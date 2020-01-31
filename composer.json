@@ -1,0 +1,20 @@
+{
+    "name": "softspring/cms-bundle",
+    "description": "A cms bundle",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "require": {
+        "php": "^7.2",
+        "softspring/crudl-bundle": "^1.0.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Softspring\\CmsBundle\\": ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
+}
