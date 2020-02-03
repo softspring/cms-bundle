@@ -1,0 +1,25 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+        bind:
+            $em: '@sfs_cms.entity_manager'
+
+#    Softspring\CmsBundle\Controller\:
+#        resource: '../../../Controller/*'
+#        public: true
+
+    Softspring\CmsBundle\Form\:
+        resource: '../../../Form/*'
+
+    Softspring\CmsBundle\Manager\:
+        resource: '../../../Manager/*'
+
+#    Softspring\CmsBundle\Request\ParamConverter\:
+#        resource: '../../../Request/ParamConverter/*'
+#        tags: ['request.param_converter']
+
+    Softspring\CmsBundle\Twig\Extension\:
+        resource: '../../../Twig/Extension/*'
+        tags: ['twig.extension']

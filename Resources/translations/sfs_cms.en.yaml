@@ -1,0 +1,52 @@
+admin_sites:
+    list:
+        page_title: "Sites"
+        fields:
+            id.header: "Site"
+            name.header: "Name"
+            enabled.header: "Enabled"
+            languages.header: "Languages"
+            countries.header: "Countries"
+        actions.header: "Actions"
+        actions:
+            update.button: "Update"
+            details.button: "Details"
+
+    create:
+        page_title: "Create site"
+        title: "Create site"
+        form:
+            id.label: "ID"
+            enabled.label: "Enabled"
+            name.label: "Name"
+            languages.label: "Languages"
+            countries.label: "Countries"
+        actions:
+            create.button: "Create"
+            cancel.button: "Cancel"
+
+    update:
+        page_title: "Update site"
+        title: "Update site"
+        form:
+            id.label: "ID"
+            enabled.label: "Enabled"
+            name.label: "Name"
+            languages.label: "Languages"
+            countries.label: "Countries"
+        actions:
+            update.button: "Update"
+            cancel.button: "Cancel"
+            delete.button: "Delete"
+
+    delete:
+        page_title: "Delete site"
+        title: "Delete site"
+        actions:
+            delete.button: "Delete"
+            cancel.button: "Cancel"
+
+    read:
+        page_title: "Site"
+        title: "Site"
+
