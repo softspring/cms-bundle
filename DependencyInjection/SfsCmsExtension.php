@@ -30,11 +30,19 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $container->setParameter('sfs_cms.site.class', $config['site']['class']);
         $container->setParameter('sfs_cms.site.route_param_name', $config['site']['route_param_name'] ?? null);
         $container->setParameter('sfs_cms.site.find_field_name', $config['site']['find_field_name'] ?? null);
+        // configure model classes
+        $container->setParameter('sfs_cms.block.class', $config['block']['class'] ?? null);
+        $container->setParameter('sfs_cms.block.find_field_name', $config['block']['find_field_name'] ?? null);
+        $container->setParameter('sfs_cms.block.types', $config['block']['types'] ?? []);
 
         // load services
         $loader->load('services.yaml');
         $loader->load('controller/admin_sites.yaml');
         $loader->load('doctrine_filter.yaml');
+
+        if ($container->getParameter('sfs_cms.block.class')) {
+            $loader->load('controller/admin_blocks.yaml');
+        }
     }
 
     public function prepend(ContainerBuilder $container)

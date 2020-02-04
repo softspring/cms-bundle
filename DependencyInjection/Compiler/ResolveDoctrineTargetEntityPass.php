@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\DependencyInjection\Compiler;
 
+use Softspring\CmsBundle\Model\BlockInterface;
 use Softspring\CoreBundle\DependencyInjection\Compiler\AbstractResolveDoctrineTargetEntityPass;
 use Softspring\CmsBundle\Model\SiteInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -22,5 +23,6 @@ class ResolveDoctrineTargetEntityPass extends AbstractResolveDoctrineTargetEntit
     public function process(ContainerBuilder $container)
     {
         $this->setTargetEntityFromParameter('sfs_cms.site.class', SiteInterface::class, $container, true);
+        $this->setTargetEntityFromParameter('sfs_cms.block.class', BlockInterface::class, $container, false);
     }
 }

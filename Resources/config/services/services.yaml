@@ -5,6 +5,7 @@ services:
         public: false
         bind:
             $em: '@sfs_cms.entity_manager'
+            $blockTypes: '%sfs_cms.block.types%'
 
 #    Softspring\CmsBundle\Controller\:
 #        resource: '../../../Controller/*'
@@ -15,6 +16,9 @@ services:
 
     Softspring\CmsBundle\Manager\:
         resource: '../../../Manager/*'
+
+    Softspring\CmsBundle\Render\:
+        resource: '../../../Render/*'
 
 #    Softspring\CmsBundle\Request\ParamConverter\:
 #        resource: '../../../Request/ParamConverter/*'

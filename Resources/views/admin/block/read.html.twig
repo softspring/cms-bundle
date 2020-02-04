@@ -1,0 +1,8 @@
+{% set block = entity %}
+{% trans_default_domain 'sfs_cms' %}
+{% extends '@SfsCms/admin_layout.html.twig' %}
+{% block title %}{{ 'admin_blocks.read.page_title'|trans }}{% endblock %}
+
+{% block content %}
+    <h1 class="h3 mb-4">{{ block.name }}</h1>
+{% endblock content %}

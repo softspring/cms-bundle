@@ -1,0 +1,69 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+        bind:
+            $blockTypes: '%sfs_cms.block.types%'
+#            $em: '@sfs_cms.entity_manager'
+
+    Softspring\CmsBundle\Form\Admin\:
+        resource: '../../../../Form/Admin/Block*'
+
+    Softspring\CmsBundle\EventListener\Admin\:
+        resource: '../../../../EventListener/Admin/Block*'
+
+    sfs_cms.admin.block.controller:
+        class: Softspring\CrudlBundle\Controller\CrudlController
+        public: true
+        calls:
+            - { method: setContainer, arguments: ['@service_container'] }
+        arguments:
+            $manager: '@Softspring\CmsBundle\Manager\BlockManagerInterface'
+            $listFilterForm: '@Softspring\CmsBundle\Form\Admin\BlockListFilterFormInterface'
+            $createForm: '@Softspring\CmsBundle\Form\Admin\BlockCreateFormInterface'
+            $updateForm: '@Softspring\CmsBundle\Form\Admin\BlockUpdateFormInterface'
+            $deleteForm: '@Softspring\CmsBundle\Form\Admin\BlockDeleteFormInterface'
+            $config:
+                entity_attribute: 'block'
+                list:
+                    is_granted: 'ROLE_ADMIN_BLOCK_LIST'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_LIST_INITIALIZE
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_LIST_VIEW
+                    view: '@@SfsCms/admin/block/list.html.twig'
+                    view_page: '@@SfsCms/admin/block/list-page.html.twig'
+                create:
+                    is_granted: 'ROLE_ADMIN_BLOCK_CREATE'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_CREATE_INITIALIZE
+                    form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_CREATE_FORM_VALID
+                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_CREATE_SUCCESS
+                    form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_CREATE_FORM_INVALID
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_CREATE_VIEW
+                    success_redirect_to: 'sfs_cms_admin_blocks_list'
+                    view: '@@SfsCms/admin/block/create.html.twig'
+                update:
+                    is_granted: 'ROLE_ADMIN_BLOCK_UPDATE'
+                    param_converter_key: 'id'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_UPDATE_INITIALIZE
+                    form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_UPDATE_FORM_VALID
+                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_UPDATE_SUCCESS
+                    form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_UPDATE_FORM_INVALID
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_UPDATE_VIEW
+                    success_redirect_to: 'sfs_cms_admin_blocks_list'
+                    view: '@@SfsCms/admin/block/update.html.twig'
+                delete:
+                    is_granted: 'ROLE_ADMIN_BLOCK_DELETE'
+                    param_converter_key: 'id'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_DELETE_INITIALIZE
+                    form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_DELETE_FORM_VALID
+                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_DELETE_SUCCESS
+                    form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_DELETE_FORM_INVALID
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_DELETE_VIEW
+                    success_redirect_to: 'sfs_cms_admin_blocks_list'
+                    view: '@@SfsCms/admin/block/delete.html.twig'
+                read:
+                    is_granted: 'ROLE_ADMIN_BLOCK_READ'
+                    param_converter_key: 'id'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_READ_INITIALIZE
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_READ_VIEW
+                    view: '@@SfsCms/admin/block/read.html.twig'

@@ -4,12 +4,13 @@
 
 {% block content %}
 
-    {% if is_granted('ROLE_ADMIN_SITE_CREATE') %}
-        <div class="d-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3">Sites</h1>
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3">Sites</h1>
+
+        {% if is_granted('ROLE_ADMIN_SITE_CREATE') %}
             <a href="{{ url('sfs_cms_admin_sites_create') }}" class="btn btn-primary mb-3">Create site</a>
-        </div>
-    {% endif %}
+        {% endif %}
+    </div>
 
 
     {{ form_start(filterForm) }}

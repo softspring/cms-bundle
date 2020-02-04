@@ -8,7 +8,7 @@ use Softspring\CmsBundle\Model\SiteSimpleCountriesInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
-class CmsExtension extends AbstractExtension
+class SiteExtension extends AbstractExtension
 {
     /**
      * @var SiteManagerInterface|null
@@ -24,7 +24,6 @@ class CmsExtension extends AbstractExtension
     {
         $this->siteManager = $siteManager;
     }
-
 
     /**
      * @inheritDoc
@@ -60,5 +59,4 @@ class CmsExtension extends AbstractExtension
 
         return $this->siteManager->getEntityClassReflection()->implementsInterface(SiteSimpleCountriesInterface::class);
     }
-
 }
