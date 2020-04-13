@@ -27,13 +27,13 @@ services:
             $config:
                 entity_attribute: 'block'
                 list:
-                    is_granted: 'ROLE_ADMIN_BLOCK_LIST'
+                    is_granted: 'ROLE_CMS_ADMIN_BLOCKS_LIST'
                     initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_LIST_INITIALIZE
                     view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_LIST_VIEW
                     view: '@@SfsCms/admin/block/list.html.twig'
                     view_page: '@@SfsCms/admin/block/list-page.html.twig'
                 create:
-                    is_granted: 'ROLE_ADMIN_BLOCK_CREATE'
+                    is_granted: 'ROLE_CMS_ADMIN_BLOCKS_CREATE'
                     initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_CREATE_INITIALIZE
                     form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_CREATE_FORM_VALID
                     success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_CREATE_SUCCESS
@@ -42,7 +42,7 @@ services:
                     success_redirect_to: 'sfs_cms_admin_blocks_list'
                     view: '@@SfsCms/admin/block/create.html.twig'
                 update:
-                    is_granted: 'ROLE_ADMIN_BLOCK_UPDATE'
+                    is_granted: 'ROLE_CMS_ADMIN_BLOCKS_UPDATE'
                     param_converter_key: 'id'
                     initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_UPDATE_INITIALIZE
                     form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_UPDATE_FORM_VALID
@@ -52,7 +52,7 @@ services:
                     success_redirect_to: 'sfs_cms_admin_blocks_list'
                     view: '@@SfsCms/admin/block/update.html.twig'
                 delete:
-                    is_granted: 'ROLE_ADMIN_BLOCK_DELETE'
+                    is_granted: 'ROLE_CMS_ADMIN_BLOCKS_DELETE'
                     param_converter_key: 'id'
                     initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_DELETE_INITIALIZE
                     form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_DELETE_FORM_VALID
@@ -62,7 +62,7 @@ services:
                     success_redirect_to: 'sfs_cms_admin_blocks_list'
                     view: '@@SfsCms/admin/block/delete.html.twig'
                 read:
-                    is_granted: 'ROLE_ADMIN_BLOCK_READ'
+                    is_granted: 'ROLE_CMS_ADMIN_BLOCKS_READ'
                     param_converter_key: 'id'
                     initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_READ_INITIALIZE
                     view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_READ_VIEW

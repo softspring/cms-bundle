@@ -13,12 +13,12 @@ services:
             $config:
                 entity_attribute: 'site'
                 list:
-                    is_granted: 'ROLE_ADMIN_SITE_LIST'
+                    is_granted: 'ROLE_CMS_ADMIN_SITES_LIST'
                     view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SITES_LIST_VIEW
                     view: '@@SfsCms/admin/site/list.html.twig'
                     view_page: '@@SfsCms/admin/site/list-page.html.twig'
                 create:
-                    is_granted: 'ROLE_ADMIN_SITE_CREATE'
+                    is_granted: 'ROLE_CMS_ADMIN_SITES_CREATE'
                     initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SITES_CREATE_INITIALIZE
                     form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SITES_CREATE_FORM_VALID
                     success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SITES_CREATE_SUCCESS
@@ -27,7 +27,7 @@ services:
                     success_redirect_to: 'sfs_cms_admin_sites_list'
                     view: '@@SfsCms/admin/site/create.html.twig'
                 update:
-                    is_granted: 'ROLE_ADMIN_SITE_UPDATE'
+                    is_granted: 'ROLE_CMS_ADMIN_SITES_UPDATE'
                     param_converter_key: 'id'
                     initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SITES_UPDATE_INITIALIZE
                     form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SITES_UPDATE_FORM_VALID
@@ -37,7 +37,7 @@ services:
                     success_redirect_to: 'sfs_cms_admin_sites_list'
                     view: '@@SfsCms/admin/site/update.html.twig'
                 delete:
-                    is_granted: 'ROLE_ADMIN_SITE_DELETE'
+                    is_granted: 'ROLE_CMS_ADMIN_SITES_DELETE'
                     param_converter_key: 'id'
                     initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SITES_DELETE_INITIALIZE
                     form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SITES_DELETE_FORM_VALID
@@ -47,7 +47,7 @@ services:
                     success_redirect_to: 'sfs_cms_admin_sites_list'
                     view: '@@SfsCms/admin/site/delete.html.twig'
                 read:
-                    is_granted: 'ROLE_ADMIN_SITE_READ'
+                    is_granted: 'ROLE_CMS_ADMIN_SITES_READ'
                     param_converter_key: 'id'
                     view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SITES_READ_VIEW
                     view: '@@SfsCms/admin/site/read.html.twig'
