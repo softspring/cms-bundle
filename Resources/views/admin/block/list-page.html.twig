@@ -26,11 +26,11 @@
         {% endif %}
 
         <td>
-            {% if is_granted('ROLE_ADMIN_BLOCK_READ', block) %}
+            {% if is_granted('ROLE_CMS_ADMIN_BLOCKS_READ', block) %}
                 <a href="{{ url('sfs_cms_admin_blocks_read', {'block':block}) }}" class="ml-2 text-nowrap">{{ 'admin_blocks.list.actions.details.button'|trans }} <span class="mdi mdi-18px mdi-eye-outline align-middle"></span></a>
             {% endif %}
 
-            {% if is_granted('ROLE_ADMIN_BLOCK_UPDATE', block) %}
+            {% if is_granted('ROLE_CMS_ADMIN_BLOCKS_UPDATE', block) %}
                 <a href="{{ url('sfs_cms_admin_blocks_update', {'block':block}) }}" class="ml-2 text-nowrap">{{ 'admin_blocks.list.actions.update.button'|trans }} <span class="mdi mdi-18px mdi-square-edit-outline align-middle"></span></a>
             {% endif %}
         </td>
