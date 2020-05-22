@@ -71,7 +71,8 @@ class BlockExtension extends AbstractExtension
         $repo = $this->blockManager->getRepository();
 
         /** @var Collection|BlockInterface[] $blocks */
-        $blocks = (new ArrayCollection($repo->findBy(['key' => $key])));
+        $blocks = $repo->findBy(['key' => $key]);
+        $blocks = $blocks instanceof Collection ? $blocks : (new ArrayCollection($blocks));
 
         if (!$blocks->count()) {
             return '';
