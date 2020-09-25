@@ -9,6 +9,7 @@ use Symfony\Bridge\Twig\AppVariable;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -72,10 +73,10 @@ class SiteRequestListener implements EventSubscriberInterface
     }
 
     /**
-     * @param GetResponseEvent $event
+     * @param GetResponseEvent|RequestEvent $event
      * @throws UnauthorizedHttpException
      */
-    public function onRequestGetSite(GetResponseEvent $event)
+    public function onRequestGetSite($event)
     {
         $request = $event->getRequest();
 

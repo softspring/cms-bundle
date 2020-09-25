@@ -3,10 +3,10 @@
 namespace Softspring\CmsBundle\EventListener;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Softspring\CmsBundle\Doctrine\Filter\SchedulableContentFilter;
 use Softspring\CmsBundle\Doctrine\Filter\SiteFilter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class SiteDoctrineFilterListener implements EventSubscriberInterface
@@ -41,7 +41,10 @@ class SiteDoctrineFilterListener implements EventSubscriberInterface
         ];
     }
 
-    public function onRequestEnableDoctrineSiteFilter(GetResponseEvent $event)
+    /**
+     * @param GetResponseEvent|RequestEvent $event
+     */
+    public function onRequestEnableDoctrineSiteFilter($event)
     {
         $request = $event->getRequest();
 
