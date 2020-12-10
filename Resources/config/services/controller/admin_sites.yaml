@@ -1,3 +1,11 @@
+parameters:
+    sfs_cms.admin.sites.list_view: '@@SfsCms/admin/site/list.html.twig'
+    sfs_cms.admin.sites.list_page_view: '@@SfsCms/admin/site/list-page.html.twig'
+    sfs_cms.admin.sites.create_view: '@@SfsCms/admin/site/create.html.twig'
+    sfs_cms.admin.sites.update_view: '@@SfsCms/admin/site/update.html.twig'
+    sfs_cms.admin.sites.delete_view: '@@SfsCms/admin/site/delete.html.twig'
+    sfs_cms.admin.sites.read_view: '@@SfsCms/admin/site/read.html.twig'
+
 services:
     sfs_cms.admin.site.controller:
         class: Softspring\CrudlBundle\Controller\CrudlController
@@ -15,8 +23,8 @@ services:
                 list:
                     is_granted: 'ROLE_CMS_ADMIN_SITES_LIST'
                     view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SITES_LIST_VIEW
-                    view: '@@SfsCms/admin/site/list.html.twig'
-                    view_page: '@@SfsCms/admin/site/list-page.html.twig'
+                    view: '%sfs_cms.admin.sites.list_view%'
+                    view_page: '%sfs_cms.admin.sites.list_page_view%'
                 create:
                     is_granted: 'ROLE_CMS_ADMIN_SITES_CREATE'
                     initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SITES_CREATE_INITIALIZE
@@ -25,7 +33,7 @@ services:
                     form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SITES_CREATE_FORM_INVALID
                     view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SITES_CREATE_VIEW
                     success_redirect_to: 'sfs_cms_admin_sites_list'
-                    view: '@@SfsCms/admin/site/create.html.twig'
+                    view: '%sfs_cms.admin.sites.create_view%'
                 update:
                     is_granted: 'ROLE_CMS_ADMIN_SITES_UPDATE'
                     param_converter_key: 'id'
@@ -35,7 +43,7 @@ services:
                     form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SITES_UPDATE_FORM_INVALID
                     view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SITES_UPDATE_VIEW
                     success_redirect_to: 'sfs_cms_admin_sites_list'
-                    view: '@@SfsCms/admin/site/update.html.twig'
+                    view: '%sfs_cms.admin.sites.update_view%'
                 delete:
                     is_granted: 'ROLE_CMS_ADMIN_SITES_DELETE'
                     param_converter_key: 'id'
@@ -45,9 +53,9 @@ services:
                     form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SITES_DELETE_FORM_INVALID
                     view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SITES_DELETE_VIEW
                     success_redirect_to: 'sfs_cms_admin_sites_list'
-                    view: '@@SfsCms/admin/site/delete.html.twig'
+                    view: '%sfs_cms.admin.sites.delete_view%'
                 read:
                     is_granted: 'ROLE_CMS_ADMIN_SITES_READ'
                     param_converter_key: 'id'
                     view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SITES_READ_VIEW
-                    view: '@@SfsCms/admin/site/read.html.twig'
+                    view: '%sfs_cms.admin.sites.read_view%'
