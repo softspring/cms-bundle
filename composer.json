@@ -4,7 +4,7 @@
     "type": "symfony-bundle",
     "license": "MIT",
     "require": {
-        "php": "^7.4",
+        "php": ">=7.4",
         "softspring/crudl-bundle": "^1.0.1"
     },
     "autoload": {
