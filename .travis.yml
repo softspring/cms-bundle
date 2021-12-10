@@ -5,3 +5,5 @@ php:
   - 8.0
 
 install: composer update --prefer-dist --no-interaction
+
+script: composer validate
