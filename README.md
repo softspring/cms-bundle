@@ -5,6 +5,7 @@
 [![Latest Unstable Version](https://poser.pugx.org/softspring/cms-bundle/v/unstable.svg)](https://packagist.org/packages/softspring/cms-bundle)
 [![License](https://poser.pugx.org/softspring/cms-bundle/license.svg)](https://packagist.org/packages/softspring/cms-bundle)
 [![Total Downloads](https://poser.pugx.org/softspring/cms-bundle/downloads)](https://packagist.org/packages/softspring/cms-bundle)
+[![Build status](https://travis-ci.com/softspring/cms-bundle.svg?branch=master)](https://travis-ci.com/softspring/cms-bundle)
 
 # Installation
 
