@@ -1,0 +1,13 @@
+{% trans_default_domain 'sfs_cms' %}
+{% extends '@SfsCms/admin_layout.html.twig' %}
+{% block title %}{{ 'admin_layouts.read.page_title'|trans }}{% endblock %}
+
+{% block breadcrums_content %}
+    {{ parent() }}
+    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_layouts_list') }}">{{ 'admin_layouts.list.breadcrumb'|trans }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ 'admin_layouts.read.breadcrumb'|trans({'%name%': layout.name|default(layout.id) }) }}</li>
+{% endblock breadcrums_content %}
+
+{% block content %}
+    <h1 class="h3 mb-4">{{ layout.name }}</h1>
+{% endblock content %}

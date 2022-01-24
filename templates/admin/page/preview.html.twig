@@ -1,0 +1,28 @@
+{% trans_default_domain 'sfs_cms' %}
+
+{% extends '@SfsCms/admin_layout.html.twig' %}
+
+{% block breadcrums_content %}
+    {{ parent() }}
+    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_pages_list') }}">{{ 'admin_pages.list.breadcrumb'|trans }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ 'admin_pages.preview.breadcrumb'|trans }}</li>
+{% endblock breadcrums_content %}
+
+{% block content %}
+    <h1 class="h3">{{ 'admin_pages.preview.title'|trans }}</h1>
+
+    {% include '@SfsCms/admin/page/_page_tabs.html.twig' with {'current':'preview', 'page':page} %}
+
+    <select onchange="document.getElementById('preview').src = this.value; document.getElementById('previewExternalLink').href = this.value">
+        <option value="{{ url('sfs_cms_admin_pages_preview_content', {'page':page, 'locale':'es'}) }}">ES</option>
+        <option value="{{ url('sfs_cms_admin_pages_preview_content', {'page':page, 'locale':'en'}) }}">EN</option>
+    </select>
+
+    <a id="previewExternalLink" target="_blank" href="{{ url('sfs_cms_admin_pages_preview_content', {'page':page, 'locale':app.request.query.get('locale', 'es')}) }}">Abrir <span class="mdi mdi-18px mdi-open-in-new"></span></a>
+
+
+    <div class="container-fluid pt-3 pb-3">
+        <iframe id="preview" src="{{ url('sfs_cms_admin_pages_preview_content', {'page':page, 'locale': app.request.query.get('locale', 'es')}) }}" width="100%" height="800"></iframe>
+    </div>
+
+{% endblock content %}

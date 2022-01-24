@@ -1,0 +1,6 @@
+Softspring\CmsBundle\Model\SiteSimpleCountriesInterface:
+    getters:
+        countries:
+            - Count:
+                groups: [ create, update ]
+                min: 1

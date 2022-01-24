@@ -1,0 +1,85 @@
+parameters:
+    sfs_cms.admin.layouts.list_view: '@@SfsCms/admin/layout/list.html.twig'
+    sfs_cms.admin.layouts.list_page_view: '@@SfsCms/admin/layout/list-page.html.twig'
+    sfs_cms.admin.layouts.create_view: '@@SfsCms/admin/layout/create.html.twig'
+    sfs_cms.admin.layouts.update_view: '@@SfsCms/admin/layout/update.html.twig'
+    sfs_cms.admin.layouts.delete_view: '@@SfsCms/admin/layout/delete.html.twig'
+    sfs_cms.admin.layouts.read_view: '@@SfsCms/admin/layout/read.html.twig'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+        bind:
+#            $em: '@sfs_cms.entity_manager'
+
+    Softspring\CmsBundle\Form\Admin\:
+        resource: '../../../src/Form/Admin/Layout*'
+
+    Softspring\CmsBundle\EventListener\Admin\:
+        resource: '../../../src/EventListener/Admin/Layout*'
+
+    sfs_cms.admin.layouts.manager:
+        class: Softspring\CrudlBundle\Manager\DefaultCrudlEntityManager
+        arguments:
+            $targetClass: 'Softspring\CmsBundle\Model\LayoutInterface'
+
+    sfs_cms.admin.layout.controller:
+        class: Softspring\CrudlBundle\Controller\CrudlController
+        public: true
+        calls:
+            - { method: setContainer, arguments: ['@service_container'] }
+        arguments:
+            $manager: '@sfs_cms.admin.layouts.manager'
+#            $listFilterForm: '@Softspring\CmsBundle\Form\Admin\LayoutListFilterFormInterface'
+#            $createForm: '@Softspring\CmsBundle\Form\Admin\LayoutCreateFormInterface'
+#            $updateForm: '@Softspring\CmsBundle\Form\Admin\LayoutUpdateFormInterface'
+#            $deleteForm: '@Softspring\CmsBundle\Form\Admin\LayoutDeleteFormInterface'
+            $listFilterForm: null
+            $createForm: 'Softspring\CmsBundle\Form\Admin\LayoutForm'
+            $updateForm: 'Softspring\CmsBundle\Form\Admin\LayoutForm'
+            $deleteForm: null
+            $config:
+                entity_attribute: 'layout'
+                list:
+                    is_granted: 'ROLE_SFS_CMS_ADMIN_LAYOUTS_LIST'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_LAYOUTS_LIST_INITIALIZE
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_LAYOUTS_LIST_VIEW
+                    view: '%sfs_cms.admin.layouts.list_view%'
+                    view_page: '%sfs_cms.admin.layouts.list_page_view%'
+                create:
+                    is_granted: 'ROLE_SFS_CMS_ADMIN_LAYOUTS_CREATE'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_LAYOUTS_CREATE_INITIALIZE
+                    form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_LAYOUTS_CREATE_FORM_VALID
+                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_LAYOUTS_CREATE_SUCCESS
+                    form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_LAYOUTS_CREATE_FORM_INVALID
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_LAYOUTS_CREATE_VIEW
+                    success_redirect_to: 'sfs_cms_admin_layouts_list'
+                    view: '%sfs_cms.admin.layouts.create_view%'
+                update:
+                    is_granted: 'ROLE_SFS_CMS_ADMIN_LAYOUTS_UPDATE'
+                    param_converter_key: 'id'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_LAYOUTS_UPDATE_INITIALIZE
+                    form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_LAYOUTS_UPDATE_FORM_VALID
+                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_LAYOUTS_UPDATE_SUCCESS
+                    form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_LAYOUTS_UPDATE_FORM_INVALID
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_LAYOUTS_UPDATE_VIEW
+                    success_redirect_to: 'sfs_cms_admin_layouts_list'
+                    view: '%sfs_cms.admin.layouts.update_view%'
+                delete:
+                    is_granted: 'ROLE_SFS_CMS_ADMIN_LAYOUTS_DELETE'
+                    param_converter_key: 'id'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_LAYOUTS_DELETE_INITIALIZE
+                    form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_LAYOUTS_DELETE_FORM_VALID
+                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_LAYOUTS_DELETE_SUCCESS
+                    form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_LAYOUTS_DELETE_FORM_INVALID
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_LAYOUTS_DELETE_VIEW
+                    success_redirect_to: 'sfs_cms_admin_layouts_list'
+                    view: '%sfs_cms.admin.layouts.delete_view%'
+                read:
+                    is_granted: 'ROLE_SFS_CMS_ADMIN_LAYOUTS_DETAILS'
+                    param_converter_key: 'id'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_LAYOUTS_READ_INITIALIZE
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_LAYOUTS_READ_VIEW
+                    view: '%sfs_cms.admin.layouts.read_view%'

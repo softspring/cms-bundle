@@ -1,0 +1,20 @@
+{% trans_default_domain 'sfs_cms' %}
+
+{% for route in entities %}
+    <tr>
+        <td>{{ route.id }}</td>
+        <td>{{ route.site.name|default('') }}</td>
+        <td>{{ route.page.name|default('') }}</td>
+        <td>
+            {% for path in route.paths %}
+                <a href="{{ path.path|default('#') }}" target="_blank">{{ path.path|default('') }}</a><br/>
+            {% endfor %}
+        </td>
+        <td>
+            <a href="{{ url('sfs_cms_admin_routes_update', {'route':route}) }}">{{ 'admin_routes.list.actions.update.link'|trans }}</a>
+        </td>
+    </tr>
+
+
+
+{% endfor %}

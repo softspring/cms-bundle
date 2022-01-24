@@ -1,0 +1,85 @@
+parameters:
+    sfs_cms.admin.routes.list_view: '@@SfsCms/admin/route/list.html.twig'
+    sfs_cms.admin.routes.list_page_view: '@@SfsCms/admin/route/list-page.html.twig'
+    sfs_cms.admin.routes.create_view: '@@SfsCms/admin/route/create.html.twig'
+    sfs_cms.admin.routes.update_view: '@@SfsCms/admin/route/update.html.twig'
+    sfs_cms.admin.routes.delete_view: '@@SfsCms/admin/route/delete.html.twig'
+    sfs_cms.admin.routes.read_view: '@@SfsCms/admin/route/read.html.twig'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+        bind:
+    #            $em: '@sfs_cms.entity_manager'
+
+    Softspring\CmsBundle\Form\Admin\:
+        resource: '../../../src/Form/Admin/Route*'
+
+    Softspring\CmsBundle\EventListener\Admin\:
+        resource: '../../../src/EventListener/Admin/Route*'
+
+    sfs_cms.admin.routes.manager:
+        class: Softspring\CrudlBundle\Manager\DefaultCrudlEntityManager
+        arguments:
+            $targetClass: 'Softspring\CmsBundle\Model\RouteInterface'
+
+    sfs_cms.admin.route.controller:
+        class: Softspring\CrudlBundle\Controller\CrudlController
+        public: true
+        calls:
+            - { method: setContainer, arguments: ['@service_container'] }
+        arguments:
+            $manager: '@sfs_cms.admin.routes.manager'
+            #            $listFilterForm: '@Softspring\CmsBundle\Form\Admin\RouteListFilterFormInterface'
+            #            $createForm: '@Softspring\CmsBundle\Form\Admin\RouteCreateFormInterface'
+            #            $updateForm: '@Softspring\CmsBundle\Form\Admin\RouteUpdateFormInterface'
+            #            $deleteForm: '@Softspring\CmsBundle\Form\Admin\RouteDeleteFormInterface'
+            $listFilterForm: null
+            $createForm: 'Softspring\CmsBundle\Form\Admin\RouteForm'
+            $updateForm: 'Softspring\CmsBundle\Form\Admin\RouteForm'
+            $deleteForm: null
+            $config:
+                entity_attribute: 'route'
+                list:
+                    is_granted: 'ROLE_SFS_CMS_ADMIN_ROUTES_LIST'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_LIST_INITIALIZE
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_LIST_VIEW
+                    view: '%sfs_cms.admin.routes.list_view%'
+                    view_page: '%sfs_cms.admin.routes.list_page_view%'
+                create:
+                    is_granted: 'ROLE_SFS_CMS_ADMIN_ROUTES_CREATE'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_CREATE_INITIALIZE
+                    form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_CREATE_FORM_VALID
+                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_CREATE_SUCCESS
+                    form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_CREATE_FORM_INVALID
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_CREATE_VIEW
+                    success_redirect_to: 'sfs_cms_admin_routes_list'
+                    view: '%sfs_cms.admin.routes.create_view%'
+                update:
+                    is_granted: 'ROLE_SFS_CMS_ADMIN_ROUTES_UPDATE'
+                    param_converter_key: 'id'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_UPDATE_INITIALIZE
+                    form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_UPDATE_FORM_VALID
+                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_UPDATE_SUCCESS
+                    form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_UPDATE_FORM_INVALID
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_UPDATE_VIEW
+                    success_redirect_to: 'sfs_cms_admin_routes_list'
+                    view: '%sfs_cms.admin.routes.update_view%'
+                delete:
+                    is_granted: 'ROLE_SFS_CMS_ADMIN_ROUTES_DELETE'
+                    param_converter_key: 'id'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_DELETE_INITIALIZE
+                    form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_DELETE_FORM_VALID
+                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_DELETE_SUCCESS
+                    form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_DELETE_FORM_INVALID
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_DELETE_VIEW
+                    success_redirect_to: 'sfs_cms_admin_routes_list'
+                    view: '%sfs_cms.admin.routes.delete_view%'
+                read:
+                    is_granted: 'ROLE_SFS_CMS_ADMIN_ROUTES_DETAILS'
+                    param_converter_key: 'id'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_READ_INITIALIZE
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_READ_VIEW
+                    view: '%sfs_cms.admin.routes.read_view%'

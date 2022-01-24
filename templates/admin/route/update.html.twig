@@ -1,0 +1,20 @@
+{% trans_default_domain 'sfs_cms' %}
+{% extends '@SfsCms/admin_layout.html.twig' %}
+{% block title %}{{ 'admin_routes.update.page_title'|trans }}{% endblock %}
+
+{% block breadcrums_content %}
+    {{ parent() }}
+    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_routes_list') }}">{{ 'admin_routes.list.breadcrumb'|trans }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ 'admin_routes.update.breadcrumb'|trans({'%name%': layout.name|default(layout.id) }) }}</li>
+{% endblock breadcrums_content %}
+
+{% block content %}
+    <h1 class="h3">{{ 'admin_routes.update.title'|trans }}</h1>
+    {{ form_start(form) }}
+    {{ form_rest(form) }}
+    <div class="d-flex justify-content-end align-items-center">
+        <a href="{{ url('sfs_cms_admin_routes_list') }}" class="btn btn-outline-secondary">{{ 'admin_routes.update.actions.cancel.button'|trans }}</a>
+        <input type="submit" value="{{ 'admin_routes.update.actions.update.button'|trans }}" class="btn btn-primary ml-3" />
+    </div>
+    {{ form_end(form) }}
+{% endblock content %}

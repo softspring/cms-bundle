@@ -1,0 +1,19 @@
+sfs_cms_admin_routes_list:
+    controller: sfs_cms.admin.route.controller::list
+    path: /
+
+sfs_cms_admin_routes_create:
+    controller: sfs_cms.admin.route.controller::create
+    path: /create
+
+sfs_cms_admin_routes_update:
+    controller: sfs_cms.admin.route.controller::update
+    path: /{route}/update
+
+sfs_cms_admin_routes_delete:
+    controller: sfs_cms.admin.route.controller::delete
+    path: /{route}/delete
+
+sfs_cms_admin_routes_read:
+    controller: sfs_cms.admin.route.controller::read
+    path: /{route}

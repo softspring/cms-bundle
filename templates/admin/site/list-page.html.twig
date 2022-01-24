@@ -1,0 +1,27 @@
+{% trans_default_domain 'sfs_cms' %}
+
+{% for site in entities %}
+    <tr>
+        <td>{{ site.id }}</td>
+        <td>{{ site.name }}</td>
+        <td>{{ site.enabled ? 'yes' : 'no' }}</td>
+
+        {% if sfs_cms_site_has_languages() %}
+            <td>{{ site.languages|join(',') }}</td>
+        {% endif %}
+
+        {% if sfs_cms_site_has_countries() %}
+            <td>{{ site.countries|join(',') }}</td>
+        {% endif %}
+
+        <td>
+            {% if is_granted('ROLE_SFS_CMS_ADMIN_SITES_DETAILS', site) %}
+                <a href="{{ url('sfs_cms_admin_sites_read', {'site':site}) }}" class="ml-2 text-nowrap">{{ 'admin_sites.list.actions.details.button'|trans }} <span class="mdi mdi-18px mdi-eye-outline align-middle"></span></a>
+            {% endif %}
+
+            {% if is_granted('ROLE_SFS_CMS_ADMIN_SITES_UPDATE', site) %}
+                <a href="{{ url('sfs_cms_admin_sites_update', {'site':site}) }}" class="ml-2 text-nowrap">{{ 'admin_sites.list.actions.update.button'|trans }} <span class="mdi mdi-18px mdi-square-edit-outline align-middle"></span></a>
+            {% endif %}
+        </td>
+    </tr>
+{% endfor %}

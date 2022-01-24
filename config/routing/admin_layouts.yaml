@@ -1,0 +1,19 @@
+sfs_cms_admin_layouts_list:
+    controller: sfs_cms.admin.layout.controller::list
+    path: /
+
+sfs_cms_admin_layouts_create:
+    controller: sfs_cms.admin.layout.controller::create
+    path: /create
+
+sfs_cms_admin_layouts_update:
+    controller: sfs_cms.admin.layout.controller::update
+    path: /{layout}/update
+
+sfs_cms_admin_layouts_delete:
+    controller: sfs_cms.admin.layout.controller::delete
+    path: /{layout}/delete
+
+sfs_cms_admin_layouts_read:
+    controller: sfs_cms.admin.layout.controller::read
+    path: /{layout}

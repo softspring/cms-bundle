@@ -1,0 +1,80 @@
+{% trans_default_domain 'sfs_cms' %}
+
+{% extends '@SfsCms/admin_layout.html.twig' %}
+
+{% block breadcrums_content %}
+    {{ parent() }}
+    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_pages_list') }}">{{ 'admin_pages.list.breadcrumb'|trans }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ 'admin_pages.read.breadcrumb'|trans }}</li>
+{% endblock breadcrums_content %}
+
+{% block content %}
+    <h1 class="h3">{{ 'admin_pages.read.title'|trans }}</h1>
+
+    {% include '@SfsCms/admin/page/_page_tabs.html.twig' with {'current':'read', 'page':page} %}
+
+    <div class="container pt-3 pb-3">
+        <div class="row">
+            <div class="col-8">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-2 text-right">Nombre</div>
+                        <div class="col-10">{{ page.name }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2 text-right">Sitio</div>
+                        <div class="col-10">{{ page.site.name|default('') }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2 text-right">Diseño</div>
+                        <div class="col-10">{{ page.layout.name|default('') }}</div>
+                    </div>
+                </div>
+                <div class="container">
+                    <h3>Traducciones</h3>
+                    {% set stats = sfs_trans_stats(page, page.site.languages) %}
+                    {% for locale,localeStats in stats %}
+                        <div class="row">
+                            <div class="col-2 text-right">{{ locale }}</div>
+                            <div class="col-10">
+                                {% if localeStats.total %}
+                                    {{ (localeStats.translated/localeStats.total*100)|round }}%
+                                    ({{ localeStats.translated }}/{{ localeStats.total }})
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="container">
+                    <h3>SEO</h3>
+                    <div class="row">
+                        <div class="col-4 text-right">Index</div>
+                        <div class="col-8">{{ page.seo.noIndex?'noindex':'index' }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4 text-right">Links</div>
+                        <div class="col-8">{{ page.seo.noFollow?'nofollow':'follow' }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4 text-right">Sitemap</div>
+                        <div class="col-8">{{ page.seo.sitemap?'yes':'no' }}</div>
+                    </div>
+
+                    <h3 class="mt-4">Rutas</h3>
+                    {% for route in page.routes %}
+                    {% for path in route.paths %}
+                        <div class="row">
+                            <div class="col">
+                                <a href="{{ path.path }}" target="_blank">{{ path.path }} <span class="mdi mdi-18px mdi-open-in-new"></span></a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

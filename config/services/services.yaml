@@ -1,0 +1,49 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+        bind:
+            $em: '@sfs_cms.entity_manager'
+            $blockTypes: '%sfs_cms.block.types%'
+            $formFactory: '@form.factory'
+            $modulesMappings: '%sfs_cms.modules.mappings%'
+            $typesMap: '%sfs_cms.modules.mapping_forms%'
+
+    sfs_cms.admin.pages.manager:
+        class: Softspring\CrudlBundle\Manager\DefaultCrudlEntityManager
+        arguments:
+            $targetClass: 'Softspring\CmsBundle\Model\PageInterface'
+
+    Softspring\CmsBundle\Controller\:
+        resource: '../../src/Controller/*'
+        public: true
+
+    Softspring\CmsBundle\Form\:
+        resource: '../../src/Form/*'
+
+    Softspring\CmsBundle\EntityListener\:
+        resource: '../../src/EntityListener/*'
+        tags: ['doctrine.event_subscriber']
+        public: true
+
+    Softspring\CmsBundle\EventListener\:
+        resource: '../../src/EventListener/*'
+
+    Softspring\CmsBundle\Manager\:
+        resource: '../../src/Manager/*'
+
+    Softspring\CmsBundle\Render\:
+        resource: '../../src/Render/*'
+
+    Softspring\CmsBundle\Render\Module\:
+        resource: '../../src/Render/Module/*'
+        tags: ['sfs_cms.module_render']
+
+    Softspring\CmsBundle\Request\ParamConverter\PageParamConverter:
+        arguments: ['@sfs_cms.admin.pages.manager']
+        tags: ['request.param_converter']
+
+    Softspring\CmsBundle\Twig\Extension\:
+        resource: '../../src/Twig/Extension/*'
+        tags: ['twig.extension']

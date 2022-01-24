@@ -1,0 +1,8 @@
+{% trans_default_domain 'sfs_cms' %}
+
+{% extends ['@SfsAdmin/layout.html.twig', 'admin/layout.html.twig', 'base.html.twig'] %}
+
+{% block breadcrums_content %}
+    {{ parent() }}
+    <li class="breadcrumb-item"><a href="#">{{ 'admin.global_breadcrumb'|trans }}</a></li>
+{% endblock breadcrums_content %}

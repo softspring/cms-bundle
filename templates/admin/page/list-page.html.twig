@@ -1,0 +1,14 @@
+{% trans_default_domain 'sfs_cms' %}
+
+{% for page in entities %}
+    <tr>
+        <td>{{ page.id }}</td>
+        <td>{{ page.site.name|default('') }}</td>
+        <td>{{ page.name }}</td>
+        <td>
+            <a href="{{ url('sfs_cms_admin_pages_details', {'page':page}) }}">{{ 'admin_pages.list.actions.details.link'|trans }}</a>
+{#            <a href="{{ url('sfs_cms_admin_pages_update', {'page':page}) }}">{{ 'admin_pages.list.actions.update.link'|trans }}</a>#}
+{#            <a href="{{ url('sfs_cms_admin_pages_preview', {'page':page}) }}" target="_blank">{{ 'admin_pages.list.actions.preview.link'|trans }}</a>#}
+        </td>
+    </tr>
+{% endfor %}
