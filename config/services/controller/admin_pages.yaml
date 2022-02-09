@@ -27,6 +27,7 @@ services:
             - { method: setContainer, arguments: ['@service_container'] }
         arguments:
             $manager: '@sfs_cms.admin.pages.manager'
+            $eventDispatcher: '@event_dispatcher'
             #            $listFilterForm: '@Softspring\CmsBundle\Form\Admin\PageListFilterFormInterface'
             #            $deleteForm: '@Softspring\CmsBundle\Form\Admin\PageDeleteFormInterface'
             $listFilterForm: null

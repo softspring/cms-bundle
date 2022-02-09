@@ -32,6 +32,7 @@ services:
             - { method: setContainer, arguments: ['@service_container'] }
         arguments:
             $manager: '@sfs_cms.admin.routes.manager'
+            $eventDispatcher: '@event_dispatcher'
             #            $listFilterForm: '@Softspring\CmsBundle\Form\Admin\RouteListFilterFormInterface'
             #            $createForm: '@Softspring\CmsBundle\Form\Admin\RouteCreateFormInterface'
             #            $updateForm: '@Softspring\CmsBundle\Form\Admin\RouteUpdateFormInterface'

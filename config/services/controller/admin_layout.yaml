@@ -32,6 +32,7 @@ services:
             - { method: setContainer, arguments: ['@service_container'] }
         arguments:
             $manager: '@sfs_cms.admin.layouts.manager'
+            $eventDispatcher: '@event_dispatcher'
 #            $listFilterForm: '@Softspring\CmsBundle\Form\Admin\LayoutListFilterFormInterface'
 #            $createForm: '@Softspring\CmsBundle\Form\Admin\LayoutCreateFormInterface'
 #            $updateForm: '@Softspring\CmsBundle\Form\Admin\LayoutUpdateFormInterface'
