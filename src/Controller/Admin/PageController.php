@@ -4,7 +4,7 @@ namespace Softspring\CmsBundle\Controller\Admin;
 
 use Softspring\CmsBundle\Model\PageInterface;
 use Softspring\CmsBundle\Render\PageRender;
-use Softspring\CoreBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
