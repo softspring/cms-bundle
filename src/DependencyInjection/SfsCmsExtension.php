@@ -3,9 +3,7 @@
 namespace Softspring\CmsBundle\DependencyInjection;
 
 use Softspring\CmsBundle\Model\BlockInterface;
-use Softspring\CmsBundle\Model\CmsCustomerInterface;
 use Softspring\CmsBundle\Model\LayoutInterface;
-use Softspring\CmsBundle\Model\OrderInterface;
 use Softspring\CmsBundle\Model\PageInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
 use Symfony\Component\Config\Definition\Processor;
@@ -18,7 +16,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 class SfsCmsExtension extends Extension implements PrependExtensionInterface
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -56,7 +54,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
 
         $moduleMappings = [];
         $moduleFormMappings = [];
-        foreach ($config['modules']['types'] as $key => list('entity'=>$entity, 'form'=>$form)) {
+        foreach ($config['modules']['types'] as $key => list('entity' => $entity, 'form' => $form)) {
             $moduleMappings[$key] = $entity;
             $moduleFormMappings[$key] = $form;
         }

@@ -7,7 +7,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class BlockUpdateForm extends AbstractBlockForm implements BlockUpdateFormInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -16,7 +16,7 @@ class BlockUpdateForm extends AbstractBlockForm implements BlockUpdateFormInterf
         $resolver->setDefaults([
             'translation_domain' => 'sfs_cms',
             'label_format' => 'admin_blocks.update.form.%name%.label',
-            'validation_groups' =>  ['Default', 'update']
+            'validation_groups' => ['Default', 'update'],
         ]);
     }
 }

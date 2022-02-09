@@ -7,7 +7,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class SiteUpdateForm extends AbstractSiteForm implements SiteUpdateFormInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -16,7 +16,7 @@ class SiteUpdateForm extends AbstractSiteForm implements SiteUpdateFormInterface
         $resolver->setDefaults([
             'translation_domain' => 'sfs_cms',
             'label_format' => 'admin_sites.update.form.%name%.label',
-            'validation_groups' =>  ['Default', 'update']
+            'validation_groups' => ['Default', 'update'],
         ]);
     }
 }

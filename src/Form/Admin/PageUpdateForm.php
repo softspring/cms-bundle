@@ -40,7 +40,7 @@ class PageUpdateForm extends AbstractType implements PageUpdateFormInterface
             'em' => $this->em,
             'choice_label' => function (LayoutInterface $layout) {
                 return $layout->getName();
-            }
+            },
         ]);
     }
 }

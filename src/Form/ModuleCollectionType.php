@@ -2,8 +2,8 @@
 
 namespace Softspring\CmsBundle\Form;
 
-use Softspring\CmsBundle\Entity\AbstractModule;
 use Doctrine\ORM\EntityManagerInterface;
+use Softspring\CmsBundle\Entity\AbstractModule;
 use Softspring\PolymorphicFormType\Form\Type\DoctrinePolymorphicCollectionType;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,11 +17,6 @@ class ModuleCollectionType extends DoctrinePolymorphicCollectionType
 
     protected array $typesMap;
 
-    /**
-     * @param FormFactory|null            $formFactory
-     * @param EntityManagerInterface|null $em
-     * @param array                       $typesMap
-     */
     public function __construct(FormFactory $formFactory = null, EntityManagerInterface $em = null, array $typesMap = [])
     {
         parent::__construct($formFactory, $em);

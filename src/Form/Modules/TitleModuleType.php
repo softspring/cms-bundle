@@ -20,7 +20,7 @@ class TitleModuleType extends AbstractNodeType
             'label_format' => 'modules.title.%name%.label',
             'translation_domain' => 'sfs_cms',
             'prototype_button_label' => 'modules.title.prototype_button',
-            'prototype_button_attr' => [ 'class' => 'dropdown-item btn btn-light' ],
+            'prototype_button_attr' => ['class' => 'dropdown-item btn btn-light'],
         ]);
     }
 

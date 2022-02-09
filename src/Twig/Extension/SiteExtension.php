@@ -17,8 +17,6 @@ class SiteExtension extends AbstractExtension
 
     /**
      * CmsExtension constructor.
-     *
-     * @param SiteManagerInterface|null $siteManager
      */
     public function __construct(?SiteManagerInterface $siteManager)
     {
@@ -26,7 +24,7 @@ class SiteExtension extends AbstractExtension
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getFunctions()
     {
@@ -36,9 +34,6 @@ class SiteExtension extends AbstractExtension
         ];
     }
 
-    /**
-     * @return bool
-     */
     public function siteHasLanguages(): bool
     {
         if (!$this->siteManager instanceof SiteManagerInterface) {
@@ -48,9 +43,6 @@ class SiteExtension extends AbstractExtension
         return $this->siteManager->getEntityClassReflection()->implementsInterface(SiteLanguagesInterface::class);
     }
 
-    /**
-     * @return bool
-     */
     public function siteHasCountries(): bool
     {
         if (!$this->siteManager instanceof SiteManagerInterface) {

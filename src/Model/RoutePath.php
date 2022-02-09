@@ -2,9 +2,6 @@
 
 namespace Softspring\CmsBundle\Model;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-
 abstract class RoutePath implements RoutePathInterface
 {
     protected ?string $id;

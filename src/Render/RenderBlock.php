@@ -22,9 +22,6 @@ class RenderBlock
 
     /**
      * RenderBlock constructor.
-     *
-     * @param Environment $twig
-     * @param array       $blockTypes
      */
     public function __construct(Environment $twig, array $blockTypes)
     {
@@ -32,11 +29,6 @@ class RenderBlock
         $this->blockTypes = $blockTypes;
     }
 
-    /**
-     * @param BlockInterface $block
-     *
-     * @return string
-     */
     public function render(BlockInterface $block): string
     {
         if (!isset($this->blockTypes[$block->getKey()])) {

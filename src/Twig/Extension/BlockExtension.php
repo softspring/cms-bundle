@@ -33,10 +33,6 @@ class BlockExtension extends AbstractExtension
 
     /**
      * BlockExtension constructor.
-     *
-     * @param BlockManagerInterface|null $blockManager
-     * @param EntityManagerInterface     $em
-     * @param RenderBlock                $renderer
      */
     public function __construct(?BlockManagerInterface $blockManager, EntityManagerInterface $em, RenderBlock $renderer)
     {
@@ -46,7 +42,7 @@ class BlockExtension extends AbstractExtension
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getFunctions()
     {
@@ -58,14 +54,6 @@ class BlockExtension extends AbstractExtension
         ];
     }
 
-    /**
-     * @param string             $key
-     * @param string|null        $_locale
-     * @param SiteInterface|null $site
-     * @param bool               $allowMultiple
-     *
-     * @return string
-     */
     public function renderBlock(string $key, string $_locale = null, ?SiteInterface $site = null, bool $allowMultiple = false): string
     {
         $repo = $this->blockManager->getRepository();
@@ -85,14 +73,6 @@ class BlockExtension extends AbstractExtension
         }
     }
 
-    /**
-     * @param string             $blockId
-     * @param string|null        $_locale
-     * @param SiteInterface|null $site
-     * @param bool               $allowMultiple
-     *
-     * @return string
-     */
     public function previewBlock(string $blockId, string $_locale = null, ?SiteInterface $site = null, bool $allowMultiple = false): string
     {
         $filters = $this->em->getFilters();
@@ -112,9 +92,6 @@ class BlockExtension extends AbstractExtension
         return $render;
     }
 
-    /**
-     * @return bool
-     */
     public function blocksAreSchedulable(): bool
     {
         if (!$this->blockManager instanceof BlockManagerInterface) {
@@ -124,9 +101,6 @@ class BlockExtension extends AbstractExtension
         return $this->blockManager->getEntityClassReflection()->implementsInterface(SchedulableContentInterface::class);
     }
 
-    /**
-     * @return bool
-     */
     public function blocksAreMultisite(): bool
     {
         if (!$this->blockManager instanceof BlockManagerInterface) {

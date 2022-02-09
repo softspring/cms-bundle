@@ -2,8 +2,8 @@
 
 namespace Softspring\CmsBundle\Entity\Modules;
 
-use Softspring\CmsBundle\Entity\AbstractModule;
 use Doctrine\ORM\Mapping as ORM;
+use Softspring\CmsBundle\Entity\AbstractModule;
 use Softspring\TranslationBundle\Configuration\Translatable;
 use Softspring\TranslationBundle\Configuration\TranslationsHtml;
 
@@ -20,17 +20,11 @@ class HtmlModule extends AbstractModule
      */
     protected ?string $code;
 
-    /**
-     * @return string|null
-     */
     public function getCode(): ?string
     {
         return $this->code;
     }
 
-    /**
-     * @param string|null $code
-     */
     public function setCode(?string $code): void
     {
         $this->code = $code;

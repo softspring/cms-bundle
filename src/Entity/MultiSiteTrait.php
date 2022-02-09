@@ -22,9 +22,6 @@ trait MultiSiteTrait
         return $this->sites;
     }
 
-    /**
-     * @param SiteInterface $site
-     */
     public function addSite(SiteInterface $site): void
     {
         if (!$this->sites->contains($site)) {
@@ -32,9 +29,6 @@ trait MultiSiteTrait
         }
     }
 
-    /**
-     * @param SiteInterface $site
-     */
     public function removeSite(SiteInterface $site): void
     {
         if ($this->sites->contains($site)) {

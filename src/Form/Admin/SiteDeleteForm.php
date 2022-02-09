@@ -20,6 +20,5 @@ class SiteDeleteForm extends AbstractType implements SiteDeleteFormInterface
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
     }
 }

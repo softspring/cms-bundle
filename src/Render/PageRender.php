@@ -20,7 +20,6 @@ class PageRender
     protected $moduleRenders;
 
     /**
-     * @param Environment            $twig
      * @param ModuleRenderInterface[] $moduleRenders
      */
     public function __construct(Environment $twig, array $moduleRenders)

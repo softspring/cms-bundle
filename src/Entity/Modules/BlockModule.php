@@ -2,8 +2,8 @@
 
 namespace Softspring\CmsBundle\Entity\Modules;
 
-use Softspring\CmsBundle\Entity\AbstractModule;
 use Doctrine\ORM\Mapping as ORM;
+use Softspring\CmsBundle\Entity\AbstractModule;
 use Softspring\CmsBundle\Model\BlockInterface;
 
 /**

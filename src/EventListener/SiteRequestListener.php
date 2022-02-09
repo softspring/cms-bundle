@@ -3,8 +3,8 @@
 namespace Softspring\CmsBundle\EventListener;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Softspring\CoreBundle\Twig\ExtensibleAppVariable;
 use Softspring\CmsBundle\Model\SiteInterface;
+use Softspring\CoreBundle\Twig\ExtensibleAppVariable;
 use Symfony\Bridge\Twig\AppVariable;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -44,11 +44,6 @@ class SiteRequestListener implements EventSubscriberInterface
 
     /**
      * SiteRequestListener constructor.
-     * @param EntityManagerInterface $em
-     * @param string $siteRouteParamName
-     * @param RouterInterface $router
-     * @param AppVariable $twigAppVariable
-     * @param string $findParamName
      */
     public function __construct(EntityManagerInterface $em, string $siteRouteParamName, RouterInterface $router, AppVariable $twigAppVariable, string $findParamName)
     {
@@ -74,6 +69,7 @@ class SiteRequestListener implements EventSubscriberInterface
 
     /**
      * @param GetResponseEvent|RequestEvent $event
+     *
      * @throws UnauthorizedHttpException
      */
     public function onRequestGetSite($event)

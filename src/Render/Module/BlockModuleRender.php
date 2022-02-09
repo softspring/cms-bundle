@@ -13,9 +13,6 @@ class BlockModuleRender implements ModuleRenderInterface
      */
     protected $renderBlock;
 
-    /**
-     * @param RenderBlock $renderBlock
-     */
     public function __construct(RenderBlock $renderBlock)
     {
         $this->renderBlock = $renderBlock;
@@ -23,8 +20,6 @@ class BlockModuleRender implements ModuleRenderInterface
 
     /**
      * @param BlockModule $module
-     *
-     * @return string
      */
     public function render(AbstractModule $module): string
     {
@@ -35,11 +30,6 @@ class BlockModuleRender implements ModuleRenderInterface
         return $this->renderBlock->render($module->getBlock());
     }
 
-    /**
-     * @param AbstractModule $module
-     *
-     * @return bool
-     */
     public function supports(AbstractModule $module): bool
     {
         return $module instanceof BlockModule;

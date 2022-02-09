@@ -23,8 +23,6 @@ class SiteDoctrineFilterListener implements EventSubscriberInterface
 
     /**
      * SiteRequestListener constructor.
-     * @param EntityManagerInterface $em
-     * @param string $siteRouteParamName
      */
     public function __construct(EntityManagerInterface $em, string $siteRouteParamName)
     {

@@ -6,4 +6,6 @@ php:
 
 install: composer update --prefer-dist --no-interaction
 
-script: composer validate
+script:
+  - composer validate
+  - ./vendor/bin/php-cs-fixer fix -v --diff --dry-run

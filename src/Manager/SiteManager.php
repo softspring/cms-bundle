@@ -3,8 +3,8 @@
 namespace Softspring\CmsBundle\Manager;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Softspring\CrudlBundle\Manager\CrudlEntityManagerTrait;
 use Softspring\CmsBundle\Model\SiteInterface;
+use Softspring\CrudlBundle\Manager\CrudlEntityManagerTrait;
 
 class SiteManager implements SiteManagerInterface
 {
@@ -17,7 +17,6 @@ class SiteManager implements SiteManagerInterface
 
     /**
      * SiteManager constructor.
-     * @param EntityManagerInterface $em
      */
     public function __construct(EntityManagerInterface $em)
     {

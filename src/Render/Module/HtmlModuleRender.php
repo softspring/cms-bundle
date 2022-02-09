@@ -13,9 +13,6 @@ class HtmlModuleRender implements ModuleRenderInterface
      */
     protected $twig;
 
-    /**
-     * @param Environment $twig
-     */
     public function __construct(Environment $twig)
     {
         $this->twig = $twig;
@@ -23,8 +20,6 @@ class HtmlModuleRender implements ModuleRenderInterface
 
     /**
      * @param HtmlModule $module
-     *
-     * @return string
      */
     public function render(AbstractModule $module): string
     {
@@ -37,11 +32,6 @@ class HtmlModuleRender implements ModuleRenderInterface
         ]);
     }
 
-    /**
-     * @param AbstractModule $module
-     *
-     * @return bool
-     */
     public function supports(AbstractModule $module): bool
     {
         return $module instanceof HtmlModule;

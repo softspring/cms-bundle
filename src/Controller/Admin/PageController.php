@@ -15,9 +15,6 @@ class PageController extends AbstractController
      */
     protected $pageRender;
 
-    /**
-     * @param PageRender $pageRender
-     */
     public function __construct(PageRender $pageRender)
     {
         $this->pageRender = $pageRender;
@@ -26,6 +23,7 @@ class PageController extends AbstractController
     public function preview(PageInterface $page, Request $request): Response
     {
         $request->setLocale($request->query->get('locale', 'es'));
+
         return new Response($this->pageRender->render($page));
     }
 }

@@ -17,8 +17,6 @@ class BlockListener implements EventSubscriberInterface
 
     /**
      * BlockListener constructor.
-     *
-     * @param array $blockTypes
      */
     public function __construct(array $blockTypes)
     {
@@ -26,7 +24,7 @@ class BlockListener implements EventSubscriberInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public static function getSubscribedEvents()
     {
@@ -36,9 +34,6 @@ class BlockListener implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param ViewEvent $event
-     */
     public function onBlockListViewAddBlockTypes(ViewEvent $event)
     {
         $event->getData()['blockTypes'] = $this->blockTypes;

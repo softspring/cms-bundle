@@ -36,14 +36,14 @@ class PageCreateForm extends AbstractType implements PageCreateFormInterface
 
         // if ($this->manager->getEntityClassReflection()->implementsInterface(SiteReferenceInterface::class)) {
         $builder->add('site', EntityType::class, [
-            //'class' => SiteInterface::class,
+            // 'class' => SiteInterface::class,
             'required' => false,
             'class' => SiteInterface::class,
             'em' => $this->em,
             'choice_label' => function (SiteInterface $site) {
                 return $site->getName();
-            }
+            },
         ]);
-        //}
+        // }
     }
 }

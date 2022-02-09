@@ -6,5 +6,4 @@ use Softspring\CrudlBundle\Form\EntityCreateFormInterface;
 
 interface PageCreateFormInterface extends EntityCreateFormInterface
 {
-
 }

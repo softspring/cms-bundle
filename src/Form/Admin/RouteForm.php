@@ -14,8 +14,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class RouteForm extends AbstractType
 {
-
-
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -29,14 +27,14 @@ class RouteForm extends AbstractType
 
         // if ($this->manager->getEntityClassReflection()->implementsInterface(SiteReferenceInterface::class)) {
         $builder->add('site', EntityType::class, [
-            //'class' => SiteInterface::class,
+            // 'class' => SiteInterface::class,
             'required' => false,
             'class' => SiteInterface::class,
             'choice_label' => function (SiteInterface $site) {
                 return $site->getName();
-            }
+            },
         ]);
-        //}
+        // }
 
         $builder->add('page', EntityType::class, [
             'class' => PageInterface::class,

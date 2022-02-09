@@ -20,6 +20,5 @@ class BlockDeleteForm extends AbstractType implements BlockDeleteFormInterface
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
     }
 }

@@ -20,33 +20,21 @@ trait SchedulableContentTrait
      */
     protected $publishEndDate;
 
-    /**
-     * @return \DateTime|null
-     */
     public function getPublishStartDate(): ?\DateTime
     {
-        return \DateTime::createFromFormat("U", $this->publishStartDate) ?: null;
+        return \DateTime::createFromFormat('U', $this->publishStartDate) ?: null;
     }
 
-    /**
-     * @param \DateTime|null $publishStartDate
-     */
     public function setPublishStartDate(?\DateTime $publishStartDate): void
     {
         $this->publishStartDate = $publishStartDate instanceof \DateTime ? $publishStartDate->format('U') : null;
     }
 
-    /**
-     * @return \DateTime|null
-     */
     public function getPublishEndDate(): ?\DateTime
     {
-        return \DateTime::createFromFormat("U", $this->publishEndDate) ?: null;
+        return \DateTime::createFromFormat('U', $this->publishEndDate) ?: null;
     }
 
-    /**
-     * @param \DateTime|null $publishEndDate
-     */
     public function setPublishEndDate(?\DateTime $publishEndDate): void
     {
         $this->publishEndDate = $publishEndDate instanceof \DateTime ? $publishEndDate->format('U') : null;

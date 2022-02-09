@@ -61,9 +61,6 @@ abstract class Page implements PageInterface
         return $this->modules;
     }
 
-    /**
-     * @param AbstractModule $module
-     */
     public function addModule(AbstractModule $module): void
     {
         if (!$this->getModules()->contains($module)) {
@@ -72,9 +69,6 @@ abstract class Page implements PageInterface
         }
     }
 
-    /**
-     * @param AbstractModule $module
-     */
     public function removeModule(AbstractModule $module): void
     {
         if ($this->getModules()->contains($module)) {

@@ -15,9 +15,6 @@ class RouteResolverListener implements EventSubscriberInterface
      */
     protected $em;
 
-    /**
-     * @param EntityManagerInterface $em
-     */
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
@@ -30,7 +27,7 @@ class RouteResolverListener implements EventSubscriberInterface
         ];
     }
 
-    public function onKernelRequest (RequestEvent $event): void
+    public function onKernelRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
 

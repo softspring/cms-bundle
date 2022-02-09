@@ -2,8 +2,8 @@
 
 namespace Softspring\CmsBundle\Entity\Modules;
 
-use Softspring\CmsBundle\Entity\AbstractModule;
 use Doctrine\ORM\Mapping as ORM;
+use Softspring\CmsBundle\Entity\AbstractModule;
 use Softspring\TranslationBundle\Configuration\Translatable;
 use Softspring\TranslationBundle\Configuration\Translation;
 
@@ -20,17 +20,11 @@ class TitleModule extends AbstractModule
      */
     protected ?string $title;
 
-    /**
-     * @return string|null
-     */
     public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    /**
-     * @param string|null $title
-     */
     public function setTitle(?string $title): void
     {
         $this->title = $title;

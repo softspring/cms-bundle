@@ -4,9 +4,6 @@ namespace Softspring\CmsBundle\Model;
 
 interface SchedulableContentInterface
 {
-    /**
-     * @return \DateTime|null
-     */
     public function getPublishStartDate(): ?\DateTime;
 
     /**
@@ -14,9 +11,6 @@ interface SchedulableContentInterface
      */
     public function setPublishStartDate(?\DateTime $publishStartDate): void;
 
-    /**
-     * @return \DateTime|null
-     */
     public function getPublishEndDate(): ?\DateTime;
 
     /**

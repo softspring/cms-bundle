@@ -12,7 +12,7 @@ class SiteFilter extends SQLFilter
     public function addFilterConstraint(ClassMetadata $targetEntity, $targetTableAlias)
     {
         if ($targetEntity->reflClass->implementsInterface(SiteFilterInterface::class)) {
-            return $targetTableAlias.'.site_id = ' . $this->getParameter('_site');
+            return $targetTableAlias.'.site_id = '.$this->getParameter('_site');
         }
 
         if ($targetEntity->reflClass->implementsInterface(MultiSiteFilterInterface::class)) {
@@ -22,6 +22,7 @@ class SiteFilter extends SQLFilter
             $joinTableFieldName = $joinTable['joinColumns'][0]['name'];
             $joinTableSiteFieldName = $joinTable['inverseJoinColumns'][0]['name'];
             $filterSite = $this->getParameter('_site');
+
             return "$targetTableAlias.id IN (SELECT $joinTableFieldName FROM $joinTableName WHERE $joinTableSiteFieldName = $filterSite )";
         }
 

@@ -34,10 +34,6 @@ abstract class AbstractBlockForm extends AbstractType
 
     /**
      * AbstractBlockForm constructor.
-     *
-     * @param BlockManagerInterface  $manager
-     * @param array                  $blockTypes
-     * @param EntityManagerInterface $em
      */
     public function __construct(BlockManagerInterface $manager, array $blockTypes, EntityManagerInterface $em)
     {
@@ -47,7 +43,7 @@ abstract class AbstractBlockForm extends AbstractType
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -61,7 +57,7 @@ abstract class AbstractBlockForm extends AbstractType
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

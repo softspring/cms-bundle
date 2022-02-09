@@ -3,8 +3,8 @@
 namespace Softspring\CmsBundle\Manager;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Softspring\CrudlBundle\Manager\CrudlEntityManagerTrait;
 use Softspring\CmsBundle\Model\BlockInterface;
+use Softspring\CrudlBundle\Manager\CrudlEntityManagerTrait;
 
 class BlockManager implements BlockManagerInterface
 {
@@ -17,7 +17,6 @@ class BlockManager implements BlockManagerInterface
 
     /**
      * BlockManager constructor.
-     * @param EntityManagerInterface $em
      */
     public function __construct(EntityManagerInterface $em)
     {

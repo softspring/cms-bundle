@@ -22,7 +22,7 @@ class ModuleDiscriminatorMapListener implements EventSubscriberInterface
         $class = $metadata->getReflectionClass();
 
         // if ($class->getName() !== AbstractModule::class && !$class->isSubclassOf(AbstractModule::class)) {
-        if ($class->getName() !== AbstractModule::class) {
+        if (AbstractModule::class !== $class->getName()) {
             return;
         }
 

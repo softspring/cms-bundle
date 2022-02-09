@@ -30,7 +30,7 @@ class BlockModuleType extends AbstractNodeType
             'label_format' => 'modules.block.%name%.label',
             'translation_domain' => 'sfs_cms',
             'prototype_button_label' => 'modules.block.prototype_button',
-            'prototype_button_attr' => [ 'class' => 'dropdown-item btn btn-light' ],
+            'prototype_button_attr' => ['class' => 'dropdown-item btn btn-light'],
         ]);
     }
 

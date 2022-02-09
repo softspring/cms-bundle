@@ -14,9 +14,6 @@ class ContentRenderer extends AbstractController
      */
     protected $pageRender;
 
-    /**
-     * @param PageRender $pageRender
-     */
     public function __construct(PageRender $pageRender)
     {
         $this->pageRender = $pageRender;
