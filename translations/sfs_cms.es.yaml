@@ -66,7 +66,7 @@ admin_blocks:
         title: "Bloques"
         breadcrumb: "Bloques"
         fields:
-            key.header: "Id"
+            key.header: "Tipo"
             sites.header: "Sitios"
             publishStartDate.header: "Fecha de publicación"
             publishEndDate.header: "Fin de publicación"
@@ -140,6 +140,7 @@ admin_layouts:
         actions:
             create.link: "Nuevo diseño"
             update.link: "Editar"
+            preview.link: "Previsualizar"
         fields:
             id.header: "Diseño"
             name.header: "Nombre"

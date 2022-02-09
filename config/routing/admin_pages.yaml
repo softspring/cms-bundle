@@ -26,6 +26,11 @@ sfs_cms_admin_pages_content:
     path: /{page}/content
     defaults:
         updateForm: 'Softspring\CmsBundle\Form\Admin\PageContentForm'
+        initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_PAGES_CONTENT_INITIALIZE
+        form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_PAGES_CONTENT_FORM_VALID
+        success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_PAGES_CONTENT_SUCCESS
+        form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_PAGES_CONTENT_FORM_INVALID
+        view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_PAGES_CONTENT_VIEW
         config:
             view: '@SfsCms/admin/page/content.html.twig'
 
@@ -34,6 +39,11 @@ sfs_cms_admin_pages_seo:
     path: /{page}/seo
     defaults:
         updateForm: 'Softspring\CmsBundle\Form\Admin\PageSeoForm'
+        initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_PAGES_SEO_INITIALIZE
+        form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_PAGES_SEO_FORM_VALID
+        success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_PAGES_SEO_SUCCESS
+        form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_PAGES_SEO_FORM_INVALID
+        view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_PAGES_SEO_VIEW
         config:
             view: '@SfsCms/admin/page/seo.html.twig'
 

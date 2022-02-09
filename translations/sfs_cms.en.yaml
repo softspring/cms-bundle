@@ -63,7 +63,7 @@ admin_blocks:
     list:
         page_title: "Blocks"
         fields:
-            key.header: "Key"
+            key.header: "Type"
             sites.header: "Sites"
             publishStartDate.header: "Publish start date"
             publishEndDate.header: "Publish end date"

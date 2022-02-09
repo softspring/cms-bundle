@@ -450,6 +450,56 @@ class SfsCmsEvents
     /**
      * @Event("Softspring\CrudlBundle\Event\GetResponseEntityEvent")
      */
+    const ADMIN_PAGES_CONTENT_INITIALIZE = 'sfs_cms.admin.pages.content_initialize';
+
+    /**
+     * @Event("Softspring\CrudlBundle\Event\GetResponseFormEvent")
+     */
+    const ADMIN_PAGES_CONTENT_FORM_VALID = 'sfs_cms.admin.pages.content_form_valid';
+
+    /**
+     * @Event("Softspring\CrudlBundle\Event\GetResponseEntityEvent")
+     */
+    const ADMIN_PAGES_CONTENT_SUCCESS = 'sfs_cms.admin.pages.content_success';
+
+    /**
+     * @Event("Softspring\CrudlBundle\Event\GetResponseFormEvent")
+     */
+    const ADMIN_PAGES_CONTENT_FORM_INVALID = 'sfs_cms.admin.pages.content_form_invalid';
+
+    /**
+     * @Event("Softspring\CoreBundle\Event\ViewEvent")
+     */
+    const ADMIN_PAGES_CONTENT_VIEW = 'sfs_cms.admin.pages.content_view';
+
+    /**
+     * @Event("Softspring\CrudlBundle\Event\GetResponseEntityEvent")
+     */
+    const ADMIN_PAGES_SEO_INITIALIZE = 'sfs_cms.admin.pages.seo_initialize';
+
+    /**
+     * @Event("Softspring\CrudlBundle\Event\GetResponseFormEvent")
+     */
+    const ADMIN_PAGES_SEO_FORM_VALID = 'sfs_cms.admin.pages.seo_form_valid';
+
+    /**
+     * @Event("Softspring\CrudlBundle\Event\GetResponseEntityEvent")
+     */
+    const ADMIN_PAGES_SEO_SUCCESS = 'sfs_cms.admin.pages.seo_success';
+
+    /**
+     * @Event("Softspring\CrudlBundle\Event\GetResponseFormEvent")
+     */
+    const ADMIN_PAGES_SEO_FORM_INVALID = 'sfs_cms.admin.pages.seo_form_invalid';
+
+    /**
+     * @Event("Softspring\CoreBundle\Event\ViewEvent")
+     */
+    const ADMIN_PAGES_SEO_VIEW = 'sfs_cms.admin.pages.seo_view';
+
+    /**
+     * @Event("Softspring\CrudlBundle\Event\GetResponseEntityEvent")
+     */
     public const ADMIN_PAGES_DELETE_INITIALIZE = 'sfs_cms.admin.pages.delete_initialize';
 
     /**
