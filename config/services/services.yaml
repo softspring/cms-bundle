@@ -44,6 +44,10 @@ services:
         arguments: ['@sfs_cms.admin.pages.manager']
         tags: ['request.param_converter']
 
+    Softspring\CmsBundle\Request\ParamConverter\LayoutParamConverter:
+        arguments: ['@sfs_cms.admin.layouts.manager']
+        tags: ['request.param_converter']
+
     Softspring\CmsBundle\Twig\Extension\:
         resource: '../../src/Twig/Extension/*'
         tags: ['twig.extension']

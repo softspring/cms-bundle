@@ -17,3 +17,7 @@ sfs_cms_admin_layouts_delete:
 sfs_cms_admin_layouts_read:
     controller: sfs_cms.admin.layout.controller::read
     path: /{layout}
+
+sfs_cms_admin_layouts_preview_content:
+    controller: Softspring\CmsBundle\Controller\Admin\LayoutController:preview
+    path: /{layout}/preview-content
