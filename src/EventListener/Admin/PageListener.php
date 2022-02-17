@@ -10,23 +10,14 @@ use Symfony\Component\Routing\RouterInterface;
 
 class PageListener implements EventSubscriberInterface
 {
-    /**
-     * @var RouterInterface
-     */
-    protected $router;
+    protected RouterInterface $router;
 
-    /**
-     * @param RouterInterface $router
-     */
     public function __construct(RouterInterface $router)
     {
         $this->router = $router;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             SfsCmsEvents::ADMIN_PAGES_CREATE_SUCCESS => ['onPageChangeSuccess'],
@@ -35,7 +26,7 @@ class PageListener implements EventSubscriberInterface
         ];
     }
 
-    public function onPageChangeSuccess(GetResponseEntityEvent $event)
+    public function onPageChangeSuccess(GetResponseEntityEvent $event): void
     {
         $event->setResponse(new RedirectResponse($this->router->generate('sfs_cms_admin_pages_details', ['page'=>$event->getEntity()])));
     }

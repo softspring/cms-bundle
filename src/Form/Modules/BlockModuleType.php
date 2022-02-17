@@ -19,7 +19,7 @@ class BlockModuleType extends AbstractNodeType
         $this->em = $em;
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'cms_module_block';
     }

@@ -5,32 +5,22 @@ namespace Softspring\CmsBundle\EventListener;
 use Doctrine\ORM\EntityManagerInterface;
 use Softspring\CmsBundle\Doctrine\Filter\SiteFilter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class SiteDoctrineFilterListener implements EventSubscriberInterface
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $em;
+    protected EntityManagerInterface $em;
 
-    /**
-     * @var string
-     */
-    protected $siteRouteParamName;
+    protected string $siteRouteParamName;
 
-    /**
-     * SiteRequestListener constructor.
-     */
     public function __construct(EntityManagerInterface $em, string $siteRouteParamName)
     {
         $this->em = $em;
         $this->siteRouteParamName = $siteRouteParamName;
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::REQUEST => [
@@ -39,10 +29,7 @@ class SiteDoctrineFilterListener implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param GetResponseEvent|RequestEvent $event
-     */
-    public function onRequestEnableDoctrineSiteFilter($event)
+    public function onRequestEnableDoctrineSiteFilter(RequestEvent $event): void
     {
         $request = $event->getRequest();
 

@@ -10,17 +10,14 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class RouteResolverListener implements EventSubscriberInterface
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $em;
+    protected EntityManagerInterface $em;
 
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::REQUEST => [['onKernelRequest', 33]], // before Symfony\Component\HttpKernel\EventListener\RouterListener (32)

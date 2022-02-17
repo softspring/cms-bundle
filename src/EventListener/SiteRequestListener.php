@@ -8,7 +8,6 @@ use Softspring\CoreBundle\Twig\ExtensibleAppVariable;
 use Symfony\Bridge\Twig\AppVariable;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -17,34 +16,16 @@ use Symfony\Component\Routing\RouterInterface;
 
 class SiteRequestListener implements EventSubscriberInterface
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $em;
+    protected EntityManagerInterface $em;
 
-    /**
-     * @var string
-     */
-    protected $siteRouteParamName;
+    protected string $siteRouteParamName;
 
-    /**
-     * @var RouterInterface
-     */
-    protected $router;
+    protected RouterInterface $router;
 
-    /**
-     * @var AppVariable
-     */
-    protected $twigAppVariable;
+    protected AppVariable $twigAppVariable;
 
-    /**
-     * @var string
-     */
-    protected $findParamName;
+    protected string $findParamName;
 
-    /**
-     * SiteRequestListener constructor.
-     */
     public function __construct(EntityManagerInterface $em, string $siteRouteParamName, RouterInterface $router, AppVariable $twigAppVariable, string $findParamName)
     {
         $this->em = $em;
@@ -58,7 +39,7 @@ class SiteRequestListener implements EventSubscriberInterface
         }
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::REQUEST => [
@@ -68,11 +49,9 @@ class SiteRequestListener implements EventSubscriberInterface
     }
 
     /**
-     * @param GetResponseEvent|RequestEvent $event
-     *
      * @throws UnauthorizedHttpException
      */
-    public function onRequestGetSite($event)
+    public function onRequestGetSite(RequestEvent $event): void
     {
         $request = $event->getRequest();
 

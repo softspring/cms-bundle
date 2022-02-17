@@ -9,7 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class HtmlModuleType extends AbstractNodeType
 {
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'cms_module_html';
     }

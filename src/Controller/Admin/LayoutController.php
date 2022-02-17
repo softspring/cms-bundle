@@ -19,7 +19,6 @@ class LayoutController extends AbstractController
 
         return $this->render($layout->getTemplate(), [
             'page' => $emptyPage,
-            'content' => '',
         ]);
     }
 }

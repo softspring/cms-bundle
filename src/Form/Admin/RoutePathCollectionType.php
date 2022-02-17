@@ -9,12 +9,12 @@ use Symfony\Component\Validator\Constraints\Count;
 
 class RoutePathCollectionType extends AbstractType
 {
-    public function getParent()
+    public function getParent(): string
     {
         return CollectionType::class;
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'route_path_collection';
     }

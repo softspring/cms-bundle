@@ -10,23 +10,14 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class BlockListener implements EventSubscriberInterface
 {
-    /**
-     * @var array
-     */
-    protected $blockTypes;
+    protected array $blockTypes;
 
-    /**
-     * BlockListener constructor.
-     */
     public function __construct(array $blockTypes)
     {
         $this->blockTypes = $blockTypes;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             SfsCmsEvents::ADMIN_BLOCKS_LIST_VIEW => ['onBlockListViewAddBlockTypes'],
@@ -34,7 +25,7 @@ class BlockListener implements EventSubscriberInterface
         ];
     }
 
-    public function onBlockListViewAddBlockTypes(ViewEvent $event)
+    public function onBlockListViewAddBlockTypes(ViewEvent $event): void
     {
         $event->getData()['blockTypes'] = $this->blockTypes;
     }
