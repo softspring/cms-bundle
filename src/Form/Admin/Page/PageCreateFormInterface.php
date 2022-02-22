@@ -1,6 +1,6 @@
 <?php
 
-namespace Softspring\CmsBundle\Form\Admin;
+namespace Softspring\CmsBundle\Form\Admin\Page;
 
 use Softspring\CrudlBundle\Form\EntityCreateFormInterface;
 

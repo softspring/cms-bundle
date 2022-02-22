@@ -1,6 +1,6 @@
 <?php
 
-namespace Softspring\CmsBundle\Form\Admin;
+namespace Softspring\CmsBundle\Form\Admin\Site;
 
 use Softspring\CrudlBundle\Form\EntityUpdateFormInterface;
 

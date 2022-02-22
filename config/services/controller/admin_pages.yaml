@@ -14,8 +14,8 @@ services:
         bind:
             $em: '@sfs_cms.entity_manager'
 
-    Softspring\CmsBundle\Form\Admin\:
-        resource: '../../../src/Form/Admin/Page*'
+    Softspring\CmsBundle\Form\Admin\Page\:
+        resource: '../../../src/Form/Admin/Page/Page*'
 
     Softspring\CmsBundle\EventListener\Admin\:
         resource: '../../../src/EventListener/Admin/Page*'
@@ -28,11 +28,11 @@ services:
         arguments:
             $manager: '@sfs_cms.admin.pages.manager'
             $eventDispatcher: '@event_dispatcher'
-            #            $listFilterForm: '@Softspring\CmsBundle\Form\Admin\PageListFilterFormInterface'
-            #            $deleteForm: '@Softspring\CmsBundle\Form\Admin\PageDeleteFormInterface'
+            #            $listFilterForm: '@Softspring\CmsBundle\Form\Admin\Page\PageListFilterFormInterface'
+            #            $deleteForm: '@Softspring\CmsBundle\Form\Admin\Page\PageDeleteFormInterface'
             $listFilterForm: null
-            $createForm: '@Softspring\CmsBundle\Form\Admin\PageCreateFormInterface'
-            $updateForm: '@Softspring\CmsBundle\Form\Admin\PageUpdateFormInterface'
+            $createForm: '@Softspring\CmsBundle\Form\Admin\Page\PageCreateFormInterface'
+            $updateForm: '@Softspring\CmsBundle\Form\Admin\Page\PageUpdateFormInterface'
             $deleteForm: null
             $config:
                 entity_attribute: 'page'

@@ -1,17 +1,17 @@
 <?php
 
-namespace Softspring\CmsBundle\Form\Admin;
+namespace Softspring\CmsBundle\Form\Admin\Page;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Softspring\CmsBundle\Model\LayoutInterface;
 use Softspring\CmsBundle\Model\PageInterface;
-use Softspring\CmsBundle\Model\SiteInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PageCreateForm extends AbstractType implements PageCreateFormInterface
+class PageUpdateForm extends AbstractType implements PageUpdateFormInterface
 {
     protected EntityManagerInterface $em;
 
@@ -25,7 +25,7 @@ class PageCreateForm extends AbstractType implements PageCreateFormInterface
         $resolver->setDefaults([
             'data_class' => PageInterface::class,
             'label_format' => 'admin_pages.form.%name%.label',
-            'validation_groups' => ['Default', 'create'],
+            'validation_groups' => ['Default', 'update'],
             'translation_domain' => 'sfs_cms',
         ]);
     }
@@ -34,16 +34,13 @@ class PageCreateForm extends AbstractType implements PageCreateFormInterface
     {
         $builder->add('name', TextType::class);
 
-        // if ($this->manager->getEntityClassReflection()->implementsInterface(SiteReferenceInterface::class)) {
-        $builder->add('site', EntityType::class, [
-            // 'class' => SiteInterface::class,
+        $builder->add('layout', EntityType::class, [
             'required' => false,
-            'class' => SiteInterface::class,
+            'class' => LayoutInterface::class,
             'em' => $this->em,
-            'choice_label' => function (SiteInterface $site) {
-                return $site->getName();
+            'choice_label' => function (LayoutInterface $layout) {
+                return $layout->getName();
             },
         ]);
-        // }
     }
 }

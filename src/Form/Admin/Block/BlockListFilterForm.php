@@ -1,12 +1,12 @@
 <?php
 
-namespace Softspring\CmsBundle\Form\Admin;
+namespace Softspring\CmsBundle\Form\Admin\Block;
 
 use Softspring\CrudlBundle\Form\EntityListFilterForm;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SiteListFilterForm extends EntityListFilterForm implements SiteListFilterFormInterface
+class BlockListFilterForm extends EntityListFilterForm implements BlockListFilterFormInterface
 {
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -14,7 +14,7 @@ class SiteListFilterForm extends EntityListFilterForm implements SiteListFilterF
 
         $resolver->setDefaults([
             'translation_domain' => 'sfs_cms',
-            'label_format' => 'admin_sites.list.filter_form.%name%.label',
+            'label_format' => 'admin_blocks.list.filter_form.%name%.label',
         ]);
     }
 

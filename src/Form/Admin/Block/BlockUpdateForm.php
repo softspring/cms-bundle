@@ -1,10 +1,10 @@
 <?php
 
-namespace Softspring\CmsBundle\Form\Admin;
+namespace Softspring\CmsBundle\Form\Admin\Block;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class BlockCreateForm extends AbstractBlockForm implements BlockCreateFormInterface
+class BlockUpdateForm extends AbstractBlockForm implements BlockUpdateFormInterface
 {
     /**
      * {@inheritDoc}
@@ -15,7 +15,8 @@ class BlockCreateForm extends AbstractBlockForm implements BlockCreateFormInterf
 
         $resolver->setDefaults([
             'translation_domain' => 'sfs_cms',
-            'label_format' => 'admin_blocks.create.form.%name%.label',
+            'label_format' => 'admin_blocks.update.form.%name%.label',
+            'validation_groups' => ['Default', 'update'],
         ]);
     }
 }

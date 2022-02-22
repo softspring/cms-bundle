@@ -1,10 +1,10 @@
 <?php
 
-namespace Softspring\CmsBundle\Form\Admin;
+namespace Softspring\CmsBundle\Form\Admin\Site;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SiteUpdateForm extends AbstractSiteForm implements SiteUpdateFormInterface
+class SiteCreateForm extends AbstractSiteForm implements SiteCreateFormInterface
 {
     /**
      * {@inheritDoc}
@@ -15,8 +15,8 @@ class SiteUpdateForm extends AbstractSiteForm implements SiteUpdateFormInterface
 
         $resolver->setDefaults([
             'translation_domain' => 'sfs_cms',
-            'label_format' => 'admin_sites.update.form.%name%.label',
-            'validation_groups' => ['Default', 'update'],
+            'label_format' => 'admin_sites.create.form.%name%.label',
+            'validation_groups' => ['Default', 'create'],
         ]);
     }
 }

@@ -15,8 +15,8 @@ services:
             $blockTypes: '%sfs_cms.block.types%'
 #            $em: '@sfs_cms.entity_manager'
 
-    Softspring\CmsBundle\Form\Admin\:
-        resource: '../../../src/Form/Admin/Block*'
+    Softspring\CmsBundle\Form\Admin\Block\:
+        resource: '../../../src/Form/Admin/Block/Block*'
 
     Softspring\CmsBundle\EventListener\Admin\:
         resource: '../../../src/EventListener/Admin/Block*'
@@ -29,10 +29,10 @@ services:
         arguments:
             $manager: '@Softspring\CmsBundle\Manager\BlockManagerInterface'
             $eventDispatcher: '@event_dispatcher'
-            $listFilterForm: '@Softspring\CmsBundle\Form\Admin\BlockListFilterFormInterface'
-            $createForm: '@Softspring\CmsBundle\Form\Admin\BlockCreateFormInterface'
-            $updateForm: '@Softspring\CmsBundle\Form\Admin\BlockUpdateFormInterface'
-            $deleteForm: '@Softspring\CmsBundle\Form\Admin\BlockDeleteFormInterface'
+            $listFilterForm: '@Softspring\CmsBundle\Form\Admin\Block\BlockListFilterFormInterface'
+            $createForm: '@Softspring\CmsBundle\Form\Admin\Block\BlockCreateFormInterface'
+            $updateForm: '@Softspring\CmsBundle\Form\Admin\Block\BlockUpdateFormInterface'
+            $deleteForm: '@Softspring\CmsBundle\Form\Admin\Block\BlockDeleteFormInterface'
             $config:
                 entity_attribute: 'block'
                 list:

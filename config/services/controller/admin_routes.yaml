@@ -12,10 +12,10 @@ services:
         autoconfigure: true
         public: false
         bind:
-    #            $em: '@sfs_cms.entity_manager'
+            $em: '@sfs_cms.entity_manager'
 
-    Softspring\CmsBundle\Form\Admin\:
-        resource: '../../../src/Form/Admin/Route*'
+    Softspring\CmsBundle\Form\Admin\Route\:
+        resource: '../../../src/Form/Admin/Route/Route*'
 
     Softspring\CmsBundle\EventListener\Admin\:
         resource: '../../../src/EventListener/Admin/Route*'
@@ -33,13 +33,13 @@ services:
         arguments:
             $manager: '@sfs_cms.admin.routes.manager'
             $eventDispatcher: '@event_dispatcher'
-            #            $listFilterForm: '@Softspring\CmsBundle\Form\Admin\RouteListFilterFormInterface'
-            #            $createForm: '@Softspring\CmsBundle\Form\Admin\RouteCreateFormInterface'
-            #            $updateForm: '@Softspring\CmsBundle\Form\Admin\RouteUpdateFormInterface'
-            #            $deleteForm: '@Softspring\CmsBundle\Form\Admin\RouteDeleteFormInterface'
+            #            $listFilterForm: '@Softspring\CmsBundle\Form\Admin\Route\RouteListFilterFormInterface'
+            #            $createForm: '@Softspring\CmsBundle\Form\Admin\Route\RouteCreateFormInterface'
+            #            $updateForm: '@Softspring\CmsBundle\Form\Admin\Route\RouteUpdateFormInterface'
+            #            $deleteForm: '@Softspring\CmsBundle\Form\Admin\Route\RouteDeleteFormInterface'
             $listFilterForm: null
-            $createForm: 'Softspring\CmsBundle\Form\Admin\RouteForm'
-            $updateForm: 'Softspring\CmsBundle\Form\Admin\RouteForm'
+            $createForm: 'Softspring\CmsBundle\Form\Admin\Route\RouteForm'
+            $updateForm: 'Softspring\CmsBundle\Form\Admin\Route\RouteForm'
             $deleteForm: null
             $config:
                 entity_attribute: 'route'

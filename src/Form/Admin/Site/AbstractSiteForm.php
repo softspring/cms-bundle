@@ -1,10 +1,12 @@
 <?php
 
-namespace Softspring\CmsBundle\Form\Admin;
+namespace Softspring\CmsBundle\Form\Admin\Site;
 
 use Softspring\CmsBundle\Manager\SiteManagerInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\Model\SiteLanguagesInterface;
+use Softspring\CmsBundle\Model\SiteSelectorHostInterface;
+use Softspring\CmsBundle\Model\SiteSelectorPathInterface;
 use Softspring\CmsBundle\Model\SiteSimpleCountriesInterface;
 use Softspring\DoctrineTemplates\Model\NamedInterface;
 use Symfony\Component\Form\AbstractType;
@@ -17,22 +19,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractSiteForm extends AbstractType
 {
-    /**
-     * @var SiteManagerInterface
-     */
-    protected $manager;
+    protected SiteManagerInterface $manager;
 
-    /**
-     * SiteCreateForm constructor.
-     */
     public function __construct(SiteManagerInterface $manager)
     {
         $this->manager = $manager;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -42,19 +35,26 @@ abstract class AbstractSiteForm extends AbstractType
         ]);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $siteClass = $this->manager->getEntityClassReflection();
+
         $builder->add('id');
         $builder->add('enabled', CheckboxType::class, ['required' => false]);
 
-        if ($this->manager->getEntityClassReflection()->implementsInterface(NamedInterface::class)) {
+        if ($siteClass->implementsInterface(NamedInterface::class)) {
             $builder->add('name', TextType::class, ['required' => false]);
         }
 
-        if ($this->manager->getEntityClassReflection()->implementsInterface(SiteLanguagesInterface::class)) {
+        if ($siteClass->implementsInterface(SiteSelectorPathInterface::class)) {
+            $builder->add('path', TextType::class, ['required' => false]);
+        }
+
+        if ($siteClass->implementsInterface(SiteSelectorHostInterface::class)) {
+            $builder->add('host', TextType::class, ['required' => false]);
+        }
+
+        if ($siteClass->implementsInterface(SiteLanguagesInterface::class)) {
             $builder->add('languages', LocaleType::class, [
                 'multiple' => true,
                 'required' => false,
@@ -65,7 +65,7 @@ abstract class AbstractSiteForm extends AbstractType
             ]);
         }
 
-        if ($this->manager->getEntityClassReflection()->implementsInterface(SiteSimpleCountriesInterface::class)) {
+        if ($siteClass->implementsInterface(SiteSimpleCountriesInterface::class)) {
             $builder->add('countries', CountryType::class, [
                 'multiple' => true,
                 'required' => false,

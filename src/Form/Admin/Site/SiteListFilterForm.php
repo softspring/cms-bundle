@@ -1,24 +1,25 @@
 <?php
 
-namespace Softspring\CmsBundle\Form\Admin;
+namespace Softspring\CmsBundle\Form\Admin\Site;
 
-use Softspring\CmsBundle\Model\SiteInterface;
-use Symfony\Component\Form\AbstractType;
+use Softspring\CrudlBundle\Form\EntityListFilterForm;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SiteDeleteForm extends AbstractType implements SiteDeleteFormInterface
+class SiteListFilterForm extends EntityListFilterForm implements SiteListFilterFormInterface
 {
     public function configureOptions(OptionsResolver $resolver)
     {
+        parent::configureOptions($resolver);
+
         $resolver->setDefaults([
-            'data_class' => SiteInterface::class,
             'translation_domain' => 'sfs_cms',
-            'label_format' => 'admin_sites.delete.form.%name%.label',
+            'label_format' => 'admin_sites.list.filter_form.%name%.label',
         ]);
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        parent::buildForm($builder, $options);
     }
 }

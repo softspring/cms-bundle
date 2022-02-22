@@ -1,6 +1,6 @@
 <?php
 
-namespace Softspring\CmsBundle\Form\Admin;
+namespace Softspring\CmsBundle\Form\Admin\Route;
 
 use Softspring\CmsBundle\Model\RoutePathInterface;
 use Symfony\Component\Form\AbstractType;

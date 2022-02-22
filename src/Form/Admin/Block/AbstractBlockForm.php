@@ -1,6 +1,6 @@
 <?php
 
-namespace Softspring\CmsBundle\Form\Admin;
+namespace Softspring\CmsBundle\Form\Admin\Block;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Softspring\CmsBundle\Manager\BlockManagerInterface;

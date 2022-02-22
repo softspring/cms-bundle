@@ -25,7 +25,7 @@ sfs_cms_admin_pages_content:
     controller: sfs_cms.admin.page.controller::update
     path: /{page}/content
     defaults:
-        updateForm: 'Softspring\CmsBundle\Form\Admin\PageContentForm'
+        updateForm: 'Softspring\CmsBundle\Form\Admin\Page\PageContentForm'
         initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_PAGES_CONTENT_INITIALIZE
         form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_PAGES_CONTENT_FORM_VALID
         success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_PAGES_CONTENT_SUCCESS
@@ -38,7 +38,7 @@ sfs_cms_admin_pages_seo:
     controller: sfs_cms.admin.page.controller::update
     path: /{page}/seo
     defaults:
-        updateForm: 'Softspring\CmsBundle\Form\Admin\PageSeoForm'
+        updateForm: 'Softspring\CmsBundle\Form\Admin\Page\PageSeoForm'
         initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_PAGES_SEO_INITIALIZE
         form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_PAGES_SEO_FORM_VALID
         success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_PAGES_SEO_SUCCESS

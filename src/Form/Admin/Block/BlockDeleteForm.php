@@ -1,6 +1,6 @@
 <?php
 
-namespace Softspring\CmsBundle\Form\Admin;
+namespace Softspring\CmsBundle\Form\Admin\Block;
 
 use Softspring\CmsBundle\Model\BlockInterface;
 use Symfony\Component\Form\AbstractType;
