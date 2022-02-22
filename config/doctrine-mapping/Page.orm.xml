@@ -8,6 +8,8 @@
 
         <field name="name" column="name" type="string" nullable="false"/>
 
+        <field name="dynamicModules" column="dynamic_modules" type="json" nullable="true"/>
+
         <many-to-one field="layout" target-entity="Softspring\CmsBundle\Model\LayoutInterface" >
             <join-column name="layout_id" referenced-column-name="id" on-delete="RESTRICT" />
         </many-to-one>

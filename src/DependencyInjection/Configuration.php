@@ -96,6 +96,37 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
 
+                ->arrayNode('dynamic_modules')
+                    ->useAttributeAsKey('key')
+                    ->arrayPrototype()
+                        ->children()
+                            ->scalarNode('render_template')->isRequired()->end()
+                            ->scalarNode('edit_template')->end()
+                            ->scalarNode('form_template')->end()
+
+                            ->scalarNode('form_type')->end()
+
+                            ->arrayNode('form_options')
+                                ->useAttributeAsKey('key')
+                                ->prototype('variable')->end()
+                            ->end()
+
+                            ->arrayNode('form_fields')
+                                ->useAttributeAsKey('key')
+                                ->arrayPrototype()
+                                    ->children()
+                                        ->scalarNode('type')->isRequired()->end()
+                                        ->arrayNode('type_options')
+                                            ->useAttributeAsKey('key')
+                                            ->prototype('variable')->end()
+                                        ->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+
             ->end()
         ;
 

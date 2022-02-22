@@ -10,6 +10,7 @@ services:
             $modulesMappings: '%sfs_cms.modules.mappings%'
             $siteType: '%sfs_cms.site.type%'
             $typesMap: '%sfs_cms.modules.mapping_forms%'
+            $dynamicModules: '%sfs_cms.dynamic_modules%'
 
     sfs_cms.admin.pages.manager:
         class: Softspring\CrudlBundle\Manager\DefaultCrudlEntityManager
@@ -40,6 +41,8 @@ services:
     Softspring\CmsBundle\Render\Module\:
         resource: '../../src/Render/Module/*'
         tags: ['sfs_cms.module_render']
+
+    Softspring\CmsBundle\Form\DynamicModuleCollectionType: ~
 
     Softspring\CmsBundle\Request\ParamConverter\PageParamConverter:
         arguments: ['@sfs_cms.admin.pages.manager']

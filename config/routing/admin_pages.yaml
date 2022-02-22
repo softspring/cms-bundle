@@ -34,6 +34,14 @@ sfs_cms_admin_pages_content:
         config:
             view: '@SfsCms/admin/page/content.html.twig'
 
+sfs_cms_admin_pages_content2:
+    controller: sfs_cms.admin.page.controller::update
+    path: /{page}/content2
+    defaults:
+        updateForm: 'Softspring\CmsBundle\Form\Admin\Page\PageContent2Form'
+        config:
+            view: '@SfsCms/admin/page/content2.html.twig'
+
 sfs_cms_admin_pages_seo:
     controller: sfs_cms.admin.page.controller::update
     path: /{page}/seo

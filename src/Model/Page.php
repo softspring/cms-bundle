@@ -29,6 +29,8 @@ abstract class Page implements PageInterface
      */
     protected Collection $routes;
 
+    protected ?array $dynamicModules = null;
+
     public function __construct()
     {
         $this->modules = new ArrayCollection();
@@ -104,4 +106,22 @@ abstract class Page implements PageInterface
     {
         return $this->routes;
     }
+
+    /**
+     * @return array|null
+     */
+    public function getDynamicModules(): ?array
+    {
+        return $this->dynamicModules;
+    }
+
+    /**
+     * @param array|null $dynamicModules
+     */
+    public function setDynamicModules(?array $dynamicModules): void
+    {
+        $this->dynamicModules = $dynamicModules;
+    }
+
+
 }

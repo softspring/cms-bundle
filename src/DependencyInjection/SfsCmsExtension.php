@@ -25,6 +25,8 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $config = $processor->processConfiguration($configuration, $configs);
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../../config/services'));
 
+        $container->setParameter('sfs_cms.dynamic_modules', $config['dynamic_modules']);
+
         // set config parameters
         $container->setParameter('sfs_cms.entity_manager_name', $config['entity_manager']);
 

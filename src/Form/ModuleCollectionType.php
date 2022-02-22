@@ -10,10 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ModuleCollectionType extends DoctrinePolymorphicCollectionType
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $em;
+    protected EntityManagerInterface $em;
 
     protected array $typesMap;
 

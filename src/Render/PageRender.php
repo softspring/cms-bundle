@@ -19,25 +19,51 @@ class PageRender
      */
     protected $moduleRenders;
 
+    protected array $dynamicModules;
+
     /**
      * @param ModuleRenderInterface[] $moduleRenders
      */
-    public function __construct(Environment $twig, array $moduleRenders)
+    public function __construct(Environment $twig, array $moduleRenders, array $dynamicModules)
     {
         $this->twig = $twig;
         $this->moduleRenders = $moduleRenders;
+        $this->dynamicModules = $dynamicModules;
     }
 
     public function render(PageInterface $page): string
     {
-        $content = implode('', $page->getModules()->map(function (AbstractModule $module) {
-            return $this->getModuleRender($module)->render($module);
-        })->toArray());
+        if (null !== $page->getDynamicModules()) {
+            $content = '';
+
+            foreach ($page->getDynamicModules() as $dynamicModule) {
+                $content .= $this->renderModule2($dynamicModule);
+            }
+        } else {
+            $content = implode('', $page->getModules()->map(function (AbstractModule $module) {
+                return $this->getModuleRender($module)->render($module);
+            })->toArray());
+        }
 
         return $this->twig->render($page->getLayout()->getTemplate(), [
             'content' => $content,
             'page' => $page,
         ]);
+    }
+
+    protected function renderModule2(array $module): string
+    {
+        if ($module['_type'] == 'container') {
+            $content = '';
+
+            foreach ($module['modules']['modules'] as $submodule) {
+                $content .= '<div class="col">'.$this->renderModule2($submodule).'</div>';
+            }
+
+            return "<div class=\"row\">$content</div>";
+        }
+
+        return $this->twig->render($this->dynamicModules[$module['_type']]['render_template'], $module);
     }
 
     protected function getModuleRender(AbstractModule $module): ModuleRenderInterface

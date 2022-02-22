@@ -32,18 +32,18 @@
                 </div>
                 <div class="container">
                     <h3>Traducciones</h3>
-                    {% set stats = sfs_trans_stats(page, page.site.languages) %}
-                    {% for locale,localeStats in stats %}
-                        <div class="row">
-                            <div class="col-2 text-right">{{ locale }}</div>
-                            <div class="col-10">
-                                {% if localeStats.total %}
-                                    {{ (localeStats.translated/localeStats.total*100)|round }}%
-                                    ({{ localeStats.translated }}/{{ localeStats.total }})
-                                {% endif %}
-                            </div>
-                        </div>
-                    {% endfor %}
+{#                    {% set stats = sfs_trans_stats(page, page.site.languages) %}#}
+{#                    {% for locale,localeStats in stats %}#}
+{#                        <div class="row">#}
+{#                            <div class="col-2 text-right">{{ locale }}</div>#}
+{#                            <div class="col-10">#}
+{#                                {% if localeStats.total %}#}
+{#                                    {{ (localeStats.translated/localeStats.total*100)|round }}%#}
+{#                                    ({{ localeStats.translated }}/{{ localeStats.total }})#}
+{#                                {% endif %}#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    {% endfor %}#}
                 </div>
             </div>
             <div class="col-4">
