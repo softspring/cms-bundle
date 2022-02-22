@@ -10,8 +10,7 @@ trait SiteSimpleCountriesTrait
     use SiteSimpleCountriesTraitModel;
 
     /**
-     * @var array
      * @ORM\Column(name="countries", type="simple_array", nullable=false)
      */
-    protected $countries = [];
+    protected array $countries = [];
 }

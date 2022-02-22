@@ -18,7 +18,7 @@ class TitleModule extends AbstractModule
      * @ORM\Column(name="title", type="text", nullable=true)
      * @Translation()
      */
-    protected ?string $title;
+    protected ?string $title = null;
 
     public function getTitle(): ?string
     {

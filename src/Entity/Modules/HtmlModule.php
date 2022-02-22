@@ -18,7 +18,7 @@ class HtmlModule extends AbstractModule
      * @ORM\Column(name="code", type="text", nullable=true)
      * @TranslationsHtml()
      */
-    protected ?string $code;
+    protected ?string $code = null;
 
     public function getCode(): ?string
     {

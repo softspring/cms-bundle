@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Twig\Extension;
 
+use Doctrine\Common\Collections\Collection;
 use Softspring\CmsBundle\Manager\SiteManagerInterface;
 use Softspring\CmsBundle\Model\SiteLanguagesInterface;
 use Softspring\CmsBundle\Model\SiteSimpleCountriesInterface;
@@ -10,27 +11,22 @@ use Twig\TwigFunction;
 
 class SiteExtension extends AbstractExtension
 {
-    /**
-     * @var SiteManagerInterface|null
-     */
-    protected $siteManager;
+    protected ?SiteManagerInterface $siteManager;
 
-    /**
-     * CmsExtension constructor.
-     */
     public function __construct(?SiteManagerInterface $siteManager)
     {
         $this->siteManager = $siteManager;
     }
 
     /**
-     * {@inheritDoc}
+     * @return TwigFunction[]
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('sfs_cms_site_has_languages', [$this, 'siteHasLanguages']),
             new TwigFunction('sfs_cms_site_has_countries', [$this, 'siteHasCountries']),
+            new TwigFunction('sfs_cms_get_sites', [$this, 'getSites']),
         ];
     }
 
@@ -50,5 +46,13 @@ class SiteExtension extends AbstractExtension
         }
 
         return $this->siteManager->getEntityClassReflection()->implementsInterface(SiteSimpleCountriesInterface::class);
+    }
+
+    /**
+     * @return array|object[]|Collection
+     */
+    public function getSites()
+    {
+        return $this->siteManager->getRepository()->findAll();
     }
 }

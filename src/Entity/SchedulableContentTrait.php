@@ -7,18 +7,16 @@ use Doctrine\ORM\Mapping as ORM;
 trait SchedulableContentTrait
 {
     /**
-     * @var int|null
-     *
      * @ORM\Column(type="integer", nullable=true, options={"unsigned":true})
      */
-    protected $publishStartDate;
+    protected ?int $publishStartDate = null;
 
     /**
      * @var int|null
      *
      * @ORM\Column(type="integer", nullable=true, options={"unsigned":true})
      */
-    protected $publishEndDate;
+    protected ?int $publishEndDate = null;
 
     public function getPublishStartDate(): ?\DateTime
     {

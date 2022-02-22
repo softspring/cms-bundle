@@ -7,14 +7,15 @@ use Doctrine\Common\Collections\Collection;
 
 abstract class Route implements RouteInterface
 {
-    protected ?string $id;
+    protected ?string $id = null;
+    protected ?int $type = null;
 
     /**
      * @var RoutePathInterface[]|Collection
      */
     protected Collection $paths;
 
-    protected ?PageInterface $page;
+    protected ?PageInterface $page = null;
 
     public function __construct()
     {
@@ -34,6 +35,16 @@ abstract class Route implements RouteInterface
     public function setId(?string $id): void
     {
         $this->id = $id;
+    }
+
+    public function getType(): ?int
+    {
+        return $this->type;
+    }
+
+    public function setType(?int $type): void
+    {
+        $this->type = $type;
     }
 
     /**

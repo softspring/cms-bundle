@@ -10,9 +10,9 @@ use Softspring\TranslationBundle\Configuration\TranslationsEmbed;
 
 abstract class Page implements PageInterface
 {
-    protected ?string $name;
+    protected ?string $name = null;
 
-    protected ?LayoutInterface $layout;
+    protected ?LayoutInterface $layout = null;
 
     /**
      * @var AbstractModule[]|Collection

@@ -4,10 +4,7 @@ namespace Softspring\CmsBundle\Model\Traits;
 
 trait SiteSimpleCountriesTrait
 {
-    /**
-     * @var array
-     */
-    protected $countries = [];
+    protected array $countries = [];
 
     public function getCountries(): array
     {

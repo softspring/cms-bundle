@@ -14,5 +14,5 @@ trait SiteReferenceTrait
      * @ORM\ManyToOne(targetEntity="Softspring\CmsBundle\Model\SiteInterface")
      * @ORM\JoinColumn(name="site_id", referencedColumnName="id")
      */
-    protected ?SiteInterface $site;
+    protected ?SiteInterface $site = null;
 }

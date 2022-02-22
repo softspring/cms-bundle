@@ -4,9 +4,9 @@ namespace Softspring\CmsBundle\Model;
 
 abstract class Block implements BlockInterface
 {
-    protected ?string $key;
+    protected ?string $key = null;
 
-    protected ?array $content;
+    protected ?array $content = null;
 
     public function getKey(): ?string
     {

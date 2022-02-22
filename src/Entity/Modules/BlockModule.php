@@ -16,7 +16,7 @@ class BlockModule extends AbstractModule
      * @ORM\ManyToOne(targetEntity="Softspring\CmsBundle\Model\BlockInterface")
      * @ORM\JoinColumn(name="block_id", referencedColumnName="id")
      */
-    protected ?BlockInterface $block;
+    protected ?BlockInterface $block = null;
 
     public function getBlock(): ?BlockInterface
     {

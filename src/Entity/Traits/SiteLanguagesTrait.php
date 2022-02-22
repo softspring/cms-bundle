@@ -10,8 +10,7 @@ trait SiteLanguagesTrait
     use SiteLanguagesTraitModel;
 
     /**
-     * @var array
      * @ORM\Column(name="languages", type="simple_array", nullable=false)
      */
-    protected $languages = [];
+    protected array $languages = [];
 }

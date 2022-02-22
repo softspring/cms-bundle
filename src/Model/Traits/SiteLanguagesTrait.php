@@ -4,10 +4,7 @@ namespace Softspring\CmsBundle\Model\Traits;
 
 trait SiteLanguagesTrait
 {
-    /**
-     * @var array
-     */
-    protected $languages = [];
+    protected array $languages = [];
 
     public function getLanguages(): array
     {

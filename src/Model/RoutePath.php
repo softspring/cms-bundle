@@ -4,15 +4,15 @@ namespace Softspring\CmsBundle\Model;
 
 abstract class RoutePath implements RoutePathInterface
 {
-    protected ?string $id;
+    protected ?string $id = null;
 
-    protected ?RouteInterface $route;
+    protected ?RouteInterface $route = null;
 
-    protected ?string $path;
+    protected ?string $path = null;
 
-    protected ?int $cacheTtl;
+    protected ?int $cacheTtl = null;
 
-    protected ?string $locale;
+    protected ?string $locale = null;
 
     public function getRoute(): ?RouteInterface
     {

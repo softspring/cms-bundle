@@ -1,0 +1,7 @@
+{% if sfs_cms_site_has_languages() %}
+    <ul>
+        {% for language in app.site.languages %}
+            <li><a href="#language-url">{{ language|trans }}</a></li>
+        {% endfor %}
+    </ul>
+{% endif %}

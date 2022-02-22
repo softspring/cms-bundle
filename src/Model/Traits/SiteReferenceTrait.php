@@ -6,7 +6,7 @@ use Softspring\CmsBundle\Model\SiteInterface;
 
 trait SiteReferenceTrait
 {
-    protected ?SiteInterface $site;
+    protected ?SiteInterface $site = null;
 
     public function getSite(): ?SiteInterface
     {

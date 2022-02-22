@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 
 abstract class Layout implements LayoutInterface
 {
-    protected ?string $name;
+    protected ?string $name = null;
 
-    protected ?string $template;
+    protected ?string $template = null;
 
     /**
      * @var PageInterface[]|Collection

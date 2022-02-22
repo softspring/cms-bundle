@@ -2,9 +2,10 @@
 
 namespace Softspring\CmsBundle\Model;
 
-interface SiteReferenceInterface
+/**
+ * @deprecated use Softspring\CmsBundle\Model\SiteReferenceSingleInterface
+ */
+interface SiteReferenceInterface extends SiteReferenceSingleInterface
 {
-    public function getSite(): ?SiteInterface;
 
-    public function setSite(?SiteInterface $site): void;
 }

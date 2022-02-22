@@ -16,35 +16,23 @@ use Twig\TwigFunction;
 
 class BlockExtension extends AbstractExtension
 {
-    /**
-     * @var BlockManagerInterface|null
-     */
-    protected $blockManager;
+    protected EntityManagerInterface $em;
 
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $em;
+    protected RenderBlock $renderer;
 
-    /**
-     * @var RenderBlock
-     */
-    protected $renderer;
+    protected ?BlockManagerInterface $blockManager;
 
-    /**
-     * BlockExtension constructor.
-     */
-    public function __construct(?BlockManagerInterface $blockManager, EntityManagerInterface $em, RenderBlock $renderer)
+    public function __construct(EntityManagerInterface $em, RenderBlock $renderer, ?BlockManagerInterface $blockManager)
     {
-        $this->blockManager = $blockManager;
         $this->em = $em;
         $this->renderer = $renderer;
+        $this->blockManager = $blockManager;
     }
 
     /**
-     * {@inheritDoc}
+     * @return TwigFunction[]
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('sfs_cms_render_block', [$this, 'renderBlock'], ['is_safe' => ['html']]),
