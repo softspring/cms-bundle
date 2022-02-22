@@ -29,6 +29,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $container->setParameter('sfs_cms.entity_manager_name', $config['entity_manager']);
 
         // configure site classes
+        $container->setParameter('sfs_cms.site.type', $config['site']['type']);
         $container->setParameter('sfs_cms.site.class', $config['site']['class']);
         $container->setParameter('sfs_cms.site.route_param_name', $config['site']['route_param_name'] ?? null);
         $container->setParameter('sfs_cms.site.find_field_name', $config['site']['find_field_name'] ?? null);

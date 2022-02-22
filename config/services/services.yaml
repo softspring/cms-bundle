@@ -8,6 +8,7 @@ services:
             $blockTypes: '%sfs_cms.block.types%'
             $formFactory: '@form.factory'
             $modulesMappings: '%sfs_cms.modules.mappings%'
+            $siteType: '%sfs_cms.site.type%'
             $typesMap: '%sfs_cms.modules.mapping_forms%'
 
     sfs_cms.admin.pages.manager:

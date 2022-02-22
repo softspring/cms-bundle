@@ -11,10 +11,12 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class RouteResolverListener implements EventSubscriberInterface
 {
     protected EntityManagerInterface $em;
+    protected string $siteType;
 
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, string $siteType)
     {
         $this->em = $em;
+        $this->siteType = $siteType;
     }
 
     public static function getSubscribedEvents(): array

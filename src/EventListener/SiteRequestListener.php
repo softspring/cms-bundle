@@ -4,7 +4,7 @@ namespace Softspring\CmsBundle\EventListener;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
-use Softspring\CoreBundle\Twig\ExtensibleAppVariable;
+use Softspring\TwigExtraBundle\Twig\ExtensibleAppVariable;
 use Symfony\Bridge\Twig\AppVariable;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -26,13 +26,16 @@ class SiteRequestListener implements EventSubscriberInterface
 
     protected string $findParamName;
 
-    public function __construct(EntityManagerInterface $em, string $siteRouteParamName, RouterInterface $router, AppVariable $twigAppVariable, string $findParamName)
+    protected string $siteType;
+
+    public function __construct(EntityManagerInterface $em, string $siteRouteParamName, RouterInterface $router, AppVariable $twigAppVariable, string $findParamName, string $siteType)
     {
         $this->em = $em;
         $this->siteRouteParamName = $siteRouteParamName;
         $this->router = $router;
         $this->twigAppVariable = $twigAppVariable;
         $this->findParamName = $findParamName;
+        $this->siteType = $siteType;
 
         if (!$this->twigAppVariable instanceof ExtensibleAppVariable) {
             throw new InvalidConfigurationException('You must configure SfsCoreBundle to extend twig app variable');
@@ -54,6 +57,12 @@ class SiteRequestListener implements EventSubscriberInterface
     public function onRequestGetSite(RequestEvent $event): void
     {
         $request = $event->getRequest();
+
+        switch ($this->siteType) {
+            case 'path':
+            case 'host':
+                // TODO
+        }
 
         if ($request->attributes->has($this->siteRouteParamName)) {
             $site = $request->attributes->get($this->siteRouteParamName);

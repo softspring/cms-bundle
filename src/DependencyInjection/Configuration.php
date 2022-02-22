@@ -19,8 +19,9 @@ class Configuration implements ConfigurationInterface
                 ->end()
 
                 ->arrayNode('site')
-                    ->addDefaultsIfNotSet()
+                    ->isRequired()
                     ->children()
+                        ->enumNode('type')->values(['path', 'host'])->isRequired()->end()
                         ->scalarNode('class')->defaultValue('App\Entity\Site')->end()
                         ->scalarNode('route_param_name')->defaultValue('_site')->end()
                         ->scalarNode('find_field_name')->defaultValue('id')->end()
