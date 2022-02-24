@@ -10,10 +10,7 @@ class SiteManager implements SiteManagerInterface
 {
     use CrudlEntityManagerTrait;
 
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $em;
+    protected EntityManagerInterface $em;
 
     /**
      * SiteManager constructor.

@@ -10,10 +10,7 @@ class BlockManager implements BlockManagerInterface
 {
     use CrudlEntityManagerTrait;
 
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $em;
+    protected EntityManagerInterface $em;
 
     /**
      * BlockManager constructor.
