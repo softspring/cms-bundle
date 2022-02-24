@@ -28,6 +28,7 @@ services:
             - { method: setContainer, arguments: ['@service_container'] }
         arguments:
             $manager: '@Softspring\CmsBundle\Manager\BlockManagerInterface'
+            $eventDispatcher: '@event_dispatcher'
             $listFilterForm: '@Softspring\CmsBundle\Form\Admin\BlockListFilterFormInterface'
             $createForm: '@Softspring\CmsBundle\Form\Admin\BlockCreateFormInterface'
             $updateForm: '@Softspring\CmsBundle\Form\Admin\BlockUpdateFormInterface'

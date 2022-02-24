@@ -3,8 +3,8 @@
 namespace Softspring\CmsBundle\EventListener;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Softspring\CoreBundle\Twig\ExtensibleAppVariable;
 use Softspring\CmsBundle\Model\SiteInterface;
+use Softspring\TwigExtraBundle\Twig\ExtensibleAppVariable;
 use Symfony\Bridge\Twig\AppVariable;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

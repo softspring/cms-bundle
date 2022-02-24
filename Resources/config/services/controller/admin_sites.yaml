@@ -14,6 +14,7 @@ services:
             - { method: setContainer, arguments: ['@service_container'] }
         arguments:
             $manager: '@Softspring\CmsBundle\Manager\SiteManagerInterface'
+            $eventDispatcher: '@event_dispatcher'
             $listFilterForm: '@Softspring\CmsBundle\Form\Admin\SiteListFilterFormInterface'
             $createForm: '@Softspring\CmsBundle\Form\Admin\SiteCreateFormInterface'
             $updateForm: '@Softspring\CmsBundle\Form\Admin\SiteUpdateFormInterface'
