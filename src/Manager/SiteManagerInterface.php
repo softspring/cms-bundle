@@ -10,15 +10,15 @@ interface SiteManagerInterface extends CrudlEntityManagerInterface
     /**
      * @return SiteInterface
      */
-    public function createEntity();
+    public function createEntity(): object;
 
     /**
      * @param SiteInterface $entity
      */
-    public function saveEntity($entity): void;
+    public function saveEntity(object $entity): void;
 
     /**
      * @param SiteInterface $entity
      */
-    public function deleteEntity($entity): void;
+    public function deleteEntity(object $entity): void;
 }

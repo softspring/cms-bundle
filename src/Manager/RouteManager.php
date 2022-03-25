@@ -18,7 +18,7 @@ class RouteManager implements RouteManagerInterface
         $this->em = $em;
     }
 
-    public function createEntity()
+    public function createEntity(): object
     {
         $class = $this->getEntityClass();
         /** @var RouteInterface $route */

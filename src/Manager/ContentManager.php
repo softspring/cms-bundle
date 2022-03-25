@@ -29,7 +29,7 @@ class ContentManager implements ContentManagerInterface
         return ContentInterface::class;
     }
 
-    public function createEntity(?string $type = null)
+    public function createEntity(?string $type = null): object
     {
         $class = $this->getTypeClass($type);
 
