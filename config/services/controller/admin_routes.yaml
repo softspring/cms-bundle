@@ -1,6 +1,6 @@
 parameters:
     sfs_cms.admin.routes.list_view: '@@SfsCms/admin/route/list.html.twig'
-    sfs_cms.admin.routes.list_page_view: '@@SfsCms/admin/route/list-page.html.twig'
+    sfs_cms.admin.routes.list_content_view: '@@SfsCms/admin/route/list-content.html.twig'
     sfs_cms.admin.routes.create_view: '@@SfsCms/admin/route/create.html.twig'
     sfs_cms.admin.routes.update_view: '@@SfsCms/admin/route/update.html.twig'
     sfs_cms.admin.routes.delete_view: '@@SfsCms/admin/route/delete.html.twig'
@@ -20,10 +20,16 @@ services:
     Softspring\CmsBundle\EventListener\Admin\:
         resource: '../../../src/EventListener/Admin/Route*'
 
-    sfs_cms.admin.routes.manager:
-        class: Softspring\CrudlBundle\Manager\DefaultCrudlEntityManager
-        arguments:
-            $targetClass: 'Softspring\CmsBundle\Model\RouteInterface'
+    Softspring\CmsBundle\Manager\RouteManagerInterface:
+        class: Softspring\CmsBundle\Manager\RouteManager
+
+    Softspring\CmsBundle\Manager\RoutePathManagerInterface:
+        class: Softspring\CmsBundle\Manager\RoutePathManager
+
+#    sfs_cms.admin.routes.manager:
+#        class: Softspring\CrudlBundle\Manager\DefaultCrudlEntityManager
+#        arguments:
+#            $targetClass: 'Softspring\CmsBundle\Model\RouteInterface'
 
     sfs_cms.admin.route.controller:
         class: Softspring\CrudlBundle\Controller\CrudlController
@@ -31,7 +37,7 @@ services:
         calls:
             - { method: setContainer, arguments: ['@service_container'] }
         arguments:
-            $manager: '@sfs_cms.admin.routes.manager'
+            $manager: '@Softspring\CmsBundle\Manager\RouteManagerInterface'
             $eventDispatcher: '@event_dispatcher'
             #            $listFilterForm: '@Softspring\CmsBundle\Form\Admin\Route\RouteListFilterFormInterface'
             #            $createForm: '@Softspring\CmsBundle\Form\Admin\Route\RouteCreateFormInterface'
@@ -48,7 +54,7 @@ services:
                     initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_LIST_INITIALIZE
                     view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_LIST_VIEW
                     view: '%sfs_cms.admin.routes.list_view%'
-                    view_page: '%sfs_cms.admin.routes.list_page_view%'
+                    view_content: '%sfs_cms.admin.routes.list_content_view%'
                 create:
                     is_granted: 'ROLE_SFS_CMS_ADMIN_ROUTES_CREATE'
                     initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_CREATE_INITIALIZE

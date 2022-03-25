@@ -1,6 +1,6 @@
 parameters:
     sfs_cms.admin.blocks.list_view: '@@SfsCms/admin/block/list.html.twig'
-    sfs_cms.admin.blocks.list_page_view: '@@SfsCms/admin/block/list-page.html.twig'
+    sfs_cms.admin.blocks.list_content_view: '@@SfsCms/admin/block/list-content.html.twig'
     sfs_cms.admin.blocks.create_view: '@@SfsCms/admin/block/create.html.twig'
     sfs_cms.admin.blocks.update_view: '@@SfsCms/admin/block/update.html.twig'
     sfs_cms.admin.blocks.delete_view: '@@SfsCms/admin/block/delete.html.twig'
@@ -40,7 +40,7 @@ services:
                     initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_LIST_INITIALIZE
                     view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_LIST_VIEW
                     view: '%sfs_cms.admin.blocks.list_view%'
-                    view_page: '%sfs_cms.admin.blocks.list_page_view%'
+                    view_content: '%sfs_cms.admin.blocks.list_content_view%'
                 create:
                     is_granted: 'ROLE_SFS_CMS_ADMIN_BLOCKS_CREATE'
                     initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_CREATE_INITIALIZE

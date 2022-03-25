@@ -1,11 +1,11 @@
-{% trans_default_domain 'sfs_cms' %}
+{% trans_default_domain 'sfs_cms_admin' %}
 {% extends '@SfsCms/admin_layout.html.twig' %}
 {% block title %}{{ 'admin_sites.delete.page_title'|trans }}{% endblock %}
 
 {% block breadcrums_content %}
     {{ parent() }}
     <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_sites_list') }}">{{ 'admin_sites.list.breadcrumb'|trans }}</a></li>
-    <li class="breadcrumb-item active" aria-current="page">{{ 'admin_sites.delete.breadcrumb'|trans({'%name%': site.name|default(site.id) }) }}</li>
+    <li class="breadcrumb-item active" aria-current="content">{{ 'admin_sites.delete.breadcrumb'|trans({'%name%': site.name|default(site.id) }) }}</li>
 {% endblock breadcrums_content %}
 
 {% block content %}

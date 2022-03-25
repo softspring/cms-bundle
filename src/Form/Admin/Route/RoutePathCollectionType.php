@@ -2,14 +2,16 @@
 
 namespace Softspring\CmsBundle\Form\Admin\Route;
 
+use Softspring\CmsBundle\Entity\RoutePath;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Count;
 
 class RoutePathCollectionType extends AbstractType
 {
-    public function getParent(): string
+    public function getParent(): ?string
     {
         return CollectionType::class;
     }

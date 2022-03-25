@@ -1,0 +1,27 @@
+list:
+    controller: Softspring\CmsBundle\Controller\Admin\ContentController::list
+    path: /
+
+create:
+    controller: Softspring\CmsBundle\Controller\Admin\ContentController::create
+    path: /create
+
+details:
+    controller: Softspring\CmsBundle\Controller\Admin\ContentController::read
+    path: /{content}
+
+preview:
+    controller: Softspring\CmsBundle\Controller\Admin\ContentController::preview
+    path: /{content}/preview
+
+update:
+    controller: Softspring\CmsBundle\Controller\Admin\ContentController::update
+    path: /{content}/update
+
+content:
+    controller: Softspring\CmsBundle\Controller\Admin\ContentController::content
+    path: /{content}/content
+
+preview_content:
+    controller: Softspring\CmsBundle\Controller\Admin\ContentController:previewContent
+    path: /{content}/preview-content

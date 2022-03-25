@@ -1,0 +1,209 @@
+admin:
+    global_breadcrumb: "CMS"
+
+admin_sites:
+    list:
+        page_title: "Sitios"
+        title: "Sitios"
+        breadcrumb: "Sitios"
+        fields:
+            id.header: "Sitio"
+            name.header: "Nombre"
+            enabled.header: "Activo"
+            languages.header: "Idiomas"
+            countries.header: "Países"
+        actions.header: "Acciones"
+        actions:
+            create.button: "Nuevo sitio"
+            update.button: "Editar"
+            details.button: "Detalles"
+
+    create:
+        page_title: "Nuevo sitio"
+        title: "Nuevo sitio"
+        breadcrumb: "Nuevo sitio"
+        form:
+            id.label: "ID"
+            enabled.label: "Activo"
+            name.label: "Nombre"
+            languages.label: "Idiomas"
+            countries.label: "Países"
+        actions:
+            create.button: "Crear"
+            cancel.button: "Cancelar"
+
+    update:
+        page_title: "Editar sitio"
+        title: "Editar sitio"
+        breadcrumb: "Editar %name%"
+        form:
+            id.label: "ID"
+            enabled.label: "Activo"
+            name.label: "Nombre"
+            languages.label: "Idiomas"
+            countries.label: "Países"
+        actions:
+            update.button: "Guardar cambios"
+            cancel.button: "Cancelar"
+            delete.button: "Eliminar"
+
+    delete:
+        page_title: "Eliminar sitio"
+        title: "Eliminar sitio"
+        breadcrumb: "Eliminar %name%"
+        actions:
+            delete.button: "Eliminar"
+            cancel.button: "Cancelar"
+
+    read:
+        page_title: "Sitio"
+        title: "Sitio"
+        breadcrumb: "%name%"
+
+admin_blocks:
+    list:
+        page_title: "Bloques"
+        title: "Bloques"
+        breadcrumb: "Bloques"
+        fields:
+            key.header: "Tipo"
+            sites.header: "Sitios"
+            publishStartDate.header: "Fecha de publicación"
+            publishEndDate.header: "Fin de publicación"
+            publishNow.header: "Actualmente publicado"
+        actions.header: "Acciones"
+        actions:
+            update.button: "Editar"
+            details.button: "Detalles"
+
+    create:
+        page_title: "Nuevo bloque"
+        title: "Nuevo bloque"
+        breadcrumb: "Nuevo bloque"
+        form:
+            key.label: "Id"
+            publishStartDate.label: "Fecha de publicación"
+            publishEndDate.label: "Fin de publicación"
+            sites.label: "Sitios"
+            content.label: "Contenido"
+        actions:
+            create.button: "Crear"
+            cancel.button: "Cancelar"
+
+    update:
+        page_title: "Editar bloque"
+        title: "Editar bloque"
+        breadcrumb: "Editar bloque"
+        form:
+            key.label: "Id"
+            publishStartDate.label: "Fecha de publicación"
+            publishEndDate.label: "Fin de publicación"
+            sites.label: "Sitios"
+            content.label: "Contenido"
+        actions:
+            update.button: "Guardar cambios"
+            cancel.button: "Cancelar"
+            delete.button: "Eliminar"
+
+    delete:
+        page_title: "Eliminar bloque"
+        title: "Eliminar bloque"
+        breadcrumb: "Eliminar bloque"
+        actions:
+            delete.button: "Eliminar"
+            cancel.button: "Cancelar"
+
+    read:
+        page_title: "Bloque"
+        title: "Bloque"
+        breadcrumb: "Bloque"
+
+
+admin_page:
+    create:
+        title: "Nueva página"
+        breadcrumb: "Nueva página"
+        actions:
+            create.button: "Crear página"
+            cancel.button: "Cancelar"
+    read:
+        title: "General"
+        breadcrumb: "General"
+    preview:
+        title: "Previsualizar página"
+        breadcrumb: "Previsualizar página"
+    translations:
+        title: "Traducciones de la página"
+        breadcrumb: "Traducciones de la página"
+    update:
+        title: "Editar página"
+        breadcrumb: "Editar página"
+        actions:
+            update.button: "Guardar cambios"
+            cancel.button: "Cancelar"
+    seo:
+        title: "Editar SEO"
+        breadcrumb: "Editar SEO"
+        actions:
+            seo.button: "Guardar cambios"
+            cancel.button: "Cancelar"
+    content:
+        title: "Editar contenido"
+        breadcrumb: "Editar contenido"
+        actions:
+            content.button: "Guardar cambios"
+            cancel.button: "Cancelar"
+    list:
+        title: "Páginas"
+        breadcrumb: "Páginas"
+        actions:
+            create.link: "Nueva página"
+            details.link: "Ver"
+            update.link: "Editar"
+            preview.link: "Previsualizar"
+        fields:
+            id.header: "Identificador"
+            site.header: "Sitio"
+            name.header: "Nombre"
+
+admin_content:
+    form:
+        name.label: "Nombre"
+        site.label: "Sitio web"
+        layout.label: "Diseño"
+        modules.label: "Módulos"
+        seo.label: "SEO"
+        metaTitle.label: "Título (barra de navegador)"
+        metaDescription.label: "Descripción (meta description)"
+        metaKeywords.label: "Palabras clave (meta keywords)"
+        noIndex.label: "Evitar indexado (noindex)"
+        noFollow.label: "Enlaces entrantes sin seguimiento (nofollow)"
+        sitemap.label: "Mostrar en sitemap"
+        versionLayout.label: "Diseño"
+
+admin_routes:
+    create:
+        title: "Nueva ruta"
+        breadcrumb: "Nueva ruta"
+        actions:
+            create.button: "Crear ruta"
+            cancel.button: "Cancelar"
+    update:
+        title: "Editar ruta"
+        breadcrumb: "Editar ruta"
+        actions:
+            update.button: "Guardar cambios"
+            cancel.button: "Cancelar"
+    list:
+        page_title: "Rutas"
+        title: "Rutas"
+        breadcrumb: "Rutas"
+        actions:
+            create.link: "Nueva ruta"
+            update.link: "Editar"
+            preview.link: "Previsualizar"
+        fields:
+            id.header: "Identificador"
+            site.header: "Sitio"
+            page.header: "Página"
+            path.header: "URL"

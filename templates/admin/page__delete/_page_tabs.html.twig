@@ -1,0 +1,32 @@
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <a class="nav-link {{ current == 'read' ? 'active' : '' }}" id="edit-tab" href="{{ url('sfs_cms_admin_content_page_details', {'content':page}) }}" role="tab" aria-controls="edit" aria-selected="true">General</a>
+    </li>
+{#    <li class="nav-item" role="presentation">#}
+{#        <a class="nav-link {{ current == 'page2' ? 'active' : '' }}" id="edit-tab" href="{{ url('sfs_cms_admin_content_page_page2', {'content':page}) }}" role="tab" aria-controls="edit" aria-selected="true">Contenido 2</a>#}
+{#    </li>#}
+    <li class="nav-item" role="presentation">
+        <a class="nav-link {{ current == 'update' ? 'active' : '' }}" id="edit-tab" href="{{ url('sfs_cms_admin_content_page_update', {'content':page}) }}" role="tab" aria-controls="edit" aria-selected="true">Editar</a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link {{ current == 'content' ? 'active' : '' }}" id="edit-tab" href="{{ url('sfs_cms_admin_content_page_content', {'content':page}) }}" role="tab" aria-controls="edit" aria-selected="true">Contenido</a>
+    </li>
+{#    <li class="nav-item" role="presentation">#}
+{#        <a class="nav-link {{ current == 'seo' ? 'active' : '' }}" id="edit-tab" href="{{ url('sfs_cms_admin_content_page_seo', {'content':page}) }}" role="tab" aria-controls="edit" aria-selected="true">SEO</a>#}
+{#    </li>#}
+{#    <li class="nav-item">#}
+{#        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Traducciones</a>#}
+{#    </li>#}
+    <li class="nav-item" role="presentation">
+        <a class="nav-link {{ current == 'preview' ? 'active' : '' }}" id="edit-tab" href="{{ url('sfs_cms_admin_content_page_preview', {'content':page}) }}" role="tab" aria-controls="edit" aria-selected="true">Previsualizar</a>
+    </li>
+{#    <li class="nav-item">#}
+{#        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Rutas</a>#}
+{#    </li>#}
+{#    <li class="nav-item">#}
+{#        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Versiones</a>#}
+{#    </li>#}
+{#    <li class="nav-item">#}
+{#        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Permisos</a>#}
+{#    </li>#}
+</ul>

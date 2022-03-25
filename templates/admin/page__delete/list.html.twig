@@ -1,0 +1,41 @@
+{% trans_default_domain 'sfs_cms_admin' %}
+
+{% extends '@SfsCms/admin_layout.html.twig' %}
+
+{% block breadcrums_content %}
+    {{ parent() }}
+    <li class="breadcrumb-item active" aria-current="content">{{ 'admin_pages.list.breadcrumb'|trans }}</li>
+{% endblock breadcrums_content %}
+
+{% block content %}
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3">{{ 'admin_pages.list.title'|trans }}</h1>
+
+{#        #}{# TODO restrict by permission #}
+        <div class="float-right">
+            <a class="btn btn-outline-primary" href="{{ url('sfs_cms_admin_content_page_create') }}">{{ 'admin_pages.list.actions.create.link'|trans }}</a>
+        </div>
+    </div>
+
+{#    #}{#    {% form_theme filterForm 'form/form_app_horizontal.html.twig' %}#}
+{#    {{ form_start(filterForm) }}#}
+{#    {{ form_widget(filterForm) }}#}
+{#    {{ form_rest(filterForm) }}#}
+{#    {{ form_end(filterForm) }}#}
+
+    <div class="container bg-white p-4">
+        {% embed '@SfsAdmin/components/table.html.twig' with {'collection':entities, 'pagination_route': 'sfs_cms_admin_content_page_list'} %}
+            {% trans_default_domain 'sfs_cms_admin' %}
+            {% block ths %}
+                <th scope="col" class="p-3">{{ 'admin_pages.list.fields.id.header'|trans }}</th>
+                {#            <th scope="col" class=p-3>{{ 'admin_pages.list.fields.site.header'|trans }}</th>#}
+                <th scope="col" class="p-3">{{ 'admin_pages.list.fields.name.header'|trans }}</th>
+                <th>&nbsp;</th>
+            {% endblock ths %}
+
+            {% block tbody %}
+                {% include '@SfsCms/admin/page/list-page.html.twig' %}
+            {% endblock tbody %}
+        {% endembed %}
+    </div>
+{% endblock content %}

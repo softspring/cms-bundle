@@ -15,7 +15,10 @@ abstract class Route implements RouteInterface
      */
     protected Collection $paths;
 
-    protected ?PageInterface $page = null;
+    protected ?ContentInterface $content = null;
+    protected ?string $redirectUrl = null;
+    protected ?string $symfonyRoute = null;
+    protected ?int $redirectType = null;
 
     public function __construct()
     {
@@ -24,7 +27,7 @@ abstract class Route implements RouteInterface
 
     public function __toString()
     {
-        return $this->getId();
+        return ''.$this->getId();
     }
 
     public function getId(): ?string
@@ -71,13 +74,43 @@ abstract class Route implements RouteInterface
         }
     }
 
-    public function getPage(): ?PageInterface
+    public function getContent(): ?ContentInterface
     {
-        return $this->page;
+        return $this->content;
     }
 
-    public function setPage(?PageInterface $page): void
+    public function setContent(?ContentInterface $content): void
     {
-        $this->page = $page;
+        $this->content = $content;
+    }
+
+    public function getRedirectUrl(): ?string
+    {
+        return $this->redirectUrl;
+    }
+
+    public function setRedirectUrl(?string $redirectUrl): void
+    {
+        $this->redirectUrl = $redirectUrl;
+    }
+
+    public function getSymfonyRoute(): ?string
+    {
+        return $this->symfonyRoute;
+    }
+
+    public function setSymfonyRoute(?string $symfonyRoute): void
+    {
+        $this->symfonyRoute = $symfonyRoute;
+    }
+
+    public function getRedirectType(): ?int
+    {
+        return $this->redirectType;
+    }
+
+    public function setRedirectType(?int $redirectType): void
+    {
+        $this->redirectType = $redirectType;
     }
 }

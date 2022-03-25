@@ -1,10 +1,10 @@
-{% trans_default_domain 'sfs_cms' %}
+{% trans_default_domain 'sfs_cms_admin' %}
 {% extends '@SfsCms/admin_layout.html.twig' %}
 {% block title %}{{ 'admin_sites.list.page_title'|trans }}{% endblock %}
 
 {% block breadcrums_content %}
     {{ parent() }}
-    <li class="breadcrumb-item active" aria-current="page">{{ 'admin_sites.list.breadcrumb'|trans }}</li>
+    <li class="breadcrumb-item active" aria-current="content">{{ 'admin_sites.list.breadcrumb'|trans }}</li>
 {% endblock breadcrums_content %}
 
 {% block content %}
@@ -38,19 +38,19 @@
         </thead>
 
         <tbody>
-        {% include '@SfsCms/admin/site/list-page.html.twig' %}
+        {% include '@SfsCms/admin/site/list-content.html.twig' %}
         </tbody>
 
-        {% if entities.pages|default(false) %}
+        {% if entities.contents|default(false) %}
             <tfoot>
             <tr>
                 <td colspan="20">
-                    {% if entities.prevPage %}
-                        <a href="{{ url('sfs_cms_admin_sites_list', app.request.query.all|merge({ page: entities.prevPage })) }}" title="Prev page"><span class="mdi mdi-24px mdi-chevron-left"></span></a>
+                    {% if entities.prevContent %}
+                        <a href="{{ url('sfs_cms_admin_sites_list', app.request.query.all|merge({ content: entities.prevContent })) }}" title="Prev content"><span class="mdi mdi-24px mdi-chevron-left"></span></a>
                     {% endif %}
 
-                    {% if entities.nextPage %}
-                        <a class="float-right" href="{{ url('sfs_cms_admin_sites_list', app.request.query.all|merge({ page: entities.nextPage })) }}" title="Next page"><span class="mdi mdi-24px mdi-chevron-right"></span></a>
+                    {% if entities.nextContent %}
+                        <a class="float-right" href="{{ url('sfs_cms_admin_sites_list', app.request.query.all|merge({ content: entities.nextContent })) }}" title="Next content"><span class="mdi mdi-24px mdi-chevron-right"></span></a>
                     {% endif %}
                 </td>
             </tr>

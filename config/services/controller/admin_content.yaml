@@ -1,0 +1,102 @@
+#parameters:
+#    sfs_cms.admin.content.list_view: '@@SfsCms/admin/content/list.html.twig'
+#    sfs_cms.admin.content.list_page_view: '@@SfsCms/admin/content/list-page.html.twig'
+#    sfs_cms.admin.content.create_view: '@@SfsCms/admin/content/create.html.twig'
+#    sfs_cms.admin.content.update_view: '@@SfsCms/admin/content/update.html.twig'
+#    sfs_cms.admin.content.delete_view: '@@SfsCms/admin/content/delete.html.twig'
+#    sfs_cms.admin.content.read_view: '@@SfsCms/admin/content/read.html.twig'
+#    sfs_cms.admin.content.content_view: '@@SfsCms/admin/content/content.html.twig'
+#
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+        bind:
+            $em: '@sfs_cms.entity_manager'
+
+#    Softspring\CmsBundle\Form\Admin\Content\:
+#        resource: '../../../src/Form/Admin/Content/Content*'
+#
+#    Softspring\CmsBundle\EventListener\Admin\:
+#        resource: '../../../src/EventListener/Admin/Content*'
+#
+#    sfs_cms.admin.content.controller:
+#        class: Softspring\CrudlBundle\Controller\CrudlController
+#        public: true
+#        calls:
+#            - { method: setContainer, arguments: ['@service_container'] }
+#        arguments:
+#            $manager: '@Softspring\CmsBundle\Manager\ContentManagerInterface'
+#            $eventDispatcher: '@event_dispatcher'
+##            $listFilterForm: '@Softspring\CmsBundle\Form\Admin\Content\ContentListFilterFormInterface'
+##            $deleteForm: '@Softspring\CmsBundle\Form\Admin\Content\ContentDeleteFormInterface'
+#            $listFilterForm: null
+#            $createForm: '@Softspring\CmsBundle\Form\Admin\Content\ContentCreateFormInterface'
+#            $updateForm: '@Softspring\CmsBundle\Form\Admin\Content\ContentUpdateFormInterface'
+#            $deleteForm: null
+#            $config:
+#                entity_attribute: 'content'
+#                list:
+#                    is_granted: 'ROLE_SFS_CMS_ADMIN_CONTENTS_LIST'
+#                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_LIST_INITIALIZE
+#                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_LIST_VIEW
+#                    filter_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_LIST_FILTER
+#                    view: '%sfs_cms.admin.content.list_view%'
+#                    view_page: '%sfs_cms.admin.content.list_page_view%'
+#                create:
+#                    is_granted: 'ROLE_SFS_CMS_ADMIN_CONTENTS_CREATE'
+#                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_CREATE_INITIALIZE
+#                    form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_CREATE_FORM_VALID
+#                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_CREATE_SUCCESS
+#                    form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_CREATE_FORM_INVALID
+#                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_CREATE_VIEW
+#                    success_redirect_to: 'sfs_cms_admin_content_list'
+#                    view: '%sfs_cms.admin.content.create_view%'
+#                update:
+#                    is_granted: 'ROLE_SFS_CMS_ADMIN_CONTENTS_UPDATE'
+#                    param_converter_key: 'id'
+#                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_UPDATE_INITIALIZE
+#                    form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_UPDATE_FORM_VALID
+#                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_UPDATE_SUCCESS
+#                    form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_UPDATE_FORM_INVALID
+#                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_UPDATE_VIEW
+#                    success_redirect_to: 'sfs_cms_admin_content_list'
+#                    view: '%sfs_cms.admin.content.update_view%'
+#                delete:
+#                    is_granted: 'ROLE_SFS_CMS_ADMIN_CONTENTS_DELETE'
+#                    param_converter_key: 'id'
+#                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_DELETE_INITIALIZE
+#                    form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_DELETE_FORM_VALID
+#                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_DELETE_SUCCESS
+#                    form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_DELETE_FORM_INVALID
+#                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_DELETE_VIEW
+#                    success_redirect_to: 'sfs_cms_admin_content_list'
+#                    view: '%sfs_cms.admin.content.delete_view%'
+#                read:
+#                    is_granted: 'ROLE_SFS_CMS_ADMIN_CONTENTS_DETAILS'
+#                    param_converter_key: 'id'
+#                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_READ_INITIALIZE
+#                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_READ_VIEW
+#                    view: '%sfs_cms.admin.content.read_view%'
+
+#    sfs_cms.admin.content_version.controller:
+#        class: Softspring\CrudlBundle\Controller\CrudlController
+#        public: true
+#        calls:
+#            - { method: setContainer, arguments: ['@service_container'] }
+#        arguments:
+#            $manager: '@Softspring\CmsBundle\Manager\ContentVersionManagerInterface'
+#            $eventDispatcher: '@event_dispatcher'
+#            $createForm: '@Softspring\CmsBundle\Form\Admin\Content\ContentContentFormInterface'
+#            $config:
+#                entity_attribute: 'version'
+#                create:
+##                    is_granted: 'ROLE_SFS_CMS_ADMIN_CONTENTS_CONTENT'
+#                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_CONTENT_INITIALIZE
+#                    form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_CONTENT_FORM_VALID
+#                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_CONTENT_SUCCESS
+#                    form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_CONTENT_FORM_INVALID
+#                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_CONTENT_VIEW
+##                    success_redirect_to: 'sfs_cms_admin_content_list'
+#                    view: '%sfs_cms.admin.content.content_view%'

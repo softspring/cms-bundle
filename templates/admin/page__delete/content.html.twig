@@ -1,0 +1,56 @@
+{% trans_default_domain 'sfs_cms_admin' %}
+
+{% extends '@SfsCms/admin_layout.html.twig' %}
+
+{% form_theme form '@SfsPolymorphicFormType/polymorphic-form-theme.html.twig' '@SfsCms/cms_form_theme.html.twig' %}
+
+{% block body %}
+    {{ form_start(form) }}
+        <div class="d-flex flex-col align-items-stretch vh-100 pt-5">
+            <header class="flex-fill p-3 bg-dark fixed-top border-bottom">
+                <div class="container-fluid">
+                    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                        <a href="#" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                            Editar contenido
+                        </a>
+
+                        <div class="col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"></div>
+
+                        <div class="text-end me-3">
+                            {{ form_widget(form.layout, {'attr':{'onchange':'confirm("Si continuas se pueden eliminar datos ¿quieres continuar?") && (document.getElementById("page_content_form__ok").value = 1) && submit()'}}) }}
+                        </div>
+
+                        <div class="text-end">
+                            <a href="{{ url('sfs_cms_admin_content_page_details', {'content':page}) }}" class="btn btn-light">{{ 'admin_pages.content.actions.cancel.button'|trans }}</a>
+
+                            <div class="btn-group" role="group">
+                                <button type="submit" class="btn btn-primary ml-3">{{ 'admin_pages.content.actions.content.button'|trans }}</button>
+                                <button name="goto" id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                    <li>
+                                        <button class="btn btn-primary dropdown-item" name="goto" value="preview">Guardar y previsualizar</button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <main class="flex-fill d-flex flex-row align-items-stretch bg-light h-100">
+                <div class="pt-4 h-100 w-100">
+                    {% include layout.edit_template %}
+                </div>
+            </main>
+        </div>
+{#        <iframe id="previewFrame" src="/preview.html"></iframe>#}
+{#        <button onclick="document.getElementById('previewFrame').contentWindow.document.getElementsByTagName('body')[0].innerHTML = 'Otra cosa'; return false;">Change</button>#}
+
+
+        {{ form_rest(form) }}
+    {{ form_end(form) }}
+
+    <script type="text/javascript">
+        document.getElementById("page_content_form__ok").value = 0;
+    </script>
+{% endblock body %}

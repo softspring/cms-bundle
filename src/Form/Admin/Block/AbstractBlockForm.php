@@ -17,24 +17,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractBlockForm extends AbstractType
 {
-    /**
-     * @var BlockManagerInterface
-     */
-    protected $manager;
+    protected BlockManagerInterface $manager;
 
-    /**
-     * @var array
-     */
-    protected $blockTypes;
+    protected array $blockTypes;
 
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $em;
+    protected EntityManagerInterface $em;
 
-    /**
-     * AbstractBlockForm constructor.
-     */
     public function __construct(BlockManagerInterface $manager, array $blockTypes, EntityManagerInterface $em)
     {
         $this->manager = $manager;
@@ -42,23 +30,17 @@ abstract class AbstractBlockForm extends AbstractType
         $this->em = $em;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => BlockInterface::class,
-            'translation_domain' => 'sfs_cms',
+            'translation_domain' => 'sfs_cms_admin',
             'content_form' => null,
         ]);
 
         $resolver->setRequired('content_form');
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         if ($this->manager->getEntityClassReflection()->implementsInterface(SchedulableContentInterface::class)) {

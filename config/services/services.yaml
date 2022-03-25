@@ -5,17 +5,15 @@ services:
         public: false
         bind:
             $em: '@sfs_cms.entity_manager'
-            $blockTypes: '%sfs_cms.block.types%'
+            $blockTypes: [] # '%sfs_cms.block.types%'
             $formFactory: '@form.factory'
-            $modulesMappings: '%sfs_cms.modules.mappings%'
-            $siteType: '%sfs_cms.site.type%'
-            $typesMap: '%sfs_cms.modules.mapping_forms%'
-            $dynamicModules: '%sfs_cms.dynamic_modules%'
+#            $siteType: '' # '%sfs_cms.site.type%'
 
-    sfs_cms.admin.pages.manager:
-        class: Softspring\CrudlBundle\Manager\DefaultCrudlEntityManager
+    Softspring\CmsBundle\Config\CmsConfig:
         arguments:
-            $targetClass: 'Softspring\CmsBundle\Model\PageInterface'
+            $modules: '%sfs_cms.modules%'
+            $layouts: '%sfs_cms.layouts%'
+            $contents: '%sfs_cms.contents%'
 
     Softspring\CmsBundle\Controller\:
         resource: '../../src/Controller/*'
@@ -24,13 +22,10 @@ services:
     Softspring\CmsBundle\Form\:
         resource: '../../src/Form/*'
 
-    Softspring\CmsBundle\EntityListener\:
-        resource: '../../src/EntityListener/*'
-        tags: ['doctrine.event_subscriber']
-        public: true
+#    Softspring\CmsBundle\EventListener\:
+#        resource: '../../src/EventListener/*'
 
-    Softspring\CmsBundle\EventListener\:
-        resource: '../../src/EventListener/*'
+    Softspring\CmsBundle\EventListener\RouteResolverListener: ~
 
     Softspring\CmsBundle\Manager\:
         resource: '../../src/Manager/*'
@@ -38,20 +33,25 @@ services:
     Softspring\CmsBundle\Render\:
         resource: '../../src/Render/*'
 
-    Softspring\CmsBundle\Render\Module\:
-        resource: '../../src/Render/Module/*'
-        tags: ['sfs_cms.module_render']
-
-    Softspring\CmsBundle\Form\DynamicModuleCollectionType: ~
-
-    Softspring\CmsBundle\Request\ParamConverter\PageParamConverter:
-        arguments: ['@sfs_cms.admin.pages.manager']
-        tags: ['request.param_converter']
-
-    Softspring\CmsBundle\Request\ParamConverter\LayoutParamConverter:
-        arguments: ['@sfs_cms.admin.layouts.manager']
+    Softspring\CmsBundle\Request\ParamConverter\:
+        resource: '../../src/Request/ParamConverter/*'
         tags: ['request.param_converter']
 
     Softspring\CmsBundle\Twig\Extension\:
         resource: '../../src/Twig/Extension/*'
         tags: ['twig.extension']
+
+    Softspring\CmsBundle\EntityListener\ContentListener:
+        tags:
+            - { name: 'doctrine.orm.entity_listener', event: 'postLoad', entity: 'Softspring\CmsBundle\Entity\Content',  priority: 10 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
+            - { name: 'doctrine.orm.entity_listener', event: 'preUpdate', entity: 'Softspring\CmsBundle\Entity\Content',  priority: 10 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
+            - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: 'Softspring\CmsBundle\Entity\Content',  priority: 10 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
+
+    Softspring\CmsBundle\EntityListener\ContentVersionListener:
+        tags:
+            - { name: 'doctrine.orm.entity_listener', event: 'postLoad', entity: 'Softspring\CmsBundle\Entity\ContentVersion',  priority: 10 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
+            - { name: 'doctrine.orm.entity_listener', event: 'preUpdate', entity: 'Softspring\CmsBundle\Entity\ContentVersion',  priority: 10 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
+            - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: 'Softspring\CmsBundle\Entity\ContentVersion',  priority: 10 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
+
+    Softspring\CmsBundle\EntityListener\ContentDiscriminatorMapListener:
+        tags: ['doctrine.event_subscriber']

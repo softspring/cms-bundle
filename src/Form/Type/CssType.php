@@ -3,12 +3,12 @@
 namespace Softspring\CmsBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class CssType extends AbstractType
 {
-    public function getParent()
+    public function getParent(): ?string
     {
-        return TextType::class;
+        return TextareaType::class;
     }
 }

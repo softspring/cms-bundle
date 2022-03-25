@@ -2,8 +2,11 @@
 
 namespace Softspring\CmsBundle\Twig\Extension;
 
+use Psr\Log\LoggerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
+use Softspring\CmsBundle\Model\Route;
 use Softspring\CmsBundle\Model\RouteInterface;
+use Softspring\CmsBundle\Model\RoutePathInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Extension\AbstractExtension;
@@ -13,6 +16,18 @@ class RouterExtension extends AbstractExtension
 {
     protected RequestStack $requestStack;
     protected RouteManagerInterface $routeManager;
+    protected ?LoggerInterface $cmsLogger;
+
+    /**
+     * @param RequestStack          $requestStack
+     * @param RouteManagerInterface $routeManager
+     */
+    public function __construct(RequestStack $requestStack, RouteManagerInterface $routeManager, ?LoggerInterface $cmsLogger)
+    {
+        $this->requestStack = $requestStack;
+        $this->routeManager = $routeManager;
+        $this->cmsLogger = $cmsLogger;
+    }
 
     /**
      * @return TwigFunction[]
@@ -26,68 +41,75 @@ class RouterExtension extends AbstractExtension
     }
 
     /**
-     * @param string|RouteInterface $route
+     * @param string|RouteInterface $routeName
      *
      * @throws \Exception
      */
-    public function getUrl($route): string
+    public function getUrl($routeName): string
     {
-        if ($this->isPreview()) {
+        if (!($route = $this->getRoute($routeName))) {
             return '#';
-        }
-
-        if (! ($route = $this->getRoute($route))) {
-            throw new \Exception('Route not found');
         }
 
         $site = $this->getSite();
 
-        return '#TODO: generate route url';
+        return $this->getRoutePath($route, $site);
     }
 
     /**
-     * @param string|RouteInterface $route
+     * @param string|RouteInterface $routeName
      *
      * @throws \Exception
      */
-    public function getPath($route): string
+    public function getPath($routeName): string
     {
-        if ($this->isPreview()) {
+        if (!($route = $this->getRoute($routeName))) {
             return '#';
-        }
-
-        if (! ($route = $this->getRoute($route))) {
-            throw new \Exception('Route not found');
         }
 
         $site = $this->getSite();
 
-        return '#TODO: generate route path';
+        return $this->getRoutePath($route, $site);
     }
 
-    protected function getRoute($route): ?RouteInterface
+    protected function getRoutePath(Route $route, $site): string
     {
-        if (is_string($route)) {
-            return $this->routeManager->getRepository()->findOneById($route);
+        /** @var RoutePathInterface $path */
+        $path = $route->getPaths()->first();
+
+        return $path->getPath();
+    }
+
+    protected function getRoute($routeName): ?RouteInterface
+    {
+        if ($this->isPreview()) {
+            return null;
         }
 
-        if (!$route instanceof RouteInterface) {
-            throw new \Exception(sprintf('Provided route of %s class must be an instance of %s', get_class($route), RouteInterface::class));
+        if (!$routeName) {
+            $this->cmsLogger && $this->cmsLogger->error('Empty route');
+            return null;
+        }
+
+        $route = $this->routeManager->getRepository()->findOneById($routeName);
+
+        if (!$route) {
+            $this->cmsLogger && $this->cmsLogger->error(sprintf('Route %s not found', $routeName));
         }
 
         return $route;
     }
 
-    protected function getSite(): SiteInterface
+    protected function getSite(): ?SiteInterface
     {
         $request = $this->requestStack->getCurrentRequest();
 
         /** @var SiteInterface $site */
         $site = $request->attributes->get('_site');
 
-        if (!$site) {
-            throw new \Exception('Can not generate route because no site is selected');
-        }
+//        if (!$site) {
+//            throw new \Exception('Can not generate route because no site is selected');
+//        }
 
         return $site;
     }

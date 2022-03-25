@@ -2,7 +2,7 @@
 
 namespace Softspring\CmsBundle\Form\Type;
 
-use Softspring\CmsBundle\Form\DynamicModuleCollectionType;
+use Softspring\CmsBundle\Form\Admin\CmsModuleCollectionType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,7 +17,7 @@ class ContainerType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('modules', DynamicModuleCollectionType::class, [
+        $builder->add('modules', CmsModuleCollectionType::class, [
             'allowed_modules' => $options['allowed_modules'],
         ]);
     }

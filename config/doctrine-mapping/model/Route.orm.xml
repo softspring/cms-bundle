@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                      https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <mapped-superclass name="Softspring\CmsBundle\Model\Route" table="cms_route">
+        <field name="type" column="route_type" type="smallint" nullable="false"/>
+        <field name="redirectType" column="redirect_type" type="smallint" nullable="true"/>
+        <field name="redirectUrl" column="redirect_url" type="text" nullable="true"/>
+        <field name="symfonyRoute" column="symfony_route" type="string" nullable="true"/>
+
+        <many-to-one field="content" target-entity="Softspring\CmsBundle\Model\ContentInterface" inversed-by="routes">
+            <join-column name="content_id" referenced-column-name="id" on-delete="CASCADE" />
+        </many-to-one>
+    </mapped-superclass>
+
+</doctrine-mapping>

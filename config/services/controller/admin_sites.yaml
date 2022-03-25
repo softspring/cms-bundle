@@ -1,6 +1,6 @@
 parameters:
     sfs_cms.admin.sites.list_view: '@@SfsCms/admin/site/list.html.twig'
-    sfs_cms.admin.sites.list_page_view: '@@SfsCms/admin/site/list-page.html.twig'
+    sfs_cms.admin.sites.list_content_view: '@@SfsCms/admin/site/list-content.html.twig'
     sfs_cms.admin.sites.create_view: '@@SfsCms/admin/site/create.html.twig'
     sfs_cms.admin.sites.update_view: '@@SfsCms/admin/site/update.html.twig'
     sfs_cms.admin.sites.delete_view: '@@SfsCms/admin/site/delete.html.twig'
@@ -25,7 +25,7 @@ services:
                     is_granted: 'ROLE_SFS_CMS_ADMIN_SITES_LIST'
                     view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SITES_LIST_VIEW
                     view: '%sfs_cms.admin.sites.list_view%'
-                    view_page: '%sfs_cms.admin.sites.list_page_view%'
+                    view_content: '%sfs_cms.admin.sites.list_content_view%'
                 create:
                     is_granted: 'ROLE_SFS_CMS_ADMIN_SITES_CREATE'
                     initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SITES_CREATE_INITIALIZE

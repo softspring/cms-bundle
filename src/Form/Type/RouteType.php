@@ -2,13 +2,35 @@
 
 namespace Softspring\CmsBundle\Form\Type;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Softspring\CmsBundle\Model\RouteInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RouteType extends AbstractType
 {
-    public function getParent()
+    protected EntityManagerInterface $sfsRouteEm;
+
+    public function __construct(EntityManagerInterface $sfsRouteEm)
     {
-        return TextType::class;
+        $this->sfsRouteEm = $sfsRouteEm;
+    }
+
+    public function getParent(): ?string
+    {
+        return EntityType::class;
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'class' => RouteInterface::class,
+            'em' => $this->sfsRouteEm,
+            'required' => false,
+            'choice_label' => function (RouteInterface $route) {
+                return $route->getId();
+            },
+        ]);
     }
 }
