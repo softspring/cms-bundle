@@ -2,11 +2,11 @@
 
 namespace Softspring\CmsBundle\Config;
 
+use Softspring\CmsBundle\Config\Exception\MissingLayoutsException;
 use Softspring\CmsBundle\Config\Model\Content;
 use Softspring\CmsBundle\Config\Model\Layout;
 use Softspring\CmsBundle\Config\Model\Module;
 use Softspring\CmsBundle\Entity\Page;
-use Softspring\CmsBundle\Form\Admin\Content\ContentCreateForm;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -22,7 +22,9 @@ class ConfigLoader
     protected string $blocksPath;
     protected string $contentsPath;
     protected string $layoutsPath;
+    protected string $menusPath;
     protected string $modulesPath;
+    protected string $sitesPath;
 
     public function __construct(ContainerInterface $container)
     {
@@ -31,7 +33,9 @@ class ConfigLoader
         $this->blocksPath = "{$this->cmsPath}/blocks";
         $this->contentsPath = "{$this->cmsPath}/contents";
         $this->layoutsPath = "{$this->cmsPath}/layouts";
+        $this->menusPath = "{$this->cmsPath}/menus";
         $this->modulesPath = "{$this->cmsPath}/modules";
+        $this->sitesPath = "{$this->cmsPath}/sites";
         $this->initDirectories();
     }
 
@@ -55,8 +59,16 @@ class ConfigLoader
             $fs->mkdir($this->layoutsPath);
         }
 
+        if (!$fs->exists($this->menusPath)) {
+            $fs->mkdir($this->menusPath);
+        }
+
         if (!$fs->exists($this->modulesPath)) {
             $fs->mkdir($this->modulesPath);
+        }
+
+        if (!$fs->exists($this->sitesPath)) {
+            $fs->mkdir($this->sitesPath);
         }
     }
 
@@ -87,6 +99,10 @@ class ConfigLoader
             $layouts[$layoutName] = $processor->processConfiguration($layoutConfiguration, Yaml::parseFile("$layoutPath/config.yaml"));
             // force reload cache if some change has been done in cms folder
             $containerBuilder->addResource(new FileResource("$layoutPath/config.yaml"));
+        }
+
+        if (empty($layouts)) {
+            throw new MissingLayoutsException('No CMS layouts are configured. At least one layout is required');
         }
 
         return $layouts;
