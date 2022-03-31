@@ -3,11 +3,11 @@
 namespace Softspring\CmsBundle\Form\Admin;
 
 use Softspring\CmsBundle\Config\CmsConfig;
-use Softspring\PolymorphicFormType\Form\DataTransformer\NodeDataTransformer;
-use Softspring\PolymorphicFormType\Form\Discriminator\NodeDiscriminator;
-use Softspring\PolymorphicFormType\Form\EventListener\NodesResizeFormListener;
-use Softspring\PolymorphicFormType\Form\Type\Node\AbstractNodeType;
-use Softspring\PolymorphicFormType\Form\Type\PolymorphicCollectionType;
+use Softspring\Component\PolymorphicFormType\Form\DataTransformer\NodeDataTransformer;
+use Softspring\Component\PolymorphicFormType\Form\Discriminator\NodeDiscriminator;
+use Softspring\Component\PolymorphicFormType\Form\EventListener\NodesResizeFormListener;
+use Softspring\Component\PolymorphicFormType\Form\Type\Node\AbstractNodeType;
+use Softspring\Component\PolymorphicFormType\Form\Type\PolymorphicCollectionType;
 use Symfony\Component\Form\Exception\RuntimeException;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactory;

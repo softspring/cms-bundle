@@ -2,7 +2,7 @@
 
 namespace Softspring\CmsBundle\Form\Admin;
 
-use Softspring\PolymorphicFormType\Form\Type\Node\AbstractNodeType;
+use Softspring\Component\PolymorphicFormType\Form\Type\Node\AbstractNodeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
