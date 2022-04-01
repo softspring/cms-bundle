@@ -2,7 +2,7 @@
 
 namespace Softspring\CmsBundle\Form\Admin\Site;
 
-use Softspring\CrudlBundle\Form\EntityCreateFormInterface;
+use Softspring\Component\CrudlController\Form\EntityCreateFormInterface;
 
 interface SiteCreateFormInterface extends EntityCreateFormInterface
 {

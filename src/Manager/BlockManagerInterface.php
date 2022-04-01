@@ -3,7 +3,7 @@
 namespace Softspring\CmsBundle\Manager;
 
 use Softspring\CmsBundle\Model\BlockInterface;
-use Softspring\CrudlBundle\Manager\CrudlEntityManagerInterface;
+use Softspring\Component\CrudlController\Manager\CrudlEntityManagerInterface;
 
 interface BlockManagerInterface extends CrudlEntityManagerInterface
 {

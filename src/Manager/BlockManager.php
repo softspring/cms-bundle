@@ -4,7 +4,7 @@ namespace Softspring\CmsBundle\Manager;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Softspring\CmsBundle\Model\BlockInterface;
-use Softspring\CrudlBundle\Manager\CrudlEntityManagerTrait;
+use Softspring\Component\CrudlController\Manager\CrudlEntityManagerTrait;
 
 class BlockManager implements BlockManagerInterface
 {

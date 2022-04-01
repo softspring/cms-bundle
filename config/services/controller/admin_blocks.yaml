@@ -22,7 +22,7 @@ services:
         resource: '../../../src/EventListener/Admin/Block*'
 
     sfs_cms.admin.block.controller:
-        class: Softspring\CrudlBundle\Controller\CrudlController
+        class: Softspring\Component\CrudlController\Controller\CrudlController
         public: true
         calls:
             - { method: setContainer, arguments: ['@service_container'] }

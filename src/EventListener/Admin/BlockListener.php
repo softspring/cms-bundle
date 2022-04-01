@@ -5,7 +5,7 @@ namespace Softspring\CmsBundle\EventListener\Admin;
 use Softspring\CmsBundle\Model\BlockInterface;
 use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\CoreBundle\Event\ViewEvent;
-use Softspring\CrudlBundle\Event\GetResponseEntityEvent;
+use Softspring\Component\CrudlController\Event\GetResponseEntityEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class BlockListener implements EventSubscriberInterface

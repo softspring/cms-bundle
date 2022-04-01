@@ -8,7 +8,7 @@ parameters:
 
 services:
     sfs_cms.admin.site.controller:
-        class: Softspring\CrudlBundle\Controller\CrudlController
+        class: Softspring\Component\CrudlController\Controller\CrudlController
         public: true
         calls:
             - { method: setContainer, arguments: ['@service_container'] }

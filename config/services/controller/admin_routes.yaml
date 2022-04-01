@@ -27,12 +27,12 @@ services:
         class: Softspring\CmsBundle\Manager\RoutePathManager
 
 #    sfs_cms.admin.routes.manager:
-#        class: Softspring\CrudlBundle\Manager\DefaultCrudlEntityManager
+#        class: Softspring\Component\CrudlController\Manager\DefaultCrudlEntityManager
 #        arguments:
 #            $targetClass: 'Softspring\CmsBundle\Model\RouteInterface'
 
     sfs_cms.admin.route.controller:
-        class: Softspring\CrudlBundle\Controller\CrudlController
+        class: Softspring\Component\CrudlController\Controller\CrudlController
         public: true
         calls:
             - { method: setContainer, arguments: ['@service_container'] }

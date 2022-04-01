@@ -4,7 +4,7 @@ namespace Softspring\CmsBundle\Manager;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
-use Softspring\CrudlBundle\Manager\CrudlEntityManagerTrait;
+use Softspring\Component\CrudlController\Manager\CrudlEntityManagerTrait;
 
 class ContentVersionManager implements ContentVersionManagerInterface
 {

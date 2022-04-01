@@ -22,7 +22,7 @@ services:
 #        resource: '../../../src/EventListener/Admin/Content*'
 #
 #    sfs_cms.admin.content.controller:
-#        class: Softspring\CrudlBundle\Controller\CrudlController
+#        class: Softspring\Component\CrudlController\Controller\CrudlController
 #        public: true
 #        calls:
 #            - { method: setContainer, arguments: ['@service_container'] }
@@ -81,7 +81,7 @@ services:
 #                    view: '%sfs_cms.admin.content.read_view%'
 
 #    sfs_cms.admin.content_version.controller:
-#        class: Softspring\CrudlBundle\Controller\CrudlController
+#        class: Softspring\Component\CrudlController\Controller\CrudlController
 #        public: true
 #        calls:
 #            - { method: setContainer, arguments: ['@service_container'] }

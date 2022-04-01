@@ -4,7 +4,7 @@ namespace Softspring\CmsBundle\Manager;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
-use Softspring\CrudlBundle\Manager\CrudlEntityManagerTrait;
+use Softspring\Component\CrudlController\Manager\CrudlEntityManagerTrait;
 
 class SiteManager implements SiteManagerInterface
 {

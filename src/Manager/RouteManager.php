@@ -5,7 +5,7 @@ namespace Softspring\CmsBundle\Manager;
 use Doctrine\ORM\EntityManagerInterface;
 use Softspring\CmsBundle\Entity\RoutePath;
 use Softspring\CmsBundle\Model\RouteInterface;
-use Softspring\CrudlBundle\Manager\CrudlEntityManagerTrait;
+use Softspring\Component\CrudlController\Manager\CrudlEntityManagerTrait;
 
 class RouteManager implements RouteManagerInterface
 {

@@ -3,7 +3,7 @@
 namespace Softspring\CmsBundle\Manager;
 
 use Softspring\CmsBundle\Model\SiteInterface;
-use Softspring\CrudlBundle\Manager\CrudlEntityManagerInterface;
+use Softspring\Component\CrudlController\Manager\CrudlEntityManagerInterface;
 
 interface SiteManagerInterface extends CrudlEntityManagerInterface
 {
