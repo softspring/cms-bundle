@@ -28,7 +28,7 @@ class LayoutContentType extends AbstractType
         foreach ($layoutConfig['containers'] as $containerId => $containerConfig) {
             $builder->add($containerId, CmsModuleCollectionType::class, [
                 'label' => "{$options['layout']}.$containerId.container_title",
-                'translation_domain' => 'cms_layouts',
+                'translation_domain' => 'sfs_cms_layouts',
             ]);
         }
     }

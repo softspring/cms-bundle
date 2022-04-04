@@ -27,7 +27,7 @@ class LayoutType extends AbstractType
 
         $resolver->setDefaults([
             'choices' => array_combine(array_map(fn ($layout) => "$layout.title", $layouts), $layouts),
-            'choice_translation_domain' => 'cms_layouts',
+            'choice_translation_domain' => 'sfs_cms_layouts',
         ]);
     }
 }

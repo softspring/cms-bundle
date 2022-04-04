@@ -4,12 +4,12 @@
 
 {% block breadcrums_content %}
     {{ parent() }}
-    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content~'_list') }}">{{ ('admin_'~content~'.list.breadcrumb')|trans }}</a></li>
-    <li class="breadcrumb-item active" aria-current="content">{{ ('admin_'~content~'.read.breadcrumb')|trans }}</li>
+    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content~'_list') }}">{{ ('admin_'~content~'s.list.breadcrumb')|trans }}</a></li>
+    <li class="breadcrumb-item active" aria-current="content">{{ ('admin_'~content~'s.read.breadcrumb')|trans }}</li>
 {% endblock breadcrums_content %}
 
 {% block content %}
-    <h1 class="h3">{{ ('admin_'~content~'.read.title')|trans }}</h1>
+    <h1 class="h3">{{ ('admin_'~content~'s.read.title')|trans }}</h1>
 
     {% include '@SfsCms/admin/content/_content_tabs.html.twig' with {'current':'read', 'content':content, 'entity':entity} %}
 

@@ -42,12 +42,12 @@ class CmsModuleCollectionType extends PolymorphicCollectionType
             $typesOptions[$moduleId]['prototype_button_label'] = "$moduleId.prototype_button";
             $typesOptions[$moduleId]['label'] = "$moduleId.label";
             $typesOptions[$moduleId]['label_format'] = "$moduleId.%name%.label";
-            $typesOptions[$moduleId]['translation_domain'] = 'cms_modules';
+            $typesOptions[$moduleId]['translation_domain'] = 'sfs_cms_modules';
             $discriminatorMap[$moduleId] = 'array';
         }
 
         $resolver->setDefaults([
-            'translation_domain' => 'cms_modules',
+            'translation_domain' => 'sfs_cms_modules',
             'error_bubbling' => false,
             'entity_manager' => null,
             'types_map' => $typesMap,

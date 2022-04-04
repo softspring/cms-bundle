@@ -18,7 +18,7 @@ class DynamicFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'translation_domain' => 'cms_modules',
+            'translation_domain' => 'sfs_cms_modules',
         ]);
 
         $resolver->setRequired('form_fields');
