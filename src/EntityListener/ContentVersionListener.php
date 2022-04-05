@@ -34,8 +34,16 @@ class ContentVersionListener
         $data = $contentVersion->getData();
         foreach ($data as $layout => $modules) {
             foreach ($modules as $m => $module) {
-                foreach ($module as $field => $value) {
-                    $data[$layout][$m][$field] = $this->transformExtraDataValue($value, $event->getObjectManager());
+                if (isset($module['modules'])) {
+                    foreach ($module['modules'] as $sm => $submodule) {
+                        foreach ($submodule as $field => $value) {
+                            $data[$layout][$m]['modules'][$sm][$field] = $this->transformExtraDataValue($value, $event->getObjectManager());
+                        }
+                    }
+                } else {
+                    foreach ($module as $field => $value) {
+                        $data[$layout][$m][$field] = $this->transformExtraDataValue($value, $event->getObjectManager());
+                    }
                 }
             }
         }
@@ -51,8 +59,16 @@ class ContentVersionListener
         $data = $contentVersion->getData();
         foreach ($data as $layout => $modules) {
             foreach ($modules as $m => $module) {
-                foreach ($module as $field => $value) {
-                    $data[$layout][$m][$field] = $this->untransformExtraDataValue($value, $event->getObjectManager());
+                if (isset($module['modules'])) {
+                    foreach ($module['modules'] as $sm => $submodule) {
+                        foreach ($submodule as $field => $value) {
+                            $data[$layout][$m]['modules'][$sm][$field] = $this->untransformExtraDataValue($value, $event->getObjectManager());
+                        }
+                    }
+                } else {
+                    foreach ($module as $field => $value) {
+                        $data[$layout][$m][$field] = $this->untransformExtraDataValue($value, $event->getObjectManager());
+                    }
                 }
             }
         }
