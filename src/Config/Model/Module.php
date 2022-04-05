@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Config\Model;
 
+use Softspring\CmsBundle\Form\Module\DynamicFormModuleType;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -27,27 +28,15 @@ class Module implements ConfigurationInterface
                 ->scalarNode('edit_template')->end()
                 ->scalarNode('form_template')->end()
 
-                ->scalarNode('form_type')->end()
-
-                ->arrayNode('form_options')
-                    ->useAttributeAsKey('key')
-                    ->prototype('variable')->end()
-                ->end()
-
-                ->arrayNode('valid_contents')
+                ->arrayNode('compatible_contents')
                     ->scalarPrototype()->end()
                 ->end()
 
-                ->arrayNode('form_fields')
+                ->scalarNode('module_type')->defaultValue(DynamicFormModuleType::class)->end()
+
+                ->arrayNode('module_options')
                     ->useAttributeAsKey('key')
-                    ->arrayPrototype()
-                    ->children()
-                        ->scalarNode('type')->defaultValue('text')->end()
-                        ->arrayNode('type_options')
-                            ->useAttributeAsKey('key')
-                            ->prototype('variable')->end()
-                        ->end()
-                    ->end()
+                    ->prototype('variable')->end()
                 ->end()
             ->end()
         ;

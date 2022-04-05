@@ -2,7 +2,7 @@
 
 namespace Softspring\CmsBundle\Form\Admin\Content;
 
-use Softspring\CmsBundle\Form\Admin\DynamicFormType;
+use Softspring\CmsBundle\Form\Type\DynamicFormType;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;

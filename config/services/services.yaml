@@ -22,6 +22,10 @@ services:
 
     Softspring\CmsBundle\Form\:
         resource: '../../src/Form/*'
+        tags: ['form.type']
+
+    Softspring\CmsBundle\Form\Module\ModuleCollectionType:
+        tags: ['form.type']
 
 #    Softspring\CmsBundle\EventListener\:
 #        resource: '../../src/EventListener/*'

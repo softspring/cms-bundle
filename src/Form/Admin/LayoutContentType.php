@@ -3,6 +3,7 @@
 namespace Softspring\CmsBundle\Form\Admin;
 
 use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Form\Module\ModuleCollectionType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -28,7 +29,7 @@ class LayoutContentType extends AbstractType
         $layoutConfig = $this->cmsConfig->getLayout($options['layout']);
 
         foreach ($layoutConfig['containers'] as $containerId => $containerConfig) {
-            $builder->add($containerId, CmsModuleCollectionType::class, [
+            $builder->add($containerId, ModuleCollectionType::class, [
                 'label' => "{$options['layout']}.$containerId.container_title",
                 'translation_domain' => 'sfs_cms_layouts',
                 'content_type' => $options['content_type'],

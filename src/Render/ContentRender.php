@@ -52,13 +52,13 @@ class ContentRender
         $this->cmsLogger && $this->cmsLogger->debug(sprintf('Rendering %s module', $module['_type']));
 
         if ($module['_type'] == 'container') {
-            $content = '';
+            $module['content'] = '';
 
-            foreach ($module['modules']['modules'] as $submodule) {
-                $content .= '<div class="col">'.$this->renderModule($submodule).'</div>';
+            foreach ($module['modules'] as $submodule) {
+                $module['content'] .= $this->renderModule($submodule, $version);
             }
 
-            return "<div class=\"row\">$content</div>";
+            return $this->twig->render($this->cmsConfig->getModule($module['_type'])['render_template'], $module);
         }
 
         $module += [
