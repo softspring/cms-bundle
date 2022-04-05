@@ -4,12 +4,13 @@
 
 {% block breadcrums_content %}
     {{ parent() }}
-    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_page_list') }}">{{ ('admin_'~content~'s.list.breadcrumb')|trans }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content~'_list') }}">{{ ('admin_'~content~'s.list.breadcrumb')|trans }}</a></li>
     <li class="breadcrumb-item active" aria-current="content">{{ ('admin_'~content~'s.create.breadcrumb')|trans }}</li>
 {% endblock breadcrums_content %}
 
 {% block content %}
     <h1 class="h3">{{ ('admin_'~content~'s.create.title')|trans }}</h1>
+
 
     {{ form_start(form) }}
 
@@ -18,11 +19,11 @@
                 <div class="container pt-3 pb-3">
                     {{ form_row(form.name) }}
 {#                    {{ form_row(form.site) }}#}
+
+                    {{ form_rest(form) }}
                 </div>
             </div>
         </div>
-
-        {{ form_rest(form) }}
 
         <div class="d-flex justify-content-end align-items-center">
         <a href="{{ url('sfs_cms_admin_content_'~content~'_list') }}" class="btn btn-outline-secondary">{{ ('admin_'~content~'s.create.actions.cancel.button')|trans }}</a>

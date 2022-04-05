@@ -1,18 +1,18 @@
-{% trans_default_domain 'sfs_cms_admin' %}
+{#{% trans_default_domain 'sfs_cms_admin' %}#}
 
-{% extends '@SfsCms/admin_layout.html.twig' %}
+{#{% extends '@SfsCms/admin_layout.html.twig' %}#}
 
-{% block breadcrums_content %}
-    {{ parent() }}
-    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_page_list') }}">{{ 'admin_pages.list.breadcrumb'|trans }}</a></li>
-    <li class="breadcrumb-item active" aria-current="content">{{ 'admin_pages.translations.breadcrumb'|trans }}</li>
-{% endblock breadcrums_content %}
+{#{% block breadcrums_content %}#}
+{#    {{ parent() }}#}
+{#    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_page_list') }}">{{ 'admin_pages.list.breadcrumb'|trans }}</a></li>#}
+{#    <li class="breadcrumb-item active" aria-current="content">{{ 'admin_pages.translations.breadcrumb'|trans }}</li>#}
+{#{% endblock breadcrums_content %}#}
 
-{% block content %}
-    <h1 class="h3">{{ 'admin_pages.translations.title'|trans }}</h1>
+{#{% block content %}#}
+{#    <h1 class="h3">{{ 'admin_pages.translations.title'|trans }}</h1>#}
 
-    {% include '@SfsCms/admin/page/_page_tabs.html.twig' with {'current':'translations', 'content':entity} %}
+{#    {% include '@SfsCms/admin/page/_page_tabs.html.twig' with {'current':'translations', 'content':entity} %}#}
 
-    {% block translations %}
-    {% endblock translations %}
-{% endblock content %}
+{#    {% block translations %}#}
+{#    {% endblock translations %}#}
+{#{% endblock content %}#}

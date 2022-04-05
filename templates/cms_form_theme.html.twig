@@ -6,7 +6,7 @@
 {#            {{ 'modules.collection.form.add.button'|trans }} {{ name }}#}
             Añadir módulo
         </button>
-        <div class="dropdown-menu dropdown-menu-right dropdown-menu--max-height" aria-labelledby="dropdownMenuButton">
+        <div class="dropdown-menu dropdown-menu-end dropdown-menu--max-height" aria-labelledby="dropdownMenuButton">
             {% for key, prototype in form.vars.prototypes %}
                 <button type="button" class="add_polymorphic_node btn btn-link d-block px-2 py-1" {{ block('polymorphic_prototype_button_attributes') }}>
                     {% set trans_domain = prototype.vars.translation_domain | default(translation_domain) | default(false) %}
@@ -21,7 +21,7 @@
     <div class="node-row mt-2 mb-2" {{ block('widget_container_attributes') }}>
         <div class="card">
             <div class="card-header">
-                <button type="button" class="float-right btn btn-light remove_polymorphic_node">x</button>
+                <button type="button" class="float-end btn btn-light remove_polymorphic_node">x</button>
                 <h5 class="card-title">
                     <span class="order-polymorphic-node">{{ form.vars.name }}</span>#
 {#                    {{ form_label(form) }}#}
@@ -83,7 +83,7 @@
             <{{ element|default('label') }}{% if label_attr %}{% with { attr: label_attr } %}{{ block('attributes') }}{% endwith %}{% endif %}>{{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}</{{ element|default('label') }}>
         {%- endif -%}
     </div>
-    <div class="col-sm-6 text-right">
+    <div class="col-sm-6 text-end">
         <button type="button" class="btn btn-primary cursor-pointer add_route_path" data-collection="#{{ id }}">
             {{ 'admin_products.list.actions.add.button'|trans }}
         </button>

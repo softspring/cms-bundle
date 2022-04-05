@@ -20,11 +20,10 @@
             <div class="container pt-3 pb-3">
                 {{ form_row(form.name) }}
 {#                {{ form_row(form.layout) }}#}
+                {{ form_rest(form) }}
             </div>
         </div>
     </div>
-
-    {{ form_rest(form) }}
 
     <div class="d-flex justify-content-end align-items-center">
         <a href="{{ url('sfs_cms_admin_content_'~content~'_list') }}" class="btn btn-outline-secondary">{{ ('admin_'~content~'s.update.actions.cancel.button')|trans }}</a>

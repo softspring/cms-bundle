@@ -56,7 +56,7 @@ class RouteResolverListener implements EventSubscriberInterface
             switch ($route->getType()) {
                 case RouteInterface::TYPE_CONTENT:
                     $request->attributes->set('_controller', 'Softspring\CmsBundle\Controller\ContentController::renderRoutePath');
-                    $request->attributes->set('_route', $routePath->getRoute()->getId());
+                    $request->attributes->set('_route', 'cms#'.$routePath->getRoute()->getId());
                     $request->attributes->set('_route_params', []);
                     $request->attributes->set('routePath', $routePath);
 

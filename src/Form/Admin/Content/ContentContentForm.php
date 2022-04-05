@@ -31,12 +31,18 @@ class ContentContentForm extends AbstractType implements ContentContentFormInter
             'translation_domain' => 'sfs_cms_admin',
             'layout' => null,
         ]);
+
+        $resolver->setRequired('content_type');
+        $resolver->setAllowedTypes('content_type', ['string']);
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('layout', LayoutType::class);
-        $builder->add('data', LayoutContentType::class, ['layout' => $options['layout']]);
+        $builder->add('data', LayoutContentType::class, [
+            'layout' => $options['layout'],
+            'content_type' => $options['content_type'],
+        ]);
         $builder->add('_ok', HiddenType::class, [
             'mapped' => false,
             'constraints' => new NotEqualTo(1),

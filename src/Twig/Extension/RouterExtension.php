@@ -48,7 +48,7 @@ class RouterExtension extends AbstractExtension
     public function getUrl($routeName): string
     {
         if (!($route = $this->getRoute($routeName))) {
-            return '#';
+            return $this->isPreview() ? 'javascript:confirm(\'Esto es una previsualización!\')' : '#';
         }
 
         $site = $this->getSite();
@@ -64,7 +64,7 @@ class RouterExtension extends AbstractExtension
     public function getPath($routeName): string
     {
         if (!($route = $this->getRoute($routeName))) {
-            return '#';
+            return $this->isPreview() ? 'javascript:confirm(\'Esto es una previsualización!\')' : '#';
         }
 
         $site = $this->getSite();

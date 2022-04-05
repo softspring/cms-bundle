@@ -14,10 +14,13 @@
                     <div class="col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"></div>
 
                     <div class="text-end me-3">
-                        <select class="form-select" onchange="document.getElementById('preview').src = this.value; document.getElementById('previewExternalLink').href = this.value">
-                            <option value="{{ url('sfs_cms_admin_content_'~content~'_preview_content', {'content':entity, 'locale':'es'}) }}">ES</option>
-                            <option value="{{ url('sfs_cms_admin_content_'~content~'_preview_content', {'content':entity, 'locale':'en'}) }}">EN</option>
-                        </select>
+                        {% if enabledLocales|length > 1 %}
+                            <select class="form-select" onchange="document.getElementById('preview').src = this.value; document.getElementById('previewExternalLink').href = this.value">
+                                {% for locale in enabledLocales %}
+                                    <option value="{{ url('sfs_cms_admin_content_'~content~'_preview_content', {'content':entity, 'locale':locale|lower}) }}">{{ locale|upper }}</option>
+                                {% endfor %}
+                            </select>
+                        {% endif %}
                     </div>
 
                     <div class="text-end">

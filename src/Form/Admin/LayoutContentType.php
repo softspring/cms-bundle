@@ -19,6 +19,8 @@ class LayoutContentType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired('layout');
+        $resolver->setRequired('content_type');
+        $resolver->setAllowedTypes('content_type', ['string']);
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -29,6 +31,7 @@ class LayoutContentType extends AbstractType
             $builder->add($containerId, CmsModuleCollectionType::class, [
                 'label' => "{$options['layout']}.$containerId.container_title",
                 'translation_domain' => 'sfs_cms_layouts',
+                'content_type' => $options['content_type'],
             ]);
         }
     }

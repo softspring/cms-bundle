@@ -36,6 +36,7 @@ class CmsModuleCollectionType extends PolymorphicCollectionType
         foreach ($this->cmsConfig->getModules() as $moduleId => $config) {
             $typesMap[$moduleId] = DynamicFormNodeType::class;
 
+            $typesOptions[$moduleId]['_valid_contents'] = $config['valid_contents'];
             $typesOptions[$moduleId]['form_template'] = $config['form_template'] ?? null;
             $typesOptions[$moduleId]['edit_template'] = $config['edit_template'] ?? null;
             $typesOptions[$moduleId]['form_fields'] = $config['form_fields'];
@@ -56,6 +57,16 @@ class CmsModuleCollectionType extends PolymorphicCollectionType
             'discriminator_field' => '_type',
             'allowed_modules' => [],
         ]);
+
+        $resolver->setRequired('content_type');
+        $resolver->setAllowedTypes('content_type', ['string']);
+    }
+
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $options = $this->removeInvalidModulesForContentType($options);
+
+        parent::buildForm($builder, $options);
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options)
@@ -74,6 +85,8 @@ class CmsModuleCollectionType extends PolymorphicCollectionType
                 unset($options['types_map'][$disallowedModule]);
             }
         }
+
+        $options = $this->removeInvalidModulesForContentType($options);
 
         foreach ($options['types_map'] as $discr => $formClass) {
             /* @var AbstractNodeType $formType */
@@ -120,5 +133,19 @@ class CmsModuleCollectionType extends PolymorphicCollectionType
         $discriminator = new NodeDiscriminator($options['discriminator_map'], $options['types_map'], $options['types_options'], $options['discriminator_field']);
         $transformer = new NodeDataTransformer($discriminator, $options['discriminator_field'], $options['id_field']);
         $builder->addEventSubscriber(new NodesResizeFormListener($discriminator, $transformer, $options['discriminator_field'], $options['id_field']));
+    }
+
+    protected function removeInvalidModulesForContentType(array $options): array
+    {
+        foreach ($options['types_options'] as $type => $typeOptions) {
+            if (!empty($typeOptions['_valid_contents']) && !in_array($options['content_type'], $typeOptions['_valid_contents'])) {
+                unset($options['types_options'][$type]);
+                unset($options['types_map'][$type]);
+                unset($options['discriminator_map'][$type]);
+            }
+            unset($options['types_options'][$type]['_valid_contents']);
+        }
+
+        return $options;
     }
 }

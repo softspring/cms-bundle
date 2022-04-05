@@ -50,7 +50,7 @@
                     {% endif %}
 
                     {% if entities.nextContent %}
-                        <a class="float-right" href="{{ url('sfs_cms_admin_sites_list', app.request.query.all|merge({ content: entities.nextContent })) }}" title="Next content"><span class="mdi mdi-24px mdi-chevron-right"></span></a>
+                        <a class="float-end" href="{{ url('sfs_cms_admin_sites_list', app.request.query.all|merge({ content: entities.nextContent })) }}" title="Next content"><span class="mdi mdi-24px mdi-chevron-right"></span></a>
                     {% endif %}
                 </td>
             </tr>

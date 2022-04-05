@@ -119,7 +119,7 @@ admin_blocks:
         breadcrumb: "Bloque"
 
 
-admin_page:
+admin_pages:
     create:
         title: "Nueva página"
         breadcrumb: "Nueva página"

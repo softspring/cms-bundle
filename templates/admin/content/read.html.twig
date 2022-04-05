@@ -18,15 +18,15 @@
             <div class="col-8">
                 <div class="container">
                     <div class="row">
-                        <div class="col-2 text-right">Nombre</div>
+                        <div class="col-2 text-end">Nombre</div>
                         <div class="col-10">{{ entity.name }}</div>
                     </div>
                     <div class="row">
-                        <div class="col-2 text-right">Sitio</div>
+                        <div class="col-2 text-end">Sitio</div>
                         <div class="col-10">{{ entity.site.name|default('') }}</div>
                     </div>
                     <div class="row">
-                        <div class="col-2 text-right">Diseño</div>
+                        <div class="col-2 text-end">Diseño</div>
                         <div class="col-10">{{ entity.layout.name|default('') }}</div>
                     </div>
                 </div>
@@ -35,7 +35,7 @@
 {#                    {% set stats = sfs_trans_stats(content, entity.site.languages) %}#}
 {#                    {% for locale,localeStats in stats %}#}
 {#                        <div class="row">#}
-{#                            <div class="col-2 text-right">{{ locale }}</div>#}
+{#                            <div class="col-2 text-end">{{ locale }}</div>#}
 {#                            <div class="col-10">#}
 {#                                {% if localeStats.total %}#}
 {#                                    {{ (localeStats.translated/localeStats.total*100)|round }}%#}
@@ -50,15 +50,15 @@
                 <div class="container">
                     <h3>SEO</h3>
 {#                    <div class="row">#}
-{#                        <div class="col-4 text-right">Index</div>#}
+{#                        <div class="col-4 text-end">Index</div>#}
 {#                        <div class="col-8">{{ entity.seo.noIndex?'noindex':'index' }}</div>#}
 {#                    </div>#}
 {#                    <div class="row">#}
-{#                        <div class="col-4 text-right">Links</div>#}
+{#                        <div class="col-4 text-end">Links</div>#}
 {#                        <div class="col-8">{{ entity.seo.noFollow?'nofollow':'follow' }}</div>#}
 {#                    </div>#}
 {#                    <div class="row">#}
-{#                        <div class="col-4 text-right">Sitemap</div>#}
+{#                        <div class="col-4 text-end">Sitemap</div>#}
 {#                        <div class="col-8">{{ entity.seo.sitemap?'yes':'no' }}</div>#}
 {#                    </div>#}
 

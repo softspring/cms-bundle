@@ -31,13 +31,15 @@ class ContentController extends AbstractController
     protected ContentRender $contentRender;
     protected CmsConfig $cmsConfig;
     protected EventDispatcherInterface $eventDispatcher;
+    protected array $enabledLocales;
 
-    public function __construct(ContentManagerInterface $contentManager, ContentRender $contentRender, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher)
+    public function __construct(ContentManagerInterface $contentManager, ContentRender $contentRender, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, array $enabledLocales)
     {
         $this->contentManager = $contentManager;
         $this->contentRender = $contentRender;
         $this->cmsConfig = $cmsConfig;
         $this->eventDispatcher = $eventDispatcher;
+        $this->enabledLocales = $enabledLocales;
     }
 
     public function create(Request $request): Response
@@ -266,6 +268,8 @@ class ContentController extends AbstractController
             throw $this->createNotFoundException('Entity not found');
         }
 
+        $request->attributes->set('content', $entity);
+
 //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
 //            return $response;
 //        }
@@ -276,7 +280,11 @@ class ContentController extends AbstractController
             $version->setLayout($request->request->get('content_content_form')['layout']);
         }
 
-        $form = $this->createForm($config['content_type'], $version, ['layout' => $version->getLayout(), 'method' => 'POST'])->handleRequest($request);
+        $form = $this->createForm($config['content_type'], $version, [
+            'layout' => $version->getLayout(),
+            'method' => 'POST',
+            'content_type' => $config['_id'],
+        ])->handleRequest($request);
 //
 //        $this->dispatchFromConfig($config, 'form_init_event_name', new FormEvent($form, $request));
 //
@@ -342,6 +350,7 @@ class ContentController extends AbstractController
             'content' => $config['_id'],
             'entity' => $entity,
 //            'deleteForm' => $deleteForm ? $deleteForm->createView() : null,
+            'enabledLocales' => $this->enabledLocales,
         ]);
 
 //        $this->dispatchFromConfig($config, 'view_event_name', new ViewEvent($viewData));
