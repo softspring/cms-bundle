@@ -5,7 +5,7 @@
                       https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <entity name="Softspring\CmsBundle\Entity\Page" table="cms_content_page">
-        <cache usage="NONSTRICT_READ_WRITE" />
+        <cache usage="NONSTRICT_READ_WRITE" region="default" />
     </entity>
 
 </doctrine-mapping>

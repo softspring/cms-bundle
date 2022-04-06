@@ -5,7 +5,7 @@
                       https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <entity name="Softspring\CmsBundle\Entity\Route" table="cms_route">
-        <cache usage="NONSTRICT_READ_WRITE" />
+        <cache usage="NONSTRICT_READ_WRITE" region="default" />
         <id name="id" type="string" column="id"/>
 
         <one-to-many field="paths" target-entity="Softspring\CmsBundle\Model\RoutePathInterface" mapped-by="route">
