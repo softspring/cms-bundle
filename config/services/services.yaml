@@ -9,6 +9,7 @@ services:
             $formFactory: '@form.factory'
 #            $siteType: '' # '%sfs_cms.site.type%'
             $enabledLocales: '%kernel.enabled_locales%'
+            $container: '@service_container'
 
     Softspring\CmsBundle\Config\CmsConfig:
         arguments:
