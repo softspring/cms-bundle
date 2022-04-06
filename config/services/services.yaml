@@ -15,10 +15,15 @@ services:
             $modules: '%sfs_cms.modules%'
             $layouts: '%sfs_cms.layouts%'
             $contents: '%sfs_cms.contents%'
+            $menus: '%sfs_cms.menus%'
 
     Softspring\CmsBundle\Controller\:
         resource: '../../src/Controller/*'
         public: true
+
+    Softspring\CmsBundle\DataFixtures\:
+        resource: '../../src/DataFixtures/*'
+        tags: ['doctrine.fixtures.loader']
 
     Softspring\CmsBundle\Form\:
         resource: '../../src/Form/*'
