@@ -36,9 +36,9 @@
         {% embed '@SfsAdmin/components/table.html.twig' with {'collection':entities, 'pagination_menu': 'sfs_cms_admin_menus_list'} %}
             {% trans_default_domain 'sfs_cms_admin' %}
             {% block ths %}
-                <th class="p-3" scope="col">{{ 'admin_menus.list.fields.id.header'|trans }}</th>
-                <th class="p-3" scope="col">{{ 'admin_menus.list.fields.type.header'|trans }}</th>
+                {#<th class="p-3" scope="col">{{ 'admin_menus.list.fields.id.header'|trans }}</th>#}
                 <th class="p-3" scope="col">{{ 'admin_menus.list.fields.name.header'|trans }}</th>
+                <th class="p-3" scope="col">{{ 'admin_menus.list.fields.type.header'|trans }}</th>
 {#                <th class="p-3" scope="col">{{ 'admin_menus.list.fields.site.header'|trans }}</th>#}
 {#                <th class="p-3" scope="col">{{ 'admin_menus.list.fields.path.header'|trans }}</th>#}
 {#                <th class="p-3" scope="col">{{ 'admin_menus.list.fields.page.header'|trans }}</th>#}

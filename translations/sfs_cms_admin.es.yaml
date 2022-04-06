@@ -203,7 +203,7 @@ admin_routes:
             update.link: "Editar"
             preview.link: "Previsualizar"
         fields:
-            id.header: "Identificador"
+            id.header: "Ruta"
             site.header: "Sitio"
             page.header: "Página"
             path.header: "URL"

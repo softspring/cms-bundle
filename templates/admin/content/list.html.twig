@@ -27,7 +27,7 @@
         {% embed '@SfsAdmin/components/table.html.twig' with {'collection':entities, 'pagination_route': 'sfs_cms_admin_content_'~content~'_list'} %}
             {% trans_default_domain 'sfs_cms_admin' %}
             {% block ths %}
-                <th scope="col" class="p-3">{{ ('admin_'~content~'s.list.fields.id.header')|trans }}</th>
+                {#<th scope="col" class="p-3">{{ ('admin_'~content~'s.list.fields.id.header')|trans }}</th>#}
                 <th scope="col" class="p-3">{{ ('admin_'~content~'s.list.fields.name.header')|trans }}</th>
                 <th>&nbsp;</th>
             {% endblock ths %}

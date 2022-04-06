@@ -219,7 +219,7 @@ class ContentController extends AbstractController
 //        } else {
             $page = 1;
             $rpp = 10000;
-            $orderSort = $config['default_order_sort'] ?? [];
+            $orderSort = ['name'=>'asc'];
             $form = null;
             $filters = [];
 //        }
