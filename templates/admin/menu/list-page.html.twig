@@ -1,0 +1,15 @@
+{% trans_default_domain 'sfs_cms_admin' %}
+
+{% for menu in entities %}
+    <tr>
+        <td class="p-3">{{ menu.id }}</td>
+        <td class="p-3">{{ menu.type }}</td>
+        <td class="p-3">{{ menu.name|default('') }}</td>
+        <td class="p-3">
+            <a href="{{ url('sfs_cms_admin_menus_update', {'menu':menu}) }}">{{ 'admin_menus.list.actions.update.link'|trans }}</a>
+        </td>
+    </tr>
+
+
+
+{% endfor %}

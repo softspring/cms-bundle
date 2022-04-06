@@ -10,26 +10,34 @@ interface MenuItemInterface
     const TYPE_ROUTE = 1;
     const TYPE_SUBMENU = 2;
 
-    public function setType(int $type): void;
+    public function setMenu(?MenuInterface $menu): void;
 
-    public function getType(): int;
+    public function getMenu(): ?MenuInterface;
 
-    public function setText(string $text): void;
+    public function setType(?int $type): void;
+
+    public function getType(): ?int;
+
+    public function setText(?string $text): void;
 
     public function getText(): ?string;
 
-    public function setRoute(RouteInterface $route): void;
+    public function setRoute(?RouteInterface $route): void;
 
     public function getRoute(): ?RouteInterface;
 
-    public function getOptions(): array;
+    public function getOptions(): ?array;
 
-    public function setOptions(array $options): void;
+    public function setOptions(?array $options): void;
+
+    public function getParent(): ?MenuItemInterface;
+
+    public function setParent(?MenuItemInterface $parent): void;
 
     /**
-     * @return Collection|MenuItemInterface[]
+     * @return Collection|null|MenuItemInterface[]
      */
-    public function getItems(): Collection;
+    public function getItems(): ?Collection;
 
     public function addItem(MenuItemInterface $item): void;
 

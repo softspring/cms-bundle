@@ -5,6 +5,7 @@ namespace Softspring\CmsBundle\Config;
 use Softspring\CmsBundle\Config\Exception\MissingLayoutsException;
 use Softspring\CmsBundle\Config\Model\Content;
 use Softspring\CmsBundle\Config\Model\Layout;
+use Softspring\CmsBundle\Config\Model\Menu;
 use Softspring\CmsBundle\Config\Model\Module;
 use Softspring\CmsBundle\Entity\Page;
 use Symfony\Component\Config\Definition\Processor;
@@ -134,6 +135,22 @@ class ConfigLoader
         return $contents;
     }
 
+    public function getMenus(ContainerBuilder $containerBuilder): array
+    {
+        $processor = new Processor();
+        $menus = [];
+
+        foreach ((new Finder())->in($this->menusPath)->directories()->depth(0) as $menuPath) {
+            $menuName = $menuPath->getFilename();
+            $menuConfiguration = new Menu($menuName);
+            $menus[$menuName] = $processor->processConfiguration($menuConfiguration, Yaml::parseFile("$menuPath/config.yaml"));
+            // force reload cache if some change has been done in cms folder
+            $containerBuilder->addResource(new FileResource("$menuPath/config.yaml"));
+        }
+
+        return $menus;
+    }
+    
     public function getBlocks(): array
     {
         return [];

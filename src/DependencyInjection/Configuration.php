@@ -69,6 +69,15 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
 
+                ->arrayNode('menu')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('menu_class')->defaultValue('Softspring\CmsBundle\Entity\Menu')->end()
+                        ->scalarNode('menu_item_class')->defaultValue('Softspring\CmsBundle\Entity\MenuItem')->end()
+                        ->scalarNode('find_field_name')->defaultValue('id')->end()
+                    ->end()
+                ->end()
+
 //                ->arrayNode('dynamic_modules')
 //                    ->useAttributeAsKey('key')
 //                    ->arrayPrototype()

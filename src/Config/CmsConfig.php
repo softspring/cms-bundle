@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Config;
 
 use Softspring\CmsBundle\Config\Exception\InvalidContentException;
 use Softspring\CmsBundle\Config\Exception\InvalidLayoutException;
+use Softspring\CmsBundle\Config\Exception\InvalidMenuException;
 use Softspring\CmsBundle\Config\Exception\InvalidModuleException;
 
 class CmsConfig
@@ -15,11 +16,12 @@ class CmsConfig
     protected array $blocks;
     protected array $sites;
 
-    public function __construct(array $layouts, array $modules, array $contents)
+    public function __construct(array $layouts, array $modules, array $contents, array $menus)
     {
         $this->layouts = $layouts;
         $this->modules = $modules;
         $this->contents = $contents;
+        $this->menus = $menus;
     }
 
     public function getLayouts(): array
@@ -87,6 +89,18 @@ class CmsConfig
     public function getMenus(): array
     {
         return $this->menus;
+    }
+
+    /**
+     * @throws InvalidMenuException
+     */
+    public function getMenu(string $id, bool $required = true): ?array
+    {
+        if ($required && !isset($this->menus[$id])) {
+            throw new InvalidMenuException($id, $this->menus);
+        }
+
+        return $this->menus[$id] ?? null;
     }
 
     public function getBlocks(): array

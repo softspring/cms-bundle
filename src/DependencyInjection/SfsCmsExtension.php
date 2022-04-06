@@ -28,6 +28,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $container->setParameter('sfs_cms.layouts', $configLoader->getLayouts($container));
         $container->setParameter('sfs_cms.contents', $configLoader->getContents($container));
         $container->setParameter('sfs_cms.blocks', $configLoader->getBlocks($container));
+        $container->setParameter('sfs_cms.menus', $configLoader->getMenus($container));
 
 
 //        $container->setParameter('sfs_cms.dynamic_modules', $config['dynamic_modules']);
@@ -50,6 +51,11 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $container->setParameter('sfs_cms.content.content_class', $config['content']['content_class']);
         $container->setParameter('sfs_cms.content.content_version_class', $config['content']['content_version_class']);
         $container->setParameter('sfs_cms.content.find_field_name', $config['content']['find_field_name'] ?? null);
+
+        // configure menu classes
+        $container->setParameter('sfs_cms.menu.menu_class', $config['menu']['menu_class']);
+        $container->setParameter('sfs_cms.menu.menu_item_class', $config['menu']['menu_item_class']);
+        $container->setParameter('sfs_cms.menu.find_field_name', $config['menu']['find_field_name'] ?? null);
 
         // configure block classes
 //        $container->setParameter('sfs_cms.block.class', $config['block']['class'] ?? null);

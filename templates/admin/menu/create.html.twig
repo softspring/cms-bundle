@@ -1,0 +1,30 @@
+{% trans_default_domain 'sfs_cms_admin' %}
+{% extends '@SfsCms/admin_layout.html.twig' %}
+{% block title %}{{ 'admin_menus.create.meta.title'|trans }}{% endblock %}
+
+{% form_theme form '@SfsPolymorphicFormType/polymorphic-form-theme.html.twig' '@SfsCms/cms_form_theme.html.twig' %}
+
+{% block breadcrums_content %}
+    {{ parent() }}
+    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_menus_list') }}">{{ 'admin_menus.list.breadcrumb'|trans }}</a></li>
+    <li class="breadcrumb-item active" aria-current="content">{{ 'admin_menus.create.breadcrumb'|trans }}</li>
+{% endblock breadcrums_content %}
+
+{% block content %}
+    <h1 class="h3">{{ 'admin_menus.create.title'|trans }}</h1>
+
+    <div class="container bg-white p-4">
+        {{ form_start(form) }}
+            <div class="row">
+                <div class="col">{{ form_row(form.name) }}</div>
+            </div>
+
+            {{ form_rest(form) }}
+
+            <div class="d-flex justify-content-end align-items-center">
+                <a href="{{ url('sfs_cms_admin_menus_list') }}" class="btn btn-outline-secondary">{{ 'admin_menus.create.actions.cancel.button'|trans }}</a>
+                <button type="submit" class="btn btn-primary ms-3">{{ 'admin_menus.create.actions.create.button'|trans }}</button>
+            </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock content %}

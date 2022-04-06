@@ -1,0 +1,53 @@
+{% trans_default_domain 'sfs_cms_admin' %}
+{% extends '@SfsCms/admin_layout.html.twig' %}
+{% block title %}{{ 'admin_menus.list.page_title'|trans }}{% endblock %}
+
+{% block breadcrums_content %}
+    {{ parent() }}
+    <li class="breadcrumb-item active" aria-current="content">{{ 'admin_menus.list.breadcrumb'|trans }}</li>
+{% endblock breadcrums_content %}
+
+{% block content %}
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3">{{ 'admin_menus.list.title'|trans }}</h1>
+
+{#        #}{# TODO restrict by permission #}
+        <div class="float-end">
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    {{ 'admin_menus.list.actions.create.link'|trans }}
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    {% for menuKey, menuConfig in config %}
+                        <li><a class="dropdown-item" href="{{ url('sfs_cms_admin_menus_create', {'menuType':menuKey}) }}">{{ menuKey }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+{#    #}{#    {% form_theme filterForm 'form/form_app_horizontal.html.twig' %}#}
+{#    {{ form_start(filterForm) }}#}
+{#    {{ form_widget(filterForm) }}#}
+{#    {{ form_rest(filterForm) }}#}
+{#    {{ form_end(filterForm) }}#}
+
+    <div class="container bg-white p-4">
+        {% embed '@SfsAdmin/components/table.html.twig' with {'collection':entities, 'pagination_menu': 'sfs_cms_admin_menus_list'} %}
+            {% trans_default_domain 'sfs_cms_admin' %}
+            {% block ths %}
+                <th class="p-3" scope="col">{{ 'admin_menus.list.fields.id.header'|trans }}</th>
+                <th class="p-3" scope="col">{{ 'admin_menus.list.fields.type.header'|trans }}</th>
+                <th class="p-3" scope="col">{{ 'admin_menus.list.fields.name.header'|trans }}</th>
+{#                <th class="p-3" scope="col">{{ 'admin_menus.list.fields.site.header'|trans }}</th>#}
+{#                <th class="p-3" scope="col">{{ 'admin_menus.list.fields.path.header'|trans }}</th>#}
+{#                <th class="p-3" scope="col">{{ 'admin_menus.list.fields.page.header'|trans }}</th>#}
+                <th class="p-3">&nbsp;</th>
+            {% endblock ths %}
+
+            {% block tbody %}
+                {% include '@SfsCms/admin/menu/list-page.html.twig' %}
+            {% endblock tbody %}
+        {% endembed %}
+    </div>
+{% endblock content %}

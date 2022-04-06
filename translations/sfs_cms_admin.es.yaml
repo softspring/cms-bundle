@@ -207,3 +207,40 @@ admin_routes:
             site.header: "Sitio"
             page.header: "Página"
             path.header: "URL"
+
+admin_menus:
+    list:
+        page_title: "Menús"
+        title: "Menús"
+        breadcrumb: "Menús"
+        actions:
+            create.link: "Nuevo menú"
+            update.link: "Editar"
+        fields:
+            id.header: "Identificador"
+            type.header: "Tipo"
+            name.header: "Nombre"
+
+    create:
+        meta.title: "Nuevo menú"
+        title: "Nuevo menú"
+        breadcrumb: "Nuevo menú"
+        actions:
+            create.button: "Crear menú"
+            cancel.button: "Cancelar"
+
+    update:
+        meta.title: "Editar menú"
+        title: "Editar menú"
+        breadcrumb: "Editar menú"
+        actions:
+            update.button: "Guardar cambios"
+            cancel.button: "Cancelar"
+
+    form:
+        name.label: ""
+        items:
+            label: "Elementos"
+            add.button: "Añadir elemento"
+            text.label: "Texto"
+            route.label: "Ruta"

@@ -1,0 +1,15 @@
+sfs_cms_admin_menus_list:
+    controller: Softspring\CmsBundle\Controller\Admin\MenuController::list
+    path: /
+
+sfs_cms_admin_menus_create:
+    controller: Softspring\CmsBundle\Controller\Admin\MenuController::create
+    path: /create/{menuType}
+
+sfs_cms_admin_menus_update:
+    controller: Softspring\CmsBundle\Controller\Admin\MenuController::update
+    path: /{menu}/update
+
+sfs_cms_admin_menus_delete:
+    controller: Softspring\CmsBundle\Controller\Admin\MenuController::delete
+    path: /{menu}/delete
