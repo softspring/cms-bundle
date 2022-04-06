@@ -3,7 +3,7 @@ admin:
 
 admin_sites:
     list:
-        page_title: "Sites"
+        meta.title: "Sites"
         title: "Sites"
         breadcrumb: "Sites"
         fields:
@@ -18,7 +18,7 @@ admin_sites:
             details.button: "Details"
 
     create:
-        page_title: "Create site"
+        meta.title: "Create site"
         title: "Create site"
         breadcrumb: "Create site"
         form:
@@ -32,7 +32,7 @@ admin_sites:
             cancel.button: "Cancel"
 
     update:
-        page_title: "Update site"
+        meta.title: "Update site"
         title: "Update site"
         breadcrumb: "Update %name%"
         form:
@@ -47,7 +47,7 @@ admin_sites:
             delete.button: "Delete"
 
     delete:
-        page_title: "Delete site"
+        meta.title: "Delete site"
         title: "Delete site"
         breadcrumb: "Delete %name%"
         actions:
@@ -55,13 +55,13 @@ admin_sites:
             cancel.button: "Cancel"
 
     read:
-        page_title: "Site"
+        meta.title: "Site"
         title: "Site"
         breadcrumb: "%name%"
 
 admin_blocks:
     list:
-        page_title: "Blocks"
+        meta.title: "Blocks"
         fields:
             key.header: "Type"
             sites.header: "Sites"
@@ -74,7 +74,7 @@ admin_blocks:
             details.button: "Details"
 
     create:
-        page_title: "Create block"
+        meta.title: "Create block"
         title: "Create block"
         form:
             key.label: "Key"
@@ -87,7 +87,7 @@ admin_blocks:
             cancel.button: "Cancel"
 
     update:
-        page_title: "Update block"
+        meta.title: "Update block"
         title: "Update block"
         form:
             key.label: "Key"
@@ -101,13 +101,13 @@ admin_blocks:
             delete.button: "Delete"
 
     delete:
-        page_title: "Delete block"
+        meta.title: "Delete block"
         title: "Delete block"
         actions:
             delete.button: "Delete"
             cancel.button: "Cancel"
 
     read:
-        page_title: "Block"
+        meta.title: "Block"
         title: "Block"
 

@@ -3,7 +3,7 @@ admin:
 
 admin_sites:
     list:
-        page_title: "Sitios"
+        meta.title: "Sitios"
         title: "Sitios"
         breadcrumb: "Sitios"
         fields:
@@ -19,7 +19,7 @@ admin_sites:
             details.button: "Detalles"
 
     create:
-        page_title: "Nuevo sitio"
+        meta.title: "Nuevo sitio"
         title: "Nuevo sitio"
         breadcrumb: "Nuevo sitio"
         form:
@@ -33,7 +33,7 @@ admin_sites:
             cancel.button: "Cancelar"
 
     update:
-        page_title: "Editar sitio"
+        meta.title: "Editar sitio"
         title: "Editar sitio"
         breadcrumb: "Editar %name%"
         form:
@@ -48,7 +48,7 @@ admin_sites:
             delete.button: "Eliminar"
 
     delete:
-        page_title: "Eliminar sitio"
+        meta.title: "Eliminar sitio"
         title: "Eliminar sitio"
         breadcrumb: "Eliminar %name%"
         actions:
@@ -56,13 +56,13 @@ admin_sites:
             cancel.button: "Cancelar"
 
     read:
-        page_title: "Sitio"
+        meta.title: "Sitio"
         title: "Sitio"
         breadcrumb: "%name%"
 
 admin_blocks:
     list:
-        page_title: "Bloques"
+        meta.title: "Bloques"
         title: "Bloques"
         breadcrumb: "Bloques"
         fields:
@@ -77,7 +77,7 @@ admin_blocks:
             details.button: "Detalles"
 
     create:
-        page_title: "Nuevo bloque"
+        meta.title: "Nuevo bloque"
         title: "Nuevo bloque"
         breadcrumb: "Nuevo bloque"
         form:
@@ -91,7 +91,7 @@ admin_blocks:
             cancel.button: "Cancelar"
 
     update:
-        page_title: "Editar bloque"
+        meta.title: "Editar bloque"
         title: "Editar bloque"
         breadcrumb: "Editar bloque"
         form:
@@ -106,7 +106,7 @@ admin_blocks:
             delete.button: "Eliminar"
 
     delete:
-        page_title: "Eliminar bloque"
+        meta.title: "Eliminar bloque"
         title: "Eliminar bloque"
         breadcrumb: "Eliminar bloque"
         actions:
@@ -114,7 +114,7 @@ admin_blocks:
             cancel.button: "Cancelar"
 
     read:
-        page_title: "Bloque"
+        meta.title: "Bloque"
         title: "Bloque"
         breadcrumb: "Bloque"
 
@@ -195,7 +195,7 @@ admin_routes:
             update.button: "Guardar cambios"
             cancel.button: "Cancelar"
     list:
-        page_title: "Rutas"
+        meta.title: "Rutas"
         title: "Rutas"
         breadcrumb: "Rutas"
         actions:
@@ -210,7 +210,7 @@ admin_routes:
 
 admin_menus:
     list:
-        page_title: "Menús"
+        meta.title: "Menús"
         title: "Menús"
         breadcrumb: "Menús"
         actions:
