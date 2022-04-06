@@ -37,17 +37,20 @@ class RouterExtension extends AbstractExtension
         return [
             new TwigFunction('sfs_cms_url', [$this, 'getUrl']),
             new TwigFunction('sfs_cms_path', [$this, 'getPath']),
+            new TwigFunction('sfs_cms_route_attr', [$this, 'getRouteAttributes']),
         ];
     }
 
     /**
-     * @param string|RouteInterface $routeName
+     * @param string|RouteInterface $routeOrName
      *
      * @throws \Exception
      */
-    public function getUrl($routeName): string
+    public function getUrl($routeOrName): string
     {
-        if (!($route = $this->getRoute($routeName))) {
+        $route = $routeOrName instanceof RouteInterface ? $routeOrName : $this->getRoute($routeOrName);
+
+        if (!$route) {
             return $this->isPreview() ? 'javascript:confirm(\'Esto es una previsualización!\')' : '#';
         }
 
@@ -57,13 +60,15 @@ class RouterExtension extends AbstractExtension
     }
 
     /**
-     * @param string|RouteInterface $routeName
+     * @param string|RouteInterface $routeOrName
      *
      * @throws \Exception
      */
-    public function getPath($routeName): string
+    public function getPath($routeOrName): string
     {
-        if (!($route = $this->getRoute($routeName))) {
+        $route = $routeOrName instanceof RouteInterface ? $routeOrName : $this->getRoute($routeOrName);
+
+        if (!$route) {
             return $this->isPreview() ? 'javascript:confirm(\'Esto es una previsualización!\')' : '#';
         }
 
@@ -71,6 +76,23 @@ class RouterExtension extends AbstractExtension
 
         return $this->getRoutePath($route, $site);
     }
+
+    /**
+     * @param string|RouteInterface $routeOrName
+     *
+     * @throws \Exception
+     */
+    public function getRouteAttributes($routeOrName): string
+    {
+        $route = $routeOrName instanceof RouteInterface ? $routeOrName : $this->getRoute($routeOrName);
+
+        if (!$route) {
+            return '';
+        }
+
+        return ''; // TODO check page to return noindex and nofollow attributes
+    }
+
 
     protected function getRoutePath(Route $route, $site): string
     {
