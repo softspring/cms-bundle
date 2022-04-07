@@ -27,8 +27,8 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $container->setParameter('sfs_cms.modules', $configLoader->getModules($container));
         $container->setParameter('sfs_cms.layouts', $configLoader->getLayouts($container));
         $container->setParameter('sfs_cms.contents', $configLoader->getContents($container));
-        $container->setParameter('sfs_cms.blocks', $configLoader->getBlocks($container));
         $container->setParameter('sfs_cms.menus', $configLoader->getMenus($container));
+        $container->setParameter('sfs_cms.blocks', $configLoader->getBlocks($container));
 
 
 //        $container->setParameter('sfs_cms.dynamic_modules', $config['dynamic_modules']);

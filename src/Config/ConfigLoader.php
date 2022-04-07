@@ -3,11 +3,13 @@
 namespace Softspring\CmsBundle\Config;
 
 use Softspring\CmsBundle\Config\Exception\MissingLayoutsException;
+use Softspring\CmsBundle\Config\Model\Block;
 use Softspring\CmsBundle\Config\Model\Content;
 use Softspring\CmsBundle\Config\Model\Layout;
 use Softspring\CmsBundle\Config\Model\Menu;
 use Softspring\CmsBundle\Config\Model\Module;
 use Softspring\CmsBundle\Entity\Page;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -151,8 +153,40 @@ class ConfigLoader
         return $menus;
     }
     
-    public function getBlocks(): array
+    public function getBlocks(ContainerBuilder $containerBuilder): array
     {
-        return [];
+        $processor = new Processor();
+        $blocks = [];
+
+        foreach ((new Finder())->in($this->blocksPath)->directories()->depth(0) as $blockPath) {
+            $blockName = $blockPath->getFilename();
+            $blockConfiguration = new Block($blockName);
+            $blocks[$blockName] = $processor->processConfiguration($blockConfiguration, Yaml::parseFile("$blockPath/config.yaml"));
+
+            if ($blocks[$blockName]['static'] && !$blocks[$blockName]['singleton']) {
+                throw new InvalidConfigurationException('A block defined as static must be singleton.');
+            }
+
+            if ($blocks[$blockName]['static'] && !empty($blocks[$blockName]['form_fields'])) {
+                throw new InvalidConfigurationException('A block defined as static can not have form_fields.');
+            }
+
+            if ($blocks[$blockName]['static'] && !empty($blocks[$blockName]['form_options'])) {
+                throw new InvalidConfigurationException('A block defined as static can not have form_options.');
+            }
+
+            if ($blocks[$blockName]['static'] && !empty($blocks[$blockName]['edit_template'])) {
+                throw new InvalidConfigurationException('A block defined as static can not have edit_template.');
+            }
+
+            if ($blocks[$blockName]['static'] && !empty($blocks[$blockName]['form_template'])) {
+                throw new InvalidConfigurationException('A block defined as static can not have form_template.');
+            }
+
+            // force reload cache if some change has been done in cms folder
+            $containerBuilder->addResource(new FileResource("$blockPath/config.yaml"));
+        }
+
+        return $blocks;
     }
 }

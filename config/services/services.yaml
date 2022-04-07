@@ -18,6 +18,7 @@ services:
             $layouts: '%sfs_cms.layouts%'
             $contents: '%sfs_cms.contents%'
             $menus: '%sfs_cms.menus%'
+            $blocks: '%sfs_cms.blocks%'
 
     Softspring\CmsBundle\Controller\:
         resource: '../../src/Controller/*'

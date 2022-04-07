@@ -14,6 +14,9 @@ use Softspring\CmsBundle\Render\RenderBlock;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
+/**
+ * @deprecated
+ */
 class BlockExtension extends AbstractExtension
 {
     protected EntityManagerInterface $em;

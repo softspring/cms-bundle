@@ -27,6 +27,12 @@ class Block implements ConfigurationInterface
                 ->scalarNode('edit_template')->end()
                 ->scalarNode('form_template')->end()
 
+                ->booleanNode('esi')->defaultTrue()->end()
+                ->integerNode('cache_ttl')->defaultFalse()->end()
+                ->booleanNode('singleton')->defaultTrue()->end()
+                ->booleanNode('static')->defaultFalse()->end()
+                ->scalarNode('render_url')->end()
+
                 ->scalarNode('form_type')->end()
 
                 ->arrayNode('form_options')
