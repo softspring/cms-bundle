@@ -10,6 +10,7 @@ services:
 #            $siteType: '' # '%sfs_cms.site.type%'
             $enabledLocales: '%kernel.enabled_locales%'
             $container: '@service_container'
+            $esi: '@?esi'
 
     Softspring\CmsBundle\Config\CmsConfig:
         arguments:
@@ -47,6 +48,10 @@ services:
     Softspring\CmsBundle\Request\ParamConverter\:
         resource: '../../src/Request/ParamConverter/*'
         tags: ['request.param_converter']
+
+    sfs_cms.twig.extension.loader:
+        class: Twig\Extension\StringLoaderExtension
+        tags: ['twig.extension']
 
     Softspring\CmsBundle\Twig\Extension\:
         resource: '../../src/Twig/Extension/*'

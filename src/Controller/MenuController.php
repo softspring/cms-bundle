@@ -32,8 +32,15 @@ class MenuController extends AbstractController
             return new Response();
         }
 
-        return $this->render($config['render_template'], [
+        $response = $this->render($config['render_template'], [
             'menu' => $menu,
         ]);
+
+        if ($config['cache_ttl'] !== false) {
+            $response->setPublic();
+            $response->setMaxAge($config['cache_ttl']);
+        }
+
+        return $response;
     }
 }

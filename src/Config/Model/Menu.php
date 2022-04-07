@@ -24,6 +24,7 @@ class Menu implements ConfigurationInterface
                 ->integerNode('revision')->isRequired()->end()
                 ->scalarNode('render_template')->defaultValue("@menu/{$this->menuName}/render.html.twig")->end()
                 ->booleanNode('esi')->defaultTrue()->end()
+                ->integerNode('cache_ttl')->defaultFalse()->end()
                 ->booleanNode('singleton')->defaultTrue()->end()
             ->end()
         ;

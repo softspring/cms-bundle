@@ -47,6 +47,7 @@ class MenuController extends AbstractController
         }
 
         if ($config['singleton'] && $this->menuManager->getRepository()->count(['type' => $menuType]) > 0) {
+            $this->addFlash('warning', 'Ya hay una instancia de este menú.');
             return $this->redirectToRoute('sfs_cms_admin_menus_list');
         }
 
@@ -57,6 +58,8 @@ class MenuController extends AbstractController
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
                 $this->menuManager->saveEntity($entity);
+
+                $this->addFlash('success', 'El menú se ha creado correctamente. '.($config['cache_ttl']!==false?" Por cuestiones de rendimiento, el menú está cacheado durante {$config['cache_ttl']} segundos, por lo que puede que tardes en visualizar los cambios.":''));
 
                 return $this->redirectToRoute('sfs_cms_admin_menus_list');
             }
@@ -83,6 +86,8 @@ class MenuController extends AbstractController
             if ($form->isValid()) {
 
                 $this->menuManager->saveEntity($menu);
+
+                $this->addFlash('success', 'El menú se ha actualizado. '.($config['cache_ttl']!==false?" Por cuestiones de rendimiento, el menú está cacheado durante {$config['cache_ttl']} segundos, por lo que puede que tardes en visualizar los cambios.":''));
 
                 return $this->redirectToRoute('sfs_cms_admin_menus_list');
             }
