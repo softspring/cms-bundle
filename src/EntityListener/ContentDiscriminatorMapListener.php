@@ -31,7 +31,7 @@ class ContentDiscriminatorMapListener implements EventSubscriberInterface
         }
     }
 
-    public function getSubscribedEvents()
+    public function getSubscribedEvents(): array
     {
         return [
             Events::loadClassMetadata,
