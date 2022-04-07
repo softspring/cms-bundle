@@ -33,7 +33,7 @@ class ImageType extends AbstractType
             'image_types' => [],
             'query_builder' => fn(EntityRepository $entityRepository) => $entityRepository->createQueryBuilder('i'),
             'choice_label' => function (ImageInterface $image) {
-                return $image->getId();
+                return $image->getName();
             },
             'choice_filter' => function (?ImageInterface $image = null) {
                 return true;
