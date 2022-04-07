@@ -12,6 +12,7 @@
         <h1 class="h3">{{ 'admin_blocks.list.title'|trans }}</h1>
 
         <div class="float-end">
+            {% if is_granted('ROLE_SFS_CMS_ADMIN_BLOCKS_CREATE') %}
             <div class="dropdown">
                 <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownBlockButton1" data-bs-toggle="dropdown" aria-expanded="false">
                     {{ 'admin_blocks.list.actions.create.link'|trans }}
@@ -22,6 +23,7 @@
                     {% endfor %}
                 </ul>
             </div>
+            {% endif %}
         </div>
     </div>
 
