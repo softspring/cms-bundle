@@ -3,6 +3,7 @@
 namespace Softspring\CmsBundle\Form\Admin\Block;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Softspring\CmsBundle\Form\Type\DynamicFormType;
 use Softspring\CmsBundle\Manager\BlockManagerInterface;
 use Softspring\CmsBundle\Model\BlockInterface;
 use Softspring\CmsBundle\Model\MultiSiteInterface;
@@ -15,7 +16,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-abstract class AbstractBlockForm extends AbstractType
+class BlockForm extends AbstractType
 {
     protected BlockManagerInterface $manager;
 
@@ -35,10 +36,10 @@ abstract class AbstractBlockForm extends AbstractType
         $resolver->setDefaults([
             'data_class' => BlockInterface::class,
             'translation_domain' => 'sfs_cms_admin',
-            'content_form' => null,
+            'block_config' => null,
         ]);
 
-        $resolver->setRequired('content_form');
+        $resolver->setRequired('block_config');
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -70,14 +71,8 @@ abstract class AbstractBlockForm extends AbstractType
             ]);
         }
 
-        $builder->add('content', $options['content_form']);
-    }
-
-    public function formOptions(BlockInterface $block, ?Request $request): array
-    {
-        return [
-            'content_form' => $this->blockTypes[$block->getKey()]['admin_form'],
-            'method' => 'POST',
-        ];
+        $builder->add('data', DynamicFormType::class, [
+            'form_fields' => $options['block_config']['form_fields'],
+        ]);
     }
 }

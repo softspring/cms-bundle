@@ -4,7 +4,7 @@ namespace Softspring\CmsBundle\Form\Admin\Block;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class BlockUpdateForm extends AbstractBlockForm implements BlockUpdateFormInterface
+class BlockUpdateForm extends BlockForm implements BlockUpdateFormInterface
 {
     public function configureOptions(OptionsResolver $resolver)
     {

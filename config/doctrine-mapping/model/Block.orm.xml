@@ -5,8 +5,8 @@
                       https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <mapped-superclass name="Softspring\CmsBundle\Model\Block" table="cms_block">
-        <field name="key" column="block_key" type="string" nullable="false" length="100" />
-        <field name="content" column="block_content" type="json" nullable="true" />
+        <field name="type" column="type" type="string" nullable="false" length="100" />
+        <field name="data" column="data" type="json" nullable="true" />
     </mapped-superclass>
 
 </doctrine-mapping>

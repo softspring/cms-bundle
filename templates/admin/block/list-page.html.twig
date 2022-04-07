@@ -2,7 +2,7 @@
 
 {% for block in entities %}
     <tr>
-        <td>{{ block.key }}</td>
+        <td>{{ block.type }}</td>
 
         {% if sfs_cms_blocks_are_multisite() %}
             <td>{{ block.sites|join(', ') }}</td>

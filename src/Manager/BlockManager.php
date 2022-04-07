@@ -19,6 +19,16 @@ class BlockManager implements BlockManagerInterface
     {
         $this->em = $em;
     }
+    
+    public function createEntity(string $blockType = null): object
+    {
+        $class = $this->getEntityClass();
+        /** @var BlockInterface $block */
+        $block = new $class();
+        $block->setType($blockType);
+
+        return $block;
+    }
 
     public function getTargetClass(): string
     {

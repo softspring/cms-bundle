@@ -58,8 +58,8 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $container->setParameter('sfs_cms.menu.find_field_name', $config['menu']['find_field_name'] ?? null);
 
         // configure block classes
-//        $container->setParameter('sfs_cms.block.class', $config['block']['class'] ?? null);
-//        $container->setParameter('sfs_cms.block.find_field_name', $config['block']['find_field_name'] ?? null);
+        $container->setParameter('sfs_cms.block.class', $config['block']['class'] ?? null);
+        $container->setParameter('sfs_cms.block.find_field_name', $config['block']['find_field_name'] ?? null);
 //        $container->setParameter('sfs_cms.block.types', $config['block']['types'] ?? []);
 
         // load services
@@ -82,7 +82,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
 
         // add a default config to force load target_entities, will be overwritten by ResolveDoctrineTargetEntityPass
 //        $doctrineConfig['orm']['resolve_target_entities'][SiteInterface::class] = 'App\Entity\Site';
-//        $doctrineConfig['orm']['resolve_target_entities'][BlockInterface::class] = 'App\Entity\Block';
+        $doctrineConfig['orm']['resolve_target_entities'][BlockInterface::class] = 'App\Entity\Block';
         $doctrineConfig['orm']['resolve_target_entities'][ContentInterface::class] = 'App\Entity\Content';
 
         // disable auto-mapping for this bundle to prevent mapping errors

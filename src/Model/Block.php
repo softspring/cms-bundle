@@ -4,27 +4,27 @@ namespace Softspring\CmsBundle\Model;
 
 abstract class Block implements BlockInterface
 {
-    protected ?string $key = null;
+    protected ?string $type = null;
 
-    protected ?array $content = null;
+    protected ?array $data = null;
 
-    public function getKey(): ?string
+    public function getType(): ?string
     {
-        return $this->key;
+        return $this->type;
     }
 
-    public function setKey(?string $key): void
+    public function setType(?string $type): void
     {
-        $this->key = $key;
+        $this->type = $type;
     }
 
-    public function getContent(): ?array
+    public function getData(): ?array
     {
-        return $this->content;
+        return $this->data;
     }
 
-    public function setContent(?array $content): void
+    public function setData(?array $data): void
     {
-        $this->content = $content;
+        $this->data = $data;
     }
 }

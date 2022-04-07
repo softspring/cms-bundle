@@ -138,11 +138,11 @@ class BlockController extends AbstractController
 //            $form = $this->createForm($formClassName)->handleRequest($request);
 //            $filters = $form->isSubmitted() && $form->isValid() ? array_filter($form->getData()) : [];
 //        } else {
-            $page = 1;
-            $rpp = 10000;
-            $orderSort = ['name' => 'asc'] ?? [];
-            $form = null;
-            $filters = [];
+        $page = 1;
+        $rpp = 10000;
+        $orderSort = ['id' => 'asc'] ?? [];
+        $form = null;
+        $filters = [];
 //        }
 
         $this->dispatch("sfs_cms.admin.blocks.filter_event_name", $filterEvent = new FilterEvent($filters, $orderSort, $page, $rpp));

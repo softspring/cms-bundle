@@ -48,7 +48,7 @@ class NewBlockExtension extends AbstractExtension
             $renderFunction = 'render';
         }
 
-        if ($blockConfig['render_url']) {
+        if (!empty($blockConfig['render_url'])) {
             $twigCode = "{{ $renderFunction(url('{$blockConfig['render_url']}')) }}";
         } else {
             // $twigCode = "{{ $renderFunction(url('sfs_cms_block_render_by_type', {'type':'$type'})) }}";

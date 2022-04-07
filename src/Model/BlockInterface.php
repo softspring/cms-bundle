@@ -4,11 +4,11 @@ namespace Softspring\CmsBundle\Model;
 
 interface BlockInterface
 {
-    public function getKey(): ?string;
+    public function getType(): ?string;
 
-    public function setKey(?string $key): void;
+    public function setType(?string $type): void;
 
-    public function getContent(): ?array;
+    public function getData(): ?array;
 
-    public function setContent(?array $content): void;
+    public function setData(?array $data): void;
 }
