@@ -10,6 +10,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotEqualTo;
 
@@ -28,9 +29,13 @@ class ContentContentForm extends AbstractType implements ContentContentFormInter
             'data_class' => ContentVersionInterface::class,
             'label_format' => 'admin_content.form.%name%.label',
             'validation_groups' => ['Default', 'create'],
-            'translation_domain' => 'sfs_cms_admin',
+            'translation_domain' => 'sfs_cms_contents',
             'layout' => null,
         ]);
+
+//        $resolver->setNormalizer('label_format', function (Options $options, $value) {
+//            return "admin_{$options['content']['_id']}.form.%name%.label";
+//        });
 
         $resolver->setRequired('content_type');
         $resolver->setAllowedTypes('content_type', ['string']);

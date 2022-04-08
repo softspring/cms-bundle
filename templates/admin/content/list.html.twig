@@ -1,19 +1,21 @@
-{% trans_default_domain 'sfs_cms_admin' %}
+{% trans_default_domain 'sfs_cms_contents' %}
 
 {% extends '@SfsCms/admin_layout.html.twig' %}
 
+{% block title %}{{ ('admin_'~content~'.list.meta.title')|trans }}{% endblock %}
+
 {% block breadcrums_content %}
     {{ parent() }}
-    <li class="breadcrumb-item active" aria-current="page">{{ ('admin_'~content~'s.list.breadcrumb')|trans }}</li>
+    <li class="breadcrumb-item active" aria-current="page">{{ ('admin_'~content~'.list.breadcrumb')|trans }}</li>
 {% endblock breadcrums_content %}
 
 {% block content %}
     <div class="d-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3">{{ ('admin_'~content~'s.list.title')|trans }}</h1>
+        <h1 class="h3">{{ ('admin_'~content~'.list.title')|trans }}</h1>
 
         {# TODO restrict by permission #}
         <div class="float-end">
-            <a class="btn btn-outline-primary" href="{{ url('sfs_cms_admin_content_'~content~'_create') }}">{{ ('admin_'~content~'s.list.actions.create.link')|trans }}</a>
+            <a class="btn btn-outline-primary" href="{{ url('sfs_cms_admin_content_'~content~'_create') }}">{{ ('admin_'~content~'.list.actions.create.link')|trans }}</a>
         </div>
     </div>
 
@@ -25,10 +27,10 @@
 
     <div class="container bg-white p-4">
         {% embed '@SfsAdmin/components/table.html.twig' with {'collection':entities, 'pagination_route': 'sfs_cms_admin_content_'~content~'_list'} %}
-            {% trans_default_domain 'sfs_cms_admin' %}
+            {% trans_default_domain 'sfs_cms_contents' %}
             {% block ths %}
-                {#<th scope="col" class="p-3">{{ ('admin_'~content~'s.list.fields.id.header')|trans }}</th>#}
-                <th scope="col" class="p-3">{{ ('admin_'~content~'s.list.fields.name.header')|trans }}</th>
+                {#<th scope="col" class="p-3">{{ ('admin_'~content~'.list.fields.id.header')|trans }}</th>#}
+                <th scope="col" class="p-3">{{ ('admin_'~content~'.list.fields.name.header')|trans }}</th>
                 <th>&nbsp;</th>
             {% endblock ths %}
 
@@ -41,9 +43,9 @@
 {#    <table class="table table-striped table-hover">#}
 {#        <thead>#}
 {#        <tr>#}
-{#            <th scope="col">{{ ('admin_'~content~'s.list.fields.id.header')|trans }}</th>#}
-{#            <th scope="col">{{ ('admin_'~content~'s.list.fields.site.header')|trans }}</th>#}
-{#            <th scope="col">{{ ('admin_'~content~'s.list.fields.name.header')|trans }}</th>#}
+{#            <th scope="col">{{ ('admin_'~content~'.list.fields.id.header')|trans }}</th>#}
+{#            <th scope="col">{{ ('admin_'~content~'.list.fields.site.header')|trans }}</th>#}
+{#            <th scope="col">{{ ('admin_'~content~'.list.fields.name.header')|trans }}</th>#}
 {#            <th>&nbsp;</th>#}
 {#        </tr>#}
 {#        </thead>#}

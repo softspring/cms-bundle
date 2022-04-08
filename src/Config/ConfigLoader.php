@@ -162,6 +162,7 @@ class ConfigLoader
             $blockName = $blockPath->getFilename();
             $blockConfiguration = new Block($blockName);
             $blocks[$blockName] = $processor->processConfiguration($blockConfiguration, Yaml::parseFile("$blockPath/config.yaml"));
+            $blocks[$blockName]['_id'] = $blockName;
 
             if ($blocks[$blockName]['static'] && !$blocks[$blockName]['singleton']) {
                 throw new InvalidConfigurationException('A block defined as static must be singleton.');

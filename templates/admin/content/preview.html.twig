@@ -1,6 +1,8 @@
-{% trans_default_domain 'sfs_cms_admin' %}
+{% trans_default_domain 'sfs_cms_contents' %}
 
 {% extends '@SfsCms/admin_layout.html.twig' %}
+
+{% block title %}{{ ('admin_'~content~'.preview.meta.title')|trans({'%name%':entity.name}) }}{% endblock %}
 
 {% block body %}
     <div class="d-flex flex-col align-items-stretch vh-100 pt-5">

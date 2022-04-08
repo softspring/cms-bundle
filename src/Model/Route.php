@@ -81,6 +81,7 @@ abstract class Route implements RouteInterface
 
     public function setContent(?ContentInterface $content): void
     {
+        $content && $this->setType(self::TYPE_CONTENT);
         $this->content = $content;
     }
 

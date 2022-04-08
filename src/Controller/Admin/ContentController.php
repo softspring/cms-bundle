@@ -4,7 +4,9 @@ namespace Softspring\CmsBundle\Controller\Admin;
 
 use Jhg\DoctrinePagination\ORM\PaginatedRepositoryInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Entity\RoutePath;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
+use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Render\ContentRender;
 use Softspring\CoreBundle\Controller\Traits\DispatchGetResponseTrait;
@@ -28,14 +30,16 @@ class ContentController extends AbstractController
     use DispatchGetResponseTrait;
 
     protected ContentManagerInterface $contentManager;
+    protected RouteManagerInterface $routeManager;
     protected ContentRender $contentRender;
     protected CmsConfig $cmsConfig;
     protected EventDispatcherInterface $eventDispatcher;
     protected array $enabledLocales;
 
-    public function __construct(ContentManagerInterface $contentManager, ContentRender $contentRender, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, array $enabledLocales)
+    public function __construct(ContentManagerInterface $contentManager, RouteManagerInterface $routeManager, ContentRender $contentRender, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, array $enabledLocales)
     {
         $this->contentManager = $contentManager;
+        $this->routeManager = $routeManager;
         $this->contentRender = $contentRender;
         $this->cmsConfig = $cmsConfig;
         $this->eventDispatcher = $eventDispatcher;
@@ -52,6 +56,7 @@ class ContentController extends AbstractController
 //        }
 
         $entity = $this->contentManager->createEntity($config['_id']);
+        $entity->addRoute($this->routeManager->createEntity());
 
 //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
 //            return $response;

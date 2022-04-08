@@ -12,19 +12,21 @@ class RouteManager implements RouteManagerInterface
     use CrudlEntityManagerTrait;
 
     protected EntityManagerInterface $em;
+    protected RoutePathManagerInterface $routePathManager;
 
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, RoutePathManagerInterface $routePathManager)
     {
         $this->em = $em;
+        $this->routePathManager = $routePathManager;
     }
 
-    public function createEntity(): object
+    public function createEntity(bool $addOnePath = true): object
     {
         $class = $this->getEntityClass();
         /** @var RouteInterface $route */
         $route = new $class();
 
-        $route->addPath(new RoutePath());
+        $addOnePath && $route->addPath(new RoutePath());
 
         return $route;
     }
@@ -32,5 +34,10 @@ class RouteManager implements RouteManagerInterface
     public function getTargetClass(): string
     {
         return RouteInterface::class;
+    }
+
+    public function getRoutePathManager(): RoutePathManagerInterface
+    {
+        return $this->routePathManager;
     }
 }

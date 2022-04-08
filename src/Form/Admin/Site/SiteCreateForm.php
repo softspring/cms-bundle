@@ -12,7 +12,7 @@ class SiteCreateForm extends AbstractSiteForm implements SiteCreateFormInterface
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'translation_domain' => 'sfs_cms_admin',
+            'translation_domain' => 'sfs_cms_sites',
             'label_format' => 'admin_sites.create.form.%name%.label',
             'validation_groups' => ['Default', 'create'],
         ]);

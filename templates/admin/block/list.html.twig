@@ -34,7 +34,7 @@
     {#    {{ form_end(filterForm) }}#}
 
     <div class="container bg-white p-4">
-        {% embed '@SfsAdmin/components/table.html.twig' with {'collection':entities, 'pagination_block': 'sfs_cms_admin_blocks_list'} %}
+        {% embed '@SfsAdmin/components/table.html.twig' with {'collection':entities, 'pagination_block': 'sfs_cms_admin_blocks_list', 'empty_message':'admin_blocks.list.empty_message'|trans} %}
             {% trans_default_domain 'sfs_cms_admin' %}
             {% block ths %}
                 {#<th class="p-3" scope="col">{{ 'admin_blocks.list.fields.id.header'|trans }}</th>#}

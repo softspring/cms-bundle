@@ -13,7 +13,7 @@ class SiteDeleteForm extends AbstractType implements SiteDeleteFormInterface
     {
         $resolver->setDefaults([
             'data_class' => SiteInterface::class,
-            'translation_domain' => 'sfs_cms_admin',
+            'translation_domain' => 'sfs_cms_sites',
             'label_format' => 'admin_sites.delete.form.%name%.label',
         ]);
     }

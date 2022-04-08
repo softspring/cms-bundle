@@ -3,7 +3,6 @@
 namespace Softspring\CmsBundle\Form\Admin\Menu;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Softspring\CmsBundle\Form\Admin\Menu\MenuItemCollectionType;
 use Softspring\CmsBundle\Model\MenuInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;

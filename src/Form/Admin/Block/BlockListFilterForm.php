@@ -13,7 +13,7 @@ class BlockListFilterForm extends EntityListFilterForm implements BlockListFilte
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'translation_domain' => 'sfs_cms_admin',
+            'translation_domain' => 'sfs_cms_blocks',
             'label_format' => 'admin_blocks.list.filter_form.%name%.label',
         ]);
     }

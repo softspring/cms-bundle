@@ -16,7 +16,7 @@ class ContentSeoForm extends AbstractType
             'data_class' => ContentInterface::class,
             'label_format' => 'admin_pages.form.%name%.label',
             'validation_groups' => ['Default', 'create', 'update'],
-            'translation_domain' => 'sfs_cms_admin',
+            'translation_domain' => 'sfs_cms_contents',
         ]);
     }
 

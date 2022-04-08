@@ -12,7 +12,7 @@ class SiteUpdateForm extends AbstractSiteForm implements SiteUpdateFormInterface
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'translation_domain' => 'sfs_cms_admin',
+            'translation_domain' => 'sfs_cms_sites',
             'label_format' => 'admin_sites.update.form.%name%.label',
             'validation_groups' => ['Default', 'update'],
         ]);

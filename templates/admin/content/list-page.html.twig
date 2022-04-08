@@ -1,4 +1,4 @@
-{% trans_default_domain 'sfs_cms_admin' %}
+{% trans_default_domain 'sfs_cms_contents' %}
 
 {% for entity in entities %}
     <tr>
@@ -6,9 +6,9 @@
 {#        <td class=p-3>{{ entity.site.name|default('') }}</td>#}
         <td class="p-3">{{ entity.name }}</td>
         <td class="p-3 text-end">
-            <a href="{{ url('sfs_cms_admin_content_'~content~'_details', {'content':entity}) }}">{{ ('admin_'~content~'s.list.actions.details.link')|trans }}</a>
-{#            <a href="{{ url('sfs_cms_admin_content_'~content~'_update', {'content':entity}) }}">{{ ('admin_'~content~'s.list.actions.update.link')|trans }}</a>#}
-{#            <a href="{{ url('sfs_cms_admin_content_'~content~'_preview', {'content':entity}) }}" target="_blank">{{ ('admin_'~content~'s.list.actions.preview.link')|trans }}</a>#}
+            <a href="{{ url('sfs_cms_admin_content_'~content~'_details', {'content':entity}) }}">{{ ('admin_'~content~'.list.actions.details.link')|trans }}</a>
+{#            <a href="{{ url('sfs_cms_admin_content_'~content~'_update', {'content':entity}) }}">{{ ('admin_'~content~'.list.actions.update.link')|trans }}</a>#}
+{#            <a href="{{ url('sfs_cms_admin_content_'~content~'_preview', {'content':entity}) }}" target="_blank">{{ ('admin_'~content~'.list.actions.preview.link')|trans }}</a>#}
         </td>
     </tr>
 {% endfor %}

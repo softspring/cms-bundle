@@ -65,6 +65,7 @@ admin_blocks:
         meta.title: "Bloques"
         title: "Bloques"
         breadcrumb: "Bloques"
+        empty_message: "Aún no se ha creado ningún bloque"
         fields:
             key.header: "Tipo"
             sites.header: "Sitios"
@@ -73,6 +74,7 @@ admin_blocks:
             publishNow.header: "Actualmente publicado"
         actions.header: "Acciones"
         actions:
+            create.link: "Nuevo bloque"
             update.button: "Editar"
             details.button: "Detalles"
 
@@ -118,68 +120,20 @@ admin_blocks:
         title: "Bloque"
         breadcrumb: "Bloque"
 
-
-admin_pages:
-    create:
-        title: "Nueva página"
-        breadcrumb: "Nueva página"
-        actions:
-            create.button: "Crear página"
-            cancel.button: "Cancelar"
-    read:
-        title: "General"
-        breadcrumb: "General"
-    preview:
-        title: "Previsualizar página"
-        breadcrumb: "Previsualizar página"
-    translations:
-        title: "Traducciones de la página"
-        breadcrumb: "Traducciones de la página"
-    update:
-        title: "Editar página"
-        breadcrumb: "Editar página"
-        actions:
-            update.button: "Guardar cambios"
-            cancel.button: "Cancelar"
-    seo:
-        title: "Editar SEO"
-        breadcrumb: "Editar SEO"
-        actions:
-            seo.button: "Guardar cambios"
-            cancel.button: "Cancelar"
-    content:
-        title: "Editar contenido"
-        breadcrumb: "Editar contenido"
-        actions:
-            content.button: "Guardar cambios"
-            cancel.button: "Cancelar"
-    list:
-        title: "Páginas"
-        breadcrumb: "Páginas"
-        actions:
-            create.link: "Nueva página"
-            details.link: "Ver"
-            update.link: "Editar"
-            preview.link: "Previsualizar"
-        fields:
-            id.header: "Identificador"
-            site.header: "Sitio"
-            name.header: "Nombre"
-
-admin_content:
-    form:
-        name.label: "Nombre"
-        site.label: "Sitio web"
-        layout.label: "Diseño"
-        modules.label: "Módulos"
-        seo.label: "SEO"
-        metaTitle.label: "Título (barra de navegador)"
-        metaDescription.label: "Descripción (meta description)"
-        metaKeywords.label: "Palabras clave (meta keywords)"
-        noIndex.label: "Evitar indexado (noindex)"
-        noFollow.label: "Enlaces entrantes sin seguimiento (nofollow)"
-        sitemap.label: "Mostrar en sitemap"
-        versionLayout.label: "Diseño"
+#admin_content:
+#    form:
+#        name.label: "Nombre"
+#        site.label: "Sitio web"
+#        layout.label: "Diseño"
+#        modules.label: "Módulos"
+#        seo.label: "SEO"
+#        metaTitle.label: "Título (barra de navegador)"
+#        metaDescription.label: "Descripción (meta description)"
+#        metaKeywords.label: "Palabras clave (meta keywords)"
+#        noIndex.label: "Evitar indexado (noindex)"
+#        noFollow.label: "Enlaces entrantes sin seguimiento (nofollow)"
+#        sitemap.label: "Mostrar en sitemap"
+#        versionLayout.label: "Diseño"
 
 admin_routes:
     create:
@@ -238,7 +192,7 @@ admin_menus:
             cancel.button: "Cancelar"
 
     form:
-        name.label: ""
+        name.label: "Nombre"
         items:
             label: "Elementos"
             add.button: "Añadir elemento"

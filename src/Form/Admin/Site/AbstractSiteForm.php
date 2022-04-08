@@ -30,7 +30,7 @@ abstract class AbstractSiteForm extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => SiteInterface::class,
-            'translation_domain' => 'sfs_cms_admin',
+            'translation_domain' => 'sfs_cms_sites',
             'attr' => ['novalidate' => 'novalidate'],
         ]);
     }

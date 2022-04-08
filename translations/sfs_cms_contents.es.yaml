@@ -1,0 +1,65 @@
+admin_page:
+    create:
+        meta.title: "Nueva página"
+        title: "Nueva página"
+        breadcrumb: "Nueva página"
+        actions:
+            create.button: "Crear página"
+            cancel.button: "Cancelar"
+    read:
+        meta.title: "General"
+        title: "General"
+        breadcrumb: "General"
+    preview:
+        meta.title: "Previsualizar página"
+        title: "Previsualizar página"
+        breadcrumb: "Previsualizar página"
+    translations:
+        meta.title: "Traducciones de la página"
+        title: "Traducciones de la página"
+        breadcrumb: "Traducciones de la página"
+    update:
+        meta.title: "Editar página"
+        title: "Editar página"
+        breadcrumb: "Editar página"
+        actions:
+            update.button: "Guardar cambios"
+            cancel.button: "Cancelar"
+    seo:
+        meta.title: "Editar SEO"
+        title: "Editar SEO"
+        breadcrumb: "Editar SEO"
+        actions:
+            seo.button: "Guardar cambios"
+            cancel.button: "Cancelar"
+    content:
+        meta.title: "Editar contenido"
+        title: "Editar contenido"
+        breadcrumb: "Editar contenido"
+        actions:
+            content.button: "Guardar cambios"
+            cancel.button: "Cancelar"
+    list:
+        meta.title: "Páginas"
+        title: "Páginas"
+        breadcrumb: "Páginas"
+        actions:
+            create.link: "Nueva página"
+            details.link: "Ver"
+            update.link: "Editar"
+            preview.link: "Previsualizar"
+        fields:
+            id.header: "Identificador"
+            site.header: "Sitio"
+            name.header: "Nombre"
+
+    form:
+        name.label: "Nombre"
+        routes:
+            label: "Rutas"
+            id.label: "Identificador"
+            paths:
+                label: "URLs"
+                path.label: "Segmento de URL"
+                cacheTtl.label: "Tiempo de caché"
+                locale.label: "Idioma"

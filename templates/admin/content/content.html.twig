@@ -1,6 +1,8 @@
-{% trans_default_domain 'sfs_cms_admin' %}
+{% trans_default_domain 'sfs_cms_contents' %}
 
 {% extends '@SfsCms/admin_layout.html.twig' %}
+
+{% block title %}{{ ('admin_'~content~'.content.meta.title')|trans({'%name%':entity.name}) }}{% endblock %}
 
 {% form_theme form '@SfsPolymorphicFormType/polymorphic-form-theme.html.twig' '@SfsCms/cms_form_theme.html.twig' %}
 
@@ -21,10 +23,10 @@
                     </div>
 
                     <div class="text-end">
-                        <a href="{{ url('sfs_cms_admin_content_'~content~'_details', {'content':entity}) }}" class="btn btn-light">{{ ('admin_'~content~'s.content.actions.cancel.button')|trans }}</a>
+                        <a href="{{ url('sfs_cms_admin_content_'~content~'_details', {'content':entity}) }}" class="btn btn-light">{{ ('admin_'~content~'.content.actions.cancel.button')|trans }}</a>
 
                         <div class="btn-group" role="group">
-                            <button type="submit" class="btn btn-primary ml-3">{{ ('admin_'~content~'s.content.actions.content.button')|trans }}</button>
+                            <button type="submit" class="btn btn-primary ml-3">{{ ('admin_'~content~'.content.actions.content.button')|trans }}</button>
                             <button name="goto" id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">

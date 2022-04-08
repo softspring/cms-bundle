@@ -2,11 +2,13 @@
 
 namespace Softspring\CmsBundle\Form\Admin\Content;
 
+use Softspring\CmsBundle\Form\Admin\Route\RouteCollectionType;
 use Softspring\CmsBundle\Form\Type\DynamicFormType;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ContentUpdateForm extends AbstractType implements ContentUpdateFormInterface
@@ -15,11 +17,14 @@ class ContentUpdateForm extends AbstractType implements ContentUpdateFormInterfa
     {
         $resolver->setDefaults([
             'data_class' => ContentInterface::class,
-            'label_format' => 'admin_content.form.%name%.label',
-            'validation_groups' => ['Default', 'create'],
-            'translation_domain' => 'sfs_cms_admin',
+            'validation_groups' => ['Default', 'update'],
+            'translation_domain' => 'sfs_cms_contents',
             'content' => null,
         ]);
+
+        $resolver->setNormalizer('label_format', function (Options $options, $value) {
+            return "admin_{$options['content']['_id']}.form.%name%.label";
+        });
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -31,5 +36,14 @@ class ContentUpdateForm extends AbstractType implements ContentUpdateFormInterfa
                 'form_fields' => $options['content']['extra_fields'],
             ]);
         }
+
+        $builder->add('routes', RouteCollectionType::class, [
+            'allow_add' => false,
+            'allow_delete' => false,
+            'entry_options' => [
+                'content_relative' => true,
+                'label_format' => "admin_{$options['content']['_id']}.form.routes.%name%.label",
+            ],
+        ]);
     }
 }

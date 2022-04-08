@@ -21,4 +21,6 @@ interface RouteManagerInterface extends CrudlEntityManagerInterface
      * @param RouteInterface $entity
      */
     public function deleteEntity(object $entity): void;
+
+    public function getRoutePathManager(): RoutePathManagerInterface;
 }
