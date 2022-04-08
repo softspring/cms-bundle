@@ -45,6 +45,7 @@ class ContentController extends AbstractController
     public function create(Request $request): Response
     {
         $config = $this->getContentConfig($request);
+        $config = $config['admin'] + ['_id' => $config['_id']];
 
 //        if (!empty($config['is_granted'])) {
 //            $this->denyAccessUnlessGranted($config['is_granted'], null, sprintf('Access denied, user is not %s.', $config['is_granted']));
@@ -95,6 +96,7 @@ class ContentController extends AbstractController
     public function read(string $content, Request $request): Response
     {
         $config = $this->getContentConfig($request);
+        $config = $config['admin'] + ['_id' => $config['_id']];
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
@@ -127,6 +129,7 @@ class ContentController extends AbstractController
     public function update(string $content, Request $request): Response
     {
         $config = $this->getContentConfig($request);
+        $config = $config['admin'] + ['_id' => $config['_id']];
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
@@ -181,6 +184,7 @@ class ContentController extends AbstractController
     public function delete(string $content, Request $request): Response
     {
         $config = $this->getContentConfig($request);
+        $config = $config['admin'] + ['_id' => $config['_id']];
 
         return new Response();
     }
@@ -188,6 +192,7 @@ class ContentController extends AbstractController
     public function list(Request $request): Response
     {
         $config = $this->getContentConfig($request);
+        $config = $config['admin'] + ['_id' => $config['_id']];
 
 //        $listFilterForm = $listFilterForm ?: $this->listFilterForm;
 
@@ -257,6 +262,7 @@ class ContentController extends AbstractController
     public function content(string $content, Request $request): Response
     {
         $config = $this->getContentConfig($request);
+        $config = $config['admin'] + ['_id' => $config['_id']];
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
@@ -328,6 +334,7 @@ class ContentController extends AbstractController
     public function preview(string $content, Request $request): Response
     {
         $config = $this->getContentConfig($request);
+        $config = $config['admin'] + ['_id' => $config['_id']];
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
@@ -361,6 +368,7 @@ class ContentController extends AbstractController
     public function previewContent(string $content, Request $request, ?WebDebugToolbarListener $debugToolbarListener): Response
     {
         $config = $this->getContentConfig($request);
+        $config = $config['admin'] + ['_id' => $config['_id']];
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 

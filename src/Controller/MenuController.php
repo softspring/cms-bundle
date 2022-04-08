@@ -6,6 +6,7 @@ use Monolog\Logger;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Manager\MenuManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class MenuController extends AbstractController
@@ -21,7 +22,7 @@ class MenuController extends AbstractController
         $this->cmsLogger = $cmsLogger;
     }
 
-    public function renderByType(string $type): Response
+    public function renderByType(string $type, Request $request): Response
     {
         $config = $this->cmsConfig->getMenu($type);
 
@@ -36,7 +37,7 @@ class MenuController extends AbstractController
             'menu' => $menu,
         ]);
 
-        if ($config['cache_ttl'] !== false) {
+        if ($config['cache_ttl'] !== false && !$request->attributes->has('_cms_preview')) {
             $response->setPublic();
             $response->setMaxAge($config['cache_ttl']);
         }

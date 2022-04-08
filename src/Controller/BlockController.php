@@ -6,6 +6,7 @@ use Monolog\Logger;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Manager\BlockManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class BlockController extends AbstractController
@@ -21,7 +22,7 @@ class BlockController extends AbstractController
         $this->cmsLogger = $cmsLogger;
     }
 
-    public function renderByType(string $type): Response
+    public function renderByType(string $type, Request $request): Response
     {
         $config = $this->cmsConfig->getBlock($type);
 
@@ -40,7 +41,7 @@ class BlockController extends AbstractController
             $response = $this->render($config['render_template']);
         }
 
-        if ($config['cache_ttl'] !== false) {
+        if ($config['cache_ttl'] !== false && !$request->attributes->has('_cms_preview')) {
             $response->setPublic();
             $response->setMaxAge($config['cache_ttl']);
         }
