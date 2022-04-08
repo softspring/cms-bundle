@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Controller\Admin;
 
 use Jhg\DoctrinePagination\ORM\PaginatedRepositoryInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Form\Admin\Menu\MenuListFilterForm;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Render\ContentRender;
@@ -192,8 +193,6 @@ class ContentController extends AbstractController
         $config = $this->getContentConfig($request);
         $config = $config['admin'] + ['_id' => $config['_id']];
 
-//        $listFilterForm = $listFilterForm ?: $this->listFilterForm;
-
         if (!empty($config['list_is_granted'])) {
             $this->denyAccessUnlessGranted($config['list_is_granted'], null, sprintf('Access denied, user is not %s.', $config['list_is_granted']));
         }
@@ -204,28 +203,12 @@ class ContentController extends AbstractController
 
         $repo = $this->contentManager->getRepository($config['_id']);
 
-//        if ($listFilterForm) {
-//            if (!$listFilterForm instanceof EntityListFilterFormInterface) {
-//                throw new \InvalidArgumentException(sprintf('List filter form must be an instance of %s', EntityListFilterFormInterface::class));
-//            }
-//
-//            // additional fields for pagination and sorting
-//            $page = $listFilterForm->getPage($request);
-//            $rpp = $listFilterForm->getRpp($request);
-//            $orderSort = $listFilterForm->getOrder($request);
-//
-//            $formClassName = get_class($listFilterForm);
-//
-//            // filter form
-//            $form = $this->createForm($formClassName)->handleRequest($request);
-//            $filters = $form->isSubmitted() && $form->isValid() ? array_filter($form->getData()) : [];
-//        } else {
-            $page = 1;
-            $rpp = 10000;
-            $orderSort = ['name'=>'asc'];
-            $form = null;
-            $filters = [];
-//        }
+        $listFilterForm = new $config['list_filter_form']();
+        $page = $listFilterForm->getPage($request);
+        $rpp = $listFilterForm->getRpp($request);
+        $orderSort = $listFilterForm->getOrder($request);
+        $form = $this->createForm($config['list_filter_form'], [], ['content_config' => $config])->handleRequest($request);
+        $filters = $form->isSubmitted() && $form->isValid() ? array_filter($form->getData()) : [];
 
         $this->dispatch("sfs_cms.admin.contents.{$config['_id']}.filter_event_name", $filterEvent = new FilterEvent($filters, $orderSort, $page, $rpp));
         $filters = $filterEvent->getFilters();
@@ -244,14 +227,15 @@ class ContentController extends AbstractController
         $viewData = new \ArrayObject([
             'content' => $config['_id'],
             'entities' => $entities, // @deprecated
-            'filterForm' => $form instanceof FormInterface ? $form->createView() : null,
+            'filterForm' => $form->createView(),
             'read_route' => $config['read_route'] ?? null,
+            'list_page_view' => $config['list_page_view'],
         ]);
 
         $this->dispatch("sfs_cms.admin.contents.{$config['_id']}.view_event_name", new ViewEvent($viewData));
 
         if ($request->isXmlHttpRequest()) {
-            return $this->render($config['list_view_page'], $viewData->getArrayCopy());
+            return $this->render($config['list_page_view'], $viewData->getArrayCopy());
         } else {
             return $this->render($config['list_view'], $viewData->getArrayCopy());
         }

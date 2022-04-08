@@ -67,11 +67,12 @@ admin_blocks:
         breadcrumb: "Bloques"
         empty_message: "Aún no se ha creado ningún bloque"
         fields:
-            key.header: "Tipo"
-            sites.header: "Sitios"
-            publishStartDate.header: "Fecha de publicación"
-            publishEndDate.header: "Fin de publicación"
-            publishNow.header: "Actualmente publicado"
+            name.header: "Nombre"
+            type.header: "Tipo"
+#            sites.header: "Sitios"
+#            publishStartDate.header: "Fecha de publicación"
+#            publishEndDate.header: "Fin de publicación"
+#            publishNow.header: "Actualmente publicado"
         actions.header: "Acciones"
         actions:
             create.link: "Nuevo bloque"

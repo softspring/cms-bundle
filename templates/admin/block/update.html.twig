@@ -1,4 +1,4 @@
-{% trans_default_domain 'sfs_cms_blocks' %}
+{% trans_default_domain 'sfs_cms_admin' %}
 {% extends '@SfsCms/admin_layout.html.twig' %}
 {% block title %}{{ 'admin_blocks.update.meta.title'|trans }}{% endblock %}
 
@@ -15,13 +15,14 @@
 
     <div class="container bg-white p-4">
         {{ form_start(form) }}
-        {{ form_widget(form.data) }}
-        {{ form_rest(form) }}
+            {{ form_row(form.name) }}
+            {{ form_widget(form.data) }}
+            {{ form_rest(form) }}
 
-        <div class="d-flex justify-content-end align-items-center">
-            <a href="{{ url('sfs_cms_admin_blocks_list') }}" class="btn btn-outline-secondary">{{ 'admin_blocks.update.actions.cancel.button'|trans }}</a>
-            <button type="submit" class="btn btn-primary ms-3">{{ 'admin_blocks.update.actions.update.button'|trans }}</button>
-        </div>
+            <div class="d-flex justify-content-end align-items-center">
+                <a href="{{ url('sfs_cms_admin_blocks_list') }}" class="btn btn-outline-secondary">{{ 'admin_blocks.update.actions.cancel.button'|trans }}</a>
+                <button type="submit" class="btn btn-primary ms-3">{{ 'admin_blocks.update.actions.update.button'|trans }}</button>
+            </div>
         {{ form_end(form) }}
     </div>
 {% endblock content %}

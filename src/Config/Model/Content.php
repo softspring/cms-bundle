@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Config\Model;
 
 use Softspring\CmsBundle\Form\Admin\Content\ContentContentForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentCreateForm;
+use Softspring\CmsBundle\Form\Admin\Content\ContentListFilterForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentUpdateForm;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -64,6 +65,7 @@ class Content implements ConfigurationInterface
                         ->scalarNode('list_is_granted')->defaultValue('')->end()
                         ->scalarNode('list_view')->defaultValue('@SfsCms/admin/content/list.html.twig')->end()
                         ->scalarNode('list_page_view')->defaultValue('@SfsCms/admin/content/list-page.html.twig')->end()
+                        ->scalarNode('list_filter_form')->defaultValue(ContentListFilterForm::class)->end()
                         ->scalarNode('create_is_granted')->defaultValue('')->end()
                         ->scalarNode('create_view')->defaultValue('@SfsCms/admin/content/create.html.twig')->end()
                         ->scalarNode('create_type')->defaultValue(ContentCreateForm::class)->end()

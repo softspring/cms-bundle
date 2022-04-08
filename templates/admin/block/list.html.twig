@@ -1,5 +1,8 @@
 {% trans_default_domain 'sfs_cms_admin' %}
 {% extends '@SfsCms/admin_layout.html.twig' %}
+
+{% form_theme filterForm 'bootstrap_5_horizontal_layout.html.twig' %}
+
 {% block title %}{{ 'admin_blocks.list.meta.title'|trans }}{% endblock %}
 
 {% block breadcrums_content %}
@@ -19,7 +22,9 @@
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownBlockButton1">
                     {% for blockKey, blockConfig in config|filter((blockConfig) => not blockConfig.static) %}
-                        <li><a class="dropdown-item" href="{{ url('sfs_cms_admin_blocks_create', {'blockType':blockKey}) }}">{{ blockKey }}</a></li>
+                        <li><a class="dropdown-item" href="{{ url('sfs_cms_admin_blocks_create', {'blockType':blockKey}) }}">
+                            {{ ('admin_'~blockKey~'.name')|trans({}, 'sfs_cms_blocks') }}
+                        </a></li>
                     {% endfor %}
                 </ul>
             </div>
@@ -27,29 +32,47 @@
         </div>
     </div>
 
-    {#    #}{#    {% form_theme filterForm 'form/form_app_horizontal.html.twig' %}#}
-    {#    {{ form_start(filterForm) }}#}
-    {#    {{ form_widget(filterForm) }}#}
-    {#    {{ form_rest(filterForm) }}#}
-    {#    {{ form_end(filterForm) }}#}
-
     <div class="container bg-white p-4">
-        {% embed '@SfsAdmin/components/table.html.twig' with {'collection':entities, 'pagination_block': 'sfs_cms_admin_blocks_list', 'empty_message':'admin_blocks.list.empty_message'|trans} %}
+        {% if entities|length %}
+            <div class="mb-4">
+                {{ form_start(filterForm) }}
+                <div class="row">
+                    {#                    {% if filterForm.name is defined %}<div class="col">{{ form_row(filterForm.name, {'row_class':'form-floating'}) }}</div>{% endif %}#}
+                    {#                    {% if filterForm.surname is defined %}<div class="col">{{ form_row(filterForm.surname, {'row_class':'form-floating'}) }}</div>{% endif %}#}
+                    {#                    {% if filterForm.email is defined %}<div class="col">{{ form_row(filterForm.email, {'row_class':'form-floating'}) }}</div>{% endif %}#}
+                    {#                    {% if filterForm.search is defined %}<div class="col">{{ form_row(filterForm.search, {'row_class': 'form-floating'}) }}</div>{% endif %}#}
+                </div>
+                {{ form_widget(filterForm) }}
+                {{ form_rest(filterForm) }}
+                {{ form_end(filterForm) }}
+            </div>
+        {% endif %}
+
+        {% embed '@SfsAdmin/components/table.html.twig' with {'collection':entities, 'pagination_menu': 'sfs_cms_admin_menus_list'} %}
             {% trans_default_domain 'sfs_cms_admin' %}
             {% block ths %}
-                {#<th class="p-3" scope="col">{{ 'admin_blocks.list.fields.id.header'|trans }}</th>#}
-                <th class="p-3" scope="col">{{ 'admin_blocks.list.fields.name.header'|trans }}</th>
-                <th class="p-3" scope="col">{{ 'admin_blocks.list.fields.type.header'|trans }}</th>
-                {% if sfs_cms_blocks_are_multisite() %}
-                    <th scope="col">{{ 'admin_blocks.list.fields.sites.header'|trans }}</th>
-                {% endif %}
+                <th scope="col">
+                    <a href="{{ sort_toggle_url('name') }}" class="text-dark">
+                        {{ 'admin_menus.list.fields.name.header'|trans }}
+                        {% if is_sorted_by('name', 'asc') %}<i class="bi bi-caret-up-fill"></i>{% elseif is_sorted_by('name', 'desc') %}<i class="bi bi-caret-down-fill"></i>{% endif %}
+                    </a>
+                </th>
+                <th scope="col">
+                    <a href="{{ sort_toggle_url('type') }}" class="text-dark">
+                        {{ 'admin_menus.list.fields.type.header'|trans }}
+                        {% if is_sorted_by('type', 'asc') %}<i class="bi bi-caret-up-fill"></i>{% elseif is_sorted_by('type', 'desc') %}<i class="bi bi-caret-down-fill"></i>{% endif %}
+                    </a>
+                </th>
+{#                {% if sfs_cms_blocks_are_multisite() %}#}
+{#                    <th scope="col">{{ 'admin_blocks.list.fields.sites.header'|trans }}</th>#}
+{#                {% endif %}#}
 
-                {% if sfs_cms_blocks_are_schedulable() %}
-                    <th scope="col">{{ 'admin_blocks.list.fields.publishStartDate.header'|trans }}</th>
-                    <th scope="col">{{ 'admin_blocks.list.fields.publishEndDate.header'|trans }}</th>
-                    <th scope="col">{{ 'admin_blocks.list.fields.publishNow.header'|trans }}</th>
-                {% endif %}
-                <th class="p-3">&nbsp;</th>
+{#                {% if sfs_cms_blocks_are_schedulable() %}#}
+{#                    <th scope="col">{{ 'admin_blocks.list.fields.publishStartDate.header'|trans }}</th>#}
+{#                    <th scope="col">{{ 'admin_blocks.list.fields.publishEndDate.header'|trans }}</th>#}
+{#                    <th scope="col">{{ 'admin_blocks.list.fields.publishNow.header'|trans }}</th>#}
+{#                {% endif %}#}
+                <th class="">&nbsp;</th>
             {% endblock ths %}
 
             {% block tbody %}

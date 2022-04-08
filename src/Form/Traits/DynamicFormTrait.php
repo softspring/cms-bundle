@@ -40,6 +40,6 @@ trait DynamicFormTrait
             }
         }
 
-        throw new InvalidConfigurationException(sprintf('Type not found for "%s" in dynamic form', $type));
+        throw new InvalidConfigurationException(sprintf("Type not found for '%s' in dynamic form.\n\nSearched paths were %s. \n\nYou can try to configure as full namespaced class (example: App\Form\Type\MyCustomType)", $type, implode(', ', $posibleClasses)));
     }
 }

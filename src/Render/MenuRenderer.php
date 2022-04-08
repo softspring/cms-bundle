@@ -25,7 +25,7 @@ class MenuRenderer extends AbstractRenderer
     {
         $menuConfig = $this->cmsConfig->getMenu($type);
 
-        if ($menuConfig['esi']) {
+        if ($menuConfig['esi'] && !$this->isPreview()) {
             if (!$this->esiEnabled) {
                 throw new \Exception('You must enable esi with framework.esi configuration to use it in CMS');
             }
@@ -35,7 +35,9 @@ class MenuRenderer extends AbstractRenderer
             $renderFunction = 'render';
         }
 
-        $twigCode = "{{ $renderFunction(controller('Softspring\\\\CmsBundle\\\\Controller\\\\MenuController::renderByType', {'type':'$type'})) }}";
+        $previewJsonProperty = $this->isPreview() ? ",'_cms_preview':true" : '';
+
+        $twigCode = "{{ $renderFunction(controller('Softspring\\\\CmsBundle\\\\Controller\\\\MenuController::renderByType', {'type':'$type'$previewJsonProperty})) }}";
 
         $template = twig_template_from_string($this->twig, $twigCode);
 

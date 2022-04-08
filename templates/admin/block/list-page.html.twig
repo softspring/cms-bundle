@@ -1,8 +1,11 @@
-{% trans_default_domain 'sfs_cms_blocks' %}
+{% trans_default_domain 'sfs_cms_admin' %}
 
 {% for block in entities %}
     <tr>
-        <td>{{ block.type }}</td>
+        <td>{{ block.name }}</td>
+        <td>
+            {{ ('admin_'~block.type~'.name')|trans({}, 'sfs_cms_blocks') }}
+        </td>
 
         {% if sfs_cms_blocks_are_multisite() %}
             <td>{{ block.sites|join(', ') }}</td>
@@ -25,7 +28,7 @@
             </td>
         {% endif %}
 
-        <td>
+        <td class="text-end">
             {% if is_granted('ROLE_SFS_CMS_ADMIN_BLOCKS_DETAILS', block) %}
                 <a href="{{ url('sfs_cms_admin_blocks_read', {'block':block}) }}" class="ml-2 text-nowrap">{{ 'admin_blocks.list.actions.details.button'|trans }} <span class="mdi mdi-18px mdi-eye-outline align-middle"></span></a>
             {% endif %}

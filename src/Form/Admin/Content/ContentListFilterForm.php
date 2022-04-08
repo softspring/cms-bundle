@@ -1,21 +1,26 @@
 <?php
 
-namespace Softspring\CmsBundle\Form\Admin\Block;
+namespace Softspring\CmsBundle\Form\Admin\Content;
 
 use Softspring\Component\CrudlController\Form\EntityListFilterForm;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class BlockListFilterForm extends EntityListFilterForm
+class ContentListFilterForm extends EntityListFilterForm
 {
     public function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'translation_domain' => 'sfs_cms_blocks',
-            'label_format' => 'admin_blocks.list.filter_form.%name%.label',
+            'translation_domain' => 'sfs_cms_contents',
+            'content_config' => null,
         ]);
+
+        $resolver->setNormalizer('label_format', function (Options $options, $value) {
+            return "admin_{$options['content_config']['_id']}.list.filter_form.%name%.label";
+        });
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -25,7 +30,7 @@ class BlockListFilterForm extends EntityListFilterForm
 
     public static function orderValidFields(): array
     {
-        return ['name', 'type'];
+        return ['name'];
     }
 
     public static function orderDefaultField(): string

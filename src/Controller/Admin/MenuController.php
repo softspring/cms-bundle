@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\InvalidMenuException;
 use Softspring\CmsBundle\Form\Admin\Menu\MenuForm;
+use Softspring\CmsBundle\Form\Admin\Menu\MenuListFilterForm;
 use Softspring\CmsBundle\Manager\MenuManagerInterface;
 use Softspring\CmsBundle\Model\MenuInterface;
 use Softspring\CoreBundle\Controller\Traits\DispatchGetResponseTrait;
@@ -110,8 +111,6 @@ class MenuController extends AbstractController
 
     public function list(Request $request): Response
     {
-//        $listFilterForm = $listFilterForm ?: $this->listFilterForm;
-
 //        if (!empty($config['list_is_granted'])) {
 //            $this->denyAccessUnlessGranted($config['list_is_granted'], null, sprintf('Access denied, user is not %s.', $config['list_is_granted']));
 //        }
@@ -122,28 +121,12 @@ class MenuController extends AbstractController
 
         $repo = $this->menuManager->getRepository();
 
-//        if ($listFilterForm) {
-//            if (!$listFilterForm instanceof EntityListFilterFormInterface) {
-//                throw new \InvalidArgumentException(sprintf('List filter form must be an instance of %s', EntityListFilterFormInterface::class));
-//            }
-//
-//            // additional fields for pagination and sorting
-//            $page = $listFilterForm->getPage($request);
-//            $rpp = $listFilterForm->getRpp($request);
-//            $orderSort = $listFilterForm->getOrder($request);
-//
-//            $formClassName = get_class($listFilterForm);
-//
-//            // filter form
-//            $form = $this->createForm($formClassName)->handleRequest($request);
-//            $filters = $form->isSubmitted() && $form->isValid() ? array_filter($form->getData()) : [];
-//        } else {
-            $page = 1;
-            $rpp = 10000;
-            $orderSort = ['name' => 'asc'] ?? [];
-            $form = null;
-            $filters = [];
-//        }
+        $listFilterForm = new MenuListFilterForm();
+        $page = $listFilterForm->getPage($request);
+        $rpp = $listFilterForm->getRpp($request);
+        $orderSort = $listFilterForm->getOrder($request);
+        $form = $this->createForm(MenuListFilterForm::class)->handleRequest($request);
+        $filters = $form->isSubmitted() && $form->isValid() ? array_filter($form->getData()) : [];
 
         $this->dispatch("sfs_cms.admin.menus.filter_event_name", $filterEvent = new FilterEvent($filters, $orderSort, $page, $rpp));
         $filters = $filterEvent->getFilters();
@@ -161,8 +144,8 @@ class MenuController extends AbstractController
         // show view
         $viewData = new \ArrayObject([
             'entities' => $entities, // @deprecated
-            'filterForm' => $form instanceof FormInterface ? $form->createView() : null,
-            'config' => $this->cmsConfig->getMenus(),
+            'filterForm' => $form->createView(),
+            'menus_config' => $this->cmsConfig->getMenus(),
         ]);
 
         $this->dispatch("sfs_cms.admin.menus.view_event_name", new ViewEvent($viewData));

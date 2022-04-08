@@ -50,6 +50,8 @@ class BlockForm extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder->add('name');
+
         if ($this->manager->getEntityClassReflection()->implementsInterface(SchedulableContentInterface::class)) {
             $builder->add('publishStartDate', DateTimeType::class, [
                 'required' => false,

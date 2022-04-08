@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\InvalidBlockException;
 use Softspring\CmsBundle\Form\Admin\Block\BlockForm;
+use Softspring\CmsBundle\Form\Admin\Block\BlockListFilterForm;
 use Softspring\CmsBundle\Manager\BlockManagerInterface;
 use Softspring\CmsBundle\Model\BlockInterface;
 use Softspring\CoreBundle\Controller\Traits\DispatchGetResponseTrait;
@@ -110,8 +111,6 @@ class BlockController extends AbstractController
 
     public function list(Request $request): Response
     {
-//        $listFilterForm = $listFilterForm ?: $this->listFilterForm;
-
 //        if (!empty($config['list_is_granted'])) {
 //            $this->denyAccessUnlessGranted($config['list_is_granted'], null, sprintf('Access denied, user is not %s.', $config['list_is_granted']));
 //        }
@@ -122,28 +121,12 @@ class BlockController extends AbstractController
 
         $repo = $this->blockManager->getRepository();
 
-//        if ($listFilterForm) {
-//            if (!$listFilterForm instanceof EntityListFilterFormInterface) {
-//                throw new \InvalidArgumentException(sprintf('List filter form must be an instance of %s', EntityListFilterFormInterface::class));
-//            }
-//
-//            // additional fields for pagination and sorting
-//            $page = $listFilterForm->getPage($request);
-//            $rpp = $listFilterForm->getRpp($request);
-//            $orderSort = $listFilterForm->getOrder($request);
-//
-//            $formClassName = get_class($listFilterForm);
-//
-//            // filter form
-//            $form = $this->createForm($formClassName)->handleRequest($request);
-//            $filters = $form->isSubmitted() && $form->isValid() ? array_filter($form->getData()) : [];
-//        } else {
-        $page = 1;
-        $rpp = 10000;
-        $orderSort = ['id' => 'asc'] ?? [];
-        $form = null;
-        $filters = [];
-//        }
+        $listFilterForm = new BlockListFilterForm();
+        $page = $listFilterForm->getPage($request);
+        $rpp = $listFilterForm->getRpp($request);
+        $orderSort = $listFilterForm->getOrder($request);
+        $form = $this->createForm(BlockListFilterForm::class)->handleRequest($request);
+        $filters = $form->isSubmitted() && $form->isValid() ? array_filter($form->getData()) : [];
 
         $this->dispatch("sfs_cms.admin.blocks.filter_event_name", $filterEvent = new FilterEvent($filters, $orderSort, $page, $rpp));
         $filters = $filterEvent->getFilters();

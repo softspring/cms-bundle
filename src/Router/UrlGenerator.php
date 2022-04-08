@@ -30,10 +30,14 @@ class UrlGenerator
      */
     public function getUrl($routeOrName): string
     {
+        if ($this->isPreview()) {
+            return 'javascript:confirm(\'Esto es una previsualización!\')';
+        }
+
         $route = $routeOrName instanceof RouteInterface ? $routeOrName : $this->getRoute($routeOrName);
 
         if (!$route) {
-            return $this->isPreview() ? 'javascript:confirm(\'Esto es una previsualización!\')' : '#';
+            return '#';
         }
 
         $site = $this->getSite();
@@ -48,10 +52,14 @@ class UrlGenerator
      */
     public function getPath($routeOrName): string
     {
+        if ($this->isPreview()) {
+            return 'javascript:confirm(\'Esto es una previsualización!\')';
+        }
+
         $route = $routeOrName instanceof RouteInterface ? $routeOrName : $this->getRoute($routeOrName);
 
         if (!$route) {
-            return $this->isPreview() ? 'javascript:confirm(\'Esto es una previsualización!\')' : '#';
+            return '#';
         }
 
         $site = $this->getSite();
@@ -86,10 +94,6 @@ class UrlGenerator
 
     protected function getRoute($routeName): ?RouteInterface
     {
-        if ($this->isPreview()) {
-            return null;
-        }
-
         if (!$routeName) {
             $this->cmsLogger && $this->cmsLogger->error('Empty route');
             return null;
