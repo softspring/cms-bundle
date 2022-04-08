@@ -8,6 +8,9 @@ use Softspring\CoreBundle\Event\ViewEvent;
 use Softspring\Component\CrudlController\Event\GetResponseEntityEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+/**
+ * @deprecated
+ */
 class BlockListener implements EventSubscriberInterface
 {
     protected array $blockTypes;

@@ -7,6 +7,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @deprecated
+ */
 class SiteDeleteForm extends AbstractType implements SiteDeleteFormInterface
 {
     public function configureOptions(OptionsResolver $resolver)

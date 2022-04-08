@@ -84,6 +84,7 @@ class ConfigLoader
             $moduleName = $modulePath->getFilename();
             $moduleConfiguration = new Module($moduleName);
             $modules[$moduleName] = $processor->processConfiguration($moduleConfiguration, Yaml::parseFile("$modulePath/config.yaml"));
+            $modules[$moduleName]['_id'] = $moduleName;
             // force reload cache if some change has been done in cms folder
             $containerBuilder->addResource(new FileResource("$modulePath/config.yaml"));
         }
@@ -100,6 +101,7 @@ class ConfigLoader
             $layoutName = $layoutPath->getFilename();
             $layoutConfiguration = new Layout($layoutName);
             $layouts[$layoutName] = $processor->processConfiguration($layoutConfiguration, Yaml::parseFile("$layoutPath/config.yaml"));
+            $layouts[$layoutName]['_id'] = $layoutName;
             // force reload cache if some change has been done in cms folder
             $containerBuilder->addResource(new FileResource("$layoutPath/config.yaml"));
         }
@@ -146,6 +148,7 @@ class ConfigLoader
             $menuName = $menuPath->getFilename();
             $menuConfiguration = new Menu($menuName);
             $menus[$menuName] = $processor->processConfiguration($menuConfiguration, Yaml::parseFile("$menuPath/config.yaml"));
+            $menus[$menuName]['_id'] = $menuName;
             // force reload cache if some change has been done in cms folder
             $containerBuilder->addResource(new FileResource("$menuPath/config.yaml"));
         }

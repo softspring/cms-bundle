@@ -3,9 +3,8 @@
 namespace Softspring\CmsBundle;
 
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
-use Doctrine\ORM\Events;
 use Softspring\CmsBundle\DependencyInjection\Compiler\AliasDoctrineEntityManagerPass;
-use Softspring\CmsBundle\DependencyInjection\Compiler\InyectWebDebugToolbarListenerPass;
+use Softspring\CmsBundle\DependencyInjection\Compiler\InjectWebDebugToolbarListenerPass;
 use Softspring\CmsBundle\DependencyInjection\Compiler\ResolveDoctrineTargetEntityPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -28,7 +27,7 @@ class SfsCmsBundle extends Bundle
 
         $container->addCompilerPass(new AliasDoctrineEntityManagerPass());
         $container->addCompilerPass(new ResolveDoctrineTargetEntityPass());
-        $container->addCompilerPass(new InyectWebDebugToolbarListenerPass());
+        $container->addCompilerPass(new InjectWebDebugToolbarListenerPass());
     }
 
     private function addRegisterMappingsPass(ContainerBuilder $container, array $mappings, $enablingParameter = false)

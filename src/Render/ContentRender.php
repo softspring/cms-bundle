@@ -4,7 +4,6 @@ namespace Softspring\CmsBundle\Render;
 
 use Psr\Log\LoggerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
-use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Twig\Environment;
 

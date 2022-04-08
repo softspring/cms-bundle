@@ -6,6 +6,9 @@ use Softspring\Component\CrudlController\Form\EntityListFilterForm;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @deprecated
+ */
 class SiteListFilterForm extends EntityListFilterForm implements SiteListFilterFormInterface
 {
     public function configureOptions(OptionsResolver $resolver)

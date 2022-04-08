@@ -4,6 +4,9 @@ namespace Softspring\CmsBundle\Form\Admin\Site;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @deprecated
+ */
 class SiteUpdateForm extends AbstractSiteForm implements SiteUpdateFormInterface
 {
     

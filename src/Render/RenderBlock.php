@@ -8,21 +8,14 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
+/**
+ * @deprecated
+ */
 class RenderBlock
 {
-    /**
-     * @var Environment
-     */
-    protected $twig;
+    protected Environment $twig;
+    protected array $blockTypes;
 
-    /**
-     * @var array
-     */
-    protected $blockTypes;
-
-    /**
-     * RenderBlock constructor.
-     */
     public function __construct(Environment $twig, array $blockTypes)
     {
         $this->twig = $twig;

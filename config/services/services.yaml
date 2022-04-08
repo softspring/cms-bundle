@@ -43,6 +43,9 @@ services:
     Softspring\CmsBundle\Manager\:
         resource: '../../src/Manager/*'
 
+    Softspring\CmsBundle\Router\:
+        resource: '../../src/Router/*'
+
     Softspring\CmsBundle\Render\:
         resource: '../../src/Render/*'
 

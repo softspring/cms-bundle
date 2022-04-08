@@ -28,7 +28,7 @@ class ResolveDoctrineTargetEntityPass extends AbstractResolveDoctrineTargetEntit
         $this->setTargetEntityFromParameter('sfs_cms.route.path_class', RoutePathInterface::class, $container, true);
         $this->setTargetEntityFromParameter('sfs_cms.content.content_class', ContentInterface::class, $container, true);
         $this->setTargetEntityFromParameter('sfs_cms.content.content_version_class', ContentVersionInterface::class, $container, true);
-        $this->setTargetEntityFromParameter('sfs_cms.menu.menu_class', MenuInterface::class, $container, true);
-        $this->setTargetEntityFromParameter('sfs_cms.menu.menu_item_class', MenuItemInterface::class, $container, true);
+        $this->setTargetEntityFromParameter('sfs_cms.menu.class', MenuInterface::class, $container, true);
+        $this->setTargetEntityFromParameter('sfs_cms.menu.item_class', MenuItemInterface::class, $container, true);
     }
 }

@@ -6,6 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\Model\Traits\SiteReferenceTrait as SiteReferenceTraitModel;
 
+/**
+ * @deprecated
+ */
 trait SiteReferenceTrait
 {
     use SiteReferenceTraitModel;

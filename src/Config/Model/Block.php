@@ -24,8 +24,8 @@ class Block implements ConfigurationInterface
                 ->integerNode('revision')->isRequired()->end()
 
                 ->scalarNode('render_template')->defaultValue("@block/{$this->blockName}/render.html.twig")->end()
-                ->scalarNode('edit_template')->end()
-                ->scalarNode('form_template')->end()
+                // ->scalarNode('edit_template')->end()
+                // ->scalarNode('form_template')->end()
 
                 ->booleanNode('esi')->defaultTrue()->end()
                 ->integerNode('cache_ttl')->defaultFalse()->end()
