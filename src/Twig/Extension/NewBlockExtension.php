@@ -3,6 +3,7 @@
 namespace Softspring\CmsBundle\Twig\Extension;
 
 use Softspring\CmsBundle\Config\CmsConfig;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\HttpCache\Esi;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
@@ -11,16 +12,15 @@ use Twig\TwigFunction;
 
 class NewBlockExtension extends AbstractExtension
 {
+    protected RequestStack $requestStack;
     protected CmsConfig $cmsConfig;
-
     protected Environment $twig;
-
     protected RouterInterface $router;
-
     protected bool $esiEnabled;
 
-    public function __construct(CmsConfig $cmsConfig, Environment $twig, RouterInterface $router, ?Esi $esi)
+    public function __construct(RequestStack $requestStack, CmsConfig $cmsConfig, Environment $twig, RouterInterface $router, ?Esi $esi)
     {
+        $this->requestStack = $requestStack;
         $this->cmsConfig = $cmsConfig;
         $this->twig = $twig;
         $this->router = $router;
@@ -38,7 +38,7 @@ class NewBlockExtension extends AbstractExtension
     {
         $blockConfig = $this->cmsConfig->getBlock($type);
 
-        if ($blockConfig['esi']) {
+        if ($blockConfig['esi'] && !$this->isPreview()) {
             if (!$this->esiEnabled) {
                 throw new \Exception('You must enable esi with framework.esi configuration to use it in CMS');
             }
@@ -58,5 +58,12 @@ class NewBlockExtension extends AbstractExtension
         $template = twig_template_from_string($this->twig, $twigCode);
 
         return $template->render();
+    }
+
+    protected function isPreview(): bool
+    {
+        $request = $this->requestStack->getCurrentRequest();
+
+        return $request->attributes->has('_cms_preview');
     }
 }

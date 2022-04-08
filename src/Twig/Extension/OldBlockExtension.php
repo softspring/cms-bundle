@@ -17,7 +17,7 @@ use Twig\TwigFunction;
 /**
  * @deprecated
  */
-class BlockExtension extends AbstractExtension
+class OldBlockExtension extends AbstractExtension
 {
     protected EntityManagerInterface $em;
 
