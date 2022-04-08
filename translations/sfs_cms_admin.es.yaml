@@ -161,6 +161,9 @@ admin_routes:
             site.header: "Sitio"
             page.header: "Página"
             path.header: "URL"
+    form:
+        paths:
+            add.button: "Añadir segmento de URL"
 
 admin_menus:
     list:

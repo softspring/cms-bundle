@@ -1,4 +1,3 @@
-{% trans_default_domain 'sfs_cms' %}
 {%- block polymorphic_prototype_buttons -%}
     <!-- Buttons -->
     <div id="polymorphic_prototypes" class="dropdown polymorphic-collection-prototypes">
@@ -199,6 +198,7 @@
 {% endblock route_path_collection_row %}
 
 {% block route_path_collection_label %}
+    {% trans_default_domain 'sfs_cms_admin' %}
     <div class="row my-4">
         <div class="col-sm-6">
             {% set element = 'p' %}
@@ -220,7 +220,7 @@
     </div>
     <div class="col-sm-6 text-end">
         <button type="button" class="btn btn-primary cursor-pointer add_route_path" data-collection="#{{ id }}">
-            {{ 'admin_products.list.actions.add.button'|trans }}
+            {{ 'admin_routes.form.paths.add.button'|trans }}
         </button>
     </div>
 {% endblock route_path_collection_label %}
