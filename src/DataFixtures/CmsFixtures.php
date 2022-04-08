@@ -133,7 +133,7 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
             $route = $this->createRoute($routeConfig['id']);
 
             foreach ($routeConfig['paths'] as $paths) {
-                $this->createRoutePath($route, $paths['path']);
+                $this->createRoutePath($route, $paths['path'], $paths['cache_ttl'] ?? null);
             }
 
             $this->addReference("route___{$routeConfig['id']}", $route);
@@ -208,11 +208,12 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
         return $route;
     }
 
-    protected function createRoutePath(RouteInterface $route, string $path): RoutePathInterface
+    protected function createRoutePath(RouteInterface $route, string $path, ?int $cacheTtl = null): RoutePathInterface
     {
         $route->addPath($routePath = $this->routePathManager->createEntity());
 
         $routePath->setPath($path);
+        $routePath->setCacheTtl($cacheTtl);
 
         return $routePath;
     }
