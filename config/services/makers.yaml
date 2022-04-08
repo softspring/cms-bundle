@@ -1,0 +1,17 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+        bind:
+            $doctrineHelper: '@maker.doctrine_helper'
+            $formTypeRenderer: '@maker.renderer.form_type_renderer'
+            $fileManager: '@maker.file_manager'
+            $entityClassGenerator: '@maker.entity_class_generator'
+
+#    Softspring\CmsBundle\Maker\:
+#        resource: '../../src/Maker/*'
+#        tags: ['maker.command']
+
+    Softspring\CmsBundle\Maker\MakeContent:
+        tags: ['maker.command']

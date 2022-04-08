@@ -6,6 +6,7 @@ use Softspring\CmsBundle\Config\ConfigLoader;
 use Softspring\CmsBundle\Model\BlockInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
+use Symfony\Bundle\MakerBundle\MakerBundle;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\DirectoryResource;
@@ -74,6 +75,10 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
 //        true && $loader->load('controller/admin_layout.yaml');
         true && $loader->load('controller/admin_routes.yaml');
         true && $loader->load('controller/admin_content.yaml');
+
+        if (class_exists(MakerBundle::class)) {
+            $loader->load('makers.yaml');
+        }
     }
 
     public function prepend(ContainerBuilder $container)
