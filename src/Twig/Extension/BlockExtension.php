@@ -10,7 +10,7 @@ use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
-class NewBlockExtension extends AbstractExtension
+class BlockExtension extends AbstractExtension
 {
     protected RequestStack $requestStack;
     protected CmsConfig $cmsConfig;
