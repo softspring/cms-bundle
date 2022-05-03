@@ -11,76 +11,68 @@
 {% endblock breadcrums_content %}
 
 {% block content %}
-    <h1 class="h3">{{ ('admin_'~content~'.read.title')|trans }}</h1>
+    <h1 class="h2">{{ ('admin_'~content~'.read.title')|trans }}</h1>
 
     {% include '@SfsCms/admin/content/_content_tabs.html.twig' with {'current':'read', 'content':content, 'entity':entity} %}
 
-    <div class="container pt-3 pb-3">
-        <div class="row">
-            <div class="col-8">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-2 text-end">Nombre</div>
-                        <div class="col-10">{{ entity.name }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-2 text-end">Sitio</div>
-                        <div class="col-10">{{ entity.site.name|default('') }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-2 text-end">Diseño</div>
-                        <div class="col-10">{{ entity.layout.name|default('') }}</div>
-                    </div>
-                </div>
-                <div class="container">
-                    <h3>Traducciones</h3>
+    <div class="container-fluid p-3 bg-white">
+        <div class="row align-items-center border-bottom border-dark">
+            <div class="col-12 col-md-3 col-lg-2 text-md-end mb-md-2">Nombre</div>
+            <div class="col-12 col-md-9 col-lg-10 mb-2 h4"><strong>{{ entity.name }}</strong></div>
+            <div class="col-12 col-md-3 col-lg-2 text-md-end mb-md-2">Sitio</div>
+            <div class="col-12 col-md-9 col-lg-10 mb-2">{{ entity.site.name|default('') }}</div>
+            <div class="col-12 col-md-3 col-lg-2 text-md-end mb-md-2">Diseño</div>
+            <div class="col-12 col-md-9 col-lg-10 mb-2">{{ entity.layout.name|default('') }}</div>
+        </div>
+        <div class="row mt-4 border-bottom border-dark">
+            <div class="col-12 col-md-4">
+                <h2 class="h5">Traducciones</h2>
 {#                    {% set stats = sfs_trans_stats(content, entity.site.languages) %}#}
 {#                    {% for locale,localeStats in stats %}#}
-{#                        <div class="row">#}
-{#                            <div class="col-2 text-end">{{ locale }}</div>#}
-{#                            <div class="col-10">#}
+{#                        <p class="d-flex">#}
+{#                            <strong>{{ locale }}</strong>#}
+{#                            <span class="col-10">#}
 {#                                {% if localeStats.total %}#}
 {#                                    {{ (localeStats.translated/localeStats.total*100)|round }}%#}
-{#                                    ({{ localeStats.translated }}/{{ localeStats.total }})#}
+{#                                   <span class="text-tertiary">({{ localeStats.translated }}/{{ localeStats.total }})</span>#}
 {#                                {% endif %}#}
-{#                            </div>#}
-{#                        </div>#}
+{#                            </span>#}
+{#                         </p>#}
 {#                    {% endfor %}#}
-                </div>
             </div>
-            <div class="col-4">
-                <div class="container">
-                    <h3>SEO</h3>
-{#                    <div class="row">#}
-{#                        <div class="col-4 text-end">Index</div>#}
-{#                        <div class="col-8">{{ entity.seo.noIndex?'noindex':'index' }}</div>#}
-{#                    </div>#}
-{#                    <div class="row">#}
-{#                        <div class="col-4 text-end">Links</div>#}
-{#                        <div class="col-8">{{ entity.seo.noFollow?'nofollow':'follow' }}</div>#}
-{#                    </div>#}
-{#                    <div class="row">#}
-{#                        <div class="col-4 text-end">Sitemap</div>#}
-{#                        <div class="col-8">{{ entity.seo.sitemap?'yes':'no' }}</div>#}
-{#                    </div>#}
+            <div class="col-12 col-md-4">
+                <h2 class="h5">SEO</h2>
+                    <p class="d-flex mb-2">
+                        <span class="pe-2">Index</span>
+{#                        <strong>{{ entity.seo.noIndex?'noindex':'index' }}</strong>#}
+                    </p>
+                    <p class="d-flex mb-2">
+                        <span class="pe-2">Links</span>
+{#                        <strong>{{ entity.seo.noFollow?'nofollow':'follow' }}</strong>#}
+                    </p>
+                    <p class="d-flex mb-2">
+                        <span class="pe-2">Sitemap</span>
+{#                        <strong>{{ entity.seo.sitemap?'yes':'no' }}</strong>#}
+                    </p>
+            </div>
+            <div class="col-12 col-md-4">
 
-                    <h3 class="mt-4">Rutas</h3>
-                    {% for route in entity.routes %}
-                    {% for path in route.paths %}
-                        <div class="row">
-                            <div class="col">
-                                <a href="{{ path.path }}" target="_blank">{{ path.path }} <span class="mdi mdi-18px mdi-open-in-new"></span></a>
-                            </div>
-                        </div>
-                    {% endfor %}
-                    {% endfor %}
-                </div>
+                <h2 class="h5">Rutas</h2>
+                <ul class="list-unstyled">
+                {% for route in entity.routes %}
+                {% for path in route.paths %}
+                    <li>
+                        <a href="{{ path.path }}" target="_blank">{{ path.path }} <span class="mdi mdi-18px mdi-open-in-new"></span></a>
+                    </li>
+                {% endfor %}
+                {% endfor %}
+                </ul>
             </div>
         </div>
 
-        <div class="row">
+        <div class="row mt-4">
             <div class="col">
-                <h4>Versiones</h4>
+                <h2 class="h5">Versiones</h2>
                 <table class="table">
                     <thead>
                     <tr>

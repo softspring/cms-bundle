@@ -63,3 +63,4 @@ admin_page:
                 path.label: "Segmento de URL"
                 cacheTtl.label: "Tiempo de caché"
                 locale.label: "Idioma"
+            0.label: "Ruta 0"
