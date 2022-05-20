@@ -91,6 +91,8 @@ class ModuleCollectionType extends PolymorphicCollectionType
             'allowed_modules' => [],
             'compatible_contents' => [],
             'content_type' => null,
+            'module_collection_class' => '',
+            'module_row_class' => '',
         ]);
 
 //        $resolver->setRequired('content_type');
@@ -115,11 +117,14 @@ class ModuleCollectionType extends PolymorphicCollectionType
         // propagate container fields
         foreach ($options['types_map'] as $type => $typeClass) {
             $options['types_options'][$type]['content_type'] = $options['content_type'];
+            $options['types_options'][$type]['row_class'] = $options['module_row_class'];
 
             if ($typeClass == ContainerModuleType::class) {
                 $options['types_options'][$type]['compatible_contents'] = $options['compatible_contents'];
             }
         }
+
+        $view->vars['module_collection_class'] = $options['module_collection_class'];
 
         parent::buildView($view, $form, $options);
     }
@@ -138,6 +143,7 @@ class ModuleCollectionType extends PolymorphicCollectionType
         // propagate container fields
         foreach ($options['types_map'] as $type => $typeClass) {
             $options['types_options'][$type]['content_type'] = $options['content_type'];
+            $options['types_options'][$type]['row_class'] = $options['module_row_class'];
 
             if ($typeClass == ContainerModuleType::class) {
                 $options['types_options'][$type]['compatible_contents'] = $options['compatible_contents'];

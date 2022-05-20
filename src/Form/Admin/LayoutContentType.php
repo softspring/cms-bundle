@@ -33,6 +33,10 @@ class LayoutContentType extends AbstractType
                 'label' => "{$options['layout']}.$containerId.container_title",
                 'translation_domain' => 'sfs_cms_layouts',
                 'content_type' => $options['content_type'],
+                // random prototype name to allow multiple levels
+                'prototype_name' => '__'.substr(sha1(rand(0,10000000000)), rand(0,10), 8).'__',
+                'module_collection_class' => 'container-fluid',
+                'module_row_class' => 'row',
             ]);
         }
     }

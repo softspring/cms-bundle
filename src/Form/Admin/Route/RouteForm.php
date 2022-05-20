@@ -39,6 +39,10 @@ class RouteForm extends AbstractType
     {
         $builder->add('id', TextType::class, [
             'constraints' => new Regex('/^[a-z][a-z0-9_]{3,}$/i'),
+            'attr' => [
+                'class' => 'snake-case',
+                'data-route-id' => true,
+            ]
         ]);
 
         if (!$options['content_relative']) {

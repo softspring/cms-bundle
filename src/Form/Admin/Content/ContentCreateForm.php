@@ -29,7 +29,12 @@ class ContentCreateForm extends AbstractType implements ContentCreateFormInterfa
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name', TextType::class);
+        $builder->add('name', TextType::class, [
+            'attr' => [
+                'data-generate-underscore' => 'data-route-id',
+                'data-generate-slug' => 'data-route-path',
+            ]
+        ]);
 
         if (!empty($options['content']['extra_fields'])) {
             $builder->add('extraData', DynamicFormType::class, [

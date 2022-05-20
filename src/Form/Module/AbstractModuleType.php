@@ -14,6 +14,7 @@ abstract class AbstractModuleType extends AbstractNodeType
         $resolver->setDefaults([
             'translation_domain' => 'sfs_cms_modules',
             'content_type' => null,
+            'row_class' => '',
         ]);
 
         $resolver->setRequired('content_type');
@@ -30,5 +31,6 @@ abstract class AbstractModuleType extends AbstractNodeType
     {
         $view->vars['form_template'] = $options['form_template'];
         $view->vars['edit_template'] = $options['edit_template'];
+        $view->vars['row_class'] = $options['row_class'];
     }
 }

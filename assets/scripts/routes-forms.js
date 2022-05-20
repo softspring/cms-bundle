@@ -53,4 +53,52 @@
         event.preventDefault();
         removeRoutePath($(this));
     });
+    
+    // function removeDynamicForm($removeNodeLink)
+    // {
+    //     var $removeRow = $removeNodeLink.closest('.node-row');
+    //
+    //     // custom for this
+    //     var $nodes = $removeRow.parent().children('fieldset');
+    //     var nodes = $nodes.length;
+    //
+    //     $removeRow.remove();
+    //
+    //     // custom for this
+    //     if (nodes-1 <= 1) {
+    //         $nodes.find('.remove_dynamic_form').hide();
+    //     }
+    // }
+    //
+    // function getDynamicFormCollectionLastIndex($collection)
+    // {
+    //     return $collection.children('fieldset').length - 1; // parseInt($collection.find('.node-row').last().data('index'));
+    // }
+    //
+    // function addDynamicForm ($addNodeLink)
+    // {
+    //     var $collection = $($addNodeLink.data('collection'));
+    //     var lastIndex = $collection.children('fieldset').length - 1;
+    //     var index = lastIndex + 1;
+    //
+    //     // create and process prototype
+    //     var prototype = $collection.data('prototype');
+    //     var newRow = prototype.replace(/__name__/g, index);
+    //     var $newRow = $(newRow);
+    //
+    //     // append node to form
+    //     $collection.append($newRow);
+    //
+    //     $collection.find('.remove_dynamic_form').show();
+    // }
+    //
+    // $(document).on('click', '.add_dynamic_form', function(event){
+    //     event.preventDefault();
+    //     addDynamicForm($(this));
+    // });
+    //
+    // $(document).on('click', '.remove_dynamic_form', function(event){
+    //     event.preventDefault();
+    //     removeDynamicForm($(this));
+    // });
 })(jQuery);

@@ -7,7 +7,7 @@
         </button>
         <div class="dropdown-menu dropdown-menu-end dropdown-menu--max-height" aria-labelledby="dropdownMenuButton">
             {% for key, prototype in form.vars.prototypes %}
-                <button type="button" class="add_polymorphic_node btn btn-link d-block px-2 py-1" {{ block('polymorphic_prototype_button_attributes') }}>
+                <button type="button" class="polymorphic-add-button btn btn-link d-block px-2 py-1" {{ block('polymorphic_prototype_button_attributes') }}>
                     {% set trans_domain = prototype.vars.translation_domain | default(translation_domain) | default(false) %}
                     {{ not trans_domain ? prototype.vars.prototype_button_label : prototype.vars.prototype_button_label|trans({}, trans_domain) }}
                 </button>
@@ -43,14 +43,15 @@
             {%- endif -%}
             <{{ element|default('label') }}{% if label_attr %}{% with { attr: label_attr } %}{{ block('attributes') }}{% endwith %}{% endif %}>{{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}</{{ element|default('label') }}>
         {%- endif -%}
-    </div>
-    <div class="col-sm-6 text-end">
-        {{ block('polymorphic_prototype_buttons') }}
+        </div>
+        <div class="col-sm-6 text-end">
+            {{ block('polymorphic_prototype_buttons') }}
+        </div>
     </div>
 {% endblock module_collection_label %}
 
 {% block module_collection_widget %}
-    {% set attr = attr | merge({'class':'polymorphic-collection-widget'}) %}
+    {% set attr = attr | merge({'class':'polymorphic-collection-widget '~module_collection_class}) %}
     <!-- Nodes -->
     <div {{ block('widget_container_attributes') }}>
         {%- if form.parent is empty -%}
@@ -71,53 +72,61 @@
 {#{% endblock module_collection_entry %}#}
 
 {% block dynamic_form_module_row %}
-    <div class="node-row mt-2 mb-2" {{ block('widget_container_attributes') }}>
-        <div class="card">
-            <div class="card-header">
-                <button type="button" class="float-end btn btn-light rounded-circle remove_polymorphic_node px-3">x</button>
-                <h5 class="card-title">
-                    <span class="order-polymorphic-node">{{ form.vars.name }}</span>#
-{#                    {{ form_label(form) }}#}
+    <div class="polymorphic-node-row mt-2 mb-2 {{ row_class|default('') }}" {{ block('widget_container_attributes') }}>
+        <div class="cms-module">
+            <div class="cms-module-header">
+                <div class="cms-module-title">
+                    <span class="order-polymorphic-node" id="{{ id }}_order_index">{{ form.vars.name }}</span>#
                     {{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}
-                </h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">{{ form_widget(form) }}{{ form_errors(form) }}</div>
                 </div>
+
+                <div class="cms-module-buttons">
+                    <button type="button" id="{{ id }}_remove_node_button" class="polymorphic-remove-node-button">x</button>
+                    <button type="button" id="{{ id }}_down_node_button" class="polymorphic-down-node-button">v</button>
+                    <button type="button" id="{{ id }}_up_node_button" class="polymorphic-up-node-button">^</button>
+                </div>
+            </div>
+            <div class="cms-module-body">
+                {{ form_widget(form) }}{{ form_errors(form) }}
             </div>
         </div>
     </div>
 {% endblock dynamic_form_module_row %}
 
 {% block dynamic_form_module_widget %}
-    <div class="module-edit">
+    <div class="cms-module-edit">
         {% if edit_template|default(false) %}
             <div class="module-preview">
             {% include edit_template %}
             </div>
         {% endif %}
 
-        {% if form_template|default(false) %}
-            {% include form_template %}
-        {% else %}
-            {{ form_widget(form) }}
-        {% endif %}
+        <div class="cms-module-form">
+            {% if form_template|default(false) %}
+                {% include form_template %}
+            {% else %}
+                {{ form_widget(form) }}
+            {% endif %}
+        </div>
     </div>
 {% endblock dynamic_form_module_widget %}
 
 {% block container_module_row %}
-    <div class="node-row mt-2 mb-2" {{ block('widget_container_attributes') }}>
-        <div class="card">
-            <div class="card-header">
-                <button type="button" class="float-end btn btn-light rounded-circle remove_polymorphic_node px-3">x</button>
-                <h5 class="card-title">
-                    <span class="order-polymorphic-node">{{ form.vars.name }}</span>#
-{#                    {{ form_label(form) }}#}
+    <div class="polymorphic-node-row mt-2 mb-2 {{ row_class|default('') }}" {{ block('widget_container_attributes') }}>
+        <div class="cms-module">
+            <div class="cms-module-header">
+                <div class="cms-module-title">
+                    <span class="order-polymorphic-node" id="{{ id }}_order_index">{{ form.vars.name }}</span>#
                     {{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}
-                </h5>
+                </div>
+
+                <div class="cms-module-buttons">
+                    <button type="button" id="{{ id }}_remove_node_button" class="polymorphic-remove-node-button">x</button>
+                    <button type="button" id="{{ id }}_down_node_button" class="polymorphic-down-node-button">v</button>
+                    <button type="button" id="{{ id }}_up_node_button" class="polymorphic-up-node-button">^</button>
+                </div>
             </div>
-            <div class="card-body">
+            <div class="cms-module-body">
                 <div class="row">
                     <div class="col">{{ form_widget(form) }}{{ form_errors(form) }}</div>
                 </div>
@@ -127,7 +136,7 @@
 {% endblock container_module_row %}
 
 {% block container_module_widget %}
-    <div class="module-edit">
+    <div class="cms-module-edit">
         {% if edit_template|default(false) %}
             <div class="module-preview">
             {% include edit_template %}
@@ -143,17 +152,21 @@
 {% endblock container_module_widget %}
 
 {% block empty_module_row %}
-    <div class="node-row mt-2 mb-2" {{ block('widget_container_attributes') }}>
-        <div class="card">
-            <div class="card-header">
-                <button type="button" class="float-end btn btn-light rounded-circle remove_polymorphic_node px-3">x</button>
-                <h5 class="card-title">
-                    <span class="order-polymorphic-node">{{ form.vars.name }}</span>#
-{#                    {{ form_label(form) }}#}
+    <div class="polymorphic-node-row mt-2 mb-2 {{ row_class|default('') }}" {{ block('widget_container_attributes') }}>
+        <div class="cms-modulecms-module">
+            <div class="cms-module-header">
+                <div class="cms-module-title">
+                    <span class="order-polymorphic-node" id="{{ id }}_order_index">{{ form.vars.name }}</span>#
                     {{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}
-                </h5>
+                </div>
+
+                <div class="cms-module-buttons">
+                    <button type="button" id="{{ id }}_remove_node_button" class="polymorphic-remove-node-button">x</button>
+                    <button type="button" id="{{ id }}_down_node_button" class="polymorphic-down-node-button">v</button>
+                    <button type="button" id="{{ id }}_up_node_button" class="polymorphic-up-node-button">^</button>
+                </div>
             </div>
-            <div class="card-body">
+            <div class="cms-module-body">
                 <div class="row">
                     <div class="col">{{ form_widget(form) }}{{ form_errors(form) }}</div>
                 </div>
@@ -163,7 +176,7 @@
 {% endblock empty_module_row %}
 
 {% block empty_module_widget %}
-    <div class="module-edit">
+    <div class="cms-module-edit">
         {% if edit_template|default(false) %}
             <div class="module-preview">
             {% include edit_template %}
@@ -231,7 +244,7 @@
 {% endblock route_path_collection_widget %}
 
 {% block route_path_row %}
-    <div class="node-row mt-2 mb-2" {{ block('widget_container_attributes') }}>
+    <div class="polymorphic-node-row mt-2 mb-2" {{ block('widget_container_attributes') }}>
         <div class="row">
             <div class="col-sm-1"><span class="order-route-path-node">{{ form.vars.name }}</span></div>
             <div class="col-sm-10">{{ form_widget(form) }}{{ form_errors(form) }}</div>
@@ -304,7 +317,7 @@
 {% endblock menu_item_collection_widget %}
 
 {% block menu_item_row %}
-    <div class="node-row mt-2 mb-2" {{ block('widget_container_attributes') }}>
+    <div class="polymorphic-node-row mt-2 mb-2" {{ block('widget_container_attributes') }}>
         <div class="row">
             <div class="col-sm-1"><span class="order-menu-item-node">{{ form.vars.name }}</span></div>
             <div class="col-sm-10">{{ form_widget(form) }}{{ form_errors(form) }}</div>
@@ -322,3 +335,54 @@
         {{ form_rest(form) }}
     </div>
 {% endblock menu_item_widget %}
+
+{#{% block dynamic_form_collection_row %}#}
+{#    <div class="dynamic-form-collection collection">#}
+{#        {{ form_label(form) }} #}{# uses: dynamic_form_collection_label #}
+{#        {{ form_errors(form) }}#}
+{#        {{ form_widget(form) }} #}{# uses: dynamic_form_collection_widget #}
+{#    </div>#}
+{#{% endblock dynamic_form_collection_row %}#}
+
+{#{% block dynamic_form_collection_label %}#}
+{#    {% trans_default_domain 'sfs_cms_admin' %}#}
+{#    <div class="row my-4">#}
+{#        <div class="col-sm-6">#}
+{#            {% set element = 'p' %}#}
+{#            {% set label_attr = label_attr | merge({'class':'h4'}) %}#}
+
+{#            {% if label is not same as(false) -%}#}
+{#            {% if label is empty -%}#}
+{#                {%- if label_format is not empty -%}#}
+{#                    {% set label = label_format|replace({#}
+{#                        '%name%': name,#}
+{#                        '%id%': id,#}
+{#                    }) %}#}
+{#                {%- else -%}#}
+{#                    {% set label = name|humanize %}#}
+{#                {%- endif -%}#}
+{#            {%- endif -%}#}
+{#            <{{ element|default('label') }}{% if label_attr %}{% with { attr: label_attr } %}{{ block('attributes') }}{% endwith %}{% endif %}>{{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}</{{ element|default('label') }}>#}
+{#        {%- endif -%}#}
+{#    </div>#}
+{#    <div class="col-sm-6 text-end">#}
+{#        <button type="button" class="btn btn-primary cursor-pointer add_dynamic_form" data-collection="#{{ id }}">#}
+{#            Add#}
+{#        </button>#}
+{#    </div>#}
+{#{% endblock dynamic_form_collection_label %}#}
+
+{#{% block dynamic_form_collection_widget %}#}
+{#    {% if prototype is defined and not prototype.rendered %}#}
+{#        {%- set attr = attr|merge({'data-prototype': form_row(prototype) }) -%}#}
+{#    {% endif %}#}
+{#    {% set attr = attr | merge({'class':'dynamic-form-collection-widget col-12'}) %}#}
+{#    <!-- Nodes -->#}
+{#    <div {{ block('widget_container_attributes') }}>#}
+{#        {%- if form.parent is empty -%}#}
+{#            {{ form_errors(form) }}#}
+{#        {%- endif -%}#}
+{#        {{- block('form_rows') -}}#}
+{#        {{- form_rest(form) -}}#}
+{#    </div>#}
+{#{% endblock dynamic_form_collection_widget %}#}

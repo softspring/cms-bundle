@@ -33,6 +33,10 @@ class RoutePathType extends AbstractType
     {
         $builder->add('path', TextType::class, [
             'constraints' => new NotBlank(),
+            'attr' => [
+                'data-route-path' => true,
+                'class' => 'sluggize',
+            ]
         ]);
         $builder->add('cacheTtl', IntegerType::class);
         $builder->add('locale', ChoiceType::class, [

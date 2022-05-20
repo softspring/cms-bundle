@@ -1,7 +1,63 @@
+var underscored = require("underscore.string/underscored");
+var slugify = require("underscore.string/slugify");
+
 window.onload = function() {
+    function moduleFocus(module)
+    {
+        allLostFocus();
+        module.classList.add('active');
+    }
+
+    function allLostFocus()
+    {
+        document.querySelectorAll('.cms-module').forEach((element) => element.classList.remove('active'));
+    }
+
+    document.addEventListener('click', function (event) {
+        for (i=0 ; i < event.composedPath().length ; i++) {
+            if (event.composedPath()[i] instanceof Element && event.composedPath()[i].matches('.cms-module')) {
+                moduleFocus(event.composedPath()[i]);
+                return;
+            }
+        }
+
+        // allLostFocus();
+    });
+
+    document.addEventListener('keyup', function(event) {
+        if (!event.target.matches('[data-generate-underscore]') && !event.target.matches('[data-generate-slug]')) return;
+
+        // generate underscore
+        var element = document.querySelector('['+event.target.dataset.generateUnderscore+']');
+        if (element && element.value === underscored(event.target.lastValue||'')) {
+            element.value = underscored(event.target.value);
+        }
+
+        // generate slug
+        var element = document.querySelector('['+event.target.dataset.generateSlug+']');
+        if (element && element.value.replace(/^\/+/, '').replace(/\/+$/, '') === slugify(event.target.lastValue||'')) {
+            element.value = '/'+slugify(event.target.value);
+        }
+
+        event.target.lastValue = event.target.value;
+    });
+
+    document.addEventListener('keyup', function(event) {
+        if (!event.target.matches('.snake-case')) return;
+        event.target.value = underscored(event.target.value);
+    });
+
+    document.addEventListener('keyup', function(event) {
+        if (!event.target.matches('.sluggize')) return;
+        event.target.value = slugify(event.target.value);
+    });
+
     document.addEventListener('input', function(event) {
-        let module = event.target.closest('.module-edit');
-        let preview = event.target.closest('.module-edit').querySelector('.module-preview');
+        let module = event.target.closest('.cms-module-edit');
+
+        if (!module) return;
+
+        let preview = event.target.closest('.cms-module-edit').querySelector('.module-preview');
 
         if (module && event.target.matches('[data-content-edit-field]')) {
             let inputElement = module.querySelector("[data-content-edit-preview='"+event.target.dataset.contentEditField+"']");
@@ -37,7 +93,7 @@ window.onload = function() {
         }
     });
 
-    document.addEventListener("remove_polymorphic_node", function(event) { // (1)
+    document.addEventListener("removed_polymorphic_node", function(event) { // (1)
         // console.log(event);
     });
 };
