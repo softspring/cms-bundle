@@ -18,6 +18,10 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue('default')
                 ->end()
 
+                ->arrayNode('collections')
+                    ->scalarPrototype()->end()
+                ->end()
+
 //                ->arrayNode('site')
 //                    ->isRequired()
 //                    ->children()

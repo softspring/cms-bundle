@@ -28,8 +28,9 @@ class ConfigLoader
     protected string $menusPath;
     protected string $modulesPath;
     protected string $sitesPath;
+    protected array $collectionPaths;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, array $collectionPaths = [])
     {
         $this->container = $container;
         $this->cmsPath = $this->container->getParameter('kernel.project_dir').'/cms';
@@ -39,6 +40,7 @@ class ConfigLoader
         $this->menusPath = "{$this->cmsPath}/menus";
         $this->modulesPath = "{$this->cmsPath}/modules";
         $this->sitesPath = "{$this->cmsPath}/sites";
+        $this->collectionPaths = $collectionPaths;
         $this->initDirectories();
     }
 
@@ -80,13 +82,19 @@ class ConfigLoader
         $processor = new Processor();
         $modules = [];
 
-        foreach ((new Finder())->in($this->modulesPath)->directories()->depth(0) as $modulePath) {
-            $moduleName = $modulePath->getFilename();
-            $moduleConfiguration = new Module($moduleName);
-            $modules[$moduleName] = $processor->processConfiguration($moduleConfiguration, Yaml::parseFile("$modulePath/config.yaml"));
-            $modules[$moduleName]['_id'] = $moduleName;
-            // force reload cache if some change has been done in cms folder
-            $containerBuilder->addResource(new FileResource("$modulePath/config.yaml"));
+        $modulePaths = array_merge(array_map(fn($path) => $this->container->getParameter('kernel.project_dir').'/'.trim($path, '/').'/modules', $this->collectionPaths), [
+            $this->modulesPath,
+        ]);
+
+        foreach ($modulePaths as $modulesPath) if (is_dir($modulesPath)) {
+            foreach ((new Finder())->in($modulesPath)->directories()->depth(0) as $modulePath) {
+                $moduleName = $modulePath->getFilename();
+                $moduleConfiguration = new Module($moduleName);
+                $modules[$moduleName] = $processor->processConfiguration($moduleConfiguration, Yaml::parseFile("$modulePath/config.yaml"));
+                $modules[$moduleName]['_id'] = $moduleName;
+                // force reload cache if some change has been done in cms folder
+                $containerBuilder->addResource(new FileResource("$modulePath/config.yaml"));
+            }
         }
 
         return $modules;

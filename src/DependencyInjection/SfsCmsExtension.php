@@ -24,13 +24,14 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $config = $processor->processConfiguration($configuration, $configs);
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../../config/services'));
 
-        $configLoader = new ConfigLoader($container);
+        $container->setParameter('sfs_cms.collections', $config['collections']);
+
+        $configLoader = new ConfigLoader($container, $config['collections']);
         $container->setParameter('sfs_cms.modules', $configLoader->getModules($container));
         $container->setParameter('sfs_cms.layouts', $configLoader->getLayouts($container));
         $container->setParameter('sfs_cms.contents', $configLoader->getContents($container));
         $container->setParameter('sfs_cms.menus', $configLoader->getMenus($container));
         $container->setParameter('sfs_cms.blocks', $configLoader->getBlocks($container));
-
 
 //        $container->setParameter('sfs_cms.dynamic_modules', $config['dynamic_modules']);
 
@@ -98,15 +99,16 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
 
         $container->prependExtensionConfig('doctrine', $doctrineConfig);
 
-        $container->prependExtensionConfig('twig', [
-            'paths' => [
-                '%kernel.project_dir%/cms'=> 'cms',
-                '%kernel.project_dir%/cms/modules'=> 'module', // use @module/html/render.html.twig
-                '%kernel.project_dir%/cms/contents'=> 'content', // use @content/article/render.html.twig
-                '%kernel.project_dir%/cms/blocks'=> 'block', // use @block/header/render.html.twig
-                '%kernel.project_dir%/cms/layouts'=> 'layout', // use @layout/default/render.html.twig
-                '%kernel.project_dir%/cms/menus'=> 'menu', // use @menu/main/render.html.twig
-            ],
-        ]);
+//        $container->prependExtensionConfig('twig', [
+//            'paths' => [
+//                '%kernel.project_dir%/cms'=> 'cms',
+//                '%kernel.project_dir%/cms/modules'=> 'module', // use @module/html/render.html.twig
+//                '%kernel.project_dir%/vendor/softspring/cms-module-collection/modules'=> 'module', // use @module/html/render.html.twig
+//                '%kernel.project_dir%/cms/contents'=> 'content', // use @content/article/render.html.twig
+//                '%kernel.project_dir%/cms/blocks'=> 'block', // use @block/header/render.html.twig
+//                '%kernel.project_dir%/cms/layouts'=> 'layout', // use @layout/default/render.html.twig
+//                '%kernel.project_dir%/cms/menus'=> 'menu', // use @menu/main/render.html.twig
+//            ],
+//        ]);
     }
 }
