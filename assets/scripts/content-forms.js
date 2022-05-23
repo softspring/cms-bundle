@@ -26,7 +26,7 @@ window.onload = function() {
     // on module focus get focus
     document.addEventListener('click', function (event) {
         // prevent focus on close button
-        if (event.target.matches('.cms-module-form-close')) return;
+        if (event.target && event.target.hasAttribute('data-cms-module-form-close')) return;
 
         for (i=0 ; i < event.composedPath().length ; i++) {
             if (event.composedPath()[i] instanceof Element && event.composedPath()[i].matches('.cms-module')) {
@@ -89,6 +89,11 @@ window.onload = function() {
         if (preview && event.target.matches('[data-content-edit-class]')) {
             let htmlElement = preview.querySelector("[data-content-edit-class-target='"+event.target.dataset.contentEditClass+"']");
             htmlElement.className = htmlElement.dataset.contentEditClassDefault+' '+event.target.value;
+        }
+
+        if (preview && event.target.matches('[data-content-edit-color]')) {
+            let htmlElement = preview.querySelector("[data-content-edit-color-target='"+event.target.dataset.contentEditColor+"']");
+            htmlElement.style.backgroundColor = event.target.value;
         }
     }, true);
 

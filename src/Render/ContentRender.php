@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Render;
 
 use Psr\Log\LoggerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Form\Module\ContainerModuleType;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Twig\Environment;
 
@@ -50,17 +51,7 @@ class ContentRender
     {
         $this->cmsLogger && $this->cmsLogger->debug(sprintf('Rendering %s module', $module['_type']));
 
-        if ($module['_type'] == 'container') {
-            $module['content'] = '';
-
-            foreach ($module['modules'] as $submodule) {
-                $module['content'] .= $this->renderModule($submodule, $version);
-            }
-
-            return $this->twig->render($this->cmsConfig->getModule($module['_type'])['render_template'], $module);
-        }
-
-        if ($module['_type'] == 'row') {
+        if ($this->isContainer($module)) {
             $module['content'] = '';
 
             foreach ($module['modules'] as $submodule) {
@@ -76,5 +67,11 @@ class ContentRender
         ];
 
         return $this->twig->render($this->cmsConfig->getModule($module['_type'])['render_template'], $module);
+    }
+
+    private function isContainer($module)
+    {
+        $module = $this->cmsConfig->getModule($module['_type']);
+        return $module['module_type'] === ContainerModuleType::class;
     }
 }

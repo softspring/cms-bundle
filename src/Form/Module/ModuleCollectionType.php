@@ -53,7 +53,7 @@ class ModuleCollectionType extends PolymorphicCollectionType
             $typesOptions[$moduleId]['edit_template'] = $config['edit_template'] ?? null;
             $typesOptions[$moduleId]['prototype_button_label'] = "$moduleId.prototype_button";
             $typesOptions[$moduleId]['label'] = "$moduleId.label";
-            $typesOptions[$moduleId]['label_format'] = "$moduleId.%name%.label";
+            $typesOptions[$moduleId]['label_format'] = "$moduleId.form.%name%.label";
             $typesOptions[$moduleId]['translation_domain'] = 'sfs_cms_modules';
             $typesOptions[$moduleId]['module_id'] = $moduleId;
         }
