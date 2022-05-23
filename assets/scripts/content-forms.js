@@ -6,22 +6,34 @@ window.onload = function() {
     {
         allLostFocus();
         module.classList.add('active');
+        document.getElementById('content-form').classList.remove('d-none');
     }
 
     function allLostFocus()
     {
+        document.getElementById('content-form').classList.add('d-none');
         document.querySelectorAll('.cms-module').forEach((element) => element.classList.remove('active'));
     }
 
+    // close module edit form
+    document.addEventListener('click', function(event) {
+        if (!event.target || !event.target.hasAttribute('data-cms-module-form-close')) return;
+        event.preventDefault();
+        event.stopPropagation();
+        allLostFocus();
+    });
+
+    // on module focus get focus
     document.addEventListener('click', function (event) {
+        // prevent focus on close button
+        if (event.target.matches('.cms-module-form-close')) return;
+
         for (i=0 ; i < event.composedPath().length ; i++) {
             if (event.composedPath()[i] instanceof Element && event.composedPath()[i].matches('.cms-module')) {
                 moduleFocus(event.composedPath()[i]);
                 return;
             }
         }
-
-        // allLostFocus();
     });
 
     document.addEventListener('keyup', function(event) {
