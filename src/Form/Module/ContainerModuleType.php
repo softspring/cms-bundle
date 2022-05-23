@@ -3,8 +3,6 @@
 namespace Softspring\CmsBundle\Form\Module;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ContainerModuleType extends AbstractModuleType
@@ -24,7 +22,10 @@ class ContainerModuleType extends AbstractModuleType
 
         parent::configureChildOptions($resolver);
         $resolver->setRequired('allowed_modules');
-        $resolver->setAllowedTypes('allowed_modules', ['array']);
+        $resolver->setDefault('allowed_modules', null);
+        $resolver->setAllowedTypes('allowed_modules', ['array', 'null']); // null means any
+        $resolver->setRequired('allowed_container_modules');
+        $resolver->setAllowedTypes('allowed_container_modules', ['array']);
     }
 
     protected function buildChildForm(FormBuilderInterface $builder, array $options)
@@ -33,6 +34,7 @@ class ContainerModuleType extends AbstractModuleType
             'label' => "container.form.modules.label",
             'content_type' => $options['content_type'],
             'allowed_modules' => $options['allowed_modules'],
+            'allowed_container_modules' => $options['allowed_container_modules'],
             'module_collection_class' => $options['module_collection_class'],
             'module_row_class' => $options['module_row_class'],
             'compatible_contents' => [],

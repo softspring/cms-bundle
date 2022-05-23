@@ -12,10 +12,14 @@ abstract class AbstractModuleType extends AbstractNodeType
     public function configureChildOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
+            'module_id' => null,
             'translation_domain' => 'sfs_cms_modules',
             'content_type' => null,
             'row_class' => '',
         ]);
+
+        $resolver->setRequired('module_id');
+        $resolver->setAllowedTypes('module_id', ['string']);
 
         $resolver->setRequired('content_type');
         $resolver->setAllowedTypes('content_type', ['string']);

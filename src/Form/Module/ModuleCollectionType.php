@@ -55,6 +55,7 @@ class ModuleCollectionType extends PolymorphicCollectionType
             $typesOptions[$moduleId]['label'] = "$moduleId.label";
             $typesOptions[$moduleId]['label_format'] = "$moduleId.%name%.label";
             $typesOptions[$moduleId]['translation_domain'] = 'sfs_cms_modules';
+            $typesOptions[$moduleId]['module_id'] = $moduleId;
         }
 
         return $typesOptions;
@@ -88,15 +89,13 @@ class ModuleCollectionType extends PolymorphicCollectionType
             'types_options' => $this->configureModulesTypesOptions(),
             'discriminator_map' => $this->configureModulesDiscriminatorMap(),
             'discriminator_field' => '_type',
-            'allowed_modules' => [],
+            'allowed_modules' => null,
+            'allowed_container_modules' => null,
             'compatible_contents' => [],
             'content_type' => null,
             'module_collection_class' => '',
             'module_row_class' => '',
         ]);
-
-//        $resolver->setRequired('content_type');
-//        $resolver->setAllowedTypes('content_type', ['string']);
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -171,9 +170,20 @@ class ModuleCollectionType extends PolymorphicCollectionType
 
     protected function filterAllowedModules(array $options): array
     {
-        if (!empty($options['allowed_modules'])) {
+        if (is_array($options['allowed_modules'])) {
             $modules = array_keys($options['types_map']);
             $disallowedModules = array_diff($modules, $options['allowed_modules']);
+
+            foreach ($disallowedModules as $disallowedModule) {
+                unset($options['types_map'][$disallowedModule]);
+                unset($options['discriminator_map'][$disallowedModule]);
+                unset($options['types_options'][$disallowedModule]);
+            }
+        }
+
+        if (!is_null($options['allowed_container_modules'])) {
+            $containerModules = array_keys(array_filter($options['types_map'], fn ($type) => $type === ContainerModuleType::class));
+            $disallowedModules = array_diff($containerModules, $options['allowed_container_modules']);
 
             foreach ($disallowedModules as $disallowedModule) {
                 unset($options['types_map'][$disallowedModule]);
