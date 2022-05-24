@@ -22,6 +22,9 @@
             <cascade>
                 <cascade-persist/>
             </cascade>
+            <order-by>
+                <order-by-field name="createdAt" direction="DESC" />
+            </order-by>
         </one-to-many>
 
         <one-to-many field="routes" target-entity="Softspring\CmsBundle\Model\RouteInterface" mapped-by="content">

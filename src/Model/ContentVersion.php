@@ -10,6 +10,8 @@ abstract class ContentVersion implements ContentVersionInterface
 
     protected ?string $layout = null;
 
+    protected ?int $createdAt = null;
+
 //    protected ?Seo $seo = null;
 
     protected ?array $data = null;
@@ -34,6 +36,16 @@ abstract class ContentVersion implements ContentVersionInterface
     public function setLayout(?string $layout): void
     {
         $this->layout = $layout;
+    }
+
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->createdAt ? \DateTime::createFromFormat('U', $this->createdAt) : null;
+    }
+
+    public function autoSetCreatedAt()
+    {
+        $this->createdAt = time();
     }
 
 //    public function getSeo(): ?Seo

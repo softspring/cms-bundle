@@ -7,6 +7,8 @@ use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Form\Admin\Menu\MenuListFilterForm;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
+use Softspring\CmsBundle\Model\ContentInterface;
+use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Render\ContentRender;
 use Softspring\CoreBundle\Controller\Traits\DispatchGetResponseTrait;
 use Softspring\CoreBundle\Event\GetResponseRequestEvent;
@@ -241,11 +243,12 @@ class ContentController extends AbstractController
         }
     }
 
-    public function content(string $content, Request $request): Response
+    public function content(string $content, Request $request, string $prevVersion = null): Response
     {
         $config = $this->getContentConfig($request);
         $config = $config['admin'] + ['_id' => $config['_id']];
 
+        /** @var ContentInterface $entity */
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
 //        if (!empty($config['is_granted'])) {
@@ -262,7 +265,11 @@ class ContentController extends AbstractController
 //            return $response;
 //        }
 
-        $version = $this->contentManager->createVersion($entity);
+        if ($prevVersion) {
+            $prevVersion = $entity->getVersions()->filter(fn(ContentVersionInterface $version) => $version->getId() == $prevVersion)->first();
+        }
+
+        $version = $this->contentManager->createVersion($entity, $prevVersion);
 
         if ($request->request->get('content_content_form')) {
             $version->setLayout($request->request->get('content_content_form')['layout']);

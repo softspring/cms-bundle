@@ -22,6 +22,10 @@ content:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController::content
     path: /{content}/content
 
+content_from_version:
+    controller: Softspring\CmsBundle\Controller\Admin\ContentController::content
+    path: /{content}/content/{prevVersion}
+
 preview_content:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController:previewContent
     path: /{content}/preview-content

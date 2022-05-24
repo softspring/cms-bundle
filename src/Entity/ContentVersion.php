@@ -12,4 +12,9 @@ class ContentVersion extends ContentVersionModel
     {
         return $this->id;
     }
+
+    public function __toString(): string
+    {
+        return ''.$this->getId();
+    }
 }
