@@ -3,10 +3,12 @@
 namespace Softspring\CmsBundle\Form\Module;
 
 use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Form\Traits\DataMapperTrait;
 use Softspring\Component\PolymorphicFormType\Form\DataTransformer\NodeDataTransformer;
 use Softspring\Component\PolymorphicFormType\Form\Discriminator\NodeDiscriminator;
 use Softspring\Component\PolymorphicFormType\Form\EventListener\NodesResizeFormListener;
 use Softspring\Component\PolymorphicFormType\Form\Type\PolymorphicCollectionType;
+use Symfony\Component\Form\DataMapperInterface;
 use Symfony\Component\Form\Exception\InvalidConfigurationException;
 use Symfony\Component\Form\Exception\RuntimeException;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,8 +17,10 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ModuleCollectionType extends PolymorphicCollectionType
+class ModuleCollectionType extends PolymorphicCollectionType implements DataMapperInterface
 {
+    use DataMapperTrait;
+
     protected FormFactory $formFactory;
     protected CmsConfig $cmsConfig;
 
@@ -102,6 +106,7 @@ class ModuleCollectionType extends PolymorphicCollectionType
     {
         $options = $this->removeInvalidModulesForContentType($options);
         parent::buildForm($builder, $options);
+        $builder->setDataMapper($this);
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options)
