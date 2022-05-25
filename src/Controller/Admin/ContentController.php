@@ -375,7 +375,7 @@ class ContentController extends AbstractController
 
         $request->attributes->set('_cms_preview', true);
 
-        return new Response($this->contentRender->render($entity->getVersions()->last()));
+        return new Response($this->contentRender->render($entity->getVersions()->first()));
     }
 
     /**
