@@ -1,3 +1,6 @@
+content:
+    add_module.button: "Añadir módulo"
+
 admin_page:
     create:
         meta.title: "Nueva página"
@@ -63,4 +66,3 @@ admin_page:
                 path.label: "Segmento de URL"
                 cacheTtl.label: "Tiempo de caché"
                 locale.label: "Idioma"
-            0.label: "Ruta 0"

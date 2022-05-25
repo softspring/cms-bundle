@@ -1,0 +1,68 @@
+content:
+    add_module.button: "Add module"
+
+admin_page:
+    create:
+        meta.title: "New page"
+        title: "New page"
+        breadcrumb: "New page"
+        actions:
+            create.button: "Create page"
+            cancel.button: "Cancel"
+    read:
+        meta.title: "General"
+        title: "General"
+        breadcrumb: "General"
+    preview:
+        meta.title: "Preview page"
+        title: "Preview page"
+        breadcrumb: "Preview page"
+    translations:
+        meta.title: "Page translations"
+        title: "Page translations"
+        breadcrumb: "Page translations"
+    update:
+        meta.title: "Edit page"
+        title: "Edit page"
+        breadcrumb: "Edit page"
+        actions:
+            update.button: "Save changes"
+            cancel.button: "Cancel"
+    seo:
+        meta.title: "Edit SEO"
+        title: "Edit SEO"
+        breadcrumb: "Edit SEO"
+        actions:
+            seo.button: "Save changes"
+            cancel.button: "Cancel"
+    content:
+        meta.title: "Edit content"
+        title: "Edit content"
+        breadcrumb: "Edit content"
+        actions:
+            content.button: "Save changes"
+            cancel.button: "Cancel"
+    list:
+        meta.title: "Pages"
+        title: "Pages"
+        breadcrumb: "Pages"
+        actions:
+            create.link: "New page"
+            details.link: "View"
+            update.link: "Edit"
+            preview.link: "Preview"
+        fields:
+            id.header: "Identifier"
+            site.header: "Site"
+            name.header: "Name"
+
+    form:
+        name.label: "Name"
+        routes:
+            label: "Routes"
+            id.label: "Identififier"
+            paths:
+                label: "URLs"
+                path.label: "URL segment"
+                cacheTtl.label: "Cache time"
+                locale.label: "Language"

@@ -1,0 +1,204 @@
+admin:
+    global_breadcrumb: "CMS"
+
+admin_sites:
+    list:
+        meta.title: "Sites"
+        title: "Sites"
+        breadcrumb: "Sites"
+        fields:
+            id.header: "Site"
+            name.header: "Name"
+            enabled.header: "Active"
+            languages.header: "Languages"
+            countries.header: "Countries"
+        actions.header: "Actions"
+        actions:
+            create.button: "New site"
+            update.button: "Edit"
+            details.button: "Details"
+
+    create:
+        meta.title: "New site"
+        title: "New site"
+        breadcrumb: "New site"
+        form:
+            id.label: "ID"
+            enabled.label: "Active"
+            name.label: "Name"
+            languages.label: "Languages"
+            countries.label: "Countries"
+        actions:
+            create.button: "Create"
+            cancel.button: "Cancel"
+
+    update:
+        meta.title: "Edit site"
+        title: "Edit site"
+        breadcrumb: "Edit %name%"
+        form:
+            id.label: "ID"
+            enabled.label: "Active"
+            name.label: "Name"
+            languages.label: "Languages"
+            countries.label: "Countries"
+        actions:
+            update.button: "Save changes"
+            cancel.button: "Cancel"
+            delete.button: "Delete"
+
+    delete:
+        meta.title: "Delete site"
+        title: "Delete site"
+        breadcrumb: "Delete %name%"
+        actions:
+            delete.button: "Delete"
+            cancel.button: "Cancel"
+
+    read:
+        meta.title: "Site"
+        title: "Site"
+        breadcrumb: "%name%"
+
+admin_blocks:
+    list:
+        meta.title: "Blocks"
+        title: "Blocks"
+        breadcrumb: "Blocks"
+        empty_message: "No block created yet"
+        fields:
+            name.header: "Name"
+            type.header: "Type"
+#            sites.header: "Sites"
+#            publishStartDate.header: "Fecha de publicación"
+#            publishEndDate.header: "Fin de publicación"
+#            publishNow.header: "Actualmente publicado"
+        actions.header: "Actions"
+        actions:
+            create.link: "New block"
+            update.button: "Edit"
+            details.button: "Details"
+
+    create:
+        meta.title: "New block"
+        title: "New block"
+        breadcrumb: "New block"
+        form:
+            key.label: "Id"
+            publishStartDate.label: "Published from"
+            publishEndDate.label: "Published until"
+            sites.label: "Sites"
+            content.label: "Content"
+        actions:
+            create.button: "Create"
+            cancel.button: "Cancel"
+
+    update:
+        meta.title: "Edit block"
+        title: "Edit block"
+        breadcrumb: "Edit block"
+        form:
+            key.label: "Id"
+            publishStartDate.label: "Published from"
+            publishEndDate.label: "Published until"
+            sites.label: "Sites"
+            content.label: "Content"
+        actions:
+            update.button: "Save changes"
+            cancel.button: "Cancel"
+            delete.button: "Delete"
+
+    delete:
+        meta.title: "Delete block"
+        title: "Delete block"
+        breadcrumb: "Delete block"
+        actions:
+            delete.button: "Delete"
+            cancel.button: "Cancel"
+
+    read:
+        meta.title: "Block"
+        title: "Block"
+        breadcrumb: "Block"
+
+#admin_content:
+#    form:
+#        name.label: "Name"
+#        site.label: "Site web"
+#        layout.label: "Diseño"
+#        modules.label: "Módulos"
+#        seo.label: "SEO"
+#        metaTitle.label: "Título (barra de navegador)"
+#        metaDescription.label: "Descripción (meta description)"
+#        metaKeywords.label: "Palabras clave (meta keywords)"
+#        noIndex.label: "Evitar indexado (noindex)"
+#        noFollow.label: "Enlaces entrantes sin seguimiento (nofollow)"
+#        sitemap.label: "Mostrar en sitemap"
+#        versionLayout.label: "Diseño"
+
+admin_routes:
+    create:
+        title: "New route"
+        breadcrumb: "New route"
+        actions:
+            create.button: "Create route"
+            cancel.button: "Cancel"
+    update:
+        title: "Edit route"
+        breadcrumb: "Edit route"
+        actions:
+            update.button: "Save changes"
+            cancel.button: "Cancel"
+    list:
+        meta.title: "Routes"
+        title: "Routes"
+        breadcrumb: "Routes"
+        actions:
+            create.link: "New route"
+            update.link: "Edit"
+            preview.link: "Preview"
+        fields:
+            id.header: "Route"
+            site.header: "Site"
+            page.header: "Page"
+            path.header: "URL"
+    form:
+        paths:
+            add.button: "Add URL segment"
+
+admin_menus:
+    list:
+        meta.title: "Menus"
+        title: "Menus"
+        breadcrumb: "Menus"
+        actions:
+            create.link: "New menu"
+            update.link: "Edit"
+        fields:
+            id.header: "Identifier"
+            type.header: "Type"
+            name.header: "Name"
+
+    create:
+        meta.title: "New menu"
+        title: "New menu"
+        breadcrumb: "New menu"
+        actions:
+            create.button: "Create menu"
+            cancel.button: "Cancel"
+
+    update:
+        meta.title: "Edit menu"
+        title: "Edit menu"
+        breadcrumb: "Edit menu"
+        actions:
+            update.button: "Save changes"
+            cancel.button: "Cancel"
+
+    form:
+        name.label: "Name"
+        items:
+            label: "Elements"
+            add.button: "Add element"
+            text.label: "Text"
+            route.label: "Route"
