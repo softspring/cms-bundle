@@ -1,15 +1,19 @@
 {% block translation_text_widget %}
-    {% for field in form %}
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">
-                    {#{{ field.vars.label|upper }}#}
-                    <img alt="{{ field.vars.label|upper }}" title="{{ field.vars.label|upper }}" src="http://purecatamphetamine.github.io/country-flag-icons/3x2/{{ field.vars.label|upper }}.svg" height="15" class="border"/>&nbsp;
-                </span>
+    {% if form|length > 1 %}
+        {% for field in form %}
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        {#{{ field.vars.label|upper }}#}
+                        <img alt="{{ field.vars.label|upper }}" title="{{ field.vars.label|upper }}" src="http://purecatamphetamine.github.io/country-flag-icons/3x2/{{ field.vars.label|upper }}.svg" height="15" class="border"/>&nbsp;
+                    </span>
+                </div>
+                {{ form_widget(field) }}
             </div>
-            {{ form_widget(field) }}
-        </div>
-    {% endfor %}
+        {% endfor %}
+    {% else %}
+        {{ form_widget(form|first) }}
+    {% endif %}
 {% endblock translation_text_widget %}
 
 {% block html_class_widget %}
