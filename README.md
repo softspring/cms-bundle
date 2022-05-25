@@ -5,7 +5,7 @@
 [![Latest Unstable Version](https://poser.pugx.org/softspring/cms-bundle/v/unstable.svg)](https://packagist.org/packages/softspring/cms-bundle)
 [![License](https://poser.pugx.org/softspring/cms-bundle/license.svg)](https://packagist.org/packages/softspring/cms-bundle)
 [![Total Downloads](https://poser.pugx.org/softspring/cms-bundle/downloads)](https://packagist.org/packages/softspring/cms-bundle)
-[![Build status](https://travis-ci.com/softspring/cms-bundle.svg?branch=master)](https://app.travis-ci.com/github/softspring/cms-bundle)
+[![Build status](https://github.com/softspring/cms-bundle/actions/workflows/php.yml/badge.svg?branch=5.0)](https://github.com/softspring/cms-bundle/actions/workflows/php.yml)
 
 # Installation
 
