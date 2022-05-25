@@ -1,3 +1,35 @@
+{% block translation_text_widget %}
+    {% for field in form %}
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">
+                    {#{{ field.vars.label|upper }}#}
+                    <img alt="{{ field.vars.label|upper }}" title="{{ field.vars.label|upper }}" src="http://purecatamphetamine.github.io/country-flag-icons/3x2/{{ field.vars.label|upper }}.svg" height="15" class="border"/>&nbsp;
+                </span>
+            </div>
+            {{ form_widget(field) }}
+        </div>
+    {% endfor %}
+{% endblock translation_text_widget %}
+
+{% block html_class_widget %}
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text">.class</span>
+        </div>
+        {{ form_widget(form) }}
+    </div>
+{% endblock html_class_widget %}
+
+{% block html_id_widget %}
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text">#</span>
+        </div>
+        {{ form_widget(form) }}
+    </div>
+{% endblock html_id_widget %}
+
 {%- block polymorphic_prototype_buttons -%}
     <!-- Buttons -->
     <div id="polymorphic_prototypes" class="dropdown polymorphic-collection-prototypes">
@@ -78,6 +110,7 @@
                 <div class="cms-module-title">
 {#                    <span class="order-polymorphic-node" id="{{ id }}_order_index">{{ form.vars.name }}</span>##}
 {#                    {{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}#}
+                    {# form_name #}
                 </div>
 
                 <div class="cms-module-buttons">
@@ -106,7 +139,7 @@
                 <div class="row">
                     <span class="order-polymorphic-node d-inline-block" id="{{ id }}_order_index">{{ form.vars.name }}</span>
                     <span class="d-inline-block"># {{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}</span>
-
+                    {# form_name #}
                     <button type="button" class="btn-close" data-cms-module-form-close="" aria-label="Close"></button>
                 </div>
 
@@ -129,6 +162,7 @@
                 <div class="cms-module-title">
                     <span class="order-polymorphic-node" id="{{ id }}_order_index">{{ form.vars.name }}</span>#
                     {{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}
+                    {# form_name #}
                 </div>
 
                 <div class="cms-module-buttons">
@@ -169,6 +203,7 @@
                 <div class="cms-module-title">
                     <span class="order-polymorphic-node" id="{{ id }}_order_index">{{ form.vars.name }}</span>#
                     {{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}
+                    {# form_name #}
                 </div>
 
                 <div class="cms-module-buttons">

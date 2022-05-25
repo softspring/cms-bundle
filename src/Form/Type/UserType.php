@@ -27,6 +27,7 @@ class UserType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
+            'required' => false,
             'class' => UserInterface::class,
             'em' => $this->sfsUserEm,
             'choice_label' => function (UserInterface $user) {

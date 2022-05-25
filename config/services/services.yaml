@@ -9,6 +9,7 @@ services:
             $formFactory: '@form.factory'
 #            $siteType: '' # '%sfs_cms.site.type%'
             $enabledLocales: '%kernel.enabled_locales%'
+            $defaultLocale: '%kernel.default_locale%'
             $container: '@service_container'
             $esi: '@?esi'
 
