@@ -23,7 +23,7 @@ class ContentController extends AbstractController
     {
         $content = $routePath->getRoute()->getContent();
 
-        $response = new Response($this->contentRender->render($content->getVersions()->last()));
+        $response = new Response($this->contentRender->render($content->getVersions()->first()));
 
         if ($routePath->getCacheTtl()) {
             $response->setPublic();
