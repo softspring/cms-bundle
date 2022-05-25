@@ -318,6 +318,61 @@ class ContentController extends AbstractController
         return $this->render($config['content_view'], $viewData->getArrayCopy());
     }
 
+    public function seo(string $content, Request $request): Response
+    {
+        $config = $this->getContentConfig($request);
+        $config = $config['admin'] + ['_id' => $config['_id']] + ['seo' => $config['seo']];
+
+        $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
+
+//        if (!empty($config['is_granted'])) {
+//            $this->denyAccessUnlessGranted($config['is_granted'], null, sprintf('Access denied, user is not %s.', $config['is_granted']));
+//        }
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Entity not found');
+        }
+
+//        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
+//            return $response;
+//        }
+
+        $form = $this->createForm($config['seo_type'], $entity, ['content' => $config, 'method' => 'POST'])->handleRequest($request);
+//
+//        $this->dispatchFromConfig($config, 'form_init_event_name', new FormEvent($form, $request));
+//
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+//                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_valid_event_name', new GetResponseFormEvent($form, $request))) {
+//                    return $response;
+//                }
+
+                $this->contentManager->saveEntity($entity);
+
+//                if ($response = $this->dispatchGetResponseFromConfig($config, 'success_event_name', new GetResponseEntityEvent($entity, $request))) {
+//                    return $response;
+//                }
+
+                return $this->redirect(!empty($config['seo_success_redirect_to']) ? $this->generateUrl($config['seo_success_redirect_to']) : $this->generateUrl("sfs_cms_admin_content_{$config['_id']}_details", ['content' => $entity]));
+//            } else {
+//                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_invalid_event_name', new GetResponseFormEvent($form, $request))) {
+//                    return $response;
+//                }
+            }
+        }
+
+        // show view
+        $viewData = new \ArrayObject([
+            'content' => $config['_id'],
+            'entity' => $entity,
+            'form' => $form->createView(),
+        ]);
+//
+//        $this->dispatchFromConfig($config, 'view_event_name', new ViewEvent($viewData));
+
+        return $this->render($config['seo_view'], $viewData->getArrayCopy());
+    }
+
     public function preview(string $content, Request $request): Response
     {
         $config = $this->getContentConfig($request);

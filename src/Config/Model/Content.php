@@ -5,6 +5,7 @@ namespace Softspring\CmsBundle\Config\Model;
 use Softspring\CmsBundle\Form\Admin\Content\ContentContentForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentCreateForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentListFilterForm;
+use Softspring\CmsBundle\Form\Admin\Content\ContentSeoForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentUpdateForm;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -58,6 +59,20 @@ class Content implements ConfigurationInterface
                     ->end()
                 ->end()
 
+                ->arrayNode('seo')
+                    ->defaultValue([])
+                    ->useAttributeAsKey('key')
+                    ->arrayPrototype()
+                    ->children()
+                        ->scalarNode('type')->isRequired()->end()
+                        ->arrayNode('type_options')
+                            ->useAttributeAsKey('key')
+                            ->prototype('variable')->end()
+                        ->end()
+                    ->end()
+                    ->end()
+                ->end()
+
                 ->arrayNode('admin')
                     ->addDefaultsIfNotSet()
                     ->children()
@@ -76,6 +91,10 @@ class Content implements ConfigurationInterface
                         ->scalarNode('update_view')->defaultValue('@SfsCms/admin/content/update.html.twig')->end()
                         ->scalarNode('update_type')->defaultValue(ContentUpdateForm::class)->end()
                         ->scalarNode('update_success_redirect_to')->defaultValue('')->end()
+                        ->scalarNode('seo_is_granted')->defaultValue('')->end()
+                        ->scalarNode('seo_view')->defaultValue('@SfsCms/admin/content/seo.html.twig')->end()
+                        ->scalarNode('seo_type')->defaultValue(ContentSeoForm::class)->end()
+                        ->scalarNode('seo_success_redirect_to')->defaultValue('')->end()
                         ->scalarNode('content_is_granted')->defaultValue('')->end()
                         ->scalarNode('content_view')->defaultValue('@SfsCms/admin/content/content.html.twig')->end()
                         ->scalarNode('content_type')->defaultValue(ContentContentForm::class)->end()

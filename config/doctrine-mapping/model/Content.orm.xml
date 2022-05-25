@@ -7,6 +7,7 @@
     <mapped-superclass name="Softspring\CmsBundle\Model\Content" table="cms_content">
         <field name="name" column="name" type="string" nullable="false" unique="true"/>
         <field name="extraData" column="extra_data" type="json" nullable="true"/>
+        <field name="seo" column="seo" type="json" nullable="true"/>
     </mapped-superclass>
 
 </doctrine-mapping>

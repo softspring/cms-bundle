@@ -18,6 +18,10 @@ update:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController::update
     path: /{content}/update
 
+seo:
+    controller: Softspring\CmsBundle\Controller\Admin\ContentController::seo
+    path: /{content}/seo
+
 content:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController::content
     path: /{content}/content

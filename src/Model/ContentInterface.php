@@ -33,4 +33,8 @@ interface ContentInterface
     public function getExtraData(): ?array;
 
     public function setExtraData(?array $data): void;
+
+    public function getSeo(): ?array;
+
+    public function setSeo(?array $seo): void;
 }

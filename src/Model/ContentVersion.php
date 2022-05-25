@@ -12,8 +12,6 @@ abstract class ContentVersion implements ContentVersionInterface
 
     protected ?int $createdAt = null;
 
-//    protected ?Seo $seo = null;
-
     protected ?array $data = null;
 
     // protected ?string $compiled = null;
@@ -47,16 +45,6 @@ abstract class ContentVersion implements ContentVersionInterface
     {
         $this->createdAt = time();
     }
-
-//    public function getSeo(): ?Seo
-//    {
-//        return $this->seo;
-//    }
-//
-//    public function setSeo(?Seo $seo): void
-//    {
-//        $this->seo = $seo;
-//    }
 
     public function getData(): ?array
     {

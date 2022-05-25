@@ -2,7 +2,7 @@
 
 namespace Softspring\CmsBundle\Form\Admin\Content;
 
-use Softspring\CmsBundle\Form\SeoType;
+use Softspring\CmsBundle\Form\Type\DynamicFormType;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -14,14 +14,17 @@ class ContentSeoForm extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => ContentInterface::class,
-            'label_format' => 'admin_pages.form.%name%.label',
+            'label_format' => 'admin_content.form.%name%.label',
             'validation_groups' => ['Default', 'create', 'update'],
             'translation_domain' => 'sfs_cms_contents',
+            'content' => null,
         ]);
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('seo', SeoType::class);
+        $builder->add('seo', DynamicFormType::class, [
+            'form_fields' => $options['content']['seo'] ?? [],
+        ]);
     }
 }

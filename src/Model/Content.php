@@ -21,6 +21,8 @@ abstract class Content implements ContentInterface
 
     protected ?array $extraData = null;
 
+    protected ?array $seo = null;
+
     public function __construct()
     {
         $this->versions = new ArrayCollection();
@@ -91,5 +93,15 @@ abstract class Content implements ContentInterface
     public function setExtraData(?array $extraData): void
     {
         $this->extraData = $extraData;
+    }
+
+    public function getSeo(): ?array
+    {
+        return $this->seo;
+    }
+
+    public function setSeo(?array $seo): void
+    {
+        $this->seo = $seo;
     }
 }
