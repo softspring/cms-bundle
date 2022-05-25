@@ -88,7 +88,7 @@ class ModuleCollectionType extends PolymorphicCollectionType
             'types_map' => $this->configureModulesTypesMap(),
             'types_options' => $this->configureModulesTypesOptions(),
             'discriminator_map' => $this->configureModulesDiscriminatorMap(),
-            'discriminator_field' => '_type',
+            'discriminator_field' => '_module',
             'allowed_modules' => null,
             'allowed_container_modules' => null,
             'compatible_contents' => [],

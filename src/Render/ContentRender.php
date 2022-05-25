@@ -49,7 +49,7 @@ class ContentRender
 
     protected function renderModule(array $module, ContentVersionInterface $version): string
     {
-        $this->cmsLogger && $this->cmsLogger->debug(sprintf('Rendering %s module', $module['_type']));
+        $this->cmsLogger && $this->cmsLogger->debug(sprintf('Rendering %s module', $module['_module']));
 
         if ($this->isContainer($module)) {
             $module['content'] = '';
@@ -58,7 +58,7 @@ class ContentRender
                 $module['content'] .= $this->renderModule($submodule, $version);
             }
 
-            return $this->twig->render($this->cmsConfig->getModule($module['_type'])['render_template'], $module);
+            return $this->twig->render($this->cmsConfig->getModule($module['_module'])['render_template'], $module);
         }
 
         $module += [
@@ -66,12 +66,12 @@ class ContentRender
             'content' => $version->getContent(),
         ];
 
-        return $this->twig->render($this->cmsConfig->getModule($module['_type'])['render_template'], $module);
+        return $this->twig->render($this->cmsConfig->getModule($module['_module'])['render_template'], $module);
     }
 
     private function isContainer($module)
     {
-        $module = $this->cmsConfig->getModule($module['_type']);
+        $module = $this->cmsConfig->getModule($module['_module']);
         return $module['module_type'] === ContainerModuleType::class;
     }
 }
