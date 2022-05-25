@@ -61,8 +61,8 @@ class SiteRequestListener implements EventSubscriberInterface
         switch ($this->siteType) {
             case 'path':
             case 'host':
-                // TODO
-        }
+            // TODO
+            }
 
         if ($request->attributes->has($this->siteRouteParamName)) {
             $site = $request->attributes->get($this->siteRouteParamName);

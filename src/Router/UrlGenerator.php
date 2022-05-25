@@ -83,7 +83,6 @@ class UrlGenerator
         return ''; // TODO check page to return noindex and nofollow attributes
     }
 
-
     protected function getRoutePath(Route $route, $site): string
     {
         /** @var RoutePathInterface $path */
@@ -96,6 +95,7 @@ class UrlGenerator
     {
         if (!$routeName) {
             $this->cmsLogger && $this->cmsLogger->error('Empty route');
+
             return null;
         }
 

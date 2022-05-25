@@ -31,6 +31,7 @@ class BlockController extends AbstractController
 
             if (!$block) {
                 $this->cmsLogger && $this->cmsLogger->error(sprintf('CMS missing block %s', $type));
+
                 return new Response();
             }
 
@@ -41,7 +42,7 @@ class BlockController extends AbstractController
             $response = $this->render($config['render_template']);
         }
 
-        if ($config['cache_ttl'] !== false && !$request->attributes->has('_cms_preview')) {
+        if (false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
             $response->setPublic();
             $response->setMaxAge($config['cache_ttl']);
         }

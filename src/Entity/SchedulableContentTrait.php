@@ -12,8 +12,6 @@ trait SchedulableContentTrait
     protected ?int $publishStartDate = null;
 
     /**
-     * @var int|null
-     *
      * @ORM\Column(type="integer", nullable=true, options={"unsigned":true})
      */
     protected ?int $publishEndDate = null;

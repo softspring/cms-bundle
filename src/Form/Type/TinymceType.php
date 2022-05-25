@@ -27,6 +27,5 @@ class TinymceType extends AbstractType
 
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-
     }
 }

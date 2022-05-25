@@ -94,6 +94,7 @@ class ContentVersionListener
     {
         if (is_array($value) && isset($value['_entity_class'])) {
             $repo = $objectManager->getRepository($value['_entity_class']);
+
             return $repo->findOneBy($value['_entity_id']);
         }
 

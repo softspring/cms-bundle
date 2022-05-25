@@ -63,7 +63,7 @@ class RouteResolverListener implements EventSubscriberInterface
                     if ($routePath->getLocale()) {
                         $request->setLocale($routePath->getLocale());
                     }
-                    break;
+                break;
 
                 case Route::TYPE_REDIRECT_TO_URL:
                     $event->setResponse(new RedirectResponse($route->getRedirectUrl(), $route->getRedirectType() ?? Response::HTTP_FOUND));

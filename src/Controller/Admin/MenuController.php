@@ -10,11 +10,10 @@ use Softspring\CmsBundle\Form\Admin\Menu\MenuForm;
 use Softspring\CmsBundle\Form\Admin\Menu\MenuListFilterForm;
 use Softspring\CmsBundle\Manager\MenuManagerInterface;
 use Softspring\CmsBundle\Model\MenuInterface;
+use Softspring\Component\CrudlController\Event\FilterEvent;
 use Softspring\CoreBundle\Controller\Traits\DispatchGetResponseTrait;
 use Softspring\CoreBundle\Event\ViewEvent;
-use Softspring\Component\CrudlController\Event\FilterEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -49,6 +48,7 @@ class MenuController extends AbstractController
 
         if ($config['singleton'] && $this->menuManager->getRepository()->count(['type' => $menuType]) > 0) {
             $this->addFlash('warning', 'Ya hay una instancia de este menú.');
+
             return $this->redirectToRoute('sfs_cms_admin_menus_list');
         }
 
@@ -60,7 +60,7 @@ class MenuController extends AbstractController
             if ($form->isValid()) {
                 $this->menuManager->saveEntity($entity);
 
-                $this->addFlash('success', 'El menú se ha creado correctamente. '.($config['cache_ttl']!==false?" Por cuestiones de rendimiento, el menú está cacheado durante {$config['cache_ttl']} segundos, por lo que puede que tardes en visualizar los cambios.":''));
+                $this->addFlash('success', 'El menú se ha creado correctamente. '.(false !== $config['cache_ttl'] ? " Por cuestiones de rendimiento, el menú está cacheado durante {$config['cache_ttl']} segundos, por lo que puede que tardes en visualizar los cambios." : ''));
 
                 return $this->redirectToRoute('sfs_cms_admin_menus_list');
             }
@@ -85,10 +85,9 @@ class MenuController extends AbstractController
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
-
                 $this->menuManager->saveEntity($menu);
 
-                $this->addFlash('success', 'El menú se ha actualizado. '.($config['cache_ttl']!==false?" Por cuestiones de rendimiento, el menú está cacheado durante {$config['cache_ttl']} segundos, por lo que puede que tardes en visualizar los cambios.":''));
+                $this->addFlash('success', 'El menú se ha actualizado. '.(false !== $config['cache_ttl'] ? " Por cuestiones de rendimiento, el menú está cacheado durante {$config['cache_ttl']} segundos, por lo que puede que tardes en visualizar los cambios." : ''));
 
                 return $this->redirectToRoute('sfs_cms_admin_menus_list');
             }
@@ -128,7 +127,7 @@ class MenuController extends AbstractController
         $form = $this->createForm(MenuListFilterForm::class)->handleRequest($request);
         $filters = $form->isSubmitted() && $form->isValid() ? array_filter($form->getData()) : [];
 
-        $this->dispatch("sfs_cms.admin.menus.filter_event_name", $filterEvent = new FilterEvent($filters, $orderSort, $page, $rpp));
+        $this->dispatch('sfs_cms.admin.menus.filter_event_name', $filterEvent = new FilterEvent($filters, $orderSort, $page, $rpp));
         $filters = $filterEvent->getFilters();
         $orderSort = $filterEvent->getOrderSort();
         $page = $filterEvent->getPage();
@@ -148,7 +147,7 @@ class MenuController extends AbstractController
             'menus_config' => $this->cmsConfig->getMenus(),
         ]);
 
-        $this->dispatch("sfs_cms.admin.menus.view_event_name", new ViewEvent($viewData));
+        $this->dispatch('sfs_cms.admin.menus.view_event_name', new ViewEvent($viewData));
 
         if ($request->isXmlHttpRequest()) {
             return $this->render('@SfsCms/admin/menu/list-page.html.twig', $viewData->getArrayCopy());

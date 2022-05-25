@@ -30,6 +30,7 @@ class MenuController extends AbstractController
 
         if (!$menu) {
             $this->cmsLogger && $this->cmsLogger->error(sprintf('CMS missing menu %s', $type));
+
             return new Response();
         }
 
@@ -37,7 +38,7 @@ class MenuController extends AbstractController
             'menu' => $menu,
         ]);
 
-        if ($config['cache_ttl'] !== false && !$request->attributes->has('_cms_preview')) {
+        if (false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
             $response->setPublic();
             $response->setMaxAge($config['cache_ttl']);
         }

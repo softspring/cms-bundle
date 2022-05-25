@@ -9,7 +9,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class SiteCreateForm extends AbstractSiteForm implements SiteCreateFormInterface
 {
-    
     public function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);

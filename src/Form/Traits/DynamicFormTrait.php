@@ -18,7 +18,7 @@ trait DynamicFormTrait
     public function buildDynamicForm(FormBuilderInterface $builder, array $options): void
     {
         foreach ($options['form_fields'] as $fieldName => $formField) {
-            $builder->add($fieldName, $this->getFieldType($formField['type']??'text'), $formField['type_options'] ?? []);
+            $builder->add($fieldName, $this->getFieldType($formField['type'] ?? 'text'), $formField['type_options'] ?? []);
         }
     }
 
@@ -34,7 +34,7 @@ trait DynamicFormTrait
             'Symfony\Component\Form\Extension\Core\Type\\'.ucfirst($type).'Type',
         ];
 
-        foreach($posibleClasses as $posibleClass) {
+        foreach ($posibleClasses as $posibleClass) {
             if (class_exists($posibleClass)) {
                 return $posibleClass;
             }

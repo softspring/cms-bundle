@@ -64,7 +64,7 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
 
             $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
-            foreach ($contentConfig['fields']??[] as $field => $value) {
+            foreach ($contentConfig['fields'] ?? [] as $field => $value) {
                 if (isset($value['_reference'])) {
                     $propertyAccessor->setValue($content, $field, $this->getReference($value['_reference']));
                 } else {

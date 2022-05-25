@@ -123,7 +123,7 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
             $options['types_options'][$type]['content_type'] = $options['content_type'];
             $options['types_options'][$type]['row_class'] = $options['module_row_class'];
 
-            if ($typeClass == ContainerModuleType::class) {
+            if (ContainerModuleType::class == $typeClass) {
                 $options['types_options'][$type]['compatible_contents'] = $options['compatible_contents'];
             }
         }
@@ -149,7 +149,7 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
             $options['types_options'][$type]['content_type'] = $options['content_type'];
             $options['types_options'][$type]['row_class'] = $options['module_row_class'];
 
-            if ($typeClass == ContainerModuleType::class) {
+            if (ContainerModuleType::class == $typeClass) {
                 $options['types_options'][$type]['compatible_contents'] = $options['compatible_contents'];
             }
         }
@@ -187,7 +187,7 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
         }
 
         if (!is_null($options['allowed_container_modules'])) {
-            $containerModules = array_keys(array_filter($options['types_map'], fn ($type) => $type === ContainerModuleType::class));
+            $containerModules = array_keys(array_filter($options['types_map'], fn ($type) => ContainerModuleType::class === $type));
             $disallowedModules = array_diff($containerModules, $options['allowed_container_modules']);
 
             foreach ($disallowedModules as $disallowedModule) {

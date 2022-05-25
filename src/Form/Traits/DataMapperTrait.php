@@ -84,7 +84,7 @@ trait DataMapperTrait
     }
 
     /**
-     * This function prevents invalid mapping values on moving modules up and down, and cleans up old module fields
+     * This function prevents invalid mapping values on moving modules up and down, and cleans up old module fields.
      */
     private function cleanPropertyValue($value, FormInterface $form)
     {
@@ -104,7 +104,7 @@ trait DataMapperTrait
                 continue;
             } elseif ($isCompound && !is_array($value[$field])) {
                 $value[$field] = [];
-            } else if (!$isCompound && is_array($value[$field])) {
+            } elseif (!$isCompound && is_array($value[$field])) {
                 $value[$field] = '';
             }
         }

@@ -6,11 +6,11 @@ use Doctrine\Common\Collections\Collection;
 
 interface RouteInterface
 {
-    const TYPE_UNKNOWN = 0;
-    const TYPE_CONTENT = 1;
-    const TYPE_REDIRECT_TO_ROUTE = 2;
-    const TYPE_REDIRECT_TO_URL = 3;
-    const TYPE_PARENT_ROUTE = 4;
+    public const TYPE_UNKNOWN = 0;
+    public const TYPE_CONTENT = 1;
+    public const TYPE_REDIRECT_TO_ROUTE = 2;
+    public const TYPE_REDIRECT_TO_URL = 3;
+    public const TYPE_PARENT_ROUTE = 4;
 
     public function getId(): ?string;
 

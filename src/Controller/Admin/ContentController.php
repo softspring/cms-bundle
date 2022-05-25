@@ -4,19 +4,17 @@ namespace Softspring\CmsBundle\Controller\Admin;
 
 use Jhg\DoctrinePagination\ORM\PaginatedRepositoryInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
-use Softspring\CmsBundle\Form\Admin\Menu\MenuListFilterForm;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Render\ContentRender;
+use Softspring\Component\CrudlController\Event\FilterEvent;
 use Softspring\CoreBundle\Controller\Traits\DispatchGetResponseTrait;
 use Softspring\CoreBundle\Event\GetResponseRequestEvent;
 use Softspring\CoreBundle\Event\ViewEvent;
-use Softspring\Component\CrudlController\Event\FilterEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\WebProfilerBundle\EventListener\WebDebugToolbarListener;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -162,7 +160,7 @@ class ContentController extends AbstractController
 //                    return $response;
 //                }
 
-                return $this->redirect(!empty($config['update_success_redirect_to']) ? $this->generateUrl($config['update_success_redirect_to']) : $this->generateUrl("sfs_cms_admin_content_{$config['_id']}_details", ['content'=>$entity]));
+                return $this->redirect(!empty($config['update_success_redirect_to']) ? $this->generateUrl($config['update_success_redirect_to']) : $this->generateUrl("sfs_cms_admin_content_{$config['_id']}_details", ['content' => $entity]));
 //            } else {
 //                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_invalid_event_name', new GetResponseFormEvent($form, $request))) {
 //                    return $response;
@@ -266,7 +264,7 @@ class ContentController extends AbstractController
 //        }
 
         if ($prevVersion) {
-            $prevVersion = $entity->getVersions()->filter(fn(ContentVersionInterface $version) => $version->getId() == $prevVersion)->first();
+            $prevVersion = $entity->getVersions()->filter(fn (ContentVersionInterface $version) => $version->getId() == $prevVersion)->first();
         }
 
         $version = $this->contentManager->createVersion($entity, $prevVersion);
@@ -295,11 +293,11 @@ class ContentController extends AbstractController
 //                    return $response;
 //                }
 
-                if ($request->request->get('goto') == 'preview') {
+                if ('preview' == $request->request->get('goto')) {
                     return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_preview", ['content' => $entity]);
                 }
 
-                return $this->redirect(!empty($config['content_success_redirect_to']) ? $this->generateUrl($config['content_success_redirect_to']) : $this->generateUrl("sfs_cms_admin_content_{$config['_id']}_details", ['content'=>$entity]));
+                return $this->redirect(!empty($config['content_success_redirect_to']) ? $this->generateUrl($config['content_success_redirect_to']) : $this->generateUrl("sfs_cms_admin_content_{$config['_id']}_details", ['content' => $entity]));
 //            } else {
 //                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_invalid_event_name', new GetResponseFormEvent($form, $request))) {
 //                    return $response;

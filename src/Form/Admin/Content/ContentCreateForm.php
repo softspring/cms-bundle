@@ -33,7 +33,7 @@ class ContentCreateForm extends AbstractType implements ContentCreateFormInterfa
             'attr' => [
                 'data-generate-underscore' => 'data-route-id',
                 'data-generate-slug' => 'data-route-path',
-            ]
+            ],
         ]);
 
         if (!empty($options['content']['extra_fields'])) {

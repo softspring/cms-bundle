@@ -4,7 +4,7 @@ namespace Softspring\CmsBundle\Model;
 
 interface RoutePathInterface
 {
-    const TYPE_REDIRECT_TO_CANONICAL = 1;
+    public const TYPE_REDIRECT_TO_CANONICAL = 1;
 
     public function getRoute(): ?RouteInterface;
 

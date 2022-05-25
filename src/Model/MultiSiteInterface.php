@@ -7,5 +7,4 @@ namespace Softspring\CmsBundle\Model;
  */
 interface MultiSiteInterface extends SiteReferenceMultipleInterface
 {
-
 }

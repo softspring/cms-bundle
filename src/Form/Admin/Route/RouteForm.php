@@ -42,7 +42,7 @@ class RouteForm extends AbstractType
             'attr' => [
                 'class' => 'snake-case',
                 'data-route-id' => true,
-            ]
+            ],
         ]);
 
         if (!$options['content_relative']) {
@@ -55,7 +55,7 @@ class RouteForm extends AbstractType
                     'REDIRECT_TO_ROUTE' => RouteInterface::TYPE_REDIRECT_TO_ROUTE,
                     'REDIRECT_TO_URL' => RouteInterface::TYPE_REDIRECT_TO_URL,
                     //                'PARENT_ROUTE' => RouteInterface::TYPE_PARENT_ROUTE,
-                ]
+                ],
             ]);
 
             //        // if ($this->manager->getEntityClassReflection()->implementsInterface(SiteReferenceInterface::class)) {
@@ -89,7 +89,7 @@ class RouteForm extends AbstractType
                     'none' => null,
                     'temporary' => Response::HTTP_MOVED_PERMANENTLY,
                     'permanent' => Response::HTTP_FOUND,
-                ]
+                ],
             ]);
 
             $routes = array_keys(array_filter($this->router->getRouteCollection()->all(), function (Route $route) {
@@ -97,7 +97,7 @@ class RouteForm extends AbstractType
             }));
 
             $builder->add('symfonyRoute', ChoiceType::class, [
-                'choices' => [''=>null] + array_combine($routes, $routes),
+                'choices' => ['' => null] + array_combine($routes, $routes),
             ]);
         }
 

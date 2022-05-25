@@ -6,9 +6,9 @@ use Doctrine\Common\Collections\Collection;
 
 interface MenuItemInterface
 {
-    const TYPE_UNKNOWN = 0;
-    const TYPE_ROUTE = 1;
-    const TYPE_SUBMENU = 2;
+    public const TYPE_UNKNOWN = 0;
+    public const TYPE_ROUTE = 1;
+    public const TYPE_SUBMENU = 2;
 
     public function setMenu(?MenuInterface $menu): void;
 
@@ -35,7 +35,7 @@ interface MenuItemInterface
     public function setParent(?MenuItemInterface $parent): void;
 
     /**
-     * @return Collection|null|MenuItemInterface[]
+     * @return Collection|MenuItemInterface[]|null
      */
     public function getItems(): ?Collection;
 

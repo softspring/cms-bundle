@@ -10,9 +10,9 @@ use Softspring\CmsBundle\Form\Admin\Block\BlockForm;
 use Softspring\CmsBundle\Form\Admin\Block\BlockListFilterForm;
 use Softspring\CmsBundle\Manager\BlockManagerInterface;
 use Softspring\CmsBundle\Model\BlockInterface;
+use Softspring\Component\CrudlController\Event\FilterEvent;
 use Softspring\CoreBundle\Controller\Traits\DispatchGetResponseTrait;
 use Softspring\CoreBundle\Event\ViewEvent;
-use Softspring\Component\CrudlController\Event\FilterEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,6 +49,7 @@ class BlockController extends AbstractController
 
         if ($config['singleton'] && $this->blockManager->getRepository()->count(['type' => $blockType]) > 0) {
             $this->addFlash('warning', 'Ya hay una instancia de este menú.');
+
             return $this->redirectToRoute('sfs_cms_admin_blocks_list');
         }
 
@@ -60,7 +61,7 @@ class BlockController extends AbstractController
             if ($form->isValid()) {
                 $this->blockManager->saveEntity($entity);
 
-                $this->addFlash('success', 'El menú se ha creado correctamente. '.($config['cache_ttl']!==false?" Por cuestiones de rendimiento, el menú está cacheado durante {$config['cache_ttl']} segundos, por lo que puede que tardes en visualizar los cambios.":''));
+                $this->addFlash('success', 'El menú se ha creado correctamente. '.(false !== $config['cache_ttl'] ? " Por cuestiones de rendimiento, el menú está cacheado durante {$config['cache_ttl']} segundos, por lo que puede que tardes en visualizar los cambios." : ''));
 
                 return $this->redirectToRoute('sfs_cms_admin_blocks_list');
             }
@@ -85,10 +86,9 @@ class BlockController extends AbstractController
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
-
                 $this->blockManager->saveEntity($block);
 
-                $this->addFlash('success', 'El menú se ha actualizado. '.($config['cache_ttl']!==false?" Por cuestiones de rendimiento, el menú está cacheado durante {$config['cache_ttl']} segundos, por lo que puede que tardes en visualizar los cambios.":''));
+                $this->addFlash('success', 'El menú se ha actualizado. '.(false !== $config['cache_ttl'] ? " Por cuestiones de rendimiento, el menú está cacheado durante {$config['cache_ttl']} segundos, por lo que puede que tardes en visualizar los cambios." : ''));
 
                 return $this->redirectToRoute('sfs_cms_admin_blocks_list');
             }
@@ -128,7 +128,7 @@ class BlockController extends AbstractController
         $form = $this->createForm(BlockListFilterForm::class)->handleRequest($request);
         $filters = $form->isSubmitted() && $form->isValid() ? array_filter($form->getData()) : [];
 
-        $this->dispatch("sfs_cms.admin.blocks.filter_event_name", $filterEvent = new FilterEvent($filters, $orderSort, $page, $rpp));
+        $this->dispatch('sfs_cms.admin.blocks.filter_event_name', $filterEvent = new FilterEvent($filters, $orderSort, $page, $rpp));
         $filters = $filterEvent->getFilters();
         $orderSort = $filterEvent->getOrderSort();
         $page = $filterEvent->getPage();
@@ -148,7 +148,7 @@ class BlockController extends AbstractController
             'config' => $this->cmsConfig->getBlocks(),
         ]);
 
-        $this->dispatch("sfs_cms.admin.blocks.view_event_name", new ViewEvent($viewData));
+        $this->dispatch('sfs_cms.admin.blocks.view_event_name', new ViewEvent($viewData));
 
         if ($request->isXmlHttpRequest()) {
             return $this->render('@SfsCms/admin/block/list-page.html.twig', $viewData->getArrayCopy());

@@ -11,7 +11,7 @@ class Menu implements MenuInterface
 
     protected ?string $type = null;
 
-    /** @var Collection|null|MenuItemInterface[]  */
+    /** @var Collection|MenuItemInterface[]|null */
     protected ?Collection $items = null;
 
     public function __construct()
@@ -39,7 +39,6 @@ class Menu implements MenuInterface
         $this->type = $type;
     }
 
-
     public function getItems(): ?Collection
     {
         return $this->items;
@@ -60,6 +59,4 @@ class Menu implements MenuInterface
             $item->setMenu(null);
         }
     }
-
-
 }

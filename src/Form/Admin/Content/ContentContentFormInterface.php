@@ -6,5 +6,4 @@ use Softspring\Component\CrudlController\Form\EntityCreateFormInterface;
 
 interface ContentContentFormInterface extends EntityCreateFormInterface
 {
-
 }

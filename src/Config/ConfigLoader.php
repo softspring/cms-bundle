@@ -82,18 +82,20 @@ class ConfigLoader
         $processor = new Processor();
         $modules = [];
 
-        $modulePaths = array_merge(array_map(fn($path) => $this->container->getParameter('kernel.project_dir').'/'.trim($path, '/').'/modules', $this->collectionPaths), [
+        $modulePaths = array_merge(array_map(fn ($path) => $this->container->getParameter('kernel.project_dir').'/'.trim($path, '/').'/modules', $this->collectionPaths), [
             $this->modulesPath,
         ]);
 
-        foreach ($modulePaths as $modulesPath) if (is_dir($modulesPath)) {
-            foreach ((new Finder())->in($modulesPath)->directories()->depth(0) as $modulePath) {
-                $moduleName = $modulePath->getFilename();
-                $moduleConfiguration = new Module($moduleName);
-                $modules[$moduleName] = $processor->processConfiguration($moduleConfiguration, Yaml::parseFile("$modulePath/config.yaml"));
-                $modules[$moduleName]['_id'] = $moduleName;
-                // force reload cache if some change has been done in cms folder
-                $containerBuilder->addResource(new FileResource("$modulePath/config.yaml"));
+        foreach ($modulePaths as $modulesPath) {
+            if (is_dir($modulesPath)) {
+                foreach ((new Finder())->in($modulesPath)->directories()->depth(0) as $modulePath) {
+                    $moduleName = $modulePath->getFilename();
+                    $moduleConfiguration = new Module($moduleName);
+                    $modules[$moduleName] = $processor->processConfiguration($moduleConfiguration, Yaml::parseFile("$modulePath/config.yaml"));
+                    $modules[$moduleName]['_id'] = $moduleName;
+                    // force reload cache if some change has been done in cms folder
+                    $containerBuilder->addResource(new FileResource("$modulePath/config.yaml"));
+                }
             }
         }
 
@@ -131,7 +133,7 @@ class ConfigLoader
             'content' => [
                 'revision' => 1,
                 'entity_class' => Page::class,
-            ]
+            ],
         ]);
         $contents['page']['_id'] = 'page';
 
@@ -163,7 +165,7 @@ class ConfigLoader
 
         return $menus;
     }
-    
+
     public function getBlocks(ContainerBuilder $containerBuilder): array
     {
         $processor = new Processor();

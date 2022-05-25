@@ -20,7 +20,7 @@ abstract class MenuItem implements MenuItemInterface
     protected ?MenuItemInterface $parent = null;
 
     /**
-     * @var Collection|null|MenuItemInterface[]
+     * @var Collection|MenuItemInterface[]|null
      */
     protected ?Collection $items = null;
 
@@ -109,5 +109,4 @@ abstract class MenuItem implements MenuItemInterface
             $item->setParent(null);
         }
     }
-
 }

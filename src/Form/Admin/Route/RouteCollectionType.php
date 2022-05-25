@@ -2,7 +2,6 @@
 
 namespace Softspring\CmsBundle\Form\Admin\Route;
 
-use Softspring\CmsBundle\Form\Type\RouteType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\OptionsResolver\OptionsResolver;

@@ -72,6 +72,7 @@ class ContentRender
     private function isContainer($module)
     {
         $module = $this->cmsConfig->getModule($module['_module']);
-        return $module['module_type'] === ContainerModuleType::class;
+
+        return ContainerModuleType::class === $module['module_type'];
     }
 }

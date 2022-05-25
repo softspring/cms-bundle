@@ -9,7 +9,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class SiteUpdateForm extends AbstractSiteForm implements SiteUpdateFormInterface
 {
-    
     public function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);

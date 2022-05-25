@@ -17,7 +17,7 @@ class ContentController extends AbstractController
     }
 
     /**
-     * // TODO MATCH ALSO WITH SITE
+     * // TODO MATCH ALSO WITH SITE.
      */
     public function renderRoutePath(RoutePathInterface $routePath): Response
     {

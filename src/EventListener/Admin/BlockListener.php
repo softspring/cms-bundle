@@ -4,8 +4,8 @@ namespace Softspring\CmsBundle\EventListener\Admin;
 
 use Softspring\CmsBundle\Model\BlockInterface;
 use Softspring\CmsBundle\SfsCmsEvents;
-use Softspring\CoreBundle\Event\ViewEvent;
 use Softspring\Component\CrudlController\Event\GetResponseEntityEvent;
+use Softspring\CoreBundle\Event\ViewEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

@@ -15,7 +15,7 @@ interface MenuInterface
     public function getName(): ?string;
 
     /**
-     * @return Collection|null|MenuItemInterface[]
+     * @return Collection|MenuItemInterface[]|null
      */
     public function getItems(): ?Collection;
 

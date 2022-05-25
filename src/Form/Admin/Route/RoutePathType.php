@@ -36,7 +36,7 @@ class RoutePathType extends AbstractType
             'attr' => [
                 'data-route-path' => true,
                 'class' => 'sluggize',
-            ]
+            ],
         ]);
         $builder->add('cacheTtl', IntegerType::class);
         $builder->add('locale', ChoiceType::class, [
