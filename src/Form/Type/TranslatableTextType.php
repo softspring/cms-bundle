@@ -7,7 +7,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class TranslationTextType extends AbstractType
+class TranslatableTextType extends AbstractType
 {
     protected string $defaultLocale;
     protected array $enabledLocales;
@@ -20,7 +20,7 @@ class TranslationTextType extends AbstractType
 
     public function getBlockPrefix(): string
     {
-        return 'translation_text';
+        return 'translatable_text';
     }
 
     public function configureOptions(OptionsResolver $resolver)
