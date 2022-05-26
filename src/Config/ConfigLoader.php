@@ -8,8 +8,6 @@ use Softspring\CmsBundle\Config\Model\Content;
 use Softspring\CmsBundle\Config\Model\Layout;
 use Softspring\CmsBundle\Config\Model\Menu;
 use Softspring\CmsBundle\Config\Model\Module;
-use Softspring\CmsBundle\Entity\Page;
-use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -21,25 +19,11 @@ use Symfony\Component\Yaml\Yaml;
 class ConfigLoader
 {
     protected ContainerInterface $container;
-    protected string $cmsPath;
-    protected string $blocksPath;
-    protected string $contentsPath;
-    protected string $layoutsPath;
-    protected string $menusPath;
-    protected string $modulesPath;
-    protected string $sitesPath;
     protected array $collectionPaths;
 
     public function __construct(ContainerInterface $container, array $collectionPaths = [])
     {
         $this->container = $container;
-        $this->cmsPath = $this->container->getParameter('kernel.project_dir').'/cms';
-        $this->blocksPath = "{$this->cmsPath}/blocks";
-        $this->contentsPath = "{$this->cmsPath}/contents";
-        $this->layoutsPath = "{$this->cmsPath}/layouts";
-        $this->menusPath = "{$this->cmsPath}/menus";
-        $this->modulesPath = "{$this->cmsPath}/modules";
-        $this->sitesPath = "{$this->cmsPath}/sites";
         $this->collectionPaths = $collectionPaths;
         $this->initDirectories();
     }
@@ -48,32 +32,39 @@ class ConfigLoader
     {
         $fs = new Filesystem();
 
-        if (!$fs->exists($this->cmsPath)) {
-            $fs->mkdir($this->cmsPath);
+        $cmsPath = $this->container->getParameter('kernel.project_dir').'/cms';
+        if (!$fs->exists($cmsPath)) {
+            $fs->mkdir($cmsPath);
         }
 
-        if (!$fs->exists($this->blocksPath)) {
-            $fs->mkdir($this->blocksPath);
+        $blocksPath = $this->container->getParameter('kernel.project_dir').'/blocks';
+        if (!$fs->exists($blocksPath)) {
+            $fs->mkdir($blocksPath);
         }
 
-        if (!$fs->exists($this->contentsPath)) {
-            $fs->mkdir($this->contentsPath);
+        $contentsPath = $this->container->getParameter('kernel.project_dir').'/contents';
+        if (!$fs->exists($contentsPath)) {
+            $fs->mkdir($contentsPath);
         }
 
-        if (!$fs->exists($this->layoutsPath)) {
-            $fs->mkdir($this->layoutsPath);
+        $layoutsPath = $this->container->getParameter('kernel.project_dir').'/layouts';
+        if (!$fs->exists($layoutsPath)) {
+            $fs->mkdir($layoutsPath);
         }
 
-        if (!$fs->exists($this->menusPath)) {
-            $fs->mkdir($this->menusPath);
+        $menusPath = $this->container->getParameter('kernel.project_dir').'/menus';
+        if (!$fs->exists($menusPath)) {
+            $fs->mkdir($menusPath);
         }
 
-        if (!$fs->exists($this->modulesPath)) {
-            $fs->mkdir($this->modulesPath);
+        $modulesPath = $this->container->getParameter('kernel.project_dir').'/modules';
+        if (!$fs->exists($modulesPath)) {
+            $fs->mkdir($modulesPath);
         }
 
-        if (!$fs->exists($this->sitesPath)) {
-            $fs->mkdir($this->sitesPath);
+        $sitesPath = $this->container->getParameter('kernel.project_dir').'/sites';
+        if (!$fs->exists($sitesPath)) {
+            $fs->mkdir($sitesPath);
         }
     }
 
@@ -82,21 +73,11 @@ class ConfigLoader
         $processor = new Processor();
         $modules = [];
 
-        $modulePaths = array_merge(array_map(fn ($path) => $this->container->getParameter('kernel.project_dir').'/'.trim($path, '/').'/modules', $this->collectionPaths), [
-            $this->modulesPath,
-        ]);
+        $configurations = $this->readConfigurations($containerBuilder, 'modules', 'module');
 
-        foreach ($modulePaths as $modulesPath) {
-            if (is_dir($modulesPath)) {
-                foreach ((new Finder())->in($modulesPath)->directories()->depth(0) as $modulePath) {
-                    $moduleName = $modulePath->getFilename();
-                    $moduleConfiguration = new Module($moduleName);
-                    $modules[$moduleName] = $processor->processConfiguration($moduleConfiguration, Yaml::parseFile("$modulePath/config.yaml"));
-                    $modules[$moduleName]['_id'] = $moduleName;
-                    // force reload cache if some change has been done in cms folder
-                    $containerBuilder->addResource(new FileResource("$modulePath/config.yaml"));
-                }
-            }
+        foreach ($configurations as $moduleName => $moduleConfigs) {
+            $modules[$moduleName] = $processor->processConfiguration(new Module($moduleName), $moduleConfigs);
+            $modules[$moduleName]['_id'] = $moduleName;
         }
 
         return $modules;
@@ -107,13 +88,11 @@ class ConfigLoader
         $processor = new Processor();
         $layouts = [];
 
-        foreach ((new Finder())->in($this->layoutsPath)->directories()->depth(0) as $layoutPath) {
-            $layoutName = $layoutPath->getFilename();
-            $layoutConfiguration = new Layout($layoutName);
-            $layouts[$layoutName] = $processor->processConfiguration($layoutConfiguration, Yaml::parseFile("$layoutPath/config.yaml"));
+        $configurations = $this->readConfigurations($containerBuilder, 'layouts', 'layout');
+
+        foreach ($configurations as $layoutName => $layoutConfigs) {
+            $layouts[$layoutName] = $processor->processConfiguration(new Layout($layoutName), $layoutConfigs);
             $layouts[$layoutName]['_id'] = $layoutName;
-            // force reload cache if some change has been done in cms folder
-            $containerBuilder->addResource(new FileResource("$layoutPath/config.yaml"));
         }
 
         if (empty($layouts)) {
@@ -128,22 +107,11 @@ class ConfigLoader
         $processor = new Processor();
         $contents = [];
 
-        $contentConfiguration = new Content('page');
-        $contents['page'] = $processor->processConfiguration($contentConfiguration, [
-            'content' => [
-                'revision' => 1,
-                'entity_class' => Page::class,
-            ],
-        ]);
-        $contents['page']['_id'] = 'page';
+        $configurations = $this->readConfigurations($containerBuilder, 'contents', 'content');
 
-        foreach ((new Finder())->in($this->contentsPath)->directories()->depth(0) as $contentPath) {
-            $contentName = $contentPath->getFilename();
-            $contentConfiguration = new Content($contentName);
-            $contents[$contentName] = $processor->processConfiguration($contentConfiguration, Yaml::parseFile("$contentPath/config.yaml"));
+        foreach ($configurations as $contentName => $contentConfigs) {
+            $contents[$contentName] = $processor->processConfiguration(new Content($contentName), $contentConfigs);
             $contents[$contentName]['_id'] = $contentName;
-            // force reload cache if some change has been done in cms folder
-            $containerBuilder->addResource(new FileResource("$contentPath/config.yaml"));
         }
 
         return $contents;
@@ -154,13 +122,11 @@ class ConfigLoader
         $processor = new Processor();
         $menus = [];
 
-        foreach ((new Finder())->in($this->menusPath)->directories()->depth(0) as $menuPath) {
-            $menuName = $menuPath->getFilename();
-            $menuConfiguration = new Menu($menuName);
-            $menus[$menuName] = $processor->processConfiguration($menuConfiguration, Yaml::parseFile("$menuPath/config.yaml"));
+        $configurations = $this->readConfigurations($containerBuilder, 'menus', 'menu');
+
+        foreach ($configurations as $menuName => $menuConfigs) {
+            $menus[$menuName] = $processor->processConfiguration(new Menu($menuName), $menuConfigs);
             $menus[$menuName]['_id'] = $menuName;
-            // force reload cache if some change has been done in cms folder
-            $containerBuilder->addResource(new FileResource("$menuPath/config.yaml"));
         }
 
         return $menus;
@@ -171,36 +137,32 @@ class ConfigLoader
         $processor = new Processor();
         $blocks = [];
 
-        foreach ((new Finder())->in($this->blocksPath)->directories()->depth(0) as $blockPath) {
-            $blockName = $blockPath->getFilename();
-            $blockConfiguration = new Block($blockName);
-            $blocks[$blockName] = $processor->processConfiguration($blockConfiguration, Yaml::parseFile("$blockPath/config.yaml"));
+        $configurations = $this->readConfigurations($containerBuilder, 'blocks', 'block');
+
+        foreach ($configurations as $blockName => $blockConfigs) {
+            $blocks[$blockName] = $processor->processConfiguration(new Block($blockName), $blockConfigs);
             $blocks[$blockName]['_id'] = $blockName;
-
-            if ($blocks[$blockName]['static'] && !$blocks[$blockName]['singleton']) {
-                throw new InvalidConfigurationException('A block defined as static must be singleton.');
-            }
-
-            if ($blocks[$blockName]['static'] && !empty($blocks[$blockName]['form_fields'])) {
-                throw new InvalidConfigurationException('A block defined as static can not have form_fields.');
-            }
-
-            if ($blocks[$blockName]['static'] && !empty($blocks[$blockName]['form_options'])) {
-                throw new InvalidConfigurationException('A block defined as static can not have form_options.');
-            }
-
-            if ($blocks[$blockName]['static'] && !empty($blocks[$blockName]['edit_template'])) {
-                throw new InvalidConfigurationException('A block defined as static can not have edit_template.');
-            }
-
-            if ($blocks[$blockName]['static'] && !empty($blocks[$blockName]['form_template'])) {
-                throw new InvalidConfigurationException('A block defined as static can not have form_template.');
-            }
-
-            // force reload cache if some change has been done in cms folder
-            $containerBuilder->addResource(new FileResource("$blockPath/config.yaml"));
         }
 
         return $blocks;
+    }
+
+    protected function readConfigurations(ContainerBuilder $containerBuilder, string $elementPath, string $elementType): array
+    {
+        $configurations = [];
+
+        foreach ($this->collectionPaths as $collectionPath) {
+            $elementsPath = $this->container->getParameter('kernel.project_dir').'/'.trim($collectionPath,'/').'/'.$elementPath;
+            if (is_dir($elementsPath)) {
+                foreach ((new Finder())->in($elementsPath)->directories()->depth(0) as $elementFilePath) {
+                    $elementName = $elementFilePath->getFilename();
+                    $configurations[$elementName][] = Yaml::parseFile("$elementFilePath/config.yaml")[$elementType];
+                    // force reload cache if some change has been done in cms folder
+                    $containerBuilder->addResource(new FileResource("$elementFilePath/config.yaml"));
+                }
+            }
+        }
+
+        return $configurations;
     }
 }

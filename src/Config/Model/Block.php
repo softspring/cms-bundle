@@ -20,6 +20,36 @@ class Block implements ConfigurationInterface
         $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
+            ->validate()
+                ->ifTrue(function ($config) {
+                    return $config['static'] && !$config['singleton'];
+                })
+                ->thenInvalid('A block defined as static must be singleton.')
+            ->end()
+            ->validate()
+                ->ifTrue(function ($config) {
+                    return $config['static'] && !empty($config['form_fields']);
+                })
+                ->thenInvalid('A block defined as static can not have form_fields.')
+            ->end()
+            ->validate()
+                ->ifTrue(function ($config) {
+                    return $config['static'] && !empty($config['form_options']);
+                })
+                ->thenInvalid('A block defined as static can not have form_options.')
+            ->end()
+//            ->validate()
+//                ->ifTrue(function ($config) {
+//                    return $config['static'] && !empty($config['edit_template']);
+//                })
+//                ->thenInvalid('A block defined as static can not have edit_template.')
+//            ->end()
+//            ->validate()
+//                ->ifTrue(function ($config) {
+//                    return $config['static'] && !empty($config['form_template']);
+//                })
+//                ->thenInvalid('A block defined as static can not have form_template.')
+//            ->end()
             ->children()
                 ->integerNode('revision')->isRequired()->end()
 
