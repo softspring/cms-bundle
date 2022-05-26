@@ -29,6 +29,7 @@ class TranslatableTextType extends AbstractType
             'required' => false,
             'languages' => $this->enabledLocales,
             'default_language' => $this->defaultLocale,
+            'children_attr' => [],
         ]);
 
         $resolver->setRequired('languages');
@@ -43,6 +44,8 @@ class TranslatableTextType extends AbstractType
             $builder->add($lang, TextType::class, [
                 'required' => $lang == $options['default_language'],
                 'label' => $lang,
+                'attr' => $options['children_attr'],
+                'block_prefix' => 'translatable_text_element',
             ]);
         }
     }

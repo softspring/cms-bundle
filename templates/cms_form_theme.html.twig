@@ -16,6 +16,13 @@
     {% endif %}
 {% endblock translatable_text_widget %}
 
+{% block translatable_text_element_widget %}
+    {% if attr['data-edit-content-input']|default(false) %}
+        {% set attr = attr|merge({'data-edit-content-input': attr['data-edit-content-input']~'.'~form.vars.label|lower}) -%}
+    {% endif %}
+    {{ form_widget(form, {'attr':attr}) }}
+{% endblock %}
+
 {% block translatable_image_widget %}
     {% if form|length > 1 %}
         {% for field in form %}

@@ -22,6 +22,16 @@
                         {{ form_widget(form.layout, {'attr':{'onchange':'confirm("Si continuas se pueden eliminar datos ¿quieres continuar?") && (document.getElementById("content_content_form__ok").value = 1) && submit()'}}) }}
                     </div>
 
+                    <div class="text-end me-3">
+                        {% if enabledLocales|length > 1 %}
+                            <select class="form-select" id="contentEditionLanguageSelection">
+                                {% for locale in enabledLocales %}
+                                    <option value="{{ locale|lower }}">{{ locale|upper }}</option>
+                                {% endfor %}
+                            </select>
+                        {% endif %}
+                    </div>
+
                     <div class="text-end">
                         <a href="{{ url('sfs_cms_admin_content_'~content~'_details', {'content':entity}) }}" class="btn btn-light">{{ ('admin_'~content~'.content.actions.cancel.button')|trans }}</a>
 

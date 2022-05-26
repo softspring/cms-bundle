@@ -311,6 +311,7 @@ class ContentController extends AbstractController
             'entity' => $entity,
             'layout' => $this->cmsConfig->getLayout($version->getLayout()),
             'form' => $form->createView(),
+            'enabledLocales' => $this->enabledLocales,
         ]);
 //
 //        $this->dispatchFromConfig($config, 'view_event_name', new ViewEvent($viewData));
