@@ -9,18 +9,26 @@ admin_page:
         actions:
             create.button: "Create page"
             cancel.button: "Cancel"
+
     read:
         meta.title: "General"
         title: "General"
         breadcrumb: "General"
+
     preview:
         meta.title: "Preview page"
         title: "Preview page"
         breadcrumb: "Preview page"
+        actions:
+            open.button: "Open"
+            cancel.button: "Back"
+            content.button: "Edit version"
+
     translations:
         meta.title: "Page translations"
         title: "Page translations"
         breadcrumb: "Page translations"
+
     update:
         meta.title: "Edit page"
         title: "Edit page"
@@ -28,20 +36,24 @@ admin_page:
         actions:
             update.button: "Save changes"
             cancel.button: "Cancel"
+
     seo:
         meta.title: "Edit SEO"
         title: "Edit SEO"
         breadcrumb: "Edit SEO"
         actions:
-            seo.button: "Save changes"
+            save.button: "Save changes"
             cancel.button: "Cancel"
+
     content:
         meta.title: "Edit content"
         title: "Edit content"
         breadcrumb: "Edit content"
         actions:
-            content.button: "Save changes"
+            save.button: "Save version"
+            save_and_preview.button: "Save and preview"
             cancel.button: "Cancel"
+
     list:
         meta.title: "Pages"
         title: "Pages"
@@ -60,9 +72,16 @@ admin_page:
         name.label: "Name"
         routes:
             label: "Routes"
-            id.label: "Identififier"
+            id.label: "Route id"
             paths:
                 label: "URLs"
                 path.label: "URL segment"
                 cacheTtl.label: "Cache time"
                 locale.label: "Language"
+        seo:
+            metaTitle.label: "Title (browser title and meta tags)"
+            metaDescription.label: "Description (meta tag)"
+            metaKeywords.label: "Keywords (meta tag)"
+            noIndex.label: "No index"
+            noFollow.label: "No follow"
+            sitemap.label: "Sitemap"

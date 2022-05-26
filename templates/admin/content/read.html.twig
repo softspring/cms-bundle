@@ -62,7 +62,7 @@
                 {% for route in entity.routes %}
                 {% for path in route.paths %}
                     <li>
-                        <a href="{{ path.path }}" target="_blank">{{ path.path }} <span class="mdi mdi-18px mdi-open-in-new"></span></a>
+                        <a href="/{{ path.path }}" target="_blank">/{{ path.path }} <span class="mdi mdi-18px mdi-open-in-new"></span></a>
                     </li>
                 {% endfor %}
                 {% endfor %}

@@ -6,6 +6,7 @@ use Softspring\CmsBundle\Form\Type\DynamicFormType;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ContentSeoForm extends AbstractType
@@ -19,12 +20,18 @@ class ContentSeoForm extends AbstractType
             'translation_domain' => 'sfs_cms_contents',
             'content' => null,
         ]);
+
+        $resolver->setNormalizer('label_format', function (Options $options, $value) {
+            return "admin_{$options['content']['_id']}.form.%name%.label";
+        });
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('seo', DynamicFormType::class, [
             'form_fields' => $options['content']['seo'] ?? [],
+            'translation_domain' => 'sfs_cms_contents',
+            'label_format' => "admin_{$options['content']['_id']}.form.seo.%name%.label",
         ]);
     }
 }

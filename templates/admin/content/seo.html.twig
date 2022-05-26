@@ -22,11 +22,12 @@
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="edit" role="tabpanel" aria-labelledby="edit-tab">
             <div class="container-fluid bg-white p-3">
+                {{ form_widget(form.seo) }}
                 {{ form_rest(form) }}
 
                 <div class="d-flex justify-content-end align-items-center">
                     <a href="{{ url('sfs_cms_admin_content_'~content~'_list') }}" class="btn btn-outline-secondary">{{ ('admin_'~content~'.seo.actions.cancel.button')|trans }}</a>
-                    <input type="submit" value="{{ ('admin_'~content~'.seo.actions.seo.button')|trans }}" class="btn btn-primary ms-3" />
+                    <input type="submit" value="{{ ('admin_'~content~'.seo.actions.save.button')|trans }}" class="btn btn-primary ms-3" />
                 </div>
             </div>
         </div>
