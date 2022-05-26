@@ -36,22 +36,26 @@ window.onload = function() {
         }
     });
 
+    String.prototype.removeAccents = function() {
+        return this.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
     document.addEventListener('keyup', function(event) {
         if (!event.target.matches('[data-generate-underscore]') && !event.target.matches('[data-generate-slug]')) return;
 
         // generate underscore
         var element = document.querySelector('['+event.target.dataset.generateUnderscore+']');
         if (element && element.value === underscored(event.target.lastValue||'')) {
-            element.value = underscored(event.target.value);
+            element.value = underscored(event.target.value).removeAccents();
         }
 
         // generate slug
         var element = document.querySelector('['+event.target.dataset.generateSlug+']');
         if (element && element.value.replace(/^\/+/, '').replace(/\/+$/, '') === slugify(event.target.lastValue||'')) {
-            element.value = '/'+slugify(event.target.value);
+            element.value = slugify(event.target.value).removeAccents();
         }
 
-        event.target.lastValue = event.target.value;
+        event.target.lastValue = event.target.value.removeAccents();
     });
 
     document.addEventListener('keyup', function(event) {
