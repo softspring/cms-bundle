@@ -4,8 +4,8 @@
             <div class="input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text">
-                        {#{{ field.vars.label|upper }}#}
-                        <img alt="{{ field.vars.label|upper }}" title="{{ field.vars.label|upper }}" src="https://unpkg.com/language-icons/icons/{{ field.vars.label|lower }}.svg" height="15" class="border"/>&nbsp;
+                        {{ field.vars.label|upper }}
+{#                        <img alt="{{ field.vars.label|upper }}" title="{{ field.vars.label|upper }}" src="https://unpkg.com/language-icons/icons/{{ field.vars.label|lower }}.svg" height="15" class="border"/>&nbsp;#}
                     </span>
                 </div>
                 {{ form_widget(field) }}
@@ -22,8 +22,8 @@
             <div class="input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text">
-                        {#{{ field.vars.label|upper }}#}
-                        <img alt="{{ field.vars.label|upper }}" title="{{ field.vars.label|upper }}" src="https://unpkg.com/language-icons/icons/{{ field.vars.label|lower }}.svg" height="15" class="border"/>&nbsp;
+                        {{ field.vars.label|upper }}
+{#                        <img alt="{{ field.vars.label|upper }}" title="{{ field.vars.label|upper }}" src="https://unpkg.com/language-icons/icons/{{ field.vars.label|lower }}.svg" height="15" class="border"/>&nbsp;#}
                     </span>
                 </div>
                 {{ form_widget(field) }}
