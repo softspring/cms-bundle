@@ -37,32 +37,32 @@ class ConfigLoader
             $fs->mkdir($cmsPath);
         }
 
-        $blocksPath = $this->container->getParameter('kernel.project_dir').'/blocks';
+        $blocksPath = $this->container->getParameter('kernel.project_dir').'/cms/blocks';
         if (!$fs->exists($blocksPath)) {
             $fs->mkdir($blocksPath);
         }
 
-        $contentsPath = $this->container->getParameter('kernel.project_dir').'/contents';
+        $contentsPath = $this->container->getParameter('kernel.project_dir').'/cms/contents';
         if (!$fs->exists($contentsPath)) {
             $fs->mkdir($contentsPath);
         }
 
-        $layoutsPath = $this->container->getParameter('kernel.project_dir').'/layouts';
+        $layoutsPath = $this->container->getParameter('kernel.project_dir').'/cms/layouts';
         if (!$fs->exists($layoutsPath)) {
             $fs->mkdir($layoutsPath);
         }
 
-        $menusPath = $this->container->getParameter('kernel.project_dir').'/menus';
+        $menusPath = $this->container->getParameter('kernel.project_dir').'/cms/menus';
         if (!$fs->exists($menusPath)) {
             $fs->mkdir($menusPath);
         }
 
-        $modulesPath = $this->container->getParameter('kernel.project_dir').'/modules';
+        $modulesPath = $this->container->getParameter('kernel.project_dir').'/cms/modules';
         if (!$fs->exists($modulesPath)) {
             $fs->mkdir($modulesPath);
         }
 
-        $sitesPath = $this->container->getParameter('kernel.project_dir').'/sites';
+        $sitesPath = $this->container->getParameter('kernel.project_dir').'/cms/sites';
         if (!$fs->exists($sitesPath)) {
             $fs->mkdir($sitesPath);
         }
