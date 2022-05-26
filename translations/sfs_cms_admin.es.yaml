@@ -138,12 +138,14 @@ admin_blocks:
 
 admin_routes:
     create:
+        meta.title: "Nueva ruta"
         title: "Nueva ruta"
         breadcrumb: "Nueva ruta"
         actions:
             create.button: "Crear ruta"
             cancel.button: "Cancelar"
     update:
+        meta.title: "Editar ruta"
         title: "Editar ruta"
         breadcrumb: "Editar ruta"
         actions:
@@ -165,6 +167,25 @@ admin_routes:
     form:
         paths:
             add.button: "Añadir segmento de URL"
+            label: "Segmentos"
+            path.label: "Segmento"
+            locale.label: "Idioma"
+            cacheTtl.label: "Tiempo de cache"
+        id.label: "Identificador"
+        type:
+            label: "Tipo"
+            values:
+                content: "Contenido"
+                redirect_to_route: "Redirección a ruta"
+                redirect_to_url: "Redirección a URL"
+        content.label: "Contenido"
+        redirectUrl.label: "Redirigir a URL"
+        symfonyRoute.label: "Ruta"
+        redirectType:
+            label: "Tipo de redirección"
+            values:
+                temporary: "Temporal"
+                permanent: "Permanente"
 
 admin_menus:
     list:

@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Count;
+use Symfony\Component\Validator\Constraints\Valid;
 
 class RoutePathCollectionType extends AbstractType
 {
@@ -24,7 +25,7 @@ class RoutePathCollectionType extends AbstractType
         $resolver->setDefaults([
             'entry_type' => RoutePathType::class,
             'required' => false,
-            'constraints' => new Count(['min' => 1]),
+            'constraints' => [new Count(['min' => 1]), new Valid() ],
             'allow_add' => true,
             'allow_delete' => true,
             'by_reference' => false,

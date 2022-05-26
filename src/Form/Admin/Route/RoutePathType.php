@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Intl\Locales;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -43,7 +44,8 @@ class RoutePathType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('path', TextType::class, [
-            'constraints' => new NotBlank(),
+            'required' => false,
+            'empty_data' => '',
             'attr' => [
                 'data-route-path' => true,
                 'class' => 'sluggize',
@@ -52,7 +54,8 @@ class RoutePathType extends AbstractType
         $builder->add('cacheTtl', IntegerType::class);
         $builder->add('locale', ChoiceType::class, [
             'required' => false,
-            'choices' => array_combine($options['languages'], $options['languages']),
+            'choices' => array_combine(array_map(fn ($lang) => Locales::getName($lang),$options['languages']), $options['languages']),
+            'choice_translation_domain' => false,
         ]);
     }
 }

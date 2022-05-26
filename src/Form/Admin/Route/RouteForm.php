@@ -32,6 +32,8 @@ class RouteForm extends AbstractType
         $resolver->setDefaults([
             'data_class' => RouteInterface::class,
             'content_relative' => false,
+            'label_format' => 'admin_routes.form.%name%.label',
+            'translation_domain' => 'sfs_cms_admin',
         ]);
     }
 
@@ -49,11 +51,11 @@ class RouteForm extends AbstractType
             $builder->add('type', ChoiceType::class, [
                 'choices' => [
                     //                'PAGE' => RouteInterface::TYPE_PAGE,
-                    'CONTENT' => RouteInterface::TYPE_CONTENT,
+                    'admin_routes.form.type.values.content' => RouteInterface::TYPE_CONTENT,
                     //                'STATIC' => RouteInterface::TYPE_STATIC,
                     //                'NOT_FOUND' => RouteInterface::TYPE_NOT_FOUND,
-                    'REDIRECT_TO_ROUTE' => RouteInterface::TYPE_REDIRECT_TO_ROUTE,
-                    'REDIRECT_TO_URL' => RouteInterface::TYPE_REDIRECT_TO_URL,
+                    'admin_routes.form.type.values.redirect_to_route' => RouteInterface::TYPE_REDIRECT_TO_ROUTE,
+                    'admin_routes.form.type.values.redirect_to_url' => RouteInterface::TYPE_REDIRECT_TO_URL,
                     //                'PARENT_ROUTE' => RouteInterface::TYPE_PARENT_ROUTE,
                 ],
             ]);
@@ -86,9 +88,8 @@ class RouteForm extends AbstractType
             $builder->add('redirectType', ChoiceType::class, [
                 'required' => false,
                 'choices' => [
-                    'none' => null,
-                    'temporary' => Response::HTTP_MOVED_PERMANENTLY,
-                    'permanent' => Response::HTTP_FOUND,
+                    'admin_routes.form.redirectType.values.temporary' => Response::HTTP_MOVED_PERMANENTLY,
+                    'admin_routes.form.redirectType.values.permanent' => Response::HTTP_FOUND,
                 ],
             ]);
 

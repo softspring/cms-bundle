@@ -1,0 +1,21 @@
+Softspring\CmsBundle\Model\RouteInterface:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: id
+
+    getters:
+        content:
+            -   Symfony\Component\Validator\Constraints\Expression:
+                    expression: "not(this.getType() == 1 and this.getContent() == null)"
+                    message: "Required"
+        redirectUrl:
+            -   Symfony\Component\Validator\Constraints\Expression:
+                    expression: "not(this.getType() == 3 and this.getRedirectUrl() == null)"
+                    message: "Required"
+        symfonyRoute:
+            -   Symfony\Component\Validator\Constraints\Expression:
+                    expression: "not(this.getType() == 2 and this.getSymfonyRoute() == null)"
+                    message: "Required"
+        redirectType:
+            -   Symfony\Component\Validator\Constraints\Expression:
+                    expression: "not( (this.getType() == 3 or this.getType() == 2) and this.getRedirectType() == null)"
+                    message: "Required"

@@ -6,7 +6,7 @@
         <td class="p-3">{{ route.site.name|default('') }}</td>
         <td class="p-3">
             {% for path in route.paths %}
-                <a href="{{ path.path|default('#') }}" target="_blank">{{ path.path|default('') }}</a><br/>
+                <a href="/{{ path.path|default('') }}" target="_blank">/{{ path.path|default('') }}</a><br/>
             {% endfor %}
         </td>
         <td class="p-3">{{ route.content.name|default('') }}</td>
@@ -14,7 +14,4 @@
             <a href="{{ url('sfs_cms_admin_routes_update', {'route':route}) }}">{{ 'admin_routes.list.actions.update.link'|trans }}</a>
         </td>
     </tr>
-
-
-
 {% endfor %}
