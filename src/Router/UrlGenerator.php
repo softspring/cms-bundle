@@ -88,7 +88,7 @@ class UrlGenerator
         /** @var RoutePathInterface $path */
         $path = $route->getPaths()->first();
 
-        return $path->getPath();
+        return '/'.$path->getPath();
     }
 
     protected function getRoute($routeName): ?RouteInterface
