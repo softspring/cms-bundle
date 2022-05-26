@@ -41,9 +41,16 @@ abstract class ContentVersion implements ContentVersionInterface
         return $this->createdAt ? \DateTime::createFromFormat('U', $this->createdAt) : null;
     }
 
+    public function setCreatedAt(?\DateTime $createdAt): void
+    {
+        $this->createdAt = $createdAt ? $createdAt->format('U') : null;
+    }
+
     public function autoSetCreatedAt()
     {
-        $this->createdAt = time();
+        if (!$this->createdAt) {
+            $this->createdAt = time();
+        }
     }
 
     public function getData(): ?array

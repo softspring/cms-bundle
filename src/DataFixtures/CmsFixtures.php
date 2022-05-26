@@ -62,6 +62,8 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
 
             $content = $this->createContent($key, $contentConfig['name'], null, $contentConfig['extra']);
 
+            $content->getVersions()->first()->setCreatedAt(new \DateTime('-1 minute'));
+
             $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
             foreach ($contentConfig['fields'] ?? [] as $field => $value) {
@@ -227,7 +229,7 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
         return $menu;
     }
 
-    protected function createMenuItem(MenuInterface $menu, string $text, ?RouteInterface $route = null): MenuItemInterface
+    protected function createMenuItem(MenuInterface $menu, array $text, ?RouteInterface $route = null): MenuItemInterface
     {
         $item = $this->menuItemManager->createEntity();
         $menu->addItem($item);
