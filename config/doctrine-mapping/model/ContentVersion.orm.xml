@@ -8,7 +8,8 @@
         <field name="layout" column="layout" type="string" nullable="true"/>
         <field name="data" column="data" type="json" nullable="true"/>
 
-<!--        <embedded name="seo" class="Softspring\CmsBundle\Entity\Embeddable\Seo" column-prefix="seo_" />-->
+        <field name="compiledModules" column="compiled_modules" type="json" nullable="true"/>
+        <field name="compiled" column="compiled" type="json" nullable="true"/>
 
         <field name="createdAt" column="created_at" type="integer" nullable="true">
             <options>

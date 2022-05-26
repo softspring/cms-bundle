@@ -7,9 +7,22 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\Persistence\ObjectManager;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
+use Softspring\CmsBundle\Render\ContentRender;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class ContentVersionListener
 {
+    protected ContentRender $contentRender;
+    protected RequestStack $requestStack;
+    protected array $enabledLocales;
+
+    public function __construct(ContentRender $contentRender, RequestStack $requestStack, array $enabledLocales)
+    {
+        $this->contentRender = $contentRender;
+        $this->enabledLocales = $enabledLocales;
+        $this->requestStack = $requestStack;
+    }
+
     public function postLoad(ContentVersionInterface $contentVersion, LifecycleEventArgs $event)
     {
         $this->untransform($contentVersion, $event);
@@ -17,12 +30,32 @@ class ContentVersionListener
 
     public function preUpdate(ContentVersionInterface $contentVersion, PreUpdateEventArgs $event)
     {
+        $this->saveCompiled($contentVersion, $event);
         $this->transform($contentVersion, $event);
     }
 
     public function prePersist(ContentVersionInterface $contentVersion, LifecycleEventArgs $event)
     {
+        $this->saveCompiled($contentVersion, $event);
         $this->transform($contentVersion, $event);
+    }
+
+    protected function saveCompiled(ContentVersionInterface $contentVersion, LifecycleEventArgs $event)
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        $originalLocale = $request->getLocale();
+
+        $compiled = [];
+        $compiledModules = [];
+        foreach ($this->enabledLocales as $locale) {
+            $request->setLocale($locale);
+            $compiled[$locale] = $this->contentRender->render($contentVersion);
+            $compiledModules[$locale] = $this->contentRender->renderModules($contentVersion);
+        }
+        $contentVersion->setCompiled($compiled);
+        $contentVersion->setCompiledModules($compiledModules);
+
+        $request->setLocale($originalLocale);
     }
 
     protected function transform(ContentVersionInterface $contentVersion, LifecycleEventArgs $event)

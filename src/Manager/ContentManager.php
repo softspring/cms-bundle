@@ -35,7 +35,8 @@ class ContentManager implements ContentManagerInterface
 
         /** @var ContentInterface $content */
         $content = new $class();
-        $content->addVersion($this->contentVersionManager->createEntity());
+        $content->addVersion($version = $this->contentVersionManager->createEntity());
+        $version->setLayout($this->getTypeDefaultLayout($type));
 
         return $content;
     }
@@ -70,12 +71,20 @@ class ContentManager implements ContentManagerInterface
 
     protected function getTypeClass(?string $type = null): string
     {
+        return $this->getTypeConfig($type)['entity_class'];
+    }
+
+    protected function getTypeDefaultLayout(?string $type = null): string
+    {
+        return $this->getTypeConfig($type)['default_layout'];
+    }
+
+    protected function getTypeConfig(?string $type = null): array
+    {
         if (!$type) {
             throw new \Exception('type is required');
         }
 
-        $content = $this->cmsConfig->getContent($type, true);
-
-        return $content['entity_class'];
+        return $this->cmsConfig->getContent($type, true);
     }
 }

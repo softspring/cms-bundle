@@ -2,8 +2,6 @@
 
 namespace Softspring\CmsBundle\Model;
 
-use Softspring\CmsBundle\Entity\Embeddable\Seo;
-
 interface ContentVersionInterface
 {
     public function getId(): ?string;
@@ -19,4 +17,12 @@ interface ContentVersionInterface
     public function getData(): ?array;
 
     public function setData(?array $data): void;
+
+    public function getCompiledModules(): ?array;
+
+    public function setCompiledModules(?array $compiledModules): void;
+
+    public function getCompiled(): ?array;
+
+    public function setCompiled(?array $compiled): void;
 }

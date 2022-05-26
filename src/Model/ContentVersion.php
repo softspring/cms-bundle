@@ -2,8 +2,6 @@
 
 namespace Softspring\CmsBundle\Model;
 
-use Softspring\CmsBundle\Entity\Embeddable\Seo;
-
 abstract class ContentVersion implements ContentVersionInterface
 {
     protected ?ContentInterface $content = null;
@@ -14,7 +12,9 @@ abstract class ContentVersion implements ContentVersionInterface
 
     protected ?array $data = null;
 
-    // protected ?string $compiled = null;
+    protected ?array $compiledModules = null;
+
+    protected ?array $compiled = null;
 
     public function getContent(): ?ContentInterface
     {
@@ -54,5 +54,25 @@ abstract class ContentVersion implements ContentVersionInterface
     public function setData(?array $data): void
     {
         $this->data = $data;
+    }
+
+    public function getCompiledModules(): ?array
+    {
+        return $this->compiledModules;
+    }
+
+    public function setCompiledModules(?array $compiledModules): void
+    {
+        $this->compiledModules = $compiledModules;
+    }
+
+    public function getCompiled(): ?array
+    {
+        return $this->compiled;
+    }
+
+    public function setCompiled(?array $compiled): void
+    {
+        $this->compiled = $compiled;
     }
 }
