@@ -13,6 +13,8 @@ services:
         public: false
         bind:
             $em: '@sfs_cms.entity_manager'
+            $enabledLocales: '%kernel.enabled_locales%'
+            $defaultLocale: '%kernel.default_locale%'
 
     Softspring\CmsBundle\Form\Admin\Route\:
         resource: '../../../src/Form/Admin/Route/Route*'
@@ -50,13 +52,13 @@ services:
             $config:
                 entity_attribute: 'route'
                 list:
-                    is_granted: 'ROLE_SFS_CMS_ADMIN_ROUTES_LIST'
+#                    is_granted: 'ROLE_SFS_CMS_ADMIN_ROUTES_LIST'
                     initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_LIST_INITIALIZE
                     view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_LIST_VIEW
                     view: '%sfs_cms.admin.routes.list_view%'
                     view_content: '%sfs_cms.admin.routes.list_content_view%'
                 create:
-                    is_granted: 'ROLE_SFS_CMS_ADMIN_ROUTES_CREATE'
+#                    is_granted: 'ROLE_SFS_CMS_ADMIN_ROUTES_CREATE'
                     initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_CREATE_INITIALIZE
                     form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_CREATE_FORM_VALID
                     success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_CREATE_SUCCESS
@@ -65,7 +67,7 @@ services:
                     success_redirect_to: 'sfs_cms_admin_routes_list'
                     view: '%sfs_cms.admin.routes.create_view%'
                 update:
-                    is_granted: 'ROLE_SFS_CMS_ADMIN_ROUTES_UPDATE'
+#                    is_granted: 'ROLE_SFS_CMS_ADMIN_ROUTES_UPDATE'
                     param_converter_key: 'id'
                     initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_UPDATE_INITIALIZE
                     form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_UPDATE_FORM_VALID
@@ -75,7 +77,7 @@ services:
                     success_redirect_to: 'sfs_cms_admin_routes_list'
                     view: '%sfs_cms.admin.routes.update_view%'
                 delete:
-                    is_granted: 'ROLE_SFS_CMS_ADMIN_ROUTES_DELETE'
+#                    is_granted: 'ROLE_SFS_CMS_ADMIN_ROUTES_DELETE'
                     param_converter_key: 'id'
                     initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_DELETE_INITIALIZE
                     form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_DELETE_FORM_VALID
@@ -85,7 +87,7 @@ services:
                     success_redirect_to: 'sfs_cms_admin_routes_list'
                     view: '%sfs_cms.admin.routes.delete_view%'
                 read:
-                    is_granted: 'ROLE_SFS_CMS_ADMIN_ROUTES_DETAILS'
+#                    is_granted: 'ROLE_SFS_CMS_ADMIN_ROUTES_DETAILS'
                     param_converter_key: 'id'
                     initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_READ_INITIALIZE
                     view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_READ_VIEW

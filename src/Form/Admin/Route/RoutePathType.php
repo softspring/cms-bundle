@@ -15,10 +15,14 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class RoutePathType extends AbstractType
 {
     protected RoutePathManagerInterface $routePathManager;
+    protected string $defaultLocale;
+    protected array $enabledLocales;
 
-    public function __construct(RoutePathManagerInterface $routePathManager)
+    public function __construct(RoutePathManagerInterface $routePathManager, string $defaultLocale, array $enabledLocales)
     {
         $this->routePathManager = $routePathManager;
+        $this->defaultLocale = $defaultLocale;
+        $this->enabledLocales = $enabledLocales;
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -26,7 +30,14 @@ class RoutePathType extends AbstractType
         $resolver->setDefaults([
             'data_class' => RoutePathInterface::class,
             'empty_data' => $this->routePathManager->createEntity(),
+            'languages' => $this->enabledLocales,
+            'default_language' => $this->defaultLocale,
         ]);
+
+        $resolver->setRequired('languages');
+        $resolver->setAllowedTypes('languages', 'array');
+        $resolver->setRequired('default_language');
+        $resolver->setAllowedTypes('default_language', 'string');
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -41,11 +52,7 @@ class RoutePathType extends AbstractType
         $builder->add('cacheTtl', IntegerType::class);
         $builder->add('locale', ChoiceType::class, [
             'required' => false,
-            'choices' => [
-                // TODO GET FROM SITE
-                'es' => 'es',
-                'en' => 'en',
-            ],
+            'choices' => array_combine($options['languages'], $options['languages']),
         ]);
     }
 }
