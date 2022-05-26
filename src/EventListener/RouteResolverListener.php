@@ -81,6 +81,6 @@ class RouteResolverListener implements EventSubscriberInterface
 
     protected function searchRoutePath(string $path): ?RoutePathInterface
     {
-        return $this->em->getRepository(RoutePathInterface::class)->findOneByPath($path);
+        return $this->em->getRepository(RoutePathInterface::class)->findOneByPath(trim($path, '/'));
     }
 }
