@@ -88,6 +88,7 @@
                             <td>{{ loop.index0 == 0 ? 'publicada' : '' }}</td>
                             <td>
                                 <a href="{{ url('sfs_cms_admin_content_'~content~'_content_from_version', {'content':entity, 'prevVersion':version}) }}">editar</a>
+                                <a href="{{ url('sfs_cms_admin_content_'~content~'_preview_version', {'content':entity, 'version':version}) }}">previsualizar</a>
                             </td>
                         </tr>
                     {% endfor %}

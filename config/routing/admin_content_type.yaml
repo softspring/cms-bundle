@@ -14,6 +14,10 @@ preview:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController::preview
     path: /{content}/preview
 
+preview_version:
+    controller: Softspring\CmsBundle\Controller\Admin\ContentController::preview
+    path: /{content}/preview/{version}
+
 update:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController::update
     path: /{content}/update
@@ -33,3 +37,7 @@ content_from_version:
 preview_content:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController:previewContent
     path: /{content}/preview-content
+
+preview_content_version:
+    controller: Softspring\CmsBundle\Controller\Admin\ContentController:previewContent
+    path: /{content}/preview-content/{version}

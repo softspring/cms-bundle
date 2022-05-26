@@ -35,7 +35,7 @@
         </header>
         <main class="flex-fill d-flex flex-row align-items-stretch bg-light h-100">
             <div class="pt-4 h-100 w-100">
-                <iframe id="preview" src="{{ url('sfs_cms_admin_content_'~content~'_preview_content', {'content':entity, 'locale': app.request.query.get('locale', app.request.defaultLocale)}) }}" width="100%" height="100%"></iframe>
+                <iframe id="preview" src="{{ url('sfs_cms_admin_content_'~content~'_preview_content_version', {'content':entity, 'version':version, 'locale': app.request.query.get('locale', app.request.defaultLocale)}) }}" width="100%" height="100%"></iframe>
             </div>
         </main>
     </div>

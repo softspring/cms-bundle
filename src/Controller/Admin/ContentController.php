@@ -373,7 +373,7 @@ class ContentController extends AbstractController
         return $this->render($config['seo_view'], $viewData->getArrayCopy());
     }
 
-    public function preview(string $content, Request $request): Response
+    public function preview(string $content, Request $request, string $version = null): Response
     {
         $config = $this->getContentConfig($request);
         $config = $config['admin'] + ['_id' => $config['_id']];
@@ -398,6 +398,7 @@ class ContentController extends AbstractController
         $viewData = new \ArrayObject([
             'content' => $config['_id'],
             'entity' => $entity,
+            'version' => $version ?? $entity->getVersions()->first(),
 //            'deleteForm' => $deleteForm ? $deleteForm->createView() : null,
             'enabledLocales' => $this->enabledLocales,
         ]);
@@ -407,12 +408,16 @@ class ContentController extends AbstractController
         return $this->render($config['preview_view'], $viewData->getArrayCopy());
     }
 
-    public function previewContent(string $content, Request $request, ?WebDebugToolbarListener $debugToolbarListener): Response
+    public function previewContent(string $content, Request $request, string $version = null, ?WebDebugToolbarListener $debugToolbarListener = null): Response
     {
         $config = $this->getContentConfig($request);
         $config = $config['admin'] + ['_id' => $config['_id']];
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
+
+        if ($version) {
+            $version = $entity->getVersions()->filter(fn (ContentVersionInterface $versionI) => $versionI->getId() == $version)->first();
+        }
 
 //        if (!empty($config['is_granted'])) {
 //            $this->denyAccessUnlessGranted($config['is_granted'], $entity, sprintf('Access denied, user is not %s.', $config['is_granted']));
@@ -428,7 +433,7 @@ class ContentController extends AbstractController
 
         $request->attributes->set('_cms_preview', true);
 
-        return new Response($this->contentRender->render($entity->getVersions()->first()));
+        return new Response($this->contentRender->render($version ?? $entity->getVersions()->first()));
     }
 
     /**
