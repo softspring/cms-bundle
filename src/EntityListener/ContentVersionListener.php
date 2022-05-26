@@ -43,6 +43,12 @@ class ContentVersionListener
     protected function saveCompiled(ContentVersionInterface $contentVersion, LifecycleEventArgs $event)
     {
         $request = $this->requestStack->getCurrentRequest();
+
+        if (!$request) {
+            // if no request provided, probably is running a command, fixtures, etc.
+            return;
+        }
+
         $originalLocale = $request->getLocale();
 
         $compiled = [];
