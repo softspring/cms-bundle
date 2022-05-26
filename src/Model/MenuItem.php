@@ -11,7 +11,7 @@ abstract class MenuItem implements MenuItemInterface
 
     protected ?int $type = MenuItemInterface::TYPE_ROUTE;
 
-    protected ?string $text = null;
+    protected ?array $text = null;
 
     protected ?array $options = null;
 
@@ -49,12 +49,12 @@ abstract class MenuItem implements MenuItemInterface
         $this->type = $type;
     }
 
-    public function getText(): ?string
+    public function getText(): ?array
     {
         return $this->text;
     }
 
-    public function setText(?string $text): void
+    public function setText(?array $text): void
     {
         $this->text = $text;
     }

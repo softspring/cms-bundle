@@ -36,7 +36,7 @@ class MenuController extends AbstractController
     }
 
     /**
-     * @Security(expression="is_granted('ROLE_SFS_CMS_ADMIN_MENUS_CREATE', menuType)")
+     * @ Security(expression="is_granted('ROLE_SFS_CMS_ADMIN_MENUS_CREATE', menuType)")
      */
     public function create(string $menuType, Request $request): Response
     {
@@ -75,7 +75,7 @@ class MenuController extends AbstractController
     }
 
     /**
-     * @Security(expression="is_granted('ROLE_SFS_CMS_ADMIN_MENUS_UPDATE', menu)")
+     * @ Security(expression="is_granted('ROLE_SFS_CMS_ADMIN_MENUS_UPDATE', menu)")
      */
     public function update(MenuInterface $menu, Request $request): Response
     {

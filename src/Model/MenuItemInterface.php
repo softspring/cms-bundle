@@ -18,9 +18,9 @@ interface MenuItemInterface
 
     public function getType(): ?int;
 
-    public function setText(?string $text): void;
+    public function setText(?array $text): void;
 
-    public function getText(): ?string;
+    public function getText(): ?array;
 
     public function setRoute(?RouteInterface $route): void;
 

@@ -11,7 +11,7 @@
 
         <field name="type" column="item_type" type="smallint" nullable="false"/>
 
-        <field name="text" column="item_text" type="string" nullable="false"/>
+        <field name="text" column="item_text" type="json" nullable="false"/>
 
         <field name="options" column="options" type="json" nullable="true"/>
 
