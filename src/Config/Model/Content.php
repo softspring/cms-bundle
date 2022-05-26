@@ -31,6 +31,7 @@ class Content implements ConfigurationInterface
 //                ->scalarNode('render_template')->defaultValue("@content/{$this->contentName}/render.html.twig")->end()
 //                ->scalarNode('edit_template')->defaultValue("@content/{$this->contentName}/edit.html.twig")->end()
                 ->scalarNode('entity_class')->isRequired()->end()
+                ->scalarNode('default_layout')->defaultValue('default')->end()
 
                 ->arrayNode('containers')
                     ->defaultValue([])
@@ -60,7 +61,14 @@ class Content implements ConfigurationInterface
                 ->end()
 
                 ->arrayNode('seo')
-                    ->defaultValue([])
+                    ->defaultValue([
+                        'metaTitle' => ['type' => 'translatableText'],
+                        'metaDescription' => ['type' => 'translatableText'],
+                        'metaKeywords' => ['type' => 'translatableText'],
+                        'noIndex' => ['type' => 'checkbox', 'type_options' => ['required' => false ]],
+                        'noFollow' => ['type' => 'checkbox', 'type_options' => ['required' => false ]],
+                        'sitemap' => ['type' => 'checkbox', 'type_options' => ['required' => false ]],
+                    ])
                     ->useAttributeAsKey('key')
                     ->arrayPrototype()
                     ->children()
