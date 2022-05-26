@@ -65,9 +65,9 @@ class Content implements ConfigurationInterface
                         'metaTitle' => ['type' => 'translatableText'],
                         'metaDescription' => ['type' => 'translatableText'],
                         'metaKeywords' => ['type' => 'translatableText'],
-                        'noIndex' => ['type' => 'checkbox', 'type_options' => ['required' => false ]],
-                        'noFollow' => ['type' => 'checkbox', 'type_options' => ['required' => false ]],
-                        'sitemap' => ['type' => 'checkbox', 'type_options' => ['required' => false ]],
+                        'noIndex' => ['type' => 'checkbox', 'type_options' => ['required' => false]],
+                        'noFollow' => ['type' => 'checkbox', 'type_options' => ['required' => false]],
+                        'sitemap' => ['type' => 'checkbox', 'type_options' => ['required' => false]],
                     ])
                     ->useAttributeAsKey('key')
                     ->arrayPrototype()

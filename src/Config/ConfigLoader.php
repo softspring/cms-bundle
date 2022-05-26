@@ -152,7 +152,7 @@ class ConfigLoader
         $configurations = [];
 
         foreach ($this->collectionPaths as $collectionPath) {
-            $elementsPath = $this->container->getParameter('kernel.project_dir').'/'.trim($collectionPath,'/').'/'.$elementPath;
+            $elementsPath = $this->container->getParameter('kernel.project_dir').'/'.trim($collectionPath, '/').'/'.$elementPath;
             if (is_dir($elementsPath)) {
                 foreach ((new Finder())->in($elementsPath)->directories()->depth(0) as $elementFilePath) {
                     $elementName = $elementFilePath->getFilename();
