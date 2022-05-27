@@ -43,6 +43,12 @@ window.addEventListener('load', (event) => {
     function selectTranslatableElementsLanguage(language) {
         document.querySelectorAll('[data-lang]').forEach((el) => el.style.setProperty('display', 'none'));
         document.querySelectorAll('[data-lang='+language+']').forEach((el) => el.style.setProperty('display', ''));
+        document.querySelectorAll('[data-edit-content-hide-if-empty]:empty').forEach((htmlElement) => htmlElement.style.setProperty('display', 'none'));
+    }
+
+    function getSelectedLanguage() {
+        const contentEditionLanguageSelector = document.getElementById('contentEditionLanguageSelection');
+        return contentEditionLanguageSelector.value;
     }
 
     function filterCurrentTranslatableElementsLanguage() {
@@ -136,9 +142,19 @@ window.addEventListener('load', (event) => {
                 } else {
                     htmlTargetElement.innerHTML = event.target.value;
                 }
+
+                if (htmlTargetElement.dataset.editContentHideIfEmpty) {
+                    if (htmlTargetElement.innerHTML === '') {
+                        htmlTargetElement.style.setProperty('display', 'none');
+                    } else if (htmlTargetElement.matches('[data-lang='+getSelectedLanguage()+']')) {
+                        htmlTargetElement.style.setProperty('display', '');
+                    }
+                }
             });
         }
     });
+
+    document.querySelectorAll('[data-edit-content-hide-if-empty]:empty').forEach((htmlElement) => htmlElement.style.setProperty('display', 'none'));
 
     /**
      * Sets input value from html editable element
