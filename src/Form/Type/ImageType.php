@@ -8,6 +8,8 @@ use Softspring\ImageBundle\Model\ImageInterface;
 use Softspring\ImageBundle\Render\ImageRenderer;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -34,6 +36,7 @@ class ImageType extends AbstractType
             'em' => $this->em,
             'required' => false,
             'image_types' => [],
+            'image_attr' => [],
             'query_builder' => fn (EntityRepository $entityRepository) => $entityRepository->createQueryBuilder('i'),
             'choice_label' => function (ImageInterface $image) {
                 return $image->getName();
@@ -64,9 +67,9 @@ class ImageType extends AbstractType
 
                 foreach ($imageType as $mode => $version) {
                     if ('image' == $mode) {
-                        $attrs['data-image-preview-image'] = $this->imageRenderer->renderImage($image, $version);
+                        $attrs['data-image-preview-image'] = $this->imageRenderer->renderImage($image, $version, $options['image_attr']);
                     } elseif ('picture' == $mode) {
-                        $attrs['data-image-preview-picture'] = $this->imageRenderer->renderPicture($image, $version);
+                        $attrs['data-image-preview-picture'] = $this->imageRenderer->renderPicture($image, $version, $options['image_attr']);
                     } else {
                         throw new \Exception("Bad $mode mode for image_type. Only 'image' and 'picture' are allowed");
                     }
@@ -75,5 +78,10 @@ class ImageType extends AbstractType
                 return $attrs;
             };
         });
+    }
+
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        $view->vars['image_attr'] = $options['image_attr'];
     }
 }
