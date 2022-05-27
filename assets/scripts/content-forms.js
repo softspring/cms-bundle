@@ -130,7 +130,13 @@ window.addEventListener('load', (event) => {
 
         let htmlTargetElements = modulePreview.querySelectorAll("[data-edit-content-target='" + event.target.dataset.editContentInput + "']");
         if (htmlTargetElements.length) {
-            htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.innerHTML = event.target.value);
+            htmlTargetElements.forEach(function(htmlTargetElement) {
+                if (htmlTargetElement.dataset.editContentEscape) {
+                    htmlTargetElement.innerText = event.target.value;
+                } else {
+                    htmlTargetElement.innerHTML = event.target.value;
+                }
+            });
         }
     });
 
