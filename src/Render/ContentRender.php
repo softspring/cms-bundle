@@ -49,7 +49,7 @@ class ContentRender
 
         $containers = [];
         foreach ($layout['containers'] as $layoutContainerId => $layoutContainerConfig) {
-            $layoutContainer = $versionData ? $versionData[$layoutContainerId] : [];
+            $layoutContainer = $versionData ? $versionData[$layoutContainerId]??[] : [];
             $containers[$layoutContainerId] = '';
 
             foreach ($layoutContainer as $module) {
