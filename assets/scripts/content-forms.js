@@ -41,16 +41,20 @@ window.addEventListener('load', (event) => {
      * ****************************************************************************************************** */
 
     function selectTranslatableElementsLanguage(language) {
-        document.querySelectorAll('[data-lang='+language+']').forEach((el) => el.classList.remove('d-none'));
-        document.querySelectorAll('[data-lang]:not([data-lang='+language+'])').forEach((el) => el.classList.add('d-none'));
+        document.querySelectorAll('[data-lang]').forEach((el) => el.style.setProperty('display', 'none'));
+        document.querySelectorAll('[data-lang='+language+']').forEach((el) => el.style.setProperty('display', ''));
     }
 
-    const contentEditionLanguageSelector = document.getElementById('contentEditionLanguageSelection');
-    contentEditionLanguageSelector.addEventListener('change', function (event) {
-        selectTranslatableElementsLanguage(event.target.value);
-    });
+    function filterCurrentTranslatableElementsLanguage() {
+        const contentEditionLanguageSelector = document.getElementById('contentEditionLanguageSelection');
+        contentEditionLanguageSelector.addEventListener('change', function (event) {
+            selectTranslatableElementsLanguage(event.target.value);
+        });
 
-    selectTranslatableElementsLanguage(contentEditionLanguageSelector.value);
+        selectTranslatableElementsLanguage(contentEditionLanguageSelector.value);
+    }
+
+    filterCurrentTranslatableElementsLanguage();
 
     /* ****************************************************************************************************** *
      * INLINE HTML EDITION
@@ -68,9 +72,9 @@ window.addEventListener('load', (event) => {
 
         let modulePreview = event.target.closest('.cms-module-edit').querySelector('.module-preview');
 
-        let htmlTargetElement = modulePreview.querySelector("[data-edit-id-target='" + event.target.dataset.editIdInput + "']");
-        if (htmlTargetElement) {
-            htmlTargetElement.id = event.target.value;
+        let htmlTargetElements = modulePreview.querySelectorAll("[data-edit-id-target='" + event.target.dataset.editIdInput + "']");
+        if (htmlTargetElements.length) {
+            htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.id = event.target.value);
         }
     });
 
@@ -88,9 +92,9 @@ window.addEventListener('load', (event) => {
 
         let modulePreview = event.target.closest('.cms-module-edit').querySelector('.module-preview');
 
-        let htmlTargetElement = modulePreview.querySelector("[data-edit-class-target='" + event.target.dataset.editClassInput + "']");
-        if (htmlTargetElement) {
-            htmlTargetElement.className = htmlTargetElement.dataset.editClassDefault + ' ' + event.target.value;
+        let htmlTargetElements = modulePreview.querySelectorAll("[data-edit-class-target='" + event.target.dataset.editClassInput + "']");
+        if (htmlTargetElements.length) {
+            htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.className = htmlTargetElement.dataset.editClassDefault + ' ' + event.target.value);
         }
     });
 
@@ -106,10 +110,9 @@ window.addEventListener('load', (event) => {
 
         let modulePreview = event.target.closest('.cms-module-edit').querySelector('.module-preview');
 
-        let htmlTargetElement = modulePreview.querySelector("[data-edit-bgcolor-target='" + event.target.dataset.editBgcolorInput + "']");
-        if (htmlTargetElement) {
-            htmlTargetElement.style.backgroundColor = event.target.value;
-            // htmlTargetElement.style.setProperty('background-color', event.target.value, 'important');
+        let htmlTargetElements = modulePreview.querySelectorAll("[data-edit-bgcolor-target='" + event.target.dataset.editBgcolorInput + "']");
+        if (htmlTargetElements.length) {
+            htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.style.backgroundColor = event.target.value);
         }
     });
 
@@ -125,9 +128,9 @@ window.addEventListener('load', (event) => {
 
         let modulePreview = event.target.closest('.cms-module-edit').querySelector('.module-preview');
 
-        let htmlTargetElement = modulePreview.querySelector("[data-edit-content-target='" + event.target.dataset.editContentInput + "']");
-        if (htmlTargetElement) {
-            htmlTargetElement.innerHTML = event.target.value;
+        let htmlTargetElements = modulePreview.querySelectorAll("[data-edit-content-target='" + event.target.dataset.editContentInput + "']");
+        if (htmlTargetElements.length) {
+            htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.innerHTML = event.target.value);
         }
     });
 
@@ -143,9 +146,9 @@ window.addEventListener('load', (event) => {
 
         let moduleForm = event.target.closest('.cms-module-edit').querySelector('.cms-module-form');
 
-        let htmlTargetElement = moduleForm.querySelector("[data-edit-content-input='" + event.target.dataset.editContentTarget + "']");
-        if (htmlTargetElement) {
-            htmlTargetElement.value = event.target.innerHTML;
+        let htmlTargetElements = moduleForm.querySelectorAll("[data-edit-content-input='" + event.target.dataset.editContentTarget + "']");
+        if (htmlTargetElements.length) {
+            htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.value = event.target.innerHTML);
         }
     });
 
@@ -161,14 +164,14 @@ window.addEventListener('load', (event) => {
 
         let moduleForm = event.target.closest('.cms-module-edit').querySelector('.module-preview');
 
-        let htmlTargetElement = moduleForm.querySelector("[data-image-preview-target='" + event.target.dataset.imagePreviewInput + "']");
-        if (htmlTargetElement) {
+        let htmlTargetElements = moduleForm.querySelectorAll("[data-image-preview-target='" + event.target.dataset.imagePreviewInput + "']");
+        if (htmlTargetElements.length) {
             if (event.target.options[event.target.selectedIndex].dataset.imagePreviewPicture) {
-                htmlTargetElement.innerHTML = event.target.options[event.target.selectedIndex].dataset.imagePreviewPicture;
+                htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.innerHTML = event.target.options[event.target.selectedIndex].dataset.imagePreviewPicture);
             } else if (event.target.options[event.target.selectedIndex].dataset.imagePreviewImage) {
-                htmlTargetElement.innerHTML = event.target.options[event.target.selectedIndex].dataset.imagePreviewImage;
+                htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.innerHTML = event.target.options[event.target.selectedIndex].dataset.imagePreviewImage);
             } else {
-                htmlTargetElement.innerHTML = '';
+                htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.innerHTML = '');
             }
         }
     });
@@ -195,6 +198,7 @@ window.addEventListener('load', (event) => {
         if (module) {
             moduleFocus(module);
         }
+        filterCurrentTranslatableElementsLanguage();
     });
 
     document.addEventListener("removed_polymorphic_node", function (event) { // (1)
