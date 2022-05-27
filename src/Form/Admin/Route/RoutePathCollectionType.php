@@ -25,7 +25,7 @@ class RoutePathCollectionType extends AbstractType
         $resolver->setDefaults([
             'entry_type' => RoutePathType::class,
             'required' => false,
-            'constraints' => [new Count(['min' => 1]), new Valid() ],
+            'constraints' => [new Count(['min' => 1]), new Valid()],
             'allow_add' => true,
             'allow_delete' => true,
             'by_reference' => false,

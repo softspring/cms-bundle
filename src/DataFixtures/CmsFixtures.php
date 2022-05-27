@@ -16,8 +16,11 @@ use Softspring\CmsBundle\Model\MenuInterface;
 use Softspring\CmsBundle\Model\MenuItemInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Model\RoutePathInterface;
+use Softspring\ImageBundle\Entity\Image;
+use Softspring\ImageBundle\Entity\ImageVersion;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Yaml\Yaml;
 
@@ -44,6 +47,7 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
 
     public function load(ObjectManager $manager)
     {
+        $this->loadImages($manager);
         $this->preloadRoutes($manager);
         $this->loadContents($manager);
         $this->loadMenus($manager);
@@ -157,6 +161,25 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
             }
 
             $manager->persist($route);
+        }
+    }
+
+    public function loadImages(ObjectManager $manager)
+    {
+        foreach ((new Finder())->in("$this->fixturesPath/images")->files()->name('*.json') as $imageConfig) {
+            $data = json_decode(file_get_contents($imageConfig->getRealPath()), true);
+
+            $image = new Image();
+            $image->setType($data['type']);
+            $image->setName($data['name']);
+            $image->setDescription($data['description']);
+            $image->addVersion($version = new ImageVersion());
+            $version->setVersion('_original');
+            $version->setUpload(new File($data['file']));
+
+            $this->addReference("image___{$data['id']}", $image);
+
+            $manager->persist($image);
         }
     }
 

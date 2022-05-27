@@ -63,9 +63,9 @@ class ImageType extends AbstractType
                 $attrs = [];
 
                 foreach ($imageType as $mode => $version) {
-                    if ($mode == 'image') {
+                    if ('image' == $mode) {
                         $attrs['data-image-preview-image'] = $this->imageRenderer->renderImage($image, $version);
-                    } elseif ($mode == 'picture') {
+                    } elseif ('picture' == $mode) {
                         $attrs['data-image-preview-picture'] = $this->imageRenderer->renderPicture($image, $version);
                     } else {
                         throw new \Exception("Bad $mode mode for image_type. Only 'image' and 'picture' are allowed");

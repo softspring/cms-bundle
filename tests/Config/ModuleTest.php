@@ -43,7 +43,7 @@ class ModuleTest extends TestCase
             'module' => [
                 'revision' => 2,
                 'render_template' => 'other_render_file.html.twig',
-            ]
+            ],
         ]);
 
         $this->assertEquals(2, $config['revision']);

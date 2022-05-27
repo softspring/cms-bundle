@@ -416,16 +416,16 @@ class ContentController extends AbstractController
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
-        if ($version) {
-            $version = $entity->getVersions()->filter(fn (ContentVersionInterface $versionI) => $versionI->getId() == $version)->first();
-        }
-
 //        if (!empty($config['is_granted'])) {
 //            $this->denyAccessUnlessGranted($config['is_granted'], $entity, sprintf('Access denied, user is not %s.', $config['is_granted']));
 //        }
 
         if (!$entity) {
             throw $this->createNotFoundException('Entity not found');
+        }
+
+        if ($version) {
+            $version = $entity->getVersions()->filter(fn (ContentVersionInterface $versionI) => $versionI->getId() == $version)->first();
         }
 
         $debugToolbarListener && $debugToolbarListener->setMode(WebDebugToolbarListener::DISABLED);

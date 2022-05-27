@@ -138,8 +138,8 @@ class ContentVersionListener
         if (is_array($value)) {
             if (isset($value['_entity_class'])) {
                 $repo = $objectManager->getRepository($value['_entity_class']);
-                return $repo->findOneBy($value['_entity_id']);
 
+                return $repo->findOneBy($value['_entity_id']);
             } else {
                 foreach ($value as $key => $value2) {
                     $value[$key] = $this->untransformExtraDataValue($value2, $objectManager);

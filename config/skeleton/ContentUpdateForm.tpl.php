@@ -1,20 +1,20 @@
-<?= "<?php\n" ?>
+<?php echo "<?php\n"; ?>
 
-namespace <?= $namespace ?>;
+namespace <?php echo $namespace; ?>;
 
-use <?= $entity_full_class ?>;
+use <?php echo $entity_full_class; ?>;
 use Softspring\CmsBundle\Form\Admin\Content\ContentUpdateForm;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class <?= $class_name ?> extends ContentUpdateForm
+class <?php echo $class_name; ?> extends ContentUpdateForm
 {
     public function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'data_class' => <?= $entity_class ?>::class,
+            'data_class' => <?php echo $entity_class; ?>::class,
         ]);
     }
 

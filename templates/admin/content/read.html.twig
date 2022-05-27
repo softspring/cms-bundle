@@ -89,6 +89,7 @@
                             <td>
                                 <a href="{{ url('sfs_cms_admin_content_'~content~'_content_from_version', {'content':entity, 'prevVersion':version}) }}">editar</a>
                                 <a href="{{ url('sfs_cms_admin_content_'~content~'_preview_version', {'content':entity, 'version':version}) }}">previsualizar</a>
+                                <a href="{{ url('sfs_cms_admin_content_'~content~'_save_fixtures_version', {'content':entity, 'version':version}) }}">dump</a>
                             </td>
                         </tr>
                     {% endfor %}

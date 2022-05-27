@@ -48,10 +48,10 @@ class LayoutTest extends TestCase
                     'sidebar' => [],
                     'content' => [
                         'required' => true,
-                        'allowed_modules' => ['html','image','landscape'],
+                        'allowed_modules' => ['html', 'image', 'landscape'],
                     ],
-                ]
-            ]
+                ],
+            ],
         ]);
 
         $this->assertEquals(2, $config['revision']);
@@ -65,6 +65,6 @@ class LayoutTest extends TestCase
 
         $this->assertArrayHasKey('content', $config['containers']);
         $this->assertTrue($config['containers']['content']['required']);
-        $this->assertEquals(['html','image','landscape'], $config['containers']['content']['allowed_modules']);
+        $this->assertEquals(['html', 'image', 'landscape'], $config['containers']['content']['allowed_modules']);
     }
 }
