@@ -143,7 +143,8 @@ window.addEventListener('load', (event) => {
      */
     document.addEventListener('input', function (event) {
         if (!event.target || !event.target.hasAttribute('data-edit-content-target')) return;
-
+console.log('entrooo');
+console.log("[data-edit-content-input='" + event.target.dataset.editContentTarget + "']");
         let moduleForm = event.target.closest('.cms-module-edit').querySelector('.cms-module-form');
 
         let htmlTargetElements = moduleForm.querySelectorAll("[data-edit-content-input='" + event.target.dataset.editContentTarget + "']");
