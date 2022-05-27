@@ -78,6 +78,7 @@ class FixturesDump
             $contentType => [
                 'name' => $content->getName(),
                 'extra' => $content->getExtraData(),
+                'seo' => $content->getSeo(),
                 'versions' => [
                     [
                         'layout' => $contentVersion->getLayout(),

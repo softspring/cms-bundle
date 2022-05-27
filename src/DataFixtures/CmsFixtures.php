@@ -64,7 +64,7 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
             $key = key($data);
             $contentConfig = current($data);
 
-            $content = $this->createContent($key, $contentConfig['name'], null, $contentConfig['extra']);
+            $content = $this->createContent($key, $contentConfig['name'], null, [], $contentConfig['extra'] ?? [], $contentConfig['seo']);
 
             $content->getVersions()->first()->setCreatedAt(new \DateTime('-1 minute'));
 
@@ -81,7 +81,7 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
             foreach ($contentConfig['versions'] as $version) {
                 $data = $version['data'];
                 $this->replaceModuleFixtureReferences($data);
-                $this->createVersion($content, $version['layout'], $data);
+                $this->createVersion($content, $version['layout'], $data ?? []);
             }
 
             $this->addReference("content___$id", $content);
@@ -92,6 +92,10 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
 
     protected function replaceModuleFixtureReferences(&$data)
     {
+        if (!is_array($data)) {
+            return;
+        }
+
         foreach ($data as $key => &$value) {
             if (is_array($value)) {
                 if (isset($value['_reference'])) {
@@ -183,16 +187,17 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
         }
     }
 
-    protected function createPage(string $name, string $layout = null, array $data = null, array $extraData = []): ContentInterface
+    protected function createPage(string $name, string $layout = null, array $data = null, array $extraData = [], ?array $seo = null): ContentInterface
     {
-        return $this->createContent('page', $name, $layout, $data, $extraData);
+        return $this->createContent('page', $name, $layout, $data, $extraData, $seo);
     }
 
-    protected function createContent(string $contentType, string $name, string $layout = null, array $data = null, array $extraData = []): ContentInterface
+    protected function createContent(string $contentType, string $name, string $layout = null, array $data = null, array $extraData = [], ?array $seo = null): ContentInterface
     {
         $content = $this->contentManager->createEntity($contentType);
         $content->setName($name);
         $content->setExtraData($extraData);
+        $content->setSeo($seo);
 
         if ($layout && $data) {
             $this->createVersion($content, $layout, $data);
