@@ -143,9 +143,9 @@
                 </div>
 
                 <div class="cms-module-buttons">
-                    <button type="button" id="{{ id }}_remove_node_button" class="polymorphic-remove-node-button">x</button>
-                    <button type="button" id="{{ id }}_down_node_button" class="polymorphic-down-node-button">v</button>
-                    <button type="button" id="{{ id }}_up_node_button" class="polymorphic-up-node-button">^</button>
+                    <button type="button" id="{{ id }}_remove_node_button" class="btn-close polymorphic-remove-node-button"><span class="sr-only">x</span></button>
+                    <button type="button" id="{{ id }}_down_node_button" class=""btn-close polymorphic-down-node-button">v</button>
+                    <button type="button" id="{{ id }}_up_node_button" class=""btn-close polymorphic-up-node-button">^</button>
                 </div>
             </div>
             <div class="cms-module-body">
@@ -164,21 +164,20 @@
         {% endif %}
 
         <div class="cms-module-form">
-            <div class="container">
-                <div class="row">
-                    <span class="order-polymorphic-node d-inline-block" id="{{ id }}_order_index">{{ form.vars.name }}</span>
-                    <span class="d-inline-block"># {{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}</span>
-                    {# form_name #}
-                    <button type="button" class="btn-close" data-cms-module-form-close="" aria-label="Close"></button>
+            <div class="d-flex justify-content-between border-bottom bg-gray-200 p-3">
+                <div>
+                    <span class="order-polymorphic-node pe-3" id="{{ id }}_order_index">{{ form.vars.name }}</span>
+                    <strong># {{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}</strong>
                 </div>
-
-                <div class="row">
+                {# form_name #}
+                <button type="button" class="btn-close" data-cms-module-form-close="" aria-label="Close"></button>
+            </div>
+            <div class="container">
                 {% if form_template|default(false) %}
                     {% include form_template %}
                 {% else %}
                     {{ form_widget(form) }}
                 {% endif %}
-                </div>
             </div>
         </div>
     </div>
