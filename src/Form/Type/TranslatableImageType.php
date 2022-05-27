@@ -28,6 +28,7 @@ class TranslatableImageType extends AbstractType
             'required' => false,
             'languages' => $this->enabledLocales,
             'default_language' => $this->defaultLocale,
+            'children_attr' => [],
             'image_types' => [],
         ]);
 
@@ -41,9 +42,11 @@ class TranslatableImageType extends AbstractType
     {
         foreach ($options['languages'] as $lang) {
             $builder->add($lang, ImageType::class, [
-                'required' => $lang == $options['default_language'],
+                'required' => false, // $lang == $options['default_language'],
                 'label' => $lang,
                 'image_types' => $options['image_types'],
+                'attr' => $options['children_attr'],
+                'block_prefix' => 'translatable_image_element',
             ]);
         }
     }

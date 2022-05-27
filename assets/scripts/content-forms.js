@@ -149,6 +149,30 @@ window.addEventListener('load', (event) => {
         }
     });
 
+    /**
+     * Shows an image preview
+     *
+     * The preview target element must have the "data-image-preview-target" attribute
+     * The select option must have the "data-image-preview-input"
+     * Both data attributes must have the same value (as identificator)
+     */
+    document.addEventListener('change', function (event) {
+        if (!event.target || !event.target.hasAttribute('data-image-preview-input')) return;
+
+        let moduleForm = event.target.closest('.cms-module-edit').querySelector('.module-preview');
+
+        let htmlTargetElement = moduleForm.querySelector("[data-image-preview-target='" + event.target.dataset.imagePreviewInput + "']");
+        if (htmlTargetElement) {
+            if (event.target.options[event.target.selectedIndex].dataset.imagePreviewPicture) {
+                htmlTargetElement.innerHTML = event.target.options[event.target.selectedIndex].dataset.imagePreviewPicture;
+            } else if (event.target.options[event.target.selectedIndex].dataset.imagePreviewImage) {
+                htmlTargetElement.innerHTML = event.target.options[event.target.selectedIndex].dataset.imagePreviewImage;
+            } else {
+                htmlTargetElement.innerHTML = '';
+            }
+        }
+    });
+
     /* ****************************************************************************************************** *
      * CONFIGURE CUSTOM MODULES
      * ****************************************************************************************************** */
@@ -163,6 +187,13 @@ window.addEventListener('load', (event) => {
                     plugins: '',
                 });
             }
+        }
+    });
+
+    document.addEventListener("add_polymorphic_node", function (event) { // (1)
+        var module = event.target.querySelector('.cms-module');
+        if (module) {
+            moduleFocus(module);
         }
     });
 

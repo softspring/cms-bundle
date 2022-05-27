@@ -41,6 +41,13 @@
     {% endif %}
 {% endblock translatable_image_widget %}
 
+{% block translatable_image_element_widget %}
+    {% if attr['data-image-preview-input']|default(false) %}
+        {% set attr = attr|merge({'data-image-preview-input': attr['data-image-preview-input']~'.'~form.vars.label|lower}) -%}
+    {% endif %}
+    {{ form_widget(form, {'attr':attr}) }}
+{% endblock %}
+
 {% block html_class_widget %}
     <div class="input-group">
         <div class="input-group-prepend">

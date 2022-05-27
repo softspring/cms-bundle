@@ -124,6 +124,10 @@ class ContentVersionListener
                 ];
             } catch (MappingException $e) {
             }
+        } elseif (is_array($value)) {
+            foreach ($value as $key => $value2) {
+                $value[$key] = $this->transformExtraDataValue($value2, $objectManager);
+            }
         }
 
         return $value;
@@ -131,10 +135,16 @@ class ContentVersionListener
 
     protected function untransformExtraDataValue($value, ObjectManager $objectManager)
     {
-        if (is_array($value) && isset($value['_entity_class'])) {
-            $repo = $objectManager->getRepository($value['_entity_class']);
+        if (is_array($value)) {
+            if (isset($value['_entity_class'])) {
+                $repo = $objectManager->getRepository($value['_entity_class']);
+                return $repo->findOneBy($value['_entity_id']);
 
-            return $repo->findOneBy($value['_entity_id']);
+            } else {
+                foreach ($value as $key => $value2) {
+                    $value[$key] = $this->untransformExtraDataValue($value2, $objectManager);
+                }
+            }
         }
 
         return $value;
