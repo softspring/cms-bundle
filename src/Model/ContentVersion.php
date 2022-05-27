@@ -82,4 +82,9 @@ abstract class ContentVersion implements ContentVersionInterface
     {
         $this->compiled = $compiled;
     }
+
+    public function isPublished(): bool
+    {
+        return $this->getContent()->getPublishedVersion() == $this;
+    }
 }

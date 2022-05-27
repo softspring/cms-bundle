@@ -27,6 +27,10 @@
             </order-by>
         </one-to-many>
 
+        <many-to-one field="publishedVersion" target-entity="Softspring\CmsBundle\Model\ContentVersionInterface">
+            <join-column name="published_version_id" on-delete="SET NULL"/>
+        </many-to-one>
+
         <one-to-many field="routes" target-entity="Softspring\CmsBundle\Model\RouteInterface" mapped-by="content">
             <cascade>
                 <cascade-persist/>

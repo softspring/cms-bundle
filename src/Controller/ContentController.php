@@ -25,7 +25,12 @@ class ContentController extends AbstractController
     {
         $content = $routePath->getRoute()->getContent();
         /** @var ContentVersionInterface $publishedVersion */
-        $publishedVersion = $content->getVersions()->first();
+        $publishedVersion = $content->getPublishedVersion();
+
+        if (!$publishedVersion) {
+            return new Response('', Response::HTTP_NOT_FOUND);
+        }
+
         $pageContent = $publishedVersion->getCompiled()[$request->getLocale()] ?? $this->contentRender->render($publishedVersion);
 
         // create response

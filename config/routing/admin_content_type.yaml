@@ -41,3 +41,7 @@ preview_content:
 preview_content_version:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController:previewContent
     path: /{content}/preview-content/{version}
+
+publish_version:
+    controller: Softspring\CmsBundle\Controller\Admin\ContentController:publishVersion
+    path: /{content}/publish-version/{version}

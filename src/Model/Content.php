@@ -23,6 +23,8 @@ abstract class Content implements ContentInterface
 
     protected ?array $seo = null;
 
+    protected ?ContentVersionInterface $publishedVersion = null;
+
     public function __construct()
     {
         $this->versions = new ArrayCollection();
@@ -103,5 +105,15 @@ abstract class Content implements ContentInterface
     public function setSeo(?array $seo): void
     {
         $this->seo = $seo;
+    }
+
+    public function getPublishedVersion(): ?ContentVersionInterface
+    {
+        return $this->publishedVersion;
+    }
+
+    public function setPublishedVersion(?ContentVersionInterface $publishedVersion): void
+    {
+        $this->publishedVersion = $publishedVersion;
     }
 }

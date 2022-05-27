@@ -25,4 +25,6 @@ interface ContentVersionInterface
     public function getCompiled(): ?array;
 
     public function setCompiled(?array $compiled): void;
+
+    public function isPublished(): bool;
 }

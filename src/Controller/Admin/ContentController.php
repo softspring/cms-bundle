@@ -409,6 +409,31 @@ class ContentController extends AbstractController
         return $this->render($config['preview_view'], $viewData->getArrayCopy());
     }
 
+    public function publishVersion(string $content, Request $request, string $version, ?WebDebugToolbarListener $debugToolbarListener = null): Response
+    {
+        $config = $this->getContentConfig($request);
+        $config = $config['admin'] + ['_id' => $config['_id']];
+
+        /** @var ContentInterface $entity */
+        $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Entity not found');
+        }
+
+        if ($version) {
+            $version = $entity->getVersions()->filter(fn (ContentVersionInterface $versionI) => $versionI->getId() == $version)->first();
+        }
+
+        if ($version) {
+            // TODO call to compile methods (usefull if republishing)
+            $entity->setPublishedVersion($version);
+            $this->contentManager->saveEntity($entity);
+        }
+
+        return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_details", ['content' => $entity]);
+    }
+
     public function previewContent(string $content, Request $request, string $version = null, ?WebDebugToolbarListener $debugToolbarListener = null): Response
     {
         $config = $this->getContentConfig($request);

@@ -37,4 +37,8 @@ interface ContentInterface
     public function getSeo(): ?array;
 
     public function setSeo(?array $seo): void;
+
+    public function getPublishedVersion(): ?ContentVersionInterface;
+
+    public function setPublishedVersion(?ContentVersionInterface $publishedVersion): void;
 }

@@ -85,10 +85,15 @@
                         <tr>
                             <td>{{ version.id }}</td>
                             <td>{{ version.createdAt ? version.createdAt|date('H:i:s d-m-Y') : '' }}</td>
-                            <td>{{ loop.index0 == 0 ? 'publicada' : '' }}</td>
+{#                            <td>{{ loop.index0 == 0 ? 'publicada' : '' }}</td>#}
+                            <td>{{ version.published ? 'publicada' : '' }}</td>
                             <td>
                                 <a href="{{ url('sfs_cms_admin_content_'~content~'_content_from_version', {'content':entity, 'prevVersion':version}) }}">editar</a>
                                 <a href="{{ url('sfs_cms_admin_content_'~content~'_preview_version', {'content':entity, 'version':version}) }}">previsualizar</a>
+
+                                {% if not version.published %}
+                                    <a href="{{ url('sfs_cms_admin_content_'~content~'_publish_version', {'content':entity, 'version':version}) }}">publicar versión</a>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}
