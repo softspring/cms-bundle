@@ -81,7 +81,11 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
             foreach ($contentConfig['versions'] as $version) {
                 $data = $version['data'];
                 $this->replaceModuleFixtureReferences($data);
-                $this->createVersion($content, $version['layout'], $data ?? []);
+                $version = $this->createVersion($content, $version['layout'], $data ?? []);
+            }
+
+            if (isset($version) && $version instanceof ContentVersionInterface) {
+                $content->setPublishedVersion($version);
             }
 
             $this->addReference("content___$id", $content);
@@ -200,7 +204,8 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
         $content->setSeo($seo);
 
         if ($layout && $data) {
-            $this->createVersion($content, $layout, $data);
+            $version = $this->createVersion($content, $layout, $data);
+            $content->setPublishedVersion($version);
         }
 
         return $content;

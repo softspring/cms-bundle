@@ -40,7 +40,7 @@ class DumpFixturesCommand extends Command
         foreach ($this->cmsConfig->getContents() as $contentId => $content) {
             /** @var ContentInterface $content */
             foreach ($this->em->getRepository($content['entity_class'])->findAll() as $content) {
-                $dumpFile = FixturesDump::dumpContent($content, $content->getVersions()->first(), $contentId);
+                $dumpFile = FixturesDump::dumpContent($content, $content->getVersions()->first() ?? null, $contentId);
 
                 $output->writeln(sprintf('Dumped "%s" %s content to %s', $content->getName(), $contentId, $dumpFile));
             }

@@ -142,6 +142,7 @@ class FixturesDump
             $imageFileName = '/srv/cms/fixtures/images/'.$data->getId().[
                 'image/jpeg' => '.jpeg',
                 'image/png' => '.png',
+                'image/webp' => '.webp',
             ][$originalVersion->getFileMimeType()];
 
             $storageClient = new StorageClient();
