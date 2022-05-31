@@ -48,7 +48,7 @@ class BlockController extends AbstractController
         }
 
         if ($config['singleton'] && $this->blockManager->getRepository()->count(['type' => $blockType]) > 0) {
-            $this->addFlash('warning', 'Ya hay una instancia de este menú.');
+            $this->addFlash('warning', 'Ya hay una instancia de este bloque.');
 
             return $this->redirectToRoute('sfs_cms_admin_blocks_list');
         }
@@ -61,7 +61,7 @@ class BlockController extends AbstractController
             if ($form->isValid()) {
                 $this->blockManager->saveEntity($entity);
 
-                $this->addFlash('success', 'El menú se ha creado correctamente. '.(false !== $config['cache_ttl'] ? " Por cuestiones de rendimiento, el menú está cacheado durante {$config['cache_ttl']} segundos, por lo que puede que tardes en visualizar los cambios." : ''));
+                $this->addFlash('success', 'El bloque se ha creado correctamente. '.(false !== $config['cache_ttl'] ? " Por cuestiones de rendimiento, el bloque está cacheado durante {$config['cache_ttl']} segundos, por lo que puede que tardes en visualizar los cambios." : ''));
 
                 return $this->redirectToRoute('sfs_cms_admin_blocks_list');
             }
@@ -88,7 +88,7 @@ class BlockController extends AbstractController
             if ($form->isValid()) {
                 $this->blockManager->saveEntity($block);
 
-                $this->addFlash('success', 'El menú se ha actualizado. '.(false !== $config['cache_ttl'] ? " Por cuestiones de rendimiento, el menú está cacheado durante {$config['cache_ttl']} segundos, por lo que puede que tardes en visualizar los cambios." : ''));
+                $this->addFlash('success', 'El bloque se ha actualizado. '.(false !== $config['cache_ttl'] ? " Por cuestiones de rendimiento, el bloque está cacheado durante {$config['cache_ttl']} segundos, por lo que puede que tardes en visualizar los cambios." : ''));
 
                 return $this->redirectToRoute('sfs_cms_admin_blocks_list');
             }

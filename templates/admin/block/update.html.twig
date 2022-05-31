@@ -2,12 +2,15 @@
 {% extends '@SfsCms/admin_layout.html.twig' %}
 {% block title %}{{ 'admin_blocks.update.meta.title'|trans }}{% endblock %}
 
-{% form_theme form '@SfsPolymorphicFormType/polymorphic-form-theme.html.twig' '@SfsCms/cms_form_theme.html.twig' %}
+{% form_theme form '@SfsPolymorphicFormType/polymorphic-form-theme.html.twig'
+    '@SfsCms/cms_form_theme.html.twig'
+    '@SfsImage/image_form_theme.html.twig'
+%}
 
 {% block breadcrums_content %}
     {{ parent() }}
     <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_blocks_list') }}">{{ 'admin_blocks.list.breadcrumb'|trans }}</a></li>
-    <li class="breadcrumb-item active" aria-current="content">{{ 'admin_blocks.update.breadcrumb'|trans({'%name%': block.name|default(block.id) }) }}</li>
+    <li class="breadcrumb-item active" aria-current="content">{{ 'admin_blocks.update.breadcrumb'|trans }}</li>
 {% endblock breadcrums_content %}
 
 {% block content %}
@@ -15,29 +18,14 @@
 
     <div class="container-fluid bg-white p-4">
         {{ form_start(form) }}
-        <div class="row">
-            <div class="col-12">
-                {{ form_row(form.name) }}
-            </div>
-            <div class="col-12 col-md-6">
-                {{ form_row(form.data.id) }}
-            </div>
-            <div class="col-12 col-md-6">
-                {{ form_row(form.data.class) }}
-            </div>
-            <div class="col-12">
-                {{ form_row(form.data.title) }}
-            </div>
-            <div class="col-12">
-                {{ form_row(form.data.image) }}
-            </div>
-        </div>
-            {{ form_rest(form) }}
+        {{ form_rest(form) }}
 
-            <div class="d-flex justify-content-end align-items-center">
-                <a href="{{ url('sfs_cms_admin_blocks_list') }}" class="btn btn-outline-secondary">{{ 'admin_blocks.update.actions.cancel.button'|trans }}</a>
-                <button type="submit" class="btn btn-primary ms-3">{{ 'admin_blocks.update.actions.update.button'|trans }}</button>
-            </div>
+        <div class="d-flex justify-content-end align-items-center">
+            <a href="{{ url('sfs_cms_admin_blocks_list') }}" class="btn btn-outline-secondary">{{ 'admin_blocks.update.actions.cancel.button'|trans }}</a>
+            <button type="submit" class="btn btn-primary ms-3">{{ 'admin_blocks.update.actions.update.button'|trans }}</button>
+        </div>
         {{ form_end(form) }}
     </div>
+
+    {% include '@SfsImage/image_type_modal.html.twig' %}
 {% endblock content %}

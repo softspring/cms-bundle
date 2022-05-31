@@ -26,7 +26,12 @@ window.addEventListener('load', (event) => {
     // on module focus get focus
     document.addEventListener('click', function (event) {
         // prevent focus on close button
-        if (event.target && event.target.hasAttribute('data-cms-module-form-close')) return;
+        if (event.target && (event.target.hasAttribute('data-cms-module-form-close') || event.target.matches('.polymorphic-remove-node-button'))) {
+            if (event.target.matches('.polymorphic-remove-node-button')) {
+                allLostFocus();
+            }
+            return;
+        }
 
         for (i = 0; i < event.composedPath().length; i++) {
             if (event.composedPath()[i] instanceof Element && event.composedPath()[i].matches('.cms-module')) {

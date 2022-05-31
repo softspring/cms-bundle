@@ -47,6 +47,7 @@ class ContentCreateForm extends AbstractType implements ContentCreateFormInterfa
             'allow_delete' => false,
             'entry_options' => [
                 'content_relative' => true,
+                'translation_domain' => 'sfs_cms_contents',
                 'label_format' => "admin_{$options['content']['_id']}.form.routes.%name%.label",
             ],
         ]);

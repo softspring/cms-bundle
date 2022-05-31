@@ -5,6 +5,7 @@ namespace Softspring\CmsBundle\Command;
 use Doctrine\ORM\EntityManagerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\DumpFixtures\CmsFixtures;
+use Softspring\CmsBundle\Model\BlockInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\MenuInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
@@ -31,6 +32,7 @@ class DumpFixturesCommand extends Command
         $this->dumpContents($output);
         $this->dumpRoutes($output);
         $this->dumpMenus($output);
+        $this->dumpBlocks($output);
 
         return Command::SUCCESS;
     }
@@ -64,6 +66,16 @@ class DumpFixturesCommand extends Command
             $dumpFile = CmsFixtures::dumpMenu($menu);
 
             $output->writeln(sprintf('Dumped "%s" menu to %s', $menu->getName(), $dumpFile));
+        }
+    }
+
+    protected function dumpBlocks(OutputInterface $output)
+    {
+        /** @var BlockInterface $block */
+        foreach ($this->em->getRepository(BlockInterface::class)->findAll() as $block) {
+            $dumpFile = CmsFixtures::dumpBlock($block);
+
+            $output->writeln(sprintf('Dumped "%s" block to %s', $block->getName(), $dumpFile));
         }
     }
 }

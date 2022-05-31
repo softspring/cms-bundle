@@ -2,6 +2,14 @@ content:
     add_module.button: "Add module"
 
 admin_page:
+    tabs_menu:
+        details: "General"
+        update: "Edit"
+        seo: "SEO"
+        content: "Content (last version)"
+        preview: "Preview (last version)"
+        versions: "Versions"
+
     create:
         meta.title: "New page"
         title: "New page"

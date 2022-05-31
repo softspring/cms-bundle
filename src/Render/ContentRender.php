@@ -65,10 +65,10 @@ class ContentRender
         $this->cmsLogger && $this->cmsLogger->debug(sprintf('Rendering %s module', $module['_module']));
 
         if ($this->isContainer($module)) {
-            $module['content'] = '';
+            $module['contents'] = [];
 
             foreach ($module['modules'] as $submodule) {
-                $module['content'] .= $this->renderModule($submodule, $version);
+                $module['contents'][] = $this->renderModule($submodule, $version);
             }
 
             return $this->twig->render($this->cmsConfig->getModule($module['_module'])['render_template'], $module);

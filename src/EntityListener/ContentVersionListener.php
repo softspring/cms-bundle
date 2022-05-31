@@ -30,8 +30,12 @@ class ContentVersionListener
 
     public function preUpdate(ContentVersionInterface $contentVersion, PreUpdateEventArgs $event)
     {
-        $this->saveCompiled($contentVersion, $event);
         $this->transform($contentVersion, $event);
+    }
+
+    public function postUpdate(ContentVersionInterface $contentVersion, PreUpdateEventArgs $event)
+    {
+        $this->saveCompiled($contentVersion, $event);
     }
 
     public function prePersist(ContentVersionInterface $contentVersion, LifecycleEventArgs $event)
@@ -55,7 +59,7 @@ class ContentVersionListener
         $compiledModules = [];
         foreach ($this->enabledLocales as $locale) {
             $request->setLocale($locale);
-            $compiled[$locale] = $this->contentRender->render($contentVersion);
+            // $compiled[$locale] = $this->contentRender->render($contentVersion);
             $compiledModules[$locale] = $this->contentRender->renderModules($contentVersion);
         }
         $contentVersion->setCompiled($compiled);

@@ -5,11 +5,13 @@ namespace Softspring\CmsBundle\DataFixtures;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
+use Softspring\CmsBundle\Manager\BlockManagerInterface;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\MenuItemManagerInterface;
 use Softspring\CmsBundle\Manager\MenuManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Manager\RoutePathManagerInterface;
+use Softspring\CmsBundle\Model\BlockInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Model\MenuInterface;
@@ -32,9 +34,10 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
     protected RoutePathManagerInterface $routePathManager;
     protected MenuManagerInterface $menuManager;
     protected MenuItemManagerInterface $menuItemManager;
+    protected BlockManagerInterface $blockManager;
     protected string $fixturesPath;
 
-    public function __construct(ContainerInterface $container, ContentManagerInterface $contentManager, RouteManagerInterface $routeManager, RoutePathManagerInterface $routePathManager, MenuManagerInterface $menuManager, MenuItemManagerInterface $menuItemManager)
+    public function __construct(ContainerInterface $container, ContentManagerInterface $contentManager, RouteManagerInterface $routeManager, RoutePathManagerInterface $routePathManager, MenuManagerInterface $menuManager, MenuItemManagerInterface $menuItemManager, BlockManagerInterface $blockManager)
     {
         $this->container = $container;
         $this->contentManager = $contentManager;
@@ -42,6 +45,7 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
         $this->routePathManager = $routePathManager;
         $this->menuManager = $menuManager;
         $this->menuItemManager = $menuItemManager;
+        $this->blockManager = $blockManager;
         $this->fixturesPath = $this->container->getParameter('kernel.project_dir').'/cms/fixtures';
     }
 
@@ -49,6 +53,7 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
     {
         $this->loadImages($manager);
         $this->preloadRoutes($manager);
+        $this->loadBlocks($manager);
         $this->loadContents($manager);
         $this->loadMenus($manager);
         $this->loadRoutes($manager);
@@ -147,6 +152,28 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
         }
     }
 
+    public function loadBlocks(ObjectManager $manager)
+    {
+        if (!is_dir("$this->fixturesPath/blocks")) {
+            return;
+        }
+
+        foreach ((new Finder())->in("$this->fixturesPath/blocks")->files() as $blockFile) {
+            $data = Yaml::parseFile($blockFile->getRealPath());
+
+            $id = $blockFile->getFilenameWithoutExtension();
+            $key = key($data);
+            $blockConfig = current($data);
+
+            $this->replaceModuleFixtureReferences($blockConfig['data']);
+            $block = $this->createBlock($blockConfig['type'], $blockConfig['name'], $blockConfig['data']);
+
+            $this->addReference("block___$id", $block);
+
+            $manager->persist($block);
+        }
+    }
+
     public function preloadRoutes(ObjectManager $manager)
     {
         if (!is_dir("$this->fixturesPath/routes")) {
@@ -159,7 +186,7 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
             $route = $this->createRoute($routeConfig['id']);
 
             foreach ($routeConfig['paths'] as $paths) {
-                $this->createRoutePath($route, $paths['path'], $paths['cache_ttl'] ?? null);
+                $this->createRoutePath($route, $paths['path'], $paths['locale'] ?? null, $paths['cache_ttl'] ?? null);
             }
 
             $this->addReference("route___{$routeConfig['id']}", $route);
@@ -263,11 +290,12 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
         return $route;
     }
 
-    protected function createRoutePath(RouteInterface $route, string $path, ?int $cacheTtl = null): RoutePathInterface
+    protected function createRoutePath(RouteInterface $route, string $path, ?string $locale = null, ?int $cacheTtl = null): RoutePathInterface
     {
         $route->addPath($routePath = $this->routePathManager->createEntity());
 
         $routePath->setPath($path);
+        $routePath->setLocale($locale);
         $routePath->setCacheTtl($cacheTtl);
 
         return $routePath;
@@ -280,6 +308,16 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
         $menu->setName($name);
 
         return $menu;
+    }
+
+    protected function createBlock(string $blockType, string $name, array $data): BlockInterface
+    {
+        $block = $this->blockManager->createEntity($blockType);
+        $block->setType($blockType);
+        $block->setName($name);
+        $block->setData($data);
+
+        return $block;
     }
 
     protected function createMenuItem(MenuInterface $menu, array $text, ?RouteInterface $route = null): MenuItemInterface

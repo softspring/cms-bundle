@@ -53,6 +53,10 @@ class RouteResolverListener implements EventSubscriberInterface
         if ($routePath = $this->searchRoutePath($request->getPathInfo())) {
             $route = $routePath->getRoute();
 
+            if ($routePath->getLocale()) {
+                $request->setLocale($routePath->getLocale());
+            }
+
             switch ($route->getType()) {
                 case RouteInterface::TYPE_CONTENT:
                     $request->attributes->set('_controller', 'Softspring\CmsBundle\Controller\ContentController::renderRoutePath');

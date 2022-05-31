@@ -18,7 +18,8 @@ class BlockExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('sfs_cms_block', [$this->blockRenderer, 'renderBlockByType'], ['is_safe' => ['html']]),
+            new TwigFunction('sfs_cms_block', [$this->blockRenderer, 'renderBlock'], ['is_safe' => ['html']]),
+            new TwigFunction('sfs_cms_block_by_type', [$this->blockRenderer, 'renderBlockByType'], ['is_safe' => ['html']]),
         ];
     }
 }

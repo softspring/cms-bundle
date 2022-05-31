@@ -2,7 +2,10 @@
 {% extends '@SfsCms/admin_layout.html.twig' %}
 {% block title %}{{ 'admin_blocks.create.meta.title'|trans }}{% endblock %}
 
-{% form_theme form '@SfsPolymorphicFormType/polymorphic-form-theme.html.twig' '@SfsCms/cms_form_theme.html.twig' %}
+{% form_theme form '@SfsPolymorphicFormType/polymorphic-form-theme.html.twig'
+    '@SfsCms/cms_form_theme.html.twig'
+    '@SfsImage/image_form_theme.html.twig'
+%}
 
 {% block breadcrums_content %}
     {{ parent() }}
@@ -15,23 +18,6 @@
 
     <div class="container-fluid bg-white p-4">
         {{ form_start(form) }}
-        <div class="row">
-            <div class="col-12">
-                {{ form_row(form.name) }}
-            </div>
-            <div class="col-12 col-md-6">
-                {{ form_row(form.data.id) }}
-            </div>
-            <div class="col-12 col-md-6">
-                {{ form_row(form.data.class) }}
-            </div>
-            <div class="col-12">
-                {{ form_row(form.data.title) }}
-            </div>
-            <div class="col-12">
-                {{ form_row(form.data.image) }}
-            </div>
-        </div>
             {{ form_rest(form) }}
 
             <div class="d-flex justify-content-end align-items-center">
@@ -40,4 +26,6 @@
             </div>
         {{ form_end(form) }}
     </div>
+
+    {% include '@SfsImage/image_type_modal.html.twig' %}
 {% endblock content %}

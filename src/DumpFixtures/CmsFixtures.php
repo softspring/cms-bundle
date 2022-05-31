@@ -3,6 +3,7 @@
 namespace Softspring\CmsBundle\DumpFixtures;
 
 use Google\Cloud\Storage\StorageClient;
+use Softspring\CmsBundle\Model\BlockInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Model\MenuInterface;
@@ -72,6 +73,24 @@ class CmsFixtures
         return $file;
     }
 
+    public static function dumpBlock(BlockInterface $block): string
+    {
+        $dump = [
+            'block' => [
+                'type' => $block->getType(),
+                'name' => $block->getName(),
+                'data' => self::dumpData($block->getData()),
+            ],
+        ];
+
+        $yaml = self::yaml($dump);
+        $file = '/srv/cms/fixtures/blocks/'.self::slugglify($block->getName()).'.yaml';
+        !is_dir('/srv/cms/fixtures/blocks') && mkdir('/srv/cms/fixtures/blocks', 0755, true);
+        file_put_contents($file, $yaml);
+
+        return $file;
+    }
+
     public static function dumpContent(ContentInterface $content, ?ContentVersionInterface $contentVersion, string $contentType): string
     {
         $dump = [
@@ -130,6 +149,12 @@ class CmsFixtures
         if ($data instanceof RouteInterface) {
             return [
                 '_reference' => 'route___'.$data->getId(),
+            ];
+        }
+
+        if ($data instanceof BlockInterface) {
+            return [
+                '_reference' => 'block___'.self::slugglify($data->getName()),
             ];
         }
 
