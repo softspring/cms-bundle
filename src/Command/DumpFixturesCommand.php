@@ -4,10 +4,10 @@ namespace Softspring\CmsBundle\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\DumpFixtures\CmsFixtures;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\MenuInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
-use Softspring\CmsBundle\Utils\FixturesDump;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -40,7 +40,7 @@ class DumpFixturesCommand extends Command
         foreach ($this->cmsConfig->getContents() as $contentId => $content) {
             /** @var ContentInterface $content */
             foreach ($this->em->getRepository($content['entity_class'])->findAll() as $content) {
-                $dumpFile = FixturesDump::dumpContent($content, $content->getVersions()->first() ?? null, $contentId);
+                $dumpFile = CmsFixtures::dumpContent($content, $content->getVersions()->first() ?? null, $contentId);
 
                 $output->writeln(sprintf('Dumped "%s" %s content to %s', $content->getName(), $contentId, $dumpFile));
             }
@@ -51,7 +51,7 @@ class DumpFixturesCommand extends Command
     {
         /** @var RouteInterface $route */
         foreach ($this->em->getRepository(RouteInterface::class)->findAll() as $route) {
-            $dumpFile = FixturesDump::dumpRoute($route);
+            $dumpFile = CmsFixtures::dumpRoute($route);
 
             $output->writeln(sprintf('Dumped "%s" route to %s', $route->getId(), $dumpFile));
         }
@@ -61,7 +61,7 @@ class DumpFixturesCommand extends Command
     {
         /** @var MenuInterface $menu */
         foreach ($this->em->getRepository(MenuInterface::class)->findAll() as $menu) {
-            $dumpFile = FixturesDump::dumpMenu($menu);
+            $dumpFile = CmsFixtures::dumpMenu($menu);
 
             $output->writeln(sprintf('Dumped "%s" menu to %s', $menu->getName(), $dumpFile));
         }

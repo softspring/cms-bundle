@@ -1,6 +1,6 @@
 <?php
 
-namespace Softspring\CmsBundle\Utils;
+namespace Softspring\CmsBundle\DumpFixtures;
 
 use Google\Cloud\Storage\StorageClient;
 use Softspring\CmsBundle\Model\ContentInterface;
@@ -11,7 +11,7 @@ use Softspring\ImageBundle\Model\ImageInterface;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Yaml\Yaml;
 
-class FixturesDump
+class CmsFixtures
 {
     public static function dumpRoute(RouteInterface $route): string
     {
@@ -150,7 +150,7 @@ class FixturesDump
 
             file_put_contents('/srv/cms/fixtures/images/'.$data->getId().'.json', json_encode([
                 'id' => $data->getId(),
-                'type' => 'background',
+                'type' => $data->getType(),
                 'name' => $data->getName(),
                 'description' => $data->getDescription(),
                 'file' => $imageFileName,

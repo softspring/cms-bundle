@@ -3,7 +3,7 @@
 namespace Softspring\CmsBundle\Controller\Admin;
 
 use Softspring\CmsBundle\Model\ContentVersionInterface;
-use Softspring\CmsBundle\Utils\FixturesDump;
+use Softspring\CmsBundle\Utils\CmsFixtures;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,7 +29,7 @@ class FixturesController extends AbstractController
 //            $this->denyAccessUnlessGranted($config['is_granted'], $entity, sprintf('Access denied, user is not %s.', $config['is_granted']));
 //        }
 
-        FixturesDump::dumpContent($entity, $version, $config['_id']);
+        CmsFixtures::dumpContent($entity, $version, $config['_id']);
 
         return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_details", ['content' => $entity]);
     }

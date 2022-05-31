@@ -57,6 +57,10 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
 
     public function loadContents(ObjectManager $manager)
     {
+        if (!is_dir("$this->fixturesPath/contents")) {
+            return;
+        }
+
         foreach ((new Finder())->in("$this->fixturesPath/contents")->files() as $contentFile) {
             $data = Yaml::parseFile($contentFile->getRealPath());
 
@@ -113,6 +117,10 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
 
     public function loadMenus(ObjectManager $manager)
     {
+        if (!is_dir("$this->fixturesPath/menus")) {
+            return;
+        }
+
         foreach ((new Finder())->in("$this->fixturesPath/menus")->files() as $menuFile) {
             $data = Yaml::parseFile($menuFile->getRealPath());
 
@@ -141,6 +149,10 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
 
     public function preloadRoutes(ObjectManager $manager)
     {
+        if (!is_dir("$this->fixturesPath/routes")) {
+            return;
+        }
+
         foreach ((new Finder())->in("$this->fixturesPath/routes")->files() as $routeFile) {
             $data = Yaml::parseFile($routeFile->getRealPath());
             $routeConfig = current($data);
@@ -156,6 +168,10 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
 
     public function loadRoutes(ObjectManager $manager)
     {
+        if (!is_dir("$this->fixturesPath/routes")) {
+            return;
+        }
+
         foreach ((new Finder())->in("$this->fixturesPath/routes")->files() as $routeFile) {
             $data = Yaml::parseFile($routeFile->getRealPath());
             $routeConfig = current($data);
@@ -174,6 +190,10 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
 
     public function loadImages(ObjectManager $manager)
     {
+        if (!is_dir("$this->fixturesPath/images")) {
+            return;
+        }
+
         foreach ((new Finder())->in("$this->fixturesPath/images")->files()->name('*.json') as $imageConfig) {
             $data = json_decode(file_get_contents($imageConfig->getRealPath()), true);
 
