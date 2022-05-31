@@ -198,6 +198,51 @@ window.addEventListener('load', (event) => {
         }
     });
 
+    /**
+     * Shows an image preview from image modal type
+     *
+     * The preview target element must have the "data-image-preview-target" attribute
+     * The select option must have the "data-image-preview-input"
+     * Both data attributes must have the same value (as identificator)
+     */
+    document.addEventListener('sfs_image.selected', function (event) {
+        if (!event.target || !event.target.hasAttribute('data-image-preview-input')) return;
+
+        let moduleForm = event.target.closest('.cms-module-edit').querySelector('.module-preview');
+
+        var config = JSON.parse(event.target.dataset.imageTypeConfig);
+        var typeConfig = config[event.target.dataset.imageTypeType];
+
+        let htmlTargetElements = moduleForm.querySelectorAll("[data-image-preview-target='" + event.target.dataset.imagePreviewInput + "']");
+        if (htmlTargetElements.length) {
+            const previewImage = event.target.dataset.imageVersionSm;
+
+            // show required preview in every html element
+            htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.innerHTML = previewImage);
+        }
+    });
+
+    /**
+     * Removes an image preview from image modal type
+     *
+     * The preview target element must have the "data-image-preview-target" attribute
+     * The select option must have the "data-image-preview-input"
+     * Both data attributes must have the same value (as identificator)
+     */
+    document.addEventListener('sfs_image.unselected', function (event) {
+        if (!event.target || !event.target.hasAttribute('data-image-preview-input')) return;
+
+        let moduleForm = event.target.closest('.cms-module-edit').querySelector('.module-preview');
+
+        var config = JSON.parse(event.target.dataset.imageTypeConfig);
+        var typeConfig = config[event.target.dataset.imageTypeType];
+
+        let htmlTargetElements = moduleForm.querySelectorAll("[data-image-preview-target='" + event.target.dataset.imagePreviewInput + "']");
+        if (htmlTargetElements.length) {
+            htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.innerHTML = '');
+        }
+    });
+
     /* ****************************************************************************************************** *
      * CONFIGURE CUSTOM MODULES
      * ****************************************************************************************************** */

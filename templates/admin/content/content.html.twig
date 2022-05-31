@@ -4,7 +4,10 @@
 
 {% block title %}{{ ('admin_'~content~'.content.meta.title')|trans({'%name%':entity.name}) }}{% endblock %}
 
-{% form_theme form '@SfsPolymorphicFormType/polymorphic-form-theme.html.twig' '@SfsCms/cms_form_theme.html.twig' %}
+{% form_theme form '@SfsPolymorphicFormType/polymorphic-form-theme.html.twig'
+    '@SfsCms/cms_form_theme.html.twig'
+    '@SfsImage/image_form_theme.html.twig'
+%}
 
 {% block body %}
     {{ form_start(form) }}
@@ -68,4 +71,6 @@
     <script type="text/javascript">
         document.getElementById("content_content_form__ok").value = 0;
     </script>
+
+    {% include '@SfsImage/image_type_modal.html.twig' %}
 {% endblock body %}
