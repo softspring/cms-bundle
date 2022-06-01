@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\EventListener;
 
+use Doctrine\DBAL\Exception\TableNotFoundException;
 use Doctrine\ORM\EntityManagerInterface;
 use Softspring\CmsBundle\Model\Route;
 use Softspring\CmsBundle\Model\RouteInterface;
@@ -85,6 +86,11 @@ class RouteResolverListener implements EventSubscriberInterface
 
     protected function searchRoutePath(string $path): ?RoutePathInterface
     {
-        return $this->em->getRepository(RoutePathInterface::class)->findOneByPath(trim($path, '/'));
+        try {
+            return $this->em->getRepository(RoutePathInterface::class)->findOneByPath(trim($path, '/'));
+        } catch (TableNotFoundException $e) {
+            // prevent error before creating database schema
+            return null;
+        }
     }
 }
