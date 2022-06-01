@@ -20,12 +20,12 @@ admin_page:
 
     read:
         meta.title: "General"
-        title: "General"
+        title: "%name%"
         breadcrumb: "General"
 
     preview:
         meta.title: "Preview page"
-        title: "Preview page"
+        title: "%name%"
         breadcrumb: "Preview page"
         actions:
             open.button: "Open"
@@ -34,12 +34,12 @@ admin_page:
 
     translations:
         meta.title: "Page translations"
-        title: "Page translations"
+        title: "%name%"
         breadcrumb: "Page translations"
 
     update:
         meta.title: "Edit page"
-        title: "Edit page"
+        title: "%name%"
         breadcrumb: "Edit page"
         actions:
             update.button: "Save changes"
@@ -47,7 +47,7 @@ admin_page:
 
     seo:
         meta.title: "Edit SEO"
-        title: "Edit SEO"
+        title: "%name%"
         breadcrumb: "Edit SEO"
         actions:
             save.button: "Save changes"
@@ -55,7 +55,7 @@ admin_page:
 
     content:
         meta.title: "Edit content"
-        title: "Edit content"
+        title: "%name%"
         breadcrumb: "Edit content"
         actions:
             save.button: "Save version"

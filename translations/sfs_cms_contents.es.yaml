@@ -17,39 +17,51 @@ admin_page:
         actions:
             create.button: "Crear página"
             cancel.button: "Cancelar"
+
     read:
         meta.title: "General"
-        title: "General"
+        title: "%name%"
         breadcrumb: "General"
+
     preview:
         meta.title: "Previsualizar página"
-        title: "Previsualizar página"
+        title: "%name%"
         breadcrumb: "Previsualizar página"
+        actions:
+            open.button: "Abrir"
+            cancel.button: "Atrás"
+            content.button: "Editar versión"
+
     translations:
         meta.title: "Traducciones de la página"
-        title: "Traducciones de la página"
+        title: "%name%"
         breadcrumb: "Traducciones de la página"
+
     update:
         meta.title: "Editar página"
-        title: "Editar página"
+        title: "%name%"
         breadcrumb: "Editar página"
         actions:
             update.button: "Guardar cambios"
             cancel.button: "Cancelar"
+
     seo:
         meta.title: "Editar SEO"
-        title: "Editar SEO"
+        title: "%name%"
         breadcrumb: "Editar SEO"
         actions:
-            seo.button: "Guardar cambios"
+            save.button: "Guardar cambios"
             cancel.button: "Cancelar"
+
     content:
         meta.title: "Editar contenido"
-        title: "Editar contenido"
+        title: "%name%"
         breadcrumb: "Editar contenido"
         actions:
-            content.button: "Guardar cambios"
+            save.button: "Guardar cambios"
+            save_and_preview.button: "Guardar y previsualizar"
             cancel.button: "Cancelar"
+
     list:
         meta.title: "Páginas"
         title: "Páginas"
@@ -74,3 +86,10 @@ admin_page:
                 path.label: "Segmento de URL"
                 cacheTtl.label: "Tiempo de caché"
                 locale.label: "Idioma"
+        seo:
+            metaTitle.label: "Título (título del navegador y etiquetas meta)"
+            metaDescription.label: "Descripción (etiqueta meta)"
+            metaKeywords.label: "Palabras clave (etiqueta meta)"
+            noIndex.label: "No indexar"
+            noFollow.label: "No seguir enlaces"
+            sitemap.label: "Mapa de sitio"
