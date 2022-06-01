@@ -36,7 +36,11 @@
                     </div>
 
                     <div class="text-end">
-                        <a href="{{ url('sfs_cms_admin_content_'~content~'_details', {'content':entity}) }}" class="btn btn-light">{{ ('admin_'~content~'.content.actions.cancel.button')|trans }}</a>
+                        {% if app.request.query.get('back') == 'versions' %}
+                            <a href="{{ url('sfs_cms_admin_content_'~content~'_versions', {'content':entity}) }}" class="btn btn-light">{{ ('admin_'~content~'.content.actions.cancel.button')|trans }}</a>
+                        {% else %}
+                            <a href="{{ url('sfs_cms_admin_content_'~content~'_details', {'content':entity}) }}" class="btn btn-light">{{ ('admin_'~content~'.content.actions.cancel.button')|trans }}</a>
+                        {% endif %}
 
                         <div class="btn-group" role="group">
                             <button type="submit" class="btn btn-primary ms-3">{{ ('admin_'~content~'.content.actions.save.button')|trans }}</button>

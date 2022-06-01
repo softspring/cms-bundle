@@ -95,6 +95,7 @@ class Content implements ConfigurationInterface
                         ->scalarNode('create_success_redirect_to')->defaultValue('')->end()
                         ->scalarNode('read_view')->defaultValue('@SfsCms/admin/content/read.html.twig')->end()
                         ->scalarNode('preview_view')->defaultValue('@SfsCms/admin/content/preview.html.twig')->end()
+                        ->scalarNode('versions_view')->defaultValue('@SfsCms/admin/content/versions.html.twig')->end()
                         ->scalarNode('update_is_granted')->defaultValue('')->end()
                         ->scalarNode('update_view')->defaultValue('@SfsCms/admin/content/update.html.twig')->end()
                         ->scalarNode('update_type')->defaultValue(ContentUpdateForm::class)->end()

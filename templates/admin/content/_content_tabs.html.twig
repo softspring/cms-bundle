@@ -21,8 +21,8 @@
 {#    <li class="nav-item">#}
 {#        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Rutas</a>#}
 {#    </li>#}
-    <li class="nav-item">
-        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">{{ ('admin_'~content~'.tabs_menu.versions')|trans }}</a>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link {{ current == 'versions' ? 'active' : '' }}" id="edit-tab" href="{{ url('sfs_cms_admin_content_'~content~'_versions', {'content':entity}) }}" role="tab" aria-controls="edit" aria-selected="true">{{ ('admin_'~content~'.tabs_menu.versions')|trans }}</a>
     </li>
 {#    <li class="nav-item">#}
 {#        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Permisos</a>#}

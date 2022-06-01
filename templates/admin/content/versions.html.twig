@@ -1,0 +1,69 @@
+{% trans_default_domain 'sfs_cms_contents' %}
+
+{% extends '@SfsCms/admin_layout.html.twig' %}
+
+{% block title %}{{ ('admin_'~content~'.versions.meta.title')|trans({'%name%':entity.name}) }}{% endblock %}
+
+{% block breadcrums_content %}
+    {{ parent() }}
+    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content~'_list') }}">{{ ('admin_'~content~'.list.breadcrumb')|trans }}</a></li>
+    <li class="breadcrumb-item active" aria-current="content">{{ ('admin_'~content~'.versions.breadcrumb')|trans({'%name%':entity.name}) }}</li>
+{% endblock breadcrums_content %}
+
+{% block content %}
+    <h1 class="h2">{{ ('admin_'~content~'.versions.title')|trans({'%name%':entity.name}) }}</h1>
+
+    {% include '@SfsCms/admin/content/_content_tabs.html.twig' with {'current':'versions', 'content':content, 'entity':entity} %}
+
+    <div class="container-fluid p-3 bg-white">
+        <div class="row mt-4">
+            <div class="col">
+                {# TODO restrict by permission #}
+                <div class="float-end">
+                    <a class="btn btn-outline-secondary disabled" href="#">{{ ('admin_'~content~'.versions.actions.cleanup_versions.link')|trans }}</a>
+                </div>
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>{{ ('admin_'~content~'.versions.fields.id.header')|trans }}</th>
+                        <th>{{ ('admin_'~content~'.versions.fields.created.header')|trans }}</th>
+                        <th>{{ ('admin_'~content~'.versions.fields.publish_status.header')|trans }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for version in entity.versions %}
+                        <tr>
+                            <td>{{ version.id }}</td>
+                            <td>{{ version.createdAt ? version.createdAt|date('H:i:s d-m-Y') : '' }}</td>
+                            <td>{{ version.published ? ('admin_'~content~'.versions.publish_status.published')|trans : ('admin_'~content~'.versions.publish_status.unpublished')|trans }}</td>
+                            <td>
+                                {% if version.published %} {# version.keep #}
+                                    <a class="" href="#" title="{{ ('admin_'~content~'.versions.actions.keep.link')|trans }}"><i class="bi bi-pin-angle-fill"></i></a>
+                                {% else %}
+                                    <a class="" href="#" title="{{ ('admin_'~content~'.versions.actions.nokeep.link')|trans }}"><i class="bi bi-pin-angle"></i></a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ url('sfs_cms_admin_content_'~content~'_content_from_version', {'content':entity, 'prevVersion':version, 'back': 'versions'}) }}">
+                                    {{ ('admin_'~content~'.versions.actions.edit.link')|trans }}
+                                </a>
+                                <a href="{{ url('sfs_cms_admin_content_'~content~'_preview_version', {'content':entity, 'version':version, 'back': 'versions'}) }}">
+                                    {{ ('admin_'~content~'.versions.actions.preview.link')|trans }}
+                                </a>
+
+                                {% if not version.published %}
+                                    <a href="{{ url('sfs_cms_admin_content_'~content~'_publish_version', {'content':entity, 'version':version, 'back': 'versions'}) }}">
+                                        {{ ('admin_'~content~'.versions.actions.publish.link')|trans }}
+                                    </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

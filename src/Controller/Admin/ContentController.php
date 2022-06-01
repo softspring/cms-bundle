@@ -15,6 +15,7 @@ use Softspring\CoreBundle\Event\GetResponseRequestEvent;
 use Softspring\CoreBundle\Event\ViewEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\WebProfilerBundle\EventListener\WebDebugToolbarListener;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -160,7 +161,7 @@ class ContentController extends AbstractController
 //                    return $response;
 //                }
 
-                return $this->redirect(!empty($config['update_success_redirect_to']) ? $this->generateUrl($config['update_success_redirect_to']) : $this->generateUrl("sfs_cms_admin_content_{$config['_id']}_details", ['content' => $entity]));
+                return !empty($config['update_success_redirect_to']) ? $this->redirectToRoute($config['update_success_redirect_to']) : $this->redirectBack($config['_id'], $entity, $request);;
 //            } else {
 //                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_invalid_event_name', new GetResponseFormEvent($form, $request))) {
 //                    return $response;
@@ -297,7 +298,7 @@ class ContentController extends AbstractController
                     return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_preview", ['content' => $entity]);
                 }
 
-                return $this->redirect(!empty($config['content_success_redirect_to']) ? $this->generateUrl($config['content_success_redirect_to']) : $this->generateUrl("sfs_cms_admin_content_{$config['_id']}_details", ['content' => $entity]));
+                return !empty($config['content_success_redirect_to']) ? $this->redirectToRoute($config['content_success_redirect_to']) : $this->redirectBack($config['_id'], $entity, $request);;
 //            } else {
 //                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_invalid_event_name', new GetResponseFormEvent($form, $request))) {
 //                    return $response;
@@ -354,7 +355,7 @@ class ContentController extends AbstractController
 //                    return $response;
 //                }
 
-                return $this->redirect(!empty($config['seo_success_redirect_to']) ? $this->generateUrl($config['seo_success_redirect_to']) : $this->generateUrl("sfs_cms_admin_content_{$config['_id']}_details", ['content' => $entity]));
+                return !empty($config['seo_success_redirect_to']) ? $this->redirectToRoute($config['seo_success_redirect_to']) : $this->redirectBack($config['_id'], $entity, $request);;
 //            } else {
 //                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_invalid_event_name', new GetResponseFormEvent($form, $request))) {
 //                    return $response;
@@ -431,7 +432,7 @@ class ContentController extends AbstractController
             $this->contentManager->saveEntity($entity);
         }
 
-        return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_details", ['content' => $entity]);
+        return $this->redirectBack($config['_id'], $entity, $request);
     }
 
     public function previewContent(string $content, Request $request, string $version = null, ?WebDebugToolbarListener $debugToolbarListener = null): Response
@@ -460,6 +461,51 @@ class ContentController extends AbstractController
         $request->attributes->set('_cms_preview', true);
 
         return new Response($this->contentRender->render($version ?? $entity->getVersions()->first()));
+    }
+
+    public function versions(string $content, Request $request): Response
+    {
+        $config = $this->getContentConfig($request);
+        $config = $config['admin'] + ['_id' => $config['_id']];
+
+        $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
+
+//        if (!empty($config['is_granted'])) {
+//            $this->denyAccessUnlessGranted($config['is_granted'], $entity, sprintf('Access denied, user is not %s.', $config['is_granted']));
+//        }
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Entity not found');
+        }
+
+//        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
+//            return $response;
+//        }
+
+//        $deleteForm = $this->getDeleteForm($entity, $request, $this->deleteForm);
+
+        // show view
+        $viewData = new \ArrayObject([
+            'content' => $config['_id'],
+            'entity' => $entity,
+//            'deleteForm' => $deleteForm ? $deleteForm->createView() : null,
+        ]);
+
+//        $this->dispatchFromConfig($config, 'view_event_name', new ViewEvent($viewData));
+
+        return $this->render($config['versions_view'], $viewData->getArrayCopy());
+    }
+
+    protected function redirectBack(string $configId, ContentInterface $entity, Request $request): RedirectResponse
+    {
+        switch ($request->query->get('back'))
+        {
+            case 'versions':
+                return $this->redirectToRoute("sfs_cms_admin_content_{$configId}_versions", ['content' => $entity]);
+
+            default:
+                return $this->redirectToRoute("sfs_cms_admin_content_{$configId}_details", ['content' => $entity]);
+        }
     }
 
     /**

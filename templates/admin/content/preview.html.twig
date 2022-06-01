@@ -27,7 +27,11 @@
 
                     <div class="text-end">
                         <a id="previewExternalLink" target="_blank" class="btn btn-light" href="{{ url('sfs_cms_admin_content_'~content~'_preview_content', {'content':entity, 'locale':app.request.query.get('locale', 'es')}) }}">{{ ('admin_'~content~'.preview.actions.open.button')|trans }} <i class="bi bi-box-arrow-up-right"></i></a>
-                        <a href="{{ url('sfs_cms_admin_content_'~content~'_details', {'content':entity}) }}" class="btn btn-light">{{ ('admin_'~content~'.preview.actions.cancel.button')|trans }}</a>
+                        {% if app.request.query.get('back') == 'versions' %}
+                            <a href="{{ url('sfs_cms_admin_content_'~content~'_versions', {'content':entity}) }}" class="btn btn-light">{{ ('admin_'~content~'.preview.actions.cancel.button')|trans }}</a>
+                        {% else %}
+                            <a href="{{ url('sfs_cms_admin_content_'~content~'_details', {'content':entity}) }}" class="btn btn-light">{{ ('admin_'~content~'.preview.actions.cancel.button')|trans }}</a>
+                        {% endif %}
                         <a href="{{ url('sfs_cms_admin_content_'~content~'_content', {'content':entity}) }}" class="btn btn-light">{{ ('admin_'~content~'.preview.actions.content.button')|trans }}</a>
                     </div>
                 </div>

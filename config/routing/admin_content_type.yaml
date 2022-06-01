@@ -45,3 +45,7 @@ preview_content_version:
 publish_version:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController:publishVersion
     path: /{content}/publish-version/{version}
+
+versions:
+    controller: Softspring\CmsBundle\Controller\Admin\ContentController::versions
+    path: /{content}/versions

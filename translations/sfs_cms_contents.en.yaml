@@ -23,6 +23,25 @@ admin_page:
         title: "%name%"
         breadcrumb: "General"
 
+    versions:
+        meta.title: "Versions"
+        title: "%name%"
+        breadcrumb: "Versions"
+        fields:
+            id.header: "Version"
+            created.header: "Created"
+            publish_status.header: "Publish status"
+        publish_status:
+            published: "published"
+            unpublished: ""
+        actions:
+            edit.link: "edit"
+            preview.link: "preview"
+            publish.link: "publish version"
+            cleanup_versions.link: "Cleanup versions"
+            keep.link: "Keep version, click to no keep"
+            nokeep.link: "Do not keep version, click to keep"
+
     preview:
         meta.title: "Preview page"
         title: "%name%"
