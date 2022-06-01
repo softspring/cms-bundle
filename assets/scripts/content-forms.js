@@ -53,11 +53,13 @@ window.addEventListener('load', (event) => {
 
     function getSelectedLanguage() {
         const contentEditionLanguageSelector = document.getElementById('contentEditionLanguageSelection');
+        if (contentEditionLanguageSelector == null || !contentEditionLanguageSelector.length) return;
         return contentEditionLanguageSelector.value;
     }
 
     function filterCurrentTranslatableElementsLanguage() {
         const contentEditionLanguageSelector = document.getElementById('contentEditionLanguageSelection');
+        if (contentEditionLanguageSelector == null || !contentEditionLanguageSelector.length) return;
         contentEditionLanguageSelector.addEventListener('change', function (event) {
             selectTranslatableElementsLanguage(event.target.value);
         });
