@@ -41,6 +41,7 @@
 
     &.active {
         border: 2px dashed green;
+        width: calc(100% - 320px);
 
         > .cms-module-body > .cms-module-edit > .cms-module-form {
             display: block;
