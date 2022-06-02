@@ -496,6 +496,53 @@ class ContentController extends AbstractController
         return $this->render($config['versions_view'], $viewData->getArrayCopy());
     }
 
+    public function cleanupVersions(string $content, Request $request): Response
+    {
+        $config = $this->getContentConfig($request);
+        $config = $config['admin'] + ['_id' => $config['_id']];
+
+        /** @var ContentInterface $entity */
+        $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
+
+//        if (!empty($config['is_granted'])) {
+//            $this->denyAccessUnlessGranted($config['is_granted'], $entity, sprintf('Access denied, user is not %s.', $config['is_granted']));
+//        }
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Entity not found');
+        }
+
+        /** @var ContentVersionInterface $version */
+        foreach ($entity->getVersions() as $version) {
+            if ($version->deleteOnCleanup()) {
+                $entity->removeVersion($version); // TODO THIS SHOULD REMOVE VERSIONS
+                $this->getDoctrine()->getManager()->remove($version);
+            }
+        }
+        $this->contentManager->saveEntity($entity);
+
+        return $this->redirectBack($config['_id'], $entity, $request);
+    }
+
+    public function markKeepVersion(string $content, Request $request, string $version, bool $keep): Response
+    {
+        $config = $this->getContentConfig($request);
+        $config = $config['admin'] + ['_id' => $config['_id']];
+
+        $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Entity not found');
+        }
+
+        /** @var ContentVersionInterface $version */
+        $version = $entity->getVersions()->filter(fn (ContentVersionInterface $versionI) => $versionI->getId() == $version)->first();
+        $version->setKeep($keep);
+        $this->getDoctrine()->getManager()->flush();
+
+        return $this->redirectBack($config['_id'], $entity, $request);
+    }
+
     protected function redirectBack(string $configId, ContentInterface $entity, Request $request): RedirectResponse
     {
         switch ($request->query->get('back')) {

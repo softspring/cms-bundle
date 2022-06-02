@@ -20,7 +20,7 @@
             <div class="col">
                 {# TODO restrict by permission #}
                 <div class="float-end">
-                    <a class="btn btn-outline-secondary disabled" href="#">{{ ('admin_'~content~'.versions.actions.cleanup_versions.link')|trans }}</a>
+                    <a class="btn btn-outline-secondary" href="{{ url('sfs_cms_admin_content_'~content~'_cleanup_versions', {'content':entity, 'back':'versions'}) }}">{{ ('admin_'~content~'.versions.actions.cleanup_versions.link')|trans }}</a>
                 </div>
 
                 <table class="table">
@@ -38,10 +38,10 @@
                             <td>{{ version.createdAt ? version.createdAt|date('H:i:s d-m-Y') : '' }}</td>
                             <td>{{ version.published ? ('admin_'~content~'.versions.publish_status.published')|trans : ('admin_'~content~'.versions.publish_status.unpublished')|trans }}</td>
                             <td>
-                                {% if version.published %} {# version.keep #}
-                                    <a class="" href="#" title="{{ ('admin_'~content~'.versions.actions.keep.link')|trans }}"><i class="bi bi-pin-angle-fill"></i></a>
+                                {% if version.keep %}
+                                    <a class="" href="{{ url('sfs_cms_admin_content_'~content~'_unkeep_version', {'content':entity, 'version':version, 'back': 'versions'}) }}" title="{{ ('admin_'~content~'.versions.actions.keep.link')|trans }}"><i class="bi bi-pin-angle-fill"></i></a>
                                 {% else %}
-                                    <a class="" href="#" title="{{ ('admin_'~content~'.versions.actions.nokeep.link')|trans }}"><i class="bi bi-pin-angle"></i></a>
+                                    <a class="" href="{{ url('sfs_cms_admin_content_'~content~'_keep_version', {'content':entity, 'version':version, 'back': 'versions'}) }}" title="{{ ('admin_'~content~'.versions.actions.nokeep.link')|trans }}"><i class="bi bi-pin-angle"></i></a>
                                 {% endif %}
                             </td>
                             <td>
@@ -58,6 +58,7 @@
                                     </a>
                                 {% endif %}
                             </td>
+                            <td>{% if version.deleteOnCleanup %}<i class="bi bi-trash text-secondary" title="This version will be removed on versions cleanup"></i>{% endif %}</td>
                         </tr>
                     {% endfor %}
                     </tbody>

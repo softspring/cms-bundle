@@ -27,4 +27,12 @@ interface ContentVersionInterface
     public function setCompiled(?array $compiled): void;
 
     public function isPublished(): bool;
+
+    public function isLastVersion(): bool;
+
+    public function deleteOnCleanup(): bool;
+
+    public function isKeep(): bool;
+
+    public function setKeep(bool $keep): void;
 }

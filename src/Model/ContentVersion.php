@@ -16,6 +16,8 @@ abstract class ContentVersion implements ContentVersionInterface
 
     protected ?array $compiled = null;
 
+    protected bool $keep = false;
+
     public function getContent(): ?ContentInterface
     {
         return $this->content;
@@ -86,5 +88,25 @@ abstract class ContentVersion implements ContentVersionInterface
     public function isPublished(): bool
     {
         return $this->getContent()->getPublishedVersion() == $this;
+    }
+
+    public function isLastVersion(): bool
+    {
+        return $this->getContent()->getVersions()->first() == $this;
+    }
+
+    public function deleteOnCleanup(): bool
+    {
+        return !$this->isKeep() && !$this->isPublished() && !$this->isLastVersion();
+    }
+
+    public function isKeep(): bool
+    {
+        return $this->keep;
+    }
+
+    public function setKeep(bool $keep): void
+    {
+        $this->keep = $keep;
     }
 }

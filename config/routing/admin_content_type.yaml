@@ -46,6 +46,22 @@ publish_version:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController:publishVersion
     path: /{content}/publish-version/{version}
 
+keep_version:
+    controller: Softspring\CmsBundle\Controller\Admin\ContentController:markKeepVersion
+    path: /{content}/keep-version/{version}
+    defaults:
+        keep: true
+
+unkeep_version:
+    controller: Softspring\CmsBundle\Controller\Admin\ContentController:markKeepVersion
+    path: /{content}/unkeep-version/{version}
+    defaults:
+        keep: false
+
 versions:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController::versions
     path: /{content}/versions
+
+cleanup_versions:
+    controller: Softspring\CmsBundle\Controller\Admin\ContentController::cleanupVersions
+    path: /{content}/cleanup-versions
