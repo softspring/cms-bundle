@@ -10,7 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ImageModalType extends AbstractType
 {
-    public function getBlockPrefix():string
+    public function getBlockPrefix(): string
     {
         return 'cms_image_modal';
     }

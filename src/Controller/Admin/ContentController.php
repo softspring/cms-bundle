@@ -161,7 +161,7 @@ class ContentController extends AbstractController
 //                    return $response;
 //                }
 
-                return !empty($config['update_success_redirect_to']) ? $this->redirectToRoute($config['update_success_redirect_to']) : $this->redirectBack($config['_id'], $entity, $request);;
+                return !empty($config['update_success_redirect_to']) ? $this->redirectToRoute($config['update_success_redirect_to']) : $this->redirectBack($config['_id'], $entity, $request);
 //            } else {
 //                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_invalid_event_name', new GetResponseFormEvent($form, $request))) {
 //                    return $response;
@@ -298,7 +298,7 @@ class ContentController extends AbstractController
                     return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_preview", ['content' => $entity]);
                 }
 
-                return !empty($config['content_success_redirect_to']) ? $this->redirectToRoute($config['content_success_redirect_to']) : $this->redirectBack($config['_id'], $entity, $request);;
+                return !empty($config['content_success_redirect_to']) ? $this->redirectToRoute($config['content_success_redirect_to']) : $this->redirectBack($config['_id'], $entity, $request);
 //            } else {
 //                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_invalid_event_name', new GetResponseFormEvent($form, $request))) {
 //                    return $response;
@@ -355,7 +355,7 @@ class ContentController extends AbstractController
 //                    return $response;
 //                }
 
-                return !empty($config['seo_success_redirect_to']) ? $this->redirectToRoute($config['seo_success_redirect_to']) : $this->redirectBack($config['_id'], $entity, $request);;
+                return !empty($config['seo_success_redirect_to']) ? $this->redirectToRoute($config['seo_success_redirect_to']) : $this->redirectBack($config['_id'], $entity, $request);
 //            } else {
 //                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_invalid_event_name', new GetResponseFormEvent($form, $request))) {
 //                    return $response;
@@ -498,8 +498,7 @@ class ContentController extends AbstractController
 
     protected function redirectBack(string $configId, ContentInterface $entity, Request $request): RedirectResponse
     {
-        switch ($request->query->get('back'))
-        {
+        switch ($request->query->get('back')) {
             case 'versions':
                 return $this->redirectToRoute("sfs_cms_admin_content_{$configId}_versions", ['content' => $entity]);
 
