@@ -2,6 +2,9 @@
 
 namespace Softspring\CmsBundle\Model;
 
+/**
+ * @deprecated
+ */
 abstract class Site implements SiteInterface
 {
     protected bool $enabled = false;

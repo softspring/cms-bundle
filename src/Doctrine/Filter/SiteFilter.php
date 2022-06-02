@@ -7,6 +7,9 @@ use Doctrine\ORM\Query\Filter\SQLFilter;
 use Softspring\CmsBundle\Model\Filters\MultiSiteFilterInterface;
 use Softspring\CmsBundle\Model\Filters\SiteFilterInterface;
 
+/**
+ * @deprecated
+ */
 class SiteFilter extends SQLFilter
 {
     public function addFilterConstraint(ClassMetadata $targetEntity, $targetTableAlias)

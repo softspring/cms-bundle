@@ -6,6 +6,9 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query\Filter\SQLFilter;
 use Softspring\CmsBundle\Model\SchedulableContentInterface;
 
+/**
+ * @deprecated
+ */
 class SchedulableContentFilter extends SQLFilter
 {
     public function addFilterConstraint(ClassMetadata $targetEntity, $targetTableAlias)
