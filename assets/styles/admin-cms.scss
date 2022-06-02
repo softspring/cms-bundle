@@ -38,6 +38,15 @@
     &:hover {
         border: 2px dashed black;
     }
+    //napa
+    @at-root .has-form & {
+        width: calc(100% - 320px);
+
+        & .cms-module {
+            width: auto;
+        }
+    }
+
 
     &.active {
         border: 2px dashed green;
