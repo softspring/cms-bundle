@@ -51,18 +51,12 @@
             height: calc(100vh - 76px);
             overflow-y: auto;
             background-color: white;
-
             box-shadow: -5px 0px 10px 1px rgba(0, 0, 0, .2);
+            z-index: 1000;
         }
     }
 
     .content-escape {
         word-break: break-word;
     }
-}
-
-
-.content-form {
-    width: 312px;
-    flex-shrink: 0;
 }
