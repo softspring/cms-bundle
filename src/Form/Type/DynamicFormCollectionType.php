@@ -2,32 +2,17 @@
 
 namespace Softspring\CmsBundle\Form\Type;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Softspring\Component\DynamicFormType\Form\DynamicFormCollectionType as BaseDynamicFormCollectionType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class DynamicFormCollectionType extends AbstractType
+class DynamicFormCollectionType extends BaseDynamicFormCollectionType
 {
-    public function getBlockPrefix(): string
-    {
-        return 'dynamic_form_collection';
-    }
-
-    public function getParent(): string
-    {
-        return CollectionType::class;
-    }
-
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'allow_add' => true,
-            'allow_delete' => true,
-            'prototype' => true,
-            'entry_type' => DynamicFormType::class,
-            'prototype_initial_elements' => 1,
-        ]);
+        parent::configureOptions($resolver);
 
-        $resolver->setAllowedTypes('prototype_initial_elements', ['int']);
+        $resolver->setDefaults([
+            'entry_type' => DynamicFormType::class,
+        ]);
     }
 }
