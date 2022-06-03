@@ -1,6 +1,6 @@
 <?php
 
-namespace Softspring\CmsBundle\Test\Config;
+namespace Softspring\CmsBundle\Test\Config\Model;
 
 use PHPUnit\Framework\TestCase;
 use Softspring\CmsBundle\Config\Model\Layout;
@@ -30,8 +30,8 @@ class LayoutTest extends TestCase
         ]);
 
         $this->assertEquals(1, $config['revision']);
-        $this->assertEquals('@cms/layout/layout_name/render.html.twig', $config['render_template']);
-        $this->assertEquals('@cms/layout/layout_name/edit.html.twig', $config['edit_template']);
+        $this->assertEquals('@layout/layout_name/render.html.twig', $config['render_template']);
+        $this->assertEquals('@layout/layout_name/edit.html.twig', $config['edit_template']);
         $this->assertIsArray($config['containers']);
     }
 

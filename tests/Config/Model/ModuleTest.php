@@ -1,9 +1,10 @@
 <?php
 
-namespace Softspring\CmsBundle\Test\Config;
+namespace Softspring\CmsBundle\Test\Config\Model;
 
 use PHPUnit\Framework\TestCase;
 use Softspring\CmsBundle\Config\Model\Module;
+use Softspring\CmsBundle\Form\Module\DynamicFormModuleType;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 
@@ -17,6 +18,8 @@ class ModuleTest extends TestCase
         $processor = new Processor();
         $configuration = new Module('module_name');
         $config = $processor->processConfiguration($configuration, []);
+
+        $this->assertIsArray($config);
     }
 
     public function testDefaultConfig()
@@ -29,10 +32,13 @@ class ModuleTest extends TestCase
             ],
         ]);
 
-        $this->assertEquals(1, $config['revision']);
-        $this->assertEquals('@cms/module/module_name/render.html.twig', $config['render_template']);
-        $this->assertIsArray($config['form_options']);
-        $this->assertIsArray($config['form_fields']);
+        $this->assertEquals([
+            'revision' => 1,
+            'render_template' => '@module/module_name/render.html.twig',
+            'module_type' => DynamicFormModuleType::class,
+            'module_options' => [],
+            'compatible_contents' => [],
+        ], $config);
     }
 
     public function testCustomConfig()
@@ -46,9 +52,12 @@ class ModuleTest extends TestCase
             ],
         ]);
 
-        $this->assertEquals(2, $config['revision']);
-        $this->assertEquals('other_render_file.html.twig', $config['render_template']);
-        $this->assertIsArray($config['form_options']);
-        $this->assertIsArray($config['form_fields']);
+        $this->assertEquals([
+            'revision' => 2,
+            'render_template' => 'other_render_file.html.twig',
+            'module_type' => DynamicFormModuleType::class,
+            'module_options' => [],
+            'compatible_contents' => [],
+        ], $config);
     }
 }
