@@ -8,6 +8,7 @@
     "require": {
         "php": ">=7.4",
         "softspring/crudl-controller": "^5.0",
+        "softspring/dynamic-form-type": "^5.0",
         "softspring/polymorphic-form-type": "^5.0",
         "softspring/twig-extra-bundle": "^5.0",
         "symfony/uid": "^5.0 || ^6.0"
