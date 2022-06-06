@@ -42,7 +42,9 @@ class UrlGenerator
 
         $site = $this->getSite();
 
-        return $this->getRoutePath($route, $site, $locale);
+        $host = $this->requestStack->getCurrentRequest()->getSchemeAndHttpHost();
+
+        return $host.$this->getRoutePath($route, $site, $locale);
     }
 
     /**
