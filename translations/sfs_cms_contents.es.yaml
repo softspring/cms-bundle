@@ -81,6 +81,7 @@ admin_page:
         actions:
             save.button: "Guardar cambios"
             save_and_preview.button: "Guardar y previsualizar"
+            save_and_publish.button: "Guardar y publicar"
             cancel.button: "Cancelar"
 
     list:

@@ -81,6 +81,7 @@ admin_page:
         actions:
             save.button: "Save version"
             save_and_preview.button: "Save and preview"
+            save_and_publish.button: "Save and publish"
             cancel.button: "Cancel"
 
     list:

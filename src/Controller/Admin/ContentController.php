@@ -301,6 +301,10 @@ class ContentController extends AbstractController
                     return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_preview", ['content' => $entity]);
                 }
 
+                if ('publish' == $request->request->get('goto')) {
+                    return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_publish_version", ['content' => $entity, 'version' => $version]);
+                }
+
                 return !empty($config['content_success_redirect_to']) ? $this->redirectToRoute($config['content_success_redirect_to']) : $this->redirectBack($config['_id'], $entity, $request);
 //            } else {
 //                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_invalid_event_name', new GetResponseFormEvent($form, $request))) {
@@ -437,6 +441,8 @@ class ContentController extends AbstractController
             $entity->setPublishedVersion($version);
             $this->contentManager->saveEntity($entity);
         }
+
+        $this->addFlash('success', 'version_has_been_published');
 
         return $this->redirectBack($config['_id'], $entity, $request, $version);
     }
