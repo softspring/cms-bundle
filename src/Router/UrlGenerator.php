@@ -28,7 +28,7 @@ class UrlGenerator
      *
      * @throws \Exception
      */
-    public function getUrl($routeOrName): string
+    public function getUrl($routeOrName, ?string $locale = null): string
     {
         if ($this->isPreview()) {
             return 'javascript:confirm(\'Esto es una previsualización!\')';
@@ -42,7 +42,7 @@ class UrlGenerator
 
         $site = $this->getSite();
 
-        return $this->getRoutePath($route, $site);
+        return $this->getRoutePath($route, $site, $locale);
     }
 
     /**
@@ -50,7 +50,7 @@ class UrlGenerator
      *
      * @throws \Exception
      */
-    public function getPath($routeOrName): string
+    public function getPath($routeOrName, ?string $locale = null): string
     {
         if ($this->isPreview()) {
             return 'javascript:confirm(\'Esto es una previsualización!\')';
@@ -64,7 +64,7 @@ class UrlGenerator
 
         $site = $this->getSite();
 
-        return $this->getRoutePath($route, $site);
+        return $this->getRoutePath($route, $site, $locale);
     }
 
     /**
@@ -80,13 +80,40 @@ class UrlGenerator
             return '';
         }
 
-        return ''; // TODO check page to return noindex and nofollow attributes
+        $attrs = [];
+
+        if ($route->getType() === RouteInterface::TYPE_CONTENT && $route->getContent()) {
+            $seo = $route->getContent()->getSeo();
+            if (isset($seo['noIndex'])) {
+                $attrs['rel'][] = $seo['noIndex'] ? 'noindex' : 'index';
+            }
+            if (isset($seo['noFollow'])) {
+                $attrs['rel'][] = $seo['noFollow'] ? 'nofollow' : 'follow';
+            }
+        }
+
+        foreach ($attrs as $attr => $value) {
+            if ($attr === 'rel' && is_array($value)) {
+                $value = implode(',', $value);
+            }
+
+            $attrs[] = $attr.'="'.htmlentities($value).'"';
+            unset($attrs[$attr]);
+        }
+
+        return implode(' ', $attrs);
     }
 
-    protected function getRoutePath(Route $route, $site): string
+    protected function getRoutePath(Route $route, $site, ?string $locale = null): string
     {
+        $locale = $locale ?: $this->requestStack->getCurrentRequest()->getLocale();
+
         /** @var RoutePathInterface $path */
-        $path = $route->getPaths()->first();
+        if ($locale) {
+            $path = $route->getPaths()->filter(fn(RoutePathInterface $routePath) => $routePath->getLocale() == $locale)->first();
+        }
+
+        $path = $path ?: $route->getPaths()->first();
 
         return '/'.$path->getPath();
     }
