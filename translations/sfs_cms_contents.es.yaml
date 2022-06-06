@@ -50,6 +50,8 @@ admin_page:
             open.button: "Abrir"
             cancel.button: "Atrás"
             content.button: "Editar versión"
+            publish.button: "Publicar versión"
+            published.button: "Publicada"
 
     translations:
         meta.title: "Traducciones de la página"

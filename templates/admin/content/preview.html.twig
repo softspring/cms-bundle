@@ -33,6 +33,12 @@
                             <a href="{{ url('sfs_cms_admin_content_'~content~'_details', {'content':entity}) }}" class="btn btn-light">{{ ('admin_'~content~'.preview.actions.cancel.button')|trans }}</a>
                         {% endif %}
                         <a href="{{ url('sfs_cms_admin_content_'~content~'_content', {'content':entity}) }}" class="btn btn-light">{{ ('admin_'~content~'.preview.actions.content.button')|trans }}</a>
+
+                        {% if version.published %}
+                            <span class="btn btn-light disabled">{{ ('admin_'~content~'.preview.actions.published.button')|trans }}</span>
+                        {% else %}
+                            <a href="{{ url('sfs_cms_admin_content_'~content~'_publish_version', {'content':entity, 'version':version, 'back':'preview'}) }}" class="btn btn-light">{{ ('admin_'~content~'.preview.actions.publish.button')|trans }}</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

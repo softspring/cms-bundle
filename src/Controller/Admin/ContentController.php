@@ -375,7 +375,7 @@ class ContentController extends AbstractController
         return $this->render($config['seo_view'], $viewData->getArrayCopy());
     }
 
-    public function preview(string $content, Request $request, string $version = null): Response
+    public function preview(string $content, Request $request, ContentVersionInterface $version = null): Response
     {
         $config = $this->getContentConfig($request);
         $config = $config['admin'] + ['_id' => $config['_id']];
@@ -432,7 +432,7 @@ class ContentController extends AbstractController
             $this->contentManager->saveEntity($entity);
         }
 
-        return $this->redirectBack($config['_id'], $entity, $request);
+        return $this->redirectBack($config['_id'], $entity, $request, $version);
     }
 
     public function previewContent(string $content, Request $request, string $version = null, ?WebDebugToolbarListener $debugToolbarListener = null): Response
@@ -543,11 +543,18 @@ class ContentController extends AbstractController
         return $this->redirectBack($config['_id'], $entity, $request);
     }
 
-    protected function redirectBack(string $configId, ContentInterface $entity, Request $request): RedirectResponse
+    protected function redirectBack(string $configId, ContentInterface $entity, Request $request, ?ContentVersionInterface $version = null): RedirectResponse
     {
         switch ($request->query->get('back')) {
             case 'versions':
                 return $this->redirectToRoute("sfs_cms_admin_content_{$configId}_versions", ['content' => $entity]);
+
+            case 'preview':
+                if ($version) {
+                    return $this->redirectToRoute("sfs_cms_admin_content_{$configId}_preview", ['content' => $entity]);
+                } else {
+                    return $this->redirectToRoute("sfs_cms_admin_content_{$configId}_preview_version", ['content' => $entity, 'version' => $version]);
+                }
 
             default:
                 return $this->redirectToRoute("sfs_cms_admin_content_{$configId}_details", ['content' => $entity]);
