@@ -206,9 +206,20 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
             /** @var RouteInterface $route */
             $route = $this->getReference("route___{$routeConfig['id']}");
 
-            if (!empty($routeConfig['content'])) {
-                $route->setType(RouteInterface::TYPE_CONTENT);
-                $route->setContent($this->getReference("content___{$routeConfig['content']}"));
+            switch ($routeConfig['type']) {
+                case RouteInterface::TYPE_CONTENT:
+                    $route->setType(RouteInterface::TYPE_CONTENT);
+                    $route->setContent($this->getReference("content___{$routeConfig['content']}"));
+                    break;
+
+                case RouteInterface::TYPE_REDIRECT_TO_URL:
+                    $route->setType(RouteInterface::TYPE_REDIRECT_TO_URL);
+                    $route->setRedirectUrl($routeConfig['redirect_url']);
+                    $route->setRedirectType($routeConfig['redirect_type']);
+                    break;
+
+                default:
+                    throw new \Exception(sprintf('Route type %u not yet implemented', $routeConfig['type']));
             }
 
             $manager->persist($route);

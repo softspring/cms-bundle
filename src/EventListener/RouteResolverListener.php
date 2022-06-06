@@ -79,7 +79,7 @@ class RouteResolverListener implements EventSubscriberInterface
                     break;
 
                 default:
-                    throw new \Exception('Route type not yet implemented');
+                    throw new \Exception(sprintf('Route type %u not yet implemented', $route->getType()));
             }
         }
     }
