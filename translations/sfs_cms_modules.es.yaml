@@ -1,0 +1,28 @@
+grid:
+    label: "Grid"
+    prototype_button: "Grid"
+
+container:
+    label: "Contenedor"
+    prototype_button: "Contenedor"
+    form:
+        modules.label: "Módulos"
+
+html:
+    label: "Código HTML"
+    prototype_button: "Código HTML"
+    form:
+        id.label: "Id"
+        code.label: "Código"
+
+css:
+    label: "Código CSS"
+    prototype_button: "Código CSS"
+    form:
+        css.label: "Estilos CSS"
+
+html_headers:
+    label: "Cabeceras HTML"
+    prototype_button: "Cabeceras HTML"
+    form:
+        code.label: "Código"

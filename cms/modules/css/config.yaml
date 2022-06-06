@@ -1,0 +1,13 @@
+module:
+    revision: 1
+    edit_template: '@module/css/edit.html.twig'
+    render_template: '@module/css/render.html.twig'
+    module_options:
+        label_format: 'modules.css.%%name%%.label'
+        translation_domain: 'custom_domain'
+        form_fields:
+            css:
+                type: 'css'
+                type_options:
+                    attr:
+                        data-edit-content-input: 'css'

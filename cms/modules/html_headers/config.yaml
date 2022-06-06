@@ -1,0 +1,12 @@
+module:
+    revision: 1
+    edit_template: '@module/html_headers/edit.html.twig'
+    render_template: '@module/html_headers/render.html.twig'
+    module_options:
+        label_format: 'modules.html_headers.%%name%%.label'
+        form_fields:
+            code:
+                type: 'html'
+                type_options:
+                    attr:
+                        data-edit-content-input: 'code'

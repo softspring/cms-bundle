@@ -1,0 +1,10 @@
+module:
+    revision: 1
+    form_template: '@module/container/form.html.twig'
+    module_type: 'Softspring\CmsBundle\Form\Module\ContainerModuleType'
+    module_options:
+        module_collection_class: 'container'
+        module_row_class: 'row'
+        allowed_modules: ~
+        allowed_container_modules:
+            - grid

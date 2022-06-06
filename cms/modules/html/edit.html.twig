@@ -1,0 +1,9 @@
+<div id="{{ form.id.vars.data|default('') }}"
+     class="text-break content-escape"
+     data-edit-id-target="codeContainerId"
+
+     data-edit-content-target="code"
+     data-edit-content-escape="true"
+>{{ form.code.vars.data|default('') }}</div>
+
+{#<iframe class="container-fluid" srcdoc="{{ form.code.vars.data|default('') }}" src="about:blank"></iframe>#}
