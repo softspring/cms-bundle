@@ -1,0 +1,82 @@
+{% extends '@SfsCore/base.html.twig' %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+{% block extra_headers %}
+    {{ parent() }}
+    {{ containers.headers|raw }}
+{% endblock %}
+
+{% block title %}{{ content.seo.metaTitle|default([])|sfs_cms_trans }}{% endblock %}
+
+{% block seo %}
+    {{ parent() }}
+    <meta name="description" content="{{ content.seo.metaDescription|default([])|sfs_cms_trans }}"/>
+    <meta name="keywords" content="{{ content.seo.metaKeywords|default([])|sfs_cms_trans }}"/>
+    <meta name="robots" content="{{ content.seo.noIndex|default(false) ? 'noindex' : 'index' }}" />
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="">
+    <meta property="og:title" content="{{ content.seo.metaTitle|default([])|sfs_cms_trans }}">
+    <meta property="og:description" content="{{ content.seo.metaDescription|default([])|sfs_cms_trans }}">
+    <meta property="og:locale" content="{{ app.request.locale }}">
+
+    {% if app.request.attributes.get('routePath') %}
+        {% for routePath in app.request.attributes.get('routePath').route.paths|filter((routePath) => routePath != app.request.attributes.get('routePath')) %}
+            <link rel="alternate" hreflang="{{ routePath.locale }}" href="{{ sfs_cms_url(routePath.route, routePath.locale) }}" />
+        {% endfor %}
+    {% endif %}
+{% endblock seo %}
+
+{% block body %}
+    {{ sfs_cms_block_by_type('environment') }}
+    <header class="p-3 mb-3 border-bottom">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
+                    <img alt="Softspring" height="30" src="{{ asset('build/images/softspring-logo.svg') }}" />
+                </a>
+
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    {# {{ sfs_cms_menu('main') }}  #}
+                </ul>
+
+                {% if app.request.attributes.get('routePath') %}
+                <ul class="nav col-12 col-lg-auto mb-2 justify-content-center mb-md-0">
+                    {% for routePath in app.request.attributes.get('routePath').route.paths %}
+                        {% if routePath == app.request.attributes.get('routePath') %}
+                            <li><a href="#" class="nav-link px-3"><strong>{{ routePath.locale }}</strong></a></li>
+                        {% else %}
+                            <li><a href="{{ sfs_cms_path(routePath.route, routePath.locale) }}" class="nav-link px-3">{{ routePath.locale }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
+                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                    <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+                </form>
+
+                <div class="dropdown text-end">
+                    <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+                    </a>
+                    <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+                        <li><a class="dropdown-item" href="#">New project...</a></li>
+                        <li><a class="dropdown-item" href="#">Settings</a></li>
+                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Sign out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main role="main">
+        <div class="container-fluid">
+            {{ containers.main|raw }}
+        </div>
+    </main>
+{% endblock body %}

@@ -1,0 +1,8 @@
+layout:
+    revision: 1
+    containers:
+        headers:
+            allowed_modules:
+                - html_headers
+                - css
+        main: ~
