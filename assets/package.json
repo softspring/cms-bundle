@@ -1,0 +1,7 @@
+{
+    "name": "@softspring/cms",
+    "version": "5.0.0-dev",
+    "dependencies": {
+        "underscore.string": "^3.3.6"
+    }
+}
