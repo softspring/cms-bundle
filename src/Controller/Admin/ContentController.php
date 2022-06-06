@@ -105,7 +105,8 @@ class ContentController extends AbstractController
 //        }
 
         if (!$entity) {
-            throw $this->createNotFoundException('Entity not found');
+            $request->getSession()->getFlashBag()->add('error', 'entity_not_found');
+            return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_list");
         }
 
 //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
@@ -138,7 +139,8 @@ class ContentController extends AbstractController
 //        }
 
         if (!$entity) {
-            throw $this->createNotFoundException('Entity not found');
+            $request->getSession()->getFlashBag()->add('error', 'entity_not_found');
+            return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_list");
         }
 
 //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
@@ -255,7 +257,8 @@ class ContentController extends AbstractController
 //        }
 
         if (!$entity) {
-            throw $this->createNotFoundException('Entity not found');
+            $request->getSession()->getFlashBag()->add('error', 'entity_not_found');
+            return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_list");
         }
 
         $request->attributes->set('content', $entity);
@@ -332,7 +335,8 @@ class ContentController extends AbstractController
 //        }
 
         if (!$entity) {
-            throw $this->createNotFoundException('Entity not found');
+            $request->getSession()->getFlashBag()->add('error', 'entity_not_found');
+            return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_list");
         }
 
 //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
@@ -387,7 +391,8 @@ class ContentController extends AbstractController
 //        }
 
         if (!$entity) {
-            throw $this->createNotFoundException('Entity not found');
+            $request->getSession()->getFlashBag()->add('error', 'entity_not_found');
+            return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_list");
         }
 
 //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
@@ -419,7 +424,8 @@ class ContentController extends AbstractController
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Entity not found');
+            $request->getSession()->getFlashBag()->add('error', 'entity_not_found');
+            return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_list");
         }
 
         if ($version) {
@@ -447,7 +453,8 @@ class ContentController extends AbstractController
 //        }
 
         if (!$entity) {
-            throw $this->createNotFoundException('Entity not found');
+            $request->getSession()->getFlashBag()->add('error', 'entity_not_found');
+            return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_list");
         }
 
         if ($version) {
@@ -475,7 +482,8 @@ class ContentController extends AbstractController
 //        }
 
         if (!$entity) {
-            throw $this->createNotFoundException('Entity not found');
+            $request->getSession()->getFlashBag()->add('error', 'entity_not_found');
+            return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_list");
         }
 
 //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
@@ -509,7 +517,8 @@ class ContentController extends AbstractController
 //        }
 
         if (!$entity) {
-            throw $this->createNotFoundException('Entity not found');
+            $request->getSession()->getFlashBag()->add('error', 'entity_not_found');
+            return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_list");
         }
 
         /** @var ContentVersionInterface $version */
@@ -532,7 +541,8 @@ class ContentController extends AbstractController
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Entity not found');
+            $request->getSession()->getFlashBag()->add('error', 'entity_not_found');
+            return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_list");
         }
 
         /** @var ContentVersionInterface $version */
