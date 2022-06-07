@@ -21,12 +21,9 @@
     <meta property="og:title" content="{{ content.seo.metaTitle|default([])|sfs_cms_trans }}">
     <meta property="og:description" content="{{ content.seo.metaDescription|default([])|sfs_cms_trans }}">
     <meta property="og:locale" content="{{ app.request.locale }}">
-
-    {% if app.request.attributes.get('routePath') %}
-        {% for routePath in app.request.attributes.get('routePath').route.paths|filter((routePath) => routePath != app.request.attributes.get('routePath')) %}
-            <link rel="alternate" hreflang="{{ routePath.locale }}" href="{{ sfs_cms_url(routePath.route, routePath.locale) }}" />
-        {% endfor %}
-    {% endif %}
+    {% for locale, url in sfs_cms_alternate_urls() %}
+        <link rel="alternate" hreflang="{{ locale }}" href="{{ url }}" />
+    {% endfor %}
 {% endblock seo %}
 
 {% block body %}
@@ -42,17 +39,15 @@
                     {# {{ sfs_cms_menu('main') }}  #}
                 </ul>
 
-                {% if app.request.attributes.get('routePath') %}
                 <ul class="nav col-12 col-lg-auto mb-2 justify-content-center mb-md-0">
-                    {% for routePath in app.request.attributes.get('routePath').route.paths %}
-                        {% if routePath == app.request.attributes.get('routePath') %}
-                            <li><a href="#" class="nav-link px-3"><strong>{{ routePath.locale }}</strong></a></li>
+                    {% for locale, path in sfs_cms_locale_paths('home') %}
+                        {% if locale == app.request.locale %}
+                            <li><a href="" class="nav-link px-3"><strong>{{ locale }}</strong></a></li>
                         {% else %}
-                            <li><a href="{{ sfs_cms_path(routePath.route, routePath.locale) }}" class="nav-link px-3">{{ routePath.locale }}</a></li>
+                            <li><a href="{{ path }}" class="nav-link px-3">{{ locale }}</a></li>
                         {% endif %}
                     {% endfor %}
                 </ul>
-                {% endif %}
 
                 <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
                     <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
