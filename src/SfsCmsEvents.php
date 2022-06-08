@@ -8,7 +8,7 @@ namespace Softspring\CmsBundle;
 class SfsCmsEvents
 {
     /**
-     * @Event("Softspring\CoreBundle\Event\ViewEvent")
+     * @Event("Softspring\Component\Events\ViewEvent")
      */
     public const ADMIN_SITES_LIST_VIEW = 'sfs_cms.admin.sites.list_view';
 
@@ -33,12 +33,12 @@ class SfsCmsEvents
     public const ADMIN_SITES_CREATE_FORM_INVALID = 'sfs_cms.admin.sites.create_form_invalid';
 
     /**
-     * @Event("Softspring\CoreBundle\Event\ViewEvent")
+     * @Event("Softspring\Component\Events\ViewEvent")
      */
     public const ADMIN_SITES_CREATE_VIEW = 'sfs_cms.admin.sites.create_view';
 
     /**
-     * @Event("Softspring\CoreBundle\Event\ViewEvent")
+     * @Event("Softspring\Component\Events\ViewEvent")
      */
     public const ADMIN_SITES_READ_VIEW = 'sfs_cms.admin.sites.read_view';
 
@@ -63,7 +63,7 @@ class SfsCmsEvents
     public const ADMIN_SITES_UPDATE_FORM_INVALID = 'sfs_cms.admin.sites.update_form_invalid';
 
     /**
-     * @Event("Softspring\CoreBundle\Event\ViewEvent")
+     * @Event("Softspring\Component\Events\ViewEvent")
      */
     public const ADMIN_SITES_UPDATE_VIEW = 'sfs_cms.admin.sites.update_view';
 
@@ -88,17 +88,17 @@ class SfsCmsEvents
     public const ADMIN_SITES_DELETE_FORM_INVALID = 'sfs_cms.admin.sites.delete_form_invalid';
 
     /**
-     * @Event("Softspring\CoreBundle\Event\ViewEvent")
+     * @Event("Softspring\Component\Events\ViewEvent")
      */
     public const ADMIN_SITES_DELETE_VIEW = 'sfs_cms.admin.blocks.delete_view';
 
     /**
-     * @Event("Softspring\CoreBundle\Event\GetResponseRequestEvent")
+     * @Event("Softspring\Component\Events\GetResponseRequestEvent")
      */
     public const ADMIN_BLOCKS_LIST_INITIALIZE = 'sfs_cms.admin.blocks.list_initialize';
 
     /**
-     * @Event("Softspring\CoreBundle\Event\ViewEvent")
+     * @Event("Softspring\Component\Events\ViewEvent")
      */
     public const ADMIN_BLOCKS_LIST_VIEW = 'sfs_cms.admin.blocks.list_view';
 
@@ -123,7 +123,7 @@ class SfsCmsEvents
     public const ADMIN_BLOCKS_CREATE_FORM_INVALID = 'sfs_cms.admin.blocks.create_form_invalid';
 
     /**
-     * @Event("Softspring\CoreBundle\Event\ViewEvent")
+     * @Event("Softspring\Component\Events\ViewEvent")
      */
     public const ADMIN_BLOCKS_CREATE_VIEW = 'sfs_cms.admin.blocks.create_view';
 
@@ -133,7 +133,7 @@ class SfsCmsEvents
     public const ADMIN_BLOCKS_READ_INITIALIZE = 'sfs_cms.admin.blocks.read_initialize';
 
     /**
-     * @Event("Softspring\CoreBundle\Event\ViewEvent")
+     * @Event("Softspring\Component\Events\ViewEvent")
      */
     public const ADMIN_BLOCKS_READ_VIEW = 'sfs_cms.admin.blocks.read_view';
 
@@ -158,7 +158,7 @@ class SfsCmsEvents
     public const ADMIN_BLOCKS_UPDATE_FORM_INVALID = 'sfs_cms.admin.blocks.update_form_invalid';
 
     /**
-     * @Event("Softspring\CoreBundle\Event\ViewEvent")
+     * @Event("Softspring\Component\Events\ViewEvent")
      */
     public const ADMIN_BLOCKS_UPDATE_VIEW = 'sfs_cms.admin.blocks.update_view';
 
@@ -183,17 +183,17 @@ class SfsCmsEvents
     public const ADMIN_BLOCKS_DELETE_FORM_INVALID = 'sfs_cms.admin.blocks.delete_form_invalid';
 
     /**
-     * @Event("Softspring\CoreBundle\Event\ViewEvent")
+     * @Event("Softspring\Component\Events\ViewEvent")
      */
     public const ADMIN_BLOCKS_DELETE_VIEW = 'sfs_cms.admin.blocks.delete_view';
 
     /**
-     * @Event("Softspring\CoreBundle\Event\GetResponseRequestEvent")
+     * @Event("Softspring\Component\Events\GetResponseRequestEvent")
      */
     public const ADMIN_ROUTES_LIST_INITIALIZE = 'sfs_cms.admin.routes.list_initialize';
 
     /**
-     * @Event("Softspring\CoreBundle\Event\ViewEvent")
+     * @Event("Softspring\Component\Events\ViewEvent")
      */
     public const ADMIN_ROUTES_LIST_VIEW = 'sfs_cms.admin.routes.list_view';
 
@@ -218,7 +218,7 @@ class SfsCmsEvents
     public const ADMIN_ROUTES_CREATE_FORM_INVALID = 'sfs_cms.admin.routes.create_form_invalid';
 
     /**
-     * @Event("Softspring\CoreBundle\Event\ViewEvent")
+     * @Event("Softspring\Component\Events\ViewEvent")
      */
     public const ADMIN_ROUTES_CREATE_VIEW = 'sfs_cms.admin.routes.create_view';
 
@@ -228,7 +228,7 @@ class SfsCmsEvents
     public const ADMIN_ROUTES_READ_INITIALIZE = 'sfs_cms.admin.routes.read_initialize';
 
     /**
-     * @Event("Softspring\CoreBundle\Event\ViewEvent")
+     * @Event("Softspring\Component\Events\ViewEvent")
      */
     public const ADMIN_ROUTES_READ_VIEW = 'sfs_cms.admin.routes.read_view';
 
@@ -253,7 +253,7 @@ class SfsCmsEvents
     public const ADMIN_ROUTES_UPDATE_FORM_INVALID = 'sfs_cms.admin.routes.update_form_invalid';
 
     /**
-     * @Event("Softspring\CoreBundle\Event\ViewEvent")
+     * @Event("Softspring\Component\Events\ViewEvent")
      */
     public const ADMIN_ROUTES_UPDATE_VIEW = 'sfs_cms.admin.routes.update_view';
 
@@ -278,7 +278,7 @@ class SfsCmsEvents
     public const ADMIN_ROUTES_DELETE_FORM_INVALID = 'sfs_cms.admin.routes.delete_form_invalid';
 
     /**
-     * @Event("Softspring\CoreBundle\Event\ViewEvent")
+     * @Event("Softspring\Component\Events\ViewEvent")
      */
     public const ADMIN_ROUTES_DELETE_VIEW = 'sfs_cms.admin.routes.delete_view';
 }
