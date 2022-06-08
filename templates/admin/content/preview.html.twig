@@ -5,7 +5,7 @@
 {% block title %}{{ ('admin_'~content~'.preview.meta.title')|trans({'%name%':entity.name}) }}{% endblock %}
 
 {% block body %}
-    <div class="d-flex flex-col align-items-stretch vh-100 pt-5">
+    <div class="d-flex flex-col align-items-stretch min-vh-100 pt-5">
         <header class="flex-fill p-3 bg-dark fixed-top border-bottom">
             <div class="container-fluid">
                 <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
@@ -43,7 +43,7 @@
                 </div>
             </div>
         </header>
-        <main class="flex-fill d-flex flex-row align-items-stretch bg-light h-100">
+        <main class="flex-fill d-flex flex-row align-items-stretch bg-light  min-vh-100">
             <div class="pt-4 h-100 w-100">
                 <iframe id="preview" src="{{ url('sfs_cms_admin_content_'~content~'_preview_content_version', {'content':entity, 'version':version, 'locale': app.request.query.get('locale', app.request.defaultLocale)}) }}" width="100%" height="100%"></iframe>
             </div>
