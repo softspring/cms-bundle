@@ -41,19 +41,9 @@
     &:hover {
         border: 2px dashed black;
     }
-    //napa
-    @at-root .has-form & {
-        width: calc(100% - 320px);
-
-        & .cms-module {
-            width: auto;
-        }
-    }
-
 
     &.active {
         border: 2px dashed green;
-        width: calc(100% - 320px);
 
         > .cms-module-body > .cms-module-edit > .cms-module-form {
             display: block;
@@ -72,4 +62,9 @@
     .content-escape {
         word-break: break-word;
     }
+}
+
+#content-form {
+    width: 300px;
+    flex-shrink: 0;
 }
