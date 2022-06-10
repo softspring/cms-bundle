@@ -57,6 +57,17 @@
     </div>
 {% endblock html_class_widget %}
 
+{% block cms_color_widget %}
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <div class="input-group-text">
+                <input type="checkbox" data-color-type="toggler" {{ form.vars.data ? 'checked="checked"' : '' }} />
+            </div>
+        </div>
+        {{ form_widget(form, {'attr': {'data-color-type': 'widget'}, 'disabled': not not form.vars.data}) }}
+    </div>
+{% endblock cms_color_widget %}
+
 {% block html_id_widget %}
     <div class="input-group">
         <div class="input-group-prepend">
