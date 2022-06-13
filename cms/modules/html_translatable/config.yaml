@@ -1,0 +1,21 @@
+module:
+    revision: 1
+    edit_template: '@module/html_translatable/edit.html.twig'
+    render_template: '@module/html_translatable/render.html.twig'
+    module_options:
+        label_format: 'modules.html_translatable.%%name%%.label'
+        translation_domain: 'custom_domain'
+        form_fields:
+            id:
+                type: 'id'
+                type_options:
+                    attr:
+                        data-edit-id-input: 'codeContainerId'
+
+            code:
+                type: 'translatable'
+                type_options:
+                    type: 'html'
+                    type_options:
+                        attr:
+                            data-edit-content-input: 'code'
