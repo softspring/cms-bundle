@@ -17,7 +17,7 @@
 
     function getMenuItemCollectionLastIndex($collection)
     {
-        return $collection.find('.node-row').length - 1; // parseInt($collection.find('.node-row').last().data('index'));
+        return $collection.find('.polymorphic-node-row').length - 1; // parseInt($collection.find('.node-row').last().data('index'));
     }
 
     function addMenuItem ($addNodeLink)
