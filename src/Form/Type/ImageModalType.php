@@ -2,7 +2,7 @@
 
 namespace Softspring\CmsBundle\Form\Type;
 
-use Softspring\ImageBundle\Form\ImageModalType as RealImageModalType;
+use Softspring\MediaBundle\Form\MediaModalType as RealMediaModalType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -26,7 +26,7 @@ class ImageModalType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('image', RealImageModalType::class, $options['image_type_options']);
+        $builder->add('image', RealMediaModalType::class, $options['image_type_options']);
 
         if ($options['alt']) {
             $builder->add('alt', TextType::class, $options['alt_type_options']);

@@ -8,7 +8,7 @@ use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Model\MenuInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
-use Softspring\ImageBundle\Model\ImageInterface;
+use Softspring\MediaBundle\Model\MediaInterface;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Yaml\Yaml;
 
@@ -158,31 +158,36 @@ class CmsFixtures
             ];
         }
 
-        if ($data instanceof ImageInterface) {
-            !is_dir('/srv/cms/fixtures/images') && mkdir('/srv/cms/fixtures/images', 0755, true);
-            $originalVersion = $data->getVersion('_original');
+        if ($data instanceof MediaInterface) {
+            !is_dir('/srv/cms/fixtures/media') && mkdir('/srv/cms/fixtures/media', 0755, true);
 
-            $parts = explode('/', $originalVersion->getUrl(), 4);
+            $versionFiles = [];
 
-            $imageFileName = '/srv/cms/fixtures/images/'.$data->getId().[
-                'image/jpeg' => '.jpeg',
-                'image/png' => '.png',
-                'image/webp' => '.webp',
-            ][$originalVersion->getFileMimeType()];
+            // TODO SET THIS IN A LOOP WITH ALL UPLOADED FILES (NOT ONLY _ORIGINAL FILE)
+                $originalVersion = $data->getVersion('_original');
+                $parts = explode('/', $originalVersion->getUrl(), 4);
+                $mediaFileName = '/srv/cms/fixtures/media/'.$data->getId().([
+                    'image/jpeg' => '.jpeg',
+                    'image/png' => '.png',
+                    'image/gif' => '.gif',
+                    'image/webp' => '.webp',
+                    'video/webm' => '.webm',
+                ][$originalVersion->getFileMimeType()]??'');
+                $storageClient = new StorageClient();
+                $storageClient->bucket($parts[2])->object($parts[3])->downloadToFile($mediaFileName);
+                $versionFiles['_original'] = $mediaFileName;
 
-            $storageClient = new StorageClient();
-            $storageClient->bucket($parts[2])->object($parts[3])->downloadToFile($imageFileName);
-
-            file_put_contents('/srv/cms/fixtures/images/'.$data->getId().'.json', json_encode([
+            file_put_contents('/srv/cms/fixtures/media/'.$data->getId().'.json', json_encode([
                 'id' => $data->getId(),
                 'type' => $data->getType(),
+                'media_type' => $data->getMediaType(),
                 'name' => $data->getName(),
                 'description' => $data->getDescription(),
-                'file' => $imageFileName,
-            ]));
+                'versionFiles' => $versionFiles,
+            ], JSON_PRETTY_PRINT));
 
             return [
-                '_reference' => 'image___'.$data->getId(),
+                '_reference' => 'media___'.$data->getId(),
             ];
         }
 

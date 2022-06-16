@@ -219,7 +219,7 @@ window.addEventListener('load', (event) => {
      * The select option must have the "data-image-preview-input"
      * Both data attributes must have the same value (as identificator)
      */
-    document.addEventListener('sfs_image.selected', function (event) {
+    document.addEventListener('sfs_media.selected', function (event) {
         if (!event.target || !event.target.hasAttribute('data-image-preview-input')) return;
 
         let moduleForm = event.target.closest('.cms-module-edit').querySelector('.module-preview');
@@ -243,7 +243,7 @@ window.addEventListener('load', (event) => {
      * The select option must have the "data-image-preview-input"
      * Both data attributes must have the same value (as identificator)
      */
-    document.addEventListener('sfs_image.unselected', function (event) {
+    document.addEventListener('sfs_media.unselected', function (event) {
         if (!event.target || !event.target.hasAttribute('data-image-preview-input')) return;
 
         let moduleForm = event.target.closest('.cms-module-edit').querySelector('.module-preview');

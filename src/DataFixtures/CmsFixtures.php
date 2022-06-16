@@ -18,11 +18,12 @@ use Softspring\CmsBundle\Model\MenuInterface;
 use Softspring\CmsBundle\Model\MenuItemInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Model\RoutePathInterface;
-use Softspring\ImageBundle\Entity\Image;
-use Softspring\ImageBundle\Entity\ImageVersion;
+use Softspring\MediaBundle\Entity\Media;
+use Softspring\MediaBundle\Entity\MediaVersion;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Yaml\Yaml;
 
@@ -51,7 +52,7 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
 
     public function load(ObjectManager $manager)
     {
-        $this->loadImages($manager);
+        $this->loadMedia($manager);
         $this->preloadRoutes($manager);
         $this->loadBlocks($manager);
         $this->loadContents($manager);
@@ -226,26 +227,30 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
         }
     }
 
-    public function loadImages(ObjectManager $manager)
+    public function loadMedia(ObjectManager $manager)
     {
-        if (!is_dir("$this->fixturesPath/images")) {
+        if (!is_dir("$this->fixturesPath/media")) {
             return;
         }
 
-        foreach ((new Finder())->in("$this->fixturesPath/images")->files()->name('*.json') as $imageConfig) {
-            $data = json_decode(file_get_contents($imageConfig->getRealPath()), true);
+        foreach ((new Finder())->in("$this->fixturesPath/media")->files()->name('*.json') as $mediaConfig) {
+            $data = json_decode(file_get_contents($mediaConfig->getRealPath()), true);
 
-            $image = new Image();
-            $image->setType($data['type']);
-            $image->setName($data['name']);
-            $image->setDescription($data['description']);
-            $image->addVersion($version = new ImageVersion());
-            $version->setVersion('_original');
-            $version->setUpload(new File($data['file']));
+            $media = new Media();
+            $media->setMediaType($data['media_type']);
+            $media->setType($data['type']);
+            $media->setName($data['name']);
+            $media->setDescription($data['description']);
 
-            $this->addReference("image___{$data['id']}", $image);
+            foreach ($data['versionFiles'] as $versionKey => $versionFileName) {
+                $version = new MediaVersion($versionKey, $media);
+                $version->setUpload(new UploadedFile($versionFileName, 'file-fake-name'), true);
+                $manager->persist($version);
+            }
 
-            $manager->persist($image);
+            $this->addReference("media___{$data['id']}", $media);
+
+            $manager->persist($media);
         }
     }
 

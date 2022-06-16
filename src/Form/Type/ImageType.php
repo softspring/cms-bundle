@@ -4,8 +4,8 @@ namespace Softspring\CmsBundle\Form\Type;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Softspring\ImageBundle\Model\ImageInterface;
-use Softspring\ImageBundle\Render\ImageRenderer;
+use Softspring\MediaBundle\Model\MediaInterface;
+use Softspring\MediaBundle\Render\MediaRenderer;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
@@ -16,9 +16,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class ImageType extends AbstractType
 {
     protected EntityManagerInterface $em;
-    protected ImageRenderer $imageRenderer;
+    protected MediaRenderer $imageRenderer;
 
-    public function __construct(EntityManagerInterface $em, ImageRenderer $imageRenderer)
+    public function __construct(EntityManagerInterface $em, MediaRenderer $imageRenderer)
     {
         $this->em = $em;
         $this->imageRenderer = $imageRenderer;
@@ -32,16 +32,16 @@ class ImageType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'class' => ImageInterface::class,
+            'class' => MediaInterface::class,
             'em' => $this->em,
             'required' => false,
             'image_types' => [],
             'image_attr' => [],
             'query_builder' => fn (EntityRepository $entityRepository) => $entityRepository->createQueryBuilder('i'),
-            'choice_label' => function (ImageInterface $image) {
+            'choice_label' => function (MediaInterface $image) {
                 return $image->getName();
             },
-            'choice_filter' => function (?ImageInterface $image = null) {
+            'choice_filter' => function (?MediaInterface $image = null) {
                 return true;
             },
         ]);
@@ -56,7 +56,7 @@ class ImageType extends AbstractType
         });
 
         $resolver->setDefault('choice_attr', function (Options $options) {
-            return function (?ImageInterface $image = null) use ($options) {
+            return function (?MediaInterface $image = null) use ($options) {
                 if (empty($options['attr']['data-image-preview-input'])) {
                     return [];
                 }

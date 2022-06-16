@@ -4,7 +4,7 @@
 
 {% form_theme form '@SfsPolymorphicFormType/polymorphic-form-theme.html.twig'
     '@SfsCms/cms_form_theme.html.twig'
-    '@SfsImage/image_form_theme.html.twig'
+    '@SfsMedia/image_form_theme.html.twig'
 %}
 
 {% block breadcrums_content %}
@@ -27,5 +27,5 @@
         {{ form_end(form) }}
     </div>
 
-    {% include '@SfsImage/image_type_modal.html.twig' %}
+    {% include '@SfsMedia/image_type_modal.html.twig' %}
 {% endblock content %}

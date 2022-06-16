@@ -10,6 +10,7 @@
         "softspring/crudl-controller": "^5.0",
         "softspring/dynamic-form-type": "^5.0",
         "softspring/events": "^5.0",
+        "softspring/media-bundle": "^5.0",
         "softspring/polymorphic-form-type": "^5.0",
         "symfony/uid": "^5.0 || ^6.0"
     },
