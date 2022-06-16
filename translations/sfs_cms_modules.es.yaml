@@ -26,3 +26,10 @@ html_headers:
     prototype_button: "Cabeceras HTML"
     form:
         code.label: "Código"
+
+html_translatable:
+    label: "Código HTML traducible"
+    prototype_button: "Código HTML traducible"
+    form:
+        id.label: "Id"
+        code.label: "Código"

@@ -1,13 +1,22 @@
-{% for locale,localeField in form.code %}
-    <div id="{{ form.id.vars.data|default('') }}"
-         class="text-break content-escape"
-         data-lang="{{ locale }}"
-         data-edit-id-target="codeContainerId"
+{#{% for locale,localeField in form.code %}#}
+{#    <div id="{{ form.id.vars.data|default('') }}"#}
+{#         class="text-break content-escape"#}
+{#         data-lang="{{ locale }}"#}
+{#         data-edit-id-target="codeContainerId"#}
 
-         data-edit-content-target="code.{{ locale }}"
+{#         data-edit-content-target="code.{{ locale }}"#}
 
-         data-edit-content-escape="true"
-    >{{ localeField.vars.data|default('') }}</div>
-{% endfor %}
+{#         data-edit-content-escape="true"#}
+{#    >{{ localeField.vars.data|default('') }}</div>#}
+{#{% endfor %}#}
 
 {#<iframe class="container-fluid" srcdoc="{{ form.code.vars.data|default('') }}" src="about:blank"></iframe>#}
+<div id="{{ form.id.vars.data|default('') }}"
+     class="text-break content-escape"
+     data-edit-id-target="contentContainerId"
+
+     data-edit-content-target="content"
+     data-edit-content-escape="true"
+>
+    {{ form_row(form.code) }}
+</div>

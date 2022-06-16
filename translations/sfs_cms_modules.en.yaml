@@ -26,3 +26,11 @@ html_headers:
     prototype_button: "HTML headers"
     form:
         code.label: "Code"
+
+
+html_translatable:
+    label: "Translatable HTML code"
+    prototype_button: "Translatable HTML code"
+    form:
+        id.label: "Id"
+        code.label: "Code"

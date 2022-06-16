@@ -1,3 +1,6 @@
+.tox-notifications-container {
+    display: none;
+}
 .cms-module {
     position: relative;
     display: flex;
@@ -62,6 +65,11 @@
     .content-escape {
         word-break: break-word;
     }
+
+    .textarea-lg {
+        height: 200px;
+    }
+
 }
 
 #content-form {

@@ -2,6 +2,7 @@ module:
     revision: 1
     edit_template: '@module/html_translatable/edit.html.twig'
     render_template: '@module/html_translatable/render.html.twig'
+    form_template: '@module/html_translatable/form.html.twig'
     module_options:
         label_format: 'modules.html_translatable.%%name%%.label'
         translation_domain: 'custom_domain'
