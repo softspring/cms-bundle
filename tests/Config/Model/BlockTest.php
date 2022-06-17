@@ -96,7 +96,7 @@ class BlockTest extends TestCase
                 'singleton' => true,
                 'form_fields' => [
                     'test' => [
-                        'type' => 'text'
+                        'type' => 'text',
                     ],
                 ],
             ],

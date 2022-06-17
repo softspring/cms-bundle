@@ -54,7 +54,7 @@ class TranslatableType extends AbstractType
                 'block_prefix' => 'translatable_element',
             ] + $options['type_options']
             + [
-                'attr' => $options['children_attr'] + ($options['type_options']['attr']??[]),
+                'attr' => $options['children_attr'] + ($options['type_options']['attr'] ?? []),
             ]);
         }
     }

@@ -84,7 +84,7 @@ class UrlGenerator
 
         $attrs = [];
 
-        if ($route->getType() === RouteInterface::TYPE_CONTENT && $route->getContent()) {
+        if (RouteInterface::TYPE_CONTENT === $route->getType() && $route->getContent()) {
             $seo = $route->getContent()->getSeo();
             if (isset($seo['noIndex'])) {
                 $attrs['rel'][] = $seo['noIndex'] ? 'noindex' : 'index';
@@ -95,7 +95,7 @@ class UrlGenerator
         }
 
         foreach ($attrs as $attr => $value) {
-            if ($attr === 'rel' && is_array($value)) {
+            if ('rel' === $attr && is_array($value)) {
                 $value = implode(',', $value);
             }
 
@@ -110,9 +110,9 @@ class UrlGenerator
     {
         $locale = $locale ?: $this->requestStack->getCurrentRequest()->getLocale();
 
-        /** @var RoutePathInterface $path */
+        /* @var RoutePathInterface $path */
         if ($locale) {
-            $path = $route->getPaths()->filter(fn(RoutePathInterface $routePath) => $routePath->getLocale() == $locale)->first();
+            $path = $route->getPaths()->filter(fn (RoutePathInterface $routePath) => $routePath->getLocale() == $locale)->first();
         }
 
         $path = $path ?: $route->getPaths()->first();

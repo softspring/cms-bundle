@@ -78,24 +78,26 @@ class TranslateExtension extends AbstractExtension
 
         $alternate = [];
 
-        foreach ($this->enabledLocales as $locale) if ($locale !== $currentLocale) {
-            if (isset($alternate[$routePath->getLocale()])) {
-                continue;
+        foreach ($this->enabledLocales as $locale) {
+            if ($locale !== $currentLocale) {
+                if (isset($alternate[$routePath->getLocale()])) {
+                    continue;
+                }
+
+                $hasLocalizedRoutePath = (bool) $routePath->getRoute()->getPaths()->filter(fn (RoutePathInterface $routePath) => $routePath->getLocale() == $locale)->count();
+
+                if (!$hasLocalizedRoutePath) {
+                    continue;
+                }
+
+                $url = $this->urlGenerator->getUrl($routePath->getRoute(), $locale);
+
+                if ('#' === $url) {
+                    continue;
+                }
+
+                $alternate[$locale] = $url;
             }
-
-            $hasLocalizedRoutePath = (bool) $routePath->getRoute()->getPaths()->filter(fn(RoutePathInterface $routePath) => $routePath->getLocale() == $locale)->count();
-
-            if (!$hasLocalizedRoutePath) {
-                continue;
-            }
-
-            $url = $this->urlGenerator->getUrl($routePath->getRoute(), $locale);
-
-            if ($url === '#') {
-                continue;
-            }
-
-            $alternate[$locale] = $url;
         }
 
         return $alternate;
@@ -120,7 +122,7 @@ class TranslateExtension extends AbstractExtension
                 continue;
             }
 
-            $hasLocalizedRoutePath = (bool) $routePath->getRoute()->getPaths()->filter(fn(RoutePathInterface $routePath) => $routePath->getLocale() == $locale)->count();
+            $hasLocalizedRoutePath = (bool) $routePath->getRoute()->getPaths()->filter(fn (RoutePathInterface $routePath) => $routePath->getLocale() == $locale)->count();
 
             if ($hasLocalizedRoutePath) {
                 $localePaths[$locale] = $this->urlGenerator->getPath($routePath->getRoute(), $locale);

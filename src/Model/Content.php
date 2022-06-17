@@ -19,6 +19,8 @@ abstract class Content implements ContentInterface
      */
     protected Collection $routes;
 
+    protected ?RouteInterface $canonical;
+
     protected ?array $extraData = null;
 
     protected ?array $seo = null;

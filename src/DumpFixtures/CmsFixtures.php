@@ -164,18 +164,18 @@ class CmsFixtures
             $versionFiles = [];
 
             // TODO SET THIS IN A LOOP WITH ALL UPLOADED FILES (NOT ONLY _ORIGINAL FILE)
-                $originalVersion = $data->getVersion('_original');
-                $parts = explode('/', $originalVersion->getUrl(), 4);
-                $mediaFileName = '/srv/cms/fixtures/media/'.$data->getId().([
+            $originalVersion = $data->getVersion('_original');
+            $parts = explode('/', $originalVersion->getUrl(), 4);
+            $mediaFileName = '/srv/cms/fixtures/media/'.$data->getId().([
                     'image/jpeg' => '.jpeg',
                     'image/png' => '.png',
                     'image/gif' => '.gif',
                     'image/webp' => '.webp',
                     'video/webm' => '.webm',
-                ][$originalVersion->getFileMimeType()]??'');
-                $storageClient = new StorageClient();
-                $storageClient->bucket($parts[2])->object($parts[3])->downloadToFile($mediaFileName);
-                $versionFiles['_original'] = $mediaFileName;
+                ][$originalVersion->getFileMimeType()] ?? '');
+            $storageClient = new StorageClient();
+            $storageClient->bucket($parts[2])->object($parts[3])->downloadToFile($mediaFileName);
+            $versionFiles['_original'] = $mediaFileName;
 
             file_put_contents('/srv/cms/fixtures/media/'.$data->getId().'.json', json_encode([
                 'id' => $data->getId(),
