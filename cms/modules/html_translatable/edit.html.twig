@@ -11,9 +11,13 @@
 {#{% endfor %}#}
 
 {#<iframe class="container-fluid" srcdoc="{{ form.code.vars.data|default('') }}" src="about:blank"></iframe>#}
+{% set defaultDivClass = 'text-break content-escape' %}
 <div id="{{ form.id.vars.data|default('') }}"
-     class="text-break content-escape"
+     class="{{ defaultDivClass }}"
      data-edit-id-target="contentContainerId"
+
+     data-edit-class-target="contentContainerClassDiv"
+     data-edit-class-default="{{ defaultDivClass }}"
 
      data-edit-content-target="content"
      data-edit-content-escape="true"

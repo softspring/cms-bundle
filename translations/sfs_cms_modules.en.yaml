@@ -34,3 +34,4 @@ html_translatable:
     form:
         id.label: "Id"
         code.label: "Code"
+        class.label: "Classes"

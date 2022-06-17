@@ -13,6 +13,12 @@ module:
                     attr:
                         data-edit-id-input: 'codeContainerId'
 
+            class:
+                type: 'class'
+                type_options:
+                    attr:
+                        data-edit-class-input: 'codeContainerDiv'
+
             code:
                 type: 'translatable'
                 type_options:
