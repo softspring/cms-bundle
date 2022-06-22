@@ -35,17 +35,10 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $container->setParameter('sfs_cms.contents', $configLoader->getContents($container));
         $container->setParameter('sfs_cms.menus', $configLoader->getMenus($container));
         $container->setParameter('sfs_cms.blocks', $configLoader->getBlocks($container));
-
-//        $container->setParameter('sfs_cms.dynamic_modules', $config['dynamic_modules']);
+        $container->setParameter('sfs_cms.sites', $configLoader->getSites($container));
 
         // set config parameters
         $container->setParameter('sfs_cms.entity_manager_name', $config['entity_manager']);
-
-//        // configure site classes
-//        $container->setParameter('sfs_cms.site.type', $config['site']['type']);
-//        $container->setParameter('sfs_cms.site.class', $config['site']['class']);
-//        $container->setParameter('sfs_cms.site.route_param_name', $config['site']['route_param_name'] ?? null);
-//        $container->setParameter('sfs_cms.site.find_field_name', $config['site']['find_field_name'] ?? null);
 
         // configure route classes
         $container->setParameter('sfs_cms.route.class', $config['route']['class']);
@@ -69,14 +62,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
 
         // load services
         $loader->load('services.yaml');
-//        $loader->load('controller/admin_sites.yaml');
-//        $loader->load('doctrine_filter.yaml');
 
-//        if ($container->getParameter('sfs_cms.block.class')) {
-//            $loader->load('controller/admin_blocks.yaml');
-//        }
-
-//        true && $loader->load('controller/admin_layout.yaml');
         true && $loader->load('controller/admin_routes.yaml');
         true && $loader->load('controller/admin_content.yaml');
 
@@ -90,7 +76,6 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $doctrineConfig = [];
 
         // add a default config to force load target_entities, will be overwritten by ResolveDoctrineTargetEntityPass
-//        $doctrineConfig['orm']['resolve_target_entities'][SiteInterface::class] = 'App\Entity\Site';
         $doctrineConfig['orm']['resolve_target_entities'][BlockInterface::class] = 'App\Entity\Block';
         $doctrineConfig['orm']['resolve_target_entities'][ContentInterface::class] = 'App\Entity\Content';
 

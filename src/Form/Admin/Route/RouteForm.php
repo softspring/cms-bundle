@@ -60,17 +60,6 @@ class RouteForm extends AbstractType
                 ],
             ]);
 
-            //        // if ($this->manager->getEntityClassReflection()->implementsInterface(SiteReferenceInterface::class)) {
-            //        $builder->add('site', EntityType::class, [
-            //            'required' => false,
-            //            'em' => $this->em,
-            //            'class' => SiteInterface::class,
-            //            'choice_label' => function (SiteInterface $site) {
-            //                return $site->getName();
-            //            },
-            //        ]);
-            //        // }
-
             $builder->add('content', EntityType::class, [
                 'class' => ContentInterface::class,
                 'required' => false,

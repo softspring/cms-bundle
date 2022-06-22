@@ -18,13 +18,6 @@ class RouteResolverListener implements EventSubscriberInterface
 {
     protected EntityManagerInterface $em;
     protected RouterInterface $router;
-//    protected string $siteType;
-
-//    public function __construct(EntityManagerInterface $em, string $siteType)
-//    {
-//        $this->em = $em;
-//        $this->siteType = $siteType;
-//    }
 
     public function __construct(EntityManagerInterface $em, RouterInterface $router)
     {

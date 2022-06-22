@@ -6,10 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Softspring\CmsBundle\Form\Type\DynamicFormType;
 use Softspring\CmsBundle\Manager\BlockManagerInterface;
 use Softspring\CmsBundle\Model\BlockInterface;
-use Softspring\CmsBundle\Model\MultiSiteInterface;
 use Softspring\CmsBundle\Model\SchedulableContentInterface;
-use Softspring\CmsBundle\Model\SiteInterface;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -67,14 +64,6 @@ class BlockForm extends AbstractType
                 'time_widget' => 'single_text',
                 'model_timezone' => 'UTC',
                 'view_timezone' => 'UTC',
-            ]);
-        }
-
-        if ($this->manager->getEntityClassReflection()->implementsInterface(MultiSiteInterface::class)) {
-            $builder->add('sites', EntityType::class, [
-                'class' => SiteInterface::class,
-                'multiple' => true,
-                'em' => $this->em,
             ]);
         }
 

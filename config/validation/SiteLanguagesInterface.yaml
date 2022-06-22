@@ -1,6 +1,0 @@
-Softspring\CmsBundle\Model\SiteLanguagesInterface:
-    getters:
-        languages:
-            - Count:
-                groups: [create, update]
-                min: 1

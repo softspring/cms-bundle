@@ -22,7 +22,6 @@ class ResolveDoctrineTargetEntityPass extends AbstractResolveDoctrineTargetEntit
 
     public function process(ContainerBuilder $container)
     {
-//        $this->setTargetEntityFromParameter('sfs_cms.site.class', SiteInterface::class, $container, true);
         $this->setTargetEntityFromParameter('sfs_cms.block.class', BlockInterface::class, $container, true);
         $this->setTargetEntityFromParameter('sfs_cms.route.class', RouteInterface::class, $container, true);
         $this->setTargetEntityFromParameter('sfs_cms.route.path_class', RoutePathInterface::class, $container, true);

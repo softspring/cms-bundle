@@ -1,65 +1,6 @@
 admin:
     global_breadcrumb: "CMS"
 
-admin_sites:
-    list:
-        meta.title: "Sitios"
-        title: "Sitios"
-        breadcrumb: "Sitios"
-        fields:
-            id.header: "Sitio"
-            name.header: "Nombre"
-            enabled.header: "Activo"
-            languages.header: "Idiomas"
-            countries.header: "Países"
-        actions.header: "Acciones"
-        actions:
-            create.button: "Nuevo sitio"
-            update.button: "Editar"
-            details.button: "Detalles"
-
-    create:
-        meta.title: "Nuevo sitio"
-        title: "Nuevo sitio"
-        breadcrumb: "Nuevo sitio"
-        form:
-            id.label: "ID"
-            enabled.label: "Activo"
-            name.label: "Nombre"
-            languages.label: "Idiomas"
-            countries.label: "Países"
-        actions:
-            create.button: "Crear"
-            cancel.button: "Cancelar"
-
-    update:
-        meta.title: "Editar sitio"
-        title: "Editar sitio"
-        breadcrumb: "Editar %name%"
-        form:
-            id.label: "ID"
-            enabled.label: "Activo"
-            name.label: "Nombre"
-            languages.label: "Idiomas"
-            countries.label: "Países"
-        actions:
-            update.button: "Guardar cambios"
-            cancel.button: "Cancelar"
-            delete.button: "Eliminar"
-
-    delete:
-        meta.title: "Eliminar sitio"
-        title: "Eliminar sitio"
-        breadcrumb: "Eliminar %name%"
-        actions:
-            delete.button: "Eliminar"
-            cancel.button: "Cancelar"
-
-    read:
-        meta.title: "Sitio"
-        title: "Sitio"
-        breadcrumb: "%name%"
-
 admin_blocks:
     list:
         meta.title: "Bloques"
