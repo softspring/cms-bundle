@@ -34,8 +34,7 @@ class UrlMatcher
      */
     public function matchRequest(Request $request): ?array
     {
-        [$siteId, $siteConfig, $siteHostConfig] = $this->siteResolver->getSiteAndHost($request);
-        $pathInfo = $request->getPathInfo();
+        [$siteId, $siteConfig, $siteHostConfig] = $this->siteResolver->resolveSiteAndHost($request);
 
         if (!$siteId) {
             // site not found
@@ -56,6 +55,8 @@ class UrlMatcher
             ];
         }
 
+        $pathInfo = $request->getPathInfo();
+
         if ($siteConfig['slash_route']['enabled'] && $pathInfo === '/') {
             switch ($siteConfig['slash_route']['behaviour']) {
                 case 'redirect_to_route_with_user_language':
@@ -74,33 +75,33 @@ class UrlMatcher
             '_sfs_cms_site' => $siteConfig+['id'=>$siteId],
         ];
 
-        if ($siteHostConfig['locale']) {
-            $attributes['locale'] = $siteHostConfig['locale'];
+        if (!empty($siteHostConfig['locale'])) {
+            $attributes['_sfs_cms_locale'] = $siteHostConfig['locale'];
         }
 
         foreach ($siteConfig['paths'] as $path) if ($path['path'] == substr($pathInfo, 0, strlen($path['path']))) {
             if ($path['locale']) {
-                if (!empty($attributes['locale'])) {
+                if (!empty($attributes['_sfs_cms_locale'])) {
                     // TODO resolve conflict
                 }
-                $attributes['locale'] = $path['locale'];
+                $attributes['_sfs_cms_locale'] = $path['locale'];
                 $pathInfo = substr($pathInfo, strlen($path['path']));
             }
         }
 
         // search in database or redis-cache (TODO) ;)
-        if ($routePath = $this->searchRoutePath($siteId, $pathInfo, $attributes['locale']??null)) {
+        if ($routePath = $this->searchRoutePath($siteId, $pathInfo, $attributes['_sfs_cms_locale']??null)) {
             $route = $routePath->getRoute();
 
             if ($routePath->getLocale()) {
-                if (!empty($attributes['locale']) && $attributes['locale'] !== $routePath->getLocale()) {
+                if (!empty($attributes['_sfs_cms_locale']) && $attributes['_sfs_cms_locale'] !== $routePath->getLocale()) {
                     // check if locale is already set by site config
                     if ($request->getLocale() && $request->getLocale() !== $routePath->getLocale()) {
                         // TODO RESOLVE LOCALE CONFLICT
                     }
                 }
 
-                $attributes['locale'] = $routePath->getLocale();
+                $attributes['_sfs_cms_locale'] = $routePath->getLocale();
             }
 
             switch ($route->getType()) {
@@ -131,17 +132,20 @@ class UrlMatcher
         return $attributes;
     }
 
-    public function searchRoutePath(string $site, string $path, ?string $locale = null): ?RoutePathInterface
+    protected function searchRoutePath(string $site, string $path, ?string $locale = null): ?RoutePathInterface
     {
         try {
             $qb = $this->em->getRepository(RoutePathInterface::class)->createQueryBuilder('rp');
             $qb->select('rp');
             $qb->leftJoin('rp.route', 'r');
-            $qb->andWhere('rp.path = :path')->setParameter('path', trim($path, '/'));
-            $qb->andWhere('r.site = :site')->setParameter('site', $site);
+            $qb->andWhere('rp.path = :path');
+            $qb->setParameter('path', trim($path, '/'));
+            $qb->andWhere('r.site = :site');
+            $qb->setParameter('site', $site);
 
             if ($locale) {
-                $qb->andWhere('rp.locale = :locale')->setParameter('locale', $locale);
+                $qb->andWhere('rp.locale = :locale');
+                $qb->setParameter('locale', $locale);
             }
 
             return $qb->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT);

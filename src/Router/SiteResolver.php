@@ -21,7 +21,7 @@ class SiteResolver
     /**
      * @throws SiteNotFoundException
      */
-    public function getSiteAndHost(Request $request): ?array
+    public function resolveSiteAndHost(Request $request): ?array
     {
         switch ($this->siteConfig['identification']) {
             case 'domain':
@@ -36,6 +36,7 @@ class SiteResolver
                 break;
 
             case 'path':
+            default:
                 // $path = $request->getBasePath();
                 throw new \Exception('Not yet implemented');
         }
@@ -53,9 +54,13 @@ class SiteResolver
     public function getCanonicalRedirectUrl(array $siteConfig, Request $request): string
     {
         $canonicalHost = '';
+        $canonicalScheme = $request->getScheme();
         foreach ($siteConfig['hosts'] as $hostConfig) {
             if ($hostConfig['canonical']) {
                 $canonicalHost = $hostConfig['domain'];
+                if ($hostConfig['scheme']) {
+                    $canonicalScheme = $hostConfig['scheme'];
+                }
                 break;
             }
         }
@@ -65,6 +70,6 @@ class SiteResolver
         }
 
         $queryString = $request->getQueryString();
-        return $request->getScheme().'://'.$canonicalHost.$request->getPathInfo().($queryString?'?'.$queryString:'');
+        return $canonicalScheme.'://'.$canonicalHost.$request->getPathInfo().($queryString?'?'.$queryString:'');
     }
 }

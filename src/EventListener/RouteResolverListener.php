@@ -43,8 +43,8 @@ class RouteResolverListener implements EventSubscriberInterface
             return;
         }
 
-        if (isset($attributes['locale'])) {
-            $request->setLocale($attributes['locale']);
+        if (isset($attributes['_sfs_cms_locale'])) {
+            $request->setLocale($attributes['_sfs_cms_locale']);
         }
 
         $request->attributes->add($attributes);
