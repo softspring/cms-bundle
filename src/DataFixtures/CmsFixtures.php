@@ -73,7 +73,7 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
             $key = key($data);
             $contentConfig = current($data);
 
-            $content = $this->createContent($key, $contentConfig['name'], null, [], $contentConfig['extra'] ?? [], $contentConfig['seo']);
+            $content = $this->createContent($key, $contentConfig['site'], $contentConfig['name'], null, [], $contentConfig['extra'] ?? [], $contentConfig['seo']);
 
             $content->getVersions()->first()->setCreatedAt(new \DateTime('-1 minute'));
 
@@ -183,7 +183,7 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
         foreach ((new Finder())->in("$this->fixturesPath/routes")->files() as $routeFile) {
             $data = Yaml::parseFile($routeFile->getRealPath());
             $routeConfig = current($data);
-            $route = $this->createRoute($routeConfig['id']);
+            $route = $this->createRoute($routeConfig['id'], $routeConfig['site']);
 
             foreach ($routeConfig['paths'] as $paths) {
                 $this->createRoutePath($route, $paths['path'], $paths['locale'] ?? null, $paths['cache_ttl'] ?? null);
@@ -253,14 +253,15 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
         }
     }
 
-    protected function createPage(string $name, string $layout = null, array $data = null, array $extraData = [], ?array $seo = null): ContentInterface
+    protected function createPage(string $name, string $site, string $layout = null, array $data = null, array $extraData = [], ?array $seo = null): ContentInterface
     {
-        return $this->createContent('page', $name, $layout, $data, $extraData, $seo);
+        return $this->createContent('page', $site, $name, $layout, $data, $extraData, $seo);
     }
 
-    protected function createContent(string $contentType, string $name, string $layout = null, array $data = null, array $extraData = [], ?array $seo = null): ContentInterface
+    protected function createContent(string $contentType, string $site, string $name, string $layout = null, array $data = null, array $extraData = [], ?array $seo = null): ContentInterface
     {
         $content = $this->contentManager->createEntity($contentType);
+        $content->setSite($site);
         $content->setName($name);
         $content->setExtraData($extraData);
         $content->setSeo($seo);
@@ -282,10 +283,11 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
         return $version;
     }
 
-    protected function createRoute(string $routeName, string $path = null, ContentInterface $content = null): RouteInterface
+    protected function createRoute(string $routeName, string $site, string $path = null, ContentInterface $content = null): RouteInterface
     {
         $route = $this->routeManager->createEntity();
         $route->setId($routeName);
+        $route->setSite($site);
         $route->setType(RouteInterface::TYPE_UNKNOWN);
 
         if ($content) {

@@ -18,6 +18,7 @@ class AddTwigNamespacesPass implements CompilerPassInterface
         $twigFilesystemLoaderDefinition->addMethodCall('addPath', ['%kernel.project_dir%/cms/blocks', 'block']); // use @block/header/render.html.twig
         $twigFilesystemLoaderDefinition->addMethodCall('addPath', ['%kernel.project_dir%/cms/layouts', 'layout']); // use @layout/default/render.html.twig
         $twigFilesystemLoaderDefinition->addMethodCall('addPath', ['%kernel.project_dir%/cms/menus', 'menu']); // use @menu/main/render.html.twig
+        $twigFilesystemLoaderDefinition->addMethodCall('addPath', ['%kernel.project_dir%/cms/sites', 'site']); // use @site/error_pages/404.html.twig
 
         foreach ($container->getParameter('sfs_cms.collections') as $collectionPath) {
             // add modules path if exists

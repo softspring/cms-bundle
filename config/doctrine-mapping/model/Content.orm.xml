@@ -5,6 +5,7 @@
                       https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <mapped-superclass name="Softspring\CmsBundle\Model\Content" table="cms_content">
+        <field name="site" column="site" type="string" nullable="true"/>
         <field name="name" column="name" type="string" nullable="false" unique="true"/>
         <field name="extraData" column="extra_data" type="json" nullable="true"/>
         <field name="seo" column="seo" type="json" nullable="true"/>

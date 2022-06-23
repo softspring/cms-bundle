@@ -2,27 +2,20 @@
 
 namespace Softspring\CmsBundle\EventListener;
 
-use Doctrine\DBAL\Exception\TableNotFoundException;
-use Doctrine\ORM\EntityManagerInterface;
-use Softspring\CmsBundle\Model\Route;
-use Softspring\CmsBundle\Model\RouteInterface;
-use Softspring\CmsBundle\Model\RoutePathInterface;
+use Softspring\CmsBundle\Router\UrlMatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Routing\RouterInterface;
 
 class RouteResolverListener implements EventSubscriberInterface
 {
-    protected EntityManagerInterface $em;
-    protected RouterInterface $router;
+    protected UrlMatcher $urlMatcher;
 
-    public function __construct(EntityManagerInterface $em, RouterInterface $router)
+    public function __construct(UrlMatcher $urlMatcher)
     {
-        $this->em = $em;
-        $this->router = $router;
+        $this->urlMatcher = $urlMatcher;
     }
 
     public static function getSubscribedEvents(): array
@@ -43,47 +36,17 @@ class RouteResolverListener implements EventSubscriberInterface
             return;
         }
 
-        // search in database or redis-cache ;)
-        if ($routePath = $this->searchRoutePath($request->getPathInfo())) {
-            $route = $routePath->getRoute();
+        $attributes = $this->urlMatcher->matchRequest($request);
 
-            if ($routePath->getLocale()) {
-                $request->setLocale($routePath->getLocale());
-            }
-
-            switch ($route->getType()) {
-                case RouteInterface::TYPE_CONTENT:
-                    $request->attributes->set('_controller', 'Softspring\CmsBundle\Controller\ContentController::renderRoutePath');
-                    $request->attributes->set('_route', 'cms#'.$routePath->getRoute()->getId());
-                    $request->attributes->set('_route_params', []);
-                    $request->attributes->set('routePath', $routePath);
-
-                    if ($routePath->getLocale()) {
-                        $request->setLocale($routePath->getLocale());
-                    }
-                break;
-
-                case Route::TYPE_REDIRECT_TO_URL:
-                    $event->setResponse(new RedirectResponse($route->getRedirectUrl(), $route->getRedirectType() ?? Response::HTTP_FOUND));
-                    break;
-
-                case Route::TYPE_REDIRECT_TO_ROUTE:
-                    $event->setResponse(new RedirectResponse($this->router->generate($route->getSymfonyRoute()), $route->getRedirectType() ?? Response::HTTP_FOUND));
-                    break;
-
-                default:
-                    throw new \Exception(sprintf('Route type %u not yet implemented', $route->getType()));
-            }
+        if (isset($attributes['_sfs_cms_redirect'])) {
+            $event->setResponse(new RedirectResponse($attributes['_sfs_cms_redirect'], $attributes['_sfs_cms_redirect_code'] ?? Response::HTTP_FOUND));
+            return;
         }
-    }
 
-    protected function searchRoutePath(string $path): ?RoutePathInterface
-    {
-        try {
-            return $this->em->getRepository(RoutePathInterface::class)->findOneByPath(trim($path, '/'));
-        } catch (TableNotFoundException $e) {
-            // prevent error before creating database schema
-            return null;
+        if (isset($attributes['locale'])) {
+            $request->setLocale($attributes['locale']);
         }
+
+        $request->attributes->add($attributes);
     }
 }

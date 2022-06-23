@@ -9,6 +9,8 @@ abstract class Content implements ContentInterface
 {
     protected ?string $name = null;
 
+    protected ?string $site = null;
+
     /**
      * @var ContentVersionInterface[]|Collection
      */
@@ -41,6 +43,16 @@ abstract class Content implements ContentInterface
     public function setName(?string $name): void
     {
         $this->name = $name;
+    }
+
+    public function getSite(): ?string
+    {
+        return $this->site;
+    }
+
+    public function setSite(?string $site): void
+    {
+        $this->site = $site;
     }
 
     /**

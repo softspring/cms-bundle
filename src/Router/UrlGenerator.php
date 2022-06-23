@@ -3,23 +3,27 @@
 namespace Softspring\CmsBundle\Router;
 
 use Psr\Log\LoggerInterface;
+use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Model\Route;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Model\RoutePathInterface;
-use Softspring\CmsBundle\Model\SiteInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class UrlGenerator
 {
     protected RequestStack $requestStack;
     protected RouteManagerInterface $routeManager;
+    protected CmsConfig $cmsConfig;
+    protected array $siteConfig;
     protected ?LoggerInterface $cmsLogger;
 
-    public function __construct(RequestStack $requestStack, RouteManagerInterface $routeManager, ?LoggerInterface $cmsLogger)
+    public function __construct(RequestStack $requestStack, RouteManagerInterface $routeManager, CmsConfig $cmsConfig, array $siteConfig, ?LoggerInterface $cmsLogger)
     {
         $this->requestStack = $requestStack;
         $this->routeManager = $routeManager;
+        $this->cmsConfig = $cmsConfig;
+        $this->siteConfig = $siteConfig;
         $this->cmsLogger = $cmsLogger;
     }
 
@@ -40,11 +44,7 @@ class UrlGenerator
             return '#';
         }
 
-        $site = $this->getSite();
-
-        $host = $this->requestStack->getCurrentRequest()->getSchemeAndHttpHost();
-
-        return $host.$this->getRoutePath($route, $site, $locale);
+        return $this->getSiteSchemeAndHost($route, $locale). $this->getSiteOrLocalePath($route, $locale).'/'.$this->getRoutePath($route, $locale);
     }
 
     /**
@@ -64,9 +64,37 @@ class UrlGenerator
             return '#';
         }
 
-        $site = $this->getSite();
+        return $this->getSiteOrLocalePath($route, $locale).'/'.$this->getRoutePath($route, $locale);
+    }
 
-        return $this->getRoutePath($route, $site, $locale);
+    /**
+     * @throws \Exception
+     */
+    public function getUrlFixed(RoutePathInterface $routePath): string
+    {
+        if ($this->isPreview()) {
+            return 'javascript:confirm(\'Esto es una previsualización!\')';
+        }
+
+        $route = $routePath->getRoute();
+        $locale = $routePath->getLocale();
+
+        return $this->getSiteSchemeAndHost($route, $locale). $this->getSiteOrLocalePath($route, $locale).'/'.$routePath->getPath();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function getPathFixed(RoutePathInterface $routePath): string
+    {
+        if ($this->isPreview()) {
+            return 'javascript:confirm(\'Esto es una previsualización!\')';
+        }
+
+        $route = $routePath->getRoute();
+        $locale = $routePath->getLocale();
+
+        return $this->getSiteOrLocalePath($route, $locale).'/'.$routePath->getPath();
     }
 
     /**
@@ -106,7 +134,7 @@ class UrlGenerator
         return implode(' ', $attrs);
     }
 
-    protected function getRoutePath(Route $route, $site, ?string $locale = null): string
+    protected function getRoutePath(Route $route, ?string $locale = null): string
     {
         $locale = $locale ?: $this->requestStack->getCurrentRequest()->getLocale();
 
@@ -117,7 +145,7 @@ class UrlGenerator
 
         $path = $path ?: $route->getPaths()->first();
 
-        return '/'.$path->getPath();
+        return $path->getPath();
     }
 
     protected function getRoute($routeName): ?RouteInterface
@@ -137,24 +165,41 @@ class UrlGenerator
         return $route;
     }
 
-    protected function getSite(): ?SiteInterface
-    {
-        $request = $this->requestStack->getCurrentRequest();
-
-        /** @var SiteInterface $site */
-        $site = $request->attributes->get('_site');
-
-//        if (!$site) {
-//            throw new \Exception('Can not generate route because no site is selected');
-//        }
-
-        return $site;
-    }
-
     protected function isPreview(): bool
     {
         $request = $this->requestStack->getCurrentRequest();
 
         return $request->attributes->has('_cms_preview');
+    }
+
+    protected function getSiteSchemeAndHost(RouteInterface $route, ?string $locale): string
+    {
+        $locale = $locale ?: $this->requestStack->getCurrentRequest()->getLocale();
+        $siteConfig = $this->cmsConfig->getSite($route->getSite());
+
+        foreach ($siteConfig['hosts'] as $hostConfig) if ($hostConfig['canonical'] && (!$hostConfig['locale'] || $hostConfig['locale'] === $locale)) {
+            $scheme = $hostConfig['scheme'] ?:$this->requestStack->getCurrentRequest()->getScheme();
+            $host = $hostConfig['domain'];
+
+            return "$scheme://$host";
+        }
+
+        return $this->requestStack->getCurrentRequest()->getSchemeAndHttpHost();
+    }
+
+    protected function getSiteOrLocalePath(RouteInterface $route, ?string $locale): string
+    {
+        $locale = $locale ?: $this->requestStack->getCurrentRequest()->getLocale();
+        $siteConfig = $this->cmsConfig->getSite($route->getSite());
+
+        if ($this->siteConfig['identification'] == 'path') {
+            throw new \Exception('Not yet implemented');
+        }
+
+        foreach ($siteConfig['paths'] as $pathConfig) if (!empty($pathConfig['locale']) && $pathConfig['locale'] === $locale) {
+            return '/'.trim($pathConfig['path'], '/');
+        }
+
+        return '';
     }
 }

@@ -7,6 +7,7 @@ use Softspring\CmsBundle\Config\Exception\InvalidContentException;
 use Softspring\CmsBundle\Config\Exception\InvalidLayoutException;
 use Softspring\CmsBundle\Config\Exception\InvalidMenuException;
 use Softspring\CmsBundle\Config\Exception\InvalidModuleException;
+use Softspring\CmsBundle\Config\Exception\InvalidSiteException;
 
 class CmsConfig
 {
@@ -17,13 +18,14 @@ class CmsConfig
     protected array $blocks;
     protected array $sites;
 
-    public function __construct(array $layouts, array $modules, array $contents, array $menus, array $blocks)
+    public function __construct(array $layouts, array $modules, array $contents, array $menus, array $blocks, array $sites)
     {
         $this->layouts = $layouts;
         $this->modules = $modules;
         $this->contents = $contents;
         $this->menus = $menus;
         $this->blocks = $blocks;
+        $this->sites = $sites;
     }
 
     public function getLayouts(): array
@@ -125,5 +127,22 @@ class CmsConfig
     public function getSites(): array
     {
         return $this->sites;
+    }
+
+    /**
+     * @throws InvalidSiteException
+     */
+    public function getSite(string $id, bool $required = true): ?array
+    {
+        if ($required && !isset($this->sites[$id])) {
+            throw new InvalidSiteException($id, $this->sites);
+        }
+
+        return $this->sites[$id] ?? null;
+    }
+
+    public function getSitesForContent(string $contentType): array
+    {
+        return array_filter($this->sites, fn (array $site) => in_array($contentType, $site['allowed_content_types']));
     }
 }

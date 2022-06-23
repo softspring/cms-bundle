@@ -20,6 +20,10 @@ interface RouteInterface
 
     public function setType(?int $type): void;
 
+    public function getSite(): ?string;
+
+    public function setSite(?string $site): void;
+
     /**
      * @return RoutePathInterface[]|Collection
      */

@@ -5,6 +5,7 @@
                       https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <mapped-superclass name="Softspring\CmsBundle\Model\Route" table="cms_route">
+        <field name="site" column="site" type="string" nullable="true"/>
         <field name="type" column="route_type" type="smallint" nullable="false"/>
         <field name="redirectType" column="redirect_type" type="smallint" nullable="true"/>
         <field name="redirectUrl" column="redirect_url" type="text" nullable="true"/>

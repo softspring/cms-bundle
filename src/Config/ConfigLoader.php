@@ -8,6 +8,7 @@ use Softspring\CmsBundle\Config\Model\Content;
 use Softspring\CmsBundle\Config\Model\Layout;
 use Softspring\CmsBundle\Config\Model\Menu;
 use Softspring\CmsBundle\Config\Model\Module;
+use Softspring\CmsBundle\Config\Model\Site;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -145,6 +146,21 @@ class ConfigLoader
         }
 
         return $blocks;
+    }
+
+    public function getSites(ContainerBuilder $containerBuilder): array
+    {
+        $processor = new Processor();
+        $sites = [];
+
+        $configurations = $this->readConfigurations($containerBuilder, 'sites', 'site');
+
+        foreach ($configurations as $siteName => $siteConfigs) {
+            $sites[$siteName] = $processor->processConfiguration(new Site($siteName), $siteConfigs);
+            $sites[$siteName]['_id'] = $siteName;
+        }
+
+        return $sites;
     }
 
     protected function readConfigurations(ContainerBuilder $containerBuilder, string $elementPath, string $elementType): array

@@ -32,6 +32,14 @@ class Configuration implements ConfigurationInterface
 //                    ->end()
 //                ->end()
 
+                ->arrayNode('site')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->enumNode('identification')->values(['domain', 'path'])->defaultValue('domain')->end()
+                        ->booleanNode('throw_not_found')->defaultTrue()->end()
+                    ->end()
+                ->end()
+
                 ->arrayNode('block')
                     ->addDefaultsIfNotSet()
                     ->children()

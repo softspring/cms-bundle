@@ -12,6 +12,7 @@ services:
             $defaultLocale: '%kernel.default_locale%'
             $container: '@service_container'
             $esi: '@?esi'
+            $siteConfig: '%sfs_cms.site_config%'
 
     Softspring\CmsBundle\Config\CmsConfig:
         arguments:
@@ -20,6 +21,7 @@ services:
             $contents: '%sfs_cms.contents%'
             $menus: '%sfs_cms.menus%'
             $blocks: '%sfs_cms.blocks%'
+            $sites: '%sfs_cms.sites%'
 
     Softspring\CmsBundle\Command\:
         resource: '../../src/Command/*'
@@ -43,6 +45,8 @@ services:
 #        resource: '../../src/EventListener/*'
 
     Softspring\CmsBundle\EventListener\RouteResolverListener: ~
+
+    Softspring\CmsBundle\EventListener\ErrorPageListener: ~
 
     Softspring\CmsBundle\Manager\:
         resource: '../../src/Manager/*'

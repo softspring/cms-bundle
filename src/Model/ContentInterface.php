@@ -12,6 +12,10 @@ interface ContentInterface
 
     public function setName(?string $name): void;
 
+    public function getSite(): ?string;
+
+    public function setSite(?string $site): void;
+
     /**
      * @return ContentVersionInterface[]|Collection
      */

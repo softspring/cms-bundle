@@ -18,9 +18,6 @@ class ContentController extends AbstractController
         $this->contentRender = $contentRender;
     }
 
-    /**
-     * // TODO MATCH ALSO WITH SITE.
-     */
     public function renderRoutePath(RoutePathInterface $routePath, Request $request): Response
     {
         $content = $routePath->getRoute()->getContent();

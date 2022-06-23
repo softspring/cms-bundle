@@ -1,0 +1,22 @@
+site:
+    allowed_content_types: ['page']
+    locales: ['es', 'en']
+    default_locale: 'es'
+    https_redirect: true
+    paths:
+        - { path: '/es', locale: 'es' }
+        - { path: '/en', locale: 'en' }
+    error_pages:
+        404:
+            es: [ '@site/default/error_pages/404.html.twig' ]
+            en: [ '@site/default/error_pages/404.html.twig' ]
+        4xx:
+            es: [ '@site/default/error_pages/4xx.html.twig' ]
+            en: [ '@site/default/error_pages/4xx.html.twig' ]
+        5xx:
+            es: [ '@site/default/error_pages/5xx.html.twig', '/srv/cms/site/default/error_pages/5xx-es.html' ]
+            en: [ '@site/default/error_pages/5xx.html.twig', '/srv/cms/site/default/error_pages/5xx-en.html' ]
+    slash_route:
+        behaviour: 'redirect_to_route_with_user_language'
+        route: 'home'
+

@@ -23,6 +23,8 @@ class RouterExtension extends AbstractExtension
         return [
             new TwigFunction('sfs_cms_url', [$this->urlGenerator, 'getUrl']),
             new TwigFunction('sfs_cms_path', [$this->urlGenerator, 'getPath']),
+            new TwigFunction('sfs_cms_url_fixed', [$this->urlGenerator, 'getUrlFixed']),
+            new TwigFunction('sfs_cms_path_fixed', [$this->urlGenerator, 'getPathFixed']),
             new TwigFunction('sfs_cms_route_attr', [$this->urlGenerator, 'getRouteAttributes']),
         ];
     }

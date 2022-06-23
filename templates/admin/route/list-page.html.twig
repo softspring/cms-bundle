@@ -3,10 +3,10 @@
 {% for route in entities %}
     <tr>
         <td class="p-3">{{ route.id }}</td>
-        <td class="p-3">{{ route.site.name|default('') }}</td>
+        <td class="p-3">{{ route.site|sfs_cms_site_name }}</td>
         <td class="p-3">
             {% for path in route.paths %}
-                <a href="/{{ path.path|default('') }}" target="_blank">/{{ path.path|default('') }}</a><br/>
+                <a href="{{ sfs_cms_url_fixed(path) }}" target="_blank">{{ sfs_cms_path_fixed(path) }}</a><br/>
             {% endfor %}
         </td>
         <td class="p-3">{{ route.content.name|default('') }}</td>

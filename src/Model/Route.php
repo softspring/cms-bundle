@@ -9,6 +9,7 @@ abstract class Route implements RouteInterface
 {
     protected ?string $id = null;
     protected ?int $type = null;
+    protected ?string $site = null;
 
     /**
      * @var RoutePathInterface[]|Collection
@@ -48,6 +49,16 @@ abstract class Route implements RouteInterface
     public function setType(?int $type): void
     {
         $this->type = $type;
+    }
+
+    public function getSite(): ?string
+    {
+        return $this->site;
+    }
+
+    public function setSite(?string $site): void
+    {
+        $this->site = $site;
     }
 
     /**

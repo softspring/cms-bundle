@@ -3,6 +3,7 @@
 namespace Softspring\CmsBundle\Form\Admin\Content;
 
 use Softspring\CmsBundle\Form\Admin\Route\RouteCollectionType;
+use Softspring\CmsBundle\Form\Admin\SiteChoiceType;
 use Softspring\CmsBundle\Form\Type\DynamicFormType;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Symfony\Component\Form\AbstractType;
@@ -34,6 +35,10 @@ class ContentCreateForm extends AbstractType implements ContentCreateFormInterfa
                 'data-generate-underscore' => 'data-route-id',
                 'data-generate-slug' => 'data-route-path',
             ],
+        ]);
+
+        $builder->add('site', SiteChoiceType::class, [
+            'content' => $options['content'],
         ]);
 
         if (!empty($options['content']['extra_fields'])) {
