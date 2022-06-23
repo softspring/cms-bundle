@@ -30,7 +30,11 @@ class SiteChoiceType extends AbstractType
         ]);
 
         $resolver->setNormalizer('choices', function (Options $options, $value) {
-            $siteChoices = $this->cmsConfig->getSitesForContent($options['content']['_id']);
+            if (empty($options['content'])) {
+                $siteChoices = $this->cmsConfig->getSites();
+            } else {
+                $siteChoices = $this->cmsConfig->getSitesForContent($options['content']['_id']);
+            }
 
             return array_combine(array_map(fn ($key) => "$key.name", array_keys($siteChoices)), array_keys($siteChoices));
         });

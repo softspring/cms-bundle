@@ -3,6 +3,7 @@
 namespace Softspring\CmsBundle\Form\Admin\Route;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Softspring\CmsBundle\Form\Admin\SiteChoiceType;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -14,7 +15,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class RouteForm extends AbstractType
 {
@@ -34,6 +37,14 @@ class RouteForm extends AbstractType
             'content_relative' => false,
             'label_format' => 'admin_routes.form.%name%.label',
             'translation_domain' => 'sfs_cms_admin',
+            'constraints' => new Callback(function (RouteInterface $value, ExecutionContextInterface $context, $payload) {
+                if ($value->getContent() && $value->getContent()->getSite() !== $value->getSite()) {
+                    $context->buildViolation('The content must have the same site as route selected one')
+                        ->atPath('content')
+                        ->addViolation()
+                    ;
+                }
+            }),
         ]);
     }
 
@@ -46,6 +57,8 @@ class RouteForm extends AbstractType
                 'data-route-id' => true,
             ],
         ]);
+
+        $builder->add('site', SiteChoiceType::class);
 
         if (!$options['content_relative']) {
             $builder->add('type', ChoiceType::class, [
@@ -66,6 +79,11 @@ class RouteForm extends AbstractType
                 'em' => $this->em,
                 'choice_label' => function (ContentInterface $content) {
                     return $content->getName();
+                },
+                'choice_attr' => function (ContentInterface $content) {
+                    return [
+                        'data-site' => $content->getSite(),
+                    ];
                 },
                 // 'constraints' => new NotBlank(),
             ]);

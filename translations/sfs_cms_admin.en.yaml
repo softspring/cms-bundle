@@ -105,6 +105,7 @@ admin_routes:
             site.header: "Site"
             page.header: "Page"
             path.header: "URL"
+            type.header: "Type"
     form:
         paths:
             add.button: "Add URL paths"
@@ -127,6 +128,12 @@ admin_routes:
             values:
                 temporary: "Temporary"
                 permanent: "Permanent"
+    types:
+        0.name: "Unkwown"
+        1.name: "Content"
+        2.name: "Redirect to route"
+        3.name: "Redirect to URL"
+        4.name: "Parent route"
 
 admin_menus:
     list:

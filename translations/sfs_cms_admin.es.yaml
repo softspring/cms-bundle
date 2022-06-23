@@ -105,6 +105,7 @@ admin_routes:
             site.header: "Sitio"
             page.header: "Página"
             path.header: "URL"
+            type.header: "Tipo"
     form:
         paths:
             add.button: "Añadir segmento de URL"
@@ -127,6 +128,12 @@ admin_routes:
             values:
                 temporary: "Temporal"
                 permanent: "Permanente"
+    types:
+        0.name: "Indefinido"
+        1.name: "Contenido"
+        2.name: "Redirección a ruta"
+        3.name: "Redirección a URL"
+        4.name: "Ruta padre"
 
 admin_menus:
     list:

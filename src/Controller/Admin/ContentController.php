@@ -8,6 +8,7 @@ use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
+use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Render\ContentRender;
 use Softspring\Component\CrudlController\Event\FilterEvent;
 use Softspring\Component\Events\DispatchGetResponseTrait;
@@ -67,6 +68,9 @@ class ContentController extends AbstractController
 //                    return $response;
 //                }
 
+                $entity->getRoutes()->map(function (RouteInterface $route) use ($entity) {
+                    $route->setSite($entity->getSite());
+                });
                 $this->contentManager->saveEntity($entity);
 
 //                if ($response = $this->dispatchGetResponseFromConfig($config, 'success_event_name', new GetResponseEntityEvent($entity, $request))) {

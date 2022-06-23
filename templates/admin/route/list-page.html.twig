@@ -9,6 +9,7 @@
                 <a href="{{ sfs_cms_url_fixed(path) }}" target="_blank">{{ sfs_cms_path_fixed(path) }}</a><br/>
             {% endfor %}
         </td>
+        <td class="p-3">{{ ('admin_routes.types.'~route.type~'.name')|trans }}</td>
         <td class="p-3">{{ route.content.name|default('') }}</td>
         <td class="p-3 text-end">
             <a href="{{ url('sfs_cms_admin_routes_update', {'route':route}) }}">{{ 'admin_routes.list.actions.update.link'|trans }}</a>
