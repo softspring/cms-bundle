@@ -32,7 +32,7 @@ class SiteChoiceType extends AbstractType
         $resolver->setNormalizer('choices', function (Options $options, $value) {
             $siteChoices = $this->cmsConfig->getSitesForContent($options['content']['_id']);
 
-            return array_combine(array_map(fn($key) => "$key.name", array_keys($siteChoices)), array_keys($siteChoices));
+            return array_combine(array_map(fn ($key) => "$key.name", array_keys($siteChoices)), array_keys($siteChoices));
         });
     }
 }

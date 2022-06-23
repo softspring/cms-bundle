@@ -66,7 +66,7 @@ class ContentManager implements ContentManagerInterface
             $version->setData($prevVersion->getData());
         }
 
-        $content->setLastVersionNumber((int)$content->getLastVersionNumber() +1);
+        $content->setLastVersionNumber((int) $content->getLastVersionNumber() + 1);
         $version->setVersionNumber($content->getLastVersionNumber());
 
         $content->addVersion($version);

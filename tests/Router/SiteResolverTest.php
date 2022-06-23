@@ -47,7 +47,7 @@ class SiteResolverTest extends TestCase
 
     public function testResolveWithHost()
     {
-        $sitesConfig = [ 'identification' => 'domain' ];
+        $sitesConfig = ['identification' => 'domain'];
         $siteResolver = new SiteResolver($this->cmsConfig, $sitesConfig);
 
         $request = new Request([], [], [], [], [], ['SERVER_NAME' => 'sfs-cms.org']);
@@ -59,7 +59,7 @@ class SiteResolverTest extends TestCase
 
     public function testResolveNotFound()
     {
-        $sitesConfig = [ 'identification' => 'domain', 'throw_not_found' => false ];
+        $sitesConfig = ['identification' => 'domain', 'throw_not_found' => false];
         $siteResolver = new SiteResolver($this->cmsConfig, $sitesConfig);
 
         $request = new Request([], [], [], [], [], ['SERVER_NAME' => 'other-hostname.org']);
@@ -74,7 +74,7 @@ class SiteResolverTest extends TestCase
     {
         $this->expectException(SiteNotFoundException::class);
 
-        $sitesConfig = [ 'identification' => 'domain', 'throw_not_found' => true ];
+        $sitesConfig = ['identification' => 'domain', 'throw_not_found' => true];
         $siteResolver = new SiteResolver($this->cmsConfig, $sitesConfig);
 
         $request = new Request([], [], [], [], [], ['SERVER_NAME' => 'other-hostname.org']);
@@ -85,7 +85,7 @@ class SiteResolverTest extends TestCase
     {
         $this->expectException(\Exception::class);
 
-        $sitesConfig = [ 'identification' => 'path' ];
+        $sitesConfig = ['identification' => 'path'];
         $siteResolver = new SiteResolver($this->cmsConfig, $sitesConfig);
 
         $request = new Request([], [], [], [], [], ['SERVER_NAME' => 'sfs-cms.org']);
@@ -94,7 +94,7 @@ class SiteResolverTest extends TestCase
 
     public function testCanonicalUrl()
     {
-        $sitesConfig = [ 'identification' => 'domain', 'throw_not_found' => true ];
+        $sitesConfig = ['identification' => 'domain', 'throw_not_found' => true];
         $siteResolver = new SiteResolver($this->cmsConfig, $sitesConfig);
         $request = new Request([], [], [], [], [], ['SERVER_NAME' => 'www.sfs-cms.org']);
         $this->assertEquals('https://sfs-cms.org/', $siteResolver->getCanonicalRedirectUrl($this->cmsConfig->getSite('default'), $request));
@@ -102,7 +102,7 @@ class SiteResolverTest extends TestCase
 
     public function testCanonicalUrlWithPathAndQueryString()
     {
-        $sitesConfig = [ 'identification' => 'domain', 'throw_not_found' => true ];
+        $sitesConfig = ['identification' => 'domain', 'throw_not_found' => true];
         $siteResolver = new SiteResolver($this->cmsConfig, $sitesConfig);
         $request = new Request([], [], [], [], [], ['SERVER_NAME' => 'www.sfs-cms.org', 'REQUEST_URI' => 'https://www.sfs-cms.org/test/url', 'QUERY_STRING' => 'with-params=1']);
         $this->assertEquals('https://sfs-cms.org/test/url?with-params=1', $siteResolver->getCanonicalRedirectUrl($this->cmsConfig->getSite('default'), $request));
@@ -112,7 +112,7 @@ class SiteResolverTest extends TestCase
     {
         $this->expectException(SiteHasNotACanonicalHostException::class);
 
-        $sitesConfig = [ 'identification' => 'domain', 'throw_not_found' => true ];
+        $sitesConfig = ['identification' => 'domain', 'throw_not_found' => true];
         $siteResolver = new SiteResolver($this->cmsConfig, $sitesConfig);
         $request = new Request([], [], [], [], [], ['SERVER_NAME' => 'no_canonical.sfs-cms.org']);
         $siteResolver->getCanonicalRedirectUrl($this->cmsConfig->getSite('no_canonical'), $request);

@@ -21,7 +21,7 @@ class Site implements ConfigurationInterface
 
         $rootNode
             ->validate()
-                ->ifTrue(fn($config) => empty($config['hosts']) && empty($config['paths']))
+                ->ifTrue(fn ($config) => empty($config['hosts']) && empty($config['paths']))
                 ->thenInvalid('Invalid configuration, either hosts either paths must be set for a valid site')
             ->end()
             ->children()
@@ -67,15 +67,15 @@ class Site implements ConfigurationInterface
 
                 ->arrayNode('slash_route')
                     ->validate()
-                        ->ifTrue(fn($config) => $config['enabled'] && empty($config['behaviour']))
+                        ->ifTrue(fn ($config) => $config['enabled'] && empty($config['behaviour']))
                         ->thenInvalid('If slash_route option is enabled, it requires a behaviour')
                     ->end()
                     ->validate()
-                        ->ifTrue(fn($config) => $config['enabled'] && ($config['behaviour']??'') == 'redirect_to_route_with_user_language' && empty($config['route']))
+                        ->ifTrue(fn ($config) => $config['enabled'] && ($config['behaviour'] ?? '') == 'redirect_to_route_with_user_language' && empty($config['route']))
                         ->thenInvalid('redirect_to_route_with_user_language behaviour requires a route')
                     ->end()
                     ->validate()
-                        ->ifTrue(fn($config) => $config['enabled'] && ($config['behaviour']??'') == 'redirect_to_route_with_user_language' && empty($config['redirect_code']))
+                        ->ifTrue(fn ($config) => $config['enabled'] && ($config['behaviour'] ?? '') == 'redirect_to_route_with_user_language' && empty($config['redirect_code']))
                         ->thenInvalid('redirect_to_route_with_user_language behaviour requires a redirect_code')
                     ->end()
                     ->canBeEnabled()

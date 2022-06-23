@@ -40,6 +40,7 @@ class RouteResolverListener implements EventSubscriberInterface
 
         if (isset($attributes['_sfs_cms_redirect'])) {
             $event->setResponse(new RedirectResponse($attributes['_sfs_cms_redirect'], $attributes['_sfs_cms_redirect_code'] ?? Response::HTTP_FOUND));
+
             return;
         }
 

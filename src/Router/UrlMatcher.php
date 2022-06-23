@@ -41,7 +41,7 @@ class UrlMatcher
             return [];
         }
 
-        if ($siteConfig['https_redirect'] && $request->getScheme() === 'http') {
+        if ($siteConfig['https_redirect'] && 'http' === $request->getScheme()) {
             return [
                 '_sfs_cms_redirect' => $this->siteResolver->getCanonicalRedirectUrl($siteConfig, $request),
                 '_sfs_cms_redirect_code' => Response::HTTP_FOUND,
@@ -57,10 +57,11 @@ class UrlMatcher
 
         $pathInfo = $request->getPathInfo();
 
-        if ($siteConfig['slash_route']['enabled'] && $pathInfo === '/') {
+        if ($siteConfig['slash_route']['enabled'] && '/' === $pathInfo) {
             switch ($siteConfig['slash_route']['behaviour']) {
                 case 'redirect_to_route_with_user_language':
                     $userLocale = $request->getPreferredLanguage($siteConfig['locales']);
+
                     return [
                         '_sfs_cms_redirect' => $this->urlGenerator->getUrl($siteConfig['slash_route']['route'], $userLocale),
                         '_sfs_cms_redirect_code' => $siteConfig['slash_route']['redirect_code'] ?: Response::HTTP_FOUND,
@@ -72,25 +73,27 @@ class UrlMatcher
         }
 
         $attributes = [
-            '_sfs_cms_site' => $siteConfig+['id'=>$siteId],
+            '_sfs_cms_site' => $siteConfig + ['id' => $siteId],
         ];
 
         if (!empty($siteHostConfig['locale'])) {
             $attributes['_sfs_cms_locale'] = $siteHostConfig['locale'];
         }
 
-        foreach ($siteConfig['paths'] as $path) if ($path['path'] == substr($pathInfo, 0, strlen($path['path']))) {
-            if ($path['locale']) {
-                if (!empty($attributes['_sfs_cms_locale'])) {
-                    // TODO resolve conflict
+        foreach ($siteConfig['paths'] as $path) {
+            if ($path['path'] == substr($pathInfo, 0, strlen($path['path']))) {
+                if ($path['locale']) {
+                    if (!empty($attributes['_sfs_cms_locale'])) {
+                        // TODO resolve conflict
+                    }
+                    $attributes['_sfs_cms_locale'] = $path['locale'];
+                    $pathInfo = substr($pathInfo, strlen($path['path']));
                 }
-                $attributes['_sfs_cms_locale'] = $path['locale'];
-                $pathInfo = substr($pathInfo, strlen($path['path']));
             }
         }
 
         // search in database or redis-cache (TODO) ;)
-        if ($routePath = $this->searchRoutePath($siteId, $pathInfo, $attributes['_sfs_cms_locale']??null)) {
+        if ($routePath = $this->searchRoutePath($siteId, $pathInfo, $attributes['_sfs_cms_locale'] ?? null)) {
             $route = $routePath->getRoute();
 
             if ($routePath->getLocale()) {

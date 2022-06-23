@@ -5,7 +5,6 @@ namespace Softspring\CmsBundle\DependencyInjection;
 use Softspring\CmsBundle\Config\ConfigLoader;
 use Softspring\CmsBundle\Model\BlockInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
-use Softspring\CmsBundle\Model\SiteInterface;
 use Symfony\Bundle\MakerBundle\MakerBundle;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;

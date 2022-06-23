@@ -28,8 +28,8 @@ class SiteTest extends TestCase
                 'default_locale' => 'en',
                 'https_redirect' => false,
                 'hosts' => [
-                    [ 'domain' => 'example.org' ],
-                ]
+                    ['domain' => 'example.org'],
+                ],
             ],
         ]);
 

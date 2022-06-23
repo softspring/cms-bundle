@@ -582,7 +582,7 @@ class ContentController extends AbstractController
                     return $this->redirectToRoute("sfs_cms_admin_content_{$configId}_preview_version", ['content' => $entity, 'version' => $version]);
                 }
 
-                // no break
+            // no break
             default:
                 return $this->redirectToRoute("sfs_cms_admin_content_{$configId}_details", ['content' => $entity]);
         }

@@ -44,7 +44,7 @@ class UrlGenerator
             return '#';
         }
 
-        return $this->getSiteSchemeAndHost($route, $locale). $this->getSiteOrLocalePath($route, $locale).'/'.$this->getRoutePath($route, $locale);
+        return $this->getSiteSchemeAndHost($route, $locale).$this->getSiteOrLocalePath($route, $locale).'/'.$this->getRoutePath($route, $locale);
     }
 
     /**
@@ -79,7 +79,7 @@ class UrlGenerator
         $route = $routePath->getRoute();
         $locale = $routePath->getLocale();
 
-        return $this->getSiteSchemeAndHost($route, $locale). $this->getSiteOrLocalePath($route, $locale).'/'.$routePath->getPath();
+        return $this->getSiteSchemeAndHost($route, $locale).$this->getSiteOrLocalePath($route, $locale).'/'.$routePath->getPath();
     }
 
     /**
@@ -177,11 +177,13 @@ class UrlGenerator
         $locale = $locale ?: $this->requestStack->getCurrentRequest()->getLocale();
         $siteConfig = $this->cmsConfig->getSite($route->getSite());
 
-        foreach ($siteConfig['hosts'] as $hostConfig) if ($hostConfig['canonical'] && (!$hostConfig['locale'] || $hostConfig['locale'] === $locale)) {
-            $scheme = $hostConfig['scheme'] ?:$this->requestStack->getCurrentRequest()->getScheme();
-            $host = $hostConfig['domain'];
+        foreach ($siteConfig['hosts'] as $hostConfig) {
+            if ($hostConfig['canonical'] && (!$hostConfig['locale'] || $hostConfig['locale'] === $locale)) {
+                $scheme = $hostConfig['scheme'] ?: $this->requestStack->getCurrentRequest()->getScheme();
+                $host = $hostConfig['domain'];
 
-            return "$scheme://$host";
+                return "$scheme://$host";
+            }
         }
 
         return $this->requestStack->getCurrentRequest()->getSchemeAndHttpHost();
@@ -192,12 +194,14 @@ class UrlGenerator
         $locale = $locale ?: $this->requestStack->getCurrentRequest()->getLocale();
         $siteConfig = $this->cmsConfig->getSite($route->getSite());
 
-        if ($this->siteConfig['identification'] == 'path') {
+        if ('path' == $this->siteConfig['identification']) {
             throw new \Exception('Not yet implemented');
         }
 
-        foreach ($siteConfig['paths'] as $pathConfig) if (!empty($pathConfig['locale']) && $pathConfig['locale'] === $locale) {
-            return '/'.trim($pathConfig['path'], '/');
+        foreach ($siteConfig['paths'] as $pathConfig) {
+            if (!empty($pathConfig['locale']) && $pathConfig['locale'] === $locale) {
+                return '/'.trim($pathConfig['path'], '/');
+            }
         }
 
         return '';

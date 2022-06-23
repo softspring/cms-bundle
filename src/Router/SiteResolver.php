@@ -33,7 +33,7 @@ class SiteResolver
                         }
                     }
                 }
-                break;
+            break;
 
             case 'path':
             default:
@@ -70,6 +70,7 @@ class SiteResolver
         }
 
         $queryString = $request->getQueryString();
-        return $canonicalScheme.'://'.$canonicalHost.$request->getPathInfo().($queryString?'?'.$queryString:'');
+
+        return $canonicalScheme.'://'.$canonicalHost.$request->getPathInfo().($queryString ? '?'.$queryString : '');
     }
 }
