@@ -34,7 +34,7 @@
                     <tbody>
                     {% for version in entity.versions %}
                         <tr>
-                            <td>{{ version.id }}</td>
+                            <td>v{{ version.versionNumber }}</td>
                             <td>{{ version.createdAt ? version.createdAt|date('H:i:s d-m-Y') : '' }}</td>
                             <td>{{ version.published ? ('admin_'~content~'.versions.publish_status.published')|trans : ('admin_'~content~'.versions.publish_status.unpublished')|trans }}</td>
                             <td>

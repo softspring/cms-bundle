@@ -85,7 +85,7 @@
                     <tbody>
                     {% for version in entity.versions %}
                         <tr>
-                            <td>{{ version.id }}</td>
+                            <td>v{{ version.versionNumber }}</td>
                             <td>{{ version.createdAt ? version.createdAt|date('H:i:s d-m-Y') : '' }}</td>
 {#                            <td>{{ loop.index0 == 0 ? 'publicada' : '' }}</td>#}
                             <td>{{ version.published ? 'publicada' : '' }}</td>

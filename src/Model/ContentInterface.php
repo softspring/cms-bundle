@@ -25,6 +25,10 @@ interface ContentInterface
 
     public function removeVersion(ContentVersionInterface $version): void;
 
+    public function getLastVersionNumber(): ?int;
+
+    public function setLastVersionNumber(?int $lastVersionNumber): void;
+
     /**
      * @return RouteInterface[]|Collection
      */

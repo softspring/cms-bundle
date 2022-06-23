@@ -16,6 +16,8 @@ abstract class Content implements ContentInterface
      */
     protected Collection $versions;
 
+    protected ?int $lastVersionNumber = null;
+
     /**
      * @var RouteInterface[]|Collection
      */
@@ -76,6 +78,16 @@ abstract class Content implements ContentInterface
         if ($this->versions->contains($version)) {
             $this->versions->removeElement($version);
         }
+    }
+
+    public function getLastVersionNumber(): ?int
+    {
+        return $this->lastVersionNumber;
+    }
+
+    public function setLastVersionNumber(?int $lastVersionNumber): void
+    {
+        $this->lastVersionNumber = $lastVersionNumber;
     }
 
     /**

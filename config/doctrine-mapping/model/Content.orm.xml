@@ -9,6 +9,12 @@
         <field name="name" column="name" type="string" nullable="false" unique="true"/>
         <field name="extraData" column="extra_data" type="json" nullable="true"/>
         <field name="seo" column="seo" type="json" nullable="true"/>
+
+        <field name="lastVersionNumber" column="last_version_number" type="integer" nullable="true">
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
     </mapped-superclass>
 
 </doctrine-mapping>

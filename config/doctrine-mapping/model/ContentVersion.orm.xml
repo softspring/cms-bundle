@@ -17,6 +17,12 @@
             </options>
         </field>
 
+        <field name="versionNumber" column="version_number" type="integer" nullable="true">
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+
         <field name="keep" column="keep" type="boolean">
             <options>
                 <option name="default">0</option>

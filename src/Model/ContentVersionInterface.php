@@ -14,6 +14,16 @@ interface ContentVersionInterface
 
     public function setLayout(?string $layout): void;
 
+    public function getCreatedAt(): ?\DateTime;
+
+    public function setCreatedAt(?\DateTime $createdAt): void;
+
+    public function autoSetCreatedAt();
+
+    public function getVersionNumber(): ?int;
+
+    public function setVersionNumber(?int $versionNumber): void;
+
     public function getData(): ?array;
 
     public function setData(?array $data): void;

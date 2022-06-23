@@ -10,6 +10,8 @@ abstract class ContentVersion implements ContentVersionInterface
 
     protected ?int $createdAt = null;
 
+    protected ?int $versionNumber = null;
+
     protected ?array $data = null;
 
     protected ?array $compiledModules = null;
@@ -53,6 +55,16 @@ abstract class ContentVersion implements ContentVersionInterface
         if (!$this->createdAt) {
             $this->createdAt = time();
         }
+    }
+
+    public function getVersionNumber(): ?int
+    {
+        return $this->versionNumber;
+    }
+
+    public function setVersionNumber(?int $versionNumber): void
+    {
+        $this->versionNumber = $versionNumber;
     }
 
     public function getData(): ?array
