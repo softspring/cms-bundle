@@ -19,6 +19,7 @@ class CmsFixtures
         $dump = [
             'route' => [
                 'id' => $route->getId(),
+                'site' => $route->getSite(),
                 'type' => $route->getType(),
                 'symfony_route' => $route->getSymfonyRoute(),
                 'content' => null,
@@ -96,6 +97,7 @@ class CmsFixtures
         $dump = [
             $contentType => [
                 'name' => $content->getName(),
+                'site' => $content->getSite(),
                 'extra' => $content->getExtraData(),
                 'seo' => $content->getSeo(),
                 'versions' => [
