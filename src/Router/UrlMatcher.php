@@ -87,6 +87,7 @@ class UrlMatcher
                         // TODO resolve conflict
                     }
                     $attributes['_sfs_cms_locale'] = $path['locale'];
+                    $attributes['_sfs_cms_locale_path'] = $path['path'];
                     $pathInfo = substr($pathInfo, strlen($path['path']));
                 }
             }
@@ -105,6 +106,13 @@ class UrlMatcher
                 }
 
                 $attributes['_sfs_cms_locale'] = $routePath->getLocale();
+            }
+
+            if (empty($attributes['_sfs_cms_locale_path']) && $siteConfig['locale_path_redirect_if_empty']) {
+                return [
+                    '_sfs_cms_redirect' => $this->urlGenerator->getUrl($route->getId(), $routePath->getLocale()),
+                    '_sfs_cms_redirect_code' => $siteConfig['slash_route']['redirect_code'] ?: Response::HTTP_FOUND,
+                ];
             }
 
             switch ($route->getType()) {
@@ -151,7 +159,7 @@ class UrlMatcher
                 $qb->setParameter('locale', $locale);
             }
 
-            return $qb->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT);
+            return $qb->getQuery()->getResult(AbstractQuery::HYDRATE_OBJECT)[0] ?? null;
         } catch (TableNotFoundException $e) {
             // prevent error before creating database schema
             return null;

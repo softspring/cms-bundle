@@ -38,6 +38,7 @@ class Site implements ConfigurationInterface
                 ->scalarNode('default_locale')->defaultValue('es')->end()
 
                 ->booleanNode('https_redirect')->defaultTrue()->end()
+                ->booleanNode('locale_path_redirect_if_empty')->defaultTrue()->end()
 
                 ->arrayNode('extra')
                     ->useAttributeAsKey('key')
