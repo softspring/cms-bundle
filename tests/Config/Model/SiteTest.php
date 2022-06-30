@@ -38,6 +38,7 @@ class SiteTest extends TestCase
             'locales' => ['es', 'en'],
             'default_locale' => 'en',
             'https_redirect' => false,
+            'locale_path_redirect_if_empty' => true,
             'extra' => [],
             'hosts' => [
                 [

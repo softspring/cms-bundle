@@ -160,6 +160,7 @@ class UrlMatcherTest extends TestCase
         $this->assertEquals([
             '_sfs_cms_site' => $siteConfig + ['id' => 'default'],
             '_sfs_cms_locale' => 'en',
+            '_sfs_cms_locale_path' => '/en',
         ], $attributes);
     }
 
@@ -168,6 +169,7 @@ class UrlMatcherTest extends TestCase
         $siteConfig = [
             'locales' => ['es', 'en'],
             'https_redirect' => true,
+            'locale_path_redirect_if_empty' => true,
             'slash_route' => [
                 'enabled' => false,
             ],
@@ -194,11 +196,12 @@ class UrlMatcherTest extends TestCase
         $attributes = $urlMatcher->matchRequest($request);
         $this->assertEquals([
             '_sfs_cms_site' => $siteConfig + ['id' => 'default'],
-            '_sfs_cms_locale' => 'fr',
-            '_route' => 'cms#example',
-            '_route_params' => [],
-            '_controller' => 'Softspring\CmsBundle\Controller\ContentController::renderRoutePath',
-            'routePath' => $routePath,
+//            '_route' => 'cms#example',
+//            '_route_params' => [],
+//            '_controller' => 'Softspring\CmsBundle\Controller\ContentController::renderRoutePath',
+//            'routePath' => $routePath,
+            '_sfs_cms_locale' => 'en',
+            '_sfs_cms_locale_path' => '/en',
         ], $attributes);
     }
 }
