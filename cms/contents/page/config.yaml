@@ -22,3 +22,22 @@ content:
             type: checkbox
             type_options:
                 required: false
+        sitemapChangefreq:
+            type: choice
+            type_options:
+                choices:
+                    "": false
+                    always: always
+                    hourly: hourly
+                    daily: daily
+                    weekly: weekly
+                    monthly: monthly
+                    yearly: yearly
+                    never: never
+        sitemapPriority:
+            type: number
+            type_options:
+                required: false
+                scale: 1
+                constraints:
+                    - { constraint: range, options: { min: 0, max: 1 } }

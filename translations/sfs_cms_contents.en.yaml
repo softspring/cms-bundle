@@ -115,3 +115,5 @@ admin_page:
             noIndex.label: "No index"
             noFollow.label: "No follow"
             sitemap.label: "Sitemap"
+            sitemapChangefreq.label: "Change frequency for sitemap"
+            sitemapPriority.label: "URL priority for sitemap"

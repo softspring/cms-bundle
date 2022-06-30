@@ -72,6 +72,22 @@ class UrlMatcher
             }
         }
 
+        foreach ($siteConfig['sitemaps'] as $sitemap => $sitemapConfig) if ('/'.trim($sitemapConfig['url'], '/') === $pathInfo) {
+            return [
+                '_controller' => 'Softspring\CmsBundle\Controller\SitemapController::sitemap',
+                'sitemap' => $sitemap,
+                'site' => $siteId,
+            ];
+        }
+
+        if ($siteConfig['sitemaps_index']['enabled'] && '/'.trim($siteConfig['sitemaps_index']['url'], '/') === $pathInfo) {
+            return [
+                '_controller' => 'Softspring\CmsBundle\Controller\SitemapController::index',
+                'site' => $siteId,
+            ];
+        }
+
+
         $attributes = [
             '_sfs_cms_site' => $siteConfig + ['id' => $siteId],
         ];

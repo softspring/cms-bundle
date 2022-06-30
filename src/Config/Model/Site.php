@@ -101,6 +101,24 @@ class Site implements ConfigurationInterface
                     ->prototype('variable')->end()
                 ->end()
 
+                ->arrayNode('sitemaps')
+                    ->performNoDeepMerging()
+                    ->arrayPrototype()
+                        ->children()
+                            ->scalarNode('url')->defaultValue('sitemap.xml')->end()
+                            ->scalarNode('default_priority')->defaultFalse()->end()
+                            ->enumNode('default_changefreq')->defaultFalse()->values([false, 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never'])->end()
+                            ->integerNode('cache_ttl')->defaultFalse()->end()
+                        ->end()
+                    ->end()
+                ->end()
+
+                ->arrayNode('sitemaps_index')
+                    ->canBeEnabled()
+                    ->children()
+                        ->scalarNode('url')->defaultFalse()->end()
+                    ->end()
+                ->end()
             ->end()
         ;
 

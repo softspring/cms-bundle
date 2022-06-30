@@ -8,9 +8,7 @@ use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Router\UrlGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Twig\Environment;
 
 class SitemapController extends AbstractController
@@ -28,17 +26,15 @@ class SitemapController extends AbstractController
         $this->cmsConfig = $cmsConfig;
     }
 
-    public function generate(Request $request): Response
+    public function sitemap(string $site, string $sitemap): Response
     {
-        if (!$request->attributes->has('_sfs_cms_site')) {
-            throw new NotFoundHttpException('No site was detected for sitemap');
-        }
-        $siteConfig = $request->attributes->get('_sfs_cms_site');
+        $siteConfig = $this->cmsConfig->getSite($site);
+        $sitemapConfig = $siteConfig['sitemaps'][$sitemap];
 
         $urls = [];
 
         /** @var ContentInterface $content */
-        foreach ($this->em->getRepository(ContentInterface::class)->findAll() as $content) {
+        foreach ($this->em->getRepository(ContentInterface::class)->findBySite($site) as $content) {
             if (!$content->getPublishedVersion()) {
                 continue;
             }
@@ -48,6 +44,8 @@ class SitemapController extends AbstractController
                 continue;
             }
 
+            // TODO check sitemap name
+
             if ($seo['noIndex']??false) {
                 continue;
             }
@@ -55,22 +53,62 @@ class SitemapController extends AbstractController
             /** @var RouteInterface $contentRoute */
             foreach ($content->getRoutes() as $contentRoute) {
                 foreach ($siteConfig['locales'] as $locale) {
-                    $url = $this->urlGenerator->getUrl($contentRoute, $locale);
+                    $url = [ 'loc' => $this->urlGenerator->getUrl($contentRoute, $locale) ];
 
                     if ($content->getPublishedVersion()->getCreatedAt()) {
-                        $lastmod = $content->getPublishedVersion()->getCreatedAt()->format('Y-m-d');
+                        $url['lastmod'] = $content->getPublishedVersion()->getCreatedAt()->format('Y-m-d');
                     }
 
-                    $urls[] = [
-                        'loc' => $url,
-                        'lastmod' => $lastmod ?? null,
-                    ];
+                    if ($seo['sitemapChangefreq'] ?? false) {
+                        $url['changefreq'] = $seo['sitemapChangefreq'];
+                    } elseif ($sitemapConfig['default_changefreq'] ?? false) {
+                        $url['changefreq'] = $sitemapConfig['default_changefreq'];
+                    }
+
+                    if ($seo['sitemapPriority'] ?? false) {
+                        $url['priority'] = $seo['sitemapPriority'];
+                    } elseif ($sitemapConfig['default_priority'] ?? false) {
+                        $url['priority'] = $sitemapConfig['default_priority'];
+                    }
+
+                    $urls[] = $url;
                 }
             }
         }
 
-        return $this->render('@SfsCms/sitemap/sitemap.xml.twig', [
-            'urls' => $urls,
-        ], new Response(null, 200, ['Content-type' => 'application/xml']));
+        $response = new Response(null, 200, ['Content-type' => 'application/xml']);
+
+        if ($sitemapConfig['cache_ttl'] ?? false) {
+            $response->setPublic();
+            $response->setMaxAge($sitemapConfig['cache_ttl']);
+        }
+
+        return $this->render('@SfsCms/sitemap/sitemap.xml.twig', [ 'urls' => $urls ], $response);
+    }
+
+    public function index(string $site): Response
+    {
+        $siteConfig = $this->cmsConfig->getSite($site);
+        $hostAndProtocol = 'https://';
+        foreach ($siteConfig['hosts'] as $host) if ($host['canonical']) {
+            $hostAndProtocol .= $host['domain'];
+        }
+
+        $sitemaps = [];
+
+        foreach ($siteConfig['sitemaps'] as $sitemap => $sitemapConfig) {
+            $sitemaps[] = [
+                'loc' => "$hostAndProtocol/{$sitemapConfig['url']}",
+            ];
+        }
+
+        $response = new Response(null, 200, ['Content-type' => 'application/xml']);
+
+//        if ($sitemapConfig['cache_ttl'] ?? false) {
+//            $response->setPublic();
+//            $response->setMaxAge($sitemapConfig['cache_ttl']);
+//        }
+
+        return $this->render('@SfsCms/sitemap/index.xml.twig', [ 'sitemaps' => $sitemaps ], $response);
     }
 }

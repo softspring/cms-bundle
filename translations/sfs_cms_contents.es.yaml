@@ -115,3 +115,5 @@ admin_page:
             noIndex.label: "No indexar"
             noFollow.label: "No seguir enlaces"
             sitemap.label: "Mapa de sitio"
+            sitemapChangefreq.label: "Frecuencia de cambio en el sitemap"
+            sitemapPriority.label: "Prioridad de URL en el sitemap"
