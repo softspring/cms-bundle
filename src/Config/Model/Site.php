@@ -26,11 +26,13 @@ class Site implements ConfigurationInterface
             ->end()
             ->children()
                 ->arrayNode('allowed_content_types')
+                    ->performNoDeepMerging()
                     ->defaultValue(['page'])
                     ->scalarPrototype()->end()
                 ->end()
 
                 ->arrayNode('locales')
+                    ->performNoDeepMerging()
                     ->defaultValue(['es'])
                     ->scalarPrototype()->end()
                 ->end()
@@ -41,11 +43,13 @@ class Site implements ConfigurationInterface
                 ->booleanNode('locale_path_redirect_if_empty')->defaultTrue()->end()
 
                 ->arrayNode('extra')
+                    ->performNoDeepMerging()
                     ->useAttributeAsKey('key')
                     ->prototype('variable')->end()
                 ->end()
 
                 ->arrayNode('hosts')
+                    ->performNoDeepMerging()
                     ->arrayPrototype()
                         ->children()
                             ->scalarNode('domain')->isRequired()->end()
@@ -58,6 +62,7 @@ class Site implements ConfigurationInterface
                 ->end()
 
                 ->arrayNode('paths')
+                    ->performNoDeepMerging()
                     ->arrayPrototype()
                         ->children()
                             ->scalarNode('path')->isRequired()->end()

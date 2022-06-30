@@ -1,0 +1,3 @@
+sfs_cms_sitemap:
+    controller: Softspring\CmsBundle\Controller\SitemapController::generate
+    path: "/sitemap.xml"
