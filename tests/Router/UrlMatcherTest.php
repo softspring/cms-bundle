@@ -97,6 +97,8 @@ class UrlMatcherTest extends TestCase
                 'route' => 'home_page',
                 'redirect_code' => 301,
             ],
+            'sitemaps' => [],
+            'sitemaps_index' => [ 'enabled' => false],
         ];
         $hostConfig = ['redirect_to_canonical' => false];
 
@@ -121,6 +123,8 @@ class UrlMatcherTest extends TestCase
                 'enabled' => false,
             ],
             'paths' => [],
+            'sitemaps' => [],
+            'sitemaps_index' => [ 'enabled' => false],
         ];
         $hostConfig = ['redirect_to_canonical' => false, 'locale' => 'es'];
 
@@ -148,6 +152,8 @@ class UrlMatcherTest extends TestCase
                 ['path' => '/es', 'locale' => 'es'],
                 ['path' => '/en', 'locale' => 'en'],
             ],
+            'sitemaps' => [],
+            'sitemaps_index' => [ 'enabled' => false],
         ];
         $hostConfig = ['redirect_to_canonical' => false, 'locale' => 'es'];
 
@@ -177,6 +183,8 @@ class UrlMatcherTest extends TestCase
                 ['path' => '/es', 'locale' => 'es'],
                 ['path' => '/en', 'locale' => 'en'],
             ],
+            'sitemaps' => [],
+            'sitemaps_index' => [ 'enabled' => false],
         ];
         $hostConfig = ['redirect_to_canonical' => false, 'locale' => 'es'];
 

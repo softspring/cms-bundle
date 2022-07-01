@@ -65,7 +65,9 @@ class Site implements ConfigurationInterface
                     ->performNoDeepMerging()
                     ->arrayPrototype()
                         ->beforeNormalization()
-                            ->always(function ($config) { $config['path'] = rtrim($config['path'], '/'); return $config; })
+                            ->always(function ($config) { $config['path'] = rtrim($config['path'], '/');
+
+return $config; })
                         ->end()
                         ->children()
                             ->scalarNode('path')->isRequired()->end()

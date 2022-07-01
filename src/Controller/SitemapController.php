@@ -40,20 +40,20 @@ class SitemapController extends AbstractController
             }
 
             $seo = $content->getSeo();
-            if (! ($seo['sitemap'] ?? false)) {
+            if (!($seo['sitemap'] ?? false)) {
                 continue;
             }
 
             // TODO check sitemap name
 
-            if ($seo['noIndex']??false) {
+            if ($seo['noIndex'] ?? false) {
                 continue;
             }
 
             /** @var RouteInterface $contentRoute */
             foreach ($content->getRoutes() as $contentRoute) {
                 foreach ($siteConfig['locales'] as $locale) {
-                    $url = [ 'loc' => $this->urlGenerator->getUrl($contentRoute, $locale) ];
+                    $url = ['loc' => $this->urlGenerator->getUrl($contentRoute, $locale)];
 
                     if ($content->getPublishedVersion()->getCreatedAt()) {
                         $url['lastmod'] = $content->getPublishedVersion()->getCreatedAt()->format('Y-m-d');
@@ -83,15 +83,17 @@ class SitemapController extends AbstractController
             $response->setMaxAge($sitemapConfig['cache_ttl']);
         }
 
-        return $this->render('@SfsCms/sitemap/sitemap.xml.twig', [ 'urls' => $urls ], $response);
+        return $this->render('@SfsCms/sitemap/sitemap.xml.twig', ['urls' => $urls], $response);
     }
 
     public function index(string $site): Response
     {
         $siteConfig = $this->cmsConfig->getSite($site);
         $hostAndProtocol = 'https://';
-        foreach ($siteConfig['hosts'] as $host) if ($host['canonical']) {
-            $hostAndProtocol .= $host['domain'];
+        foreach ($siteConfig['hosts'] as $host) {
+            if ($host['canonical']) {
+                $hostAndProtocol .= $host['domain'];
+            }
         }
 
         $sitemaps = [];
@@ -109,6 +111,6 @@ class SitemapController extends AbstractController
 //            $response->setMaxAge($sitemapConfig['cache_ttl']);
 //        }
 
-        return $this->render('@SfsCms/sitemap/index.xml.twig', [ 'sitemaps' => $sitemaps ], $response);
+        return $this->render('@SfsCms/sitemap/index.xml.twig', ['sitemaps' => $sitemaps], $response);
     }
 }
