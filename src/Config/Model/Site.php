@@ -95,7 +95,7 @@ class Site implements ConfigurationInterface
                     ->children()
                         ->enumNode('behaviour')->values(['redirect_to_route_with_user_language'])->end()
                         ->scalarNode('route')->end()
-                        ->integerNode('redirect_code')->end()
+                        ->integerNode('redirect_code')->defaultValue(301)->end()
                     ->end()
                 ->end()
 
