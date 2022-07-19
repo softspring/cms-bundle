@@ -52,6 +52,7 @@ class SiteTest extends TestCase
             'paths' => [],
             'slash_route' => [
                 'enabled' => false,
+                'redirect_code' => 301,
             ],
             'error_pages' => [],
             'sitemaps' => [],
