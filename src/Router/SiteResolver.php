@@ -33,7 +33,7 @@ class SiteResolver
                         }
                     }
                 }
-            break;
+                break;
 
             case 'path':
             default:
