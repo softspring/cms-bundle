@@ -7,9 +7,12 @@ use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Model\RoutePathInterface;
 use Softspring\CmsBundle\Render\BlockRenderer;
 use Softspring\CmsBundle\Render\MenuRenderer;
+use Symfony\Bundle\FrameworkBundle\HttpCache\HttpCache;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
+use Symfony\Component\HttpKernel\EventListener\FragmentListener;
+use Symfony\Component\HttpKernel\HttpCache\Esi;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -20,14 +23,20 @@ class ContentDataCollector extends DataCollector
     protected BlockRenderer $blockRenderer;
     protected MenuRenderer $menuRenderer;
     protected ?TranslatorInterface $translator;
-    protected bool $profilerEnabled;
+    protected bool $profilerEnabled = false;
+    protected bool $esiEnabled = false;
+    protected bool $fragmentsEnabled = false;
+    protected bool $httpCacheEnabled = false;
 
-    public function __construct(BlockRenderer $blockRenderer, MenuRenderer $menuRenderer, ?TranslatorInterface $translator, ?Profiler $profiler)
+    public function __construct(BlockRenderer $blockRenderer, MenuRenderer $menuRenderer, ?TranslatorInterface $translator, ?Profiler $profiler, ?Esi $esi, ?FragmentListener $fragmentListener, ?HttpCache $httpCache)
     {
         $this->blockRenderer = $blockRenderer;
         $this->menuRenderer = $menuRenderer;
         $this->translator = $translator;
         $this->profilerEnabled = (bool) $profiler;
+        $this->esiEnabled = (bool) $esi;
+        $this->fragmentsEnabled = (bool) $fragmentListener;
+        $this->httpCacheEnabled = (bool) $httpCache;
     }
 
     public function collect(Request $request, Response $response, \Throwable $exception = null)
@@ -139,5 +148,20 @@ class ContentDataCollector extends DataCollector
             default:
                 return 'no yet implemented';
         }
+    }
+
+    public function isEsiEnabled(): bool
+    {
+        return $this->esiEnabled;
+    }
+
+    public function isFragmentsEnabled(): bool
+    {
+        return $this->fragmentsEnabled;
+    }
+
+    public function isHttpCacheEnabled(): bool
+    {
+        return $this->httpCacheEnabled;
     }
 }

@@ -73,6 +73,12 @@
 
             <div class="sf-toolbar-info-group">
                 <div class="sf-toolbar-info-piece">
+                    <b>Symfony</b>
+                    <span class="sf-toolbar-status sf-toolbar-status-{{ collector.esiEnabled ? 'green' : 'gray' }}">esi {{ collector.esiEnabled ? '✓' : '✗' }}</span>
+                    <span class="sf-toolbar-status sf-toolbar-status-{{ collector.fragmentsEnabled ? 'green' : 'gray' }}">fragments {{ collector.fragmentsEnabled ? '✓' : '✗' }}</span>
+                    <span class="sf-toolbar-status sf-toolbar-status-{{ collector.httpCacheEnabled ? 'green' : 'gray' }}">http cache {{ collector.httpCacheEnabled ? '✓' : '✗' }}</span>
+                </div>
+                <div class="sf-toolbar-info-piece">
                     <b>Resources</b>
                     <span><a href="https://github.com/softspring/cms-bundle" target="_blank" rel="help">CMS Documentation</a></span>
                 </div>
