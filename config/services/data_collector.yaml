@@ -1,0 +1,9 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+        
+    Softspring\CmsBundle\DataCollector\ContentDataCollector:
+        tags:
+            - { name: 'data_collector', template: '@SfsCms/Collector/content.html.twig', id: 'cms',  priority: 332 }

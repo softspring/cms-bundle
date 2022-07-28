@@ -6,6 +6,7 @@ use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Model\BlockInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\HttpCache\Esi;
+use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
 
@@ -14,14 +15,17 @@ class BlockRenderer extends AbstractRenderer
     protected CmsConfig $cmsConfig;
     protected Environment $twig;
     protected RouterInterface $router;
+    protected bool $profilerEnabled;
     protected bool $esiEnabled;
+    protected array $profilerDebugCollectorData = [];
 
-    public function __construct(RequestStack $requestStack, CmsConfig $cmsConfig, Environment $twig, RouterInterface $router, ?Esi $esi)
+    public function __construct(RequestStack $requestStack, CmsConfig $cmsConfig, Environment $twig, RouterInterface $router, ?Profiler $profiler, ?Esi $esi)
     {
         parent::__construct($requestStack);
         $this->cmsConfig = $cmsConfig;
         $this->twig = $twig;
         $this->router = $router;
+        $this->profilerEnabled = (bool) $profiler;
         $this->esiEnabled = (bool) $esi;
     }
 
@@ -47,6 +51,13 @@ class BlockRenderer extends AbstractRenderer
         }
 
         $template = twig_template_from_string($this->twig, $twigCode);
+
+        if ($this->profilerEnabled) {
+            $this->profilerDebugCollectorData[] = [
+                'type' => $type,
+                'config' => $blockConfig,
+            ];
+        }
 
         return $template->render();
     }
@@ -77,6 +88,19 @@ class BlockRenderer extends AbstractRenderer
 
         $template = twig_template_from_string($this->twig, $twigCode);
 
+        if ($this->profilerEnabled) {
+            $this->profilerDebugCollectorData[] = [
+                'type' => $type,
+                'blockId' => $blockId,
+                'config' => $blockConfig,
+            ];
+        }
+
         return $template->render();
+    }
+
+    public function getDebugCollectorData(): array
+    {
+        return $this->profilerDebugCollectorData;
     }
 }

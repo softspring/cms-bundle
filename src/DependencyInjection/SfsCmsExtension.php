@@ -66,6 +66,8 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         true && $loader->load('controller/admin_routes.yaml');
         true && $loader->load('controller/admin_content.yaml');
 
+        $loader->load('data_collector.yaml');
+
         if (class_exists(MakerBundle::class)) {
             $loader->load('makers.yaml');
         }

@@ -5,19 +5,23 @@ namespace Softspring\CmsBundle\Render;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\HttpCache\Esi;
+use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Twig\Environment;
 
 class MenuRenderer extends AbstractRenderer
 {
     protected CmsConfig $cmsConfig;
     protected Environment $twig;
+    protected bool $profilerEnabled;
     protected bool $esiEnabled;
+    protected array $profilerDebugCollectorData = [];
 
-    public function __construct(RequestStack $requestStack, CmsConfig $cmsConfig, Environment $twig, ?Esi $esi)
+    public function __construct(RequestStack $requestStack, CmsConfig $cmsConfig, Environment $twig, ?Profiler $profiler, ?Esi $esi)
     {
         parent::__construct($requestStack);
         $this->cmsConfig = $cmsConfig;
         $this->twig = $twig;
+        $this->profilerEnabled = (bool) $profiler;
         $this->esiEnabled = (bool) $esi;
     }
 
@@ -41,6 +45,18 @@ class MenuRenderer extends AbstractRenderer
 
         $template = twig_template_from_string($this->twig, $twigCode);
 
+        if ($this->profilerEnabled) {
+            $this->profilerDebugCollectorData[] = [
+                'type' => $type,
+                'config' => $menuConfig,
+            ];
+        }
+
         return $template->render();
+    }
+
+    public function getDebugCollectorData(): array
+    {
+        return $this->profilerDebugCollectorData;
     }
 }

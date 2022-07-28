@@ -1,0 +1,433 @@
+{% extends '@WebProfiler/Profiler/layout.html.twig' %}
+
+{% block toolbar %}
+    {% if collector.cmsRequest %}
+        {% set cached = 'no-cache' not in (collector.cache['cache-control'][0]|default('no-cache')) %}
+
+        {% set icon %}
+            <svg height="24" width="24" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 135 103"><defs><style>.cls-1{fill:url(#linear-gradient);}.cls-2{fill:url(#linear-gradient-2);}.cls-3{fill:url(#linear-gradient-3);}.cls-4{fill:#fbbc33;}.cls-5{fill:#38b6ab;}.cls-6{fill:#94c11f;}</style><linearGradient id="linear-gradient" x1="3.11" y1="78.11" x2="47.65" y2="78.11" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#407f4d"/><stop offset="1" stop-color="#366637"/></linearGradient><linearGradient id="linear-gradient-2" x1="3.11" y1="65.22" x2="73.45" y2="65.22" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#408456"/><stop offset="1" stop-color="#336233"/></linearGradient><linearGradient id="linear-gradient-3" x1="3.11" y1="52.32" x2="99.25" y2="52.32" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#3e895d"/><stop offset="1" stop-color="#336237"/></linearGradient></defs><path class="cls-1" d="M47.65,100.39H36.15a33.08,33.08,0,0,0-33-33V55.84A44.59,44.59,0,0,1,47.65,100.39Z"/><path class="cls-2" d="M73.45,100.39H62A58.91,58.91,0,0,0,3.11,41.55V30A70.42,70.42,0,0,1,73.45,100.39Z"/><path class="cls-3" d="M99.25,100.39H87.74A84.73,84.73,0,0,0,3.11,15.75V4.24A96.25,96.25,0,0,1,99.25,100.39Z"/><path class="cls-4" d="M99.26,100.39H87.75A44.59,44.59,0,0,1,132.3,55.84V67.35A33.08,33.08,0,0,0,99.26,100.39Z"/><path class="cls-5" d="M73.46,100.39H62A70.43,70.43,0,0,1,132.3,30V41.55A58.9,58.9,0,0,0,73.46,100.39Z"/><path class="cls-6" d="M47.66,100.39H36.15A96.26,96.26,0,0,1,132.3,4.24V15.75A84.74,84.74,0,0,0,47.66,100.39Z"/></svg>
+            <span class="sf-toolbar-value">{{ collector.title }}</span>
+            <span id="sfs-content-cache"></span>
+        {% endset %}
+
+        {% set text %}
+            <div class="sf-toolbar-info-group">
+                <div class="sf-toolbar-info-piece">
+                    <b>Site</b>
+                    <span>{{ collector.site }}</span>
+                </div>
+                <div class="sf-toolbar-info-piece">
+                    <b>Locale</b>
+                    <span>{{ collector.locale }}</span>
+                </div>
+                <div class="sf-toolbar-info-piece">
+                    <b>Route</b>
+                    <span>{{ collector.route.id|default('') }}</span>
+                </div>
+                <div class="sf-toolbar-info-piece">
+                    <b>Route cache</b>
+                    <span>{{ collector.routePath.cacheTtl|default('none') }}</span>
+                </div>
+                <div class="sf-toolbar-info-piece">
+                    <b>Content</b>
+                    <span>{{ collector.content.name|default('') }}</span>
+                </div>
+                <div class="sf-toolbar-info-piece">
+                    <b>Content version</b>
+                    <span>{{ collector.content.publishedVersion.createdAt|date('H:i:s d-m-Y')|default('') }}</span>
+                </div>
+                <div class="sf-toolbar-info-piece">
+                    <b>Layout</b>
+                    <span>{{ (collector.content.publishedVersion.layout~'.title')|trans({}, 'sfs_cms_layouts')|default('') }}</span>
+                </div>
+            </div>
+
+            {% if collector.cache|length %}
+                <div class="sf-toolbar-info-group">
+                    <div class="sf-toolbar-info-piece">
+                        <b>Cache-control</b>
+                        <span class="sf-toolbar-status">{{ collector.cache['cache-control'][0] }}</span>
+                    </div>
+                    <div class="sf-toolbar-info-piece">
+                        <b>Date</b>
+                        <span class="sf-toolbar-status">{{ collector.cache['date'][0] }}</span>
+                    </div>
+                    <div class="sf-toolbar-info-piece">
+                        <b>Age</b>
+                        <span class="sf-toolbar-status {{ cached?'sf-toolbar-status-yellow':'' }}" id="sfs-cache-age">none</span>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="sf-toolbar-info-group">
+                <div class="sf-toolbar-info-piece">
+                    <b>Rendered blocks</b>
+                    <span class="sf-toolbar-status">{{ collector.blocks|length }}</span>
+                </div>
+
+                <div class="sf-toolbar-info-piece">
+                    <b>Rendered menus</b>
+                    <span class="sf-toolbar-status">{{ collector.menus|length }}</span>
+                </div>
+            </div>
+
+            <div class="sf-toolbar-info-group">
+                <div class="sf-toolbar-info-piece">
+                    <b>Resources</b>
+                    <span><a href="https://github.com/softspring/cms-bundle" target="_blank" rel="help">CMS Documentation</a></span>
+                </div>
+            </div>
+        {% endset %}
+
+        {% set status = cached ? 'yellow' : '' %}
+
+        {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', { link: true }) }}
+
+        {% if cached %}
+            <script type="text/javascript">
+                var pageTimestamp = {{ collector.cache['date']|first|date('U') }};
+                var currentTimestamp = Math.floor(Date.now() / 1000);
+                var currentTimestampDelayed = Math.floor(Date.now() / 1000) - 1; // allowed delay
+                var cachedSeconds = currentTimestamp - pageTimestamp;
+                var cachedSecondsDelayed = currentTimestampDelayed - pageTimestamp;
+
+                // var cacheSpan = document.getElementById('sfs-content-cache');
+                var ageSpan = document.getElementById('sfs-cache-age');
+                var containerBlock = document.getElementsByClassName('sf-toolbar-block-cms')[0];
+
+                if (cachedSecondsDelayed > 0) {
+                    // cacheSpan.innerHTML = '<span class="sf-toolbar-value">' + cachedSeconds + '</span> <span class="sf-toolbar-label">sg</span>';
+                    ageSpan.innerHTML = cachedSeconds + ' sg';
+
+                    containerBlock.classList.remove('sf-toolbar-status-yellow');
+                    containerBlock.classList.add('sf-toolbar-status-green');
+                    ageSpan.classList.remove('sf-toolbar-status-yellow');
+                    ageSpan.classList.add('sf-toolbar-status-green');
+                } else {
+                    ageSpan.innerHTML = cachedSeconds + ' sg';
+                }
+            </script>
+        {% endif %}
+
+    {% else %}
+{#        {% set icon %}#}
+{#            <svg height="24" width="24" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 135 103"><defs><style>.cls-1{fill:url(#aaaaaa-gradient);}.cls-2{fill:url(#aaaaaa-gradient-2);}.cls-3{fill:url(#aaaaaa-gradient-3);}.cls-4{fill:#aaaaaa;}.cls-5{fill:#aaaaaa;}.cls-6{fill:#aaaaaa;}</style><linearGradient id="linear-gradient" x1="3.11" y1="78.11" x2="47.65" y2="78.11" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#aaaaaa"/><stop offset="1" stop-color="#aaaaaa"/></linearGradient><linearGradient id="linear-gradient-2" x1="3.11" y1="65.22" x2="73.45" y2="65.22" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#aaaaaa"/><stop offset="1" stop-color="#aaaaaa"/></linearGradient><linearGradient id="linear-gradient-3" x1="3.11" y1="52.32" x2="99.25" y2="52.32" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#aaaaaa"/><stop offset="1" stop-color="#aaaaaa"/></linearGradient></defs><path class="cls-1" d="M47.65,100.39H36.15a33.08,33.08,0,0,0-33-33V55.84A44.59,44.59,0,0,1,47.65,100.39Z"/><path class="cls-2" d="M73.45,100.39H62A58.91,58.91,0,0,0,3.11,41.55V30A70.42,70.42,0,0,1,73.45,100.39Z"/><path class="cls-3" d="M99.25,100.39H87.74A84.73,84.73,0,0,0,3.11,15.75V4.24A96.25,96.25,0,0,1,99.25,100.39Z"/><path class="cls-4" d="M99.26,100.39H87.75A44.59,44.59,0,0,1,132.3,55.84V67.35A33.08,33.08,0,0,0,99.26,100.39Z"/><path class="cls-5" d="M73.46,100.39H62A70.43,70.43,0,0,1,132.3,30V41.55A58.9,58.9,0,0,0,73.46,100.39Z"/><path class="cls-6" d="M47.66,100.39H36.15A96.26,96.26,0,0,1,132.3,4.24V15.75A84.74,84.74,0,0,0,47.66,100.39Z"/></svg>#}
+{#            <span class="sf-toolbar-label">no cms</span>#}
+{#        {% endset %}#}
+{#        {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', { link: true }) }}#}
+    {% endif %}
+{% endblock %}
+
+{% block menu %}
+    <span class="label">
+        <span class="icon">
+            <svg height="24" width="24" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 135 103"><defs><style>.cls-1{fill:url(#linear-gradient);}.cls-2{fill:url(#linear-gradient-2);}.cls-3{fill:url(#linear-gradient-3);}.cls-4{fill:#fbbc33;}.cls-5{fill:#38b6ab;}.cls-6{fill:#94c11f;}</style><linearGradient id="linear-gradient" x1="3.11" y1="78.11" x2="47.65" y2="78.11" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#407f4d"/><stop offset="1" stop-color="#366637"/></linearGradient><linearGradient id="linear-gradient-2" x1="3.11" y1="65.22" x2="73.45" y2="65.22" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#408456"/><stop offset="1" stop-color="#336233"/></linearGradient><linearGradient id="linear-gradient-3" x1="3.11" y1="52.32" x2="99.25" y2="52.32" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#3e895d"/><stop offset="1" stop-color="#336237"/></linearGradient></defs><path class="cls-1" d="M47.65,100.39H36.15a33.08,33.08,0,0,0-33-33V55.84A44.59,44.59,0,0,1,47.65,100.39Z"/><path class="cls-2" d="M73.45,100.39H62A58.91,58.91,0,0,0,3.11,41.55V30A70.42,70.42,0,0,1,73.45,100.39Z"/><path class="cls-3" d="M99.25,100.39H87.74A84.73,84.73,0,0,0,3.11,15.75V4.24A96.25,96.25,0,0,1,99.25,100.39Z"/><path class="cls-4" d="M99.26,100.39H87.75A44.59,44.59,0,0,1,132.3,55.84V67.35A33.08,33.08,0,0,0,99.26,100.39Z"/><path class="cls-5" d="M73.46,100.39H62A70.43,70.43,0,0,1,132.3,30V41.55A58.9,58.9,0,0,0,73.46,100.39Z"/><path class="cls-6" d="M47.66,100.39H36.15A96.26,96.26,0,0,1,132.3,4.24V15.75A84.74,84.74,0,0,0,47.66,100.39Z"/></svg>
+        </span>
+        <strong>CMS</strong>
+    </span>
+{% endblock %}
+
+{% block panel %}
+    <h2>CMS Response</h2>
+
+    <div class="metrics">
+        <div class="metric">
+            <span class="value">{{ collector.siteConfig.id }}</span>
+            <span class="label">site</span>
+        </div>
+        <div class="metric">
+            <span class="value">{{ collector.route.id }}</span>
+            <span class="label">route</span>
+        </div>
+        <div class="metric">
+            <span class="value">
+                {% if collector.routePath.cacheTtl %}
+                    {{ collector.routePath.cacheTtl }}
+                    <span class="unit">sg</span>
+                {% else %}
+                    none
+                {% endif %}
+            </span>
+            <span class="label">route cache</span>
+        </div>
+        <div class="metric">
+            <span class="value">{{ collector.locale }}</span>
+            <span class="label">locale</span>
+        </div>
+    </div>
+
+    <div class="sf-tabs">
+        <div class="tab">
+            <h3 class="tab-title">Site</h3>
+
+            <div class="tab-content">
+                <table>
+                    <thead>
+                    <tr>
+                        <th colspan="2" class="colored font-normal">Site</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="font-normal">Id</td><td class="font-normal">{{ collector.siteConfig.id }}</td></tr>
+                        <tr><td class="font-normal">Name</td><td class="font-normal">{{ collector.site }}</td></tr>
+                        <tr><td class="font-normal">Locales</td><td class="font-normal">{{ collector.siteConfig.locales|join(', ') }}</td></tr>
+                        <tr><td class="font-normal">Default locale</td><td class="font-normal">{{ collector.siteConfig.default_locale }}</td></tr>
+                        <tr><td class="font-normal">HTTPS redirect</td><td class="font-normal">{{ collector.siteConfig.https_redirect ? 'yes' : 'no' }}</td></tr>
+                        <tr><td class="font-normal">Allowed content types</td><td class="font-normal">{{ collector.siteConfig.allowed_content_types|join(', ') }}</td></tr>
+                        <tr><td class="font-normal">Locale path redirect if empty</td><td class="font-normal">{{ collector.siteConfig.locale_path_redirect_if_empty ? 'yes' : 'no' }}</td></tr>
+                        <tr><td class="font-normal">Slash route behaviour</td><td class="font-normal">
+                                {% if collector.siteConfig.slash_route.enabled %}
+                                    {% if collector.siteConfig.slash_route.behaviour %}
+                                        {{ collector.siteConfig.slash_route.redirect_code }} redirect to {{ collector.siteConfig.slash_route.route }} route
+                                    {% else %}
+                                        {{ collector.siteConfig.slash_route.behaviour }}
+                                    {% endif %}
+                                {% else %}
+                                    disabled
+                                {% endif %}
+                            </td></tr>
+                    </tbody>
+                </table>
+
+                <h4>Hosts</h4>
+                <table>
+                    <thead>
+                    <tr>
+                        <th class="colored font-normal">Domain</th>
+                        <th class="colored font-normal">Locale</th>
+                        <th class="colored font-normal">Scheme</th>
+                        <th class="colored font-normal">Canonical</th>
+                        <th class="colored font-normal">Redirect to canonical</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for host in collector.siteConfig.hosts %}
+                        <tr>
+                            <td class="font-normal">{{ host.domain }}</td>
+                            <td class="font-normal">{{ host.locale|default('<em>non dependant</em>')|raw }}</td>
+                            <td class="font-normal">{{ host.scheme }}</td>
+                            <td class="font-normal">{{ host.canonical ? 'true' : '' }}</td>
+                            <td class="font-normal">{{ host.redirect_to_canonical ? 'redirect' : '' }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+
+                <h4>Paths</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="colored font-normal">Path</th>
+                            <th class="colored font-normal">Loccale</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for path in collector.siteConfig.paths %}
+                            <tr>
+                                <td class="font-normal">{{ path.path }}</td>
+                                <td class="font-normal">{{ path.locale }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <h4>Sitemaps</h4>
+                {% if collector.siteConfig.sitemaps_index.enabled %}
+                    <table>
+                        <thead>
+                        <tr>
+                            <th class="colored font-normal">Sitemap index</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="font-normal">{{ collector.siteConfig.sitemaps_index.url }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                {% endif %}
+                {% if collector.siteConfig.sitemaps is empty %}
+                    <div class="empty">
+                        <p>No sitemaps are configured</p>
+                    </div>
+                {% else %}
+                    <table>
+                        <thead>
+                        <tr>
+                            <th class="colored font-normal">#</th>
+                            <th class="colored font-normal">url</th>
+                            <th class="colored font-normal">cache_ttl</th>
+                            <th class="colored font-normal">default priority</th>
+                            <th class="colored font-normal">default changefreq</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for key,sitemap in collector.siteConfig.sitemaps %}
+                            <tr>
+                                <td class="font-normal">{{ key }}</td>
+                                <td class="font-normal"><a target="_blank" href="/{{ sitemap.url }}">{{ sitemap.url }}</a></td>
+                                <td class="font-normal">{{ sitemap.cache_ttl }}</td>
+                                <td class="font-normal">{{ sitemap.default_priority }}</td>
+                                <td class="font-normal">{{ sitemap.default_changefreq }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+
+                <h4>Error pages</h4>
+                {% if collector.siteConfig.error_pages is empty %}
+                    <div class="empty">
+                        <p>No error pages are configured</p>
+                    </div>
+                {% else %}
+                    <table>
+                        <thead>
+                        <tr>
+                            <th class="colored font-normal">HTTP code</th>
+                            <th class="colored font-normal">Locale</th>
+                            <th class="colored font-normal">Template</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for httpCode, errorPages in collector.siteConfig.error_pages %}
+                            {% for locale, errorPage in errorPages %}
+                            <tr>
+                                <td class="font-normal">{{ httpCode }}</td>
+                                <td class="font-normal">{{ locale }}</td>
+                                <td class="font-normal">{{ errorPage|join('<br/>')|raw }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+
+                <h4>Extra</h4>
+                {% if collector.siteConfig.extra is empty %}
+                    <div class="empty">
+                        <p>No extra configuration is configured</p>
+                    </div>
+                {% else %}
+                    <table>
+                        <thead>
+                        <tr>
+                            <th class="colored font-normal">#</th>
+                            <th class="colored font-normal">Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for key, value in collector.siteConfig.extra %}
+                            <tr>
+                                <td class="font-normal">{{ key }}</td>
+                                <td class="font-normal">{{ dump(value) }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="tab">
+            <h3 class="tab-title">Route</h3>
+            <div class="tab-content">
+
+                <h3>Route</h3>
+                {{ dump(collector.route) }}
+                {{ dump(collector.routePath) }}
+            </div>
+        </div>
+
+        <div class="tab">
+            <h3 class="tab-title">Content</h3>
+            <div class="tab-content">
+
+                <h3>Content</h3>
+                {{ dump(collector.content) }}
+            </div>
+        </div>
+
+        <div class="tab disabled">
+            <h3 class="tab-title">Modules</h3>
+            <div class="tab-content">
+            </div>
+        </div>
+
+        <div class="tab">
+            <h3 class="tab-title">Blocks <span class="badge">{{ collector.blocks|length }}</span></h3>
+            <div class="tab-content">
+
+                <h3>Blocks</h3>
+                {% if collector.blocks is empty %}
+                    <div class="empty">
+                        <p>No blocks are rendered</p>
+                    </div>
+                {% else %}
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>type</th>
+                            <th>esi</th>
+                            <th>singleton</th>
+                            <th>cache</th>
+                            <th>config</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for block in collector.blocks %}
+                            <tr>
+                                <td>{{ block.blockId|default(block.config.static?'<i>static</i>':'')|raw }}</td>
+                                <td>{{ block.type }}</td>
+                                <td>{{ block.config.esi?'yes':'no' }}</td>
+                                <td>{{ block.config.singleton?'yes':'no' }}</td>
+                                <td>{{ block.config.cache_ttl }}</td>
+                                <td>{{ dump(block.config) }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="tab">
+            <h3 class="tab-title">Menus <span class="badge">{{ collector.menus|length }}</span></h3>
+            <div class="tab-content">
+
+                <h3>Menus</h3>
+                {% if collector.menus is empty %}
+                    <div class="empty">
+                        <p>No menus are rendered</p>
+                    </div>
+                {% else %}
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>type</th>
+                            <th>esi</th>
+                            <th>singleton</th>
+                            <th>cache</th>
+                            <th>config</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for menu in collector.menus %}
+                            <tr>
+                                <td>{{ menu.type }}</td>
+                                <td>{{ menu.config.esi?'yes' : 'no' }}</td>
+                                <td>{{ menu.config.singleton?'yes' : 'no' }}</td>
+                                <td>{{ menu.config.cache_ttl }}</td>
+                                <td>{{ dump(menu.config) }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
