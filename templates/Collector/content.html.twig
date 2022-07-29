@@ -1,5 +1,19 @@
 {% extends '@WebProfiler/Profiler/layout.html.twig' %}
 
+{% macro module_tr(module, prefix) %}
+    <tr>
+{#        <td></td>#}
+        <td>{{ prefix|raw }}&nbsp;└&nbsp;<span class="status-warning">{{ module.config._id }}</span></td>
+        <td>
+            <a>{{ module.config.render_template }}</a>
+        </td>
+{#        <td>{{ dump(module.config|default([])) }}</td>#}
+    </tr>
+    {% for submodule in module.modules|default([]) %}
+        {{ _self.module_tr(submodule, prefix~'&nbsp;&nbsp;&nbsp;') }}
+    {% endfor %}
+{% endmacro %}
+
 {% block toolbar %}
     {% if collector.cmsRequest %}
         {% set cached = 'no-cache' not in (collector.cache['cache-control'][0]|default('no-cache')) %}
@@ -355,16 +369,40 @@
             </div>
         </div>
 
-        <div class="tab disabled">
+        <div class="tab">
             <h3 class="tab-title">Modules</h3>
             <div class="tab-content">
+                <h3>Modules</h3>
+                {% if collector.modules is empty %}
+                    <div class="empty">
+                        <p>No modules are rendered</p>
+                    </div>
+                {% else %}
+                    <table>
+                        <thead>
+                        <tr>
+{#                            <th>container</th>#}
+                            <th>module</th>
+                            <th>template</th>
+                            <th>config</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for layout,content in collector.modules %}
+                            <tr>
+                                <td><strong>{{ layout }}</strong></td>
+                            </tr>
+                            {{ _self.module_tr(content[0]) }}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
             </div>
         </div>
 
         <div class="tab">
             <h3 class="tab-title">Blocks <span class="badge">{{ collector.blocks|length }}</span></h3>
             <div class="tab-content">
-
                 <h3>Blocks</h3>
                 {% if collector.blocks is empty %}
                     <div class="empty">

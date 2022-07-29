@@ -6,6 +6,7 @@ use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Model\RoutePathInterface;
 use Softspring\CmsBundle\Render\BlockRenderer;
+use Softspring\CmsBundle\Render\ContentRender;
 use Softspring\CmsBundle\Render\MenuRenderer;
 use Symfony\Bundle\FrameworkBundle\HttpCache\HttpCache;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,16 +23,18 @@ class ContentDataCollector extends DataCollector
 
     protected BlockRenderer $blockRenderer;
     protected MenuRenderer $menuRenderer;
+    protected ContentRender $contentRender;
     protected ?TranslatorInterface $translator;
     protected bool $profilerEnabled = false;
     protected bool $esiEnabled = false;
     protected bool $fragmentsEnabled = false;
     protected bool $httpCacheEnabled = false;
 
-    public function __construct(BlockRenderer $blockRenderer, MenuRenderer $menuRenderer, ?TranslatorInterface $translator, ?Profiler $profiler, ?Esi $esi, ?FragmentListener $fragmentListener, ?HttpCache $httpCache)
+    public function __construct(BlockRenderer $blockRenderer, MenuRenderer $menuRenderer, ContentRender $contentRender, ?TranslatorInterface $translator, ?Profiler $profiler, ?Esi $esi, ?FragmentListener $fragmentListener, ?HttpCache $httpCache)
     {
         $this->blockRenderer = $blockRenderer;
         $this->menuRenderer = $menuRenderer;
+        $this->contentRender = $contentRender;
         $this->translator = $translator;
         $this->profilerEnabled = (bool) $profiler;
         $this->esiEnabled = (bool) $esi;
@@ -60,8 +63,13 @@ class ContentDataCollector extends DataCollector
 
         $this->data['cache'] = array_intersect_key($response->headers->all(), array_flip(['cache-control', 'date']));
 
+        $this->data['modules'] = $this->contentRender->getDebugCollectorData();
         $this->data['blocks'] = $this->blockRenderer->getDebugCollectorData();
         $this->data['menus'] = $this->menuRenderer->getDebugCollectorData();
+
+        $this->data['esiEnabled'] = $this->esiEnabled;
+        $this->data['fragmentsEnabled'] = $this->fragmentsEnabled;
+        $this->data['httpCacheEnabled'] = $this->httpCacheEnabled;
     }
 
     public function getName(): string
@@ -76,6 +84,11 @@ class ContentDataCollector extends DataCollector
     public function getBlocks(): array
     {
         return $this->data['blocks'] ?? [];
+    }
+
+    public function getModules(): array
+    {
+        return $this->data['modules'] ?? [];
     }
 
     public function getMenus(): array
@@ -152,16 +165,16 @@ class ContentDataCollector extends DataCollector
 
     public function isEsiEnabled(): bool
     {
-        return $this->esiEnabled;
+        return $this->data['esiEnabled'];
     }
 
     public function isFragmentsEnabled(): bool
     {
-        return $this->fragmentsEnabled;
+        return $this->data['fragmentsEnabled'];
     }
 
     public function isHttpCacheEnabled(): bool
     {
-        return $this->httpCacheEnabled;
+        return $this->data['httpCacheEnabled'];
     }
 }

@@ -7,6 +7,7 @@ use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Form\Module\ContainerModuleType;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Twig\Environment;
 
 class ContentRender
@@ -19,12 +20,17 @@ class ContentRender
 
     protected ?LoggerInterface $cmsLogger;
 
-    public function __construct(Environment $twig, CmsConfig $cmsConfig, RequestStack $requestStack, ?LoggerInterface $cmsLogger)
+    protected bool $profilerEnabled;
+
+    protected array $profilerDebugCollectorData = [];
+
+    public function __construct(Environment $twig, CmsConfig $cmsConfig, RequestStack $requestStack, ?LoggerInterface $cmsLogger, ?Profiler $profiler)
     {
         $this->twig = $twig;
         $this->cmsConfig = $cmsConfig;
         $this->requestStack = $requestStack;
         $this->cmsLogger = $cmsLogger;
+        $this->profilerEnabled = (bool) $profiler;
     }
 
     public function render(ContentVersionInterface $version): string
@@ -53,25 +59,33 @@ class ContentRender
             $containers[$layoutContainerId] = '';
 
             foreach ($layoutContainer as $module) {
-                $containers[$layoutContainerId] .= $this->renderModule($module, $version);
+                $this->profilerDebugCollectorData[$layoutContainerId] = [];
+                $containers[$layoutContainerId] .= $this->renderModule($module, $version, $this->profilerDebugCollectorData[$layoutContainerId]);
             }
         }
 
         return $containers;
     }
 
-    protected function renderModule(array $module, ContentVersionInterface $version): string
+    protected function renderModule(array $module, ContentVersionInterface $version, array &$profilerDebugCollectorData): string
     {
         $this->cmsLogger && $this->cmsLogger->debug(sprintf('Rendering %s module', $module['_module']));
+
+        $moduleConfig = $this->cmsConfig->getModule($module['_module']);
 
         if ($this->isContainer($module)) {
             $module['contents'] = [];
 
+            $profilerDebugCollectorData[] = [
+                'config' => $moduleConfig,
+                'modules' => [],
+            ];
+
             foreach ($module['modules'] as $submodule) {
-                $module['contents'][] = $this->renderModule($submodule, $version);
+                $module['contents'][] = $this->renderModule($submodule, $version, $profilerDebugCollectorData[sizeof($profilerDebugCollectorData)-1]['modules']);
             }
 
-            return $this->twig->render($this->cmsConfig->getModule($module['_module'])['render_template'], $module);
+            return $this->twig->render($moduleConfig['render_template'], $module);
         }
 
         $module += [
@@ -79,7 +93,11 @@ class ContentRender
             'content' => $version->getContent(),
         ];
 
-        return $this->twig->render($this->cmsConfig->getModule($module['_module'])['render_template'], $module);
+        $profilerDebugCollectorData[] = [
+            'config' => $moduleConfig,
+        ];
+
+        return $this->twig->render($moduleConfig['render_template'], $module);
     }
 
     private function isContainer($module)
@@ -87,5 +105,10 @@ class ContentRender
         $module = $this->cmsConfig->getModule($module['_module']);
 
         return ContainerModuleType::class === $module['module_type'];
+    }
+
+    public function getDebugCollectorData(): array
+    {
+        return $this->profilerDebugCollectorData;
     }
 }
