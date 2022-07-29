@@ -71,6 +71,18 @@ class SitemapController extends AbstractController
                         $url['priority'] = $sitemapConfig['default_priority'];
                     }
 
+                    if ($sitemapConfig['alternates']) {
+                        $url['alternates'] = [];
+                        // all alternates, including self path
+                        // @see https://developers.google.com/search/docs/advanced/crawling/localized-versions?hl=es#sitemap
+                        foreach ($contentRoute->getPaths() as $path) {
+                            $url['alternates'][] = [
+                                'locale' => $path->getLocale(),
+                                'url' => $this->urlGenerator->getUrl($contentRoute, $path->getLocale()),
+                            ];
+                        }
+                    }
+
                     $urls[] = $url;
                 }
             }
