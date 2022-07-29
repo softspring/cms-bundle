@@ -26,6 +26,11 @@ class AddTwigNamespacesPass implements CompilerPassInterface
             if (is_dir($modulesPath)) {
                 $twigFilesystemLoaderDefinition->addMethodCall('addPath', [$modulesPath, 'module']);
             }
+            // add layouts path if exists
+            $layoutsPath = $container->getParameter('kernel.project_dir').'/'.trim($collectionPath, '/').'/layouts';
+            if (is_dir($layoutsPath)) {
+                $twigFilesystemLoaderDefinition->addMethodCall('addPath', [$layoutsPath, 'layout']);
+            }
         }
     }
 }
