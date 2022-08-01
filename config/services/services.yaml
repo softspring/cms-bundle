@@ -24,7 +24,7 @@ services:
             $sites: '%sfs_cms.sites%'
 
 
-    Symfony\Component\HttpKernel\Profiler\Profiler: '@profiler'
+    Symfony\Component\HttpKernel\Profiler\Profiler: '@?profiler'
 
     Softspring\CmsBundle\Command\:
         resource: '../../src/Command/*'
