@@ -67,7 +67,6 @@ class TranslateExtension extends AbstractExtension
     public function getAlternateUrls(): array
     {
         $request = $this->requestStack->getCurrentRequest();
-        $currentLocale = $request->getLocale();
 
         /** @var ?RoutePathInterface $routePath */
         $routePath = $request->attributes->get('routePath');
@@ -76,31 +75,25 @@ class TranslateExtension extends AbstractExtension
             return [];
         }
 
-        $alternate = [];
+        $alternates = [];
 
         foreach ($this->enabledLocales as $locale) {
-            if ($locale !== $currentLocale) {
-                if (isset($alternate[$routePath->getLocale()])) {
-                    continue;
-                }
+            $hasLocalizedRoutePath = (bool) $routePath->getRoute()->getPaths()->filter(fn (RoutePathInterface $routePath) => $routePath->getLocale() == $locale)->count();
 
-                $hasLocalizedRoutePath = (bool) $routePath->getRoute()->getPaths()->filter(fn (RoutePathInterface $routePath) => $routePath->getLocale() == $locale)->count();
-
-                if (!$hasLocalizedRoutePath) {
-                    continue;
-                }
-
-                $url = $this->urlGenerator->getUrl($routePath->getRoute(), $locale);
-
-                if ('#' === $url) {
-                    continue;
-                }
-
-                $alternate[$locale] = $url;
+            if (!$hasLocalizedRoutePath) {
+                continue;
             }
+
+            $url = $this->urlGenerator->getUrl($routePath->getRoute(), $locale);
+
+            if ('#' === $url) {
+                continue;
+            }
+
+            $alternates[$locale] = $url;
         }
 
-        return $alternate;
+        return $alternates;
     }
 
     public function getLocalePaths(string $defaultRoute = null): array
