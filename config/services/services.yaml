@@ -13,6 +13,7 @@ services:
             $container: '@service_container'
             $esi: '@?esi'
             $siteConfig: '%sfs_cms.site_config%'
+            $profiler: '@?profiler'
 
     Softspring\CmsBundle\Config\CmsConfig:
         arguments:
@@ -22,9 +23,6 @@ services:
             $menus: '%sfs_cms.menus%'
             $blocks: '%sfs_cms.blocks%'
             $sites: '%sfs_cms.sites%'
-
-
-    Symfony\Component\HttpKernel\Profiler\Profiler: '@?profiler'
 
     Softspring\CmsBundle\Command\:
         resource: '../../src/Command/*'
