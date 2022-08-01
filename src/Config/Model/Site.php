@@ -113,6 +113,7 @@ class Site implements ConfigurationInterface
                             ->scalarNode('default_priority')->defaultFalse()->end()
                             ->enumNode('default_changefreq')->defaultFalse()->values([false, 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never'])->end()
                             ->integerNode('cache_ttl')->defaultFalse()->end()
+                            ->booleanNode('alternates')->defaultTrue()->end()
                         ->end()
                     ->end()
                 ->end()
