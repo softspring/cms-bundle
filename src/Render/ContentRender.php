@@ -82,7 +82,7 @@ class ContentRender
             ];
 
             foreach ($module['modules'] as $submodule) {
-                $module['contents'][] = $this->renderModule($submodule, $version, $profilerDebugCollectorData[sizeof($profilerDebugCollectorData)-1]['modules']);
+                $module['contents'][] = $this->renderModule($submodule, $version, $profilerDebugCollectorData[sizeof($profilerDebugCollectorData) - 1]['modules']);
             }
 
             return $this->twig->render($moduleConfig['render_template'], $module);
