@@ -51,7 +51,7 @@ class UrlMatcher
         if ($siteHostConfig['redirect_to_canonical']) {
             return [
                 '_sfs_cms_redirect' => $this->siteResolver->getCanonicalRedirectUrl($siteConfig, $request),
-                '_sfs_cms_redirect_code' => Response::HTTP_FOUND,
+                '_sfs_cms_redirect_code' => Response::HTTP_MOVED_PERMANENTLY,
             ];
         }
 

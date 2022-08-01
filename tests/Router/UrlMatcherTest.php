@@ -82,7 +82,7 @@ class UrlMatcherTest extends TestCase
         $attributes = $urlMatcher->matchRequest($request);
         $this->assertEquals([
             '_sfs_cms_redirect' => 'https://example.org/redirect',
-            '_sfs_cms_redirect_code' => 302,
+            '_sfs_cms_redirect_code' => 301,
         ], $attributes);
     }
 
