@@ -31,8 +31,9 @@ class ContentController extends AbstractController
     protected CmsConfig $cmsConfig;
     protected EventDispatcherInterface $eventDispatcher;
     protected array $enabledLocales;
+    protected ?WebDebugToolbarListener $webDebugToolbarListener;
 
-    public function __construct(ContentManagerInterface $contentManager, RouteManagerInterface $routeManager, ContentRender $contentRender, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, array $enabledLocales)
+    public function __construct(ContentManagerInterface $contentManager, RouteManagerInterface $routeManager, ContentRender $contentRender, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, array $enabledLocales, ?WebDebugToolbarListener $webDebugToolbarListener)
     {
         $this->contentManager = $contentManager;
         $this->routeManager = $routeManager;
@@ -40,6 +41,7 @@ class ContentController extends AbstractController
         $this->cmsConfig = $cmsConfig;
         $this->eventDispatcher = $eventDispatcher;
         $this->enabledLocales = $enabledLocales;
+        $this->webDebugToolbarListener = $webDebugToolbarListener;
     }
 
     public function create(Request $request): Response
@@ -428,7 +430,7 @@ class ContentController extends AbstractController
         return $this->render($config['preview_view'], $viewData->getArrayCopy());
     }
 
-    public function publishVersion(string $content, Request $request, string $version, ?WebDebugToolbarListener $debugToolbarListener = null): Response
+    public function publishVersion(string $content, Request $request, string $version): Response
     {
         $config = $this->getContentConfig($request);
         $config = $config['admin'] + ['_id' => $config['_id']];
@@ -457,7 +459,7 @@ class ContentController extends AbstractController
         return $this->redirectBack($config['_id'], $entity, $request, $version);
     }
 
-    public function previewContent(string $content, Request $request, string $version = null, ?WebDebugToolbarListener $debugToolbarListener = null): Response
+    public function previewContent(string $content, Request $request, string $version = null): Response
     {
         $config = $this->getContentConfig($request);
         $config = $config['admin'] + ['_id' => $config['_id']];
@@ -478,7 +480,7 @@ class ContentController extends AbstractController
             $version = $entity->getVersions()->filter(fn (ContentVersionInterface $versionI) => $versionI->getId() == $version)->first();
         }
 
-        $debugToolbarListener && $debugToolbarListener->setMode(WebDebugToolbarListener::DISABLED);
+        $this->webDebugToolbarListener && $this->webDebugToolbarListener->setMode(WebDebugToolbarListener::DISABLED);
 
         $request->setLocale($request->query->get('locale', 'es'));
 
