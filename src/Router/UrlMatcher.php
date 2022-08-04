@@ -133,6 +133,10 @@ class UrlMatcher
             }
         }
 
+        if (isset($attributes['_sfs_cms_locale'])) {
+            $attributes['_locale'] = $attributes['_sfs_cms_locale'];
+        }
+
         return $attributes;
     }
 
