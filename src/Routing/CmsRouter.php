@@ -7,6 +7,7 @@ use Softspring\CmsBundle\Router\UrlMatcher;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\Routing\RequestContext;
@@ -44,30 +45,30 @@ class CmsRouter implements RouterInterface, RequestMatcherInterface, WarmableInt
 
     public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
     {
-        switch ($referenceType) {
-            case UrlGeneratorInterface::ABSOLUTE_URL:
-                $url = $this->urlGenerator->getUrl($name, $parameters['_locale'] ?? '');
-                break;
+        try {
+            return $this->staticRouter->generate($name, $parameters, $referenceType);
+        } catch (RouteNotFoundException $e) {
+            switch ($referenceType) {
+                case UrlGeneratorInterface::ABSOLUTE_URL:
+                    $url = $this->urlGenerator->getUrl($name, $parameters['_locale'] ?? '');
+                    break;
 
-            case UrlGeneratorInterface::ABSOLUTE_PATH:
-            case UrlGeneratorInterface::RELATIVE_PATH:
-                $url = $this->urlGenerator->getPath($name, $parameters['_locale'] ?? '');
-                break;
+                case UrlGeneratorInterface::ABSOLUTE_PATH:
+                case UrlGeneratorInterface::RELATIVE_PATH:
+                    $url = $this->urlGenerator->getPath($name, $parameters['_locale'] ?? '');
+                    break;
 
-            case UrlGeneratorInterface::NETWORK_PATH:
-                $url = $this->urlGenerator->getUrl($name, $parameters['_locale'] ?? '');
-                $url = preg_replace('/^(https?)', '', $url);
-                break;
+                case UrlGeneratorInterface::NETWORK_PATH:
+                    $url = $this->urlGenerator->getUrl($name, $parameters['_locale'] ?? '');
+                    $url = preg_replace('/^(https?)', '', $url);
+                    break;
 
-            default:
-                throw new \Exception('Invalid $referenceType');
-        }
+                default:
+                    throw new \Exception('Invalid $referenceType');
+            }
 
-        if ('#' !== $url) {
             return $url;
         }
-
-        return $this->staticRouter->generate($name, $parameters, $referenceType);
     }
 
     public function match(string $pathinfo): array
