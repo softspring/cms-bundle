@@ -6,53 +6,43 @@ use Doctrine\DBAL\Exception\TableNotFoundException;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Softspring\CmsBundle\Exception\SiteHasNotACanonicalHostException;
-use Softspring\CmsBundle\Exception\SiteNotFoundException;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Model\RoutePathInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\RouterInterface;
 
 class UrlMatcher
 {
     protected EntityManagerInterface $em;
-    protected RouterInterface $router;
     protected UrlGenerator $urlGenerator;
     protected SiteResolver $siteResolver;
 
-    public function __construct(EntityManagerInterface $em, RouterInterface $router, UrlGenerator $urlGenerator, SiteResolver $siteResolver)
+    public function __construct(EntityManagerInterface $em, UrlGenerator $urlGenerator, SiteResolver $siteResolver)
     {
         $this->em = $em;
-        $this->router = $router;
         $this->urlGenerator = $urlGenerator;
         $this->siteResolver = $siteResolver;
     }
 
     /**
-     * @throws SiteNotFoundException
      * @throws SiteHasNotACanonicalHostException
      */
     public function matchRequest(Request $request): ?array
     {
-        [$siteId, $siteConfig, $siteHostConfig] = $this->siteResolver->resolveSiteAndHost($request);
-
-        if (!$siteId) {
-            // site not found
+        if (!$request->attributes->has('_sfs_cms_site')) {
             return [];
         }
 
+        $siteConfig = $request->attributes->get('_sfs_cms_site');
+        $siteHostConfig = $request->attributes->get('_sfs_cms_site_host_config');
+        $siteId = $siteConfig['id'];
+
         if ($siteConfig['https_redirect'] && 'http' === $request->getScheme()) {
-            return [
-                '_sfs_cms_redirect' => $this->siteResolver->getCanonicalRedirectUrl($siteConfig, $request),
-                '_sfs_cms_redirect_code' => Response::HTTP_MOVED_PERMANENTLY,
-            ];
+            return $this->generateRedirect($this->siteResolver->getCanonicalRedirectUrl($siteConfig, $request), Response::HTTP_MOVED_PERMANENTLY);
         }
 
         if ($siteHostConfig['redirect_to_canonical']) {
-            return [
-                '_sfs_cms_redirect' => $this->siteResolver->getCanonicalRedirectUrl($siteConfig, $request),
-                '_sfs_cms_redirect_code' => Response::HTTP_MOVED_PERMANENTLY,
-            ];
+            return $this->generateRedirect($this->siteResolver->getCanonicalRedirectUrl($siteConfig, $request), Response::HTTP_MOVED_PERMANENTLY);
         }
 
         $pathInfo = $request->getPathInfo();
@@ -62,10 +52,7 @@ class UrlMatcher
                 case 'redirect_to_route_with_user_language':
                     $userLocale = $request->getPreferredLanguage($siteConfig['locales']);
 
-                    return [
-                        '_sfs_cms_redirect' => $this->urlGenerator->getUrl($siteConfig['slash_route']['route'], $userLocale),
-                        '_sfs_cms_redirect_code' => $siteConfig['slash_route']['redirect_code'] ?: Response::HTTP_FOUND,
-                    ];
+                    return $this->generateRedirect($this->urlGenerator->getUrl($siteConfig['slash_route']['route'], $userLocale), $siteConfig['slash_route']['redirect_code'] ?: Response::HTTP_FOUND);
 
                 default:
                     throw new \Exception('Not yet implemented');
@@ -75,10 +62,10 @@ class UrlMatcher
         foreach ($siteConfig['sitemaps'] as $sitemap => $sitemapConfig) {
             if ('/'.trim($sitemapConfig['url'], '/') === $pathInfo) {
                 return [
-                '_controller' => 'Softspring\CmsBundle\Controller\SitemapController::sitemap',
-                'sitemap' => $sitemap,
-                'site' => $siteId,
-            ];
+                    '_controller' => 'Softspring\CmsBundle\Controller\SitemapController::sitemap',
+                    'sitemap' => $sitemap,
+                    'site' => $siteId,
+                ];
             }
         }
 
@@ -89,9 +76,7 @@ class UrlMatcher
             ];
         }
 
-        $attributes = [
-            '_sfs_cms_site' => $siteConfig + ['id' => $siteId],
-        ];
+        $attributes = [];
 
         if (!empty($siteHostConfig['locale'])) {
             $attributes['_sfs_cms_locale'] = $siteHostConfig['locale'];
@@ -126,31 +111,22 @@ class UrlMatcher
             }
 
             if (empty($attributes['_sfs_cms_locale_path']) && $siteConfig['locale_path_redirect_if_empty']) {
-                return [
-                    '_sfs_cms_redirect' => $this->urlGenerator->getUrl($route->getId(), $routePath->getLocale()),
-                    '_sfs_cms_redirect_code' => $siteConfig['slash_route']['redirect_code'] ?: Response::HTTP_FOUND,
-                ];
+                return $this->generateRedirect($this->urlGenerator->getUrl($route->getId(), $routePath->getLocale()), $siteConfig['slash_route']['redirect_code'] ?: Response::HTTP_FOUND);
             }
 
             switch ($route->getType()) {
                 case RouteInterface::TYPE_CONTENT:
-                    $attributes['_route'] = 'cms#'.$routePath->getRoute()->getId();
+                    $attributes['_route'] = $routePath->getRoute()->getId();
                     $attributes['_route_params'] = [];
                     $attributes['_controller'] = 'Softspring\CmsBundle\Controller\ContentController::renderRoutePath';
                     $attributes['routePath'] = $routePath;
                     break;
 
                 case RouteInterface::TYPE_REDIRECT_TO_URL:
-                    return [
-                        '_sfs_cms_redirect' => $route->getRedirectUrl(),
-                        '_sfs_cms_redirect_code' => $route->getRedirectType() ?? Response::HTTP_FOUND,
-                    ];
+                    return $this->generateRedirect($route->getRedirectUrl(), $route->getRedirectType() ?? Response::HTTP_FOUND);
 
                 case RouteInterface::TYPE_REDIRECT_TO_ROUTE:
-                    return [
-                        '_sfs_cms_redirect' => $this->router->generate($route->getSymfonyRoute()),
-                        '_sfs_cms_redirect_code' => $route->getRedirectType() ?? Response::HTTP_FOUND,
-                    ];
+                    return $this->generateRedirectToRoute($route->getSymfonyRoute(), $route->getRedirectType() ?? Response::HTTP_FOUND);
 
                 default:
                     throw new \Exception(sprintf('Route type %u not yet implemented', $route->getType()));
@@ -158,6 +134,24 @@ class UrlMatcher
         }
 
         return $attributes;
+    }
+
+    protected function generateRedirect(string $url, int $statusCode): array
+    {
+        return [
+            '_controller' => 'Softspring\CmsBundle\Controller\RedirectController::redirectToUrl',
+            'url' => $url,
+            'statusCode' => $statusCode,
+        ];
+    }
+
+    protected function generateRedirectToRoute(string $route, int $statusCode): array
+    {
+        return [
+            '_controller' => 'Softspring\CmsBundle\Controller\RedirectController::redirection',
+            'route' => $route,
+            'statusCode' => $statusCode,
+        ];
     }
 
     protected function searchRoutePath(string $site, string $path, ?string $locale = null): ?RoutePathInterface
