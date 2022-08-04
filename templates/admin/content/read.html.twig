@@ -63,7 +63,7 @@
                 {% for route in entity.routes %}
                 {% for path in route.paths %}
                     <li>
-                        <a href="{{ sfs_cms_url_fixed(path) }}" target="_blank">{{ sfs_cms_path_fixed(path) }} <span class="mdi mdi-18px mdi-open-in-new"></span></a>
+                        <a href="{{ sfs_cms_route_path_url(path) }}" target="_blank">{{ sfs_cms_route_path_path(path) }} <span class="mdi mdi-18px mdi-open-in-new"></span></a>
                         {% if path.cacheTtl %}(cache {{ path.cacheTtl }} seconds){% endif %}
                     </li>
                 {% endfor %}

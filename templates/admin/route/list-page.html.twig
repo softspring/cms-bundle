@@ -6,7 +6,7 @@
         <td class="p-3">{{ route.site|sfs_cms_site_name }}</td>
         <td class="p-3">
             {% for path in route.paths %}
-                <a href="{{ sfs_cms_url_fixed(path) }}" target="_blank">{{ sfs_cms_path_fixed(path) }}</a><br/>
+                <a href="{{ sfs_cms_route_path_url(path) }}" target="_blank">{{ sfs_cms_route_path_path(path) }}</a><br/>
             {% endfor %}
         </td>
         <td class="p-3">{{ ('admin_routes.types.'~route.type~'.name')|trans }}</td>
