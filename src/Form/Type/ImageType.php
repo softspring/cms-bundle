@@ -35,8 +35,8 @@ class ImageType extends AbstractType
             'class' => MediaInterface::class,
             'em' => $this->em,
             'required' => false,
-            'image_types' => [],
-            'image_attr' => [],
+            'media_types' => [],
+            'media_attr' => [],
             'query_builder' => fn (EntityRepository $entityRepository) => $entityRepository->createQueryBuilder('i'),
             'choice_label' => function (MediaInterface $image) {
                 return $image->getName();
@@ -51,7 +51,7 @@ class ImageType extends AbstractType
                 return $er->createQueryBuilder('i')
                     ->orderBy('i.id', 'ASC')
                     ->andWhere('i.type IN (:types)')
-                    ->setParameter('types', array_keys($options['image_types']));
+                    ->setParameter('types', array_keys($options['media_types']));
             };
         });
 
@@ -61,17 +61,17 @@ class ImageType extends AbstractType
                     return [];
                 }
 
-                $imageTypes = $options['image_types'];
+                $imageTypes = $options['media_types'];
                 $imageType = $imageTypes[$image->getType()];
                 $attrs = [];
 
                 foreach ($imageType as $mode => $version) {
                     if ('image' == $mode) {
-                        $attrs['data-image-preview-image'] = $this->imageRenderer->renderImage($image, $version, $options['image_attr']);
+                        $attrs['data-image-preview-image'] = $this->imageRenderer->renderImage($image, $version, $options['media_attr']);
                     } elseif ('picture' == $mode) {
-                        $attrs['data-image-preview-picture'] = $this->imageRenderer->renderPicture($image, $version, $options['image_attr']);
+                        $attrs['data-image-preview-picture'] = $this->imageRenderer->renderPicture($image, $version, $options['media_attr']);
                     } else {
-                        throw new \Exception("Bad $mode mode for image_type. Only 'image' and 'picture' are allowed");
+                        throw new \Exception("Bad $mode mode for media_type. Only 'image' and 'picture' are allowed");
                     }
                 }
 
@@ -82,6 +82,6 @@ class ImageType extends AbstractType
 
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->vars['image_attr'] = $options['image_attr'];
+        $view->vars['media_attr'] = $options['media_attr'];
     }
 }

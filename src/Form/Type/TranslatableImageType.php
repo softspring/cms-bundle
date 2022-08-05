@@ -29,8 +29,8 @@ class TranslatableImageType extends AbstractType
             'languages' => $this->enabledLocales,
             'default_language' => $this->defaultLocale,
             'children_attr' => [],
-            'image_attr' => [],
-            'image_types' => [],
+            'media_attr' => [],
+            'media_types' => [],
         ]);
 
         $resolver->setRequired('languages');
@@ -45,10 +45,10 @@ class TranslatableImageType extends AbstractType
             $builder->add($lang, ImageType::class, [
                 'required' => false, // $lang == $options['default_language'],
                 'label' => $lang,
-                'image_types' => $options['image_types'],
-                'image_attr' => $options['image_attr'],
+                'media_types' => $options['media_types'],
+                'media_attr' => $options['media_attr'],
                 'attr' => $options['children_attr'],
-                'block_prefix' => 'translatable_image_element',
+                'block_prefix' => 'translatable_media_element',
             ]);
         }
     }

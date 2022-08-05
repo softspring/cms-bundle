@@ -18,7 +18,7 @@ class ImageModalType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'image_type_options' => [],
+            'media_type_options' => [],
             'alt' => true,
             'alt_type_options' => [],
         ]);
@@ -26,7 +26,7 @@ class ImageModalType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('image', RealMediaModalType::class, $options['image_type_options']);
+        $builder->add('media', RealMediaModalType::class, $options['media_type_options']);
 
         if ($options['alt']) {
             $builder->add('alt', TextType::class, $options['alt_type_options']);
