@@ -1,2 +1,6 @@
 default:
     title: 'Diseño por defecto'
+    headers:
+        container_title: "Cabeceras de la página"
+    main:
+        container_title: "Contenido"

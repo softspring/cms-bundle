@@ -1,2 +1,6 @@
 default:
     title: 'Default layout'
+    headers:
+        container_title: "Page headers"
+    main:
+        container_title: "Content"
