@@ -1,6 +1,17 @@
 .tox-notifications-container {
     display: none;
 }
+
+.cms-content-header {
+    display: flex;
+    align-items: center;
+    min-height: 75px;
+}
+
+.cms-content-main{
+    margin-top: 27px;
+}
+
 .cms-module {
     position: relative;
     display: flex;
@@ -10,10 +21,6 @@
 
     .cms-module-form {
         display: none;
-    }
-
-    .cms-content-header {
-        min-height: 75px;
     }
 
     .cms-module-header {
