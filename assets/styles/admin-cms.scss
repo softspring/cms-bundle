@@ -11,6 +11,11 @@
 .cms-content-main{
     margin-top: 27px;
 }
+.module-polymorphic-collection {
+    .polymorphic-node-row {
+        margin: 40px 0;
+    }
+}
 
 .cms-module {
     position: relative;
@@ -28,7 +33,7 @@
         width: 100%;
         height: 30px;
         position: absolute;
-        top: -30px;
+        top: -35px;
 
         .cms-module-buttons {
             position: absolute;
@@ -38,7 +43,7 @@
             align-items: center;
 
             button {
-                padding: 0.25em 0.25em;
+                padding: 0.25em 0.25em 0;
                 border: none;
                 background-color: transparent;
 

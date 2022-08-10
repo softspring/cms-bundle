@@ -176,7 +176,7 @@
 {#{% endblock module_collection_entry %}#}
 
 {% block dynamic_form_module_row %}
-    <div class="polymorphic-node-row mt-2 mb-2 {{ row_class|default('') }}" {{ block('widget_container_attributes') }}>
+    <div class="polymorphic-node-row {{ row_class|default('') }}" {{ block('widget_container_attributes') }}>
         <div class="cms-module">
             <div class="cms-module-header">
                 <div class="cms-module-title">
@@ -227,7 +227,7 @@
 {% endblock dynamic_form_module_widget %}
 
 {% block container_module_row %}
-    <div class="polymorphic-node-row mt-2 mb-2 {{ row_class|default('') }}" {{ block('widget_container_attributes') }}>
+    <div class="polymorphic-node-row {{ row_class|default('') }}" {{ block('widget_container_attributes') }}>
         <div class="cms-module">
             <div class="cms-module-header">
                 <div class="cms-module-title">
@@ -268,7 +268,7 @@
 {% endblock container_module_widget %}
 
 {% block empty_module_row %}
-    <div class="polymorphic-node-row mt-2 mb-2 {{ row_class|default('') }}" {{ block('widget_container_attributes') }}>
+    <div class="polymorphic-node-row {{ row_class|default('') }}" {{ block('widget_container_attributes') }}>
         <div class="cms-modulecms-module">
             <div class="cms-module-header">
                 <div class="cms-module-title">
@@ -361,7 +361,7 @@
 {% endblock route_path_collection_widget %}
 
 {% block route_path_row %}
-    <div class="polymorphic-node-row mt-2 mb-2" {{ block('widget_container_attributes') }}>
+    <div class="polymorphic-node-row" {{ block('widget_container_attributes') }}>
         <div class="row">
             <div class="col-sm-1"><span class="order-route-path-node">{{ form.vars.name }}</span></div>
             <div class="col-sm-10">{{ form_widget(form) }}{{ form_errors(form) }}</div>
@@ -434,7 +434,7 @@
 {% endblock menu_item_collection_widget %}
 
 {% block menu_item_row %}
-    <div class="polymorphic-node-row mt-2 mb-2" {{ block('widget_container_attributes') }}>
+    <div class="polymorphic-node-row" {{ block('widget_container_attributes') }}>
         <div class="row">
             <div class="col-sm-1"><span class="order-menu-item-node">{{ form.vars.name }}</span></div>
             <div class="col-sm-10">{{ form_widget(form) }}{{ form_errors(form) }}</div>
