@@ -26,6 +26,11 @@
 
     .cms-module-form {
         display: none;
+
+        .tox.tox-tinymce.tox-fullscreen {
+            top: 80px !important;
+            height: calc(100vh - 80px) !important;
+        }
     }
 
     .cms-module-header {
