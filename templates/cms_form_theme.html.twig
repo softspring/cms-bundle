@@ -111,7 +111,7 @@
         </button>
         <div class="dropdown-menu dropdown-menu-end dropdown-menu--max-height" aria-labelledby="dropdownMenuButton">
             {% for key, prototype in form.vars.prototypes %}
-                <button type="button" class="polymorphic-add-button btn btn-link d-block px-2 py-1" {{ block('polymorphic_prototype_button_attributes') }}>
+                <button type="button" class="polymorphic-add-button btn btn-link d-block px-2 py-1 text-start {{ block('polymorphic_prototype_button_attributes') }}>
                     {% set trans_domain = prototype.vars.translation_domain | default(translation_domain) | default(false) %}
                     {{ not trans_domain ? prototype.vars.prototype_button_label : prototype.vars.prototype_button_label|trans({}, trans_domain) }}
                 </button>
