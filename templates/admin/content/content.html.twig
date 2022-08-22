@@ -77,3 +77,9 @@
 
     {% include '@SfsMedia/media_type_modal.html.twig' %}
 {% endblock body %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.tiny.cloud/1/0zxo7hhr52tjj8ir7zp8ujyxq2xrwy561vrc8oqr6oozfjbi/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+{% endblock javascripts %}
+
