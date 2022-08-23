@@ -31,6 +31,14 @@
             top: 80px !important;
             height: calc(100vh - 80px) !important;
         }
+
+        .input-group-prepend {
+            .input-group-text {
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+                height: 100%;
+            }
+        }
     }
 
     .cms-module-header {
