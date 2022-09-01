@@ -5,7 +5,7 @@ namespace Softspring\CmsBundle\Form\Module;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ContainerModuleType extends AbstractModuleType
+class ContainerModuleType extends DynamicFormModuleType
 {
     public function getBlockPrefix(): string
     {
@@ -28,7 +28,7 @@ class ContainerModuleType extends AbstractModuleType
         $resolver->setAllowedTypes('allowed_container_modules', ['array']);
     }
 
-    protected function buildChildForm(FormBuilderInterface $builder, array $options)
+    public function buildChildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('modules', ModuleCollectionType::class, [
             'label' => 'container.form.modules.label',
@@ -41,5 +41,7 @@ class ContainerModuleType extends AbstractModuleType
             // random prototype name to allow multiple levels
             'prototype_name' => '__'.substr(sha1(rand(0, 10000000000)), rand(0, 10), 8).'__',
         ]);
+
+        parent::buildChildForm($builder, $options);
     }
 }

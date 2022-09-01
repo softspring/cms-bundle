@@ -1,4 +1,5 @@
-<div class="grid-module row">
+<div class="grid-module row {{ class|default('') }}" id="{{ id|default('') }}"
+     style="{{ bg_color|default(false) ? 'background-color:'~bg_color : '' }}">
     {% for content in contents %}
         <div class="col">{{ content|raw }}</div>
     {% endfor %}

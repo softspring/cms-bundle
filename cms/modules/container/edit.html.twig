@@ -1,0 +1,13 @@
+<div class="container border border-2" style="border-style: dashed !important; min-height: 300px">
+    {{ form_row(form.modules, {'container': {
+        'attr': {
+            'id': form.id.vars.data,
+            'class': 'py-2 '~form.class.vars.data|default(''),
+            'data-edit-id-target': 'containerIdDiv',
+            'data-edit-class-target': 'containerClassDiv',
+            'data-edit-class-default': 'p-2',
+            'data-edit-bgcolor-target': 'containerColorDiv',
+            'style': form.bg_color.vars.data ? 'background-color:'~form.bg_color.vars.data : ''
+        }
+    }}) }}
+</div>

@@ -100,7 +100,7 @@ class ContentRender
         return $this->twig->render($moduleConfig['render_template'], $module);
     }
 
-    private function isContainer($module)
+    private function isContainer($module): bool
     {
         $module = $this->cmsConfig->getModule($module['_module']);
 

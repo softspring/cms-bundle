@@ -1,12 +1,20 @@
 grid:
     label: "Grid"
     prototype_button: "Grid"
+    form:
+        modules.label: "Modules"
+        id.label: "Id"
+        class.label: "Classes"
+        bg_color.label: "Background color"
 
 container:
     label: "Container"
     prototype_button: "Container"
     form:
         modules.label: "Modules"
+        id.label: "Id"
+        class.label: "Classes"
+        bg_color.label: "Background color"
 
 html:
     label: "HTML code"

@@ -1,6 +1,6 @@
 module:
     revision: 1
-    form_template: '@module/container/form.html.twig'
+    edit_template: '@module/container/edit.html.twig'
     module_type: 'Softspring\CmsBundle\Form\Module\ContainerModuleType'
     module_options:
         module_collection_class: 'container'
@@ -8,3 +8,21 @@ module:
         allowed_modules: ~
         allowed_container_modules:
             - grid
+        form_fields:
+            id:
+                type: 'id'
+                type_options:
+                    attr:
+                        data-edit-id-input: 'containerIdDiv'
+
+            class:
+                type: 'class'
+                type_options:
+                    attr:
+                        data-edit-class-input: 'containerClassDiv'
+
+            bg_color:
+                type: 'color'
+                type_options:
+                    attr:
+                        data-edit-bgcolor-input: 'containerColorDiv'

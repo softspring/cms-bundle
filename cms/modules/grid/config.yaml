@@ -1,9 +1,27 @@
 module:
     revision: 1
-    form_template: '@module/grid/form.html.twig'
+    edit_template: '@module/grid/edit.html.twig'
     module_type: 'Softspring\CmsBundle\Form\Module\ContainerModuleType'
     module_options:
         module_collection_class: 'row'
         module_row_class: 'col'
         allowed_modules: ~
         allowed_container_modules: []
+        form_fields:
+            id:
+                type: 'id'
+                type_options:
+                    attr:
+                        data-edit-id-input: 'gridIdDiv'
+
+            class:
+                type: 'class'
+                type_options:
+                    attr:
+                        data-edit-class-input: 'gridClassDiv'
+
+            bg_color:
+                type: 'color'
+                type_options:
+                    attr:
+                        data-edit-bgcolor-input: 'gridColorDiv'

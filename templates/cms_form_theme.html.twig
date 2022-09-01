@@ -155,6 +155,12 @@
 {% endblock module_collection_label %}
 
 {% block module_collection_widget %}
+    {% if container is defined %}
+        {% with { 'attr': container.attr|default({}) } %}
+            <div {{ block('attributes') }}>
+        {% endwith %}
+    {% endif %}
+
     {% set attr = attr | merge({'class':'polymorphic-collection-widget '~module_collection_class}) %}
     <!-- Nodes -->
     <div {{ block('widget_container_attributes') }}>
@@ -164,6 +170,10 @@
         {{- block('form_rows') -}}
         {{- form_rest(form) -}}
     </div>
+
+    {% if container is defined %}
+        </div>
+    {% endif %}
 {% endblock module_collection_widget %}
 
 {#{% block module_collection_entry_row %}#}
@@ -206,7 +216,7 @@
             </div>
         {% endif %}
 
-        <div class="cms-module-form">
+        <div class="cms-module-form text-dark">
             <div class="d-flex justify-content-between border-bottom bg-gray-200 p-3">
                 <div>
                     <span class="order-polymorphic-node pe-3" id="{{ id }}_order_index">{{ form.vars.name }}</span>
@@ -231,8 +241,8 @@
         <div class="cms-module">
             <div class="cms-module-header">
                 <div class="cms-module-title">
-                    <span class="order-polymorphic-node" id="{{ id }}_order_index">{{ form.vars.name }}</span>#
-                    {{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}
+{#                    <span class="order-polymorphic-node" id="{{ id }}_order_index">{{ form.vars.name }}</span>##}
+{#                    {{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}#}
                     {# form_name #}
                 </div>
 
@@ -243,9 +253,11 @@
                 </div>
             </div>
             <div class="cms-module-body">
-                <div class="row">
-                    <div class="col">{{ form_widget(form) }}{{ form_errors(form) }}</div>
-                </div>
+{#                <div class="row">#}
+{#                    <div class="col">#}
+                        {{ form_widget(form) }}{{ form_errors(form) }}
+{#                    </div>#}
+{#                </div>#}
             </div>
         </div>
     </div>
@@ -259,11 +271,23 @@
             </div>
         {% endif %}
 
-        {% if form_template|default(false) %}
-            {% include form_template %}
-        {% else %}
-            {{ form_widget(form) }}
-        {% endif %}
+        <div class="cms-module-form text-dark">
+            <div class="d-flex justify-content-between border-bottom bg-gray-200 p-3">
+                <div>
+                    <span class="order-polymorphic-node pe-3" id="{{ id }}_order_index">{{ form.vars.name }}</span>
+                    <strong># {{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}</strong>
+                </div>
+                <button type="button" class="btn-close" data-cms-module-form-close="" aria-label="Close"></button>
+            </div>
+            <div class="container">
+                {% if form_template|default(false) %}
+                    {% include form_template %}
+                {% else %}
+                    {{ form_widget(form) }}
+                {% endif %}
+            </div>
+        </div>
+        {{ form_rest(form) }}
     </div>
 {% endblock container_module_widget %}
 
@@ -272,8 +296,8 @@
         <div class="cms-modulecms-module">
             <div class="cms-module-header">
                 <div class="cms-module-title">
-                    <span class="order-polymorphic-node" id="{{ id }}_order_index">{{ form.vars.name }}</span>#
-                    {{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}
+{#                    <span class="order-polymorphic-node" id="{{ id }}_order_index">{{ form.vars.name }}</span>##}
+{#                    {{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}#}
                     {# form_name #}
                 </div>
 
