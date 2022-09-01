@@ -89,7 +89,7 @@
                 <input type="checkbox" data-color-type="toggler" {{ form.vars.data ? 'checked="checked"' : '' }} />
             </div>
         </div>
-        {{ form_widget(form, {'attr': {'data-color-type': 'widget'}, 'disabled': not not form.vars.data}) }}
+        {{ form_widget(form, {'attr': {'data-color-type': 'widget'}, 'disabled': not form.vars.data}) }}
     </div>
 {% endblock cms_color_widget %}
 
