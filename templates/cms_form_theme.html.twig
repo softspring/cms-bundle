@@ -220,7 +220,7 @@
             <div class="d-flex justify-content-between border-bottom bg-gray-200 p-3">
                 <div>
                     <span class="order-polymorphic-node pe-3" id="{{ id }}_order_index">{{ form.vars.name }}</span>
-                    <strong># {{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}</strong>
+                    <strong>{{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}</strong>
                 </div>
                 {# form_name #}
                 <button type="button" class="btn-close" data-cms-module-form-close="" aria-label="Close"></button>
@@ -253,11 +253,7 @@
                 </div>
             </div>
             <div class="cms-module-body">
-{#                <div class="row">#}
-{#                    <div class="col">#}
-                        {{ form_widget(form) }}{{ form_errors(form) }}
-{#                    </div>#}
-{#                </div>#}
+                {{ form_widget(form) }}{{ form_errors(form) }}
             </div>
         </div>
     </div>
@@ -275,7 +271,7 @@
             <div class="d-flex justify-content-between border-bottom bg-gray-200 p-3">
                 <div>
                     <span class="order-polymorphic-node pe-3" id="{{ id }}_order_index">{{ form.vars.name }}</span>
-                    <strong># {{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}</strong>
+                    <strong>{{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}</strong>
                 </div>
                 <button type="button" class="btn-close" data-cms-module-form-close="" aria-label="Close"></button>
             </div>
@@ -293,7 +289,7 @@
 
 {% block empty_module_row %}
     <div class="polymorphic-node-row {{ row_class|default('') }}" {{ block('widget_container_attributes') }}>
-        <div class="cms-modulecms-module">
+        <div class="cms-module">
             <div class="cms-module-header">
                 <div class="cms-module-title">
 {#                    <span class="order-polymorphic-node" id="{{ id }}_order_index">{{ form.vars.name }}</span>##}
@@ -308,9 +304,7 @@
                 </div>
             </div>
             <div class="cms-module-body">
-                <div class="row">
-                    <div class="col">{{ form_widget(form) }}{{ form_errors(form) }}</div>
-                </div>
+                {{ form_widget(form) }}{{ form_errors(form) }}
             </div>
         </div>
     </div>
@@ -320,15 +314,27 @@
     <div class="cms-module-edit">
         {% if edit_template|default(false) %}
             <div class="module-preview">
-            {% include edit_template %}
+                {% include edit_template %}
             </div>
         {% endif %}
 
-        {% if form_template|default(false) %}
-            {% include form_template %}
-        {% else %}
-            {{ form_widget(form) }}
-        {% endif %}
+        <div class="cms-module-form text-dark">
+            <div class="d-flex justify-content-between border-bottom bg-gray-200 p-3">
+                <div>
+                    <span class="order-polymorphic-node pe-3" id="{{ id }}_order_index">{{ form.vars.name }}</span>
+                    <strong>{{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}</strong>
+                </div>
+                {# form_name #}
+                <button type="button" class="btn-close" data-cms-module-form-close="" aria-label="Close"></button>
+            </div>
+            <div class="container">
+                {% if form_template|default(false) %}
+                    {% include form_template %}
+                {% else %}
+                    {{ form_widget(form) }}
+                {% endif %}
+            </div>
+        </div>
     </div>
 {% endblock empty_module_widget %}
 
