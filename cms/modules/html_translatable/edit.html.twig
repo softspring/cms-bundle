@@ -22,5 +22,12 @@
      data-edit-content-target="content"
      data-edit-content-escape="true"
 >
-    {{ form_row(form.code) }}
+    {% for locale,localeField in form.code %}
+        <div data-edit-content-target="code.{{ locale }}" data-lang="{{ locale }}">
+            {{ localeField.vars.data|default('Translatable HTML code')|replace({'href': ''})|raw }}
+        </div>
+    {% endfor %}
+{#    {{ form_row(form.code) }}#}
+{#    {{ form.code.vars.data|default('')|length > 100 ? form.code.vars.data|raw|slice(0, 100) ~ '...' : form.code.vars.data|raw|default('')  }}</div>#}
+
 </div>
