@@ -7,13 +7,22 @@
 [![Total Downloads](https://poser.pugx.org/softspring/cms-bundle/downloads)](https://packagist.org/packages/softspring/cms-bundle)
 [![Build status](https://github.com/softspring/cms-bundle/actions/workflows/php.yml/badge.svg?branch=5.0)](https://github.com/softspring/cms-bundle/actions/workflows/php.yml)
 
-# Installation
+## Documentation
 
-## Applications that use Symfony Flex
+- [1. Installation](docs/1_installation.md)
+- [2. Getting started](docs/2_getting_started.md)
+- [3. Concepts](docs/3_concepts.md)
+- [4. Configuration](docs/4_configuration.md)
+- [5. Sites](docs/5_sites.md)
+- 6. Layouts
+- 7. Modules
+- 8. Menus
+- 9. Blocks
+- 10. Using medias
+- 11. Caching
+- 12. Logging
+- 13. Extend with collections
 
-Open a command console, enter your project directory and execute:
+## License
 
-```console
-$ composer require softspring/cms-bundle
-```
-
+This bundle is under the MIT license. See the complete license in the bundle [LICENSE](LICENSE) file.
