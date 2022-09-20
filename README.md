@@ -15,13 +15,13 @@
 - [4. Configuration](docs/4_configuration.md)
 - [5. Sites](docs/5_sites.md)
 - 6- Layouts
-- 7. Modules
-- 8. Menus
-- 9. Blocks
-- 10. Using medias
-- 11. Caching
-- 12. Logging
-- 13. Extend with collections
+- 7- Modules
+- 8- Menus
+- 9- Blocks
+- 10- Using medias
+- 11- Caching
+- 12- Logging
+- 13- Extend with collections
 
 ## License
 
