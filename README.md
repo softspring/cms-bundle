@@ -14,7 +14,7 @@
 - [3. Concepts](docs/3_concepts.md)
 - [4. Configuration](docs/4_configuration.md)
 - [5. Sites](docs/5_sites.md)
--6. Layouts
+- 6- Layouts
 - 7. Modules
 - 8. Menus
 - 9. Blocks
