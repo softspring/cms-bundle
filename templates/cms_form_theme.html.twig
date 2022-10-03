@@ -370,7 +370,7 @@
             {%- endif -%}
         </div>
 
-        <button type="button" class="btn btn-primary cursor-pointer add_route_path" data-collection="#{{ id }}">
+        <button type="button" class="btn btn-outline-primary cursor-pointer add_route_path" data-collection="#{{ id }}">
             {{ 'admin_routes.form.paths.add.button'|trans }}
         </button>
     </div>
@@ -393,7 +393,7 @@
 
 {% block route_path_row %}
     <div class="polymorphic-node-row" {{ block('widget_container_attributes') }}>
-        <div class="row">
+        <div class="row my-3">
             <div class="col-sm-1"><span class="order-route-path-node">{{ form.vars.name }}</span></div>
             <div class="col-sm-10">{{ form_widget(form) }}{{ form_errors(form) }}</div>
             <div class="col-sm-1"><button type="button" class="btn btn-light rounded-circle remove_route_path px-3">x</button></div>
@@ -443,7 +443,7 @@
         {%- endif -%}
     </div>
     <div class="col-sm-6 text-end">
-        <button type="button" class="btn btn-primary cursor-pointer add_menu_item" data-collection="#{{ id }}">
+        <button type="button" class="btn btn-outline-primary cursor-pointer add_menu_item" data-collection="#{{ id }}">
             {{ 'admin_menus.form.items.add.button'|trans }}
         </button>
     </div>
@@ -466,7 +466,7 @@
 
 {% block menu_item_row %}
     <div class="polymorphic-node-row" {{ block('widget_container_attributes') }}>
-        <div class="row">
+        <div class="row my-3">
             <div class="col-sm-1"><span class="order-menu-item-node">{{ form.vars.name }}</span></div>
             <div class="col-sm-10">{{ form_widget(form) }}{{ form_errors(form) }}</div>
             <div class="col-sm-1"><button type="button" class="btn btn-light rounded-circle remove_menu_item px-3">x</button></div>
@@ -514,7 +514,7 @@
 {#        {%- endif -%}#}
 {#    </div>#}
 {#    <div class="col-sm-6 text-end">#}
-{#        <button type="button" class="btn btn-primary cursor-pointer add_dynamic_form" data-collection="#{{ id }}">#}
+{#        <button type="button" class="btn btn-outline-primary cursor-pointer add_dynamic_form" data-collection="#{{ id }}">#}
 {#            Add#}
 {#        </button>#}
 {#    </div>#}
