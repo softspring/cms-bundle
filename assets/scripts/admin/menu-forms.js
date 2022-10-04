@@ -1,10 +1,10 @@
 (function($) {
     function removeMenuItem($removeNodeLink)
     {
-        var $removeRow = $removeNodeLink.closest('.node-row');
+        var $removeRow = $removeNodeLink.closest('.polymorphic-node-row');
 
         // custom for this
-        var $nodes = $removeRow.parent().find('.node-row');
+        var $nodes = $removeRow.closest('.polymorphic-node-row');
         var nodes = $nodes.length;
 
         $removeRow.remove();
