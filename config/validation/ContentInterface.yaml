@@ -1,0 +1,7 @@
+Softspring\CmsBundle\Model\ContentInterface:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: name
+    
+    getters:
+        routes:
+            - Valid: ~
