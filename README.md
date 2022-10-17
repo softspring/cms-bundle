@@ -7,6 +7,7 @@
 [![PHP Version Require](http://poser.pugx.org/softspring/cms-bundle/require/php)](https://packagist.org/packages/softspring/cms-bundle)
 [![Total Downloads](https://poser.pugx.org/softspring/cms-bundle/downloads)](https://packagist.org/packages/softspring/cms-bundle)
 [![Build status](https://github.com/softspring/cms-bundle/actions/workflows/php.yml/badge.svg?branch=5.0)](https://github.com/softspring/cms-bundle/actions/workflows/php.yml)
+![Coverage](https://raw.githubusercontent.com/softspring/cms-bundle/5.0/.github/badges/coverage.svg)
 
 ## Documentation
 
