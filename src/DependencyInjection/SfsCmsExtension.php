@@ -89,16 +89,10 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
 
         $container->prependExtensionConfig('doctrine', $doctrineConfig);
 
-//        $container->prependExtensionConfig('twig', [
-//            'paths' => [
-//                '%kernel.project_dir%/cms'=> 'cms',
-//                '%kernel.project_dir%/cms/modules'=> 'module', // use @module/html/render.html.twig
-//                '%kernel.project_dir%/vendor/softspring/cms-module-collection/modules'=> 'module', // use @module/html/render.html.twig
-//                '%kernel.project_dir%/cms/contents'=> 'content', // use @content/article/render.html.twig
-//                '%kernel.project_dir%/cms/blocks'=> 'block', // use @block/header/render.html.twig
-//                '%kernel.project_dir%/cms/layouts'=> 'layout', // use @layout/default/render.html.twig
-//                '%kernel.project_dir%/cms/menus'=> 'menu', // use @menu/main/render.html.twig
-//            ],
-//        ]);
+        $container->prependExtensionConfig('twig', [
+            'paths' => [
+                '%kernel.project_dir%/vendor/softspring/polymorphic-form-type/templates' => 'SfsPolymorphicFormType',
+            ],
+        ]);
     }
 }
