@@ -5,6 +5,7 @@ module:
     module_options:
         label_format: 'modules.css.%%name%%.label'
         translation_domain: 'custom_domain'
+        locale_filter: false
         form_fields:
             css:
                 type: 'css'

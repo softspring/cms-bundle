@@ -4,6 +4,7 @@ module:
     render_template: '@module/html_headers/render.html.twig'
     module_options:
         label_format: 'modules.html_headers.%%name%%.label'
+        locale_filter: false
         form_fields:
             code:
                 type: 'html'

@@ -30,6 +30,8 @@ class ContainerModuleType extends DynamicFormModuleType
 
     public function buildChildForm(FormBuilderInterface $builder, array $options)
     {
+        parent::buildChildForm($builder, $options);
+
         $builder->add('modules', ModuleCollectionType::class, [
             'label' => 'container.form.modules.label',
             'content_type' => $options['content_type'],
@@ -41,7 +43,5 @@ class ContainerModuleType extends DynamicFormModuleType
             // random prototype name to allow multiple levels
             'prototype_name' => '__'.substr(sha1(rand(0, 10000000000)), rand(0, 10), 8).'__',
         ]);
-
-        parent::buildChildForm($builder, $options);
     }
 }

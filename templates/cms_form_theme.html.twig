@@ -226,6 +226,11 @@
                 <button type="button" class="btn-close" data-cms-module-form-close="" aria-label="Close"></button>
             </div>
             <div class="container">
+                {% if form.locale_filter is defined %}
+                    {{ form_label(form.locale_filter) }}
+                    {{ form_widget(form.locale_filter) }}
+                {% endif %}
+
                 {% if form_template|default(false) %}
                     {% include form_template %}
                 {% else %}
@@ -276,6 +281,11 @@
                 <button type="button" class="btn-close" data-cms-module-form-close="" aria-label="Close"></button>
             </div>
             <div class="container">
+                {% if form.locale_filter is defined %}
+                    {{ form_label(form.locale_filter) }}
+                    {{ form_widget(form.locale_filter) }}
+                {% endif %}
+
                 {% if form_template|default(false) %}
                     {% include form_template %}
                 {% else %}
@@ -328,6 +338,11 @@
                 <button type="button" class="btn-close" data-cms-module-form-close="" aria-label="Close"></button>
             </div>
             <div class="container">
+                {% if form.locale_filter is defined %}
+                    {{ form_label(form.locale_filter) }}
+                    {{ form_widget(form.locale_filter) }}
+                {% endif %}
+
                 {% if form_template|default(false) %}
                     {% include form_template %}
                 {% else %}

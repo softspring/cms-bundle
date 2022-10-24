@@ -23,6 +23,7 @@ class DynamicFormModuleType extends AbstractModuleType
 
     public function buildChildForm(FormBuilderInterface $builder, array $options)
     {
+        parent::buildChildForm($builder, $options);
         $this->buildDynamicForm($builder, $options);
     }
 

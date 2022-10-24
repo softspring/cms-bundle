@@ -2,6 +2,7 @@ grid:
     label: "Grid"
     prototype_button: "Grid"
     form:
+        locale_filter.label: "Idiomas"
         modules.label: "Módulos"
         id.label: "Id"
         class.label: "Clases"
@@ -11,6 +12,7 @@ container:
     label: "Contenedor"
     prototype_button: "Contenedor"
     form:
+        locale_filter.label: "Idiomas"
         modules.label: "Módulos"
         id.label: "Id"
         class.label: "Clases"
@@ -20,6 +22,7 @@ html:
     label: "Código HTML"
     prototype_button: "Código HTML"
     form:
+        locale_filter.label: "Idiomas"
         id.label: "Id"
         code.label: "Código"
 
@@ -27,18 +30,21 @@ css:
     label: "Código CSS"
     prototype_button: "Código CSS"
     form:
+        locale_filter.label: "Idiomas"
         css.label: "Estilos CSS"
 
 html_headers:
     label: "Cabeceras HTML"
     prototype_button: "Cabeceras HTML"
     form:
+        locale_filter.label: "Idiomas"
         code.label: "Código"
 
 html_translatable:
     label: "Código HTML traducible"
     prototype_button: "Código HTML traducible"
     form:
+        locale_filter.label: "Idiomas"
         id.label: "Id"
         code.label: "Código"
         class.label: "Clases"

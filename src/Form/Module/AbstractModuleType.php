@@ -3,12 +3,21 @@
 namespace Softspring\CmsBundle\Form\Module;
 
 use Softspring\Component\PolymorphicFormType\Form\Type\Node\AbstractNodeType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractModuleType extends AbstractNodeType
 {
+    protected array $enabledLocales;
+
+    public function __construct(array $enabledLocales)
+    {
+        $this->enabledLocales = $enabledLocales;
+    }
+
     public function configureChildOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -16,6 +25,7 @@ abstract class AbstractModuleType extends AbstractNodeType
             'translation_domain' => 'sfs_cms_modules',
             'content_type' => null,
             'row_class' => '',
+            'locale_filter' => true,
         ]);
 
         $resolver->setRequired('module_id');
@@ -36,5 +46,17 @@ abstract class AbstractModuleType extends AbstractNodeType
         $view->vars['form_template'] = $options['form_template'];
         $view->vars['edit_template'] = $options['edit_template'];
         $view->vars['row_class'] = $options['row_class'];
+    }
+
+    protected function buildChildForm(FormBuilderInterface $builder, array $options)
+    {
+        if ($options['locale_filter'] && sizeof($this->enabledLocales) > 1) {
+            $builder->add('locale_filter', ChoiceType::class, [
+                'multiple' => true,
+                'expanded' => true,
+                'choice_translation_domain' => false,
+                'choices' => array_combine($this->enabledLocales, $this->enabledLocales),
+            ]);
+        }
     }
 }

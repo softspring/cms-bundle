@@ -2,6 +2,7 @@ grid:
     label: "Grid"
     prototype_button: "Grid"
     form:
+        locale_filter.label: "Locales"
         modules.label: "Modules"
         id.label: "Id"
         class.label: "Classes"
@@ -11,6 +12,7 @@ container:
     label: "Container"
     prototype_button: "Container"
     form:
+        locale_filter.label: "Locales"
         modules.label: "Modules"
         id.label: "Id"
         class.label: "Classes"
@@ -20,6 +22,7 @@ html:
     label: "HTML code"
     prototype_button: "HTML code"
     form:
+        locale_filter.label: "Locales"
         id.label: "Id"
         code.label: "Code"
 
@@ -27,12 +30,14 @@ css:
     label: "CSS code"
     prototype_button: "CSS code"
     form:
+        locale_filter.label: "Locales"
         css.label: "CSS styles"
 
 html_headers:
     label: "HTML headers"
     prototype_button: "HTML headers"
     form:
+        locale_filter.label: "Locales"
         code.label: "Code"
 
 
@@ -40,6 +45,7 @@ html_translatable:
     label: "Translatable HTML code"
     prototype_button: "Translatable HTML code"
     form:
+        locale_filter.label: "Locales"
         id.label: "Id"
         code.label: "Code"
         class.label: "Classes"
