@@ -56,6 +56,7 @@ abstract class AbstractModuleType extends AbstractNodeType
             $builder->add('locale_filter', ChoiceType::class, [
                 'multiple' => true,
                 'expanded' => true,
+                'block_prefix' => 'locale_filter',
                 'choice_translation_domain' => false,
                 'choices' => array_combine($this->enabledLocales, $this->enabledLocales),
             ]);

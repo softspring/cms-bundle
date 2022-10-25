@@ -91,6 +91,12 @@
         }
     }
 
+    .cms-module-locale-hidden {
+        pointer-events: none;
+        filter: grayscale(100%);
+        opacity: 0.1;
+    }
+
     .content-escape {
         word-break: break-word;
     }

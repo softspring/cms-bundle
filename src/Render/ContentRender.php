@@ -69,6 +69,14 @@ class ContentRender
 
     protected function renderModule(array $module, ContentVersionInterface $version, array &$profilerDebugCollectorData): string
     {
+        if (isset($module['locale_filter'])) {
+            $currentLocale = $this->requestStack->getCurrentRequest()->getLocale();
+
+            if (!in_array($currentLocale, $module['locale_filter'])) {
+                return '<!-- locale hidden module -->';
+            }
+        }
+
         $this->cmsLogger && $this->cmsLogger->debug(sprintf('Rendering %s module', $module['_module']));
 
         $moduleConfig = $this->cmsConfig->getModule($module['_module']);
