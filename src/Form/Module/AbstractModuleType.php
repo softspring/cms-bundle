@@ -3,8 +3,10 @@
 namespace Softspring\CmsBundle\Form\Module;
 
 use Softspring\Component\PolymorphicFormType\Form\Type\Node\AbstractNodeType;
+use Symfony\Component\Form\Event\PreSetDataEvent;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -57,6 +59,12 @@ abstract class AbstractModuleType extends AbstractNodeType
                 'choice_translation_domain' => false,
                 'choices' => array_combine($this->enabledLocales, $this->enabledLocales),
             ]);
+
+            $builder->addEventListener(FormEvents::PRE_SET_DATA, function (PreSetDataEvent $event) {
+                if (null === $event->getData()) {
+                    $event->setData(['locale_filter' => $this->enabledLocales]);
+                }
+            });
         }
     }
 }
