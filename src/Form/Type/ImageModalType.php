@@ -6,6 +6,8 @@ use Softspring\MediaBundle\Form\MediaModalType as RealMediaModalType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ImageModalType extends AbstractType
@@ -31,5 +33,11 @@ class ImageModalType extends AbstractType
         if ($options['alt']) {
             $builder->add('alt', TextType::class, $options['alt_type_options']);
         }
+    }
+
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        $view->children['media']->vars['label_format'] = str_replace('.form.', ".form.{$view->vars['name']}.", $view->children['media']->vars['label_format']);
+        $view->children['alt']->vars['label_format'] = str_replace('.form.', ".form.{$view->vars['name']}.", $view->children['alt']->vars['label_format']);
     }
 }
