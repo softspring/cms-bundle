@@ -1,5 +1,14 @@
-import './admin/color-type';
-import './admin/content-forms';
-import './admin/locale-filter-modules';
+import './admin/content-edit/locale-filter-modules';
+import './admin/content-edit/locale-filter-preview';
+import './admin/content-edit/modules';
+import './admin/content-edit/preview-background-color';
+import './admin/content-edit/preview-class';
+import './admin/content-edit/preview-contenteditable';
+import './admin/content-edit/preview-id';
+import './admin/content-edit/preview-image-choice';
+import './admin/content-edit/preview-media-modal';
+
 import './admin/routes-forms';
 import './admin/menu-forms';
+
+import './types/color-type';
