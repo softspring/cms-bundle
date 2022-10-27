@@ -42,8 +42,8 @@
 {% endblock translatable_image_widget %}
 
 {% block translatable_image_element_widget %}
-    {% if attr['data-image-preview-input']|default(false) %}
-        {% set attr = attr|merge({'data-image-preview-input': attr['data-image-preview-input']~'.'~form.vars.label|lower}) -%}
+    {% if attr['data-media-preview-input']|default(false) %}
+        {% set attr = attr|merge({'data-media-preview-input': attr['data-media-preview-input']~'.'~form.vars.label|lower}) -%}
     {% endif %}
     {{ form_widget(form, {'attr':attr}) }}
 {% endblock %}

@@ -57,7 +57,7 @@ class ImageType extends AbstractType
 
         $resolver->setDefault('choice_attr', function (Options $options) {
             return function (?MediaInterface $image = null) use ($options) {
-                if (empty($options['attr']['data-image-preview-input'])) {
+                if (empty($options['attr']['data-media-preview-input'])) {
                     return [];
                 }
 
@@ -67,9 +67,9 @@ class ImageType extends AbstractType
 
                 foreach ($imageType as $mode => $version) {
                     if ('image' == $mode) {
-                        $attrs['data-image-preview-image'] = $this->imageRenderer->renderImage($image, $version, $options['media_attr']);
+                        $attrs['data-media-preview-image'] = $this->imageRenderer->renderImage($image, $version, $options['media_attr']);
                     } elseif ('picture' == $mode) {
-                        $attrs['data-image-preview-picture'] = $this->imageRenderer->renderPicture($image, $version, $options['media_attr']);
+                        $attrs['data-media-preview-picture'] = $this->imageRenderer->renderPicture($image, $version, $options['media_attr']);
                     } else {
                         throw new \Exception("Bad $mode mode for media_type. Only 'image' and 'picture' are allowed");
                     }
