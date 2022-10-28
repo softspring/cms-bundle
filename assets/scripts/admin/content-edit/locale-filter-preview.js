@@ -10,7 +10,7 @@ function getSelectedLanguage() {
     return contentEditionLanguageSelector.value;
 }
 
-function filterCurrentTranslatableElementsLanguage() {
+export function filterCurrentTranslatableElementsLanguage() {
     const contentEditionLanguageSelector = document.getElementById('contentEditionLanguageSelection');
     if (contentEditionLanguageSelector == null || !contentEditionLanguageSelector.length) return;
     contentEditionLanguageSelector.addEventListener('change', function (event) {

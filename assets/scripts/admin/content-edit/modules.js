@@ -1,3 +1,5 @@
+import { filterCurrentTranslatableElementsLanguage } from './locale-filter-preview';
+
 window.addEventListener('load', (event) => {
     function moduleFocus(module) {
         allLostFocus();
