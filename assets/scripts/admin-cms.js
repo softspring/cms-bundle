@@ -5,7 +5,7 @@ import './admin/content-edit/preview-background-color';
 import './admin/content-edit/preview-class';
 import './admin/content-edit/preview-contenteditable';
 import './admin/content-edit/preview-id';
-import './admin/content-edit/preview-image-choice';
+import './admin/content-edit/preview-media-choice';
 import './admin/content-edit/preview-media-modal';
 
 import './admin/routes-forms';

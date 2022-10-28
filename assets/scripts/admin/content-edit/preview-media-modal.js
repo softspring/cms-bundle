@@ -1,6 +1,6 @@
 window.addEventListener('load', (event) => {
     /**
-     * Shows an image preview from image modal type
+     * Shows a media preview from media modal type
      *
      * The preview target element must have the "data-media-preview-target" attribute
      * The select option must have the "data-media-preview-input"
@@ -16,15 +16,32 @@ window.addEventListener('load', (event) => {
 
         let htmlTargetElements = moduleForm.querySelectorAll("[data-media-preview-target='" + event.target.dataset.mediaPreviewInput + "']");
         if (htmlTargetElements.length) {
-            const previewImage = event.target.dataset.mediaVersionSm;
+
+            let version = null;
+            if (config[event.target.dataset.mediaType].image) {
+                version = config[event.target.dataset.mediaType].image;
+            } else if (config[event.target.dataset.mediaType].video) {
+                version = config[event.target.dataset.mediaType].video;
+            }
+
+            let previewMedia = null;
+            if ('_original' === version) {
+                previewMedia = event.target.dataset['mediaVersion-_original'];
+            } else {
+                previewMedia = event.target.dataset['mediaVersion'+version.charAt(0).toUpperCase() + version.slice(1)];
+            }
 
             // show required preview in every html element
-            htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.innerHTML = previewImage);
+            if (previewMedia) {
+                htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.innerHTML = previewMedia);
+            } else {
+                htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.innerHTML = '');
+            }
         }
     });
 
     /**
-     * Removes an image preview from image modal type
+     * Removes a media preview from media modal type
      *
      * The preview target element must have the "data-media-preview-target" attribute
      * The select option must have the "data-media-preview-input"

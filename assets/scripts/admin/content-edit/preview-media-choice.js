@@ -1,6 +1,6 @@
 window.addEventListener('load', (event) => {
     /**
-     * Shows an image preview
+     * Shows a media preview
      *
      * The preview target element must have the "data-media-preview-target" attribute
      * The select option must have the "data-media-preview-input"
@@ -17,6 +17,8 @@ window.addEventListener('load', (event) => {
                 htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.innerHTML = event.target.options[event.target.selectedIndex].dataset.mediaPreviewPicture);
             } else if (event.target.options[event.target.selectedIndex].dataset.mediaPreviewImage) {
                 htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.innerHTML = event.target.options[event.target.selectedIndex].dataset.mediaPreviewImage);
+            } else if (event.target.options[event.target.selectedIndex].dataset.mediaPreviewVideo) {
+                htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.innerHTML = event.target.options[event.target.selectedIndex].dataset.mediaPreviewVideo);
             } else {
                 htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.innerHTML = '');
             }
