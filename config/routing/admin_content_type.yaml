@@ -58,6 +58,10 @@ unkeep_version:
     defaults:
         keep: false
 
+download_version:
+    controller: Softspring\CmsBundle\Controller\Admin\ContentController:downloadVersion
+    path: /{content}/download-version/{version}
+
 versions:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController::versions
     path: /{content}/versions

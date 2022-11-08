@@ -2,6 +2,7 @@
 content:
     revision: 1
     entity_class: 'Softspring\CmsBundle\Entity\Page'
+    dumper_class: 'Softspring\CmsBundle\Dumper\Model\PageDumper'
     default_layout: 'default'
     seo:
         metaTitle:

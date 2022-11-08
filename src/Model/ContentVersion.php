@@ -6,6 +6,8 @@ abstract class ContentVersion implements ContentVersionInterface
 {
     protected ?ContentInterface $content = null;
 
+    protected ?int $origin = null;
+
     protected ?string $layout = null;
 
     protected ?int $createdAt = null;
@@ -28,6 +30,16 @@ abstract class ContentVersion implements ContentVersionInterface
     public function setContent(?ContentInterface $content): void
     {
         $this->content = $content;
+    }
+
+    public function getOrigin(): ?int
+    {
+        return $this->origin;
+    }
+
+    public function setOrigin(?int $origin): void
+    {
+        $this->origin = $origin;
     }
 
     public function getLayout(): ?string

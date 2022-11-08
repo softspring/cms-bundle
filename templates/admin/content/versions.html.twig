@@ -27,6 +27,7 @@
                     <thead>
                     <tr>
                         <th>{{ ('admin_'~content~'.versions.fields.id.header')|trans }}</th>
+                        <th>{{ ('admin_'~content~'.versions.fields.origin.header')|trans }}</th>
                         <th>{{ ('admin_'~content~'.versions.fields.created.header')|trans }}</th>
                         <th>{{ ('admin_'~content~'.versions.fields.publish_status.header')|trans }}</th>
                     </tr>
@@ -35,6 +36,7 @@
                     {% for version in entity.versions %}
                         <tr>
                             <td>v{{ version.versionNumber }}</td>
+                            <td>{{ ('admin_'~content~'.versions.origin.'~(version.origin|default('null')))|trans }}</td>
                             <td>{{ version.createdAt ? version.createdAt|date('H:i:s d-m-Y') : '' }}</td>
                             <td>{{ version.published ? ('admin_'~content~'.versions.publish_status.published')|trans : ('admin_'~content~'.versions.publish_status.unpublished')|trans }}</td>
                             <td>
@@ -50,6 +52,9 @@
                                 </a>
                                 <a href="{{ url('sfs_cms_admin_content_'~content~'_preview_version', {'content':entity, 'version':version, 'back': 'versions'}) }}">
                                     {{ ('admin_'~content~'.versions.actions.preview.link')|trans }}
+                                </a>
+                                <a href="{{ url('sfs_cms_admin_content_'~content~'_download_version', {'content':entity, 'version':version, 'back': 'versions'}) }}">
+                                    {{ ('admin_'~content~'.versions.actions.download.link')|trans }}
                                 </a>
 
                                 {% if not version.published %}

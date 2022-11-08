@@ -8,6 +8,12 @@
         <field name="layout" column="layout" type="string" nullable="true"/>
         <field name="data" column="data" type="json" nullable="true"/>
 
+        <field name="origin" column="origin" type="smallint" nullable="true">
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+
         <field name="compiledModules" column="compiled_modules" type="json" nullable="true"/>
         <field name="compiled" column="compiled" type="json" nullable="true"/>
 

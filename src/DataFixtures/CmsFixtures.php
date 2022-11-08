@@ -242,6 +242,10 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
             $media->setDescription($data['description']);
 
             foreach ($data['versionFiles'] as $versionKey => $versionFileName) {
+                if (!file_exists($versionFileName)) {
+                    $versionFileName = "$this->fixturesPath/$versionFileName";
+                }
+
                 $version = new MediaVersion($versionKey, $media);
                 $version->setUpload(new UploadedFile($versionFileName, 'file-fake-name'), true);
                 $manager->persist($version);
@@ -276,7 +280,7 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
 
     protected function createVersion(ContentInterface $content, string $layout, array $data): ContentVersionInterface
     {
-        $version = $this->contentManager->createVersion($content);
+        $version = $this->contentManager->createVersion($content, null, ContentVersionInterface::ORIGIN_FIXTURE);
         $version->setLayout($layout);
         $version->setData($data);
 

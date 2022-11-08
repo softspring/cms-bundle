@@ -31,6 +31,7 @@ class Content implements ConfigurationInterface
 //                ->scalarNode('render_template')->defaultValue("@content/{$this->contentName}/render.html.twig")->end()
 //                ->scalarNode('edit_template')->defaultValue("@content/{$this->contentName}/edit.html.twig")->end()
                 ->scalarNode('entity_class')->isRequired()->end()
+                ->scalarNode('dumper_class')->isRequired()->end()
                 ->scalarNode('default_layout')->defaultValue('default')->end()
 
                 ->arrayNode('containers')

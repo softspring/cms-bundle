@@ -29,14 +29,21 @@ admin_page:
         breadcrumb: "Versiones"
         fields:
             id.header: "Versión"
+            origin.header: "Origen"
             created.header: "Creación"
             publish_status.header: "Publicación"
         publish_status:
             published: "publicada"
             unpublished: ""
+        origin:
+            "null": ""
+            1: "editado"
+            2: "fixture"
+            3: "cargada"
         actions:
             edit.link: "editar"
             preview.link: "previsualizar"
+            download.link: "descargar"
             publish.link: "publicar versión"
             cleanup_versions.link: "Limpiar versiones"
             keep.link: "Mantener versión, pinchar para desmarcar"

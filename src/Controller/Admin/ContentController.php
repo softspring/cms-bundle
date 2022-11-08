@@ -4,6 +4,9 @@ namespace Softspring\CmsBundle\Controller\Admin;
 
 use Jhg\DoctrinePagination\ORM\PaginatedRepositoryInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Dumper\Fixtures;
+use Softspring\CmsBundle\Dumper\Utils\Slugger;
+use Softspring\CmsBundle\Dumper\Utils\ZipDump;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
@@ -280,7 +283,7 @@ class ContentController extends AbstractController
             $prevVersion = $entity->getVersions()->filter(fn (ContentVersionInterface $version) => $version->getId() == $prevVersion)->first();
         }
 
-        $version = $this->contentManager->createVersion($entity, $prevVersion);
+        $version = $this->contentManager->createVersion($entity, $prevVersion, ContentVersionInterface::ORIGIN_EDIT);
 
         if ($request->request->get('content_content_form')) {
             $version->setLayout($request->request->get('content_content_form')['layout']);
@@ -573,6 +576,30 @@ class ContentController extends AbstractController
         $this->getDoctrine()->getManager()->flush();
 
         return $this->redirectBack($config['_id'], $entity, $request);
+    }
+
+    public function downloadVersion(string $content, Request $request, string $version): Response
+    {
+        $config = $this->getContentConfig($request);
+
+        /** @var ?ContentInterface $content */
+        $content = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
+
+        if (!$content) {
+            $request->getSession()->getFlashBag()->add('error', 'entity_not_found');
+
+            return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_list");
+        }
+
+        /** @var ContentVersionInterface $version */
+        $version = $content->getVersions()->filter(fn (ContentVersionInterface $versionI) => $versionI->getId() == $version)->first();
+
+        $path = tempnam(sys_get_temp_dir(), 'content_');
+        unlink($path);
+        Fixtures::dumpContent($content, $version, $config, $path);
+        $downloadName = sprintf('%s-%s-v%s-%s.zip', Slugger::lowerSlug($content->getName()), $config['_id'], $version->getVersionNumber(), date('Y-m-d-H-i-s'));
+
+        return ZipDump::zipDumpResponse($path, $downloadName);
     }
 
     protected function redirectBack(string $configId, ContentInterface $entity, Request $request, ?ContentVersionInterface $version = null): RedirectResponse

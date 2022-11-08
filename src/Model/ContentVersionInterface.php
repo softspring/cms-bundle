@@ -4,11 +4,20 @@ namespace Softspring\CmsBundle\Model;
 
 interface ContentVersionInterface
 {
+    public const ORIGIN_UNKNOWN = null;
+    public const ORIGIN_EDIT = 1;
+    public const ORIGIN_FIXTURE = 2;
+    public const ORIGIN_LOAD = 3;
+
     public function getId(): ?string;
 
     public function getContent(): ?ContentInterface;
 
     public function setContent(?ContentInterface $content): void;
+
+    public function getOrigin(): ?int;
+
+    public function setOrigin(?int $origin): void;
 
     public function getLayout(): ?string;
 

@@ -51,7 +51,7 @@ class ContentManager implements ContentManagerInterface
         return $repo;
     }
 
-    public function createVersion(ContentInterface $content, ContentVersionInterface $prevVersion = null): ContentVersionInterface
+    public function createVersion(ContentInterface $content, ContentVersionInterface $prevVersion = null, ?int $origin = ContentVersionInterface::ORIGIN_UNKNOWN): ContentVersionInterface
     {
         $version = $this->contentVersionManager->createEntity();
         $version->setLayout('default');
@@ -68,6 +68,7 @@ class ContentManager implements ContentManagerInterface
 
         $content->setLastVersionNumber((int) $content->getLastVersionNumber() + 1);
         $version->setVersionNumber($content->getLastVersionNumber());
+        $version->setOrigin($origin);
 
         $content->addVersion($version);
 

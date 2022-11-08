@@ -78,20 +78,24 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>Version</th>
-                        <th>Created</th>
+                        <th>{{ ('admin_'~content~'.versions.fields.id.header')|trans }}</th>
+                        <th>{{ ('admin_'~content~'.versions.fields.origin.header')|trans }}</th>
+                        <th>{{ ('admin_'~content~'.versions.fields.created.header')|trans }}</th>
+                        <th>{{ ('admin_'~content~'.versions.fields.publish_status.header')|trans }}</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for version in entity.versions %}
                         <tr>
                             <td>v{{ version.versionNumber }}</td>
+                            <td>{{ ('admin_'~content~'.versions.origin.'~(version.origin|default('null')))|trans }}</td>
                             <td>{{ version.createdAt ? version.createdAt|date('H:i:s d-m-Y') : '' }}</td>
 {#                            <td>{{ loop.index0 == 0 ? 'publicada' : '' }}</td>#}
                             <td>{{ version.published ? 'publicada' : '' }}</td>
                             <td>
                                 <a href="{{ url('sfs_cms_admin_content_'~content~'_content_from_version', {'content':entity, 'prevVersion':version}) }}">edit</a>
                                 <a href="{{ url('sfs_cms_admin_content_'~content~'_preview_version', {'content':entity, 'version':version}) }}">preview</a>
+                                <a href="{{ url('sfs_cms_admin_content_'~content~'_download_version', {'content':entity, 'version':version}) }}">download</a>
 
                                 {% if not version.published %}
                                     <a href="{{ url('sfs_cms_admin_content_'~content~'_publish_version', {'content':entity, 'version':version}) }}">publish version</a>
