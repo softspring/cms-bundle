@@ -7,5 +7,4 @@ namespace Softspring\CmsBundle\Form\Type;
  */
 class ImageType extends MediaType
 {
-
 }
