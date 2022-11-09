@@ -47,7 +47,10 @@ window.addEventListener('load', (event) => {
 
         let htmlTargetElements = moduleForm.querySelectorAll("[data-edit-content-input='" + event.target.dataset.editContentTarget + "']");
         if (htmlTargetElements.length) {
-            htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.value = event.target.innerHTML);
+            htmlTargetElements.forEach(function(htmlTargetElement) {
+              htmlTargetElement.value = event.target.innerHTML;
+              htmlTargetElement.setAttribute('value', event.target.innerHTML);//Fixed empty value when element is new and is moved
+            });
         }
     });
 });

@@ -107,9 +107,11 @@ admin_page:
 
     form:
         name.label: "Nombre"
+        site.label: "Site"
         routes:
             label: "Rutas"
             id.label: "Identificador"
+            site.label: "Site"
             paths:
                 label: "URLs"
                 path.label: "Segmento de URL"
