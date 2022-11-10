@@ -37,7 +37,7 @@ window.addEventListener('load', (event) => {
             return;
         }
 
-        for (i = 0; i < event.composedPath().length; i++) {
+        for (let i = 0; i < event.composedPath().length; i++) {
             if (event.composedPath()[i] instanceof Element && event.composedPath()[i].matches('.cms-module')) {
                 moduleFocus(event.composedPath()[i]);
                 return;

@@ -1,3 +1,15 @@
+function localeHideModules(locale) {
+    document.querySelectorAll('[data-cms-module-locale-filter][value='+locale+']').forEach(function (widget) {
+        let localeVisible = widget.checked;
+        let modulePreview = widget.closest('.cms-module-edit').querySelector('.module-preview');
+        if (localeVisible) {
+            modulePreview.classList.remove('cms-module-locale-hidden');
+        } else {
+            modulePreview.classList.add('cms-module-locale-hidden');
+        }
+    });
+}
+
 window.addEventListener('load', (event) => {
     const contentEditionLanguageSelector = document.getElementById('contentEditionLanguageSelection');
 
@@ -19,21 +31,13 @@ window.addEventListener('load', (event) => {
         }
     });
 
-    contentEditionLanguageSelector.addEventListener('change', function (event) {
-        localeHideModules(event.target.value);
-    });
-
-    localeHideModules(contentEditionLanguageSelector.value);
-
-    function localeHideModules(locale) {
-        document.querySelectorAll('[data-cms-module-locale-filter][value='+locale+']').forEach(function (widget) {
-            let localeVisible = widget.checked;
-            let modulePreview = widget.closest('.cms-module-edit').querySelector('.module-preview');
-            if (localeVisible) {
-                modulePreview.classList.remove('cms-module-locale-hidden');
-            } else {
-                modulePreview.classList.add('cms-module-locale-hidden');
-            }
+    if (contentEditionLanguageSelector) {
+        contentEditionLanguageSelector.addEventListener('change', function (event) {
+            localeHideModules(event.target.value);
         });
+
+        localeHideModules(contentEditionLanguageSelector.value);
     }
 });
+
+export { localeHideModules };
