@@ -114,6 +114,7 @@ admin_routes:
             locale.label: "Idioma"
             cacheTtl.label: "Tiempo de cache"
         id.label: "Identificador"
+        site.label: "Site"
         type:
             label: "Tipo"
             values:
