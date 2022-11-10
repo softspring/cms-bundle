@@ -1,19 +1,24 @@
 <?php
 
-namespace Softspring\CmsBundle\Dumper\Model;
+namespace Softspring\CmsBundle\Data\Transformer;
 
-use Softspring\CmsBundle\Dumper\Utils\Slugger;
 use Softspring\CmsBundle\Model\BlockInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
+use Softspring\CmsBundle\Utils\Slugger;
 use Softspring\MediaBundle\Model\MediaInterface;
 
-abstract class AbstractDumper implements DumperInterface
+abstract class AbstractDataTransformer implements DataTransformerInterface
 {
-    public static function dumpData($data, &$files = [])
+    public static function getPriority(): int
+    {
+        return 0;
+    }
+
+    public function exportData($data, &$files = [])
     {
         if (is_array($data)) {
             foreach ($data as $key => $value) {
-                $data[$key] = self::dumpData($value, $files);
+                $data[$key] = $this->exportData($value, $files);
             }
         }
 

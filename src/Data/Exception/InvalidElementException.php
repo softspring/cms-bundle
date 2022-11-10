@@ -1,6 +1,6 @@
 <?php
 
-namespace Softspring\CmsBundle\Dumper\Exception;
+namespace Softspring\CmsBundle\Data\Exception;
 
 class InvalidElementException extends \Exception
 {

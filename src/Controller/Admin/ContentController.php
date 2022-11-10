@@ -4,21 +4,23 @@ namespace Softspring\CmsBundle\Controller\Admin;
 
 use Jhg\DoctrinePagination\ORM\PaginatedRepositoryInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
-use Softspring\CmsBundle\Dumper\Fixtures;
-use Softspring\CmsBundle\Dumper\Utils\Slugger;
-use Softspring\CmsBundle\Dumper\Utils\ZipDump;
+use Softspring\CmsBundle\Data\DataExporter;
+use Softspring\CmsBundle\Data\DataImporter;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Render\ContentRender;
+use Softspring\CmsBundle\Utils\Slugger;
+use Softspring\CmsBundle\Utils\ZipContent;
 use Softspring\Component\CrudlController\Event\FilterEvent;
 use Softspring\Component\Events\DispatchGetResponseTrait;
 use Softspring\Component\Events\GetResponseRequestEvent;
 use Softspring\Component\Events\ViewEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\WebProfilerBundle\EventListener\WebDebugToolbarListener;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,9 +36,11 @@ class ContentController extends AbstractController
     protected CmsConfig $cmsConfig;
     protected EventDispatcherInterface $eventDispatcher;
     protected array $enabledLocales;
+    protected DataImporter $dataImporter;
+    protected DataExporter $dataExporter;
     protected ?WebDebugToolbarListener $webDebugToolbarListener;
 
-    public function __construct(ContentManagerInterface $contentManager, RouteManagerInterface $routeManager, ContentRender $contentRender, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, array $enabledLocales, ?WebDebugToolbarListener $webDebugToolbarListener)
+    public function __construct(ContentManagerInterface $contentManager, RouteManagerInterface $routeManager, ContentRender $contentRender, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, array $enabledLocales, DataImporter $dataImporter, DataExporter $dataExporter, ?WebDebugToolbarListener $webDebugToolbarListener)
     {
         $this->contentManager = $contentManager;
         $this->routeManager = $routeManager;
@@ -44,6 +48,8 @@ class ContentController extends AbstractController
         $this->cmsConfig = $cmsConfig;
         $this->eventDispatcher = $eventDispatcher;
         $this->enabledLocales = $enabledLocales;
+        $this->dataImporter = $dataImporter;
+        $this->dataExporter = $dataExporter;
         $this->webDebugToolbarListener = $webDebugToolbarListener;
     }
 
@@ -200,6 +206,60 @@ class ContentController extends AbstractController
         $config = $config['admin'] + ['_id' => $config['_id']];
 
         return new Response();
+    }
+
+    public function import(Request $request, bool $confirm = false): Response
+    {
+        $config = $this->getContentConfig($request);
+        $config = $config['admin'] + ['_id' => $config['_id']];
+
+//        if (!empty($config['is_granted'])) {
+//            $this->denyAccessUnlessGranted($config['is_granted'], null, sprintf('Access denied, user is not %s.', $config['is_granted']));
+//        }
+
+//        $entity = $this->contentManager->createEntity($config['_id']);
+//        $entity->addRoute($this->routeManager->createEntity());
+
+//        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
+//            return $response;
+//        }
+
+        $form = $this->createForm($config['import_type'], null, ['content' => $config, 'method' => 'POST'])->handleRequest($request);
+//
+//        $this->dispatchFromConfig($config, 'form_init_event_name', new FormEvent($form, $request));
+//
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+//                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_valid_event_name', new GetResponseFormEvent($form, $request))) {
+//                    return $response;
+//                }
+
+                /** @var UploadedFile $zipFile */
+                $zipFile = $form->getData()['file'];
+                $this->dataImporter->import(ZipContent::read($zipFile->getPath(), $zipFile->getBasename()), ['version_origin' => ContentVersionInterface::ORIGIN_IMPORT]);
+
+//                if ($response = $this->dispatchGetResponseFromConfig($config, 'success_event_name', new GetResponseEntityEvent($entity, $request))) {
+//                    return $response;
+//                }
+
+                return $this->redirect(!empty($config['import_success_redirect_to']) ? $this->generateUrl($config['import_success_redirect_to']) : $this->generateUrl("sfs_cms_admin_content_{$config['_id']}_list"));
+//            } else {
+//                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_invalid_event_name', new GetResponseFormEvent($form, $request))) {
+//                    return $response;
+//                }
+            }
+        }
+
+        // show view
+        $viewData = new \ArrayObject([
+            'content' => $config['_id'],
+            'form' => $form->createView(),
+            'confirm' => $confirm,
+        ]);
+//
+//        $this->dispatchFromConfig($config, 'view_event_name', new ViewEvent($viewData));
+
+        return $this->render($config['import_view'], $viewData->getArrayCopy());
     }
 
     public function list(Request $request): Response
@@ -578,7 +638,7 @@ class ContentController extends AbstractController
         return $this->redirectBack($config['_id'], $entity, $request);
     }
 
-    public function downloadVersion(string $content, Request $request, string $version): Response
+    public function exportVersion(string $content, Request $request, string $version): Response
     {
         $config = $this->getContentConfig($request);
 
@@ -596,10 +656,10 @@ class ContentController extends AbstractController
 
         $path = tempnam(sys_get_temp_dir(), 'content_');
         unlink($path);
-        Fixtures::dumpContent($content, $version, $config, $path);
-        $downloadName = sprintf('%s-%s-v%s-%s.zip', Slugger::lowerSlug($content->getName()), $config['_id'], $version->getVersionNumber(), date('Y-m-d-H-i-s'));
+        $this->dataExporter->exportContent($content, $version, $config, $path);
+        $exportName = sprintf('%s-%s-v%s-%s.zip', Slugger::lowerSlug($content->getName()), $config['_id'], $version->getVersionNumber(), date('Y-m-d-H-i-s'));
 
-        return ZipDump::zipDumpResponse($path, $downloadName);
+        return ZipContent::dumpResponse($path, $exportName);
     }
 
     protected function redirectBack(string $configId, ContentInterface $entity, Request $request, ?ContentVersionInterface $version = null): RedirectResponse

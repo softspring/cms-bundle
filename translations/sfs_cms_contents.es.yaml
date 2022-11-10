@@ -18,6 +18,14 @@ admin_page:
             create.button: "Crear página"
             cancel.button: "Cancelar"
 
+    import:
+        meta.title: "Importar página"
+        title: "Importar página"
+        breadcrumb: "Importar página"
+        actions:
+            import.button: "Importar página"
+            cancel.button: "Cancelar"
+
     read:
         meta.title: "General"
         title: "%name%"
@@ -43,7 +51,7 @@ admin_page:
         actions:
             edit.link: "editar"
             preview.link: "previsualizar"
-            download.link: "descargar"
+            export.link: "exportar"
             publish.link: "publicar versión"
             cleanup_versions.link: "Limpiar versiones"
             keep.link: "Mantener versión, pinchar para desmarcar"
@@ -97,6 +105,7 @@ admin_page:
         breadcrumb: "Páginas"
         actions:
             create.link: "Nueva página"
+            import.link: "Importar página"
             details.link: "Ver"
             update.link: "Editar"
             preview.link: "Previsualizar"

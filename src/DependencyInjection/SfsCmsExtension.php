@@ -3,6 +3,7 @@
 namespace Softspring\CmsBundle\DependencyInjection;
 
 use Softspring\CmsBundle\Config\ConfigLoader;
+use Softspring\CmsBundle\Data\Transformer\DataTransformerInterface;
 use Softspring\CmsBundle\Model\BlockInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Symfony\Bundle\MakerBundle\MakerBundle;
@@ -17,6 +18,8 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
 {
     public function load(array $configs, ContainerBuilder $container)
     {
+        $container->registerForAutoconfiguration(DataTransformerInterface::class)->addTag('sfs_cms.data_transformer');
+
         $processor = new Processor();
         $configuration = new Configuration();
         $config = $processor->processConfiguration($configuration, $configs);

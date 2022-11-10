@@ -14,6 +14,7 @@ services:
             $esi: '@?esi'
             $siteConfig: '%sfs_cms.site_config%'
             $profiler: '@?profiler'
+            $transformers: !tagged_iterator { tag: sfs_cms.data_transformer, default_priority_method: getPriority }
 
     Softspring\CmsBundle\Config\CmsConfig:
         arguments:
@@ -52,6 +53,9 @@ services:
     Softspring\CmsBundle\EventListener\SiteResolverListener: ~
 
     Softspring\CmsBundle\EventListener\ErrorPageListener: ~
+
+    Softspring\CmsBundle\Data\:
+        resource: '../../src/Data/*'
 
     Softspring\CmsBundle\Manager\:
         resource: '../../src/Manager/*'

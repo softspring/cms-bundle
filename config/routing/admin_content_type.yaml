@@ -6,6 +6,10 @@ create:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController::create
     path: /create
 
+import:
+    controller: Softspring\CmsBundle\Controller\Admin\ContentController::import
+    path: /import
+
 details:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController::read
     path: /{content}
@@ -16,7 +20,7 @@ preview:
 
 preview_version:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController::preview
-    path: /{content}/preview/{version}
+    path: /{content}/{version}/preview
 
 update:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController::update
@@ -32,7 +36,7 @@ content:
 
 content_from_version:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController::content
-    path: /{content}/content/{prevVersion}
+    path: /{content}/{prevVersion}/content
 
 preview_content:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController:previewContent
@@ -40,27 +44,27 @@ preview_content:
 
 preview_content_version:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController:previewContent
-    path: /{content}/preview-content/{version}
+    path: /{content}/{version}/preview-content
 
 publish_version:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController:publishVersion
-    path: /{content}/publish-version/{version}
+    path: /{content}/{version}/publish-version
 
 keep_version:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController:markKeepVersion
-    path: /{content}/keep-version/{version}
+    path: /{content}/{version}/keep-version
     defaults:
         keep: true
 
 unkeep_version:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController:markKeepVersion
-    path: /{content}/unkeep-version/{version}
+    path: /{content}/{version}/unkeep-version
     defaults:
         keep: false
 
-download_version:
-    controller: Softspring\CmsBundle\Controller\Admin\ContentController:downloadVersion
-    path: /{content}/download-version/{version}
+export_version:
+    controller: Softspring\CmsBundle\Controller\Admin\ContentController:exportVersion
+    path: /{content}/{version}/export-version
 
 versions:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController::versions

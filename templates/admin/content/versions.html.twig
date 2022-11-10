@@ -53,8 +53,8 @@
                                 <a href="{{ url('sfs_cms_admin_content_'~content~'_preview_version', {'content':entity, 'version':version, 'back': 'versions'}) }}">
                                     {{ ('admin_'~content~'.versions.actions.preview.link')|trans }}
                                 </a>
-                                <a href="{{ url('sfs_cms_admin_content_'~content~'_download_version', {'content':entity, 'version':version, 'back': 'versions'}) }}">
-                                    {{ ('admin_'~content~'.versions.actions.download.link')|trans }}
+                                <a href="{{ url('sfs_cms_admin_content_'~content~'_export_version', {'content':entity, 'version':version, 'back': 'versions'}) }}">
+                                    {{ ('admin_'~content~'.versions.actions.export.link')|trans }}
                                 </a>
 
                                 {% if not version.published %}

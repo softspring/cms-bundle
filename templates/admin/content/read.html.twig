@@ -95,7 +95,7 @@
                             <td>
                                 <a href="{{ url('sfs_cms_admin_content_'~content~'_content_from_version', {'content':entity, 'prevVersion':version}) }}">edit</a>
                                 <a href="{{ url('sfs_cms_admin_content_'~content~'_preview_version', {'content':entity, 'version':version}) }}">preview</a>
-                                <a href="{{ url('sfs_cms_admin_content_'~content~'_download_version', {'content':entity, 'version':version}) }}">download</a>
+                                <a href="{{ url('sfs_cms_admin_content_'~content~'_export_version', {'content':entity, 'version':version}) }}">export</a>
 
                                 {% if not version.published %}
                                     <a href="{{ url('sfs_cms_admin_content_'~content~'_publish_version', {'content':entity, 'version':version}) }}">publish version</a>

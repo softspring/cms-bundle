@@ -18,6 +18,14 @@ admin_page:
             create.button: "Create page"
             cancel.button: "Cancel"
 
+    import:
+        meta.title: "Import page"
+        title: "Import page"
+        breadcrumb: "Import page"
+        actions:
+            import.button: "Import page"
+            cancel.button: "Cancel"
+
     read:
         meta.title: "General"
         title: "%name%"
@@ -39,11 +47,11 @@ admin_page:
             "null": ""
             1: "edited"
             2: "fixture"
-            3: "loaded"
+            3: "imported"
         actions:
             edit.link: "edit"
             preview.link: "preview"
-            download.link: "download"
+            export.link: "export"
             publish.link: "publish version"
             cleanup_versions.link: "Cleanup versions"
             keep.link: "Keep version, click to no keep"
@@ -97,6 +105,7 @@ admin_page:
         breadcrumb: "Pages"
         actions:
             create.link: "New page"
+            import.link: "Import page"
             details.link: "View"
             update.link: "Edit"
             preview.link: "Preview"

@@ -1,6 +1,6 @@
 <?php
 
-namespace Softspring\CmsBundle\Dumper\Utils;
+namespace Softspring\CmsBundle\Utils;
 
 use Symfony\Component\String\Slugger\AsciiSlugger;
 

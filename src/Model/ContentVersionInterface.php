@@ -7,7 +7,7 @@ interface ContentVersionInterface
     public const ORIGIN_UNKNOWN = null;
     public const ORIGIN_EDIT = 1;
     public const ORIGIN_FIXTURE = 2;
-    public const ORIGIN_LOAD = 3;
+    public const ORIGIN_IMPORT = 3;
 
     public function getId(): ?string;
 

@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Config\Model;
 
 use Softspring\CmsBundle\Form\Admin\Content\ContentContentForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentCreateForm;
+use Softspring\CmsBundle\Form\Admin\Content\ContentImportForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentListFilterForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentSeoForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentUpdateForm;
@@ -31,7 +32,6 @@ class Content implements ConfigurationInterface
 //                ->scalarNode('render_template')->defaultValue("@content/{$this->contentName}/render.html.twig")->end()
 //                ->scalarNode('edit_template')->defaultValue("@content/{$this->contentName}/edit.html.twig")->end()
                 ->scalarNode('entity_class')->isRequired()->end()
-                ->scalarNode('dumper_class')->isRequired()->end()
                 ->scalarNode('default_layout')->defaultValue('default')->end()
 
                 ->arrayNode('containers')
@@ -94,6 +94,10 @@ class Content implements ConfigurationInterface
                         ->scalarNode('create_view')->defaultValue('@SfsCms/admin/content/create.html.twig')->end()
                         ->scalarNode('create_type')->defaultValue(ContentCreateForm::class)->end()
                         ->scalarNode('create_success_redirect_to')->defaultValue('')->end()
+                        ->scalarNode('import_is_granted')->defaultValue('')->end()
+                        ->scalarNode('import_view')->defaultValue('@SfsCms/admin/content/import.html.twig')->end()
+                        ->scalarNode('import_type')->defaultValue(ContentImportForm::class)->end()
+                        ->scalarNode('import_success_redirect_to')->defaultValue('')->end()
                         ->scalarNode('read_view')->defaultValue('@SfsCms/admin/content/read.html.twig')->end()
                         ->scalarNode('preview_view')->defaultValue('@SfsCms/admin/content/preview.html.twig')->end()
                         ->scalarNode('versions_view')->defaultValue('@SfsCms/admin/content/versions.html.twig')->end()
