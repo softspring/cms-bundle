@@ -1,4 +1,6 @@
-# SymfonyRouteType
+# Symfony Route type
+
+This **symfonyRoute** type makes reference to *Softspring\CmsBundle\Form\Type\SymfonyRouteType* form type.
 
 This form type provides a way to select a route.
 
@@ -24,7 +26,7 @@ requires a "color" parameter. We can define its value with *{"color": "yellow"}*
 
 ## Options
 
-**restrict_patterns**
+### restrict_patterns
 
 Routes can be filtered by a default value.
 
@@ -35,7 +37,6 @@ You can flag some routes with a default value to use as filter, for example
 ```yaml
 # config/routes.yaml
 my_route:
-     ...
      defaults:
          use_for_some_content: true
 ```
@@ -67,7 +68,7 @@ module:
                          - "use_for_route_paramsernative_content"
 ```
 
-**restrict_default_attribute**
+### restrict_default_attribute
 
 Also routes can be filtered by patterns using restrict_patterns option.
 
