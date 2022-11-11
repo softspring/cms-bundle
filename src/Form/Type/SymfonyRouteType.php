@@ -9,6 +9,8 @@ use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Route;
@@ -17,7 +19,9 @@ use Symfony\Component\Validator\Constraints\Json;
 
 class SymfonyRouteType extends AbstractType
 {
-    use PropagateLabelFormatTrait;
+    use PropagateLabelFormatTrait {
+        finishView as propagateLabelFinishView;
+    }
 
     protected RouterInterface $router;
     protected RouteManagerInterface $routeManager;
@@ -101,6 +105,13 @@ class SymfonyRouteType extends AbstractType
     }
 
     protected ?array $routes = null;
+
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        $this->propagateLabelFinishView($view, $form, $options);
+
+        $view->children['route_name']->vars['attr']['data-route-params'] = $view->children['route_params']->vars['id'];
+    }
 
     protected function getRoutes(array $options): array
     {

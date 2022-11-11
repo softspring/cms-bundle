@@ -82,4 +82,40 @@ window.addEventListener('load', (event) => {
         routeFormFieldsVisiblity();
         routeFormType.addEventListener('change', routeFormFieldsVisiblity);
     }
+
+    /* ****************************************************************************************************** *
+     * SYMFONY ROUTE PARAMS
+     * ****************************************************************************************************** */
+
+    document.addEventListener('change', function (event) {
+        if (!event.target.matches('[data-route-params]')) return;
+
+        const routeNameSelect = event.target;
+        const selectedOption = routeNameSelect.options[routeNameSelect.selectedIndex];
+        const routeParamsField = document.getElementById(routeNameSelect.dataset.routeParams);
+
+        let routeParams = {};
+
+        for(let attr in selectedOption.attributes) {
+            const dataName = selectedOption.attributes[attr];
+            if (!dataName.nodeName || !dataName.nodeName.startsWith('data-route-parameter-')) {
+                continue;
+            }
+            const paramName = dataName.nodeName.substring(21);
+            const requirement = dataName.nodeValue;
+
+            routeParams[paramName] = requirement;
+        }
+
+        console.log(routeParams);
+        console.log(JSON.stringify(routeParams));
+
+        if (Object.keys(routeParams).length) {
+            routeParamsField.closest('div').classList.remove('d-none');
+            routeParamsField.value = JSON.stringify(routeParams);
+        } else {
+            routeParamsField.closest('div').classList.add('d-none');
+            routeParamsField.value = '';
+        }
+    });
 });
