@@ -144,6 +144,8 @@ class SymfonyRouteType extends AbstractType
             $route->setDefault('_form___route_name', $routeName);
         }
 
+        ksort($this->routes);
+
         return $this->routes;
     }
 }
