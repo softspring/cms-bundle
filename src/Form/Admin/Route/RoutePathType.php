@@ -2,9 +2,7 @@
 
 namespace Softspring\CmsBundle\Form\Admin\Route;
 
-use Softspring\CmsBundle\Entity\RoutePath;
 use Softspring\CmsBundle\Manager\RoutePathManagerInterface;
-use Softspring\CmsBundle\Model\RoutePathInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;

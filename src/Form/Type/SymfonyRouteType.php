@@ -80,7 +80,7 @@ class SymfonyRouteType extends AbstractType
                 isset($attr['data-route-parameter']) && $attr['data-route-parameter'] = implode(' ;; ', $attr['data-route-parameter']);
 
                 return $attr;
-            }
+            },
         ]);
 
         $builder->add('route_params', TextType::class, [
@@ -149,7 +149,6 @@ class SymfonyRouteType extends AbstractType
 
             return true;
         }, ARRAY_FILTER_USE_BOTH);
-
 
         foreach ($this->routes as $routeName => $route) {
             $route->setDefault('_form___route_name', $routeName);

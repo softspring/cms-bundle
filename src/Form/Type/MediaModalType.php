@@ -6,5 +6,4 @@ use Softspring\MediaBundle\Form\MediaModalType as RealMediaModalType;
 
 class MediaModalType extends RealMediaModalType
 {
-
 }

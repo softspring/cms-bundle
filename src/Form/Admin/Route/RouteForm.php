@@ -78,7 +78,7 @@ class RouteForm extends AbstractType
                         'data-redirect-type-visible' => in_array($value, [RouteInterface::TYPE_REDIRECT_TO_URL, RouteInterface::TYPE_REDIRECT_TO_ROUTE]) ? 'visible' : 'hidden',
                         'data-symfony-route-visible' => in_array($value, [RouteInterface::TYPE_REDIRECT_TO_ROUTE]) ? 'visible' : 'hidden',
                     ];
-                }
+                },
             ]);
 
             $builder->add('content', EntityType::class, [

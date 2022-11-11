@@ -6,5 +6,4 @@ use Softspring\MediaBundle\Form\MediaChoiceType;
 
 class MediaType extends MediaChoiceType
 {
-
 }
