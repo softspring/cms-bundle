@@ -77,7 +77,9 @@ window.addEventListener('load', (event) => {
         }
     }
 
-    routeFormFieldsVisiblity();
-
-    document.getElementById('route_form_type').addEventListener('change', routeFormFieldsVisiblity);
+    const routeFormType = document.getElementById('route_form_type');
+    if (routeFormType) {
+        routeFormFieldsVisiblity();
+        routeFormType.addEventListener('change', routeFormFieldsVisiblity);
+    }
 });
