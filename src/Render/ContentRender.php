@@ -97,8 +97,9 @@ class ContentRender
         }
 
         $module += [
-            'version' => $version,
-            'content' => $version->getContent(),
+            '_config' => $moduleConfig,
+            '_version' => $version,
+            '_content' => $version->getContent(),
         ];
 
         $profilerDebugCollectorData[] = [
