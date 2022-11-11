@@ -9,8 +9,18 @@
                 <a href="{{ sfs_cms_route_path_url(path) }}" target="_blank">{{ sfs_cms_route_path_path(path) }}</a><br/>
             {% endfor %}
         </td>
-        <td class="p-3">{{ ('admin_routes.types.'~route.type~'.name')|trans }}</td>
-        <td class="p-3">{{ route.content.name|default('') }}</td>
+        <td class="p-3">
+            {{ ('admin_routes.types.'~route.type~'.name')|trans({'%redirectType%': route.redirectType}) }}
+        </td>
+        <td class="p-3">
+            {% if route.type == constant('Softspring\\CmsBundle\\Model\\RouteInterface::TYPE_CONTENT') %}
+                {{ route.content.name|default('') }}
+            {% elseif route.type == constant('Softspring\\CmsBundle\\Model\\RouteInterface::TYPE_REDIRECT_TO_URL') %}
+                {{ route.redirectUrl|default('') }}
+            {% elseif route.type == constant('Softspring\\CmsBundle\\Model\\RouteInterface::TYPE_REDIRECT_TO_ROUTE') %}
+                {{ route.symfonyRoute.route_name|default('') }}
+            {% endif %}
+        </td>
         <td class="p-3 text-end">
             <a href="{{ url('sfs_cms_admin_routes_update', {'route':route}) }}">{{ 'admin_routes.list.actions.update.link'|trans }}</a>
         </td>

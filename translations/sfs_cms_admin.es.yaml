@@ -114,7 +114,7 @@ admin_routes:
             locale.label: "Idioma"
             cacheTtl.label: "Tiempo de cache"
         id.label: "Identificador"
-        site.label: "Site"
+        site.label: "Sitio"
         type:
             label: "Tipo"
             values:
@@ -123,7 +123,10 @@ admin_routes:
                 redirect_to_url: "Redirección a URL"
         content.label: "Contenido"
         redirectUrl.label: "Redirigir a URL"
-        symfonyRoute.label: "Ruta"
+        symfonyRoute:
+            label: "Ruta"
+            route_name.label: "Nombre de ruta"
+            route_params.label: "Parámetros (JSON)"
         redirectType:
             label: "Tipo de redirección"
             values:
@@ -132,8 +135,8 @@ admin_routes:
     types:
         0.name: "Indefinido"
         1.name: "Contenido"
-        2.name: "Redirección a ruta"
-        3.name: "Redirección a URL"
+        2.name: "Redirección %redirectType% a ruta"
+        3.name: "Redirección %redirectType% a URL"
         4.name: "Ruta padre"
 
 admin_menus:

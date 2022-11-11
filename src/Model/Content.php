@@ -55,6 +55,10 @@ abstract class Content implements ContentInterface
     public function setSite(?string $site): void
     {
         $this->site = $site;
+
+        foreach ($this->getRoutes() as $route) {
+            $route->setSite($site);
+        }
     }
 
     /**
@@ -103,6 +107,7 @@ abstract class Content implements ContentInterface
         if (!$this->routes->contains($route)) {
             $this->routes->add($route);
             $route->setContent($this);
+            $route->setSite($this->getSite());
         }
     }
 

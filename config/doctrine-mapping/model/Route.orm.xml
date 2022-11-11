@@ -9,7 +9,7 @@
         <field name="type" column="route_type" type="smallint" nullable="false"/>
         <field name="redirectType" column="redirect_type" type="smallint" nullable="true"/>
         <field name="redirectUrl" column="redirect_url" type="text" nullable="true"/>
-        <field name="symfonyRoute" column="symfony_route" type="string" nullable="true"/>
+        <field name="symfonyRoute" column="symfony_route" type="json" nullable="true"/>
 
         <many-to-one field="content" target-entity="Softspring\CmsBundle\Model\ContentInterface" inversed-by="routes">
             <join-column name="content_id" referenced-column-name="id" on-delete="CASCADE" />

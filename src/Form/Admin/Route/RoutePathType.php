@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Form\Admin\Route;
 
+use Softspring\CmsBundle\Entity\RoutePath;
 use Softspring\CmsBundle\Manager\RoutePathManagerInterface;
 use Softspring\CmsBundle\Model\RoutePathInterface;
 use Symfony\Component\Form\AbstractType;
@@ -28,8 +29,7 @@ class RoutePathType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => RoutePathInterface::class,
-            'empty_data' => $this->routePathManager->createEntity(),
+            'data_class' => $this->routePathManager->getEntityClass(),
             'languages' => $this->enabledLocales,
             'default_language' => $this->defaultLocale,
         ]);

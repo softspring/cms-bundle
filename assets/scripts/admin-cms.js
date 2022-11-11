@@ -10,5 +10,6 @@ import './admin/content-edit/preview-media-modal';
 
 import './admin/routes-forms';
 import './admin/menu-forms';
+import './admin/form-collections';
 
 import './types/color-type';

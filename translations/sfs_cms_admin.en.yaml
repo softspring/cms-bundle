@@ -123,7 +123,10 @@ admin_routes:
                 redirect_to_url: "Redirect to URL"
         content.label: "Content"
         redirectUrl.label: "Redirect URL"
-        symfonyRoute.label: "Route"
+        symfonyRoute:
+            label: "Route"
+            route_name.label: "Route name"
+            route_params.label: "Route params (JSON)"
         redirectType:
             label: "Redirection type"
             values:
@@ -132,8 +135,8 @@ admin_routes:
     types:
         0.name: "Unkwown"
         1.name: "Content"
-        2.name: "Redirect to route"
-        3.name: "Redirect to URL"
+        2.name: "Redirect %redirectType% to route"
+        3.name: "Redirect %redirectType% to URL"
         4.name: "Parent route"
 
 admin_menus:

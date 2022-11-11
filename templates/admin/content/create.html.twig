@@ -23,7 +23,8 @@
                 <div class="container pt-3 pb-3">
                     {{ form_row(form.name) }}
                     {{ form_row(form.site) }}
-                    {{ form_row(form.routes) }}
+                    {{ form_label(form.routes) }}
+                    {{ form_widget(form.routes.0) }}
                     {{ form_rest(form) }}
                 </div>
             </div>

@@ -17,11 +17,15 @@
         {{ form_start(form) }}
             <div class="row">
                 <div class="col">{{ form_row(form.id) }}</div>
+                <div class="col">{{ form_row(form.site) }}</div>
+            </div>
+
+            <div class="row">
                 <div class="col">{{ form_row(form.type) }}</div>
                 <div class="col">
                     {{ form_row(form.content) }}
                     {{ form_row(form.redirectUrl) }}
-                    {{ form_row(form.symfonyRoute) }}
+                    {{ form_widget(form.symfonyRoute) }}
                     {{ form_row(form.redirectType) }}
                 </div>
             </div>

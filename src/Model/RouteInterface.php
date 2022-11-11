@@ -41,9 +41,9 @@ interface RouteInterface
 
     public function setRedirectUrl(?string $redirectUrl): void;
 
-    public function getSymfonyRoute(): ?string;
+    public function getSymfonyRoute(): ?array;
 
-    public function setSymfonyRoute(?string $symfonyRoute): void;
+    public function setSymfonyRoute(?array $symfonyRoute): void;
 
     public function getRedirectType(): ?int;
 

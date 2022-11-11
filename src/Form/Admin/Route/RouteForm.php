@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Form\Admin\Route;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Softspring\CmsBundle\Form\Admin\SiteChoiceType;
+use Softspring\CmsBundle\Form\Type\SymfonyRouteType;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -13,7 +14,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\Regex;
@@ -58,9 +58,9 @@ class RouteForm extends AbstractType
             ],
         ]);
 
-        $builder->add('site', SiteChoiceType::class);
-
         if (!$options['content_relative']) {
+            $builder->add('site', SiteChoiceType::class);
+
             $builder->add('type', ChoiceType::class, [
                 'choices' => [
                     //                'PAGE' => RouteInterface::TYPE_PAGE,
@@ -71,6 +71,14 @@ class RouteForm extends AbstractType
                     'admin_routes.form.type.values.redirect_to_url' => RouteInterface::TYPE_REDIRECT_TO_URL,
                     //                'PARENT_ROUTE' => RouteInterface::TYPE_PARENT_ROUTE,
                 ],
+                'choice_attr' => function ($value) {
+                    return [
+                        'data-content-visible' => in_array($value, [RouteInterface::TYPE_CONTENT]) ? 'visible' : 'hidden',
+                        'data-redirect-url-visible' => in_array($value, [RouteInterface::TYPE_REDIRECT_TO_URL]) ? 'visible' : 'hidden',
+                        'data-redirect-type-visible' => in_array($value, [RouteInterface::TYPE_REDIRECT_TO_URL, RouteInterface::TYPE_REDIRECT_TO_ROUTE]) ? 'visible' : 'hidden',
+                        'data-symfony-route-visible' => in_array($value, [RouteInterface::TYPE_REDIRECT_TO_ROUTE]) ? 'visible' : 'hidden',
+                    ];
+                }
             ]);
 
             $builder->add('content', EntityType::class, [
@@ -100,12 +108,14 @@ class RouteForm extends AbstractType
                 ],
             ]);
 
-            $routes = array_keys(array_filter($this->router->getRouteCollection()->all(), function (Route $route) {
-                return (bool) $route->getDefault('_sfs_cms_reference');
-            }));
-
-            $builder->add('symfonyRoute', ChoiceType::class, [
-                'choices' => ['' => null] + array_combine($routes, $routes),
+            $builder->add('symfonyRoute', SymfonyRouteType::class, [
+                'required' => false,
+                'restrict_patterns' => [
+                    '^admin_',
+                    '^sfs_.*admin',
+                    '^_profiler',
+                    '^_wdt',
+                ],
             ]);
         }
 

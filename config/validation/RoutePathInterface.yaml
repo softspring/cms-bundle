@@ -1,3 +1,5 @@
 Softspring\CmsBundle\Model\RoutePathInterface:
     constraints:
-        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: ['path', 'locale'] # todo and route.site
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: ['path', 'locale'] # todo and route.site
+            ignoreNull: false

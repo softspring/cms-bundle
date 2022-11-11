@@ -15,14 +15,20 @@
 
     <div class="container-fluid bg-white p-4">
         {{ form_start(form) }}
-        <div class="row">
-            <div class="col-12 col-md-6 col-lg-4">{{ form_row(form.id) }}</div>
-            <div class="col-12 col-md-6 col-lg-4">{{ form_row(form.content) }}</div>
-            <div class="col-12 col-md-6 col-lg-4">{{ form_row(form.redirectUrl) }}</div>
-            <div class="col-12 col-md-6 col-lg-4">{{ form_row(form.symfonyRoute) }}</div>
-            <div class="col-12 col-md-6 col-lg-4">{{ form_row(form.redirectType) }}</div>
-            <div class="col-12 col-md-6 col-lg-4">{{ form_row(form.type) }}</div>
-        </div>
+            <div class="row">
+                <div class="col">{{ form_row(form.id) }}</div>
+                <div class="col">{{ form_row(form.site) }}</div>
+            </div>
+
+            <div class="row">
+                <div class="col">{{ form_row(form.type) }}</div>
+                <div class="col">
+                    {{ form_row(form.content) }}
+                    {{ form_row(form.redirectUrl) }}
+                    {{ form_widget(form.symfonyRoute) }}
+                    {{ form_row(form.redirectType) }}
+                </div>
+            </div>
 
         {{ form_rest(form) }}
 

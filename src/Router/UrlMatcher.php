@@ -149,11 +149,12 @@ class UrlMatcher
         ];
     }
 
-    protected function generateRedirectToRoute(string $route, int $statusCode): array
+    protected function generateRedirectToRoute(array $route, int $statusCode): array
     {
         return [
             '_controller' => 'Softspring\CmsBundle\Controller\RedirectController::redirection',
-            'route' => $route,
+            'route' => $route['route_name'],
+            'routeParams' => $route['route_params'],
             'statusCode' => $statusCode,
         ];
     }

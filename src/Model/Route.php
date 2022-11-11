@@ -18,7 +18,7 @@ abstract class Route implements RouteInterface
 
     protected ?ContentInterface $content = null;
     protected ?string $redirectUrl = null;
-    protected ?string $symfonyRoute = null;
+    protected ?array $symfonyRoute = null;
     protected ?int $redirectType = null;
 
     public function __construct()
@@ -106,12 +106,12 @@ abstract class Route implements RouteInterface
         $this->redirectUrl = $redirectUrl;
     }
 
-    public function getSymfonyRoute(): ?string
+    public function getSymfonyRoute(): ?array
     {
         return $this->symfonyRoute;
     }
 
-    public function setSymfonyRoute(?string $symfonyRoute): void
+    public function setSymfonyRoute(?array $symfonyRoute): void
     {
         $this->symfonyRoute = $symfonyRoute;
     }
