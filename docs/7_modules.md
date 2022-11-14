@@ -25,7 +25,7 @@
 - tinymce
 - ~~translatableImage~~
 - ~~translatableText~~
-- translatable
+- [translatable](modules/form-types/translatable.md)
 - *user*
 
 ### Basic symfony types

@@ -6,6 +6,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @deprecated use TranslatableType
+ */
 class TranslatableImageType extends AbstractType
 {
     protected string $defaultLocale;
