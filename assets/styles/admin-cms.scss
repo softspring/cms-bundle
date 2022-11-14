@@ -126,3 +126,9 @@
     width: 300px;
     flex-shrink: 0;
 }
+
+[data-edit-content-placeholder]:empty::after {
+    content: attr(data-edit-content-placeholder);
+    opacity: 0.5;
+    font-style: italic;
+}
