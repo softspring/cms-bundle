@@ -20,10 +20,11 @@
 - [7. Modules](docs/7_modules.md)
 - 8- Menus
 - 9- Blocks
-- 10- Using medias
-- 11- Caching
-- 12- Logging
-- 13- Extend with collections
+- 10- Dynamic forms
+- 11- Using medias
+- 12- Caching
+- 13- Logging
+- 14- Extend with collections
 
 ## License
 
