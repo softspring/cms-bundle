@@ -51,7 +51,7 @@ class MenuTransformer extends AbstractDataTransformer
         foreach ($menu->getItems() as $item) {
             $dump['menu']['items'][] = [
                 'text' => $item->getText(),
-                'route' => $this->exportData($item->getRoute(), $files),
+                'symfony_route' => $item->getSymfonyRoute(),
             ];
         }
 
@@ -78,25 +78,18 @@ class MenuTransformer extends AbstractDataTransformer
         $menu->setName($data['menu']['name']);
 
         foreach ($data['menu']['items'] as $item) {
-            $route = null;
-
-            if (!empty($item['route']['_reference'])) {
-                /** @var RouteInterface $route */
-                $route = $referencesRepository->getReference($item['route']['_reference'], true);
-            }
-
-            $this->createMenuItem($menu, $item['text'], $route);
+            $this->createMenuItem($menu, $item['text'], $item['symfony_route']);
         }
 
         return $menu;
     }
 
-    public function createMenuItem(MenuInterface $menu, array $text, ?RouteInterface $route = null): MenuItemInterface
+    public function createMenuItem(MenuInterface $menu, array $text, ?array $route = null): MenuItemInterface
     {
         $item = $this->menuItemManager->createEntity();
         $menu->addItem($item);
         $item->setText($text);
-        $item->setRoute($route);
+        $item->setSymfonyRoute($route);
 
         return $item;
     }

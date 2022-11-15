@@ -22,9 +22,9 @@ interface MenuItemInterface
 
     public function getText(): ?array;
 
-    public function setRoute(?RouteInterface $route): void;
+    public function getSymfonyRoute(): ?array;
 
-    public function getRoute(): ?RouteInterface;
+    public function setSymfonyRoute(?array $symfonyRoute): void;
 
     public function getOptions(): ?array;
 

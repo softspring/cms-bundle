@@ -98,6 +98,10 @@ class RouteTransformer extends AbstractDataTransformer
                 $route->setRedirectType($routeData['redirect_type']);
                 break;
 
+            case RouteInterface::TYPE_REDIRECT_TO_ROUTE:
+                $route->setSymfonyRoute($routeData['symfony_route']);
+                break;
+
             default:
                 throw new \Exception(sprintf('Route type %u not yet implemented', $routeData['type']));
         }

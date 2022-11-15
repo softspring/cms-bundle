@@ -15,7 +15,7 @@ abstract class MenuItem implements MenuItemInterface
 
     protected ?array $options = null;
 
-    protected ?RouteInterface $route = null;
+    protected ?array $symfonyRoute = null;
 
     protected ?MenuItemInterface $parent = null;
 
@@ -69,14 +69,14 @@ abstract class MenuItem implements MenuItemInterface
         $this->options = $options;
     }
 
-    public function getRoute(): ?RouteInterface
+    public function getSymfonyRoute(): ?array
     {
-        return $this->route;
+        return $this->symfonyRoute;
     }
 
-    public function setRoute(?RouteInterface $route): void
+    public function setSymfonyRoute(?array $symfonyRoute): void
     {
-        $this->route = $route;
+        $this->symfonyRoute = $symfonyRoute;
     }
 
     public function getParent(): ?MenuItemInterface

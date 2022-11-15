@@ -19,9 +19,7 @@
             <join-column name="parent_item_id" referenced-column-name="id" on-delete="CASCADE" />
         </many-to-one>
 
-        <many-to-one field="route" target-entity="Softspring\CmsBundle\Model\RouteInterface">
-            <join-column name="route_id" referenced-column-name="id" on-delete="CASCADE" />
-        </many-to-one>
+        <field name="symfonyRoute" column="symfony_route" type="json" nullable="true"/>
     </mapped-superclass>
 
 </doctrine-mapping>

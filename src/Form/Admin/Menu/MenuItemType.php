@@ -3,11 +3,10 @@
 namespace Softspring\CmsBundle\Form\Admin\Menu;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Softspring\CmsBundle\Form\Type\SymfonyRouteType;
 use Softspring\CmsBundle\Form\Type\TranslatableTextType;
 use Softspring\CmsBundle\Manager\MenuItemManagerInterface;
 use Softspring\CmsBundle\Model\MenuItemInterface;
-use Softspring\CmsBundle\Model\RouteInterface;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -40,11 +39,14 @@ class MenuItemType extends AbstractType
             'constraints' => new NotBlank(),
         ]);
 
-        $builder->add('route', EntityType::class, [
+        $builder->add('symfonyRoute', SymfonyRouteType::class, [
             'required' => false,
-            'constraints' => new NotBlank(),
-            'class' => RouteInterface::class,
-            'em' => $this->em,
+            'restrict_patterns' => [
+                '^admin_',
+                '^sfs_.*admin',
+                '^_profiler',
+                '^_wdt',
+            ],
         ]);
     }
 }

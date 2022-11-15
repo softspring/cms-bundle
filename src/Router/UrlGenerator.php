@@ -104,7 +104,7 @@ class UrlGenerator
      */
     public function getRouteAttributes($routeOrName): string
     {
-        $route = $routeOrName instanceof RouteInterface ? $routeOrName : $this->getRoute($routeOrName);
+        $route = $routeOrName instanceof RouteInterface ? $routeOrName : (is_array($routeOrName) ? $this->getRoute($routeOrName['route_name']) : $this->getRoute($routeOrName));
 
         if (!$route) {
             return '';

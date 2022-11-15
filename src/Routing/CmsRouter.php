@@ -46,8 +46,10 @@ class CmsRouter implements RouterInterface, RequestMatcherInterface, WarmableInt
     public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
     {
         try {
+            // first try to generate with Symfony's route generator
             return $this->staticRouter->generate($name, $parameters, $referenceType);
         } catch (RouteNotFoundException $e) {
+            // if it does not exist, try witch CMS routes
             switch ($referenceType) {
                 case UrlGeneratorInterface::ABSOLUTE_URL:
                     $url = $this->urlGenerator->getUrl($name, $parameters['_locale'] ?? '');

@@ -174,4 +174,8 @@ admin_menus:
             label: "Elementos"
             add.button: "Añadir elemento"
             text.label: "Texto"
-            route.label: "Ruta"
+#            route.label: "Ruta"
+            symfonyRoute:
+                label: "Ruta"
+                route_name.label: "Nombre de ruta"
+                route_params.label: "Parámetros (JSON)"
