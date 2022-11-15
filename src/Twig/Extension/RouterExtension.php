@@ -45,7 +45,7 @@ class RouterExtension extends AbstractExtension
             }
 
             return $this->router->generate($route['route_name'], $params);
-        } else if ($route instanceof RouteInterface) {
+        } elseif ($route instanceof RouteInterface) {
             return $this->router->generate($route->getId());
         }
 

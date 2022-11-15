@@ -10,7 +10,6 @@ use Softspring\CmsBundle\Manager\MenuItemManagerInterface;
 use Softspring\CmsBundle\Manager\MenuManagerInterface;
 use Softspring\CmsBundle\Model\MenuInterface;
 use Softspring\CmsBundle\Model\MenuItemInterface;
-use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Utils\Slugger;
 
 class MenuTransformer extends AbstractDataTransformer
