@@ -4,8 +4,10 @@
 
      data-edit-content-target="code"
      data-edit-content-escape="true"
+
+     data-edit-content-placeholder="{{ 'html.form.code.preview.placeholder'|trans }}"
 >
 {#    {{ form.code.vars.data|default('')|length > 50 ? form.code.vars.data|raw|slice(0, 50) ~ '...' : form.code.vars.data|raw|default('')  }}#}
-    {{ form.code.vars.data|default('HTML Code')|replace({'href': ''})|raw }}
+    {{ form.code.vars.data|default()|replace({'href': ''})|raw }}
 </div>
 {#<iframe class="container-fluid" srcdoc="{{ form.code.vars.data|default('') }}" src="about:blank"></iframe>#}

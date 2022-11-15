@@ -1,3 +1,5 @@
+{% trans_default_domain 'sfs_cms_modules' %}
+
 {#{% for locale,localeField in form.code %}#}
 {#    <div id="{{ form.id.vars.data|default('') }}"#}
 {#         class="text-break content-escape"#}
@@ -23,8 +25,9 @@
      data-edit-content-escape="true"
 >
     {% for locale,localeField in form.code %}
-        <div data-edit-content-target="code.{{ locale }}" data-lang="{{ locale }}">
-            {{ localeField.vars.data|default('Translatable HTML code')|replace({'href': ''})|raw }}
+        <div data-edit-content-target="code.{{ locale }}" data-lang="{{ locale }}"
+             data-edit-content-placeholder="{{ 'html_translatable.form.code.preview.placeholder'|trans }}">
+            {{ localeField.vars.data|default()|replace({'href': ''})|raw }}
         </div>
     {% endfor %}
 {#    {{ form_row(form.code) }}#}

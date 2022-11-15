@@ -24,7 +24,9 @@ html:
     form:
         locale_filter.label: "Locales"
         id.label: "Id"
-        code.label: "Code"
+        code:
+            label: "Code"
+            preview.placeholder: "insert your HTML"
 
 css:
     label: "CSS code"
@@ -38,8 +40,9 @@ html_headers:
     prototype_button: "HTML headers"
     form:
         locale_filter.label: "Locales"
-        code.label: "Code"
-
+        code:
+            label: "Code"
+            preview.placeholder: "here you can insert meta tags"
 
 html_translatable:
     label: "Translatable HTML code"
@@ -47,5 +50,7 @@ html_translatable:
     form:
         locale_filter.label: "Locales"
         id.label: "Id"
-        code.label: "Code"
+        code:
+            label: "Code"
+            preview.placeholder: "insert your HTML"
         class.label: "Classes"

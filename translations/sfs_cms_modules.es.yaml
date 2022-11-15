@@ -24,7 +24,9 @@ html:
     form:
         locale_filter.label: "Idiomas"
         id.label: "Id"
-        code.label: "Código"
+        code:
+            label: "Código"
+            preview.placeholder: "inserta el HTML"
 
 css:
     label: "Código CSS"
@@ -38,7 +40,9 @@ html_headers:
     prototype_button: "Cabeceras HTML"
     form:
         locale_filter.label: "Idiomas"
-        code.label: "Código"
+        code:
+            label: "Código"
+            preview.placeholder: "inserta aquí tus meta tags"
 
 html_translatable:
     label: "Código HTML traducible"
@@ -46,5 +50,7 @@ html_translatable:
     form:
         locale_filter.label: "Idiomas"
         id.label: "Id"
-        code.label: "Código"
+        code:
+            label: "Código"
+            preview.placeholder: "inserta el HTML"
         class.label: "Clases"
