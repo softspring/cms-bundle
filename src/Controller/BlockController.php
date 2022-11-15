@@ -25,57 +25,69 @@ class BlockController extends AbstractController
 
     public function renderByType(string $type, Request $request): Response
     {
-        $config = $this->cmsConfig->getBlock($type);
+        try {
+            $config = $this->cmsConfig->getBlock($type);
 
-        if (!$config['static']) {
-            $block = $this->blockManager->getRepository()->findOneByType($type);
+            if (!$config['static']) {
+                $block = $this->blockManager->getRepository()->findOneByType($type);
 
-            if (!$block) {
-                $this->cmsLogger && $this->cmsLogger->error(sprintf('CMS missing block %s', $type));
+                if (!$block) {
+                    $this->cmsLogger && $this->cmsLogger->error(sprintf('CMS missing block %s', $type));
 
-                return new Response();
+                    return new Response();
+                }
+
+                $response = $this->render($config['render_template'], [
+                    'block' => $block,
+                ]);
+            } else {
+                $response = $this->render($config['render_template']);
             }
 
-            $response = $this->render($config['render_template'], [
-                'block' => $block,
-            ]);
-        } else {
-            $response = $this->render($config['render_template']);
-        }
+            if (false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
+                $response->setPublic();
+                $response->setMaxAge($config['cache_ttl']);
+            }
 
-        if (false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
-            $response->setPublic();
-            $response->setMaxAge($config['cache_ttl']);
-        }
+            return $response;
+        } catch (\Exception $e) {
+            $this->cmsLogger && $this->cmsLogger->critical(sprintf('Error rendering block type %s', $type));
 
-        return $response;
+            return new Response('<!-- error rendering block, see logs -->');
+        }
     }
 
     public function renderById(string $id, Request $request): Response
     {
-        /** @var BlockInterface $block */
-        $block = $this->blockManager->getRepository()->findOneById($id);
+        try {
+            /** @var BlockInterface $block */
+            $block = $this->blockManager->getRepository()->findOneById($id);
 
-        if (!$block) {
-            $this->cmsLogger && $this->cmsLogger->error(sprintf('CMS missing block %s', $id));
+            if (!$block) {
+                $this->cmsLogger && $this->cmsLogger->error(sprintf('CMS missing block %s', $id));
 
-            return new Response();
+                return new Response();
+            }
+
+            $type = $block->getType();
+            $config = $this->cmsConfig->getBlock($type);
+
+            if (!$config['static']) {
+                $response = $this->render($config['render_template'], $block->getData());
+            } else {
+                $response = $this->render($config['render_template']);
+            }
+
+            if (false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
+                $response->setPublic();
+                $response->setMaxAge($config['cache_ttl']);
+            }
+
+            return $response;
+        } catch (\Exception $e) {
+            $this->cmsLogger && $this->cmsLogger->critical(sprintf('Error rendering block %s', $id));
+
+            return new Response('<!-- error rendering block, see logs -->');
         }
-
-        $type = $block->getType();
-        $config = $this->cmsConfig->getBlock($type);
-
-        if (!$config['static']) {
-            $response = $this->render($config['render_template'], $block->getData());
-        } else {
-            $response = $this->render($config['render_template']);
-        }
-
-        if (false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
-            $response->setPublic();
-            $response->setMaxAge($config['cache_ttl']);
-        }
-
-        return $response;
     }
 }
