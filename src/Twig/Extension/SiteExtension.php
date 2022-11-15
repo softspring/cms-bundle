@@ -15,7 +15,7 @@ class SiteExtension extends AbstractExtension
         $this->translator = $translator;
     }
 
-    public function getFilters()
+    public function getFilters(): array
     {
         return [
             new TwigFilter('sfs_cms_site_name', [$this, 'siteName']),

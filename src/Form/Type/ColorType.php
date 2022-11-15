@@ -12,7 +12,7 @@ class ColorType extends AbstractType
         return 'cms_color';
     }
 
-    public function getParent()
+    public function getParent(): string
     {
         return SymfonyColorType::class;
     }
