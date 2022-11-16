@@ -13,7 +13,7 @@
 }
 .module-polymorphic-collection {
     .polymorphic-node-row {
-        margin: 40px 0;
+        //margin: 0 0 0 30px;
     }
 }
 
@@ -22,7 +22,10 @@
     display: flex;
     flex-direction: column;
     margin-top: 30px;
-    border: 2px dashed #fefefe;
+    border: 2px dashed transparent;
+    margin-top: -4px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 
     .cms-module-form {
         display: none;
@@ -42,11 +45,17 @@
     }
 
     .cms-module-header {
+        display: none;
+    }
+
+    &.active>.cms-module-header,
+    &:hover>.cms-module-header {
         display: block;
-        width: 100%;
-        height: 30px;
+        width: 130px;
+        height: 34px;
         position: absolute;
-        top: -35px;
+        right: 0px;
+        z-index: 10000;
 
         .cms-module-buttons {
             position: absolute;
@@ -71,18 +80,26 @@
     }
 
     &:hover {
-        border: 2px dashed black;
+        border: 2px dashed #d2d2d2;
+
+        .cms-module-header {
+            background-color: #d2d2d270;
+        }
     }
 
     &.active {
-        border: 2px dashed green;
+        border: 2px dashed #5d5d5d;
+
+        .cms-module-header {
+            background-color: #5d5d5d70;
+        }
 
         > .cms-module-body > .cms-module-edit > .cms-module-form {
             display: block;
             position: fixed;
             right: 0;
             top: 75px;
-            width: 312px;
+            width: 300px;
             height: calc(100vh - 76px);
             overflow-y: auto;
             background-color: white;
@@ -131,4 +148,8 @@
     content: attr(data-edit-content-placeholder);
     opacity: 0.5;
     font-style: italic;
+}
+
+[data-edit-content-target]:hover {
+    box-shadow: 0 0 10px #5f5f5f;
 }
