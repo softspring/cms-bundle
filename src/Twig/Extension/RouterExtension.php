@@ -44,7 +44,15 @@ class RouterExtension extends AbstractExtension
 
     public function generateUrl($route, ?string $locale = null, int $referenceType = UrlGeneratorInterface::ABSOLUTE_URL): string
     {
+        if (is_null($route)) {
+            return '#';
+        }
+
         if (is_array($route)) {
+            if (is_null($route['route_name'])) {
+                return '#';
+            }
+
             $params = $route['route_params'] ?? [];
 
             if ($locale) {
