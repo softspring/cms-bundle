@@ -8,9 +8,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RedirectController extends AbstractController
 {
-    public function redirection(string $route, array $routeParams = [], int $statusCode = Response::HTTP_PERMANENTLY_REDIRECT): RedirectResponse
+    public function redirection(string $route, ?array $routeParams = null, int $statusCode = Response::HTTP_PERMANENTLY_REDIRECT): RedirectResponse
     {
-        return $this->redirectToRoute($route, $routeParams, $statusCode);
+        return $this->redirectToRoute($route, $routeParams ?? [], $statusCode);
     }
 
     public function redirectToUrl(string $url, int $statusCode = Response::HTTP_PERMANENTLY_REDIRECT): RedirectResponse
