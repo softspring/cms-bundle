@@ -82,7 +82,7 @@
     </div>
 {% endblock html_class_widget %}
 
-{% block locale_filter_widget %}
+{% block module_locale_filter_widget %}
     <div class="input-group mb-3">
         <div {{ block('widget_container_attributes') }} class="row">
             {%- for child in form %}
@@ -93,7 +93,7 @@
             {% endfor -%}
         </div>
     </div>
-{% endblock locale_filter_widget %}
+{% endblock module_locale_filter_widget %}
 
 {% block cms_color_widget %}
     <div class="input-group mb-3">
