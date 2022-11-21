@@ -2,7 +2,7 @@
 
 namespace Softspring\CmsBundle\Form\Module;
 
-use Softspring\Component\DynamicFormType\Form\DynamicFormTrait;
+use Softspring\CmsBundle\Form\DynamicFormTrait;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -25,14 +25,5 @@ class DynamicFormModuleType extends AbstractModuleType
     {
         parent::buildChildForm($builder, $options);
         $this->buildDynamicForm($builder, $options);
-    }
-
-    protected function getFormClasses(string $type): array
-    {
-        return [
-            'App\Form\Type\\'.ucfirst($type).'Type',
-            'Softspring\CmsBundle\Form\Type\\'.ucfirst($type).'Type',
-            'Symfony\Component\Form\Extension\Core\Type\\'.ucfirst($type).'Type',
-        ];
     }
 }

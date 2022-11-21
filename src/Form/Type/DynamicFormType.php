@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Form\Type;
 
+use Softspring\CmsBundle\Form\DynamicFormTrait;
 use Softspring\Component\DynamicFormType\Form\DynamicFormType as BaseDynamicFormType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -9,6 +10,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class DynamicFormType extends BaseDynamicFormType
 {
+    use DynamicFormTrait;
+
     public function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
@@ -28,14 +31,5 @@ class DynamicFormType extends BaseDynamicFormType
     {
         $view->vars['form_template'] = $options['form_template'];
         $view->vars['edit_template'] = $options['edit_template'];
-    }
-
-    protected function getFormClasses(string $type): array
-    {
-        return [
-            'App\Form\Type\\'.ucfirst($type).'Type',
-            'Softspring\CmsBundle\Form\Type\\'.ucfirst($type).'Type',
-            'Symfony\Component\Form\Extension\Core\Type\\'.ucfirst($type).'Type',
-        ];
     }
 }

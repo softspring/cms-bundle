@@ -2,7 +2,7 @@
 
 namespace Softspring\CmsBundle\Form\Type;
 
-use Softspring\Component\DynamicFormType\Form\DynamicFormTrait;
+use Softspring\CmsBundle\Form\DynamicFormTrait;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -57,14 +57,5 @@ class TranslatableType extends AbstractType
                 'attr' => $options['children_attr'] + ($options['type_options']['attr'] ?? []),
             ]);
         }
-    }
-
-    protected function getFormClasses(string $type): array
-    {
-        return [
-            'App\Form\Type\\'.ucfirst($type).'Type',
-            'Softspring\CmsBundle\Form\Type\\'.ucfirst($type).'Type',
-            'Symfony\Component\Form\Extension\Core\Type\\'.ucfirst($type).'Type',
-        ];
     }
 }
