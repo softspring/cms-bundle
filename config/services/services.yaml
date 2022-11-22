@@ -40,10 +40,6 @@ services:
         resource: '../../src/Form/*'
         tags: ['form.type']
 
-    Softspring\CmsBundle\Routing\CmsRouter:
-        decorates: 'router.default'
-        arguments: ['@.inner']
-
     Softspring\CmsBundle\Form\Module\ModuleCollectionType:
         tags: ['form.type']
 
@@ -60,8 +56,12 @@ services:
     Softspring\CmsBundle\Manager\:
         resource: '../../src/Manager/*'
 
-    Softspring\CmsBundle\Router\:
-        resource: '../../src/Router/*'
+    Softspring\CmsBundle\Routing\:
+        resource: '../../src/Routing/*'
+        
+    Softspring\CmsBundle\Routing\CmsRouter:
+        decorates: 'router.default'
+        arguments: [ '@.inner' ]
 
     Softspring\CmsBundle\Render\:
         resource: '../../src/Render/*'

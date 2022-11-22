@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Exception\SiteHasNotACanonicalHostException;
 use Softspring\CmsBundle\Exception\SiteNotFoundException;
-use Softspring\CmsBundle\Router\SiteResolver;
+use Softspring\CmsBundle\Routing\SiteResolver;
 use Symfony\Component\HttpFoundation\Request;
 
 class SiteResolverTest extends TestCase

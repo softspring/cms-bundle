@@ -11,9 +11,9 @@ use Softspring\CmsBundle\Entity\Page;
 use Softspring\CmsBundle\Entity\Route;
 use Softspring\CmsBundle\Entity\RoutePath;
 use Softspring\CmsBundle\Model\RouteInterface;
-use Softspring\CmsBundle\Router\SiteResolver;
-use Softspring\CmsBundle\Router\UrlGenerator;
-use Softspring\CmsBundle\Router\UrlMatcher;
+use Softspring\CmsBundle\Routing\SiteResolver;
+use Softspring\CmsBundle\Routing\UrlGenerator;
+use Softspring\CmsBundle\Routing\UrlMatcher;
 use Symfony\Component\HttpFoundation\Request;
 
 class UrlMatcherTest extends TestCase

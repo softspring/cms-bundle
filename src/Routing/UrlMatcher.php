@@ -1,6 +1,6 @@
 <?php
 
-namespace Softspring\CmsBundle\Router;
+namespace Softspring\CmsBundle\Routing;
 
 use Doctrine\DBAL\Exception\TableNotFoundException;
 use Doctrine\ORM\AbstractQuery;

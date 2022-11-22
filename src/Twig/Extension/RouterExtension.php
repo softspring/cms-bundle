@@ -3,7 +3,7 @@
 namespace Softspring\CmsBundle\Twig\Extension;
 
 use Softspring\CmsBundle\Model\RouteInterface;
-use Softspring\CmsBundle\Router\UrlGenerator;
+use Softspring\CmsBundle\Routing\UrlGenerator;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;

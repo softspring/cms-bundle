@@ -1,6 +1,6 @@
 <?php
 
-namespace Softspring\CmsBundle\Router;
+namespace Softspring\CmsBundle\Routing;
 
 use Psr\Log\LoggerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;

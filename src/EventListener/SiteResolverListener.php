@@ -2,7 +2,7 @@
 
 namespace Softspring\CmsBundle\EventListener;
 
-use Softspring\CmsBundle\Router\SiteResolver;
+use Softspring\CmsBundle\Routing\SiteResolver;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;

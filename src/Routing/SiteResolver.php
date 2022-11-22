@@ -1,6 +1,6 @@
 <?php
 
-namespace Softspring\CmsBundle\Router;
+namespace Softspring\CmsBundle\Routing;
 
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Exception\SiteHasNotACanonicalHostException;

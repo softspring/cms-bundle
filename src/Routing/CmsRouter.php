@@ -2,8 +2,6 @@
 
 namespace Softspring\CmsBundle\Routing;
 
-use Softspring\CmsBundle\Router\UrlGenerator;
-use Softspring\CmsBundle\Router\UrlMatcher;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface;
