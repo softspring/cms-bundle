@@ -15,7 +15,7 @@ class AddTranslationsPathsPass implements CompilerPassInterface
 
         foreach ($container->getParameter('sfs_cms.collections') as $collectionPath) {
             // add modules translations if exists
-            $modulesPath = $container->getParameter('kernel.project_dir') . '/' . trim($collectionPath, '/') . '/modules';
+            $modulesPath = $container->getParameter('kernel.project_dir').'/'.trim($collectionPath, '/').'/modules';
             if (!is_dir($modulesPath)) {
                 continue;
             }

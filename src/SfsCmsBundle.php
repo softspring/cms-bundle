@@ -23,7 +23,7 @@ class SfsCmsBundle extends Bundle
     {
         parent::build($container);
 
-        $basePath = realpath(__DIR__ . '/../config/doctrine-mapping/');
+        $basePath = realpath(__DIR__.'/../config/doctrine-mapping/');
 
         $this->addRegisterMappingsPass($container, ["$basePath/model" => 'Softspring\CmsBundle\Model']);
         $this->addRegisterMappingsPass($container, ["$basePath/entities" => 'Softspring\CmsBundle\Entity']);

@@ -60,7 +60,7 @@ class CmsConfig
             throw new InvalidModuleException($id, $this->modules);
         }
 
-        if (isset($this->modules[$id]) && $this->modules[$id]['enabled'] === false && $onlyEnabled) {
+        if (isset($this->modules[$id]) && false === $this->modules[$id]['enabled'] && $onlyEnabled) {
             throw new DisabledModuleException($id);
         }
 
