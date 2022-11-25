@@ -34,6 +34,7 @@ class ModuleTest extends TestCase
 
         $this->assertEquals([
             'revision' => 1,
+            'enabled' => true,
             'render_template' => '@module/module_name/render.html.twig',
             'module_type' => DynamicFormModuleType::class,
             'module_options' => [],
@@ -54,6 +55,7 @@ class ModuleTest extends TestCase
 
         $this->assertEquals([
             'revision' => 2,
+            'enabled' => true,
             'render_template' => 'other_render_file.html.twig',
             'module_type' => DynamicFormModuleType::class,
             'module_options' => [],

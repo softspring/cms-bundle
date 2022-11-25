@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Config;
 
+use Softspring\CmsBundle\Config\Exception\DisabledModuleException;
 use Softspring\CmsBundle\Config\Exception\InvalidBlockException;
 use Softspring\CmsBundle\Config\Exception\InvalidContentException;
 use Softspring\CmsBundle\Config\Exception\InvalidLayoutException;
@@ -45,18 +46,22 @@ class CmsConfig
         return $this->layouts[$id] ?? null;
     }
 
-    public function getModules(): array
+    public function getModules(bool $onlyEnabled = true): array
     {
-        return $this->modules;
+        return array_filter($this->modules, fn ($module) => !$onlyEnabled || $module['enabled']);
     }
 
     /**
      * @throws InvalidModuleException
      */
-    public function getModule(string $id, bool $required = true): ?array
+    public function getModule(string $id, bool $required = true, bool $onlyEnabled = true): ?array
     {
         if ($required && !isset($this->modules[$id])) {
             throw new InvalidModuleException($id, $this->modules);
+        }
+
+        if (isset($this->modules[$id]) && $this->modules[$id]['enabled'] === false && $onlyEnabled) {
+            throw new DisabledModuleException($id);
         }
 
         return $this->modules[$id] ?? null;
