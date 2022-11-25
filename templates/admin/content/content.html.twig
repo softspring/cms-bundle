@@ -22,7 +22,7 @@
                     <div class="col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"></div>
 
                     <div class="text-end me-3">
-                        {{ form_widget(form.layout, {'attr':{'onchange':'confirm("Si continuas se pueden eliminar datos ¿quieres continuar?") && (document.getElementById("content_content_form__ok").value = 1) && submit()'}}) }}
+                        {{ form_widget(form.layout, {'attr':{'onchange':"confirm('Si continuas se pueden eliminar datos ¿quieres continuar?') && (document.getElementById('content_content_form__ok').value = 1) && submit()"}}) }}
                     </div>
 
                     <div class="text-end me-3">
@@ -43,11 +43,12 @@
                         {% endif %}
 
                         <div class="btn-group" role="group">
-                            <button type="submit" class="btn btn-primary ms-3">{{ ('admin_'~content~'.content.actions.save.button')|trans }}</button>
+                            <button name="goto" value="content" type="submit" class="btn btn-primary ms-3">{{ ('admin_'~content~'.content.actions.save.button')|trans }}</button>
                             <button name="goto" id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                 <li>
+                                    <button class="btn btn-primary dropdown-item" name="goto" value="general">{{ ('admin_'~content~'.content.actions.save_and_exit.button')|trans }}</button>
                                     <button class="btn btn-primary dropdown-item" name="goto" value="preview">{{ ('admin_'~content~'.content.actions.save_and_preview.button')|trans }}</button>
                                     <button class="btn btn-primary dropdown-item" name="goto" value="publish">{{ ('admin_'~content~'.content.actions.save_and_publish.button')|trans }}</button>
                                 </li>
@@ -59,7 +60,10 @@
         </header>
         <main class="cms-content-main flex-fill d-flex flex-row align-items-stretch bg-light h-100">
             <div class="row h-100 w-100 mx-0">
-                <div class="col px-0">{% include layout.edit_template %}</div>
+                <div class="col px-0">
+                    {{ form_errors(form) }}
+                    {% include layout.edit_template %}
+                </div>
                 <div class="col-2 h-100 bg-white d-none" id="content-form"></div>
             </div>
         </main>

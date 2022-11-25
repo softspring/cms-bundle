@@ -369,6 +369,10 @@ class ContentController extends AbstractController
 //                    return $response;
 //                }
 
+                if ('content' == $request->request->get('goto')) {
+                    return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_content", ['content' => $entity]);
+                }
+
                 if ('preview' == $request->request->get('goto')) {
                     return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_preview", ['content' => $entity]);
                 }

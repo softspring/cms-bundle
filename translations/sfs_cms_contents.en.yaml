@@ -95,6 +95,7 @@ admin_page:
         breadcrumb: "Edit content"
         actions:
             save.button: "Save version"
+            save_and_exit.button: "Save and exit"
             save_and_preview.button: "Save and preview"
             save_and_publish.button: "Save and publish"
             cancel.button: "Cancel"
