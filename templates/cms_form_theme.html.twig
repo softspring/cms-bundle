@@ -200,7 +200,7 @@
 
 {% block dynamic_form_module_row %}
     <div class="polymorphic-node-row {{ row_class|default('') }}" {{ block('widget_container_attributes') }}>
-        <div class="cms-module">
+        <div class="cms-module {{ form.vars.deprecated?'cms-module-deprecated':'' }}">
             <div class="cms-module-header">
                 <div class="cms-module-title">
 {#                    <span class="order-polymorphic-node" id="{{ id }}_order_index">{{ form.vars.name }}</span>##}
@@ -234,11 +234,16 @@
                 <div>
                     <span class="order-polymorphic-node pe-3" id="{{ id }}_order_index">{{ form.vars.name }}</span>
                     <strong>{{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}</strong>
+                    {% if form.vars.deprecated %}<i class="bi bi-exclamation-diamond text-warning"></i>{% endif %}
                 </div>
                 {# form_name #}
                 <button type="button" class="btn-close" data-cms-module-form-close="" aria-label="Close"></button>
             </div>
             <div class="container">
+                {% if form.vars.deprecated %}
+                    <div class="alert alert-warning mt-3" role="alert">{{ form.vars.deprecated }}</div>
+                {% endif %}
+
                 {% if form.locale_filter is defined %}
                     {{ form_label(form.locale_filter) }}
                     {{ form_widget(form.locale_filter) }}
@@ -256,7 +261,7 @@
 
 {% block container_module_row %}
     <div class="polymorphic-node-row {{ row_class|default('') }}" {{ block('widget_container_attributes') }}>
-        <div class="cms-module">
+        <div class="cms-module {{ form.vars.deprecated?'cms-module-deprecated':'' }}">
             <div class="cms-module-header">
                 <div class="cms-module-title">
 {#                    <span class="order-polymorphic-node" id="{{ id }}_order_index">{{ form.vars.name }}</span>##}
@@ -290,10 +295,15 @@
                 <div>
                     <span class="order-polymorphic-node pe-3" id="{{ id }}_order_index">{{ form.vars.name }}</span>
                     <strong>{{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}</strong>
+                    {% if form.vars.deprecated %}<i class="bi bi-exclamation-diamond text-warning"></i>{% endif %}
                 </div>
                 <button type="button" class="btn-close" data-cms-module-form-close="" aria-label="Close"></button>
             </div>
             <div class="container">
+                {% if form.vars.deprecated %}
+                    <div class="alert alert-warning mt-3" role="alert">{{ form.vars.deprecated }}</div>
+                {% endif %}
+
                 {% if form.locale_filter is defined %}
                     {{ form_label(form.locale_filter) }}
                     {{ form_widget(form.locale_filter) }}
@@ -312,7 +322,7 @@
 
 {% block empty_module_row %}
     <div class="polymorphic-node-row {{ row_class|default('') }}" {{ block('widget_container_attributes') }}>
-        <div class="cms-module">
+        <div class="cms-module {{ form.vars.deprecated?'cms-module-deprecated':'' }}">
             <div class="cms-module-header">
                 <div class="cms-module-title">
 {#                    <span class="order-polymorphic-node" id="{{ id }}_order_index">{{ form.vars.name }}</span>##}
@@ -346,11 +356,16 @@
                 <div>
                     <span class="order-polymorphic-node pe-3" id="{{ id }}_order_index">{{ form.vars.name }}</span>
                     <strong>{{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}</strong>
+                    {% if form.vars.deprecated %}<i class="bi bi-exclamation-diamond text-warning"></i>{% endif %}
                 </div>
                 {# form_name #}
                 <button type="button" class="btn-close" data-cms-module-form-close="" aria-label="Close"></button>
             </div>
             <div class="container">
+                {% if form.vars.deprecated %}
+                    <div class="alert alert-warning mt-3" role="alert">{{ form.vars.deprecated }}</div>
+                {% endif %}
+
                 {% if form.locale_filter is defined %}
                     {{ form_label(form.locale_filter) }}
                     {{ form_widget(form.locale_filter) }}

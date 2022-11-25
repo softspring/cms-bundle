@@ -109,6 +109,26 @@
         }
     }
 
+    &.cms-module-deprecated {
+        border-color: rgba(var(--bs-warning-rgb), 0.5) !important;
+
+        &:hover {
+            border-color: rgba(var(--bs-warning-rgb), 0.8) !important;
+
+            .cms-module-header {
+                background-color: rgba(var(--bs-warning-rgb), 0.5) !important;
+            }
+        }
+
+        &.active {
+            border-color: rgba(var(--bs-warning-rgb), 1) !important;
+
+            .cms-module-header {
+                background-color: rgba(var(--bs-warning-rgb), 0.7) !important;
+            }
+        }
+    }
+
     .cms-module-locale-hidden {
         position: relative;
         pointer-events: none;

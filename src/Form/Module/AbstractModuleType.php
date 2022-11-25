@@ -28,6 +28,7 @@ abstract class AbstractModuleType extends AbstractNodeType
             'content_type' => null,
             'row_class' => '',
             'locale_filter' => true,
+            'deprecated' => false,
         ]);
 
         $resolver->setRequired('module_id');
@@ -41,6 +42,8 @@ abstract class AbstractModuleType extends AbstractNodeType
 
         $resolver->setDefault('edit_template', null);
         $resolver->setAllowedTypes('edit_template', ['null', 'string']);
+
+        $resolver->setAllowedTypes('deprecated', ['bool', 'string']);
     }
 
     public function buildChildView(FormView $view, FormInterface $form, array $options)
@@ -48,6 +51,7 @@ abstract class AbstractModuleType extends AbstractNodeType
         $view->vars['form_template'] = $options['form_template'];
         $view->vars['edit_template'] = $options['edit_template'];
         $view->vars['row_class'] = $options['row_class'];
+        $view->vars['deprecated'] = $options['deprecated'];
     }
 
     protected function buildChildForm(FormBuilderInterface $builder, array $options)
