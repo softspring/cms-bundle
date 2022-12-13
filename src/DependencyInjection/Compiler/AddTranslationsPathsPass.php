@@ -20,7 +20,7 @@ class AddTranslationsPathsPass implements CompilerPassInterface
                 continue;
             }
 
-            foreach ((new Finder())->directories()->in("$modulesPath/*")->name('translations') as $transDirectory) {
+            foreach ((new Finder())->directories()->in("$modulesPath")->in('*')->name('translations') as $transDirectory) {
                 foreach ((new Finder())->in($transDirectory->getRealPath())->files() as $file) {
                     $fileNameParts = explode('.', $file->getBasename());
                     $format = array_pop($fileNameParts);
