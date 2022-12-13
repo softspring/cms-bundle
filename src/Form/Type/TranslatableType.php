@@ -51,6 +51,7 @@ class TranslatableType extends AbstractType
             $builder->add($lang, $this->getFieldType($options['type']), [
                 'required' => $lang == $options['default_language'],
                 'label' => $lang,
+                'translation_domain' => false,
                 'block_prefix' => 'translatable_element',
             ] + $options['type_options']
             + [
