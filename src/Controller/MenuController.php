@@ -46,7 +46,7 @@ class MenuController extends AbstractController
 
             return $response;
         } catch (\Exception $e) {
-            $this->cmsLogger && $this->cmsLogger->critical(sprintf('Error rendering menu %s', $type));
+            $this->cmsLogger && $this->cmsLogger->critical(sprintf('Error rendering menu %s: %s', $type, $e->getMessage()));
 
             return new Response('<!-- error rendering menu, see logs -->');
         }
