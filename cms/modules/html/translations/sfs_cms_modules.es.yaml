@@ -1,0 +1,10 @@
+html:
+    label: "Código HTML"
+    prototype_button: "Código HTML"
+    prototype_button_icon: '<i class="bi bi-code-square"></i>'
+    form:
+        locale_filter.label: "Idiomas"
+        id.label: "Id"
+        code:
+            label: "Código"
+            placeholder: "inserta el HTML"

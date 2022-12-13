@@ -1,0 +1,10 @@
+grid:
+    label: "Grid"
+    prototype_button: "Grid"
+    prototype_button_icon: '<i class="bi bi-layout-three-columns"></i>'
+    form:
+        locale_filter.label: "Locales"
+        modules.label: "Modules"
+        id.label: "Id"
+        class.label: "Classes"
+        bg_color.label: "Background color"

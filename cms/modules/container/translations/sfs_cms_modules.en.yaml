@@ -1,0 +1,10 @@
+container:
+    label: "Container"
+    prototype_button: "Container"
+    prototype_button_icon: '<i class="bi bi-square"></i>'
+    form:
+        locale_filter.label: "Locales"
+        modules.label: "Modules"
+        id.label: "Id"
+        class.label: "Classes"
+        bg_color.label: "Background color"

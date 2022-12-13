@@ -1,0 +1,9 @@
+html_headers:
+    label: "Cabeceras HTML"
+    prototype_button: "Cabeceras HTML"
+    prototype_button_icon: '<i class="bi bi-code-slash"></i>'
+    form:
+        locale_filter.label: "Idiomas"
+        code:
+            label: "Código"
+            preview.placeholder: "<inserta aquí tus meta tags/>"

@@ -1,0 +1,7 @@
+css:
+    label: "CSS code"
+    prototype_button: "CSS code"
+    prototype_button_icon: '<i class="bi bi-filetype-css"></i>'
+    form:
+        locale_filter.label: "Locales"
+        css.label: "CSS styles"

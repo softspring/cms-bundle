@@ -1,0 +1,11 @@
+html_translatable:
+    label: "Código HTML traducible"
+    prototype_button: "HTML traducible"
+    prototype_button_icon: '<i class="bi bi-translate"></i>'
+    form:
+        locale_filter.label: "Idiomas"
+        id.label: "Id"
+        code:
+            label: "Código"
+            preview.placeholder: "inserta el HTML"
+        class.label: "Clases"
