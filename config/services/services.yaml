@@ -15,7 +15,7 @@ services:
             $siteConfig: '%sfs_cms.site_config%'
             $profiler: '@?profiler'
             $transformers: !tagged_iterator { tag: sfs_cms.data_transformer, default_priority_method: getPriority }
-            $cmsLogger: '@monolog.logger.cms'
+            $cmsLogger: '@?monolog.logger.cms'
 
     Softspring\CmsBundle\Config\CmsConfig:
         arguments:
