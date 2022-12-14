@@ -6,7 +6,7 @@
         <td class="p-3">{{ entity.site|default('')|sfs_cms_site_name }}</td>
         <td class="p-3">{{ entity.publishedVersion ? entity.publishedVersion.createdAt|date('H:i d-m-Y') : 'no' }}</td>
         <td class="p-3 text-end">
-            <a href="{{ url('sfs_cms_admin_content_'~content~'_details', {'content':entity}) }}">{{ ('admin_'~content~'.list.actions.details.link')|trans }}</a>
+            <a href="{{ url('sfs_cms_admin_content_'~content~'_details', {'content':entity}) }}" class="ms-2 text-nowrap">{{ ('admin_'~content~'.list.actions.details.link')|trans }} <span class="bi bi-eye"></span></a>
         </td>
     </tr>
 {% endfor %}

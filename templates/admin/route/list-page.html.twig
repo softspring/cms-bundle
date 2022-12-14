@@ -22,7 +22,7 @@
             {% endif %}
         </td>
         <td class="p-3 text-end">
-            <a href="{{ url('sfs_cms_admin_routes_update', {'route':route}) }}">{{ 'admin_routes.list.actions.update.link'|trans }}</a>
+            <a href="{{ url('sfs_cms_admin_routes_update', {'route':route}) }}" class="ms-2 text-nowrap">{{ 'admin_routes.list.actions.update.link'|trans }} <span class="bi bi-pencil"></span></a>
         </td>
     </tr>
 {% endfor %}

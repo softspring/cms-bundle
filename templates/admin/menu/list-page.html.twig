@@ -6,7 +6,7 @@
         <td class="p-3">{{ menu.name|default('') }}</td>
         <td class="p-3">{{ menu.type }}</td>
         <td class="p-3 text-end">
-            <a href="{{ url('sfs_cms_admin_menus_update', {'menu':menu}) }}">{{ 'admin_menus.list.actions.update.link'|trans }}</a>
+            <a href="{{ url('sfs_cms_admin_menus_update', {'menu':menu}) }}" class="ms-2 text-nowrap">{{ 'admin_menus.list.actions.update.link'|trans }} <span class="bi bi-pencil"></span></a>
         </td>
     </tr>
 

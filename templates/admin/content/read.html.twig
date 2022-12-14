@@ -94,12 +94,12 @@
 {#                            <td>{{ loop.index0 == 0 ? 'publicada' : '' }}</td>#}
                             <td>{{ version.published ? 'publicada' : '' }}</td>
                             <td>
-                                <a href="{{ url('sfs_cms_admin_content_'~content~'_content_from_version', {'content':entity, 'prevVersion':version}) }}">edit</a>
-                                <a href="{{ url('sfs_cms_admin_content_'~content~'_preview_version', {'content':entity, 'version':version}) }}">preview</a>
-                                <a href="{{ url('sfs_cms_admin_content_'~content~'_export_version', {'content':entity, 'version':version}) }}">export</a>
+                                <a href="{{ url('sfs_cms_admin_content_'~content~'_content_from_version', {'content':entity, 'prevVersion':version}) }}" class="ms-2 text-nowrap">{{ ('admin_'~content~'.versions.actions.edit.link')|trans }} <span class="bi bi-pencil"></span></a>
+                                <a href="{{ url('sfs_cms_admin_content_'~content~'_preview_version', {'content':entity, 'version':version}) }}" class="ms-2 text-nowrap">{{ ('admin_'~content~'.versions.actions.preview.link')|trans }} <span class="bi bi-eye"></span></a>
+                                <a href="{{ url('sfs_cms_admin_content_'~content~'_export_version', {'content':entity, 'version':version}) }}" class="ms-2 text-nowrap">{{ ('admin_'~content~'.versions.actions.export.link')|trans }} <span class="bi bi-box-arrow-down"></span></a>
 
                                 {% if not version.published %}
-                                    <a href="{{ url('sfs_cms_admin_content_'~content~'_publish_version', {'content':entity, 'version':version}) }}">publish version</a>
+                                    <a href="{{ url('sfs_cms_admin_content_'~content~'_publish_version', {'content':entity, 'version':version}) }}" class="ms-2 text-nowrap">{{ ('admin_'~content~'.versions.actions.publish.link')|trans }} <span class="bi bi-file-earmark-arrow-up"></span></a>
                                 {% endif %}
                             </td>
                         </tr>

@@ -49,14 +49,13 @@ admin_page:
             2: "fixture"
             3: "cargada"
         actions:
-            edit.link: "editar"
-            preview.link: "previsualizar"
-            export.link: "exportar"
-            publish.link: "publicar versión"
+            edit.link: "Editar"
+            preview.link: "Previsualizar"
+            export.link: "Exportar"
+            publish.link: "Publicar versión"
             cleanup_versions.link: "Limpiar versiones"
             keep.link: "Mantener versión, pinchar para desmarcar"
             nokeep.link: "No mantener esta versión, pinchar para mantener"
-
     preview:
         meta.title: "Previsualizar página"
         title: "%name%"
@@ -119,6 +118,7 @@ admin_page:
         name.label: "Nombre"
         site.label: "Site"
         routes:
+            0.label: ""
             label: "Rutas"
             id.label: "Identificador"
             site.label: "Site"
