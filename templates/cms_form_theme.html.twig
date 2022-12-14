@@ -86,7 +86,7 @@
     <div class="input-group mb-3">
         <div {{ block('widget_container_attributes') }} class="row">
             {%- for child in form %}
-                <div class="col-3">
+                <div class="col">
                     {{- form_widget(child, {'attr': {'data-cms-module-locale-filter':''}}) -}}
                     {{- form_label(child, null, {translation_domain: choice_translation_domain}) -}}
                 </div>
