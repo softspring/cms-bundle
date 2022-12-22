@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 class ContentZipFileValidator extends FileValidator
 {
     /**
-     * @param UploadedFile $value
+     * @param UploadedFile|string|null $value
      */
     public function validate($value, Constraint $constraint): void
     {

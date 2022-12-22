@@ -10,7 +10,7 @@ interface MenuManagerInterface extends CrudlEntityManagerInterface
     /**
      * @return MenuInterface
      */
-    public function createEntity(): object;
+    public function createEntity(string $menuType = null): object;
 
     /**
      * @param MenuInterface $entity

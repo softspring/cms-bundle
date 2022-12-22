@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\Collection;
 
 class Menu implements MenuInterface
 {
+    protected ?string $id;
+
     protected ?string $name = null;
 
     protected ?string $type = null;
@@ -17,6 +19,16 @@ class Menu implements MenuInterface
     public function __construct()
     {
         $this->items = new ArrayCollection();
+    }
+
+    public function getId(): ?string
+    {
+        return $this->id;
+    }
+
+    public function __toString(): string
+    {
+        return ''.$this->getId();
     }
 
     public function getName(): ?string

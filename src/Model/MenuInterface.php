@@ -6,6 +6,8 @@ use Doctrine\Common\Collections\Collection;
 
 interface MenuInterface
 {
+    public function getId();
+
     public function setType(string $type): void;
 
     public function getType(): ?string;

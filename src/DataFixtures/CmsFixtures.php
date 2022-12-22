@@ -6,12 +6,6 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 use Softspring\CmsBundle\Data\DataImporter;
-use Softspring\CmsBundle\Manager\BlockManagerInterface;
-use Softspring\CmsBundle\Manager\ContentManagerInterface;
-use Softspring\CmsBundle\Manager\MenuItemManagerInterface;
-use Softspring\CmsBundle\Manager\MenuManagerInterface;
-use Softspring\CmsBundle\Manager\RouteManagerInterface;
-use Softspring\CmsBundle\Manager\RoutePathManagerInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Finder\Finder;
@@ -23,7 +17,7 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
     protected DataImporter $dataImporter;
     protected string $fixturesPath;
 
-    public function __construct(ContainerInterface $container, DataImporter $dataImporter, ContentManagerInterface $contentManager, RouteManagerInterface $routeManager, RoutePathManagerInterface $routePathManager, MenuManagerInterface $menuManager, MenuItemManagerInterface $menuItemManager, BlockManagerInterface $blockManager)
+    public function __construct(ContainerInterface $container, DataImporter $dataImporter)
     {
         $this->container = $container;
         $this->dataImporter = $dataImporter;

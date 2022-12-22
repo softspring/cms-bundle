@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Form\Admin;
 
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Form\Module\ModuleCollectionType;
+use Softspring\CmsBundle\Utils\Hash;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -35,7 +36,7 @@ class LayoutContentType extends AbstractType
                 'content_type' => $options['content_type'],
                 'allowed_modules' => !empty($containerConfig['allowed_modules']) ? $containerConfig['allowed_modules'] : null,
                 // random prototype name to allow multiple levels
-                'prototype_name' => '__'.substr(sha1(rand(0, 10000000000)), rand(0, 10), 8).'__',
+                'prototype_name' => '__'.Hash::generate().'__',
                 'module_collection_class' => 'container-fluid',
                 'module_row_class' => 'row',
             ]);

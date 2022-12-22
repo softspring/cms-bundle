@@ -37,6 +37,6 @@ class BlockListener implements EventSubscriberInterface
     {
         /** @var BlockInterface $entity */
         $entity = $event->getEntity();
-        $entity->setKey($event->getRequest()->attributes->get('type'));
+        // $entity->setKey($event->getRequest()->attributes->get('type'));
     }
 }

@@ -21,7 +21,7 @@ class ContentController extends AbstractController
     public function renderRoutePath(RoutePathInterface $routePath, Request $request): Response
     {
         $content = $routePath->getRoute()->getContent();
-        /** @var ContentVersionInterface $publishedVersion */
+        /** @var ?ContentVersionInterface $publishedVersion */
         $publishedVersion = $content->getPublishedVersion();
 
         if (!$publishedVersion) {

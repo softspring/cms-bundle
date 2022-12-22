@@ -14,6 +14,11 @@ abstract class RoutePath implements RoutePathInterface
 
     protected ?string $locale = null;
 
+    public function getId(): ?string
+    {
+        return $this->id;
+    }
+
     public function getRoute(): ?RouteInterface
     {
         return $this->route;

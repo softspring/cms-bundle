@@ -104,8 +104,8 @@ class MenuController extends AbstractController
     public function delete(string $menu, Request $request): Response
     {
 //        $config = $this->getMenuConfig($request);
-//
-//        return new Response();
+
+        return new Response();
     }
 
     public function list(Request $request): Response

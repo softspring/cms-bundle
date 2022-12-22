@@ -10,6 +10,8 @@ interface MenuItemInterface
     public const TYPE_ROUTE = 1;
     public const TYPE_SUBMENU = 2;
 
+    public function getId();
+
     public function setMenu(?MenuInterface $menu): void;
 
     public function getMenu(): ?MenuInterface;

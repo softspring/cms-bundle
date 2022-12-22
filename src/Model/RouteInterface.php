@@ -12,7 +12,7 @@ interface RouteInterface
     public const TYPE_REDIRECT_TO_URL = 3;
     public const TYPE_PARENT_ROUTE = 4;
 
-    public function getId(): ?string;
+    public function getId();
 
     public function setId(?string $id): void;
 

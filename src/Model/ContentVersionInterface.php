@@ -9,7 +9,7 @@ interface ContentVersionInterface
     public const ORIGIN_FIXTURE = 2;
     public const ORIGIN_IMPORT = 3;
 
-    public function getId(): ?string;
+    public function getId();
 
     public function getContent(): ?ContentInterface;
 

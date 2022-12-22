@@ -101,7 +101,7 @@ class ZipContent
         $response = new Response(file_get_contents($zipName));
         $response->headers->set('Content-Type', 'application/zip');
         $response->headers->set('Content-Disposition', 'attachment;filename="'.$zipName.'"');
-        $response->headers->set('Content-length', filesize($zipName));
+        $response->headers->set('Content-length', (string) filesize($zipName));
 
         $deleteAfterResponse && @unlink($zipName);
 

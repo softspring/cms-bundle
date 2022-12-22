@@ -34,7 +34,7 @@ class SitemapController extends AbstractController
         $urls = [];
 
         /** @var ContentInterface $content */
-        foreach ($this->em->getRepository(ContentInterface::class)->findBySite($site) as $content) {
+        foreach ($this->em->getRepository(ContentInterface::class)->findBy(['site' => $site]) as $content) {
             if (!$content->getPublishedVersion()) {
                 continue;
             }

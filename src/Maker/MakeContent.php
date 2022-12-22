@@ -7,14 +7,10 @@ use Doctrine\Inflector\InflectorFactory;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\DependencyBuilder;
 use Symfony\Bundle\MakerBundle\Doctrine\DoctrineHelper;
-use Symfony\Bundle\MakerBundle\Doctrine\EntityClassGenerator;
-use Symfony\Bundle\MakerBundle\FileManager;
 use Symfony\Bundle\MakerBundle\Generator;
 use Symfony\Bundle\MakerBundle\InputConfiguration;
 use Symfony\Bundle\MakerBundle\Maker\AbstractMaker;
-use Symfony\Bundle\MakerBundle\Renderer\FormTypeRenderer;
 use Symfony\Bundle\MakerBundle\Str;
-use Symfony\Bundle\MakerBundle\Validator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -27,17 +23,11 @@ class MakeContent extends AbstractMaker
     protected string $entityClassName;
 
     private DoctrineHelper $doctrineHelper;
-    private FormTypeRenderer $formTypeRenderer;
-    private FileManager $fileManager;
-    private EntityClassGenerator $entityClassGenerator;
     private ?Inflector $inflector;
 
-    public function __construct(DoctrineHelper $doctrineHelper, FormTypeRenderer $formTypeRenderer, FileManager $fileManager, EntityClassGenerator $entityClassGenerator)
+    public function __construct(DoctrineHelper $doctrineHelper)
     {
         $this->doctrineHelper = $doctrineHelper;
-        $this->formTypeRenderer = $formTypeRenderer;
-        $this->fileManager = $fileManager;
-        $this->entityClassGenerator = $entityClassGenerator;
 
         if (class_exists(InflectorFactory::class)) {
             $this->inflector = InflectorFactory::create()->build();

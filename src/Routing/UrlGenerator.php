@@ -5,7 +5,6 @@ namespace Softspring\CmsBundle\Routing;
 use Psr\Log\LoggerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
-use Softspring\CmsBundle\Model\Route;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Model\RoutePathInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -98,7 +97,7 @@ class UrlGenerator
     }
 
     /**
-     * @param string|RouteInterface $routeOrName
+     * @param string|RouteInterface|array $routeOrName
      *
      * @throws \Exception
      */
@@ -134,13 +133,15 @@ class UrlGenerator
         return implode(' ', $attrs);
     }
 
-    protected function getRoutePath(Route $route, ?string $locale = null): string
+    protected function getRoutePath(RouteInterface $route, ?string $locale = null): string
     {
         $locale = $locale ?: $this->requestStack->getCurrentRequest()->getLocale();
 
         /* @var RoutePathInterface $path */
         if ($locale) {
             $path = $route->getPaths()->filter(fn (RoutePathInterface $routePath) => $routePath->getLocale() == $locale)->first();
+        } else {
+            $path = null;
         }
 
         $path = $path ?: $route->getPaths()->first();

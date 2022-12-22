@@ -2,7 +2,7 @@
 
 namespace Softspring\CmsBundle\Controller;
 
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Manager\BlockManagerInterface;
 use Softspring\CmsBundle\Model\BlockInterface;
@@ -14,9 +14,9 @@ class BlockController extends AbstractController
 {
     protected CmsConfig $cmsConfig;
     protected BlockManagerInterface $blockManager;
-    protected ?Logger $cmsLogger;
+    protected ?LoggerInterface $cmsLogger;
 
-    public function __construct(CmsConfig $cmsConfig, BlockManagerInterface $blockManager, ?Logger $cmsLogger)
+    public function __construct(CmsConfig $cmsConfig, BlockManagerInterface $blockManager, ?LoggerInterface $cmsLogger)
     {
         $this->cmsConfig = $cmsConfig;
         $this->blockManager = $blockManager;
@@ -60,7 +60,7 @@ class BlockController extends AbstractController
     public function renderById(string $id, Request $request): Response
     {
         try {
-            /** @var BlockInterface $block */
+            /** @var ?BlockInterface $block */
             $block = $this->blockManager->getRepository()->findOneById($id);
 
             if (!$block) {

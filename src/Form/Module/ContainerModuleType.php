@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Form\Module;
 
+use Softspring\CmsBundle\Utils\Hash;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -41,7 +42,7 @@ class ContainerModuleType extends DynamicFormModuleType
             'module_row_class' => $options['module_row_class'],
             'compatible_contents' => [],
             // random prototype name to allow multiple levels
-            'prototype_name' => '__'.substr(sha1(rand(0, 10000000000)), rand(0, 10), 8).'__',
+            'prototype_name' => '__'.Hash::generate().'__',
         ]);
     }
 }

@@ -14,7 +14,6 @@ use Softspring\Component\CrudlController\Event\FilterEvent;
 use Softspring\Component\Events\DispatchGetResponseTrait;
 use Softspring\Component\Events\ViewEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -106,7 +105,7 @@ class BlockController extends AbstractController
     {
 //        $config = $this->getBlockConfig($request);
 //
-//        return new Response();
+        return new Response();
     }
 
     public function list(Request $request): Response
@@ -144,7 +143,7 @@ class BlockController extends AbstractController
         // show view
         $viewData = new \ArrayObject([
             'entities' => $entities, // @deprecated
-            'filterForm' => $form instanceof FormInterface ? $form->createView() : null,
+            'filterForm' => $form->createView(),
             'config' => $this->cmsConfig->getBlocks(),
         ]);
 

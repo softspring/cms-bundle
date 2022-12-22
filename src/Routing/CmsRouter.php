@@ -60,7 +60,7 @@ class CmsRouter implements RouterInterface, RequestMatcherInterface, WarmableInt
 
                 case UrlGeneratorInterface::NETWORK_PATH:
                     $url = $this->urlGenerator->getUrl($name, $parameters['_locale'] ?? '');
-                    $url = preg_replace('/^(https?)', '', $url);
+                    $url = preg_replace('/^(https?)/', '', $url);
                     break;
 
                 default:
@@ -92,8 +92,8 @@ class CmsRouter implements RouterInterface, RequestMatcherInterface, WarmableInt
         return Router::getSubscribedServices();
     }
 
-    public function warmUp(string $cacheDir)
+    public function warmUp(string $cacheDir): array
     {
-        $this->staticRouter->warmUp($cacheDir);
+        return $this->staticRouter->warmUp($cacheDir);
     }
 }

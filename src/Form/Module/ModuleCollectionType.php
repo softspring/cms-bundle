@@ -7,6 +7,7 @@ use Softspring\CmsBundle\Form\Traits\DataMapperTrait;
 use Softspring\Component\PolymorphicFormType\Form\DataTransformer\NodeDataTransformer;
 use Softspring\Component\PolymorphicFormType\Form\Discriminator\NodeDiscriminator;
 use Softspring\Component\PolymorphicFormType\Form\EventListener\NodesResizeFormListener;
+use Softspring\Component\PolymorphicFormType\Form\Type\Node\AbstractNodeType;
 use Softspring\Component\PolymorphicFormType\Form\Type\PolymorphicCollectionType;
 use Symfony\Component\Form\DataMapperInterface;
 use Symfony\Component\Form\Exception\InvalidConfigurationException;
@@ -21,7 +22,6 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
 {
     use DataMapperTrait;
 
-    protected FormFactory $formFactory;
     protected CmsConfig $cmsConfig;
 
     public function __construct(FormFactory $formFactory, CmsConfig $cmsConfig)

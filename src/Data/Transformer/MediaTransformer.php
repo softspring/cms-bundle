@@ -33,6 +33,7 @@ class MediaTransformer extends AbstractDataTransformer implements DataTransforme
     public function export(object $element, &$files = []): array
     {
         // TODO: Implement export() method.
+        return [];
     }
 
     public function preload(array $data, ReferencesRepository $referencesRepository): void

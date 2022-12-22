@@ -2,7 +2,7 @@
 
 namespace Softspring\CmsBundle\Controller;
 
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Manager\MenuManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,9 +13,9 @@ class MenuController extends AbstractController
 {
     protected CmsConfig $cmsConfig;
     protected MenuManagerInterface $menuManager;
-    protected ?Logger $cmsLogger;
+    protected ?LoggerInterface $cmsLogger;
 
-    public function __construct(CmsConfig $cmsConfig, MenuManagerInterface $menuManager, ?Logger $cmsLogger)
+    public function __construct(CmsConfig $cmsConfig, MenuManagerInterface $menuManager, ?LoggerInterface $cmsLogger)
     {
         $this->cmsConfig = $cmsConfig;
         $this->menuManager = $menuManager;

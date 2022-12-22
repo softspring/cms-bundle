@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Controller\Admin;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Jhg\DoctrinePagination\ORM\PaginatedRepositoryInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Data\DataExporter;
@@ -30,6 +31,8 @@ class ContentController extends AbstractController
 {
     use DispatchGetResponseTrait;
 
+    protected EntityManagerInterface $em;
+
     protected ContentManagerInterface $contentManager;
     protected RouteManagerInterface $routeManager;
     protected ContentRender $contentRender;
@@ -40,8 +43,9 @@ class ContentController extends AbstractController
     protected DataExporter $dataExporter;
     protected ?WebDebugToolbarListener $webDebugToolbarListener;
 
-    public function __construct(ContentManagerInterface $contentManager, RouteManagerInterface $routeManager, ContentRender $contentRender, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, array $enabledLocales, DataImporter $dataImporter, DataExporter $dataExporter, ?WebDebugToolbarListener $webDebugToolbarListener)
+    public function __construct(EntityManagerInterface $em, ContentManagerInterface $contentManager, RouteManagerInterface $routeManager, ContentRender $contentRender, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, array $enabledLocales, DataImporter $dataImporter, DataExporter $dataExporter, ?WebDebugToolbarListener $webDebugToolbarListener)
     {
+        $this->em = $em;
         $this->contentManager = $contentManager;
         $this->routeManager = $routeManager;
         $this->contentRender = $contentRender;
@@ -320,7 +324,7 @@ class ContentController extends AbstractController
         $config = $this->getContentConfig($request);
         $config = $config['admin'] + ['_id' => $config['_id']];
 
-        /** @var ContentInterface $entity */
+        /** @var ?ContentInterface $entity */
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
 //        if (!empty($config['is_granted'])) {
@@ -345,8 +349,10 @@ class ContentController extends AbstractController
 
         $version = $this->contentManager->createVersion($entity, $prevVersion, ContentVersionInterface::ORIGIN_EDIT);
 
-        if ($request->request->get('content_content_form')) {
-            $version->setLayout($request->request->get('content_content_form')['layout']);
+        /** @var ?array $contentContentForm */
+        $contentContentForm = $request->request->get('content_content_form');
+        if ($contentContentForm) {
+            $version->setLayout($contentContentForm['layout']);
         }
 
         $form = $this->createForm($config['content_type'], $version, [
@@ -502,7 +508,7 @@ class ContentController extends AbstractController
         $config = $this->getContentConfig($request);
         $config = $config['admin'] + ['_id' => $config['_id']];
 
-        /** @var ContentInterface $entity */
+        /** @var ?ContentInterface $entity */
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
         if (!$entity) {
@@ -596,7 +602,7 @@ class ContentController extends AbstractController
         $config = $this->getContentConfig($request);
         $config = $config['admin'] + ['_id' => $config['_id']];
 
-        /** @var ContentInterface $entity */
+        /** @var ?ContentInterface $entity */
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
 //        if (!empty($config['is_granted'])) {
@@ -613,7 +619,7 @@ class ContentController extends AbstractController
         foreach ($entity->getVersions() as $version) {
             if ($version->deleteOnCleanup()) {
                 $entity->removeVersion($version); // TODO THIS SHOULD REMOVE VERSIONS
-                $this->getDoctrine()->getManager()->remove($version);
+                $this->em->remove($version);
             }
         }
         $this->contentManager->saveEntity($entity);
@@ -637,7 +643,7 @@ class ContentController extends AbstractController
         /** @var ContentVersionInterface $version */
         $version = $entity->getVersions()->filter(fn (ContentVersionInterface $versionI) => $versionI->getId() == $version)->first();
         $version->setKeep($keep);
-        $this->getDoctrine()->getManager()->flush();
+        $this->em->flush();
 
         return $this->redirectBack($config['_id'], $entity, $request);
     }

@@ -10,7 +10,7 @@ interface BlockManagerInterface extends CrudlEntityManagerInterface
     /**
      * @return BlockInterface
      */
-    public function createEntity(): object;
+    public function createEntity(string $blockType = null): object;
 
     /**
      * @param BlockInterface $entity

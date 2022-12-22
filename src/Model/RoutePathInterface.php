@@ -6,6 +6,8 @@ interface RoutePathInterface
 {
     public const TYPE_REDIRECT_TO_CANONICAL = 1;
 
+    public function getId();
+
     public function getRoute(): ?RouteInterface;
 
     public function setRoute(?RouteInterface $route): void;

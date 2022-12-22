@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\Collection;
 
 interface ContentInterface
 {
-    public function getId(): ?string;
+    public function getId();
 
     public function getName(): ?string;
 

@@ -45,7 +45,7 @@ abstract class ContentTransformer extends AbstractDataTransformer implements Con
             throw new InvalidElementException(sprintf('%s dumper requires that $element to be an instance of %s, %s given.', get_called_class(), ContentInterface::class, get_class($element)));
         }
         if (!$contentVersion instanceof ContentVersionInterface) {
-            throw new InvalidElementException(sprintf('%s dumper requires that $contentVersion to be an instance of %s, %s given.', get_called_class(), ContentVersionInterface::class, get_class($content)));
+            throw new InvalidElementException(sprintf('%s dumper requires that $contentVersion to be an instance of %s, %s given.', get_called_class(), ContentVersionInterface::class, get_class($element)));
         }
         if (!$contentType) {
             throw new InvalidElementException(sprintf('%s dumper requires $contentType', get_called_class()));
@@ -140,6 +140,8 @@ abstract class ContentTransformer extends AbstractDataTransformer implements Con
                             $entity = $this->routeManager->getRepository()->findOneById(substr($value['_reference'], 8));
                         } elseif ('media___' === substr($value['_reference'], 0, 8)) {
                             $entity = $this->mediaManager->getRepository()->findOneById(substr($value['_reference'], 8));
+                        } else {
+                            $entity = null;
                         }
 
                         if (!$entity) {
