@@ -10,6 +10,7 @@
         "ext-json": "*",
         "ext-zip": "*",
         "doctrine/doctrine-bundle": "^2.6",
+        "doctrine/collections": "^2.0",
         "doctrine/orm": "^2.14",
         "sensio/framework-extra-bundle": "^5.4|^6.0",
         "softspring/crudl-controller": "^5.0",
