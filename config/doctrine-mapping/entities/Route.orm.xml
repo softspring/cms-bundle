@@ -8,7 +8,7 @@
         <cache usage="NONSTRICT_READ_WRITE" region="default" />
         <id name="id" type="string" column="id"/>
 
-        <one-to-many field="paths" target-entity="Softspring\CmsBundle\Model\RoutePathInterface" mapped-by="route">
+        <one-to-many field="paths" target-entity="Softspring\CmsBundle\Model\RoutePathInterface" mapped-by="route" orphan-removal="true">
             <cascade>
                 <cascade-persist/>
             </cascade>

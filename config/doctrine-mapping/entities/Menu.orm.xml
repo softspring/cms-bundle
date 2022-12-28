@@ -12,7 +12,7 @@
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
 
-        <one-to-many field="items" target-entity="Softspring\CmsBundle\Model\MenuItemInterface" mapped-by="menu">
+        <one-to-many field="items" target-entity="Softspring\CmsBundle\Model\MenuItemInterface" mapped-by="menu" orphan-removal="true">
             <cascade>
                 <cascade-persist/>
             </cascade>
