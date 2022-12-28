@@ -18,12 +18,18 @@
             <div class="row">
                 <div class="col">{{ form_row(form.name) }}</div>
             </div>
+            <div class="row">
+                <div class="col">{{ form_row(form.items) }}</div>
+            </div>
 
             {{ form_rest(form) }}
+            {{ form_errors(form) }}
 
             <div class="d-flex justify-content-end align-items-center">
-                <a href="{{ url('sfs_cms_admin_menus_list') }}" class="btn btn-outline-secondary">{{ 'admin_menus.create.actions.cancel.button'|trans }}</a>
-                <button type="submit" class="btn btn-primary ms-3">{{ 'admin_menus.create.actions.create.button'|trans }}</button>
+                <a href="{{ url('sfs_cms_admin_menus_list') }}"
+                   class="btn btn-outline-secondary">{{ 'admin_menus.create.actions.cancel.button'|trans }}</a>
+                <button type="submit"
+                        class="btn btn-primary ms-3">{{ 'admin_menus.create.actions.create.button'|trans }}</button>
             </div>
         {{ form_end(form) }}
     </div>
