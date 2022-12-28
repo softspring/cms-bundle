@@ -6,7 +6,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Softspring\CmsBundle\Form\Type\SymfonyRouteType;
 use Softspring\CmsBundle\Form\Type\TranslatableTextType;
 use Softspring\CmsBundle\Manager\MenuItemManagerInterface;
-use Softspring\CmsBundle\Model\MenuItemInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -26,8 +25,7 @@ class MenuItemType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => MenuItemInterface::class,
-            'empty_data' => $this->menuItemManager->createEntity(),
+            'data_class' => $this->menuItemManager->getEntityClass(),
             'label_format' => 'admin_menus.form.items.%name%.label',
             'translation_domain' => 'sfs_cms_admin',
         ]);
