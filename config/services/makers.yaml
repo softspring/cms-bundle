@@ -5,9 +5,9 @@ services:
         public: false
         bind:
             $doctrineHelper: '@maker.doctrine_helper'
-            $formTypeRenderer: '@maker.renderer.form_type_renderer'
-            $fileManager: '@maker.file_manager'
-            $entityClassGenerator: '@maker.entity_class_generator'
+#            $formTypeRenderer: '@maker.renderer.form_type_renderer'
+#            $fileManager: '@maker.file_manager'
+#            $entityClassGenerator: '@maker.entity_class_generator'
 
 #    Softspring\CmsBundle\Maker\:
 #        resource: '../../src/Maker/*'
