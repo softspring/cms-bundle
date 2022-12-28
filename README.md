@@ -24,7 +24,7 @@
 - 11- Using medias
 - 12- Caching
 - 13- Logging
-- 14- Extend with collections
+- [14. Extend with collections](docs/14_collections.md)
 
 ## License
 
