@@ -110,6 +110,11 @@ Remember that if it can contain images or videos:
 
 In some cases, you want to add some attributes for the *sfs_media_render_image* or *sfs_media_render_video* twig filters.
 
+There are several options to set them up, depending on the rendered type: *image_attr*, *video_attr*, *picture_attr*. Also
+ a common options is available: *media_attr*.
+
+The *media_attr* is appened to the other specific *\*_attr* options, so is a shared option.
+
 The config file would be as follows:
 
 ```yaml
@@ -121,19 +126,25 @@ module:
                 type: 'media'
                 type_options:
                     media_attr:
+                        class: 'col'
+                    image_attr:
                         class: 'img-fluid'
+                    video_attr:
+                        controls: true
 ```
 
-You need to include this media_attr in the twig templates:
+> *Keep in mind that specific option values (image_attr, video_attr, picture_attr) overrides the media_attr ones.*
+
+You need to include those *\*_attr* options in the twig templates:
 
 ```twig
 {# cms/modules/example/edit.html.twig #}
 <div data-media-preview-target="exampleMedia">
     {% if form.media_field.vars.data|default(false) %}
         {% if form.media_field.vars.data.isImage() %}
-            {{ form.media_field.vars.data|sfs_media_render_image('sm', form.media_field.vars.media_attr) }}
+            {{ form.media_field.vars.data|sfs_media_render_image('sm', form.media_field.vars.image_attr) }} 
         {% elseif form.media_field.vars.data.isVideo() %}
-            {{ form.media_field.vars.data|sfs_media_render_video('_original', form.media_field.vars.media_attr) }}
+            {{ form.media_field.vars.data|sfs_media_render_video('_original', form.media_field.vars.video_attr) }}
         {% endif %}
     {% endif %}
 </div>
@@ -144,10 +155,38 @@ In the render template you can access to the module configuration with the **_co
 ```twig
 {# cms/modules/example/render.html.twig #}
 {% if media_field.isImage() %}
-    {{ media_field|sfs_media_render_image('sm', _config.module_options.form_fields.media.type_options.media_attr) }}
+    {{ media_field|sfs_media_render_image('sm', _config.module_options.form_fields.media.type_options.image_attr) }}
 {% elseif media_field.isVideo() %}
-    {{ media_field|sfs_media_render_video('_original', _config.module_options.form_fields.media.type_options.media_attr) }}
+    {{ media_field|sfs_media_render_video('_original', _config.module_options.form_fields.media.type_options.video_attr) }}
 {% endif %}
+```
+
+### Working with videos
+
+Usually, you will want to configure *\<video\>* tag attributes such as *autoplay* or *controls*. (View video [tag documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video) for all atributes).
+
+This is a common configuration for those attributes:
+
+```yaml
+# cms/modules/example/config.yaml
+module:
+    module_options:
+        form_fields:
+            media_field:
+                type: 'media'
+                type_options:
+                    video_attr:
+                        autoplay: ''
+                        loop: ''
+                        muted: ''
+                        playsinline: ''
+                        controls: ''
+```
+
+This will render this tag:
+
+```html
+<video autoplay="" loop="" muted="" playsinline="" controls="" src="..."></video>
 ```
 
 ## Field Options
