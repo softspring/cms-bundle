@@ -3,7 +3,6 @@
 namespace Softspring\CmsBundle\Controller\Admin;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Jhg\DoctrinePagination\ORM\PaginatedRepositoryInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Data\DataExporter;
 use Softspring\CmsBundle\Data\DataImporter;

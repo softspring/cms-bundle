@@ -6,5 +6,4 @@ use Softspring\Component\DoctrinePaginator\Form\PaginatorFormInterface;
 
 interface RouteListFilterFormInterface extends PaginatorFormInterface
 {
-
 }

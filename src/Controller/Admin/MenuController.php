@@ -2,7 +2,6 @@
 
 namespace Softspring\CmsBundle\Controller\Admin;
 
-use Jhg\DoctrinePagination\ORM\PaginatedRepositoryInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\InvalidMenuException;
