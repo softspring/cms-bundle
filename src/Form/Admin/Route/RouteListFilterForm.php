@@ -1,12 +1,12 @@
 <?php
 
-namespace Softspring\CmsBundle\Form\Admin\Menu;
+namespace Softspring\CmsBundle\Form\Admin\Route;
 
 use Softspring\Component\DoctrinePaginator\Form\PaginatorFiltersForm;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class MenuListFilterForm extends PaginatorFiltersForm
+class RouteListFilterForm extends PaginatorFiltersForm implements RouteListFilterFormInterface
 {
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -14,11 +14,11 @@ class MenuListFilterForm extends PaginatorFiltersForm
 
         $resolver->setDefaults([
             'translation_domain' => 'sfs_cms_admin',
-            'label_format' => 'admin_menus.list.filter_form.%name%.label',
+            'label_format' => 'admin_routes.list.filter_form.%name%.label',
             'rpp_valid_values' => [20],
             'rpp_default_value' => 20,
-            'order_valid_fields' => ['name', 'type'],
-            'order_default_value' => 'name',
+            'order_valid_fields' => ['id'],
+            'order_default_value' => 'id',
         ]);
     }
 

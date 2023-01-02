@@ -45,10 +45,6 @@ services:
             #            $createForm: '@Softspring\CmsBundle\Form\Admin\Route\RouteCreateFormInterface'
             #            $updateForm: '@Softspring\CmsBundle\Form\Admin\Route\RouteUpdateFormInterface'
             #            $deleteForm: '@Softspring\CmsBundle\Form\Admin\Route\RouteDeleteFormInterface'
-            $listFilterForm: null
-            $createForm: 'Softspring\CmsBundle\Form\Admin\Route\RouteForm'
-            $updateForm: 'Softspring\CmsBundle\Form\Admin\Route\RouteForm'
-            $deleteForm: null
             $config:
                 entity_attribute: 'route'
                 list:
@@ -57,6 +53,7 @@ services:
                     view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_LIST_VIEW
                     view: '%sfs_cms.admin.routes.list_view%'
                     view_content: '%sfs_cms.admin.routes.list_content_view%'
+                    filter_form: '@Softspring\CmsBundle\Form\Admin\Route\RouteListFilterFormInterface'
                 create:
 #                    is_granted: 'ROLE_SFS_CMS_ADMIN_ROUTES_CREATE'
                     initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_CREATE_INITIALIZE
@@ -66,6 +63,7 @@ services:
                     view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_CREATE_VIEW
                     success_redirect_to: 'sfs_cms_admin_routes_list'
                     view: '%sfs_cms.admin.routes.create_view%'
+                    form: 'Softspring\CmsBundle\Form\Admin\Route\RouteForm'
                 update:
 #                    is_granted: 'ROLE_SFS_CMS_ADMIN_ROUTES_UPDATE'
                     param_converter_key: 'id'
@@ -76,6 +74,7 @@ services:
                     view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_UPDATE_VIEW
                     success_redirect_to: 'sfs_cms_admin_routes_list'
                     view: '%sfs_cms.admin.routes.update_view%'
+                    form: 'Softspring\CmsBundle\Form\Admin\Route\RouteForm'
                 delete:
 #                    is_granted: 'ROLE_SFS_CMS_ADMIN_ROUTES_DELETE'
                     param_converter_key: 'id'
