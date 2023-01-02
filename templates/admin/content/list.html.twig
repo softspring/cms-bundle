@@ -22,14 +22,11 @@
     </div>
 
     <div class="container-fluid bg-white p-4">
-        {% if entities|length %}
+        {% if filterForm.vars.submitted or entities|length %}
             <div class="mb-4">
                 {{ form_start(filterForm) }}
                 <div class="row">
-                    {#                    {% if filterForm.name is defined %}<div class="col">{{ form_row(filterForm.name, {'row_class':'form-floating'}) }}</div>{% endif %}#}
-                    {#                    {% if filterForm.surname is defined %}<div class="col">{{ form_row(filterForm.surname, {'row_class':'form-floating'}) }}</div>{% endif %}#}
-                    {#                    {% if filterForm.email is defined %}<div class="col">{{ form_row(filterForm.email, {'row_class':'form-floating'}) }}</div>{% endif %}#}
-                    {#                    {% if filterForm.search is defined %}<div class="col">{{ form_row(filterForm.search, {'row_class': 'form-floating'}) }}</div>{% endif %}#}
+                    {% if filterForm.name is defined %}<div class="col">{{ form_row(filterForm.name, {'row_class':'form-floating'}) }}</div>{% endif %}
                 </div>
                 {{ form_widget(filterForm) }}
                 {{ form_rest(filterForm) }}
@@ -38,13 +35,13 @@
         {% endif %}
 
         {% block table %}
-            {% embed '@SfsAdmin/components/table.html.twig' with {'collection':entities, 'pagination_route': 'sfs_cms_admin_content_'~content~'_list'} %}
+            {% embed '@SfsComponents/pagination/table.html.twig' with {'collection':entities, 'pagination_route': 'sfs_cms_admin_content_'~content~'_list'} %}
                 {% trans_default_domain 'sfs_cms_contents' %}
                 {% block ths %}
                     <th scope="col">
-                        <a href="{{ sort_toggle_url('name') }}" class="text-dark">
+                        <a href="{{ entities.sortToggleUrl(app.request, 'name') }}" class="text-dark">
                             {{ ('admin_'~content~'.list.fields.name.header')|trans }}
-                            {% if is_sorted_by('name', 'asc') %}<i class="bi bi-caret-up-fill"></i>{% elseif is_sorted_by('name', 'desc') %}<i class="bi bi-caret-down-fill"></i>{% endif %}
+                            {% if entities.sortedBy('name', 'asc') %}<i class="bi bi-caret-up-fill"></i>{% elseif entities.sortedBy('name', 'desc') %}<i class="bi bi-caret-down-fill"></i>{% endif %}
                         </a>
                     </th>
                     <th class="">Site</th>

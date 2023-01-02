@@ -11,6 +11,7 @@ use Softspring\CmsBundle\Form\Admin\Menu\MenuListFilterForm;
 use Softspring\CmsBundle\Manager\MenuManagerInterface;
 use Softspring\CmsBundle\Model\MenuInterface;
 use Softspring\Component\CrudlController\Event\FilterEvent;
+use Softspring\Component\DoctrinePaginator\Paginator;
 use Softspring\Component\Events\DispatchGetResponseTrait;
 use Softspring\Component\Events\ViewEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -120,25 +121,10 @@ class MenuController extends AbstractController
 
         $repo = $this->menuManager->getRepository();
 
-        $listFilterForm = new MenuListFilterForm();
-        $page = $listFilterForm->getPage($request);
-        $rpp = $listFilterForm->getRpp($request);
-        $orderSort = $listFilterForm->getOrder($request);
         $form = $this->createForm(MenuListFilterForm::class)->handleRequest($request);
-        $filters = $form->isSubmitted() && $form->isValid() ? array_filter($form->getData()) : [];
-
-        $this->dispatch('sfs_cms.admin.menus.filter_event_name', $filterEvent = new FilterEvent($filters, $orderSort, $page, $rpp));
-        $filters = $filterEvent->getFilters();
-        $orderSort = $filterEvent->getOrderSort();
-        $page = $filterEvent->getPage();
-        $rpp = $filterEvent->getRpp();
-
-        // get results
-        if ($repo instanceof PaginatedRepositoryInterface) {
-            $entities = $repo->findPageBy($page, $rpp, $filters, $orderSort);
-        } else {
-            $entities = $repo->findBy($filters, $orderSort, $rpp, ($page - 1) * $rpp);
-        }
+        $filterEvent = FilterEvent::createFromFilterForm($form, $request);
+        $this->dispatch('sfs_cms.admin.menus.filter_event_name', $filterEvent);
+        $entities = Paginator::queryPage($repo->createQueryBuilder('a'), $filterEvent->getPage(), $filterEvent->getRpp(), $filterEvent->getFilters(), $filterEvent->getOrderSort());
 
         // show view
         $viewData = new \ArrayObject([
