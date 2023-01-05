@@ -10,7 +10,6 @@ use Softspring\CmsBundle\Form\Admin\Menu\MenuListFilterForm;
 use Softspring\CmsBundle\Manager\MenuManagerInterface;
 use Softspring\CmsBundle\Model\MenuInterface;
 use Softspring\Component\CrudlController\Event\FilterEvent;
-use Softspring\Component\DoctrinePaginator\Paginator;
 use Softspring\Component\Events\DispatchGetResponseTrait;
 use Softspring\Component\Events\ViewEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
