@@ -32,7 +32,6 @@
         "doctrine/doctrine-fixtures-bundle": "^3.5",
         "friendsofphp/php-cs-fixer": "9999999-dev",
         "google/cloud-storage": "^1.30",
-        "javihgil/doctrine-pagination-bundle": "^2.0",
         "phpstan/phpstan": "^1.9",
         "phpunit/phpunit": "^9.5.27",
         "softspring/user-bundle": "^5.0",
