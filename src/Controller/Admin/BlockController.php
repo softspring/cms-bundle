@@ -2,7 +2,6 @@
 
 namespace Softspring\CmsBundle\Controller\Admin;
 
-use Jhg\DoctrinePagination\ORM\PaginatedRepositoryInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\InvalidBlockException;
@@ -118,27 +117,10 @@ class BlockController extends AbstractController
 //            return $response;
 //        }
 
-        $repo = $this->blockManager->getRepository();
-
-        $listFilterForm = new BlockListFilterForm();
-        $page = $listFilterForm->getPage($request);
-        $rpp = $listFilterForm->getRpp($request);
-        $orderSort = $listFilterForm->getOrder($request);
         $form = $this->createForm(BlockListFilterForm::class)->handleRequest($request);
-        $filters = $form->isSubmitted() && $form->isValid() ? array_filter($form->getData()) : [];
-
-        $this->dispatch('sfs_cms.admin.blocks.filter_event_name', $filterEvent = new FilterEvent($filters, $orderSort, $page, $rpp));
-        $filters = $filterEvent->getFilters();
-        $orderSort = $filterEvent->getOrderSort();
-        $page = $filterEvent->getPage();
-        $rpp = $filterEvent->getRpp();
-
-        // get results
-        if ($repo instanceof PaginatedRepositoryInterface) {
-            $entities = $repo->findPageBy($page, $rpp, $filters, $orderSort);
-        } else {
-            $entities = $repo->findBy($filters, $orderSort, $rpp, ($page - 1) * $rpp);
-        }
+        $filterEvent = FilterEvent::createFromFilterForm($form, $request);
+        $this->dispatch('sfs_cms.admin.blocks.filter_event_name', $filterEvent);
+        $entities = $filterEvent->queryPage();
 
         // show view
         $viewData = new \ArrayObject([

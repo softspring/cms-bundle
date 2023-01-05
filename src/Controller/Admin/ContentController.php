@@ -15,7 +15,6 @@ use Softspring\CmsBundle\Render\ContentRender;
 use Softspring\CmsBundle\Utils\Slugger;
 use Softspring\CmsBundle\Utils\ZipContent;
 use Softspring\Component\CrudlController\Event\FilterEvent;
-use Softspring\Component\DoctrinePaginator\Paginator;
 use Softspring\Component\Events\DispatchGetResponseTrait;
 use Softspring\Component\Events\GetResponseRequestEvent;
 use Softspring\Component\Events\ViewEvent;
@@ -279,12 +278,10 @@ class ContentController extends AbstractController
             return $response;
         }
 
-        $repo = $this->contentManager->getRepository($config['_id']);
-
-        $form = $this->createForm($config['list_filter_form'], [], ['content_config' => $config])->handleRequest($request);
+        $form = $this->createForm($config['list_filter_form'], [], ['content_config' => $config, 'class' => $this->contentManager->getTypeClass($config['_id'])])->handleRequest($request);
         $filterEvent = FilterEvent::createFromFilterForm($form, $request);
         $this->dispatch("sfs_cms.admin.contents.{$config['_id']}.filter_event_name", $filterEvent);
-        $entities = Paginator::queryPage($repo->createQueryBuilder('a'), $filterEvent->getPage(), $filterEvent->getRpp(), $filterEvent->getFilters(), $filterEvent->getOrderSort());
+        $entities = $filterEvent->queryPage();
 
         // show view
         $viewData = new \ArrayObject([

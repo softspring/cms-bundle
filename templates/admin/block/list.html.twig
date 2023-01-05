@@ -52,15 +52,15 @@
             {% trans_default_domain 'sfs_cms_admin' %}
             {% block ths %}
                 <th scope="col">
-                    <a href="{{ sort_toggle_url('name') }}" class="text-dark">
+                    <a href="{{ entities.sortToggleUrl(app.request, 'name') }}" class="text-dark">
                         {{ 'admin_menus.list.fields.name.header'|trans }}
-                        {% if is_sorted_by('name', 'asc') %}<i class="bi bi-caret-up-fill"></i>{% elseif is_sorted_by('name', 'desc') %}<i class="bi bi-caret-down-fill"></i>{% endif %}
+                        {% if entities.sortedBy('name', 'asc') %}<i class="bi bi-caret-up-fill"></i>{% elseif entities.sortedBy('name', 'desc') %}<i class="bi bi-caret-down-fill"></i>{% endif %}
                     </a>
                 </th>
                 <th scope="col">
-                    <a href="{{ sort_toggle_url('type') }}" class="text-dark">
+                    <a href="{{ entities.sortToggleUrl(app.request, 'type') }}" class="text-dark">
                         {{ 'admin_menus.list.fields.type.header'|trans }}
-                        {% if is_sorted_by('type', 'asc') %}<i class="bi bi-caret-up-fill"></i>{% elseif is_sorted_by('type', 'desc') %}<i class="bi bi-caret-down-fill"></i>{% endif %}
+                        {% if entities.sortedBy('type', 'asc') %}<i class="bi bi-caret-up-fill"></i>{% elseif entities.sortedBy('type', 'desc') %}<i class="bi bi-caret-down-fill"></i>{% endif %}
                     </a>
                 </th>
 {#                {% if sfs_cms_blocks_are_multisite() %}#}

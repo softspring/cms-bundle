@@ -123,7 +123,7 @@ class MenuController extends AbstractController
         $form = $this->createForm(MenuListFilterForm::class)->handleRequest($request);
         $filterEvent = FilterEvent::createFromFilterForm($form, $request);
         $this->dispatch('sfs_cms.admin.menus.filter_event_name', $filterEvent);
-        $entities = Paginator::queryPage($repo->createQueryBuilder('a'), $filterEvent->getPage(), $filterEvent->getRpp(), $filterEvent->getFilters(), $filterEvent->getOrderSort());
+        $entities = $filterEvent->queryPage();
 
         // show view
         $viewData = new \ArrayObject([

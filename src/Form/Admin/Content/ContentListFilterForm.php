@@ -2,13 +2,13 @@
 
 namespace Softspring\CmsBundle\Form\Admin\Content;
 
-use Softspring\Component\DoctrinePaginator\Form\PaginatorFiltersForm;
+use Softspring\Component\DoctrinePaginator\Form\PaginatorForm;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ContentListFilterForm extends PaginatorFiltersForm
+class ContentListFilterForm extends PaginatorForm
 {
     public function configureOptions(OptionsResolver $resolver)
     {

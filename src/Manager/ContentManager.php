@@ -75,7 +75,7 @@ class ContentManager implements ContentManagerInterface
         return $version;
     }
 
-    protected function getTypeClass(?string $type = null): string
+    public function getTypeClass(?string $type = null): string
     {
         return $this->getTypeConfig($type)['entity_class'];
     }

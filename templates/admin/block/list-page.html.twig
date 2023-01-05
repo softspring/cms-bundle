@@ -7,26 +7,26 @@
             {{ ('admin_'~block.type~'.name')|trans({}, 'sfs_cms_blocks') }}
         </td>
 
-        {% if sfs_cms_blocks_are_multisite() %}
-            <td>{{ block.sites|join(', ') }}</td>
-        {% endif %}
+{#        {% if sfs_cms_blocks_are_multisite() %}#}
+{#            <td>{{ block.sites|join(', ') }}</td>#}
+{#        {% endif %}#}
 
-        {% if sfs_cms_blocks_are_schedulable() %}
-            <td>{{ block.publishStartDate ? block.publishStartDate|date('H:i d-m-Y', ' UTC') ~ 'UTC' : '-' }}</td>
-            <td>{{ block.publishEndDate ? block.publishEndDate|date('H:i d-m-Y', ' UTC') ~ 'UTC' : '-' }}</td>
-            <td>
-                {% set now = 'now'|date('U') %}
-                {% set startDate = block.publishStartDate|default('01-01-1970')|date('U') %}
-                {% set endDate = block.publishEndDate|default('07-02-2106')|date('U') %}
+{#        {% if sfs_cms_blocks_are_schedulable() %}#}
+{#            <td>{{ block.publishStartDate ? block.publishStartDate|date('H:i d-m-Y', ' UTC') ~ 'UTC' : '-' }}</td>#}
+{#            <td>{{ block.publishEndDate ? block.publishEndDate|date('H:i d-m-Y', ' UTC') ~ 'UTC' : '-' }}</td>#}
+{#            <td>#}
+{#                {% set now = 'now'|date('U') %}#}
+{#                {% set startDate = block.publishStartDate|default('01-01-1970')|date('U') %}#}
+{#                {% set endDate = block.publishEndDate|default('07-02-2106')|date('U') %}#}
 
-                {% if now >= startDate and now <= endDate %}
-                    published
-                {% else %}
-                    not published
-                {% endif %}
+{#                {% if now >= startDate and now <= endDate %}#}
+{#                    published#}
+{#                {% else %}#}
+{#                    not published#}
+{#                {% endif %}#}
 
-            </td>
-        {% endif %}
+{#            </td>#}
+{#        {% endif %}#}
 
         <td class="text-end">
             {% if is_granted('ROLE_SFS_CMS_ADMIN_BLOCKS_DETAILS', block) %}

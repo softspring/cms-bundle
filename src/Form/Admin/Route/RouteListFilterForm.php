@@ -2,11 +2,12 @@
 
 namespace Softspring\CmsBundle\Form\Admin\Route;
 
-use Softspring\Component\DoctrinePaginator\Form\PaginatorFiltersForm;
+use Softspring\CmsBundle\Model\RouteInterface;
+use Softspring\Component\DoctrinePaginator\Form\PaginatorForm;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class RouteListFilterForm extends PaginatorFiltersForm implements RouteListFilterFormInterface
+class RouteListFilterForm extends PaginatorForm implements RouteListFilterFormInterface
 {
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -15,6 +16,7 @@ class RouteListFilterForm extends PaginatorFiltersForm implements RouteListFilte
         $resolver->setDefaults([
             'translation_domain' => 'sfs_cms_admin',
             'label_format' => 'admin_routes.list.filter_form.%name%.label',
+            'class' => RouteInterface::class,
             'rpp_valid_values' => [20],
             'rpp_default_value' => 20,
             'order_valid_fields' => ['id'],
