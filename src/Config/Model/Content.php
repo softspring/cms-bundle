@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Config\Model;
 
 use Softspring\CmsBundle\Form\Admin\Content\ContentContentForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentCreateForm;
+use Softspring\CmsBundle\Form\Admin\Content\ContentDeleteForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentImportForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentListFilterForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentSeoForm;
@@ -105,6 +106,10 @@ class Content implements ConfigurationInterface
                         ->scalarNode('update_view')->defaultValue('@SfsCms/admin/content/update.html.twig')->end()
                         ->scalarNode('update_type')->defaultValue(ContentUpdateForm::class)->end()
                         ->scalarNode('update_success_redirect_to')->defaultValue('')->end()
+                        ->scalarNode('delete_is_granted')->defaultValue('')->end()
+                        ->scalarNode('delete_view')->defaultValue('@SfsCms/admin/content/delete.html.twig')->end()
+                        ->scalarNode('delete_type')->defaultValue(ContentDeleteForm::class)->end()
+                        ->scalarNode('delete_success_redirect_to')->defaultValue('')->end()
                         ->scalarNode('seo_is_granted')->defaultValue('')->end()
                         ->scalarNode('seo_view')->defaultValue('@SfsCms/admin/content/seo.html.twig')->end()
                         ->scalarNode('seo_type')->defaultValue(ContentSeoForm::class)->end()

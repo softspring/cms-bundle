@@ -79,6 +79,15 @@ admin_page:
         actions:
             update.button: "Save changes"
             cancel.button: "Cancel"
+            delete.button: "Delete"
+
+    delete:
+        meta.title: "Delete page"
+        title: "%name%"
+        breadcrumb: "Delete page"
+        actions:
+            delete.button: "Delete definitely"
+            cancel.button: "Cancel"
 
     seo:
         meta.title: "Edit SEO"

@@ -79,6 +79,15 @@ admin_page:
         actions:
             update.button: "Guardar cambios"
             cancel.button: "Cancelar"
+            delete.button: "Eliminar"
+
+    delete:
+        meta.title: "Eliminar página"
+        title: "%name%"
+        breadcrumb: "Eliminar página"
+        actions:
+            delete.button: "Eliminar definitivamente"
+            cancel.button: "Cancelar"
 
     seo:
         meta.title: "Editar SEO"

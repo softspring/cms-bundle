@@ -14,6 +14,7 @@
         "doctrine/orm": "^2.14",
         "sensio/framework-extra-bundle": "^5.4|^6.0",
         "softspring/crudl-controller": "^5.0",
+        "softspring/doctrine-target-entity-resolver": "^5.0",
         "softspring/dynamic-form-type": "^5.0",
         "softspring/events": "^5.0",
         "softspring/media-bundle": "^5.0",

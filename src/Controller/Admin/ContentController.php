@@ -208,7 +208,56 @@ class ContentController extends AbstractController
         $config = $this->getContentConfig($request);
         $config = $config['admin'] + ['_id' => $config['_id']];
 
-        return new Response();
+        $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
+
+//        if (!empty($config['is_granted'])) {
+//            $this->denyAccessUnlessGranted($config['is_granted'], null, sprintf('Access denied, user is not %s.', $config['is_granted']));
+//        }
+
+        if (!$entity) {
+            $request->getSession()->getFlashBag()->add('error', 'entity_not_found');
+
+            return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_list");
+        }
+
+//        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
+//            return $response;
+//        }
+
+        $form = $this->createForm($config['delete_type'], $entity, ['content' => $config, 'method' => 'POST'])->handleRequest($request);
+//
+//        $this->dispatchFromConfig($config, 'form_init_event_name', new FormEvent($form, $request));
+//
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+//                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_valid_event_name', new GetResponseFormEvent($form, $request))) {
+//                    return $response;
+//                }
+
+                $this->contentManager->deleteEntity($entity);
+
+//                if ($response = $this->dispatchGetResponseFromConfig($config, 'success_event_name', new GetResponseEntityEvent($entity, $request))) {
+//                    return $response;
+//                }
+
+                return !empty($config['delete_success_redirect_to']) ? $this->redirectToRoute($config['delete_success_redirect_to']) : $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_list");
+//            } else {
+//                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_invalid_event_name', new GetResponseFormEvent($form, $request))) {
+//                    return $response;
+//                }
+            }
+        }
+
+        // show view
+        $viewData = new \ArrayObject([
+            'content' => $config['_id'],
+            'entity' => $entity,
+            'form' => $form->createView(),
+        ]);
+//
+//        $this->dispatchFromConfig($config, 'view_event_name', new ViewEvent($viewData));
+
+        return $this->render($config['delete_view'], $viewData->getArrayCopy());
     }
 
     public function import(Request $request, bool $confirm = false): Response

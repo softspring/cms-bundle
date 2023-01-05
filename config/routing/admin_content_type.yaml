@@ -26,6 +26,10 @@ update:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController::update
     path: /{content}/update
 
+delete:
+    controller: Softspring\CmsBundle\Controller\Admin\ContentController::delete
+    path: /{content}/delete
+
 seo:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController::seo
     path: /{content}/seo
