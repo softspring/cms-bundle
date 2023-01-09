@@ -62,9 +62,10 @@ class MediaTransformer extends AbstractDataTransformer implements DataTransforme
         foreach ($data['media']['versionFiles'] as $versionKey => $versionFileName) {
             $file = $data['files'][$versionFileName];
 
-            $media->addVersion($version = $this->mediaVersionManager->createEntity());
+            $version = $this->mediaVersionManager->createEntity();
             $version->setVersion($versionKey);
             $version->setUpload(new UploadedFile($file['tmpPath'], $file['name']), true);
+            $media->addVersion($version);
         }
 
         return $media;
