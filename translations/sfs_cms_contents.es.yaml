@@ -88,6 +88,18 @@ admin_page:
         actions:
             delete.button: "Eliminar definitivamente"
             cancel.button: "Cancelar"
+        form:
+            action:
+                label: "¿Qué te gustaría hacer con las rutas de esta página?"
+                options:
+                    delete: "Eliminar rutas de todas formas"
+                    change: "Apuntar a otro contenido (sin redirección)"
+                    redirect: "Redirigir a otra ruta (redirección permanente)"
+            content.label: "Nuevo contenido para las rutas"
+            symfonyRoute:
+                label: "Redirigir a ruta"
+                route_name.label: "Nombre de ruta"
+                route_params.label: "Parámetros"
 
     seo:
         meta.title: "Editar SEO"

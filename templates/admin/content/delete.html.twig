@@ -25,15 +25,17 @@
                 <p>¿Estás seguro de eliminar este contenido??</p>
                 <p>Esta acción no se podrá deshacer.</p>
 
-                <p>
-                    No pierdas los enlaces e indexación:
-                    <br/>
-                    ¿Qué hacemos con las rutas?
-                    <br/>
+                {% if entity.publishedVersion %}
+                    <p>Si quieres puedes hacer un backup de la versión publicada de este contenido antes</p>
 
-                    <input type="radio" name="option" /> Eliminar de todas formas
-                    <input type="radio" name="option" /> Apuntar a otro contenido (sin redirección)
-                    <input type="radio" name="option" /> Redirigir a otro contenido
+                    <div class="mb-4">
+                    <a href="{{ url('sfs_cms_admin_content_'~content~'_export_version', {'content':entity, 'version':entity.publishedVersion}) }}" class="btn btn-primary">
+                    Exportar</a>
+                    </div>
+                {% endif %}
+
+                <p>
+                    <strong>¡No pierdas los enlaces e indexación!</strong>
                 </p>
 
                 {{ form_rest(form) }}

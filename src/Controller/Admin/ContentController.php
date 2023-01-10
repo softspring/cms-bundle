@@ -208,6 +208,7 @@ class ContentController extends AbstractController
         $config = $this->getContentConfig($request);
         $config = $config['admin'] + ['_id' => $config['_id']];
 
+        /** @var ContentInterface|null $entity */
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
 //        if (!empty($config['is_granted'])) {
@@ -224,7 +225,7 @@ class ContentController extends AbstractController
 //            return $response;
 //        }
 
-        $form = $this->createForm($config['delete_type'], $entity, ['content' => $config, 'method' => 'POST'])->handleRequest($request);
+        $form = $this->createForm($config['delete_type'], $entity, ['content' => $config, 'method' => 'POST', 'entity' => $entity])->handleRequest($request);
 //
 //        $this->dispatchFromConfig($config, 'form_init_event_name', new FormEvent($form, $request));
 //
@@ -233,6 +234,27 @@ class ContentController extends AbstractController
 //                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_valid_event_name', new GetResponseFormEvent($form, $request))) {
 //                    return $response;
 //                }
+
+                switch ($form->get('action')->getData()) {
+                    case 'change':
+                        foreach ($entity->getRoutes() as $route) {
+                            $route->setContent($form->get('content')->getData());
+                        }
+                        break;
+
+                    case 'redirect':
+                        foreach ($entity->getRoutes() as $route) {
+                            $route->setContent(null);
+                            $route->setType(RouteInterface::TYPE_REDIRECT_TO_ROUTE);
+                            $route->setRedirectType(Response::HTTP_MOVED_PERMANENTLY); // 301
+                            $route->setSymfonyRoute($form->get('symfonyRoute')->getData());
+                        }
+                        break;
+
+                    case 'delete':
+                    default:
+                        // do nothing, route will be deleted with cascade
+                }
 
                 $this->contentManager->deleteEntity($entity);
 

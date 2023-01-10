@@ -36,6 +36,7 @@ class SymfonyRouteType extends AbstractType
     {
         $resolver->setDefaults([
             'required' => false,
+            'route_name_constraints' => [],
         ]);
 
         $resolver->setDefault('restrict_default_attribute', null);
@@ -81,6 +82,7 @@ class SymfonyRouteType extends AbstractType
 
                 return $attr;
             },
+            'constraints' => $options['route_name_constraints'],
         ]);
 
         $builder->add('route_params', TextType::class, [
