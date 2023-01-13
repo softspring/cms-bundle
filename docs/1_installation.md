@@ -9,7 +9,7 @@ of the Composer documentation.
 Open a command console, enter your project directory and execute:
 
 ```bash
-$ composer require softspring\cms-bundle:^5.0
+$ composer require softspring/cms-bundle:^5.0
 ```
 
 ## Applications that don't use Symfony Flex
