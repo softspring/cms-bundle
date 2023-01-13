@@ -41,10 +41,6 @@ services:
         arguments:
             $manager: '@Softspring\CmsBundle\Manager\RouteManagerInterface'
             $eventDispatcher: '@event_dispatcher'
-            #            $listFilterForm: '@Softspring\CmsBundle\Form\Admin\Route\RouteListFilterFormInterface'
-            #            $createForm: '@Softspring\CmsBundle\Form\Admin\Route\RouteCreateFormInterface'
-            #            $updateForm: '@Softspring\CmsBundle\Form\Admin\Route\RouteUpdateFormInterface'
-            #            $deleteForm: '@Softspring\CmsBundle\Form\Admin\Route\RouteDeleteFormInterface'
             $config:
                 entity_attribute: 'route'
                 list:
