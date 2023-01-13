@@ -20,7 +20,7 @@ Open a command console, enter your project directory and execute the
 following command to download the latest stable version of this bundle:
 
 ```console
-$ composer require softspring\cms-bundle:^5.0
+$ composer require softspring/cms-bundle:^5.0
 ```
 
 ### Step 2: Enable the Bundle
