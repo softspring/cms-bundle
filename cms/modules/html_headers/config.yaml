@@ -1,5 +1,6 @@
 module:
     revision: 1
+    group: 'helper'
     edit_template: '@module/html_headers/edit.html.twig'
     render_template: '@module/html_headers/render.html.twig'
     module_options:

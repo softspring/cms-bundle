@@ -24,6 +24,7 @@ class Module implements ConfigurationInterface
             ->children()
                 ->integerNode('revision')->isRequired()->end()
                 ->booleanNode('enabled')->defaultTrue()->end()
+                ->scalarNode('group')->defaultValue('default')->end()
 
                 ->scalarNode('render_template')->defaultValue("@module/{$this->moduleName}/render.html.twig")->end()
                 ->scalarNode('edit_template')->end()

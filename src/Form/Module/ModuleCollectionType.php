@@ -131,6 +131,19 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
         $view->vars['module_collection_class'] = $options['module_collection_class'];
 
         parent::buildView($view, $form, $options);
+
+        // group prototypes
+        $groupedPrototypes = [
+            // default order
+            'basic' => [],
+            'container' => [],
+            'helper' => [],
+        ];
+        foreach ($view->vars['prototypes'] as $prototypeId => $prototype) {
+            $moduleConfig = $this->cmsConfig->getModule($prototypeId);
+            $groupedPrototypes[$moduleConfig['group']][$prototypeId] = $prototype;
+        }
+        $view->vars['prototypes'] = array_filter($groupedPrototypes);
     }
 
     /**

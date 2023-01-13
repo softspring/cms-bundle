@@ -39,6 +39,7 @@ class ModuleTest extends TestCase
             'module_type' => DynamicFormModuleType::class,
             'module_options' => [],
             'compatible_contents' => [],
+            'group' => 'default',
         ], $config);
     }
 
@@ -60,6 +61,7 @@ class ModuleTest extends TestCase
             'module_type' => DynamicFormModuleType::class,
             'module_options' => [],
             'compatible_contents' => [],
+            'group' => 'default',
         ], $config);
     }
 }
