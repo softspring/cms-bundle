@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Form\Admin\Content;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Softspring\CmsBundle\Form\Admin\LayoutContentType;
+use Softspring\CmsBundle\Form\Module\ModuleCollectionType;
 use Softspring\CmsBundle\Form\Type\LayoutType;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Symfony\Component\Form\AbstractType;
@@ -54,6 +55,20 @@ class ContentContentForm extends AbstractType implements ContentContentFormInter
         $builder->add('_ok', HiddenType::class, [
             'mapped' => false,
             'constraints' => new NotEqualTo(1),
+        ]);
+
+        $builder->add('module_prototypes_collection', ModuleCollectionType::class, [
+            'label' => "__label__",
+            'block_prefix' => 'module_prototypes_collection',
+            'translation_domain' => 'sfs_cms_layouts',
+            'content_type' => $options['content_type'],
+            'allowed_modules' => null,
+            // random prototype name to allow multiple levels
+            'prototype_name' => '___MODULE___',
+            'module_collection_class' => 'container-fluid',
+            'module_row_class' => 'row',
+            'prototype' => true,
+            'mapped' => false,
         ]);
     }
 }

@@ -99,6 +99,7 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
             'content_type' => null,
             'module_collection_class' => '',
             'module_row_class' => '',
+            'prototype' => false, // recursive prototypes can cause memory issues and malfunctions
         ]);
     }
 
@@ -111,10 +112,6 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
 
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        if (!$options['allow_add'] || !$options['prototype']) {
-            return;
-        }
-
         $options = $this->filterAllowedModules($options);
         $options = $this->removeInvalidModulesForContentType($options);
 
@@ -129,6 +126,13 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
         }
 
         $view->vars['module_collection_class'] = $options['module_collection_class'];
+        $view->vars['module_row_class'] = $options['module_row_class'];
+        $view->vars['allowed_modules'] = $options['allowed_modules'] ?? array_keys($options['discriminator_map']);
+        $view->vars['prototypes'] = [];
+
+        if (!$options['allow_add'] || !$options['prototype']) {
+            return;
+        }
 
         parent::buildView($view, $form, $options);
 
