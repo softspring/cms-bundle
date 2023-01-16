@@ -92,7 +92,7 @@ window.addEventListener('load', (event) => {
     let modulesCollectionInsertIndex;
     let insertElement;
 
-    prototypesModal.addEventListener('show.bs.modal', function (event) {
+    prototypesModal && prototypesModal.addEventListener('show.bs.modal', function (event) {
         insertElement = event.relatedTarget;
 
         insertElement.classList.add('selected');
@@ -122,7 +122,7 @@ window.addEventListener('load', (event) => {
         modulesAllowed.forEach((moduleId) => prototypesModal.querySelectorAll('[data-module-id='+moduleId+']').forEach((el) => el.parentElement.classList.remove('d-none')));
     });
 
-    prototypesModal.addEventListener('hide.bs.modal', function (event) {
+    prototypesModal && prototypesModal.addEventListener('hide.bs.modal', function (event) {
         [...document.getElementsByClassName('insert-module')].forEach((element) => element.classList.remove('selected'));
         // insertElement.classList.remove('selected');
     });
