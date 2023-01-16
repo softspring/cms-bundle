@@ -9,6 +9,7 @@ module:
         allowed_modules: ~
         allowed_container_modules:
             - grid
+            - container
         form_fields:
             id:
                 type: 'id'
