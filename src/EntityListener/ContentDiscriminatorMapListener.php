@@ -5,6 +5,7 @@ namespace Softspring\CmsBundle\EntityListener;
 use Doctrine\Bundle\DoctrineBundle\EventSubscriber\EventSubscriberInterface;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\Mapping\MappingException;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Entity\Content;
@@ -23,6 +24,7 @@ class ContentDiscriminatorMapListener implements EventSubscriberInterface
      */
     public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs)
     {
+        /** @var ClassMetadataInfo $metadata */
         $metadata = $eventArgs->getClassMetadata();
         $class = $metadata->getReflectionClass();
 
