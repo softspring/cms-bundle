@@ -266,25 +266,27 @@
                     <div id="modalInfo"></div>
 
                     {% for group, prototypes in form.vars.prototypes %}
-                        <h5>{{ ('_group.'~group~'.name')|trans({}, 'sfs_cms_modules') }}</h5>
-                        <div class="container mb-4">
-                            <div class="row">
-                                {% for key, prototype in prototypes %}
-                                    {% set trans_domain = prototype.vars.translation_domain | default(translation_domain) | default(false) %}
-                                    <div class="col-3">
-                                        <div data-polymorphic-action="insert" data-module-id="{{ prototype.vars.module_id }}" class="module-thumbnail" {{ block('polymorphic_prototype_button_attributes') }}>
-                                            <div class="icon">
-                                                {{ (not trans_domain ? '' : (prototype.vars.prototype_button_label~'_icon')|trans({}, trans_domain))|raw }}
-                                            </div>
-                                            <div class="name">
-                                                {{ not trans_domain ? prototype.vars.prototype_button_label : prototype.vars.prototype_button_label|trans({}, trans_domain) }}
-                                                {% if prototype.vars.deprecated %}
-                                                    <i class="bi bi-exclamation-diamond text-warning" title="{{ prototype.vars.deprecated }}"></i>
-                                                {% endif %}
+                        <div class="modal-modules-group">
+                            <h5>{{ ('_group.'~group~'.name')|trans({}, 'sfs_cms_modules') }}</h5>
+                            <div class="container mb-4">
+                                <div class="row">
+                                    {% for key, prototype in prototypes %}
+                                        {% set trans_domain = prototype.vars.translation_domain | default(translation_domain) | default(false) %}
+                                        <div class="col-3 modal-module">
+                                            <div data-polymorphic-action="insert" data-module-id="{{ prototype.vars.module_id }}" class="module-thumbnail" {{ block('polymorphic_prototype_button_attributes') }}>
+                                                <div class="icon">
+                                                    {{ (not trans_domain ? '' : (prototype.vars.prototype_button_label~'_icon')|trans({}, trans_domain))|raw }}
+                                                </div>
+                                                <div class="name">
+                                                    {{ not trans_domain ? prototype.vars.prototype_button_label : prototype.vars.prototype_button_label|trans({}, trans_domain) }}
+                                                    {% if prototype.vars.deprecated %}
+                                                        <i class="bi bi-exclamation-diamond text-warning" title="{{ prototype.vars.deprecated }}"></i>
+                                                    {% endif %}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                {% endfor %}
+                                    {% endfor %}
+                                </div>
                             </div>
                         </div>
                     {% endfor %}

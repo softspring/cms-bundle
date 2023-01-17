@@ -118,8 +118,15 @@ window.addEventListener('load', (event) => {
         }
 
         // hide not allowed modules
-        prototypesModal.querySelectorAll('[data-module-id]').forEach((el) => el.parentElement.classList.add('d-none'));
-        modulesAllowed.forEach((moduleId) => prototypesModal.querySelectorAll('[data-module-id='+moduleId+']').forEach((el) => el.parentElement.classList.remove('d-none')));
+        prototypesModal.querySelectorAll('[data-module-id]').forEach((el) => modulesAllowed.includes(el.dataset.moduleId) ? el.parentElement.classList.remove('d-none') : el.parentElement.classList.add('d-none'));
+
+        prototypesModal.querySelectorAll('.modal-modules-group').forEach(function (modulesGroup) {
+            if (modulesGroup.querySelectorAll('.modal-module:not(.d-none)').length) {
+                modulesGroup.classList.remove('d-none');
+            } else {
+                modulesGroup.classList.add('d-none');
+            }
+        });
     });
 
     prototypesModal && prototypesModal.addEventListener('hide.bs.modal', function (event) {
