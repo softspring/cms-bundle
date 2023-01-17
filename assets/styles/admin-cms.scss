@@ -16,33 +16,47 @@
 .row {
     & > .insert-module {
         display: block;
-        font-size: 12px;
-        border: 1px dashed transparent;
-        text-align: center;
         cursor: pointer;
-        overflow: hidden;
-        line-height: 50px;
 
-        height: 5px;
-        transition: height 200ms linear 200ms, background-color 200ms linear 200ms;
+        margin-top: -4px;
+        height: 4px;
+        //transition: height 200ms linear 200ms, background-color 200ms linear 200ms;
+
+        background-color: $gray-500;
+        z-index: 1000;
     }
 
     & > .insert-module.selected,
     & > .insert-module:hover {
-        border: 1px dashed $primary;
         background-color: $primary;
         color: white;
 
-        height: 50px;
-        transition: height 200ms linear 200ms, background-color 200ms linear;
+        &:before {
+            text-align: center;
+            content: '+';
+            font-size: 15px;
+            font-weight: bold;
+            line-height: 20px;
+            color: white;
+            display: block;
+            width: 20px;
+            height: 20px;
+            margin-top: -10px;
+            margin-left: -15px;
+            background-color: $primary;
+        }
+
+        //height: 50px;
+        //transition: height 200ms linear 200ms, background-color 200ms linear;
     }
 
     & > .insert-module:last-child {
-        height: 50px;
-        line-height: 50px;
-        border: 1px dashed gray;
-        color: gray;
-        margin-top: 20px;
+    //    height: 50px;
+    //    line-height: 50px;
+    //    border: 1px dashed gray;
+    //    color: gray;
+    //    margin-top: 20px;
+        margin-bottom: 20px;
     }
 }
 

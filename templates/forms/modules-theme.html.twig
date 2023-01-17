@@ -48,7 +48,7 @@
 
         <div class="{{ form.vars.module_row_class }}">
             <a class="insert-module" data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal"
-               data-polymorphic-collection="{{ form.vars.id }}" data-polymorphic-position="latest">Insert module here (last)</a>
+               data-polymorphic-collection="{{ form.vars.id }}" data-polymorphic-position="latest" title="Insert module here"></a>
         </div>
     </div>
 
@@ -68,7 +68,7 @@
 
 {% block dynamic_form_module_row %}
     <div data-polymorphic="node" class="{{ row_class|default('') }}" {{ block('widget_container_attributes') }}>
-        <div class="insert-module" data-polymorphic-position="before"  data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal">Insert module here</div>
+        <div class="insert-module" data-polymorphic-position="before"  data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal" title="Insert module here"></div>
         <div class="cms-module {{ form.vars.deprecated?'cms-module-deprecated':'' }}">
             <div class="cms-module-header">
                 <div class="cms-module-title">
@@ -130,7 +130,7 @@
 
 {% block container_module_row %}
     <div data-polymorphic="node" class="{{ row_class|default('') }}" {{ block('widget_container_attributes') }}>
-        <div class="insert-module" data-polymorphic-position="before" data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal">Insert module here</div>
+        <div class="insert-module" data-polymorphic-position="before" data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal" title="Insert module here"></div>
         <div class="cms-module {{ form.vars.deprecated?'cms-module-deprecated':'' }}">
             <div class="cms-module-header">
                 <div class="cms-module-title">
@@ -192,7 +192,7 @@
 
 {% block empty_module_row %}
     <div data-polymorphic="node" class="{{ row_class|default('') }}" {{ block('widget_container_attributes') }}>
-        <div class="insert-module" data-polymorphic-position="before" data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal">Insert module here</div>
+        <div class="insert-module" data-polymorphic-position="before" data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal" title="Insert module here"></div>
 
         <div class="cms-module {{ form.vars.deprecated?'cms-module-deprecated':'' }}">
             <div class="cms-module-header">
