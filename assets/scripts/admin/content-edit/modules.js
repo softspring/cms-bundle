@@ -160,5 +160,7 @@ window.addEventListener('load', (event) => {
 
         event.node().classList.remove(...event.node().classList);
         event.node().classList.add(event.collection().dataset.moduleRowClass);
+
+        moduleFocus(event.node().querySelector('.cms-module'));
     });
 });
