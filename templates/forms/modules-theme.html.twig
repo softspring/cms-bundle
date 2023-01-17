@@ -48,8 +48,7 @@
 
         <div class="{{ form.vars.module_row_class }}">
             <a class="insert-module" data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal"
-                 data-polymorphic-collection="{{ form.vars.id }}" data-polymorphic-position="latest"
-                 data-bs-whatever="@mdo">Insert module here (last)</a>
+               data-polymorphic-collection="{{ form.vars.id }}" data-polymorphic-position="latest">Insert module here (last)</a>
         </div>
     </div>
 
@@ -69,12 +68,12 @@
 
 {% block dynamic_form_module_row %}
     <div data-polymorphic="node" class="{{ row_class|default('') }}" {{ block('widget_container_attributes') }}>
-        <div class="insert-module" data-polymorphic-position="before"  data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal" data-bs-whatever="@mdo">Insert module here</div>
+        <div class="insert-module" data-polymorphic-position="before"  data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal">Insert module here</div>
         <div class="cms-module {{ form.vars.deprecated?'cms-module-deprecated':'' }}">
             <div class="cms-module-header">
                 <div class="cms-module-title">
-{#                    <span class="order-polymorphic-node" id="{{ id }}_order_index">{{ form.vars.name }}</span>##}
-{#                    {{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}#}
+                    {#                    <span class="order-polymorphic-node" id="{{ id }}_order_index">{{ form.vars.name }}</span>##}
+                    {#                    {{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}#}
                     {# form_name #}
                 </div>
 
@@ -95,7 +94,7 @@
     <div class="cms-module-edit">
         {% if edit_template|default(false) %}
             <div class="module-preview">
-            {% include edit_template %}
+                {% include edit_template %}
             </div>
         {% endif %}
 
@@ -131,12 +130,12 @@
 
 {% block container_module_row %}
     <div data-polymorphic="node" class="{{ row_class|default('') }}" {{ block('widget_container_attributes') }}>
-        <div class="insert-module" data-polymorphic-position="before" data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal" data-bs-whatever="@mdo">Insert module here</div>
+        <div class="insert-module" data-polymorphic-position="before" data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal">Insert module here</div>
         <div class="cms-module {{ form.vars.deprecated?'cms-module-deprecated':'' }}">
             <div class="cms-module-header">
                 <div class="cms-module-title">
-{#                    <span class="order-polymorphic-node" id="{{ id }}_order_index">{{ form.vars.name }}</span>##}
-{#                    {{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}#}
+                    {#                    <span class="order-polymorphic-node" id="{{ id }}_order_index">{{ form.vars.name }}</span>##}
+                    {#                    {{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}#}
                     {# form_name #}
                 </div>
 
@@ -157,7 +156,7 @@
     <div class="cms-module-edit">
         {% if edit_template|default(false) %}
             <div class="module-preview">
-            {% include edit_template %}
+                {% include edit_template %}
             </div>
         {% endif %}
 
@@ -193,13 +192,13 @@
 
 {% block empty_module_row %}
     <div data-polymorphic="node" class="{{ row_class|default('') }}" {{ block('widget_container_attributes') }}>
-        <div class="insert-module" data-polymorphic-position="before" data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal" data-bs-whatever="@mdo">Insert module here</div>
+        <div class="insert-module" data-polymorphic-position="before" data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal">Insert module here</div>
 
         <div class="cms-module {{ form.vars.deprecated?'cms-module-deprecated':'' }}">
             <div class="cms-module-header">
                 <div class="cms-module-title">
-{#                    <span class="order-polymorphic-node" id="{{ id }}_order_index">{{ form.vars.name }}</span>##}
-{#                    {{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}#}
+                    {#                    <span class="order-polymorphic-node" id="{{ id }}_order_index">{{ form.vars.name }}</span>##}
+                    {#                    {{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}#}
                     {# form_name #}
                 </div>
 
@@ -254,57 +253,6 @@
         {{ form_rest(form) }}
     </div>
 {% endblock empty_module_widget %}
-
-{#{% block dynamic_form_collection_row %}#}
-{#    <div class="dynamic-form-collection collection">#}
-{#        {{ form_label(form) }} #}{# uses: dynamic_form_collection_label #}
-{#        {{ form_errors(form) }}#}
-{#        {{ form_widget(form) }} #}{# uses: dynamic_form_collection_widget #}
-{#    </div>#}
-{#{% endblock dynamic_form_collection_row %}#}
-
-{#{% block dynamic_form_collection_label %}#}
-{#    {% trans_default_domain 'sfs_cms_admin' %}#}
-{#    <div class="row my-4">#}
-{#        <div class="col-sm-6">#}
-{#            {% set element = 'p' %}#}
-{#            {% set label_attr = label_attr | merge({'class':'h4'}) %}#}
-
-{#            {% if label is not same as(false) -%}#}
-{#            {% if label is empty -%}#}
-{#                {%- if label_format is not empty -%}#}
-{#                    {% set label = label_format|replace({#}
-{#                        '%name%': name,#}
-{#                        '%id%': id,#}
-{#                    }) %}#}
-{#                {%- else -%}#}
-{#                    {% set label = name|humanize %}#}
-{#                {%- endif -%}#}
-{#            {%- endif -%}#}
-{#            <{{ element|default('label') }}{% if label_attr %}{% with { attr: label_attr } %}{{ block('attributes') }}{% endwith %}{% endif %}>{{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}</{{ element|default('label') }}>#}
-{#        {%- endif -%}#}
-{#    </div>#}
-{#    <div class="col-sm-6 text-end">#}
-{#        <button type="button" class="btn btn-outline-primary cursor-pointer add_dynamic_form" data-collection="#{{ id }}">#}
-{#            Add#}
-{#        </button>#}
-{#    </div>#}
-{#{% endblock dynamic_form_collection_label %}#}
-
-{#{% block dynamic_form_collection_widget %}#}
-{#    {% if prototype is defined and not prototype.rendered %}#}
-{#        {%- set attr = attr|merge({'data-prototype': form_row(prototype) }) -%}#}
-{#    {% endif %}#}
-{#    {% set attr = attr | merge({'class':'dynamic-form-collection-widget col-12'}) %}#}
-{#    <!-- Nodes -->#}
-{#    <div {{ block('widget_container_attributes') }}>#}
-{#        {%- if form.parent is empty -%}#}
-{#            {{ form_errors(form) }}#}
-{#        {%- endif -%}#}
-{#        {{- block('form_rows') -}}#}
-{#        {{- form_rest(form) -}}#}
-{#    </div>#}
-{#{% endblock dynamic_form_collection_widget %}#}
 
 {% block module_prototypes_collection_widget %}
     <div class="modal fade add-module-modal" id="module_prototypes_collection_modal" tabindex="-1" aria-labelledby="{{ form.vars.id }}_modal" aria-hidden="true">

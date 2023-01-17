@@ -4,7 +4,7 @@
 
 {% block title %}{{ ('admin_'~content~'.seo.meta.title')|trans({'%name%':entity.name}) }}{% endblock %}
 
-{% form_theme form '@SfsPolymorphicFormType/polymorphic-form-theme.html.twig' '@SfsCms/cms_form_theme.html.twig' '@SfsCms/forms/types-theme.html.twig' %}
+{% form_theme form '@SfsCms/forms/types-theme.html.twig' %}
 
 {% block breadcrums_content %}
     {{ parent() }}
