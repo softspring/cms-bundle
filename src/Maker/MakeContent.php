@@ -55,7 +55,7 @@ class MakeContent extends AbstractMaker
         $inputConfig->setArgumentAsNonInteractive('entity-class');
     }
 
-    public function interact(InputInterface $input, ConsoleStyle $io, Command $command)
+    public function interact(InputInterface $input, ConsoleStyle $io, Command $command): void
     {
         if (null === $input->getArgument('content-name')) {
             $argument = $command->getDefinition()->getArgument('content-name');
