@@ -2,3 +2,4 @@ _group:
     container.name: "Containers"
     helper.name: "Helpers"
     html.name: "HTML"
+    default.name: "Others"
