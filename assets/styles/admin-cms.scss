@@ -15,15 +15,86 @@
 
 .row {
     & > .insert-module {
-        display: block;
-        cursor: pointer;
+        display: none;
+    }
+}
 
+.insert-module {
+    display: none;
+    cursor: pointer;
+    z-index: 1000;
+    background-color: $gray-500;
+
+    &:hover {
+        z-index: 1001;
+    }
+
+    &:before {
+        text-align: center;
+        content: '+';
+        font-size: 15px;
+        font-weight: bold;
+        line-height: 20px;
+        color: white;
+        display: block;
+        width: 20px;
+        height: 20px;
+        background-color: $gray-500;
+    }
+}
+
+[data-polymorphic=collection]:hover > .row {
+    & > .insert-module {
+        display: block;
         margin-top: -4px;
         height: 4px;
-        //transition: height 200ms linear 200ms, background-color 200ms linear 200ms;
 
-        background-color: $gray-500;
-        z-index: 1000;
+        &:before {
+            margin-top: -8px;
+            margin-left: -10px;
+            position: relative;
+            left: 50%;
+        }
+
+        &.selected,
+        &:hover {
+            background-color: $primary;
+            color: white;
+
+            &:before {
+                background-color: $primary;
+            }
+        }
+
+        &:last-child {
+            margin-bottom: 20px;
+        }
+    }
+}
+
+.insert-module-at-the-end.col {
+    height: 100%;
+    min-height: 200px;
+    padding: 0;
+    flex: 0 0 16px;
+}
+
+[data-polymorphic=collection]:hover > .col,
+[data-polymorphic=collection]:hover + .insert-module-at-the-end.col {
+    & > .insert-module {
+        position: absolute;
+        display: block;
+        margin-left: calc(var(--bs-gutter-x) * -0.5);
+        width: 4px;
+        height: calc(100% - 0.5rem);
+        min-height: 200px;
+
+        &:before {
+            margin-top: -10px;
+            margin-left: -8px;
+            position: relative;
+            top: 50%;
+        }
     }
 
     & > .insert-module.selected,
@@ -32,65 +103,17 @@
         color: white;
 
         &:before {
-            text-align: center;
-            content: '+';
-            font-size: 15px;
-            font-weight: bold;
-            line-height: 20px;
-            color: white;
-            display: block;
-            width: 20px;
-            height: 20px;
-            margin-top: -10px;
-            margin-left: -15px;
             background-color: $primary;
         }
-
-        //height: 50px;
-        //transition: height 200ms linear 200ms, background-color 200ms linear;
     }
 
     & > .insert-module:last-child {
-    //    height: 50px;
-    //    line-height: 50px;
-    //    border: 1px dashed gray;
-    //    color: gray;
-    //    margin-top: 20px;
-        margin-bottom: 20px;
     }
 }
 
-.col {
-    & > .insert-module {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-
-        font-size: 12px;
-        border: 1px dashed transparent;
-        text-align: center;
-        cursor: pointer;
-        overflow: hidden;
-
-        width: 5px;
-        transition: width 200ms linear 200ms;
-    }
-
-    & > .insert-module.selected,
-    & > .insert-module:hover {
-        border: 1px dashed $primary;
-        background-color: $primary;
-        color: white;
-
-        width: 50px;
-        transition: width 200ms linear 200ms;
-    }
-
-    & > .insert-module:last-child {
-        width: 50px;
-        border: 1px dashed gray;
-        color: gray;
-    }
+[data-polymorphic=collection] + .insert-module-at-the-end.col,
+[data-polymorphic=collection]:hover + .insert-module-at-the-end.col {
+    margin-left: 0;
 }
 
 .cms-module {
