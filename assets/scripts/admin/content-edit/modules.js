@@ -168,6 +168,16 @@ window.addEventListener('load', (event) => {
         event.node().classList.remove(...event.node().classList);
         event.node().classList.add(event.collection().dataset.moduleRowClass);
 
+        if (event.collection().dataset.moduleRowClass == 'col') {
+            const down = event.node().querySelector(':scope > .cms-module > .cms-module-header > .cms-module-buttons > [data-polymorphic-action=down] .bi-chevron-down');
+            down.classList.remove('bi-chevron-down');
+            down.classList.add('bi-chevron-right');
+            const up = event.node().querySelector(':scope > .cms-module > .cms-module-header > .cms-module-buttons > [data-polymorphic-action=up] .bi-chevron-up');
+            up.classList.remove('bi-chevron-up');
+            up.classList.add('bi-chevron-left');
+        }
+
+
         moduleFocus(event.node().querySelector('.cms-module'));
     });
 });
