@@ -13,5 +13,9 @@ parameters:
             count: 1
             path: src/Routing/UrlGenerator.php
         -
+            message: "#Empty array passed to foreach.#"
+            count: 1
+            path: src/Form/Module/ModuleCollectionType.php
+        -
             message: "#Call to an undefined method .*::method\\(\\)#"
             path: tests
