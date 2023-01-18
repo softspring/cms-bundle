@@ -86,7 +86,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for version in entity.versions %}
+                    {% for version in entity.versions|slice(0,3) %}
                         <tr>
                             <td>v{{ version.versionNumber }}</td>
                             <td>{{ ('admin_'~content~'.versions.origin.'~(version.origin|default('null')))|trans }}</td>
