@@ -36,8 +36,7 @@ services:
     sfs_cms.admin.route.controller:
         class: Softspring\Component\CrudlController\Controller\CrudlController
         public: true
-        calls:
-            - { method: setContainer, arguments: ['@service_container'] }
+        tags: [ 'controller.service_arguments' ]
         arguments:
             $manager: '@Softspring\CmsBundle\Manager\RouteManagerInterface'
             $eventDispatcher: '@event_dispatcher'
