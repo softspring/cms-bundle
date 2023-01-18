@@ -58,7 +58,7 @@ class ContentContentForm extends AbstractType implements ContentContentFormInter
         ]);
 
         $builder->add('module_prototypes_collection', ModuleCollectionType::class, [
-            'label' => "__label__",
+            'label' => '__label__',
             'block_prefix' => 'module_prototypes_collection',
             'translation_domain' => 'sfs_cms_layouts',
             'content_type' => $options['content_type'],
