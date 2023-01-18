@@ -19,6 +19,7 @@ class ContainerModuleType extends DynamicFormModuleType
             'compatible_contents' => [],
             'module_collection_class' => '',
             'module_row_class' => '',
+            'collection_row_attr' => [],
         ]);
 
         parent::configureChildOptions($resolver);
@@ -43,6 +44,7 @@ class ContainerModuleType extends DynamicFormModuleType
             'compatible_contents' => [],
             // random prototype name to allow multiple levels
             'prototype_name' => '__'.Hash::generate().'__',
+            'collection_row_attr' => $options['collection_row_attr'],
         ]);
     }
 }

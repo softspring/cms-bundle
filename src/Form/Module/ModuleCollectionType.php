@@ -100,6 +100,7 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
             'module_collection_class' => '',
             'module_row_class' => '',
             'prototype' => false, // recursive prototypes can cause memory issues and malfunctions
+            'collection_row_attr' => [],
         ]);
     }
 
@@ -127,6 +128,7 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
 
         $view->vars['module_collection_class'] = $options['module_collection_class'];
         $view->vars['module_row_class'] = $options['module_row_class'];
+        $view->vars['collection_row_attr'] = $options['collection_row_attr'];
         $view->vars['allowed_modules'] = $options['allowed_modules'] ?? array_keys($options['discriminator_map']);
         $view->vars['prototypes'] = [];
 

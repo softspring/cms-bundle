@@ -12,7 +12,9 @@
 {% endblock module_locale_filter_widget %}
 
 {% block module_collection_row %}
-    <div>
+    {% with { 'attr': form.vars.collection_row_attr|default({}) } %}
+        <div {{ block('attributes') }}>
+    {% endwith %}
         {{ form_label(form) }} {# uses: module_collection_label #}
         {{ form_errors(form) }}
         {{ form_widget(form) }} {# uses: module_collection_widget #}
@@ -46,7 +48,7 @@
         {{- block('form_rows') -}}
         {{- form_rest(form) -}}
 
-        <div class="{{ form.vars.module_row_class }}">
+        <div class="insert-module-at-the-end {{ form.vars.module_row_class }}">
             <a class="insert-module" data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal"
                data-polymorphic-collection="{{ form.vars.id }}" data-polymorphic-position="latest" title="Insert module here"></a>
         </div>
