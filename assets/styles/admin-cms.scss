@@ -11,10 +11,132 @@
 .cms-content-main{
     margin-top: 27px;
 }
-.module-polymorphic-collection {
-    .polymorphic-node-row {
-        //margin: 0 0 0 30px;
+
+
+.row {
+    & > .insert-module {
+        display: none;
     }
+}
+
+.insert-module {
+    display: none;
+    //height: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid rgba(255,255,255,.8);
+    background-color: $gray-500;
+    z-index: 1000;
+
+    &:hover {
+        z-index: 1001;
+
+        &:before {
+            opacity: 1;
+        }
+    }
+
+    &:before {
+        content: '+';
+        display: block;
+        width: 25px;
+        height: 25px;
+        margin: -12px auto 0;
+        font-size: 30px;
+        line-height: 25px;
+        text-align: center;
+        color: white;
+        border-radius: 4px;
+        border: 1px solid rgba(255,255,255,.8);
+        background-color: $primary;
+        opacity: 0;
+        transition: opacity .5s ease-in-out;
+    }
+}
+
+[data-polymorphic=collection]:hover > .row {
+    & > .insert-module {
+        display: block;
+        margin-top: -4px;
+        height: 4px;
+
+        //&:before {
+        //    margin-top: -8px;
+        //    margin-left: -10px;
+        //    position: relative;
+        //    left: 50%;
+        //}
+
+        &.selected,
+        &:hover {
+            background-color: $primary;
+            color: white;
+
+            &:before {
+                background-color: $primary;
+            }
+        }
+
+        &:last-child {
+            margin-bottom: 20px;
+        }
+    }
+}
+
+.insert-module-at-the-end.col {
+    height: 100%;
+    min-height: 200px;
+    padding: 0;
+    flex: 0 0 16px;
+
+    &:first-child {
+        margin-left: 40px;
+    }
+}
+
+[data-polymorphic=collection] {
+    min-height: 50px;
+}
+
+[data-polymorphic=collection]:hover > .col,
+[data-polymorphic=collection]:hover + .insert-module-at-the-end.col {
+    &:not(.insert-module-at-the-end):first-child {
+        margin-left: 10px;
+    }
+
+    & > .insert-module {
+        position: absolute;
+        display: block;
+        margin-left: calc(var(--bs-gutter-x) * -0.5);
+        width: 4px;
+        height: calc(100% - 6rem);
+        min-height: 200px;
+
+        &:before {
+            margin-top: -12px;
+            margin-left: -12px;
+            position: relative;
+            top: 50%;
+        }
+    }
+
+    & > .insert-module.selected,
+    & > .insert-module:hover {
+        background-color: $primary;
+        color: white;
+
+        &:before {
+            background-color: $primary;
+        }
+    }
+
+    & > .insert-module:last-child {
+    }
+}
+
+[data-polymorphic=collection] + .insert-module-at-the-end.col,
+[data-polymorphic=collection]:hover + .insert-module-at-the-end.col {
+    margin-left: 0;
 }
 
 .cms-module {
@@ -23,9 +145,10 @@
     flex-direction: column;
     margin-top: 30px;
     border: 2px dashed transparent;
-    margin-top: -4px !important;
+    margin-top: -2px !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
+    min-height: 50px;
 
     .cms-module-form {
         display: none;
@@ -155,8 +278,59 @@
     }
 
     .module-container {
+        border-width: 1px !important;
         border-style: dashed !important;
-        min-height: 300px;
+        min-height: 50px;
+    }
+}
+
+.add-module-modal {
+    /* Important part */
+    .modal-dialog{
+        overflow-y: initial !important
+    }
+    .modal-body{
+        height: 80vh;
+        overflow-y: auto;
+
+        .module-thumbnail {
+            width: 100%;
+            height: 120px;
+            cursor: pointer;
+            border-radius: 5px;
+            border: 2px solid $secondary;
+            transition: all .3s ease-in-out;
+
+            .icon {
+                height: 50px;
+                width: 50px;
+                margin: 15px auto;
+                text-align: center;
+                transition: all .3s ease-in-out;
+
+                .bi {
+                    font-size: 50px;
+                    line-height: 50px;
+                }
+            }
+
+            .name {
+                color: $secondary;
+                text-align: center;
+                transition: all .3s ease-in-out;
+            }
+
+            &:hover {
+                border-color: $primary;
+
+                .icon {
+                    color: $primary;
+                }
+                .name {
+                    color: $primary;
+                }
+            }
+        }
     }
 }
 
@@ -177,8 +351,11 @@
     transition: box-shadow .3s ease-in-out;
 
     &:hover {
-        border-radius: 3px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+        box-shadow: 0 0 15px rgba(0, 0, 0, .1);
+
+        &:not(.btn) {
+            border-radius: 5px;
+        }
     }
 }
 .modal-body, .content-escape {

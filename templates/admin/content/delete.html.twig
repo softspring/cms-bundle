@@ -4,8 +4,6 @@
 
 {% block title %}{{ ('admin_'~content~'.delete.meta.title')|trans({'%name%':entity.name}) }}{% endblock %}
 
-{% form_theme form '@SfsPolymorphicFormType/polymorphic-form-theme.html.twig' '@SfsCms/cms_form_theme.html.twig' %}
-
 {% block breadcrums_content %}
     {{ parent() }}
     <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content~'_list') }}">{{ ('admin_'~content~'.list.breadcrumb')|trans }}</a></li>

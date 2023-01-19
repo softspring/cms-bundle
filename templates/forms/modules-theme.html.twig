@@ -1,0 +1,299 @@
+{% block module_locale_filter_widget %}
+    <div class="input-group mb-3">
+        <div {{ block('widget_container_attributes') }} class="row">
+            {%- for child in form %}
+                <div class="col">
+                    {{- form_widget(child, {'attr': {'data-cms-module-locale-filter':''}}) -}}
+                    {{- form_label(child, null, {translation_domain: choice_translation_domain}) -}}
+                </div>
+            {% endfor -%}
+        </div>
+    </div>
+{% endblock module_locale_filter_widget %}
+
+{% block module_collection_row %}
+    {% with { 'attr': form.vars.collection_row_attr|default({}) } %}
+        <div {{ block('attributes') }}>
+    {% endwith %}
+        {{ form_label(form) }} {# uses: module_collection_label #}
+        {{ form_errors(form) }}
+        {{ form_widget(form) }} {# uses: module_collection_widget #}
+    </div>
+{% endblock module_collection_row %}
+
+{% block module_collection_label %}
+{% endblock module_collection_label %}
+
+{% block module_collection_widget %}
+    {% if container is defined %}
+        {% with { 'attr': container.attr|default({}) } %}
+            <div {{ block('attributes') }}>
+        {% endwith %}
+    {% endif %}
+
+    {% set attr = attr | merge({
+        'data-polymorphic': 'collection',
+        'data-modules-allowed': form.vars.allowed_modules|join(','),
+        'data-modules-modal': 'module_prototypes_collection_modal',
+        'data-full-name': form.vars.full_name,
+        'data-module-row-class': form.vars.module_row_class,
+        'class': module_collection_class
+    }) %}
+
+    <!-- Nodes -->
+    <div {{ block('widget_container_attributes') }}>
+        {%- if form.parent is empty -%}
+            {{ form_errors(form) }}
+        {%- endif -%}
+        {{- block('form_rows') -}}
+        {{- form_rest(form) -}}
+
+        <div class="insert-module-at-the-end {{ form.vars.module_row_class }}">
+            <a class="insert-module" data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal"
+               data-polymorphic-collection="{{ form.vars.id }}" data-polymorphic-position="latest" title="Insert module here"></a>
+        </div>
+    </div>
+
+    {% if container is defined %}
+        </div>
+    {% endif %}
+{% endblock module_collection_widget %}
+
+{#{% block module_collection_entry_row %}#}
+{#{% endblock module_collection_entry_row %}#}
+
+{#{% block module_collection_entry_widget %}#}
+{#{% endblock module_collection_entry_widget %}#}
+
+{#{% block module_collection_entry %}#}
+{#{% endblock module_collection_entry %}#}
+
+{% block dynamic_form_module_row %}
+    <div data-polymorphic="node" class="{{ row_class|default('') }}" {{ block('widget_container_attributes') }}>
+        <div class="insert-module" data-polymorphic-position="before"  data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal" title="Insert module here"></div>
+        <div class="cms-module {{ form.vars.deprecated?'cms-module-deprecated':'' }}">
+            <div class="cms-module-header">
+                <div class="cms-module-title">
+                    {#                    <span class="order-polymorphic-node" id="{{ id }}_order_index">{{ form.vars.name }}</span>##}
+                    {#                    {{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}#}
+                    {# form_name #}
+                </div>
+
+                <div class="cms-module-buttons">
+                    <button type="button" id="{{ id }}_up_node_button" data-polymorphic-action="up"><span class="bi {{ row_class == 'col' ? 'bi-chevron-left' : 'bi-chevron-up' }} h2"></span><span class="visually-hidden">^</span></button>
+                    <button type="button" id="{{ id }}_down_node_button" data-polymorphic-action="down"><span class="bi {{ row_class == 'col' ? 'bi-chevron-right' : 'bi-chevron-down' }} h2"></span><span class="visually-hidden">v</span></button>
+                    <button type="button" id="{{ id }}_remove_node_button" data-polymorphic-action="delete" class="btn-close ms-3"><span class="visually-hidden">x</span></button>
+                </div>
+            </div>
+            <div class="cms-module-body">
+                {{ form_widget(form) }}{{ form_errors(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock dynamic_form_module_row %}
+
+{% block dynamic_form_module_widget %}
+    <div class="cms-module-edit">
+        {% if edit_template|default(false) %}
+            <div class="module-preview">
+                {% include edit_template %}
+            </div>
+        {% endif %}
+
+        <div class="cms-module-form text-dark">
+            <div class="d-flex justify-content-between border-bottom bg-gray-200 p-3">
+                <div>
+                    <span data-polymorphic="node-index" class="pe-3" id="{{ id }}_order_index">{{ form.vars.name }}</span>
+                    <strong>{{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}</strong>
+                    {% if form.vars.deprecated %}<i class="bi bi-exclamation-diamond text-warning"></i>{% endif %}
+                </div>
+                {# form_name #}
+                <button type="button" class="btn-close" data-cms-module-form-close="" aria-label="Close"></button>
+            </div>
+            <div class="container">
+                {% if form.vars.deprecated %}
+                    <div class="alert alert-warning mt-3" role="alert">{{ form.vars.deprecated }}</div>
+                {% endif %}
+
+                {% if form.locale_filter is defined %}
+                    {{ form_label(form.locale_filter) }}
+                    {{ form_widget(form.locale_filter) }}
+                {% endif %}
+
+                {% if form_template|default(false) %}
+                    {% include form_template %}
+                {% else %}
+                    {{ form_widget(form) }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock dynamic_form_module_widget %}
+
+{% block container_module_row %}
+    <div data-polymorphic="node" class="{{ row_class|default('') }}" {{ block('widget_container_attributes') }}>
+        <div class="insert-module" data-polymorphic-position="before" data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal" title="Insert module here"></div>
+        <div class="cms-module {{ form.vars.deprecated?'cms-module-deprecated':'' }}">
+            <div class="cms-module-header">
+                <div class="cms-module-title">
+                    {#                    <span class="order-polymorphic-node" id="{{ id }}_order_index">{{ form.vars.name }}</span>##}
+                    {#                    {{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}#}
+                    {# form_name #}
+                </div>
+
+                <div class="cms-module-buttons">
+                    <button type="button" id="{{ id }}_down_node_button" data-polymorphic-action="down"><span class="bi bi-chevron-down h2"></span><span class="visually-hidden">v</span></button>
+                    <button type="button" id="{{ id }}_up_node_button" data-polymorphic-action="up"><span class="bi bi-chevron-up h2"></span><span class="visually-hidden">^</span></button>
+                    <button type="button" id="{{ id }}_remove_node_button" data-polymorphic-action="delete" class="btn-close ms-3"><span class="visually-hidden">x</span></button>
+                </div>
+            </div>
+            <div class="cms-module-body">
+                {{ form_widget(form) }}{{ form_errors(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock container_module_row %}
+
+{% block container_module_widget %}
+    <div class="cms-module-edit">
+        {% if edit_template|default(false) %}
+            <div class="module-preview">
+                {% include edit_template %}
+            </div>
+        {% endif %}
+
+        <div class="cms-module-form text-dark">
+            <div class="d-flex justify-content-between border-bottom bg-gray-200 p-3">
+                <div>
+                    <span data-polymorphic="node-index" class="pe-3" id="{{ id }}_order_index">{{ form.vars.name }}</span>
+                    <strong>{{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}</strong>
+                    {% if form.vars.deprecated %}<i class="bi bi-exclamation-diamond text-warning"></i>{% endif %}
+                </div>
+                <button type="button" class="btn-close" data-cms-module-form-close="" aria-label="Close"></button>
+            </div>
+            <div class="container">
+                {% if form.vars.deprecated %}
+                    <div class="alert alert-warning mt-3" role="alert">{{ form.vars.deprecated }}</div>
+                {% endif %}
+
+                {% if form.locale_filter is defined %}
+                    {{ form_label(form.locale_filter) }}
+                    {{ form_widget(form.locale_filter) }}
+                {% endif %}
+
+                {% if form_template|default(false) %}
+                    {% include form_template %}
+                {% else %}
+                    {{ form_widget(form) }}
+                {% endif %}
+            </div>
+        </div>
+        {{ form_rest(form) }}
+    </div>
+{% endblock container_module_widget %}
+
+{% block empty_module_row %}
+    <div data-polymorphic="node" class="{{ row_class|default('') }}" {{ block('widget_container_attributes') }}>
+        <div class="insert-module" data-polymorphic-position="before" data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal" title="Insert module here"></div>
+
+        <div class="cms-module {{ form.vars.deprecated?'cms-module-deprecated':'' }}">
+            <div class="cms-module-header">
+                <div class="cms-module-title">
+                    {#                    <span class="order-polymorphic-node" id="{{ id }}_order_index">{{ form.vars.name }}</span>##}
+                    {#                    {{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}#}
+                    {# form_name #}
+                </div>
+
+                <div class="cms-module-buttons">
+                    <button type="button" id="{{ id }}_down_node_button" data-polymorphic-action="down"><span class="bi bi-chevron-down"></span><span class="visually-hidden">v</span></button>
+                    <button type="button" id="{{ id }}_up_node_button" data-polymorphic-action="up"><span class="bi bi-chevron-up"></span><span class="visually-hidden">^</span></button>
+                    <button type="button" id="{{ id }}_remove_node_button" data-polymorphic-action="delete" class="btn-close ms-3"><span class="visually-hidden">x</span></button>
+                </div>
+            </div>
+            <div class="cms-module-body">
+                {{ form_widget(form) }}{{ form_errors(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock empty_module_row %}
+
+{% block empty_module_widget %}
+    <div class="cms-module-edit">
+        {% if edit_template|default(false) %}
+            <div class="module-preview">
+                {% include edit_template %}
+            </div>
+        {% endif %}
+
+        <div class="cms-module-form text-dark">
+            <div class="d-flex justify-content-between border-bottom bg-gray-200 p-3">
+                <div>
+                    <span data-polymorphic="node-index" class="pe-3" id="{{ id }}_order_index">{{ form.vars.name }}</span>
+                    <strong>{{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}</strong>
+                    {% if form.vars.deprecated %}<i class="bi bi-exclamation-diamond text-warning"></i>{% endif %}
+                </div>
+                {# form_name #}
+                <button type="button" class="btn-close" data-cms-module-form-close="" aria-label="Close"></button>
+            </div>
+            <div class="container">
+                {% if form.vars.deprecated %}
+                    <div class="alert alert-warning mt-3" role="alert">{{ form.vars.deprecated }}</div>
+                {% endif %}
+
+                {% if form.locale_filter is defined %}
+                    {{ form_label(form.locale_filter) }}
+                    {{ form_widget(form.locale_filter) }}
+                {% endif %}
+
+                {% if form_template|default(false) %}
+                    {% include form_template %}
+                {% else %}
+                    {{ form_widget(form) }}
+                {% endif %}
+            </div>
+        </div>
+        {{ form_rest(form) }}
+    </div>
+{% endblock empty_module_widget %}
+
+{% block module_prototypes_collection_widget %}
+    <div class="modal fade add-module-modal" id="module_prototypes_collection_modal" tabindex="-1" aria-labelledby="{{ form.vars.id }}_modal" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ form.vars.name }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="modalInfo"></div>
+
+                    {% for group, prototypes in form.vars.prototypes %}
+                        <div class="modal-modules-group">
+                            <h5>{{ ('_group.'~group~'.name')|trans({}, 'sfs_cms_modules') }}</h5>
+                            <div class="container mb-4">
+                                <div class="row">
+                                    {% for key, prototype in prototypes %}
+                                        {% set trans_domain = prototype.vars.translation_domain | default(translation_domain) | default(false) %}
+                                        <div class="col-3 modal-module">
+                                            <div data-polymorphic-action="insert" data-module-id="{{ prototype.vars.module_id }}" class="module-thumbnail" {{ block('polymorphic_prototype_button_attributes') }}>
+                                                <div class="icon">
+                                                    {{ (not trans_domain ? '' : (prototype.vars.prototype_button_label~'_icon')|trans({}, trans_domain))|raw }}
+                                                </div>
+                                                <div class="name">
+                                                    {{ not trans_domain ? prototype.vars.prototype_button_label : prototype.vars.prototype_button_label|trans({}, trans_domain) }}
+                                                    {% if prototype.vars.deprecated %}
+                                                        <i class="bi bi-exclamation-diamond text-warning" title="{{ prototype.vars.deprecated }}"></i>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

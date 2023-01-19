@@ -448,6 +448,8 @@ class ContentController extends AbstractController
             }
         }
 
+        $request->attributes->set('_cms_preview', true);
+
         // show view
         $viewData = new \ArrayObject([
             'content' => $config['_id'],

@@ -2,7 +2,7 @@
 {% extends '@SfsCms/admin_layout.html.twig' %}
 {% block title %}{{ 'admin_menus.update.meta.title'|trans }}{% endblock %}
 
-{% form_theme form '@SfsPolymorphicFormType/polymorphic-form-theme.html.twig' '@SfsCms/cms_form_theme.html.twig' %}
+{% form_theme form '@SfsPolymorphicFormType/polymorphic-form-theme.html.twig' '@SfsCms/forms/menus-theme.html.twig' '@SfsCms/forms/types-theme.html.twig' %}
 
 {% block breadcrums_content %}
     {{ parent() }}

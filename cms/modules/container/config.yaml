@@ -1,5 +1,6 @@
 module:
     revision: 1
+    group: 'container'
     edit_template: '@module/container/edit.html.twig'
     module_type: 'Softspring\CmsBundle\Form\Module\ContainerModuleType'
     module_options:
@@ -8,6 +9,7 @@ module:
         allowed_modules: ~
         allowed_container_modules:
             - grid
+            - container
         form_fields:
             id:
                 type: 'id'

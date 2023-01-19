@@ -5,7 +5,8 @@
 {% block title %}{{ ('admin_'~content~'.content.meta.title')|trans({'%name%':entity.name}) }}{% endblock %}
 
 {% form_theme form '@SfsPolymorphicFormType/polymorphic-form-theme.html.twig'
-    '@SfsCms/cms_form_theme.html.twig'
+    '@SfsCms/forms/modules-theme.html.twig'
+    '@SfsCms/forms/types-theme.html.twig'
     '@SfsMedia/media_form_theme.html.twig'
 %}
 
@@ -72,6 +73,7 @@
     {#        <button onclick="document.getElementById('previewFrame').contentWindow.document.getElementsByTagName('body')[0].innerHTML = 'Otra cosa'; return false;">Change</button>#}
 
 
+    {{ form_widget(form.module_prototypes_collection) }}
     {{ form_rest(form) }}
     {{ form_end(form) }}
 
