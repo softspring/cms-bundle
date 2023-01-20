@@ -22,7 +22,7 @@
      data-edit-class-default="{{ defaultDivClass }}"
 
      data-edit-content-target="content"
-     data-edit-content-escape="true"
+     data-edit-content-validate="html"
 >
     {% for locale,localeField in form.code %}
         <div data-edit-content-target="code.{{ locale }}" data-lang="{{ locale }}"

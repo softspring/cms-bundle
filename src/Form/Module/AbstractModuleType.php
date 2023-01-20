@@ -53,6 +53,7 @@ abstract class AbstractModuleType extends AbstractNodeType
         $view->vars['edit_template'] = $options['edit_template'];
         $view->vars['row_class'] = $options['row_class'];
         $view->vars['deprecated'] = $options['deprecated'];
+        $view->vars['attr']['data-module-id'] = $options['module_id'];
     }
 
     protected function buildChildForm(FormBuilderInterface $builder, array $options)
