@@ -27,7 +27,8 @@ class ContainerModuleType extends DynamicFormModuleType
         $resolver->setDefault('allowed_modules', null);
         $resolver->setAllowedTypes('allowed_modules', ['array', 'null']); // null means any
         $resolver->setRequired('allowed_container_modules');
-        $resolver->setAllowedTypes('allowed_container_modules', ['array']);
+        $resolver->setDefault('allowed_container_modules', null);
+        $resolver->setAllowedTypes('allowed_container_modules', ['array', 'null']);
     }
 
     public function buildChildForm(FormBuilderInterface $builder, array $options)
