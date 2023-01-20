@@ -5,6 +5,7 @@ html:
     form:
         locale_filter.label: "Locales"
         id.label: "Id"
+        class.label: "Classes"
         code:
             label: "Code"
             placeholder: "insert your HTML"
