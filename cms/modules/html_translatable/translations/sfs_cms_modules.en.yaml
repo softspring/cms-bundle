@@ -5,7 +5,7 @@ html_translatable:
     form:
         locale_filter.label: "Locales"
         id.label: "Id"
+        class.label: "Classes"
         code:
             label: "Code"
             preview.placeholder: "insert your HTML"
-        class.label: "Classes"
