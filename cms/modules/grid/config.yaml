@@ -7,7 +7,7 @@ module:
         module_collection_class: 'row'
         module_row_class: 'col'
         allowed_modules: ~
-        allowed_container_modules: []
+        allowed_container_modules: ~
         form_fields:
             id:
                 type: 'id'
@@ -26,3 +26,24 @@ module:
                 type_options:
                     attr:
                         data-edit-bgcolor-input: 'gridColorDiv'
+
+            node_row_class:
+                type: 'choice'
+                type_options:
+                    choices:
+                        "grid.form.node_row_class.values.col": 'col'
+                        "grid.form.node_row_class.values.col-1": 'col-1'
+                        "grid.form.node_row_class.values.col-2": 'col-2'
+                        "grid.form.node_row_class.values.col-3": 'col-3'
+                        "grid.form.node_row_class.values.col-4": 'col-4'
+                        "grid.form.node_row_class.values.col-5": 'col-5'
+                        "grid.form.node_row_class.values.col-6": 'col-6'
+                        "grid.form.node_row_class.values.custom": ''
+                    attr:
+                        data-edit-collection-node-class: 'gridCollection'
+
+            node_row_class_custom:
+                type: 'class'
+                type_options:
+                    attr:
+                        data-edit-collection-node-class: 'gridCollection'

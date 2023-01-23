@@ -1,36 +1,17 @@
 {% trans_default_domain 'sfs_cms_modules' %}
-
-{#{% for locale,localeField in form.code %}#}
-{#    <div id="{{ form.id.vars.data|default('') }}"#}
-{#         class="text-break content-escape"#}
-{#         data-lang="{{ locale }}"#}
-{#         data-edit-id-target="codeContainerId"#}
-
-{#         data-edit-content-target="code.{{ locale }}"#}
-
-{#         data-edit-content-escape="true"#}
-{#    >{{ localeField.vars.data|default('') }}</div>#}
-{#{% endfor %}#}
-
-{#<iframe class="container-fluid" srcdoc="{{ form.code.vars.data|default('') }}" src="about:blank"></iframe>#}
 {% set defaultDivClass = 'text-break content-escape' %}
-<div id="{{ form.id.vars.data|default('') }}"
-     class="{{ defaultDivClass }}"
-     data-edit-id-target="contentContainerId"
+{% for locale,localeField in form.code %}
+    <div id="{{ form.id.vars.data|default('') }}"
+         data-edit-id-target="htmlId"
 
-     data-edit-class-target="contentContainerClassDiv"
-     data-edit-class-default="{{ defaultDivClass }}"
+         class="{{ defaultDivClass }} {{ form.class.vars.data|default('') }}"
+         data-edit-class-target="htmlClassDiv"
+         data-edit-class-default="{{ defaultDivClass }}"
 
-     data-edit-content-target="content"
-     data-edit-content-validate="html"
->
-    {% for locale,localeField in form.code %}
-        <div data-edit-content-target="code.{{ locale }}" data-lang="{{ locale }}"
-             data-edit-content-placeholder="{{ 'html_translatable.form.code.preview.placeholder'|trans }}">
-            {{ localeField.vars.data|default()|replace({'href': ''})|raw }}
-        </div>
-    {% endfor %}
-{#    {{ form_row(form.code) }}#}
-{#    {{ form.code.vars.data|default('')|length > 100 ? form.code.vars.data|raw|slice(0, 100) ~ '...' : form.code.vars.data|raw|default('')  }}</div>#}
-
-</div>
+         data-edit-content-target="code.{{ locale }}" data-lang="{{ locale }}"
+         data-edit-content-validate="html"
+         data-edit-content-placeholder="{{ 'html_translatable.form.code.preview.placeholder'|trans }}"
+    >
+        {{ localeField.vars.data|default()|replace({'href': 'href-invalidate'})|raw }}
+    </div>
+{% endfor %}

@@ -31,12 +31,13 @@
         {% endwith %}
     {% endif %}
 
-    {% set attr = attr | merge({
+    {% set attr = {
+        'data-module-row-class': form.vars.module_row_class,
+    }| merge(attr) | merge({
         'data-polymorphic': 'collection',
         'data-modules-allowed': form.vars.allowed_modules|join(','),
         'data-modules-modal': 'module_prototypes_collection_modal',
         'data-full-name': form.vars.full_name,
-        'data-module-row-class': form.vars.module_row_class,
         'class': module_collection_class
     }) %}
 
@@ -45,10 +46,14 @@
         {%- if form.parent is empty -%}
             {{ form_errors(form) }}
         {%- endif -%}
-        {{- block('form_rows') -}}
+        {% for child in form|filter(child => not child.rendered) %}
+            {{- form_row(child, {
+                'attr': child.vars.attr|merge({'class': attr['data-module-row-class']})
+            }) -}}
+        {% endfor %}
         {{- form_rest(form) -}}
 
-        <div class="insert-module-at-the-end {{ form.vars.module_row_class }}">
+        <div class="insert-module-at-the-end {{ attr['data-module-row-class'] }}">
             <a class="insert-module" data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal"
                data-polymorphic-collection="{{ form.vars.id }}" data-polymorphic-position="latest" title="Insert module here"></a>
         </div>
@@ -69,7 +74,7 @@
 {#{% endblock module_collection_entry %}#}
 
 {% block dynamic_form_module_row %}
-    <div data-polymorphic="node" class="{{ row_class|default('') }}" {{ block('widget_container_attributes') }}>
+    <div data-polymorphic="node" {{ block('widget_container_attributes') }}>
         <div class="insert-module" data-polymorphic-position="before"  data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal" title="Insert module here"></div>
         <div class="cms-module {{ form.vars.deprecated?'cms-module-deprecated':'' }}">
             <div class="cms-module-header">
@@ -80,8 +85,8 @@
                 </div>
 
                 <div class="cms-module-buttons">
-                    <button type="button" id="{{ id }}_up_node_button" data-polymorphic-action="up"><span class="bi {{ row_class == 'col' ? 'bi-chevron-left' : 'bi-chevron-up' }} h2"></span><span class="visually-hidden">^</span></button>
-                    <button type="button" id="{{ id }}_down_node_button" data-polymorphic-action="down"><span class="bi {{ row_class == 'col' ? 'bi-chevron-right' : 'bi-chevron-down' }} h2"></span><span class="visually-hidden">v</span></button>
+                    <button type="button" id="{{ id }}_up_node_button" data-polymorphic-action="up"><span class="bi bi-chevron-up h2"></span><span class="visually-hidden">^</span></button>
+                    <button type="button" id="{{ id }}_down_node_button" data-polymorphic-action="down"><span class="bi bi-chevron-down h2"></span><span class="visually-hidden">v</span></button>
                     <button type="button" id="{{ id }}_remove_node_button" data-polymorphic-action="delete" class="btn-close ms-3"><span class="visually-hidden">x</span></button>
                 </div>
             </div>
@@ -131,7 +136,7 @@
 {% endblock dynamic_form_module_widget %}
 
 {% block container_module_row %}
-    <div data-polymorphic="node" class="{{ row_class|default('') }}" {{ block('widget_container_attributes') }}>
+    <div data-polymorphic="node" {{ block('widget_container_attributes') }}>
         <div class="insert-module" data-polymorphic-position="before" data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal" title="Insert module here"></div>
         <div class="cms-module {{ form.vars.deprecated?'cms-module-deprecated':'' }}">
             <div class="cms-module-header">
@@ -193,7 +198,7 @@
 {% endblock container_module_widget %}
 
 {% block empty_module_row %}
-    <div data-polymorphic="node" class="{{ row_class|default('') }}" {{ block('widget_container_attributes') }}>
+    <div data-polymorphic="node" {{ block('widget_container_attributes') }}>
         <div class="insert-module" data-polymorphic-position="before" data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal" title="Insert module here"></div>
 
         <div class="cms-module {{ form.vars.deprecated?'cms-module-deprecated':'' }}">
