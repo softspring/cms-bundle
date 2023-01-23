@@ -20,14 +20,12 @@ class ContainerModuleType extends DynamicFormModuleType
             'module_collection_class' => '',
             'module_row_class' => '',
             'collection_row_attr' => [],
+            'allowed_modules' => null,
+            'allowed_container_modules' => null,
         ]);
 
         parent::configureChildOptions($resolver);
-        $resolver->setRequired('allowed_modules');
-        $resolver->setDefault('allowed_modules', null);
         $resolver->setAllowedTypes('allowed_modules', ['array', 'null']); // null means any
-        $resolver->setRequired('allowed_container_modules');
-        $resolver->setDefault('allowed_container_modules', null);
         $resolver->setAllowedTypes('allowed_container_modules', ['array', 'null']);
     }
 

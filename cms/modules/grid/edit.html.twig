@@ -1,13 +1,19 @@
 <div class="row border border-2 module-container">
-    {{ form_row(form.modules, {'container': {
+    {{ form_row(form.modules, {
+        'container': {
+            'attr': {
+                'id': form.id.vars.data,
+                'class': 'py-5 '~form.class.vars.data|default(''),
+                'data-edit-id-target': 'gridIdDiv',
+                'data-edit-class-target': 'gridClassDiv',
+                'data-edit-class-default': 'p-2',
+                'data-edit-bgcolor-target': 'gridColorDiv',
+                'data-edit-collection-node-class-target': 'gridCollection',
+                'style': form.bg_color.vars.data ? 'background-color:'~form.bg_color.vars.data : ''
+            }
+        },
         'attr': {
-            'id': form.id.vars.data,
-            'class': 'py-5 '~form.class.vars.data|default(''),
-            'data-edit-id-target': 'gridIdDiv',
-            'data-edit-class-target': 'gridClassDiv',
-            'data-edit-class-default': 'p-2',
-            'data-edit-bgcolor-target': 'gridColorDiv',
-            'style': form.bg_color.vars.data ? 'background-color:'~form.bg_color.vars.data : ''
+            'data-module-row-class': form.node_row_class.vars.data|default(form.node_row_class_custom.vars.data)|default('col')
         }
-    }}) }}
+    }) }}
 </div>

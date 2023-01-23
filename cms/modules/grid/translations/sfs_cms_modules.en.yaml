@@ -8,3 +8,16 @@ grid:
         id.label: "Id"
         class.label: "Classes"
         bg_color.label: "Background color"
+        node_row_class:
+            label: "Element size"
+            values:
+                col: "automatic"
+                col-1: "1/12"
+                col-2: "2/12"
+                col-3: "3/12"
+                col-4: "4/12"
+                col-5: "5/12"
+                col-6: "6/12"
+                custom: "custom"
+        node_row_class_custom:
+            label: "Element classes"
