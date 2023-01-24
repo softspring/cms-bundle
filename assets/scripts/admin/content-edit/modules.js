@@ -1,5 +1,5 @@
 import { filterCurrentTranslatableElementsLanguage } from './locale-filter-preview';
-import { getPolymorphicCollectionLastIndex } from '../../../../../polymorphic-form-type/assets/scripts/polymorphic-form-type-vanilla';
+import { getPolymorphicCollectionLastIndex } from '../../../../../polymorphic-form-type/assets/scripts/polymorphic-form-type';
 
 window.addEventListener('load', (event) => {
     function moduleFocus(module) {
