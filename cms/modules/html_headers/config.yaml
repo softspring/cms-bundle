@@ -2,6 +2,7 @@ module:
     revision: 1
     group: 'helper'
     edit_template: '@module/html_headers/edit.html.twig'
+    form_template: '@module/html_headers/form.html.twig'
     render_template: '@module/html_headers/render.html.twig'
     module_options:
         label_format: 'modules.html_headers.%%name%%.label'

@@ -1,6 +1,8 @@
 import { getSelectedLanguage } from './locale-filter-preview';
 
 window.addEventListener('load', (event) => {
+    let cssCodeNotValidatedWarningShown = false;
+
     /**
      * Previews content from input
      *
@@ -16,10 +18,42 @@ window.addEventListener('load', (event) => {
         let htmlTargetElements = modulePreview.querySelectorAll("[data-edit-content-target='" + event.target.dataset.editContentInput + "']");
         if (htmlTargetElements.length) {
             htmlTargetElements.forEach(function(htmlTargetElement) {
+                let value = event.target.value;
+
+                if (htmlTargetElement.dataset.editContentValidate) {
+                    switch (htmlTargetElement.dataset.editContentValidate) {
+                        case 'html':
+                            let valueToParse = '<body>'+value+'</body>';
+                            valueToParse = valueToParse.replace(new RegExp('\n', 'g'), '');
+                            let parser = new DOMParser();
+                            let doc = parser.parseFromString(valueToParse, "application/xml");
+                            let errorNode = doc.querySelector('parsererror');
+                            if (errorNode) {
+                                value = errorNode.innerText;
+                                htmlTargetElement.classList.add('text-error');
+                                htmlTargetElement.classList.add('border');
+                                htmlTargetElement.classList.add('border-danger');
+                            } else {
+                                htmlTargetElement.classList.remove('text-error');
+                                htmlTargetElement.classList.remove('border');
+                                htmlTargetElement.classList.remove('border-danger');
+                            }
+                            break;
+
+                        case 'css':
+                            if (!cssCodeNotValidatedWarningShown) {
+                                console.warn('Sorry, css code is not yet validated');
+                                cssCodeNotValidatedWarningShown = true;
+                            }
+                            break;
+                    }
+                }
+
                 if (htmlTargetElement.dataset.editContentEscape) {
-                    htmlTargetElement.innerText = event.target.value;
+                    htmlTargetElement.innerText = value;
                 } else {
-                    htmlTargetElement.innerHTML = event.target.value;
+                    value = value.replace(new RegExp('href', 'g'), 'href-invalidate');
+                    htmlTargetElement.innerHTML = value;
                 }
 
                 if (htmlTargetElement.dataset.editContentHideIfEmpty) {

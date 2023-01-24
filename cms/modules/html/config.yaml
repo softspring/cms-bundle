@@ -2,6 +2,7 @@ module:
     revision: 1
     group: 'html'
     edit_template: '@module/html/edit.html.twig'
+    form_template: '@module/html/form.html.twig'
     render_template: '@module/html/render.html.twig'
     module_options:
         label_format: 'modules.html.%%name%%.label'
@@ -11,10 +12,17 @@ module:
                 type: 'id'
                 type_options:
                     attr:
-                        data-edit-id-input: 'codeContainerId'
+                        data-edit-id-input: 'htmlId'
+
+            class:
+                type: 'class'
+                type_options:
+                    attr:
+                        data-edit-class-input: 'htmlClassDiv'
 
             code:
                 type: 'html'
                 type_options:
                     attr:
                         data-edit-content-input: 'code'
+                        style: 'min-height: 400px'

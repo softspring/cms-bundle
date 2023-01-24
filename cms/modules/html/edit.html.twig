@@ -1,14 +1,15 @@
 {% trans_default_domain 'sfs_cms_modules' %}
+{% set defaultDivClass = 'text-break content-escape' %}
 <div id="{{ form.id.vars.data|default('') }}"
-     class="text-break content-escape"
-     data-edit-id-target="codeContainerId"
+    data-edit-id-target="htmlId"
 
-     data-edit-content-target="code"
-     data-edit-content-escape="true"
+    class="{{ defaultDivClass }} {{ form.class.vars.data|default('') }}"
+    data-edit-class-target="htmlClassDiv"
+    data-edit-class-default="{{ defaultDivClass }}"
 
-     data-edit-content-placeholder="{{ 'html.form.code.placeholder'|trans }}"
+    data-edit-content-target="code"
+    data-edit-content-validate="html"
+    data-edit-content-placeholder="{{ 'html.form.code.placeholder'|trans }}"
 >
-{#    {{ form.code.vars.data|default('')|length > 50 ? form.code.vars.data|raw|slice(0, 50) ~ '...' : form.code.vars.data|raw|default('')  }}#}
-    {{ form.code.vars.data|default()|replace({'href': ''})|raw }}
+    {{ form.code.vars.data|default()|replace({'href': 'href-invalidate'})|raw }}
 </div>
-{#<iframe class="container-fluid" srcdoc="{{ form.code.vars.data|default('') }}" src="about:blank"></iframe>#}

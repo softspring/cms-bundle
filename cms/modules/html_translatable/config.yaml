@@ -12,13 +12,13 @@ module:
                 type: 'id'
                 type_options:
                     attr:
-                        data-edit-id-input: 'codeContainerId'
+                        data-edit-id-input: 'htmlId'
 
             class:
                 type: 'class'
                 type_options:
                     attr:
-                        data-edit-class-input: 'codeContainerDiv'
+                        data-edit-class-input: 'htmlClassDiv'
 
             code:
                 type: 'translatable'
@@ -27,3 +27,4 @@ module:
                     type_options:
                         attr:
                             data-edit-content-input: 'code'
+                            style: 'min-height: 400px'
