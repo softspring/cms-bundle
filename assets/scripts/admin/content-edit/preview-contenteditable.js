@@ -1,3 +1,5 @@
+import { getSelectedLanguage } from './locale-filter-preview';
+
 window.addEventListener('load', (event) => {
     let cssCodeNotValidatedWarningShown = false;
 
@@ -79,12 +81,20 @@ window.addEventListener('load', (event) => {
 
         let moduleForm = event.target.closest('.cms-module-edit').querySelector('.cms-module-form');
 
-        let htmlTargetElements = moduleForm.querySelectorAll("[data-edit-content-input='" + event.target.dataset.editContentTarget + "']");
-        if (htmlTargetElements.length) {
-            htmlTargetElements.forEach(function(htmlTargetElement) {
-              htmlTargetElement.value = event.target.innerHTML;
-              htmlTargetElement.setAttribute('value', event.target.innerHTML);//Fixed empty value when element is new and is moved
+        let htmlInputElements = moduleForm.querySelectorAll("[data-edit-content-input='" + event.target.dataset.editContentTarget + "']");
+        if (htmlInputElements.length) {
+            htmlInputElements.forEach(function(htmlInputElement) {
+              htmlInputElement.value = event.target.innerHTML;
+              htmlInputElement.setAttribute('value', event.target.innerHTML);//Fixed empty value when element is new and is moved
             });
+        }
+
+        if (event.target.dataset.editContentHideIfEmpty) {
+            if (event.target.innerHTML === '') {
+                event.target.style.setProperty('display', 'none');
+            } else if (event.target.matches('[data-lang='+getSelectedLanguage()+']')) {
+                event.target.style.setProperty('display', '');
+            }
         }
     });
 });
