@@ -1,4 +1,6 @@
+{# TODO REMOVE THIS WHEN ALL MODULE IS REFACTORED TO USE TRANSLATABLE TYPE #}
 {% block translatable_text_widget %}
+    {% deprecated 'this type is deprecated' %}
     {% if form|length > 1 %}
         {% for field in form %}
             <div class="input-group mb-3">
@@ -16,14 +18,18 @@
     {% endif %}
 {% endblock translatable_text_widget %}
 
+{# TODO REMOVE THIS WHEN ALL MODULE IS REFACTORED TO USE TRANSLATABLE TYPE #}
 {% block translatable_text_element_widget %}
+    {% deprecated 'this type is deprecated' %}
     {% if attr['data-edit-content-input']|default(false) %}
         {% set attr = attr|merge({'data-edit-content-input': attr['data-edit-content-input']~'.'~form.vars.label|lower}) -%}
     {% endif %}
     {{ form_widget(form, {'attr':attr}) }}
 {% endblock %}
 
+{# TODO REMOVE THIS WHEN ALL MODULE IS REFACTORED TO USE TRANSLATABLE TYPE #}
 {% block translatable_image_widget %}
+    {% deprecated 'this type is deprecated' %}
     {% if form|length > 1 %}
         {% for field in form %}
             <div class="input-group mb-3">
@@ -41,7 +47,18 @@
     {% endif %}
 {% endblock translatable_image_widget %}
 
+{# TODO REMOVE THIS WHEN ALL MODULE IS REFACTORED TO USE TRANSLATABLE TYPE #}
 {% block translatable_image_element_widget %}
+    {% deprecated 'this type is deprecated' %}
+    {% if attr['data-media-preview-input']|default(false) %}
+        {% set attr = attr|merge({'data-media-preview-input': attr['data-media-preview-input']~'.'~form.vars.label|lower}) -%}
+    {% endif %}
+    {{ form_widget(form, {'attr':attr}) }}
+{% endblock %}
+
+{# TODO REMOVE THIS WHEN ALL MODULE IS REFACTORED TO USE TRANSLATABLE TYPE #}
+{% block translatable_media_element_widget %}
+    {% deprecated 'this type is deprecated' %}
     {% if attr['data-media-preview-input']|default(false) %}
         {% set attr = attr|merge({'data-media-preview-input': attr['data-media-preview-input']~'.'~form.vars.label|lower}) -%}
     {% endif %}
@@ -55,10 +72,10 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">
                         {{ field.vars.label|upper }}
-                        {#                        <img alt="{{ field.vars.label|upper }}" title="{{ field.vars.label|upper }}" src="https://unpkg.com/language-icons/icons/{{ field.vars.label|lower }}.svg" height="15" class="border"/>&nbsp;#}
+{#                        <img alt="{{ field.vars.label|upper }}" title="{{ field.vars.label|upper }}" src="https://unpkg.com/language-icons/icons/{{ field.vars.label|lower }}.svg" height="15" class="border"/>&nbsp;#}
                     </span>
                 </div>
-                {{ form_widget(field,{'attr':{'class':'textarea-lg'}}) }}
+                {{ form_widget(field) }}
             </div>
         {% endfor %}
     {% else %}
@@ -69,6 +86,9 @@
 {% block translatable_element_widget %}
     {% if attr['data-edit-content-input']|default(false) %}
         {% set attr = attr|merge({'data-edit-content-input': attr['data-edit-content-input']~'.'~form.vars.label|lower}) -%}
+    {% endif %}
+    {% if attr['data-media-preview-input']|default(false) %}
+        {% set attr = attr|merge({'data-media-preview-input': attr['data-media-preview-input']~'.'~form.vars.label|lower}) -%}
     {% endif %}
     {{ form_widget(form, {'attr':attr}) }}
 {% endblock %}

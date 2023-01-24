@@ -14,30 +14,68 @@ window.addEventListener('load', (event) => {
         var config = JSON.parse(event.target.dataset.mediaTypeConfig);
         var typeConfig = config[event.target.dataset.mediaTypeTypes];
 
-        let htmlTargetElements = moduleForm.querySelectorAll("[data-media-preview-target='" + event.target.dataset.mediaPreviewInput + "']");
-        if (htmlTargetElements.length) {
+        let previewMedia = null;
 
+        // if data-media-version-type-field do preview in select version
+        if (event.target.dataset.mediaVersionTypeField === undefined) {
             let version = null;
             if (config[event.target.dataset.mediaType].image) {
-                version = config[event.target.dataset.mediaType].image;
-            } else if (config[event.target.dataset.mediaType].video) {
-                version = config[event.target.dataset.mediaType].video;
-            }
+                version = config[event.target.dataset.mediaType].image[0];
 
-            let previewMedia = null;
-            if ('_original' === version) {
-                previewMedia = event.target.dataset['mediaVersion-_original'];
-            } else {
-                previewMedia = event.target.dataset['mediaVersion'+version.charAt(0).toUpperCase() + version.slice(1)];
+                if ('_original' === version) {
+                    previewMedia = event.target.dataset['mediaImage-_original'];
+                } else {
+                    previewMedia = event.target.dataset['mediaImage'+version.charAt(0).toUpperCase() + version.slice(1)];
+                }
+            } else if (config[event.target.dataset.mediaType].video) {
+                version = config[event.target.dataset.mediaType].video[0];
+            } else if (config[event.target.dataset.mediaType].picture) {
+                version = config[event.target.dataset.mediaType].picture[0];
             }
 
             // show required preview in every html element
-            if (previewMedia) {
-                htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.innerHTML = previewMedia);
-            } else {
-                htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.innerHTML = '');
-            }
+            [...moduleForm.querySelectorAll("[data-media-preview-target='" + event.target.dataset.mediaPreviewInput + "']")].forEach((htmlTargetElement) => htmlTargetElement.innerHTML = previewMedia ? previewMedia : '');
         }
+    });
+
+    /**
+     * Shows a media version preview from media modal type
+     *
+     * The preview target element must have the "data-media-preview-target" attribute
+     * The select option must have the "data-media-preview-input"
+     * Both data attributes must have the same value (as identificator)
+     */
+    document.addEventListener('sfs_media.select_version', function (event) {
+        if (!event.target) return;
+
+        const mediaVersionInput = event.target;
+        const moduleForm = mediaVersionInput.closest('.cms-module-edit').querySelector('.module-preview');
+        const mediaInput = document.getElementById(mediaVersionInput.dataset.mediaTypeField);
+
+        var config = JSON.parse(mediaInput.dataset.mediaTypeConfig);
+        var typeConfig = config[mediaInput.dataset.mediaTypeTypes];
+
+        let previewMedia = null;
+
+        let [versionType, versionName] = mediaVersionInput.value.split('#');
+        versionName = '_' === versionName.charAt(0) ? '-'+versionName : versionName.charAt(0).toUpperCase() + versionName.slice(1);
+
+        switch (versionType) {
+            case 'image':
+                previewMedia = mediaInput.dataset['mediaImage'+versionName];
+                break;
+
+            case 'video':
+                previewMedia = mediaInput.dataset['mediaVideo'+versionName];
+                break;
+
+            case 'picture':
+                previewMedia = mediaInput.dataset['mediaPicture'+versionName];
+                break;
+        }
+
+        // show required preview in every html element
+        [...moduleForm.querySelectorAll("[data-media-preview-target='" + mediaInput.dataset.mediaPreviewInput + "']")].forEach((htmlTargetElement) => htmlTargetElement.innerHTML = previewMedia ? previewMedia : '');
     });
 
     /**
@@ -55,9 +93,6 @@ window.addEventListener('load', (event) => {
         var config = JSON.parse(event.target.dataset.mediaTypeConfig);
         var typeConfig = config[event.target.dataset.mediaTypeTypes];
 
-        let htmlTargetElements = moduleForm.querySelectorAll("[data-media-preview-target='" + event.target.dataset.mediaPreviewInput + "']");
-        if (htmlTargetElements.length) {
-            htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.innerHTML = '');
-        }
+        [...moduleForm.querySelectorAll("[data-media-preview-target='" + event.target.dataset.mediaPreviewInput + "']")].forEach((htmlTargetElement) => htmlTargetElement.innerHTML = '');
     });
 });
