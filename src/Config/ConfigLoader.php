@@ -79,6 +79,14 @@ class ConfigLoader
         foreach ($configurations as $moduleName => $moduleConfigs) {
             $modules[$moduleName] = $processor->processConfiguration(new Module($moduleName), $moduleConfigs);
             $modules[$moduleName]['_id'] = $moduleName;
+            $modules[$moduleName]['revision_migration_scripts'] = [];
+
+            foreach ($this->collectionPaths as $collectionPath) {
+                $elementsPath = $this->container->getParameter('kernel.project_dir').'/'.trim($collectionPath, '/').'/modules/'.$moduleName;
+                if (is_file("$elementsPath/migrate.php")) {
+                    $modules[$moduleName]['revision_migration_scripts'][] = "$elementsPath/migrate.php";
+                }
+            }
         }
 
         return $modules;
