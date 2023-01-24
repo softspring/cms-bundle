@@ -35,7 +35,7 @@
         {% endif %}
 
         {% block table %}
-            {% embed '@SfsComponents/pagination/table.html.twig' with {'collection':entities, 'pagination_route': 'sfs_cms_admin_content_'~content~'_list'} %}
+            {% embed '@SfsComponents/paginator/table.html.twig' with {'collection':entities, 'pagination_route': 'sfs_cms_admin_content_'~content~'_list'} %}
                 {% trans_default_domain 'sfs_cms_contents' %}
                 {% block ths %}
                     <th scope="col">

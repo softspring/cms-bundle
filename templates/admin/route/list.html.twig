@@ -24,7 +24,7 @@
 {#    {{ form_end(filterForm) }}#}
 
     <div class="container-fluid bg-white p-4">
-        {% embed '@SfsComponents/pagination/table.html.twig' with {'collection':entities, 'pagination_route': 'sfs_cms_admin_routes_list'} %}
+        {% embed '@SfsComponents/paginator/table.html.twig' with {'collection':entities, 'pagination_route': 'sfs_cms_admin_routes_list'} %}
             {% trans_default_domain 'sfs_cms_admin' %}
             {% block ths %}
                 <th class="p-3" scope="col">
