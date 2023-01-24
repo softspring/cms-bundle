@@ -83,6 +83,25 @@ trait DataMapperTrait
         }
     }
 
+    private function migrateValueToRevision(array $data, FormInterface $form): array
+    {
+        $fromRevision = (int) ($data['_revision'] ?? 1);
+        $toRevision = $form->getConfig()->getOption('module_revision');
+
+        if ($fromRevision == $toRevision) {
+            return $data;
+        }
+
+        $module = $form->getConfig()->getOption('module_id');
+        $migrationScripts = $form->getConfig()->getOption('module_migrations');
+
+        foreach ($migrationScripts as $migrationScript) {
+            $data = (include $migrationScript)($data, $fromRevision, $toRevision);
+        }
+
+        return $data;
+    }
+
     /**
      * This function prevents invalid mapping values on moving modules up and down, and cleans up old module fields.
      */
@@ -91,6 +110,8 @@ trait DataMapperTrait
         if (!is_array($value)) {
             return $value;
         }
+
+        $value = $this->migrateValueToRevision($value, $form);
 
         $fields = [];
         /** @var FormInterface $field */

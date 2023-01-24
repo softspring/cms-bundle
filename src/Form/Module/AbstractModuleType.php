@@ -5,6 +5,7 @@ namespace Softspring\CmsBundle\Form\Module;
 use Softspring\Component\PolymorphicFormType\Form\Type\Node\AbstractNodeType;
 use Symfony\Component\Form\Event\PreSetDataEvent;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
@@ -24,6 +25,8 @@ abstract class AbstractModuleType extends AbstractNodeType
     {
         $resolver->setDefaults([
             'module_id' => null,
+            'module_revision' => null,
+            'module_migrations' => [],
             'translation_domain' => 'sfs_cms_modules',
             'content_type' => null,
             'row_class' => '',
@@ -33,6 +36,12 @@ abstract class AbstractModuleType extends AbstractNodeType
 
         $resolver->setRequired('module_id');
         $resolver->setAllowedTypes('module_id', ['string']);
+
+        $resolver->setRequired('module_revision');
+        $resolver->setAllowedTypes('module_revision', ['int']);
+
+        $resolver->setRequired('module_migrations');
+        $resolver->setAllowedTypes('module_migrations', ['array']);
 
         $resolver->setRequired('content_type');
         $resolver->setAllowedTypes('content_type', ['string']);
@@ -72,5 +81,9 @@ abstract class AbstractModuleType extends AbstractNodeType
                 }
             });
         }
+
+        $builder->add('_revision', HiddenType::class, [
+            'data' => $options['module_revision'],
+        ]);
     }
 }

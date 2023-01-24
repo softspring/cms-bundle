@@ -60,6 +60,8 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
             $typesOptions[$moduleId]['label_format'] = "$moduleId.form.%name%.label";
             $typesOptions[$moduleId]['translation_domain'] = 'sfs_cms_modules';
             $typesOptions[$moduleId]['module_id'] = $moduleId;
+            $typesOptions[$moduleId]['module_revision'] = $config['revision'];
+            $typesOptions[$moduleId]['module_migrations'] = $config['revision_migration_scripts'];
         }
 
         return $typesOptions;
