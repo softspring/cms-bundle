@@ -27,6 +27,11 @@
                 {{ form_start(filterForm) }}
                 <div class="row">
                     {% if filterForm.name is defined %}<div class="col">{{ form_row(filterForm.name, {'row_class':'form-floating'}) }}</div>{% endif %}
+                    {% if filterForm.site is defined %}<div class="col">{{ form_row(filterForm.site, {'row_class':'form-floating'}) }}</div>{% endif %}
+
+                    <div class="col">
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+                    </div>
                 </div>
                 {{ form_widget(filterForm) }}
                 {{ form_rest(filterForm) }}
