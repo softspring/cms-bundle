@@ -4,10 +4,11 @@ namespace Softspring\CmsBundle\Form\Admin\Menu;
 
 use Softspring\CmsBundle\Model\MenuInterface;
 use Softspring\Component\DoctrinePaginator\Form\PaginatorForm;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class MenuListFilterForm extends PaginatorForm
+class MenuListFilterForm extends PaginatorForm implements MenuListFilterFormInterface
 {
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -27,5 +28,9 @@ class MenuListFilterForm extends PaginatorForm
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
+
+        $builder->add('name', TextType::class, [
+            'property_path' => '[name__like]',
+        ]);
     }
 }

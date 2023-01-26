@@ -2,11 +2,10 @@
 
 namespace Softspring\CmsBundle\Controller\Admin;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\InvalidMenuException;
 use Softspring\CmsBundle\Form\Admin\Menu\MenuForm;
-use Softspring\CmsBundle\Form\Admin\Menu\MenuListFilterForm;
+use Softspring\CmsBundle\Form\Admin\Menu\MenuListFilterFormInterface;
 use Softspring\CmsBundle\Manager\MenuManagerInterface;
 use Softspring\CmsBundle\Model\MenuInterface;
 use Softspring\Component\CrudlController\Event\FilterEvent;
@@ -107,7 +106,7 @@ class MenuController extends AbstractController
         return new Response();
     }
 
-    public function list(Request $request): Response
+    public function list(Request $request, MenuListFilterFormInterface $filterForm): Response
     {
 //        if (!empty($config['list_is_granted'])) {
 //            $this->denyAccessUnlessGranted($config['list_is_granted'], null, sprintf('Access denied, user is not %s.', $config['list_is_granted']));
@@ -117,9 +116,7 @@ class MenuController extends AbstractController
 //            return $response;
 //        }
 
-        $repo = $this->menuManager->getRepository();
-
-        $form = $this->createForm(MenuListFilterForm::class)->handleRequest($request);
+        $form = $this->createForm(get_class($filterForm))->handleRequest($request);
         $filterEvent = FilterEvent::createFromFilterForm($form, $request);
         $this->dispatch('sfs_cms.admin.menus.filter_event_name', $filterEvent);
         $entities = $filterEvent->queryPage();
