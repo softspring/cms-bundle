@@ -27,7 +27,6 @@ class AddTranslationsPathsPass implements CompilerPassInterface
                 }
             }
 
-
             // add blocks translations if exists
             $blocksPath = $container->getParameter('kernel.project_dir').'/'.trim($collectionPath, '/').'/blocks';
             if (is_dir($blocksPath)) {
