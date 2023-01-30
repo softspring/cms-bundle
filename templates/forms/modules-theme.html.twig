@@ -262,11 +262,11 @@
 {% endblock empty_module_widget %}
 
 {% block module_prototypes_collection_widget %}
-    <div class="modal fade add-module-modal" id="module_prototypes_collection_modal" tabindex="-1" aria-labelledby="{{ form.vars.id }}_modal" aria-hidden="true">
+    <section class="modal fade add-module-modal" id="module_prototypes_collection_modal" tabindex="-1" aria-labelledby="{{ form.vars.id }}_modal" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">{{ form.vars.name }}</h5>
+                    <h1 class="modal-title h5">{{ form.vars.name }}</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -274,12 +274,12 @@
 
                     {% for group, prototypes in form.vars.prototypes %}
                         <div class="modal-modules-group">
-                            <h5>{{ ('_group.'~group~'.name')|trans({}, 'sfs_cms_modules') }}</h5>
-                            <div class="container mb-4">
+                            <h2 class="h5 mb-3">{{ ('_group.'~group~'.name')|trans({}, 'sfs_cms_modules') }}</h2>
+                            <div class="container">
                                 <div class="row">
                                     {% for key, prototype in prototypes %}
                                         {% set trans_domain = prototype.vars.translation_domain | default(translation_domain) | default(false) %}
-                                        <div class="col-3 modal-module">
+                                        <div class="col-3 mb-3 modal-module">
                                             <div data-polymorphic-action="insert" data-module-id="{{ prototype.vars.module_id }}" class="module-thumbnail" {{ block('polymorphic_prototype_button_attributes') }}>
                                                 <div class="icon">
                                                     {{ (not trans_domain ? '' : (prototype.vars.prototype_button_label~'_icon')|trans({}, trans_domain))|raw }}
@@ -300,5 +300,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 {% endblock %}
