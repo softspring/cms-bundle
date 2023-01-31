@@ -29,10 +29,6 @@
 {#        {% endif %}#}
 
         <td class="text-end">
-            {% if is_granted('ROLE_SFS_CMS_ADMIN_BLOCKS_DETAILS', block) %}
-                <a href="{{ url('sfs_cms_admin_blocks_read', {'block':block}) }}" class="ms-2 text-nowrap">{{ 'admin_blocks.list.actions.details.button'|trans }} <span class="bi bi-eye"></span></a>
-            {% endif %}
-
             {% if is_granted('ROLE_SFS_CMS_ADMIN_BLOCKS_UPDATE', block) %}
                 <a href="{{ url('sfs_cms_admin_blocks_update', {'block':block}) }}" class="ms-2 text-nowrap">{{ 'admin_blocks.list.actions.update.button'|trans }} <span class="bi bi-pencil"></span></a>
             {% endif %}

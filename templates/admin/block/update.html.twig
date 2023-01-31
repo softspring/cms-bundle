@@ -3,6 +3,7 @@
 {% block title %}{{ 'admin_blocks.update.meta.title'|trans }}{% endblock %}
 
 {% form_theme form '@SfsPolymorphicFormType/polymorphic-form-theme.html.twig'
+    '@SfsCms/forms/types-theme.html.twig'
     '@SfsMedia/media_form_theme.html.twig'
 %}
 
@@ -17,12 +18,14 @@
 
     <div class="container-fluid bg-white p-4">
         {{ form_start(form) }}
-        {{ form_rest(form) }}
+            {{ form_row(form.name) }}
+            {{ form_widget(form.data) }}
+            {{ form_rest(form) }}
 
-        <div class="d-flex justify-content-end align-items-center">
-            <a href="{{ url('sfs_cms_admin_blocks_list') }}" class="btn btn-outline-secondary">{{ 'admin_blocks.update.actions.cancel.button'|trans }}</a>
-            <button type="submit" class="btn btn-primary ms-3">{{ 'admin_blocks.update.actions.update.button'|trans }}</button>
-        </div>
+            <div class="d-flex justify-content-end align-items-center">
+                <a href="{{ url('sfs_cms_admin_blocks_list') }}" class="btn btn-outline-secondary">{{ 'admin_blocks.update.actions.cancel.button'|trans }}</a>
+                <button type="submit" class="btn btn-primary ms-3">{{ 'admin_blocks.update.actions.update.button'|trans }}</button>
+            </div>
         {{ form_end(form) }}
     </div>
 
