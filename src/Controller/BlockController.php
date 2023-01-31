@@ -39,9 +39,7 @@ class BlockController extends AbstractController
                     return new Response();
                 }
 
-                $response = $this->render($config['render_template'], [
-                    'block' => $block,
-                ]);
+                $response = $this->render($config['render_template'], $block->getData() + ['_block' => $block]);
             } else {
                 $response = $this->render($config['render_template']);
             }
@@ -73,7 +71,7 @@ class BlockController extends AbstractController
             $config = $this->cmsConfig->getBlock($type);
 
             if (!$config['static']) {
-                $response = $this->render($config['render_template'], $block->getData());
+                $response = $this->render($config['render_template'], $block->getData() + ['_block' => $block]);
             } else {
                 $response = $this->render($config['render_template']);
             }
