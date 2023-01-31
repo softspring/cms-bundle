@@ -9,11 +9,3 @@ sfs_cms_admin_blocks_create:
 sfs_cms_admin_blocks_update:
     controller: Softspring\CmsBundle\Controller\Admin\BlockController::update
     path: /{block}/update
-
-sfs_cms_admin_blocks_delete:
-    controller: Softspring\CmsBundle\Controller\Admin\BlockController::delete
-    path: /{block}/delete
-
-sfs_cms_admin_blocks_read:
-    controller: Softspring\CmsBundle\Controller\Admin\BlockController::read
-    path: /{block}
