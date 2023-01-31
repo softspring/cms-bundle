@@ -16,6 +16,7 @@ services:
             $profiler: '@?profiler'
             $transformers: !tagged_iterator { tag: sfs_cms.data_transformer, default_priority_method: getPriority }
             $cmsLogger: '@?monolog.logger.cms'
+            $debug: '%kernel.debug%'
 
     Softspring\CmsBundle\Config\CmsConfig:
         arguments:
@@ -78,6 +79,12 @@ services:
     Softspring\CmsBundle\Twig\Extension\:
         resource: '../../src/Twig/Extension/*'
         tags: ['twig.extension']
+
+    Softspring\CmsBundle\EntityListener\BlockListener:
+        tags:
+            - { name: 'doctrine.orm.entity_listener', event: 'postLoad', entity: 'Softspring\CmsBundle\Entity\Block',  priority: 10 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
+            - { name: 'doctrine.orm.entity_listener', event: 'preUpdate', entity: 'Softspring\CmsBundle\Entity\Block',  priority: 10 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
+            - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: 'Softspring\CmsBundle\Entity\Block',  priority: 10 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
 
     Softspring\CmsBundle\EntityListener\ContentListener:
         tags:

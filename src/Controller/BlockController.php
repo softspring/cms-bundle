@@ -14,12 +14,14 @@ class BlockController extends AbstractController
 {
     protected CmsConfig $cmsConfig;
     protected BlockManagerInterface $blockManager;
+    protected bool $debug;
     protected ?LoggerInterface $cmsLogger;
 
-    public function __construct(CmsConfig $cmsConfig, BlockManagerInterface $blockManager, ?LoggerInterface $cmsLogger)
+    public function __construct(CmsConfig $cmsConfig, BlockManagerInterface $blockManager, bool $debug, ?LoggerInterface $cmsLogger)
     {
         $this->cmsConfig = $cmsConfig;
         $this->blockManager = $blockManager;
+        $this->debug = $debug;
         $this->cmsLogger = $cmsLogger;
     }
 
@@ -51,9 +53,7 @@ class BlockController extends AbstractController
 
             return $response;
         } catch (\Exception $e) {
-            $this->cmsLogger && $this->cmsLogger->critical(sprintf('Error rendering block type %s', $type));
-
-            return new Response('<!-- error rendering block, see logs -->');
+            return $this->renderBlockException("An exception has occurred rendering a block by type '$type'", $e);
         }
     }
 
@@ -85,9 +85,27 @@ class BlockController extends AbstractController
 
             return $response;
         } catch (\Exception $e) {
-            $this->cmsLogger && $this->cmsLogger->critical(sprintf('Error rendering block %s', $id));
+            return $this->renderBlockException("An exception has occurred rendering a block with id '$id'", $e);
+        }
+    }
 
+    protected function renderBlockException(string $message, \Exception $exception): Response
+    {
+        $this->cmsLogger && $this->cmsLogger->critical(sprintf('%s: %s', $message, $exception->getMessage()));
+
+        if (!$this->debug) {
             return new Response('<!-- error rendering block, see logs -->');
         }
+
+        $trace = nl2br($exception->getTraceAsString());
+        $error = <<<ERROR
+<section class="border border-danger p-4 text-white bg-danger">
+<h4>$message</h4>
+<p>{$exception->getMessage()}</p>
+<p>$trace</p>
+</section>
+ERROR;
+
+        return new Response($error);
     }
 }
