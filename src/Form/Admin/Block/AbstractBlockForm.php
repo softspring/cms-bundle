@@ -13,7 +13,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class BlockForm extends AbstractType
+abstract class AbstractBlockForm extends AbstractType
 {
     protected BlockManagerInterface $manager;
 

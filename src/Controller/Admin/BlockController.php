@@ -5,8 +5,9 @@ namespace Softspring\CmsBundle\Controller\Admin;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\InvalidBlockException;
-use Softspring\CmsBundle\Form\Admin\Block\BlockForm;
+use Softspring\CmsBundle\Form\Admin\Block\BlockCreateFormInterface;
 use Softspring\CmsBundle\Form\Admin\Block\BlockListFilterForm;
+use Softspring\CmsBundle\Form\Admin\Block\BlockUpdateFormInterface;
 use Softspring\CmsBundle\Manager\BlockManagerInterface;
 use Softspring\CmsBundle\Model\BlockInterface;
 use Softspring\Component\CrudlController\Event\FilterEvent;
@@ -37,7 +38,7 @@ class BlockController extends AbstractController
     /**
      * @Security(expression="is_granted('ROLE_SFS_CMS_ADMIN_BLOCKS_CREATE', blockType)")
      */
-    public function create(string $blockType, Request $request): Response
+    public function create(string $blockType, Request $request, BlockCreateFormInterface $createForm): Response
     {
         try {
             $config = $this->getBlockConfig($blockType);
@@ -53,7 +54,7 @@ class BlockController extends AbstractController
 
         $entity = $this->blockManager->createEntity($blockType);
 
-        $form = $this->createForm(BlockForm::class, $entity, ['block_config' => $config, 'method' => 'POST'])->handleRequest($request);
+        $form = $this->createForm(get_class($createForm), $entity, ['block_config' => $config, 'method' => 'POST'])->handleRequest($request);
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
@@ -76,11 +77,11 @@ class BlockController extends AbstractController
     /**
      * @Security(expression="is_granted('ROLE_SFS_CMS_ADMIN_BLOCKS_UPDATE', block)")
      */
-    public function update(BlockInterface $block, Request $request): Response
+    public function update(BlockInterface $block, Request $request, BlockUpdateFormInterface $updateForm): Response
     {
         $config = $this->getBlockConfig($block->getType());
 
-        $form = $this->createForm(BlockForm::class, $block, ['block_config' => $config, 'method' => 'POST'])->handleRequest($request);
+        $form = $this->createForm(get_class($updateForm), $block, ['block_config' => $config, 'method' => 'POST'])->handleRequest($request);
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
