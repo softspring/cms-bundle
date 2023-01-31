@@ -63,8 +63,10 @@ class Block implements ConfigurationInterface
                 ->booleanNode('static')->defaultFalse()->end()
                 ->scalarNode('render_url')->end()
 
+                // TODO review this ???
                 ->scalarNode('form_type')->end()
 
+                // TODO review this ???
                 ->arrayNode('form_options')
                     ->useAttributeAsKey('key')
                     ->prototype('variable')->end()
