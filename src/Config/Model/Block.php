@@ -50,6 +50,12 @@ class Block implements ConfigurationInterface
 //                })
 //                ->thenInvalid('A block defined as static can not have form_template.')
 //            ->end()
+            ->validate()
+                ->ifTrue(function ($config) {
+                    return $config['static'] && $config['schedulable'];
+                })
+                ->thenInvalid('A block defined as static can not be schedulable.')
+            ->end()
             ->children()
                 ->integerNode('revision')->isRequired()->end()
 
@@ -61,6 +67,7 @@ class Block implements ConfigurationInterface
                 ->integerNode('cache_ttl')->defaultFalse()->end()
                 ->booleanNode('singleton')->defaultTrue()->end()
                 ->booleanNode('static')->defaultFalse()->end()
+                ->booleanNode('schedulable')->defaultFalse()->end()
                 ->scalarNode('render_url')->end()
 
                 // TODO review this ???

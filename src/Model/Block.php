@@ -4,6 +4,8 @@ namespace Softspring\CmsBundle\Model;
 
 abstract class Block implements BlockInterface
 {
+    use SchedulableContentTrait;
+
     protected ?string $name = null;
 
     protected ?string $type = null;

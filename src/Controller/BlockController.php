@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Manager\BlockManagerInterface;
@@ -12,13 +13,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 class BlockController extends AbstractController
 {
+    use EnableSchedulableContentTrait;
+
+    protected EntityManagerInterface $em;
     protected CmsConfig $cmsConfig;
     protected BlockManagerInterface $blockManager;
     protected bool $debug;
     protected ?LoggerInterface $cmsLogger;
 
-    public function __construct(CmsConfig $cmsConfig, BlockManagerInterface $blockManager, bool $debug, ?LoggerInterface $cmsLogger)
+    public function __construct(EntityManagerInterface $em, CmsConfig $cmsConfig, BlockManagerInterface $blockManager, bool $debug, ?LoggerInterface $cmsLogger)
     {
+        $this->em = $em;
         $this->cmsConfig = $cmsConfig;
         $this->blockManager = $blockManager;
         $this->debug = $debug;
@@ -27,6 +32,8 @@ class BlockController extends AbstractController
 
     public function renderByType(string $type, Request $request): Response
     {
+        $this->enableSchedulableFilter();
+
         try {
             $config = $this->cmsConfig->getBlock($type);
 
@@ -57,6 +64,8 @@ class BlockController extends AbstractController
 
     public function renderById(string $id, Request $request): Response
     {
+        $this->enableSchedulableFilter();
+
         try {
             /** @var ?BlockInterface $block */
             $block = $this->blockManager->getRepository()->findOneById($id);

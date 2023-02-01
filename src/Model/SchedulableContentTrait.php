@@ -1,19 +1,11 @@
 <?php
 
-namespace Softspring\CmsBundle\Entity;
-
-use Doctrine\ORM\Mapping as ORM;
+namespace Softspring\CmsBundle\Model;
 
 trait SchedulableContentTrait
 {
-    /**
-     * @ORM\Column(type="integer", nullable=true, options={"unsigned":true})
-     */
     protected ?int $publishStartDate = null;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true, options={"unsigned":true})
-     */
     protected ?int $publishEndDate = null;
 
     public function getPublishStartDate(): ?\DateTime

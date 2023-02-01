@@ -6,7 +6,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Softspring\CmsBundle\Form\Type\DynamicFormType;
 use Softspring\CmsBundle\Manager\BlockManagerInterface;
 use Softspring\CmsBundle\Model\BlockInterface;
-use Softspring\CmsBundle\Model\SchedulableContentInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -48,7 +47,7 @@ abstract class AbstractBlockForm extends AbstractType
     {
         $builder->add('name');
 
-        if ($this->manager->getEntityClassReflection()->implementsInterface(SchedulableContentInterface::class)) {
+        if ($options['block_config']['schedulable']) {
             $builder->add('publishStartDate', DateTimeType::class, [
                 'required' => false,
                 'html5' => true,

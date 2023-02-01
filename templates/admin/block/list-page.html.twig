@@ -11,22 +11,25 @@
 {#            <td>{{ block.sites|join(', ') }}</td>#}
 {#        {% endif %}#}
 
-{#        {% if sfs_cms_blocks_are_schedulable() %}#}
-{#            <td>{{ block.publishStartDate ? block.publishStartDate|date('H:i d-m-Y', ' UTC') ~ 'UTC' : '-' }}</td>#}
-{#            <td>{{ block.publishEndDate ? block.publishEndDate|date('H:i d-m-Y', ' UTC') ~ 'UTC' : '-' }}</td>#}
-{#            <td>#}
-{#                {% set now = 'now'|date('U') %}#}
-{#                {% set startDate = block.publishStartDate|default('01-01-1970')|date('U') %}#}
-{#                {% set endDate = block.publishEndDate|default('07-02-2106')|date('U') %}#}
+        <td>
+            {% if not block.publishStartDate and not block.publishEndDate %}
+                <span class="text-success">always</span>
+            {% else %}
+                {% set now = 'now'|date('U') %}
+                {% set startDate = block.publishStartDate|default('01-01-1970')|date('U') %}
+                {% set startDateShow = block.publishStartDate|date('H:i d-m-Y', 'UTC') ~ ' UTC' %}
+                {% set endDate = block.publishEndDate|default('07-02-2106')|date('U') %}
+                {% set endDateShow = block.publishEndDate|date('H:i d-m-Y', 'UTC') ~ ' UTC' %}
 
-{#                {% if now >= startDate and now <= endDate %}#}
-{#                    published#}
-{#                {% else %}#}
-{#                    not published#}
-{#                {% endif %}#}
-
-{#            </td>#}
-{#        {% endif %}#}
+                {% if now >= startDate and now <= endDate %}
+                    <span class="text-success">published {% if block.publishEndDate %}until {{ endDateShow }}{% endif %}</span>
+                {% elseif now <= endDate %}
+                    <span class="text-warning">scheduled on {{ startDateShow }}</span>
+                {% else %}
+                    <span class="text-danger">not published since {{ endDateShow }}</span>
+                {% endif %}
+            {% endif %}
+        </td>
 
         <td class="text-end">
             {% if is_granted('ROLE_SFS_CMS_ADMIN_BLOCKS_UPDATE', block) %}

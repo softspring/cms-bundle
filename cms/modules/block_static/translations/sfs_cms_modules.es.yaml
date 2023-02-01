@@ -1,0 +1,9 @@
+block_static:
+    label: "Bloque estático"
+    prototype_button: "Bloque estático"
+    prototype_button_icon: '<i class="bi bi-puzzle-fill"></i>'
+    form:
+        locale_filter.label: "Idiomas"
+        id.label: "Id"
+        class.label: "Clases"
+        block.label: "Bloque"

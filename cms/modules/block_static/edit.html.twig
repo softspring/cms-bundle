@@ -1,0 +1,12 @@
+{% trans_default_domain 'sfs_cms_modules' %}
+{% set defaultDivClass = '' %}
+<div id="{{ form.id.vars.data|default('') }}"
+     data-edit-id-target="blockId"
+
+     class="{{ defaultDivClass }} {{ form.class.vars.data|default('') }}"
+     data-edit-class-target="blockClassDiv"
+     data-edit-class-default="{{ defaultDivClass }}"
+     data-block-preview-target="blockPreview"
+>
+    {{ form.block.vars.block_preview|raw }}
+</div>

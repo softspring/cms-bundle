@@ -1,0 +1,9 @@
+block_static:
+    label: "Static block"
+    prototype_button: "Static block"
+    prototype_button_icon: '<i class="bi bi-puzzle-fill"></i>'
+    form:
+        locale_filter.label: "Locales"
+        id.label: "Id"
+        class.label: "Classes"
+        block.label: "Block"
