@@ -1,0 +1,9 @@
+block_instance:
+    label: "Instancia de bloque"
+    prototype_button: "Instancia de bloque"
+    prototype_button_icon: '<i class="bi bi-puzzle"></i>'
+    form:
+        locale_filter.label: "Idiomas"
+        id.label: "Id"
+        class.label: "Clases"
+        block.label: "Bloque"

@@ -3,6 +3,7 @@
 {% block title %}{{ 'admin_blocks.create.meta.title'|trans }}{% endblock %}
 
 {% form_theme form '@SfsPolymorphicFormType/polymorphic-form-theme.html.twig'
+    '@SfsCms/forms/types-theme.html.twig'
     '@SfsMedia/media_form_theme.html.twig'
 %}
 
@@ -17,6 +18,8 @@
 
     <div class="container-fluid bg-white p-4">
         {{ form_start(form) }}
+            {{ form_row(form.name) }}
+            {{ form_widget(form.data) }}
             {{ form_rest(form) }}
 
             <div class="d-flex justify-content-end align-items-center">

@@ -2,11 +2,8 @@
 
 namespace Softspring\CmsBundle\Form\Admin\Block;
 
-use Softspring\Component\CrudlController\Form\EntityUpdateFormInterface;
+use Symfony\Component\Form\FormTypeInterface;
 
-/**
- * @deprecated
- */
-interface BlockUpdateFormInterface extends EntityUpdateFormInterface
+interface BlockUpdateFormInterface extends FormTypeInterface
 {
 }

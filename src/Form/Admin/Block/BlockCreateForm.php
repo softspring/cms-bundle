@@ -4,10 +4,7 @@ namespace Softspring\CmsBundle\Form\Admin\Block;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * @deprecated
- */
-class BlockCreateForm extends BlockForm implements BlockCreateFormInterface
+class BlockCreateForm extends AbstractBlockForm implements BlockCreateFormInterface
 {
     public function configureOptions(OptionsResolver $resolver)
     {

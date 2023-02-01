@@ -2,11 +2,8 @@
 
 namespace Softspring\CmsBundle\Form\Admin\Block;
 
-use Softspring\Component\CrudlController\Form\EntityListFilterFormInterface;
+use Softspring\Component\DoctrinePaginator\Form\PaginatorFormInterface;
 
-/**
- * @deprecated
- */
-interface BlockListFilterFormInterface extends EntityListFilterFormInterface
+interface BlockListFilterFormInterface extends PaginatorFormInterface
 {
 }

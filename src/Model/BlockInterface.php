@@ -2,7 +2,7 @@
 
 namespace Softspring\CmsBundle\Model;
 
-interface BlockInterface
+interface BlockInterface extends SchedulableContentInterface
 {
     public function getId();
 

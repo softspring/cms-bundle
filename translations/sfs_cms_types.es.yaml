@@ -1,0 +1,3 @@
+block_info:
+    not_esi_warning: 'Este tipo de bloque no está configurado como ESI. Esto quiere decir que el bloque se renderiza y almacena en la base de datos cuando presiones el botón de Guardar, y cuando la página sea visualizada lo mostrará tal y como es ahora.'
+    schedulable_info: 'Este tipo de bloque es programable. Esto quiere decir que el contenido que mostrará puede variar a lo largo del tiempo, incluso puede llegar a estar vacío si no hay una instancia del bloque programada para un momento puntual.'

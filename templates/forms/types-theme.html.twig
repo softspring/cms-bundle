@@ -121,3 +121,38 @@
         {{ form_widget(form) }}
     </div>
 {% endblock html_id_widget %}
+
+
+{% block block_info %}
+{#    data-block-esi#}
+{#    data-block-singleton#}
+{#    data-block-schedulable#}
+{#    data-block-cache-ttl#}
+
+    <div class="alert alert-warning mt-3 d-none" role="alert" data-block-message-when data-block-when-not-esi>
+        <i class="bi bi-exclamation-triangle"></i>
+        {{ 'block_info.not_esi_warning'|trans({}, 'sfs_cms_types') }}
+    </div>
+
+    <div class="alert alert-info mt-3 d-none" role="alert" data-block-message-when data-block-when-schedulable>
+        <i class="bi bi-clock-history"></i>
+        {{ 'block_info.schedulable_info'|trans({}, 'sfs_cms_types') }}
+    </div>
+{% endblock block_info %}
+
+{% block block_instance_widget %}
+    {{ form_widget(form, {'attr': attr | merge({'data-block-message-select': ''})}) }}
+    {{- block('block_info') -}}
+{% endblock block_instance_widget %}
+
+{% block block_static_widget %}
+    {{ form_widget(form, {'attr': attr | merge({'data-block-message-select': ''})}) }}
+    {{- block('block_info') -}}
+{% endblock block_static_widget %}
+
+{% block block_type_widget %}
+    {{ form_widget(form, {'attr': attr | merge({'data-block-message-select': ''})}) }}
+    {{- block('block_info') -}}
+{% endblock block_type_widget %}
+
+

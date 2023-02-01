@@ -8,6 +8,17 @@
         <field name="name" column="name" type="string" nullable="false" length="100" unique="true" />
         <field name="type" column="type" type="string" nullable="false" length="100" />
         <field name="data" column="data" type="json" nullable="true" />
+        <field name="publishStartDate" column="publish_start_date" type="integer" nullable="true">
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+
+        <field name="publishEndDate" column="publish_end_date" type="integer" nullable="true">
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
     </mapped-superclass>
 
 </doctrine-mapping>

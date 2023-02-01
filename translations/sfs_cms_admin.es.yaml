@@ -11,9 +11,7 @@ admin_blocks:
             name.header: "Nombre"
             type.header: "Tipo"
 #            sites.header: "Sitios"
-#            publishStartDate.header: "Fecha de publicación"
-#            publishEndDate.header: "Fin de publicación"
-#            publishNow.header: "Actualmente publicado"
+            published.header: "Publicación"
         actions.header: "Acciones"
         actions:
             create.link: "Nuevo bloque"

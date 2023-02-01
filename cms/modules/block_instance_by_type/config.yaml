@@ -1,0 +1,27 @@
+module:
+    revision: 1
+    group: 'default'
+    edit_template: '@module/block_instance_by_type/edit.html.twig'
+    form_template: '@module/block_instance_by_type/form.html.twig'
+    render_template: '@module/block_instance_by_type/render.html.twig'
+    module_options:
+        label_format: 'modules.block_instance_by_type.%%name%%.label'
+        translation_domain: 'custom_domain'
+        form_fields:
+            id:
+                type: 'id'
+                type_options:
+                    attr:
+                        data-edit-id-input: 'blockId'
+
+            class:
+                type: 'class'
+                type_options:
+                    attr:
+                        data-edit-class-input: 'blockClassDiv'
+
+            block:
+                type: 'blockType'
+                type_options:
+                    attr:
+                        data-block-preview-input: 'blockPreview'
