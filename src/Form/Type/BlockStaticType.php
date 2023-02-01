@@ -6,7 +6,6 @@ use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Render\BlockRenderer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
-use Symfony\Component\Form\ChoiceList\ChoiceList;
 use Symfony\Component\Form\ChoiceList\View\ChoiceView;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -41,7 +40,6 @@ class BlockStaticType extends AbstractType
         $resolver->setDefaults([
             'required' => false,
             'block_types' => null,
-            'choice_name' => ChoiceList::fieldName($this, '_id'),
             'choice_value' => '_id',
             'choice_label' => function (?object $blockConfig) {
                 return $blockConfig->_id ?? '';
@@ -60,7 +58,7 @@ class BlockStaticType extends AbstractType
                 $blockConfig->cache_ttl && $attr['data-block-cache-ttl'] = '';
 
                 return $attr;
-            }
+            },
         ]);
 
         $resolver->addAllowedTypes('block_types', ['null', 'array', 'string']);
@@ -71,7 +69,7 @@ class BlockStaticType extends AbstractType
         $resolver->setDefault('choices', function (Options $options) {
             $blockTypes = $this->cmsConfig->getBlocks();
 
-            if ($options['block_types'] !== null) {
+            if (null !== $options['block_types']) {
                 $blockTypes = array_intersect_key($blockTypes, array_flip($options['block_types']));
             }
 
@@ -88,16 +86,16 @@ class BlockStaticType extends AbstractType
         $builder->addModelTransformer(new CallbackTransformer(
             function ($blockAsKey) use ($options): ?object {
                 if ($blockAsKey) {
-                    $filtered = array_filter($options['choices'], fn($choice) => $choice->_id == $blockAsKey);
+                    $filtered = array_filter($options['choices'], fn ($choice) => $choice->_id == $blockAsKey);
                     /** @var false|object $choice */
                     $choice = current($filtered);
 
-                    return $choice !== false ? $choice : null;
+                    return false !== $choice ? $choice : null;
                 }
 
                 return null;
             },
-            function (?object $blockAsObject) use ($options): ?string {
+            function (?object $blockAsObject): ?string {
                 return $blockAsObject ? "{$blockAsObject->_id}" : null;
             }
         ));

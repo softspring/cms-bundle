@@ -10,21 +10,21 @@ trait SchedulableContentTrait
 
     public function getPublishStartDate(): ?\DateTime
     {
-        return \DateTime::createFromFormat('U', $this->publishStartDate) ?: null;
+        return $this->publishStartDate ? \DateTime::createFromFormat('U', "{$this->publishStartDate}") : null;
     }
 
     public function setPublishStartDate(?\DateTime $publishStartDate): void
     {
-        $this->publishStartDate = $publishStartDate instanceof \DateTime ? $publishStartDate->format('U') : null;
+        $this->publishStartDate = $publishStartDate instanceof \DateTime ? (int) $publishStartDate->format('U') : null;
     }
 
     public function getPublishEndDate(): ?\DateTime
     {
-        return \DateTime::createFromFormat('U', $this->publishEndDate) ?: null;
+        return $this->publishEndDate ? \DateTime::createFromFormat('U', "{$this->publishEndDate}") : null;
     }
 
     public function setPublishEndDate(?\DateTime $publishEndDate): void
     {
-        $this->publishEndDate = $publishEndDate instanceof \DateTime ? $publishEndDate->format('U') : null;
+        $this->publishEndDate = $publishEndDate instanceof \DateTime ? (int) $publishEndDate->format('U') : null;
     }
 }

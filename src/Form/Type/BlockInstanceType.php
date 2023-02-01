@@ -66,7 +66,7 @@ class BlockInstanceType extends AbstractType
                 }
 
                 return $attr;
-            }
+            },
         ]);
 
         $resolver->addAllowedTypes('block_types', ['null', 'array', 'string']);
@@ -77,7 +77,7 @@ class BlockInstanceType extends AbstractType
         $resolver->setDefault('query_builder', function (Options $options) {
             $blockTypes = $options['block_types'];
 
-            if ($blockTypes === null) {
+            if (null === $blockTypes) {
                 $blockTypes = array_keys($this->cmsConfig->getBlocks());
             }
 
