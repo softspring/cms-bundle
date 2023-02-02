@@ -107,13 +107,6 @@
 [data-polymorphic=collection]:hover + .insert-module-at-the-end[class^='col-'] {
     position: relative;
 
-    &:not(.insert-module-at-the-end):first-child {
-
-        & > .insert-module {
-            margin-left: 5px;
-        }
-    }
-
     & > .insert-module {
         position: absolute;
         display: block;
