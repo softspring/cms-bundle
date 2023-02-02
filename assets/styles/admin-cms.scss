@@ -84,9 +84,10 @@
 }
 
 .insert-module-at-the-end.col,
-.insert-module-at-the-end[class^='col-'],
-.insert-module-at-the-end[class*=' col-'] {
+.insert-module-at-the-end[class^="col-"],
+.insert-module-at-the-end[class*="col-"] {
     padding: 0;
+    margin-left: 12px;
     flex: 0 0 16px;
     height: 100%;
     min-height: 200px;
@@ -100,11 +101,11 @@
     min-height: 50px;
 }
 [data-polymorphic=collection]:hover > .col,
+[data-polymorphic=collection]:hover > [class*=" col-"],
+[data-polymorphic=collection]:hover > [class^="col-"],
 [data-polymorphic=collection]:hover + .insert-module-at-the-end.col
-[data-polymorphic=collection]:hover > [class*=' col-'],
-[data-polymorphic=collection]:hover + .insert-module-at-the-end[class*=' col-'],
-[data-polymorphic=collection]:hover > [class^='col-'],
-[data-polymorphic=collection]:hover + .insert-module-at-the-end[class^='col-'] {
+[data-polymorphic=collection]:hover + [class*="insert-module-at-the-end col-"],
+[data-polymorphic=collection]:hover + .insert-module-at-the-end[class^="col-"] {
     position: relative;
 
     & > .insert-module {
@@ -133,15 +134,8 @@
             background-color: $primary;
         }
     }
-
-    & > .insert-module:last-child {
-    }
 }
 
-[data-polymorphic=collection] + .insert-module-at-the-end.col,
-[data-polymorphic=collection]:hover + .insert-module-at-the-end.col {
-    margin-left: 0;
-}
 
 .cms-module {
     position: relative;
