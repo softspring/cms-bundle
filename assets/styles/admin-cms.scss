@@ -108,7 +108,10 @@
     position: relative;
 
     &:not(.insert-module-at-the-end):first-child {
-        margin-left: 10px;
+
+        & > .insert-module {
+            margin-left: 5px;
+        }
     }
 
     & > .insert-module {
