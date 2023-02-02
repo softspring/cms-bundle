@@ -10,6 +10,12 @@
 
 .cms-content-main{
     margin-top: 27px;
+
+    main {
+        > .container-fluid {
+            padding: 0;
+        }
+    }
 }
 
 
