@@ -1,3 +1,3 @@
-{% if id or class %}<div id="{{ id|default('') }}" class="{{ class|default('') }}">{% endif %}
+{% if id|default(false) or class|default(false) %}<div id="{{ id|default('') }}" class="{{ class|default('') }}">{% endif %}
 {{ code[app.request.locale]|default('')|raw }}
-{% if id or class %}</div>{% endif %}
+{% if id|default(false) or class|default(false) %}</div>{% endif %}
