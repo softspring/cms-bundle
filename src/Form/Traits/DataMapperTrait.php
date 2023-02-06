@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Form\Traits;
 
+use Softspring\CmsBundle\Utils\ModuleMigrator;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\PropertyAccess\Exception\AccessException;
@@ -85,21 +86,10 @@ trait DataMapperTrait
 
     private function migrateValueToRevision(array $data, FormInterface $form): array
     {
-        $fromRevision = (int) ($data['_revision'] ?? 1);
         $toRevision = $form->getConfig()->getOption('module_revision');
-
-        if ($fromRevision == $toRevision) {
-            return $data;
-        }
-
-        $module = $form->getConfig()->getOption('module_id');
         $migrationScripts = $form->getConfig()->getOption('module_migrations');
 
-        foreach ($migrationScripts as $migrationScript) {
-            $data = (include $migrationScript)($data, $fromRevision, $toRevision);
-        }
-
-        return $data;
+        return ModuleMigrator::migrate($migrationScripts, $data, $toRevision);
     }
 
     /**

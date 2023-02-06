@@ -6,6 +6,7 @@ use Psr\Log\LoggerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Form\Module\ContainerModuleType;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
+use Softspring\CmsBundle\Utils\ModuleMigrator;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Twig\Environment;
@@ -80,6 +81,8 @@ class ContentRender
         $this->cmsLogger && $this->cmsLogger->debug(sprintf('Rendering %s module', $module['_module']));
 
         $moduleConfig = $this->cmsConfig->getModule($module['_module']);
+
+        $module = ModuleMigrator::migrate($moduleConfig['revision_migration_scripts'], $module, $moduleConfig['revision']);
 
         if ($this->isContainer($module)) {
             $module['contents'] = [];
