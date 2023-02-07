@@ -12,4 +12,18 @@ class ModuleMigrator
 
         return $moduleData;
     }
+
+    public static function routeToSymfonyRoute(?string $oldRouteValue): array
+    {
+        if (is_string($oldRouteValue) && $oldRouteValue !== '' && substr($oldRouteValue, 0, 8) !== 'route___') {
+            error_log("Bad-formed '$oldRouteValue' route to migrate, has been set to null.");
+            $oldRouteValue = null;
+        }
+
+        return [
+            // migrate from route___<route_name> format
+            'route_name' => $oldRouteValue ? substr($oldRouteValue, 8) : null,
+            'route_params' => [],
+        ];
+    }
 }
