@@ -25,11 +25,13 @@ class SymfonyRouteType extends AbstractType
 
     protected RouterInterface $router;
     protected RouteManagerInterface $routeManager;
+    protected array $defaultRestrictPatterns;
 
-    public function __construct(RouterInterface $router, RouteManagerInterface $routeManager)
+    public function __construct(RouterInterface $router, RouteManagerInterface $routeManager, array $defaultRestrictPatterns)
     {
         $this->router = $router;
         $this->routeManager = $routeManager;
+        $this->defaultRestrictPatterns = $defaultRestrictPatterns;
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -45,10 +47,7 @@ class SymfonyRouteType extends AbstractType
             return is_string($value) ? [$value] : ($value ?? []);
         });
 
-        $resolver->setDefault('restrict_patterns', [
-            '^_profiler',
-            '^_wdt',
-        ]);
+        $resolver->setDefault('restrict_patterns', $this->defaultRestrictPatterns);
         $resolver->setAllowedTypes('restrict_patterns', ['string', 'array']);
         $resolver->setNormalizer('restrict_patterns', function (Options $options, $value) {
             return is_string($value) ? [$value] : ($value ?? []);

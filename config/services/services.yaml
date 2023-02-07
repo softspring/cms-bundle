@@ -1,3 +1,6 @@
+parameters:
+    sfs_cms.form_type.symfony_route.default_restrict_patterns: [ '^_profiler', '^_wdt' ]
+
 services:
     _defaults:
         autowire: true
@@ -17,6 +20,7 @@ services:
             $transformers: !tagged_iterator { tag: sfs_cms.data_transformer, default_priority_method: getPriority }
             $cmsLogger: '@?monolog.logger.cms'
             $debug: '%kernel.debug%'
+            $defaultRestrictPatterns: '%sfs_cms.form_type.symfony_route.default_restrict_patterns%'
 
     Softspring\CmsBundle\Config\CmsConfig:
         arguments:
