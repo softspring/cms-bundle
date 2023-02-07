@@ -118,4 +118,10 @@ window.addEventListener('load', (event) => {
             routeParamsField.value = '';
         }
     });
+
+    [...document.querySelectorAll('[data-route-params]')].forEach((routeParamsField) => {
+        if (!routeParamsField.value) {
+            routeParamsField.closest('div').classList.add('d-none');
+        }
+    });
 });
