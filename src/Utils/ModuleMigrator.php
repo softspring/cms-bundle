@@ -15,7 +15,7 @@ class ModuleMigrator
 
     public static function routeToSymfonyRoute(?string $oldRouteValue): array
     {
-        if (is_string($oldRouteValue) && $oldRouteValue !== '' && substr($oldRouteValue, 0, 8) !== 'route___') {
+        if (is_string($oldRouteValue) && '' !== $oldRouteValue && 'route___' !== substr($oldRouteValue, 0, 8)) {
             error_log("Bad-formed '$oldRouteValue' route to migrate, has been set to null.");
             $oldRouteValue = null;
         }
