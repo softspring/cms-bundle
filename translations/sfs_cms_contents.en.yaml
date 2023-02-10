@@ -134,6 +134,9 @@ admin_page:
             id.header: "Identifier"
             site.header: "Site"
             name.header: "Name"
+        filter_form:
+            name.label: "Name"
+            site.label: "Site"
 
     form:
         name.label: "Name"
@@ -155,5 +158,15 @@ admin_page:
             noIndex.label: "No index"
             noFollow.label: "No follow"
             sitemap.label: "Sitemap"
-            sitemapChangefreq.label: "Change frequency for sitemap"
+            sitemapChangefreq:
+                label: "Change frequency for sitemap"
+                values:
+                    empty: ""
+                    always: "always"
+                    hourly: "hourly"
+                    daily: "daily"
+                    weekly: "weekly"
+                    monthly: "monthly"
+                    yearly: "yearly"
+                    never: "never"
             sitemapPriority.label: "URL priority for sitemap"
