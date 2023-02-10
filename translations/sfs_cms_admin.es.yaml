@@ -104,6 +104,9 @@ admin_routes:
             page.header: "Página"
             path.header: "URL"
             type.header: "Tipo"
+        filter_form:
+            id.label: "Ruta"
+            site.label: "Sitio"
     form:
         paths:
             add.button: "Añadir segmento de URL"
@@ -149,6 +152,8 @@ admin_menus:
             id.header: "Identificador"
             type.header: "Tipo"
             name.header: "Nombre"
+        filter_form:
+            name.label: "Nombre"
 
     create:
         meta.title: "Nuevo menú"
