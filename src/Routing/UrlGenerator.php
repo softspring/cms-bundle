@@ -8,6 +8,7 @@ use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Model\RoutePathInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 class UrlGenerator
 {
@@ -31,7 +32,7 @@ class UrlGenerator
      *
      * @throws \Exception
      */
-    public function getUrl($routeOrName, ?string $locale = null): string
+    public function getUrl($routeOrName, ?string $locale = null, bool $onlyChecking = false): string
     {
         if ($this->isPreview()) {
             return 'javascript:confirm(\'Esto es una previsualización!\')';
@@ -40,6 +41,10 @@ class UrlGenerator
         $route = $routeOrName instanceof RouteInterface ? $routeOrName : $this->getRoute($routeOrName);
 
         if (!$route) {
+            if ($onlyChecking) {
+                throw new RouteNotFoundException();
+            }
+
             return '#';
         }
 
@@ -51,7 +56,7 @@ class UrlGenerator
      *
      * @throws \Exception
      */
-    public function getPath($routeOrName, ?string $locale = null): string
+    public function getPath($routeOrName, ?string $locale = null, bool $onlyChecking = false): string
     {
         if ($this->isPreview()) {
             return 'javascript:confirm(\'Esto es una previsualización!\')';
@@ -60,6 +65,10 @@ class UrlGenerator
         $route = $routeOrName instanceof RouteInterface ? $routeOrName : $this->getRoute($routeOrName);
 
         if (!$route) {
+            if ($onlyChecking) {
+                throw new RouteNotFoundException();
+            }
+
             return '#';
         }
 
