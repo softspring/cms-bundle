@@ -722,7 +722,7 @@ class ContentController extends AbstractController
         $path = tempnam(sys_get_temp_dir(), 'content_');
         unlink($path);
         $this->dataExporter->exportContent($content, $version, $config, $path);
-        $exportName = sprintf('%s-%s-v%s-%s.zip', Slugger::lowerSlug($content->getName()), $config['_id'], $version->getVersionNumber(), date('Y-m-d-H-i-s'));
+        $exportName = sprintf('%s/%s-%s-v%s-%s.zip', sys_get_temp_dir(), Slugger::lowerSlug($content->getName()), $config['_id'], $version->getVersionNumber(), date('Y-m-d-H-i-s'));
 
         return ZipContent::dumpResponse($path, $exportName);
     }
