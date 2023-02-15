@@ -1,5 +1,29 @@
 # CHANGELOG
 
+## [v5.0.5](https://github.com/softspring/cms-bundle/releases/tag/v5.0.5)
+
+### Upgrading
+
+*Nothing to do on upgrading*
+
+### Commits
+
+- [acd70f8](https://github.com/softspring/cms-bundle/commit/acd70f8f31069d5940f394e8b4e1ce991fc248a1): Update changelog
+- [62ea59e](https://github.com/softspring/cms-bundle/commit/62ea59e6b3fe9d16a8bbad567e74d20a482e7b4c): BUNDLES-155 - fix content export on readonly filesystems forcing to use tmp dir for temp zip file
+- [edf1370](https://github.com/softspring/cms-bundle/commit/edf13705d165c9f0ae79c1809c010e32bc0dcd7c): BUNDLES-156 - fix route deprecation
+- [c1ce876](https://github.com/softspring/cms-bundle/commit/c1ce8767f0ec98a27497d227be4e8f29f9521e6d): Add troubleshooting doc page
+
+### Changes
+
+```
+ CHANGELOG.md                               | 90 +++++++++++++++++++++++++++++-
+ config/routing/admin_content_type.yaml     | 12 ++--
+ docs/15_troubleshooting.md                 | 12 ++++
+ src/Controller/Admin/ContentController.php |  2 +-
+ src/Utils/ZipContent.php                   | 20 +++----
+ 5 files changed, 117 insertions(+), 19 deletions(-)
+```
+
 ## [v5.0.4](https://github.com/softspring/cms-bundle/releases/tag/v5.0.4)
 
 ### Upgrading
