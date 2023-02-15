@@ -43,31 +43,31 @@ content_from_version:
     path: /{content}/{prevVersion}/content
 
 preview_content:
-    controller: Softspring\CmsBundle\Controller\Admin\ContentController:previewContent
+    controller: Softspring\CmsBundle\Controller\Admin\ContentController::previewContent
     path: /{content}/preview-content
 
 preview_content_version:
-    controller: Softspring\CmsBundle\Controller\Admin\ContentController:previewContent
+    controller: Softspring\CmsBundle\Controller\Admin\ContentController::previewContent
     path: /{content}/{version}/preview-content
 
 publish_version:
-    controller: Softspring\CmsBundle\Controller\Admin\ContentController:publishVersion
+    controller: Softspring\CmsBundle\Controller\Admin\ContentController::publishVersion
     path: /{content}/{version}/publish-version
 
 keep_version:
-    controller: Softspring\CmsBundle\Controller\Admin\ContentController:markKeepVersion
+    controller: Softspring\CmsBundle\Controller\Admin\ContentController::markKeepVersion
     path: /{content}/{version}/keep-version
     defaults:
         keep: true
 
 unkeep_version:
-    controller: Softspring\CmsBundle\Controller\Admin\ContentController:markKeepVersion
+    controller: Softspring\CmsBundle\Controller\Admin\ContentController::markKeepVersion
     path: /{content}/{version}/unkeep-version
     defaults:
         keep: false
 
 export_version:
-    controller: Softspring\CmsBundle\Controller\Admin\ContentController:exportVersion
+    controller: Softspring\CmsBundle\Controller\Admin\ContentController::exportVersion
     path: /{content}/{version}/export-version
 
 versions:
