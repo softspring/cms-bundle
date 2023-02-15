@@ -75,20 +75,20 @@ class ZipContent
         $finder = new Finder();
         $finder->files()->in($path);
 
+        // open zip
+        if (true !== $zip->open($zipName, \ZipArchive::CREATE)) {
+            throw new FileException('Zip file could not be created/opened.');
+        }
+
         // loop files
         foreach ($finder as $file) {
-            // open zip
-            if (true !== $zip->open($zipName, \ZipArchive::CREATE)) {
-                throw new FileException('Zip file could not be created/opened.');
-            }
-
             // add to zip
             $zip->addFile($file->getRealpath(), str_replace("$path/", '', $file->getRealpath()));
+        }
 
-            // close zip
-            if (!$zip->close()) {
-                throw new FileException('Zip file could not be closed.');
-            }
+        // close zip
+        if (!$zip->close()) {
+            throw new FileException('Zip file could not be closed.');
         }
 
         return $zipName;
@@ -100,7 +100,7 @@ class ZipContent
 
         $response = new Response(file_get_contents($zipName));
         $response->headers->set('Content-Type', 'application/zip');
-        $response->headers->set('Content-Disposition', 'attachment;filename="'.$zipName.'"');
+        $response->headers->set('Content-Disposition', 'attachment;filename="'.pathinfo($zipName, PATHINFO_BASENAME).'"');
         $response->headers->set('Content-length', (string) filesize($zipName));
 
         $deleteAfterResponse && @unlink($zipName);

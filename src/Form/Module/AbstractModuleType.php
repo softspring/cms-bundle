@@ -77,9 +77,19 @@ abstract class AbstractModuleType extends AbstractNodeType
             ]);
 
             $builder->addEventListener(FormEvents::PRE_SET_DATA, function (PreSetDataEvent $event) {
-                if (null === $event->getData()) {
-                    $event->setData(['locale_filter' => $this->enabledLocales]);
+                $data = $event->getData();
+
+                if (null === $data) {
+                    // set all locales on prototyping (data = null)
+                    $data = ['locale_filter' => $this->enabledLocales];
                 }
+
+                if (!isset($data['locale_filter'])) {
+                    // set all locales on no stored locale_filter
+                    $data['locale_filter'] = $this->enabledLocales;
+                }
+
+                $event->setData($data);
             });
         }
 

@@ -104,6 +104,9 @@ admin_routes:
             page.header: "Page"
             path.header: "URL"
             type.header: "Type"
+        filter_form:
+            id.label: "Route"
+            site.label: "Site"
     form:
         paths:
             add.button: "Add URL paths"
@@ -149,6 +152,8 @@ admin_menus:
             id.header: "Identifier"
             type.header: "Type"
             name.header: "Name"
+        filter_form:
+            name.label: "Name"
 
     create:
         meta.title: "New menu"

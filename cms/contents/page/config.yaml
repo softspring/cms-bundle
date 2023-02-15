@@ -26,14 +26,14 @@ content:
             type: choice
             type_options:
                 choices:
-                    "": false
-                    always: always
-                    hourly: hourly
-                    daily: daily
-                    weekly: weekly
-                    monthly: monthly
-                    yearly: yearly
-                    never: never
+                    admin_page.form.seo.sitemapChangefreq.values.empty: false
+                    admin_page.form.seo.sitemapChangefreq.values.always: always
+                    admin_page.form.seo.sitemapChangefreq.values.hourly: hourly
+                    admin_page.form.seo.sitemapChangefreq.values.daily: daily
+                    admin_page.form.seo.sitemapChangefreq.values.weekly: weekly
+                    admin_page.form.seo.sitemapChangefreq.values.monthly: monthly
+                    admin_page.form.seo.sitemapChangefreq.values.yearly: yearly
+                    admin_page.form.seo.sitemapChangefreq.values.never: never
         sitemapPriority:
             type: number
             type_options:

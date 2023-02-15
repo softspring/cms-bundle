@@ -87,12 +87,11 @@ window.addEventListener('load', (event) => {
      * SYMFONY ROUTE PARAMS
      * ****************************************************************************************************** */
 
-    document.addEventListener('change', function (event) {
-        if (!event.target.matches('[data-route-params]')) return;
-
-        const routeNameSelect = event.target;
+    function updateRouteParamsField(routeNameSelect)
+    {
         const selectedOption = routeNameSelect.options[routeNameSelect.selectedIndex];
         const routeParamsField = document.getElementById(routeNameSelect.dataset.routeParams);
+        const routeParamsLabel = document.querySelector('label[for='+routeParamsField.id+']');
 
         let routeParams = {};
 
@@ -107,16 +106,30 @@ window.addEventListener('load', (event) => {
             routeParams[paramName] = requirement;
         }
 
-        console.log(routeParams);
-        console.log(JSON.stringify(routeParams));
-
         if (Object.keys(routeParams).length) {
             routeParamsField.closest('div').classList.remove('d-none');
+            routeParamsLabel && routeParamsLabel.closest('div').classList.remove('d-none');
             routeParamsField.value = JSON.stringify(routeParams);
         } else {
             routeParamsField.closest('div').classList.add('d-none');
+            routeParamsLabel && routeParamsLabel.closest('div').classList.add('d-none');
             routeParamsField.value = '';
         }
+    }
+
+    document.addEventListener('change', function (event) {
+        if (!event.target.matches('[data-route-params]')) return;
+        updateRouteParamsField(event.target);
+    });
+
+    [...document.querySelectorAll('[data-route-params]')].forEach((routeParamsField) => {
+        updateRouteParamsField(routeParamsField);
+    });
+
+    document.addEventListener("polymorphic.node.insert.after", function (event) {
+        [...event.node().querySelectorAll('[data-route-params]')].forEach((routeParamsField) => {
+            updateRouteParamsField(routeParamsField);
+        });
     });
 
     [...document.querySelectorAll('[data-route-params]')].forEach((routeParamsField) => {

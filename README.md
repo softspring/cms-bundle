@@ -25,7 +25,7 @@
 - 12- Caching
 - 13- Logging
 - [14. Extend with collections](docs/14_collections.md)
-
+ 
 ## License
 
 This bundle is under the MIT license. See the complete license in the bundle [LICENSE](LICENSE) file.
