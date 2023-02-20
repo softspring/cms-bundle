@@ -14,7 +14,21 @@ module:
                 type_options:
                     attr:
                         data-edit-id-input: 'containerIdDiv'
-
+            container_type:
+                type: 'choice'
+                type_options:
+                    choices:
+                        "container.form.container_type.values.container": container
+                        "container.form.container_type.values.fluid": container-fluid
+                    attr:
+                        data-edit-class-input: 'containerClass'
+            tag_type:
+                type: 'choice'
+                type_options:
+                    choices:
+                        "container.form.tag_type.values.div": div
+                        "container.form.tag_type.values.section": section
+                        "container.form.tag_type.values.article": article
             class:
                 type: 'class'
                 type_options:

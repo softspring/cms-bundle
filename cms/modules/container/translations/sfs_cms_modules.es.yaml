@@ -8,3 +8,12 @@ container:
         id.label: "Id"
         class.label: "Clases"
         bg_color.label: "Color de fondo"
+        container_type.label: "Tipo de contenedor"
+        container_type.values:
+            container: "Contenedor"
+            fluid: "Contenedor fluido"
+        tag_type.label: "Tipo de etiqueta HTML"
+        tag_type.values:
+            div: "<div>"
+            section: "<section>"
+            article: "<article>"
