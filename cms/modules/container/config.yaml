@@ -1,5 +1,5 @@
 module:
-    revision: 1
+    revision: 2
     group: 'container'
     edit_template: '@module/container/edit.html.twig'
     module_type: 'Softspring\CmsBundle\Form\Module\ContainerModuleType'
