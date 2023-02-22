@@ -42,12 +42,21 @@ services:
         resource: '../../src/DataFixtures/*'
         tags: ['doctrine.fixtures.loader']
 
-    Softspring\CmsBundle\Form\:
-        resource: '../../src/Form/*'
+    Softspring\CmsBundle\Form\Admin\:
+        resource: '../../src/Form/Admin/*'
         tags: ['form.type']
 
-    Softspring\CmsBundle\Form\Module\ModuleCollectionType:
+    Softspring\CmsBundle\Form\Module\:
+        resource: '../../src/Form/Module/*'
         tags: ['form.type']
+
+    Softspring\CmsBundle\Form\Type\:
+        resource: '../../src/Form/Type/*'
+        tags: ['form.type']
+
+    Softspring\CmsBundle\Form\Extension\:
+        resource: '../../src/Form/Extension/*'
+        tags: ['form.extension']
 
 #    Softspring\CmsBundle\EventListener\:
 #        resource: '../../src/EventListener/*'
