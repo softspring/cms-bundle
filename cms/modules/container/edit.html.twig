@@ -1,18 +1,19 @@
 {% set tagType = form.tag_type.vars.data|default('div') %}
 {% set containerType = form.container_type.vars.data|default('container') %}
 
-<div data-edit-bgcolor-target="containerColorDiv" style="{{ form.bg_color.vars.data ? 'background-color:'~form.bg_color.vars.data : '' }}">
-    <{{ tagType }} class="{{ containerType}} border border-2 module-container"
-        data-edit-class-target="containerClass"
-        data-edit-class-default="border border-2 module-container">
-        {{ form_row(form.modules, {'container': {
-            'attr': {
-                'id': form.id.vars.data,
-                'class': 'py-5 '~form.class.vars.data|default(''),
-                'data-edit-id-target': 'containerIdDiv',
-                'data-edit-class-target': 'containerClassDiv',
-                'data-edit-class-default': 'py-5',
-            }
-        }}) }}
-    </{{ tagType }}>
-</div>
+<{{ tagType }} class="{{ containerType}} border border-2 module-container"
+    data-edit-class-target="containerClass"
+    data-edit-class-default="border border-2 module-container"
+
+    data-edit-bgcolor-target="containerColorDiv"
+    style="{{ form.bg_color.vars.data ? 'background-color:'~form.bg_color.vars.data : '' }}">
+    {{ form_row(form.modules, {'container': {
+        'attr': {
+            'id': form.id.vars.data,
+            'class': 'py-5 '~form.class.vars.data|default(''),
+            'data-edit-id-target': 'containerIdDiv',
+            'data-edit-class-target': 'containerClassDiv',
+            'data-edit-class-default': 'py-5',
+        }
+    }}) }}
+</{{ tagType }}>
