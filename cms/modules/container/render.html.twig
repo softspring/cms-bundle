@@ -1,7 +1,5 @@
-<div style="{{ bg_color|default(false) ? 'background-color:'~bg_color : '' }}">
-    <div class="container-module container {{ class|default('') }}" id="{{ id|default('') }}">
-    {% for content in contents %}
-        {{ content|raw }}
-    {% endfor %}
-    </div>
-</div>
+<{{ tag_type }} class="container-module {{ container_type }} {{ class|default('') }}" {{ (id is not empty)? 'id='~ id|default('')}}  style="{{ bg_color|default(false) ? 'background-color:'~bg_color : '' }}">
+{% for content in contents %}
+    {{ content|raw }}
+{% endfor %}
+</{{ tag_type }}>
