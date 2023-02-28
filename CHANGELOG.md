@@ -1,5 +1,24 @@
 # CHANGELOG
 
+## [v5.0.6](https://github.com/softspring/cms-bundle/releases/tag/v5.0.6)
+
+### Upgrading
+
+*Nothing to do on upgrading*
+
+### Commits
+
+- [a64136b](https://github.com/softspring/cms-bundle/commit/a64136b8f31908ab492e644c9d42a65abb67ef00): BUNDLES-165 Fix htmlTargetElement assignment
+- [c0353cd](https://github.com/softspring/cms-bundle/commit/c0353cd0d2c77ec60a18e38edc8863b88b50382a): BUNDLES-165 Fix preview class js
+- [f0f4988](https://github.com/softspring/cms-bundle/commit/f0f498853f3446bb440774a27377516878e0977a): BUNDLES-165 Enable multiple entry points to generate css classes
+
+### Changes
+
+```
+ assets/scripts/admin/content-edit/preview-class.js | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
+```
+
 ## [v5.0.5](https://github.com/softspring/cms-bundle/releases/tag/v5.0.5)
 
 ### Upgrading
