@@ -25,8 +25,7 @@ window.addEventListener('load', (event) => {
         });
 
         [...htmlTargetElements].forEach(function (htmlTargetElement) {
-            classesElement = htmlTargetElement.dataset.editClassDefault + ' ' + classesElement;
-            htmlTargetElement.className = classesElement;
+            htmlTargetElement.className = htmlTargetElement.dataset.editClassDefault + ' ' + classesElement;
         });
     });
 });
