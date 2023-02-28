@@ -16,14 +16,17 @@ window.addEventListener('load', (event) => {
 
         let htmlTargetElements = modulePreview.querySelectorAll("[data-edit-class-target='" + event.target.dataset.editClassInput + "']");
         let htmlInputsElements = moduleForm.querySelectorAll("[data-edit-class-input='" + event.target.dataset.editClassInput + "']");
-        if (htmlInputsElements.length) {
-            let classesElement = '';
-            // Combine all option to class attribute
-            htmlInputsElements.forEach(function (htmlInputsElement) {
-                classesElement = htmlInputsElement.value + ' ' + classesElement;
-            });
-            classesElement = htmlTargetElements[0].dataset.editClassDefault + ' ' + classesElement;
-            htmlTargetElements[0].className = classesElement;
-        }
+
+        let classesElement = '';
+
+        // Combine all option to class attribute
+        [...htmlInputsElements].forEach(function (htmlInputsElement) {
+            classesElement = htmlInputsElement.value + ' ' + classesElement;
+        });
+
+        [...htmlTargetElements].forEach(function (htmlTargetElement) {
+            classesElement = htmlTargetElement.dataset.editClassDefault + ' ' + classesElement;
+            htmlTargetElement.className = classesElement;
+        });
     });
 });
