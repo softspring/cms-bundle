@@ -12,10 +12,20 @@ window.addEventListener('load', (event) => {
         if (!event.target || !event.target.hasAttribute('data-edit-class-input')) return;
 
         let modulePreview = event.target.closest('.cms-module-edit').querySelector('.module-preview');
+        let moduleForm = event.target.closest('.cms-module-edit').querySelector('.cms-module-form');
 
         let htmlTargetElements = modulePreview.querySelectorAll("[data-edit-class-target='" + event.target.dataset.editClassInput + "']");
-        if (htmlTargetElements.length) {
-            htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.className = htmlTargetElement.dataset.editClassDefault + ' ' + event.target.value);
-        }
+        let htmlInputsElements = moduleForm.querySelectorAll("[data-edit-class-input='" + event.target.dataset.editClassInput + "']");
+
+        let classesElement = '';
+
+        // Combine all option to class attribute
+        [...htmlInputsElements].forEach(function (htmlInputsElement) {
+            classesElement = htmlInputsElement.value + ' ' + classesElement;
+        });
+
+        [...htmlTargetElements].forEach(function (htmlTargetElement) {
+            htmlTargetElement.className = htmlTargetElement.dataset.editClassDefault + ' ' + classesElement;
+        });
     });
 });
