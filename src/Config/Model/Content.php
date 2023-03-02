@@ -62,6 +62,11 @@ class Content implements ConfigurationInterface
                     ->end()
                 ->end()
 
+                ->arrayNode('meta')
+                    ->variablePrototype()
+                    ->end()
+                ->end()
+
                 ->arrayNode('seo')
                     ->defaultValue([
                         'metaTitle' => ['type' => 'translatableText'],
