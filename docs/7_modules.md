@@ -469,3 +469,83 @@ In the folder your-project/app/cms/modules, add a folder with the same name as t
 
 You can add fields by overwriting config.yaml, if you need to layout the edit form, overwrite form.html.twig. For the editing layout, edit edit.html.twig. And for the rendering of the module to paint the new field, overwrite render.html.twig.
 
+As an example we are going to change the button field, so that the CSS classes are not the bootstrap ones but some custom classes.
+
+```
+ - button
+    - translations #The languages your project needs
+        - sfs_cms_modules.en.yaml
+    - config.yaml
+```
+
+##### config.yaml
+
+```
+module:
+    revision: 3
+    group: 'basic'
+    edit_template: '@module/button/edit.html.twig'
+    form_template: '@module/button/form.html.twig'
+
+    module_options:
+        form_fields:
+            id:
+                type: 'id'
+                type_options:
+                    attr:
+                        data-edit-id-input: 'buttonId'
+
+            button_style:
+                type: 'choice'
+                type_options:
+                    choices: #Change choices with the custom classes
+                        "button.form.button_style.values.read_more": 'btn-read-more'
+                        "button.form.button_style.values.continue": 'btn-continue'
+                        "button.form.button_style.values.save": 'btn-save'
+                        "button.form.button_style.values.none": ''
+                    attr:
+                        data-edit-class-input: 'buttonClass'
+
+            button_classes:
+                type: 'class'
+                type_options:
+                    attr:
+                        data-edit-class-input: 'buttonClass'
+
+            button_text:
+                type: 'translatableText'
+                type_options:
+                    children_attr:
+                        data-edit-content-input: 'buttonText'
+
+            button_link:
+                type: 'symfonyRoute'
+                type_options:
+
+```
+
+##### translations/sfs_cms_modules.en.yaml
+
+```
+button:
+    label: "Button"
+    prototype_button: "Button"
+    prototype_button_icon: '<i class="bi bi-link"></i>'
+    form:
+        locale_filter.label: "Locales"
+        id.label: "Id"
+        class.label: "Classes"
+        button_text.label: "Button text"
+        button_link:
+            route_name.label: "Button link"
+            route_params.label: "Link parameters"
+        button_style:
+            label: "Button style"
+            values:
+                read_more: "Read more"
+                continue: "Continue"
+                save: "Save"
+                none: "None"
+            button_classes:
+                label: "Custom butom styles (CSS classes)"
+```
