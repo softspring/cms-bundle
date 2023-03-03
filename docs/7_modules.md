@@ -14,8 +14,8 @@
 - dynamicForm
 - html
 - id
-- ~~imageModal~~
-- ~~image~~
+- ~~imageModal~~ (deprecated)
+- ~~image~~ (deprecated)
 - layout
 - mediaAlt
 - [mediaModal](modules/form-types/media-modal.md)
@@ -23,8 +23,8 @@
 - route
 - [symfonyRoute](modules/form-types/symfony-route.md)
 - tinymce
-- ~~translatableImage~~
-- ~~translatableText~~
+- ~~translatableImage~~ (deprecated)
+- ~~translatableText~~ (deprecated)
 - [translatable](modules/form-types/translatable.md)
 - *user*
 
