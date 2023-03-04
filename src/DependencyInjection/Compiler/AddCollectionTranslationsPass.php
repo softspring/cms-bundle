@@ -41,6 +41,21 @@ class AddCollectionTranslationsPass implements CompilerPassInterface
                     $options['resource_files'][$locale][] = (string) $file;
                 }
             }
+
+            // add item's translations if exists
+            foreach (['module', 'block', 'content', 'layout', 'menu', 'site'] as $item) {
+                $path = $container->getParameter('kernel.project_dir').'/'.trim($collectionPath, '/')."/{$item}s";
+                if (is_dir($path)) {
+                    foreach ((new Finder())->directories()->in("$path/*")->name('translations') as $transDirectory) {
+                        $options['scanned_directories'][] = $transDirectory->getRealPath();
+                        foreach ((new Finder())->in($transDirectory->getRealPath())->files() as $file) {
+                            $fileNameParts = explode('.', $file->getBasename());
+                            $locale = array_pop($fileNameParts);
+                            $options['resource_files'][$locale][] = (string) $file;
+                        }
+                    }
+                }
+            }
         }
 
         $translator->replaceArgument(4, $options);
