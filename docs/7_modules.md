@@ -119,7 +119,7 @@ A module consists of four files and translations:
 #### Create
 You can create new modules to suit your project design needs.
 
-In the folder your-project/app/cms/modules, add a folder with the name of the module you want to create, e.g. **rating**.
+In the folder your-project/cms/modules, add a folder with the name of the module you want to create, e.g. **rating**.
 
 To see in detail how the creation of modules works, let's create the **rating module**, which will display an image, a title, a description, score and a button to see more.
 
@@ -196,6 +196,8 @@ module:
                         "title.form.type.values.h4": h4
                         "title.form.type.values.h5": h5
                         "title.form.type.values.h6": h6
+                    attr:
+                        data-cms-module-title-type-field: ''
                     
             title_class:
                 type: 'class' #Field type
@@ -297,7 +299,7 @@ rating:
         {{ form_row(form.title) }}
     </div>
     <div class="col-12">
-        {{ form_row(form.title_type, {'attr': {'data-cms-module-title-type-field': ''}}) }}
+        {{ form_row(form.title_type }}
     </div>
     <div class="col-12">
         {{ form_row(form.title_class) }}
@@ -465,7 +467,7 @@ rating:
 
 #### Overwrite
 
-In the folder your-project/app/cms/modules, add a folder with the same name as the module you want to overwrite, for example, card.
+In the folder your-project/cms/modules, add a folder with the same name as the module you want to overwrite, for example, card.
 
 You can add fields by overwriting config.yaml, if you need to layout the edit form, overwrite form.html.twig. For the editing layout, edit edit.html.twig. And for the rendering of the module to paint the new field, overwrite render.html.twig.
 
