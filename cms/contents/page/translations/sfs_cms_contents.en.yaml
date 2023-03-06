@@ -1,0 +1,169 @@
+admin_page:
+    tabs_menu:
+        details: "General"
+        update: "Edit"
+        seo: "SEO"
+        content: "Content (last version)"
+        preview: "Preview (last version)"
+        versions: "Versions"
+
+    create:
+        meta.title: "New page"
+        title: "New page"
+        breadcrumb: "New page"
+        actions:
+            create.button: "Create page"
+            cancel.button: "Cancel"
+
+    import:
+        meta.title: "Import page"
+        title: "Import page"
+        breadcrumb: "Import page"
+        actions:
+            import.button: "Import page"
+            cancel.button: "Cancel"
+
+    read:
+        meta.title: "General"
+        title: "%name%"
+        breadcrumb: "General"
+
+    versions:
+        meta.title: "Versions"
+        title: "%name%"
+        breadcrumb: "Versions"
+        fields:
+            id.header: "Version"
+            origin.header: "Origin"
+            created.header: "Created"
+            publish_status.header: "Publish status"
+        publish_status:
+            published: "published"
+            unpublished: ""
+        origin:
+            "null": ""
+            1: "edited"
+            2: "fixture"
+            3: "imported"
+        actions:
+            edit.link: "Edit"
+            preview.link: "Preview"
+            export.link: "Export"
+            publish.link: "Publish version"
+            cleanup_versions.link: "Cleanup versions"
+            keep.link: "Keep version, click to no keep"
+            nokeep.link: "Do not keep version, click to keep"
+    preview:
+        meta.title: "Preview page"
+        title: "%name%"
+        breadcrumb: "Preview page"
+        actions:
+            open.button: "Open"
+            cancel.button: "Back"
+            content.button: "Edit version"
+            publish.button: "Publish version"
+            published.button: "Published"
+
+    translations:
+        meta.title: "Page translations"
+        title: "%name%"
+        breadcrumb: "Page translations"
+
+    update:
+        meta.title: "Edit page"
+        title: "%name%"
+        breadcrumb: "Edit page"
+        actions:
+            update.button: "Save changes"
+            cancel.button: "Cancel"
+            delete.button: "Delete"
+
+    delete:
+        meta.title: "Delete page"
+        title: "%name%"
+        breadcrumb: "Delete page"
+        actions:
+            delete.button: "Delete definitely"
+            cancel.button: "Cancel"
+        form:
+            action:
+                label: "What do you want to do with this page routes?"
+                options:
+                    delete: "Delete routes anyway"
+                    change: "Point to another page (without redirect)"
+                    redirect: "Redirect to another route (permanent redirect)"
+            content.label: "New content for the routes"
+            symfonyRoute:
+                label: "Redirect to route"
+                route_name.label: "Route name"
+                route_params.label: "Parameters"
+
+    seo:
+        meta.title: "Edit SEO"
+        title: "%name%"
+        breadcrumb: "Edit SEO"
+        actions:
+            save.button: "Save changes"
+            cancel.button: "Cancel"
+
+    content:
+        meta.title: "Edit content"
+        title: "%name%"
+        breadcrumb: "Edit content"
+        actions:
+            save.button: "Save version"
+            save_and_exit.button: "Save and exit"
+            save_and_preview.button: "Save and preview"
+            save_and_publish.button: "Save and publish"
+            cancel.button: "Cancel"
+
+    list:
+        meta.title: "Pages"
+        title: "Pages"
+        breadcrumb: "Pages"
+        actions:
+            create.link: "New page"
+            import.link: "Import page"
+            details.link: "View"
+            update.link: "Edit"
+            preview.link: "Preview"
+        fields:
+            id.header: "Identifier"
+            site.header: "Site"
+            name.header: "Name"
+        filter_form:
+            name.label: "Name"
+            site.label: "Site"
+
+    form:
+        name.label: "Name"
+        site.label: "Site"
+        routes:
+            0.label: ""
+            label: "Routes"
+            id.label: "Route id"
+            site.label: "Site"
+            paths:
+                label: "URLs"
+                path.label: "URL segment"
+                cacheTtl.label: "Cache time"
+                locale.label: "Language"
+        seo:
+            metaTitle.label: "Title (browser title and meta tags)"
+            metaDescription.label: "Description (meta tag)"
+            metaKeywords.label: "Keywords (meta tag)"
+            noIndex.label: "No index"
+            noFollow.label: "No follow"
+            sitemap.label: "Sitemap"
+            sitemapChangefreq:
+                label: "Change frequency for sitemap"
+                values:
+                    empty: ""
+                    always: "always"
+                    hourly: "hourly"
+                    daily: "daily"
+                    weekly: "weekly"
+                    monthly: "monthly"
+                    yearly: "yearly"
+                    never: "never"
+            sitemapPriority.label: "URL priority for sitemap"
