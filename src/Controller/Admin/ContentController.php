@@ -58,8 +58,8 @@ class ContentController extends AbstractController
 
     public function create(Request $request): Response
     {
-        $config = $this->getContentConfig($request);
-        $config = $config['admin'] + ['_id' => $config['_id']];
+        $contentConfig = $this->getContentConfig($request);
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']];
 
 //        if (!empty($config['is_granted'])) {
 //            $this->denyAccessUnlessGranted($config['is_granted'], null, sprintf('Access denied, user is not %s.', $config['is_granted']));
@@ -102,6 +102,7 @@ class ContentController extends AbstractController
         // show view
         $viewData = new \ArrayObject([
             'content' => $config['_id'],
+            'content_config' => $contentConfig,
             'entity' => $entity,
             'form' => $form->createView(),
         ]);
@@ -113,8 +114,8 @@ class ContentController extends AbstractController
 
     public function read(string $content, Request $request): Response
     {
-        $config = $this->getContentConfig($request);
-        $config = $config['admin'] + ['_id' => $config['_id']];
+        $contentConfig = $this->getContentConfig($request);
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']];
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
@@ -137,6 +138,7 @@ class ContentController extends AbstractController
         // show view
         $viewData = new \ArrayObject([
             'content' => $config['_id'],
+            'content_config' => $contentConfig,
             'entity' => $entity,
 //            'deleteForm' => $deleteForm ? $deleteForm->createView() : null,
         ]);
@@ -148,8 +150,8 @@ class ContentController extends AbstractController
 
     public function update(string $content, Request $request): Response
     {
-        $config = $this->getContentConfig($request);
-        $config = $config['admin'] + ['_id' => $config['_id']];
+        $contentConfig = $this->getContentConfig($request);
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']];
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
@@ -194,6 +196,7 @@ class ContentController extends AbstractController
         // show view
         $viewData = new \ArrayObject([
             'content' => $config['_id'],
+            'content_config' => $contentConfig,
             'entity' => $entity,
             'form' => $form->createView(),
         ]);
@@ -205,8 +208,8 @@ class ContentController extends AbstractController
 
     public function delete(string $content, Request $request): Response
     {
-        $config = $this->getContentConfig($request);
-        $config = $config['admin'] + ['_id' => $config['_id']];
+        $contentConfig = $this->getContentConfig($request);
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']];
 
         /** @var ContentInterface|null $entity */
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
@@ -273,6 +276,7 @@ class ContentController extends AbstractController
         // show view
         $viewData = new \ArrayObject([
             'content' => $config['_id'],
+            'content_config' => $contentConfig,
             'entity' => $entity,
             'form' => $form->createView(),
         ]);
@@ -284,8 +288,8 @@ class ContentController extends AbstractController
 
     public function import(Request $request, bool $confirm = false): Response
     {
-        $config = $this->getContentConfig($request);
-        $config = $config['admin'] + ['_id' => $config['_id']];
+        $contentConfig = $this->getContentConfig($request);
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']];
 
 //        if (!empty($config['is_granted'])) {
 //            $this->denyAccessUnlessGranted($config['is_granted'], null, sprintf('Access denied, user is not %s.', $config['is_granted']));
@@ -327,6 +331,7 @@ class ContentController extends AbstractController
         // show view
         $viewData = new \ArrayObject([
             'content' => $config['_id'],
+            'content_config' => $contentConfig,
             'form' => $form->createView(),
             'confirm' => $confirm,
         ]);
@@ -338,8 +343,8 @@ class ContentController extends AbstractController
 
     public function list(Request $request): Response
     {
-        $config = $this->getContentConfig($request);
-        $config = $config['admin'] + ['_id' => $config['_id']];
+        $contentConfig = $this->getContentConfig($request);
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']];
 
         if (!empty($config['list_is_granted'])) {
             $this->denyAccessUnlessGranted($config['list_is_granted'], null, sprintf('Access denied, user is not %s.', $config['list_is_granted']));
@@ -349,7 +354,7 @@ class ContentController extends AbstractController
             return $response;
         }
 
-        $form = $this->createForm($config['list_filter_form'], [], ['content_config' => $config, 'class' => $this->contentManager->getTypeClass($config['_id'])])->handleRequest($request);
+        $form = $this->createForm($config['list_filter_form'], [], ['content_config' => $contentConfig, 'class' => $this->contentManager->getTypeClass($config['_id'])])->handleRequest($request);
         $filterEvent = FilterEvent::createFromFilterForm($form, $request);
         $this->dispatch("sfs_cms.admin.contents.{$config['_id']}.filter_event_name", $filterEvent);
         $entities = $filterEvent->queryPage();
@@ -357,6 +362,7 @@ class ContentController extends AbstractController
         // show view
         $viewData = new \ArrayObject([
             'content' => $config['_id'],
+            'content_config' => $contentConfig,
             'entities' => $entities, // @deprecated
             'filterForm' => $form->createView(),
             'read_route' => $config['read_route'] ?? null,
@@ -374,8 +380,8 @@ class ContentController extends AbstractController
 
     public function content(string $content, Request $request, string $prevVersion = null): Response
     {
-        $config = $this->getContentConfig($request);
-        $config = $config['admin'] + ['_id' => $config['_id']];
+        $contentConfig = $this->getContentConfig($request);
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']];
 
         /** @var ?ContentInterface $entity */
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
@@ -453,6 +459,7 @@ class ContentController extends AbstractController
         // show view
         $viewData = new \ArrayObject([
             'content' => $config['_id'],
+            'content_config' => $contentConfig,
             'entity' => $entity,
             'layout' => $this->cmsConfig->getLayout($version->getLayout()),
             'form' => $form->createView(),
@@ -466,8 +473,8 @@ class ContentController extends AbstractController
 
     public function seo(string $content, Request $request): Response
     {
-        $config = $this->getContentConfig($request);
-        $config = $config['admin'] + ['_id' => $config['_id']] + ['seo' => $config['seo']];
+        $contentConfig = $this->getContentConfig($request);
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']] + ['seo' => $contentConfig['seo']];
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
@@ -512,6 +519,7 @@ class ContentController extends AbstractController
         // show view
         $viewData = new \ArrayObject([
             'content' => $config['_id'],
+            'content_config' => $contentConfig,
             'entity' => $entity,
             'form' => $form->createView(),
         ]);
@@ -523,8 +531,8 @@ class ContentController extends AbstractController
 
     public function preview(string $content, Request $request, ContentVersionInterface $version = null): Response
     {
-        $config = $this->getContentConfig($request);
-        $config = $config['admin'] + ['_id' => $config['_id']];
+        $contentConfig = $this->getContentConfig($request);
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']];
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
@@ -547,6 +555,7 @@ class ContentController extends AbstractController
         // show view
         $viewData = new \ArrayObject([
             'content' => $config['_id'],
+            'content_config' => $contentConfig,
             'entity' => $entity,
             'version' => $version ?? $entity->getVersions()->first(),
 //            'deleteForm' => $deleteForm ? $deleteForm->createView() : null,
@@ -560,8 +569,8 @@ class ContentController extends AbstractController
 
     public function publishVersion(string $content, Request $request, string $version): Response
     {
-        $config = $this->getContentConfig($request);
-        $config = $config['admin'] + ['_id' => $config['_id']];
+        $contentConfig = $this->getContentConfig($request);
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']];
 
         /** @var ?ContentInterface $entity */
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
@@ -589,8 +598,8 @@ class ContentController extends AbstractController
 
     public function previewContent(string $content, Request $request, string $version = null): Response
     {
-        $config = $this->getContentConfig($request);
-        $config = $config['admin'] + ['_id' => $config['_id']];
+        $contentConfig = $this->getContentConfig($request);
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']];
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
@@ -619,8 +628,8 @@ class ContentController extends AbstractController
 
     public function versions(string $content, Request $request): Response
     {
-        $config = $this->getContentConfig($request);
-        $config = $config['admin'] + ['_id' => $config['_id']];
+        $contentConfig = $this->getContentConfig($request);
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']];
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
@@ -643,6 +652,7 @@ class ContentController extends AbstractController
         // show view
         $viewData = new \ArrayObject([
             'content' => $config['_id'],
+            'content_config' => $contentConfig,
             'entity' => $entity,
 //            'deleteForm' => $deleteForm ? $deleteForm->createView() : null,
         ]);
@@ -654,8 +664,8 @@ class ContentController extends AbstractController
 
     public function cleanupVersions(string $content, Request $request): Response
     {
-        $config = $this->getContentConfig($request);
-        $config = $config['admin'] + ['_id' => $config['_id']];
+        $contentConfig = $this->getContentConfig($request);
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']];
 
         /** @var ?ContentInterface $entity */
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
@@ -684,8 +694,8 @@ class ContentController extends AbstractController
 
     public function markKeepVersion(string $content, Request $request, string $version, bool $keep): Response
     {
-        $config = $this->getContentConfig($request);
-        $config = $config['admin'] + ['_id' => $config['_id']];
+        $contentConfig = $this->getContentConfig($request);
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']];
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
