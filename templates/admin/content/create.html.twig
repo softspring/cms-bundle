@@ -31,8 +31,8 @@
         </div>
 
         <div class="d-flex justify-content-end align-items-center">
-        <a href="{{ url('sfs_cms_admin_content_'~content~'_list') }}" class="btn btn-outline-secondary">{{ ('admin_'~content~'.create.actions.cancel.button')|trans }}</a>
-        <input type="submit" value="{{ ('admin_'~content~'.create.actions.create.button')|trans }}" class="btn btn-primary ms-3" />
-    </div>
+            <a href="{{ url('sfs_cms_admin_content_'~content~'_list') }}" class="btn btn-outline-secondary">{{ ('admin_'~content~'.create.actions.cancel.button')|trans }}</a>
+            <input type="submit" value="{{ ('admin_'~content~'.create.actions.create.button')|trans }}" class="btn btn-primary ms-3" />
+        </div>
     {{ form_end(form) }}
 {% endblock content %}
