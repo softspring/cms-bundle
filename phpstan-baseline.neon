@@ -17,5 +17,9 @@ parameters:
             count: 1
             path: src/Form/Module/ModuleCollectionType.php
         -
+            message: "#Class Softspring\\\\CmsBundle\\\\DataCollector\\\\TwigDataCollector extends @final class Symfony\\\\Bridge\\\\Twig\\\\DataCollector\\\\TwigDataCollector.#"
+            count: 1
+            path: src/DataCollector/TwigDataCollector.php
+        -
             message: "#Call to an undefined method .*::method\\(\\)#"
             path: tests
