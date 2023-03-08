@@ -3,3 +3,4 @@ _group:
     helper.name: "Helpers"
     html.name: "HTML"
     default.name: "Others"
+    cms-blocks.name: "CMS Blocks"
