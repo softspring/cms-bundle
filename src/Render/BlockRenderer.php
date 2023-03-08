@@ -44,12 +44,12 @@ class BlockRenderer extends AbstractRenderer
         }
 
         if (!empty($blockConfig['render_url'])) {
-            $params_string = implode(',', array_map(fn($k, $v) => "'$k':'$v'", array_keys($params), array_values($params)));
+            $params_string = implode(',', array_map(fn ($k, $v) => "'$k':'$v'", array_keys($params), array_values($params)));
             $twigCode = "{{ $renderFunction(url('{$blockConfig['render_url']}', {{$params_string}})) }}";
         } else {
             // $twigCode = "{{ $renderFunction(url('sfs_cms_block_render_by_type', {'type':'$type'})) }}";
             $params['type'] = $type;
-            $params_string = implode(',', array_map(fn($k, $v) => "'$k':'$v'", array_keys($params), array_values($params)));
+            $params_string = implode(',', array_map(fn ($k, $v) => "'$k':'$v'", array_keys($params), array_values($params)));
             $twigCode = "{{ $renderFunction(controller('Softspring\\\\CmsBundle\\\\Controller\\\\BlockController::renderByType', {{$params_string}})) }}";
         }
 
