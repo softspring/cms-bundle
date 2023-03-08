@@ -36,7 +36,7 @@ class BlockController extends AbstractController
     }
 
     /**
-     * @Security(expression="is_granted('ROLE_SFS_CMS_ADMIN_BLOCKS_CREATE', blockType)")
+     * @ Security(expression="is_granted('ROLE_SFS_CMS_ADMIN_BLOCKS_CREATE', blockType)")
      */
     public function create(string $blockType, Request $request, BlockCreateFormInterface $createForm): Response
     {
@@ -75,7 +75,7 @@ class BlockController extends AbstractController
     }
 
     /**
-     * @Security(expression="is_granted('ROLE_SFS_CMS_ADMIN_BLOCKS_UPDATE', block)")
+     * @ Security(expression="is_granted('ROLE_SFS_CMS_ADMIN_BLOCKS_UPDATE', block)")
      */
     public function update(BlockInterface $block, Request $request, BlockUpdateFormInterface $updateForm): Response
     {
