@@ -50,13 +50,15 @@ class AddCollectionTranslationsPass implements CompilerPassInterface
                         $options['scanned_directories'][] = $transDirectory->getRealPath();
                         foreach ((new Finder())->in($transDirectory->getRealPath())->files() as $file) {
                             $fileNameParts = explode('.', $file->getBasename());
-                            $locale = array_pop($fileNameParts);
+                            [$domain, $locale, $ext] = $fileNameParts;
                             $options['resource_files'][$locale][] = (string) $file;
                         }
                     }
                 }
             }
         }
+
+        $options['cache_vary']['scanned_directories'] = $options['scanned_directories'];
 
         $translator->replaceArgument(4, $options);
     }
