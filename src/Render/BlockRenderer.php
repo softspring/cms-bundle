@@ -29,7 +29,7 @@ class BlockRenderer extends AbstractRenderer
         $this->esiEnabled = (bool) $esi;
     }
 
-    public function renderBlockByType(string $type): string
+    public function renderBlockByType(string $type, array $params = []): string
     {
         $blockConfig = $this->cmsConfig->getBlock($type);
 
@@ -44,10 +44,13 @@ class BlockRenderer extends AbstractRenderer
         }
 
         if (!empty($blockConfig['render_url'])) {
-            $twigCode = "{{ $renderFunction(url('{$blockConfig['render_url']}')) }}";
+            $params_string = implode(',', array_map(fn ($k, $v) => "'$k':'$v'", array_keys($params), array_values($params)));
+            $twigCode = "{{ $renderFunction(url('{$blockConfig['render_url']}', {{$params_string}})) }}";
         } else {
             // $twigCode = "{{ $renderFunction(url('sfs_cms_block_render_by_type', {'type':'$type'})) }}";
-            $twigCode = "{{ $renderFunction(controller('Softspring\\\\CmsBundle\\\\Controller\\\\BlockController::renderByType', {'type':'$type'})) }}";
+            $params['type'] = $type;
+            $params_string = implode(',', array_map(fn ($k, $v) => "'$k':'$v'", array_keys($params), array_values($params)));
+            $twigCode = "{{ $renderFunction(controller('Softspring\\\\CmsBundle\\\\Controller\\\\BlockController::renderByType', {{$params_string}})) }}";
         }
 
         $template = twig_template_from_string($this->twig, $twigCode);
