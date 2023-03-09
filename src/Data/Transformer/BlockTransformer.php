@@ -8,6 +8,7 @@ use Softspring\CmsBundle\Data\Exception\RunPreloadBeforeImportException;
 use Softspring\CmsBundle\Data\ReferencesRepository;
 use Softspring\CmsBundle\Manager\BlockManagerInterface;
 use Softspring\CmsBundle\Model\BlockInterface;
+use Softspring\CmsBundle\Utils\Slugger;
 
 class BlockTransformer extends AbstractDataTransformer
 {
@@ -46,14 +47,16 @@ class BlockTransformer extends AbstractDataTransformer
 
     public function preload(array $data, ReferencesRepository $referencesRepository): void
     {
-        $referencesRepository->addReference("block___{$data['block']['id']}", $this->blockManager->createEntity($data['block']['type']));
+        $blockId = Slugger::lowerSlug($data['block']['name']);
+        $referencesRepository->addReference("block___{$blockId}", $this->blockManager->createEntity($data['block']['type']));
     }
 
     public function import(array $data, ReferencesRepository $referencesRepository, array $options = []): BlockInterface
     {
         try {
+            $blockId = Slugger::lowerSlug($data['block']['name']);
             /** @var BlockInterface $block */
-            $block = $referencesRepository->getReference("block___{$data['block']['id']}", true);
+            $block = $referencesRepository->getReference("block___{$blockId}", true);
         } catch (ReferenceNotFoundException $e) {
             throw new RunPreloadBeforeImportException('You must call preload() method before importing', 0, $e);
         }
