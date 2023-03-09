@@ -38,7 +38,7 @@ class BlockController extends AbstractController
             $config = $this->cmsConfig->getBlock($type);
 
             if (!$config['static']) {
-                $block = $this->blockManager->getRepository()->findOneByType($type);
+                $block = $this->getMoreRestrictiveBlock($this->blockManager->getRepository()->findByType($type));
 
                 if (!$block) {
                     $this->cmsLogger && $this->cmsLogger->error(sprintf('CMS missing block %s', $type));
@@ -114,5 +114,27 @@ class BlockController extends AbstractController
 ERROR;
 
         return new Response($error);
+    }
+
+    /**
+     * @param BlockInterface[] $blocks
+     */
+    protected function getMoreRestrictiveBlock(array $blocks): ?BlockInterface
+    {
+        // find more restrictive block
+        $getPublishedBlockSecondsFn = function (BlockInterface $block): int {
+            $start = $block->getPublishStartDate() ? $block->getPublishStartDate()->getTimestamp() : 0;
+            $end = $block->getPublishEndDate() ? $block->getPublishEndDate()->getTimestamp() : PHP_INT_MAX;
+
+            return (int) ($end - $start);
+        };
+        usort($blocks, function (BlockInterface $block1, BlockInterface $block2) use ($getPublishedBlockSecondsFn) {
+            return $getPublishedBlockSecondsFn($block1) <=> $getPublishedBlockSecondsFn($block2);
+        });
+
+        /** @var BlockInterface|false $block */
+        $block = current($blocks);
+
+        return $block ?: null;
     }
 }
