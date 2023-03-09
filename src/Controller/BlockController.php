@@ -125,7 +125,8 @@ ERROR;
         $getPublishedBlockSecondsFn = function (BlockInterface $block): int {
             $start = $block->getPublishStartDate() ? $block->getPublishStartDate()->getTimestamp() : 0;
             $end = $block->getPublishEndDate() ? $block->getPublishEndDate()->getTimestamp() : PHP_INT_MAX;
-            return (int)($end - $start);
+
+            return (int) ($end - $start);
         };
         usort($blocks, function (BlockInterface $block1, BlockInterface $block2) use ($getPublishedBlockSecondsFn) {
             return $getPublishedBlockSecondsFn($block1) <=> $getPublishedBlockSecondsFn($block2);
