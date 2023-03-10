@@ -49,7 +49,7 @@ class DumpFixturesCommand extends Command
         foreach ($this->cmsConfig->getContents() as $contentId => $contentConfig) {
             /** @var ContentInterface $content */
             foreach ($this->em->getRepository($contentConfig['entity_class'])->findAll() as $content) {
-                $this->dataExporter->exportContent($content, $content->getVersions()->first() ?? null, $contentConfig, '/srv/cms/fixtures', ['output' => $output]);
+                $this->dataExporter->exportContent($content, $content->getVersions()->first() ?: null, $contentConfig, '/srv/cms/fixtures', ['output' => $output]);
             }
         }
     }
