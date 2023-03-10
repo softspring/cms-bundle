@@ -39,12 +39,6 @@ class MenuItemType extends AbstractType
 
         $builder->add('symfonyRoute', SymfonyRouteType::class, [
             'required' => false,
-            'restrict_patterns' => [
-                '^admin_',
-                '^sfs_.*admin',
-                '^_profiler',
-                '^_wdt',
-            ],
         ]);
     }
 }

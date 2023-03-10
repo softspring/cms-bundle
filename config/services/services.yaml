@@ -1,5 +1,5 @@
 parameters:
-    sfs_cms.form_type.symfony_route.default_restrict_patterns: [ '^_profiler', '^_wdt' ]
+    sfs_cms.form_type.symfony_route.default_restrict_patterns: [ '^_profiler', '^_wdt', '^admin_', '^sfs_.*admin' ]
 
 services:
     _defaults:
