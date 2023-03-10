@@ -7,7 +7,6 @@ use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Data\DataExporter;
 use Softspring\CmsBundle\Model\BlockInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
-use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Model\MenuInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Symfony\Component\Console\Command\Command;
