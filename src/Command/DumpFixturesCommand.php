@@ -7,6 +7,7 @@ use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Data\DataExporter;
 use Softspring\CmsBundle\Model\BlockInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
+use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Model\MenuInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Symfony\Component\Console\Command\Command;
@@ -49,7 +50,7 @@ class DumpFixturesCommand extends Command
         foreach ($this->cmsConfig->getContents() as $contentId => $contentConfig) {
             /** @var ContentInterface $content */
             foreach ($this->em->getRepository($contentConfig['entity_class'])->findAll() as $content) {
-                $this->dataExporter->exportContent($content, $content->getVersions()->first() ?? null, $contentConfig, '/srv/cms/fixtures', ['output' => $output]);
+                $this->dataExporter->exportContent($content, $content->getVersions()->first() ?: null, $contentConfig, '/srv/cms/fixtures', ['output' => $output]);
             }
         }
     }

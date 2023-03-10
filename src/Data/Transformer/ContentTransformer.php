@@ -44,8 +44,8 @@ abstract class ContentTransformer extends AbstractDataTransformer implements Con
         if (!$element instanceof ContentInterface) {
             throw new InvalidElementException(sprintf('%s dumper requires that $element to be an instance of %s, %s given.', get_called_class(), ContentInterface::class, get_class($element)));
         }
-        if (!$contentVersion instanceof ContentVersionInterface) {
-            throw new InvalidElementException(sprintf('%s dumper requires that $contentVersion to be an instance of %s, %s given.', get_called_class(), ContentVersionInterface::class, get_class($element)));
+        if ($contentVersion && !$contentVersion instanceof ContentVersionInterface) {
+            throw new InvalidElementException(sprintf('%s dumper requires that $contentVersion to be an instance of %s, %s given.', get_called_class(), ContentVersionInterface::class, get_class($contentVersion)));
         }
         if (!$contentType) {
             throw new InvalidElementException(sprintf('%s dumper requires $contentType', get_called_class()));
@@ -55,18 +55,22 @@ abstract class ContentTransformer extends AbstractDataTransformer implements Con
 
         $files = [];
 
+        $versions = [];
+
+        if ($contentVersion) {
+            $versions[] = [
+                'layout' => $contentVersion->getLayout(),
+                'data' => $this->exportData($contentVersion->getData(), $files),
+            ];
+        }
+
         return [
             $contentType => [
                 'name' => $content->getName(),
                 'site' => $content->getSite(),
                 'extra' => $content->getExtraData(),
                 'seo' => $content->getSeo(),
-                'versions' => [
-                    [
-                        'layout' => $contentVersion->getLayout(),
-                        'data' => $this->exportData($contentVersion->getData(), $files),
-                    ],
-                ],
+                'versions' => $versions,
             ],
         ];
     }
