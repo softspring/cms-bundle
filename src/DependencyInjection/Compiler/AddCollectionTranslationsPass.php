@@ -53,7 +53,7 @@ class AddCollectionTranslationsPass implements CompilerPassInterface
                             foreach ((new Finder())->in($transDirectory->getRealPath())->files() as $file) {
                                 $fileNameParts = explode('.', $file->getBasename());
                                 [$domain, $locale, $ext] = $fileNameParts;
-                                $options['resource_files'][$locale][] = (string)$file;
+                                $options['resource_files'][$locale][] = (string) $file;
                             }
                         }
                     } catch (DirectoryNotFoundException) {
