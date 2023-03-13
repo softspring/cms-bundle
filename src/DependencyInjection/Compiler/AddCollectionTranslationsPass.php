@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 use Symfony\Component\Finder\Finder;
 
 class AddCollectionTranslationsPass implements CompilerPassInterface
@@ -46,13 +47,17 @@ class AddCollectionTranslationsPass implements CompilerPassInterface
             foreach (['module', 'block', 'content', 'layout', 'menu', 'site'] as $item) {
                 $path = $container->getParameter('kernel.project_dir').'/'.trim($collectionPath, '/')."/{$item}s";
                 if (is_dir($path)) {
-                    foreach ((new Finder())->directories()->in("$path/*")->name('translations') as $transDirectory) {
-                        $options['scanned_directories'][] = $transDirectory->getRealPath();
-                        foreach ((new Finder())->in($transDirectory->getRealPath())->files() as $file) {
-                            $fileNameParts = explode('.', $file->getBasename());
-                            [$domain, $locale, $ext] = $fileNameParts;
-                            $options['resource_files'][$locale][] = (string) $file;
+                    try {
+                        foreach ((new Finder())->directories()->in("$path/*")->name('translations') as $transDirectory) {
+                            $options['scanned_directories'][] = $transDirectory->getRealPath();
+                            foreach ((new Finder())->in($transDirectory->getRealPath())->files() as $file) {
+                                $fileNameParts = explode('.', $file->getBasename());
+                                [$domain, $locale, $ext] = $fileNameParts;
+                                $options['resource_files'][$locale][] = (string) $file;
+                            }
                         }
+                    } catch (DirectoryNotFoundException) {
+                        // ignore exception
                     }
                 }
             }
