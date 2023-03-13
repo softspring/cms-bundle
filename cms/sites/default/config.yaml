@@ -3,6 +3,9 @@ site:
     locales: ['es', 'en']
     default_locale: 'es'
     https_redirect: true
+    hosts:
+        - { domain: '127.0.0.1' }
+        - { domain: 'localhost' }
     paths:
         - { path: '/es', locale: 'es' }
         - { path: '/en', locale: 'en' }
