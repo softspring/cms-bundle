@@ -25,6 +25,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ContentController extends AbstractController
 {
@@ -33,6 +34,7 @@ class ContentController extends AbstractController
     protected EntityManagerInterface $em;
 
     protected ContentManagerInterface $contentManager;
+    protected TranslatorInterface $translator;
     protected RouteManagerInterface $routeManager;
     protected ContentRender $contentRender;
     protected CmsConfig $cmsConfig;
@@ -42,11 +44,12 @@ class ContentController extends AbstractController
     protected DataExporter $dataExporter;
     protected ?WebDebugToolbarListener $webDebugToolbarListener;
 
-    public function __construct(EntityManagerInterface $em, ContentManagerInterface $contentManager, RouteManagerInterface $routeManager, ContentRender $contentRender, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, array $enabledLocales, DataImporter $dataImporter, DataExporter $dataExporter, ?WebDebugToolbarListener $webDebugToolbarListener)
+    public function __construct(EntityManagerInterface $em, ContentManagerInterface $contentManager, TranslatorInterface $translator, RouteManagerInterface $routeManager, ContentRender $contentRender, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, array $enabledLocales, DataImporter $dataImporter, DataExporter $dataExporter, ?WebDebugToolbarListener $webDebugToolbarListener)
     {
         $this->em = $em;
         $this->contentManager = $contentManager;
         $this->routeManager = $routeManager;
+        $this->translator = $translator;
         $this->contentRender = $contentRender;
         $this->cmsConfig = $cmsConfig;
         $this->eventDispatcher = $eventDispatcher;
@@ -124,9 +127,7 @@ class ContentController extends AbstractController
 //        }
 
         if (!$entity) {
-            $request->getSession()->getFlashBag()->add('error', 'entity_not_found');
-
-            return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_list");
+            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
 //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
@@ -160,9 +161,7 @@ class ContentController extends AbstractController
 //        }
 
         if (!$entity) {
-            $request->getSession()->getFlashBag()->add('error', 'entity_not_found');
-
-            return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_list");
+            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
 //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
@@ -219,9 +218,7 @@ class ContentController extends AbstractController
 //        }
 
         if (!$entity) {
-            $request->getSession()->getFlashBag()->add('error', 'entity_not_found');
-
-            return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_list");
+            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
 //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
@@ -391,9 +388,7 @@ class ContentController extends AbstractController
 //        }
 
         if (!$entity) {
-            $request->getSession()->getFlashBag()->add('error', 'entity_not_found');
-
-            return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_list");
+            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
         $request->attributes->set('content', $entity);
@@ -483,9 +478,7 @@ class ContentController extends AbstractController
 //        }
 
         if (!$entity) {
-            $request->getSession()->getFlashBag()->add('error', 'entity_not_found');
-
-            return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_list");
+            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
 //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
@@ -541,9 +534,7 @@ class ContentController extends AbstractController
 //        }
 
         if (!$entity) {
-            $request->getSession()->getFlashBag()->add('error', 'entity_not_found');
-
-            return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_list");
+            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
 //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
@@ -576,9 +567,7 @@ class ContentController extends AbstractController
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
         if (!$entity) {
-            $request->getSession()->getFlashBag()->add('error', 'entity_not_found');
-
-            return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_list");
+            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
         if ($version) {
@@ -591,7 +580,7 @@ class ContentController extends AbstractController
             $this->contentManager->saveEntity($entity);
         }
 
-        $this->addFlash('success', 'version_has_been_published');
+        $request->getSession()->getFlashBag()->add('success', $this->translator->trans('admin_'.$config['_id'].'.publish.version_has_been_published_flash', [], 'sfs_cms_contents'));
 
         return $this->redirectBack($config['_id'], $entity, $request, $version);
     }
@@ -608,9 +597,7 @@ class ContentController extends AbstractController
 //        }
 
         if (!$entity) {
-            $request->getSession()->getFlashBag()->add('error', 'entity_not_found');
-
-            return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_list");
+            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
         if ($version) {
@@ -638,9 +625,7 @@ class ContentController extends AbstractController
 //        }
 
         if (!$entity) {
-            $request->getSession()->getFlashBag()->add('error', 'entity_not_found');
-
-            return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_list");
+            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
 //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
@@ -675,9 +660,7 @@ class ContentController extends AbstractController
 //        }
 
         if (!$entity) {
-            $request->getSession()->getFlashBag()->add('error', 'entity_not_found');
-
-            return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_list");
+            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
         /** @var ContentVersionInterface $version */
@@ -700,9 +683,7 @@ class ContentController extends AbstractController
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
         if (!$entity) {
-            $request->getSession()->getFlashBag()->add('error', 'entity_not_found');
-
-            return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_list");
+            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
         /** @var ContentVersionInterface $version */
@@ -721,9 +702,7 @@ class ContentController extends AbstractController
         $content = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
         if (!$content) {
-            $request->getSession()->getFlashBag()->add('error', 'entity_not_found');
-
-            return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_list");
+            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
         /** @var ContentVersionInterface $version */
@@ -735,6 +714,13 @@ class ContentController extends AbstractController
         $exportName = sprintf('%s/%s-%s-v%s-%s.zip', sys_get_temp_dir(), Slugger::lowerSlug($content->getName()), $config['_id'], $version->getVersionNumber(), date('Y-m-d-H-i-s'));
 
         return ZipContent::dumpResponse($path, $exportName);
+    }
+
+    protected function flashAndRedirectToRoute(Request $request, string $type, string $messageId, string $configId, string $route, array $routeParams = []): RedirectResponse
+    {
+        $request->getSession()->getFlashBag()->add($type, $this->translator->trans('admin_'.$configId.'.'.$messageId, [], 'sfs_cms_contents'));
+
+        return $this->redirectToRoute($route, $routeParams);
     }
 
     protected function redirectBack(string $configId, ContentInterface $entity, Request $request, ?ContentVersionInterface $version = null): RedirectResponse
