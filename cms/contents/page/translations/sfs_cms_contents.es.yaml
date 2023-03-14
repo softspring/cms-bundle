@@ -84,7 +84,11 @@ admin_page:
         meta.title: "Eliminar página"
         title: "%name%"
         breadcrumb: "Eliminar página"
+        main_warnings_raw: '<p>¿Estás seguro de eliminar este contenido??</p><p>Esta acción no se podrá deshacer.</p>'
+        offer_backup: 'Si quieres puedes hacer un backup de la versión publicada de este contenido antes'
+        index_warnings_raw: '<p><strong>¡No pierdas los enlaces e indexación!</strong></p>'
         actions:
+            export.button: Exportar
             delete.button: "Eliminar definitivamente"
             cancel.button: "Cancelar"
         form:
