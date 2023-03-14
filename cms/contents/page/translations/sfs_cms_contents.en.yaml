@@ -1,4 +1,6 @@
 admin_page:
+    entity_not_found_flash: "Page not found"
+    
     tabs_menu:
         details: "General"
         update: "Edit"
@@ -14,6 +16,9 @@ admin_page:
         actions:
             create.button: "Create page"
             cancel.button: "Cancel"
+    
+    publish:
+        version_has_been_published_flash: "Version has been published"
 
     import:
         meta.title: "Import page"
