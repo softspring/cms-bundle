@@ -22,6 +22,8 @@ admin_page:
         actions:
             import.button: "Import page"
             cancel.button: "Cancel"
+        form:
+            file.label: "Import content file"
 
     read:
         meta.title: "General"

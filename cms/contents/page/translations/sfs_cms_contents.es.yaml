@@ -22,6 +22,8 @@ admin_page:
         actions:
             import.button: "Importar página"
             cancel.button: "Cancelar"
+        form:
+            file.label: "Fichero a importar"
 
     read:
         meta.title: "General"
