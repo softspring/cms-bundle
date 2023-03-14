@@ -2,9 +2,10 @@
 {% extends '@SfsCms/admin_layout.html.twig' %}
 {% block title %}{{ 'admin_blocks.create.meta.title'|trans }}{% endblock %}
 
-{% form_theme form '@SfsPolymorphicFormType/polymorphic-form-theme.html.twig'
-    '@SfsCms/forms/types-theme.html.twig'
-    '@SfsMedia/media_form_theme.html.twig'
+{% form_theme form
+    'bootstrap_5_layout.html.twig'
+    '@SfsCms/forms/types_theme.html.twig'
+    '@SfsMedia/forms/media_type_theme.html.twig'
 %}
 
 {% block breadcrums_content %}
@@ -19,6 +20,12 @@
     <div class="container-fluid bg-white p-4">
         {{ form_start(form) }}
             {{ form_row(form.name) }}
+
+            {% if form.publishStartDate is defined and form.publishEndDate is defined %}
+                {{ form_row(form.publishStartDate) }}
+                {{ form_row(form.publishEndDate) }}
+            {% endif %}
+
             {{ form_widget(form.data) }}
             {{ form_rest(form) }}
 
@@ -29,5 +36,5 @@
         {{ form_end(form) }}
     </div>
 
-    {% include '@SfsMedia/media_type_modal.html.twig' %}
+    {% include '@SfsMedia/forms/media_type_modal.html.twig' %}
 {% endblock content %}

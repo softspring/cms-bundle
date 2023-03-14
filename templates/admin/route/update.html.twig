@@ -2,7 +2,10 @@
 {% extends '@SfsCms/admin_layout.html.twig' %}
 {% block title %}{{ 'admin_routes.update.meta.title'|trans }}{% endblock %}
 
-{% form_theme form '@SfsPolymorphicFormType/polymorphic-form-theme.html.twig' '@SfsCms/forms/routes-theme.html.twig' %}
+{% form_theme form
+    'bootstrap_5_layout.html.twig'
+    '@SfsCms/forms/routes_theme.html.twig'
+%}
 
 {% block breadcrums_content %}
     {{ parent() }}

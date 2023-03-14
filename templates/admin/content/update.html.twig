@@ -4,7 +4,11 @@
 
 {% block title %}{{ ('admin_'~content~'.update.meta.title')|trans({'%name%':entity.name}) }}{% endblock %}
 
-{% form_theme form '@SfsCms/forms/routes-theme.html.twig' %}
+{% form_theme form
+    'bootstrap_5_layout.html.twig'
+    '@SfsCms/forms/routes_theme.html.twig'
+    '@SfsCms/forms/types_theme.html.twig'
+%}
 
 {% block breadcrums_content %}
     {{ parent() }}
