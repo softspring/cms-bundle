@@ -4,10 +4,12 @@
 
 {% block title %}{{ ('admin_'~content~'.content.meta.title')|trans({'%name%':entity.name}) }}{% endblock %}
 
-{% form_theme form '@SfsPolymorphicFormType/polymorphic-form-theme.html.twig'
-    '@SfsCms/forms/modules-theme.html.twig'
-    '@SfsCms/forms/types-theme.html.twig'
-    '@SfsMedia/media_form_theme.html.twig'
+{% form_theme form
+    'bootstrap_5_layout.html.twig'
+    '@SfsPolymorphicFormType/polymorphic-form-theme.html.twig'
+    '@SfsCms/forms/modules_theme.html.twig'
+    '@SfsCms/forms/types_theme.html.twig'
+    '@SfsMedia/forms/media_type_theme.html.twig'
 %}
 
 {% block body %}
@@ -81,7 +83,7 @@
         document.getElementById("content_content_form__ok").value = 0;
     </script>
 
-    {% include '@SfsMedia/media_type_modal.html.twig' %}
+    {% include '@SfsMedia/forms/media_type_modal.html.twig' %}
 {% endblock body %}
 
 {% block javascripts %}
