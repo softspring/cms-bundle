@@ -24,7 +24,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $processor = new Processor();
         $configuration = new Configuration();
         $config = $processor->processConfiguration($configuration, $configs);
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config/services'));
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../../config/services'));
 
         // prepend default bundle collection
         array_unshift($config['collections'], 'vendor/softspring/cms-bundle/cms');
@@ -101,7 +101,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
                 'sfs_cms_bundle' => [
                     'version' => $version,
                     'version_branch' => str_ends_with($version, '-dev') ? str_replace('.x-dev', '', $version) : false,
-                ]
+                ],
             ],
             'paths' => [
                 '%kernel.project_dir%/vendor/softspring/polymorphic-form-type/templates' => 'SfsPolymorphicFormType',
