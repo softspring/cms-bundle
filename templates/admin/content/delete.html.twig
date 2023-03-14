@@ -4,6 +4,12 @@
 
 {% block title %}{{ ('admin_'~content~'.delete.meta.title')|trans({'%name%':entity.name}) }}{% endblock %}
 
+{% form_theme form
+    'bootstrap_5_layout.html.twig'
+    '@SfsCms/forms/routes_theme.html.twig'
+    '@SfsCms/forms/types_theme.html.twig'
+%}
+
 {% block breadcrums_content %}
     {{ parent() }}
     <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content~'_list') }}">{{ ('admin_'~content~'.list.breadcrumb')|trans }}</a></li>
@@ -20,21 +26,18 @@
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="edit" role="tabpanel" aria-labelledby="edit-tab">
             <div class="container-fluid bg-white p-3">
-                <p>¿Estás seguro de eliminar este contenido??</p>
-                <p>Esta acción no se podrá deshacer.</p>
+                {{ ('admin_'~content~'.delete.main_warnings_raw')|trans|raw }}
 
                 {% if entity.publishedVersion %}
-                    <p>Si quieres puedes hacer un backup de la versión publicada de este contenido antes</p>
+                    <p>{{ ('admin_'~content~'.delete.offer_backup')|trans }}</p>
 
                     <div class="mb-4">
                     <a href="{{ url('sfs_cms_admin_content_'~content~'_export_version', {'content':entity, 'version':entity.publishedVersion}) }}" class="btn btn-primary">
-                    Exportar</a>
+                        {{ ('admin_'~content~'.delete.actions.export.button')|trans }}</a>
                     </div>
                 {% endif %}
 
-                <p>
-                    <strong>¡No pierdas los enlaces e indexación!</strong>
-                </p>
+                {{ ('admin_'~content~'.delete.index_warnings_raw')|trans|raw }}
 
                 {{ form_rest(form) }}
 

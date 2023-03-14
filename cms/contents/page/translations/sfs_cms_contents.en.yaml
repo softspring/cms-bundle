@@ -22,6 +22,8 @@ admin_page:
         actions:
             import.button: "Import page"
             cancel.button: "Cancel"
+        form:
+            file.label: "Import content file"
 
     read:
         meta.title: "General"
@@ -82,7 +84,11 @@ admin_page:
         meta.title: "Delete page"
         title: "%name%"
         breadcrumb: "Delete page"
+        main_warnings_raw: '<p>Are you sure to delete this page??</p><p>This action can not be undone</p>'
+        offer_backup: 'If you want, you can backup this content published version before deleting'
+        index_warnings_raw: '<p><strong>Do not lose links and index!</strong></p>'
         actions:
+            export.button: Export
             delete.button: "Delete definitely"
             cancel.button: "Cancel"
         form:
