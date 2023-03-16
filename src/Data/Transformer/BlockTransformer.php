@@ -40,7 +40,7 @@ class BlockTransformer extends AbstractDataTransformer
             'block' => [
                 'type' => $block->getType(),
                 'name' => $block->getName(),
-                'data' => $this->exportData($block->getData(), $files),
+                'data' => $this->exportData($block->getData(), $this->blockManager->getEntityManager(), $files),
             ],
         ];
     }
