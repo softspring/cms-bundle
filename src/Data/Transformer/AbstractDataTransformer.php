@@ -2,6 +2,8 @@
 
 namespace Softspring\CmsBundle\Data\Transformer;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\Mapping\MappingException;
 use Softspring\CmsBundle\Model\BlockInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Utils\Slugger;
@@ -14,11 +16,11 @@ abstract class AbstractDataTransformer implements DataTransformerInterface
         return 0;
     }
 
-    public function exportData($data, &$files = [])
+    public function exportData($data, EntityManagerInterface $em, &$files = [])
     {
         if (is_array($data)) {
             foreach ($data as $key => $value) {
-                $data[$key] = $this->exportData($value, $files);
+                $data[$key] = $this->exportData($value, $em, $files);
             }
         }
 
@@ -73,6 +75,18 @@ abstract class AbstractDataTransformer implements DataTransformerInterface
             return [
                 '_reference' => 'media___'.$data->getId(),
             ];
+        }
+
+        if (is_object($data)) {
+            try {
+                return [
+                    '_entity' => [
+                        'class' => $em->getClassMetadata(get_class($data))->getName(),
+                        'id' => $em->getUnitOfWork()->getEntityIdentifier($data),
+                    ],
+                ];
+            } catch (MappingException $e) {
+            }
         }
 
         return $data;

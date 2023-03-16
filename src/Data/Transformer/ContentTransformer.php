@@ -60,7 +60,7 @@ abstract class ContentTransformer extends AbstractDataTransformer implements Con
         if ($contentVersion) {
             $versions[] = [
                 'layout' => $contentVersion->getLayout(),
-                'data' => $this->exportData($contentVersion->getData(), $files),
+                'data' => $this->exportData($contentVersion->getData(), $this->contentManager->getEntityManager(), $files),
             ];
         }
 
@@ -156,6 +156,9 @@ abstract class ContentTransformer extends AbstractDataTransformer implements Con
                             $value = $entity;
                         }
                     }
+                } elseif (isset($value['_entity'])) {
+                    ['class' => $class, 'id' => $id] = $value['_entity'];
+                    $value = $this->contentManager->getEntityManager()->getRepository($class)->findOneBy($id);
                 } else {
                     $this->replaceModuleFixtureReferences($value, $referencesRepository);
                 }
