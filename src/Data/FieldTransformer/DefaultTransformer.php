@@ -11,12 +11,7 @@ class DefaultTransformer implements FieldTransformerInterface
         return -255;
     }
 
-    public function supportsExport(string $type, $data = null): bool
-    {
-        return true;
-    }
-
-    public function supportsImport(string $type, $data = null): bool
+    public function supportsExport(string $type, mixed $data): bool
     {
         return true;
     }
@@ -24,6 +19,11 @@ class DefaultTransformer implements FieldTransformerInterface
     public function export(mixed $data, &$files = []): mixed
     {
         return $data;
+    }
+
+    public function supportsImport(string $type, mixed $data): bool
+    {
+        return true;
     }
 
     public function import(mixed $data, ReferencesRepository $referencesRepository, array $options = []): mixed

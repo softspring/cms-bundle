@@ -12,14 +12,9 @@ class MediaFieldTransformer implements FieldTransformerInterface
         return 100;
     }
 
-    public function supportsExport(string $type, $data = null): bool
+    public function supportsExport(string $type, mixed $data): bool
     {
         return $data instanceof MediaInterface;
-    }
-
-    public function supportsImport(string $type, $data = null): bool
-    {
-        return isset($data['_reference']) && str_starts_with($data['_reference'], 'media___');
     }
 
     public function export(mixed $data, &$files = []): mixed
@@ -62,8 +57,13 @@ class MediaFieldTransformer implements FieldTransformerInterface
         ];
     }
 
+    public function supportsImport(string $type, mixed $data): bool
+    {
+        return isset($data['_reference']) && str_starts_with($data['_reference'], 'media___');
+    }
+
     public function import(mixed $data, ReferencesRepository $referencesRepository, array $options = []): mixed
     {
-        return $data;
+        return $referencesRepository->getReference($data, true);
     }
 }

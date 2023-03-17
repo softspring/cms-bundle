@@ -20,7 +20,7 @@ class EntityFieldTransformer implements FieldTransformerInterface
         return 10;
     }
 
-    public function supportsExport(string $type, $data = null): bool
+    public function supportsExport(string $type, mixed $data): bool
     {
         try {
             if (!is_object($data)) {
@@ -35,11 +35,6 @@ class EntityFieldTransformer implements FieldTransformerInterface
         }
     }
 
-    public function supportsImport(string $type, $data = null): bool
-    {
-        return isset($data['_entity']) && isset($data['_entity']['class']) && isset($data['_entity']['id']);
-    }
-
     public function export(mixed $data, &$files = []): mixed
     {
         return [
@@ -48,6 +43,11 @@ class EntityFieldTransformer implements FieldTransformerInterface
                 'id' => $this->em->getUnitOfWork()->getEntityIdentifier($data),
             ],
         ];
+    }
+
+    public function supportsImport(string $type, mixed $data): bool
+    {
+        return isset($data['_entity']) && isset($data['_entity']['class']) && isset($data['_entity']['id']);
     }
 
     public function import(mixed $data, ReferencesRepository $referencesRepository, array $options = []): mixed

@@ -19,12 +19,7 @@ class ArrayFieldTransformer implements FieldTransformerInterface
         return 0;
     }
 
-    public function supportsExport(string $type, $data = null): bool
-    {
-        return is_array($data);
-    }
-
-    public function supportsImport(string $type, $data = null): bool
+    public function supportsExport(string $type, mixed $data): bool
     {
         return is_array($data);
     }
@@ -36,6 +31,11 @@ class ArrayFieldTransformer implements FieldTransformerInterface
         }
 
         return $data;
+    }
+
+    public function supportsImport(string $type, mixed $data): bool
+    {
+        return is_array($data);
     }
 
     public function import(mixed $data, ReferencesRepository $referencesRepository, array $options = []): mixed
