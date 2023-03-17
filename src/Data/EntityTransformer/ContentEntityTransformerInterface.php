@@ -1,12 +1,12 @@
 <?php
 
-namespace Softspring\CmsBundle\Data\Transformer;
+namespace Softspring\CmsBundle\Data\EntityTransformer;
 
 use Softspring\CmsBundle\Data\Exception\InvalidElementException;
 use Softspring\CmsBundle\Data\ReferencesRepository;
 use Softspring\CmsBundle\Model\ContentInterface;
 
-interface ContentDataTransformerInterface extends DataTransformerInterface
+interface ContentEntityTransformerInterface extends EntityTransformerInterface
 {
     /**
      * @throws InvalidElementException

@@ -1,10 +1,6 @@
 parameters:
     ignoreErrors:
         -
-            message: "#Method Softspring\\\\CmsBundle\\\\Data\\\\Transformer\\\\DataTransformerInterface::export\\(\\) invoked with 4 parameters, 1\\-2 required\\.#"
-            count: 1
-            path: src/Data/DataExporter.php
-        -
             message: "#Anonymous function never returns null so it can be removed from the return type.#"
             count: 1
             path: src/Form\Type/SymfonyRouteType.php

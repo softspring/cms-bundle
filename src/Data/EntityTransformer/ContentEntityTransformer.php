@@ -1,7 +1,8 @@
 <?php
 
-namespace Softspring\CmsBundle\Data\Transformer;
+namespace Softspring\CmsBundle\Data\EntityTransformer;
 
+use Softspring\CmsBundle\Data\DataTransformer;
 use Softspring\CmsBundle\Data\Exception\InvalidElementException;
 use Softspring\CmsBundle\Data\Exception\ReferenceNotFoundException;
 use Softspring\CmsBundle\Data\Exception\RunPreloadBeforeImportException;
@@ -13,17 +14,24 @@ use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Utils\Slugger;
 use Softspring\MediaBundle\EntityManager\MediaManagerInterface;
 
-abstract class ContentTransformer extends AbstractDataTransformer implements ContentDataTransformerInterface
+abstract class ContentEntityTransformer implements ContentEntityTransformerInterface
 {
     protected ContentManagerInterface $contentManager;
     protected RouteManagerInterface $routeManager;
     protected MediaManagerInterface $mediaManager;
+    protected DataTransformer $dataTransformer;
 
-    public function __construct(ContentManagerInterface $contentManager, RouteManagerInterface $routeManager, MediaManagerInterface $mediaManager)
+    public function __construct(ContentManagerInterface $contentManager, RouteManagerInterface $routeManager, MediaManagerInterface $mediaManager, DataTransformer $dataTransformer)
     {
         $this->contentManager = $contentManager;
         $this->routeManager = $routeManager;
         $this->mediaManager = $mediaManager;
+        $this->dataTransformer = $dataTransformer;
+    }
+
+    public static function getPriority(): int
+    {
+        return 0;
     }
 
     public function supports(string $type, $data = null): bool
@@ -60,7 +68,7 @@ abstract class ContentTransformer extends AbstractDataTransformer implements Con
         if ($contentVersion) {
             $versions[] = [
                 'layout' => $contentVersion->getLayout(),
-                'data' => $this->exportData($contentVersion->getData(), $this->contentManager->getEntityManager(), $files),
+                'data' => $this->dataTransformer->export($contentVersion->getData(), $files),
             ];
         }
 
@@ -122,47 +130,46 @@ abstract class ContentTransformer extends AbstractDataTransformer implements Con
     {
         $version = $this->contentManager->createVersion($content, null, $options['version_origin'] ?? ContentVersionInterface::ORIGIN_UNKNOWN);
         $version->setLayout($layout);
-        $this->replaceModuleFixtureReferences($data, $referencesRepository);
-        $version->setData($data);
+        $version->setData($this->dataTransformer->import($data, $referencesRepository, $options));
 
         return $version;
     }
 
-    protected function replaceModuleFixtureReferences(&$data, ReferencesRepository $referencesRepository)
-    {
-        if (!is_array($data)) {
-            return;
-        }
-
-        foreach ($data as $key => &$value) {
-            if (is_array($value)) {
-                if (isset($value['_reference'])) {
-                    try {
-                        $entity = $referencesRepository->getReference($value['_reference'], true);
-                    } catch (ReferenceNotFoundException $e) {
-                        if ('route___' === substr($value['_reference'], 0, 8)) {
-                            $entity = $this->routeManager->getRepository()->findOneById(substr($value['_reference'], 8));
-                        } elseif ('media___' === substr($value['_reference'], 0, 8)) {
-                            $entity = $this->mediaManager->getRepository()->findOneById(substr($value['_reference'], 8));
-                        } else {
-                            $entity = null;
-                        }
-
-                        if (!$entity) {
-                            throw $e;
-                        }
-                    } finally {
-                        if ($entity ?? false) {
-                            $value = $entity;
-                        }
-                    }
-                } elseif (isset($value['_entity'])) {
-                    ['class' => $class, 'id' => $id] = $value['_entity'];
-                    $value = $this->contentManager->getEntityManager()->getRepository($class)->findOneBy($id);
-                } else {
-                    $this->replaceModuleFixtureReferences($value, $referencesRepository);
-                }
-            }
-        }
-    }
+//    protected function replaceModuleFixtureReferences(&$data, ReferencesRepository $referencesRepository)
+//    {
+//        if (!is_array($data)) {
+//            return;
+//        }
+//
+//        foreach ($data as $key => &$value) {
+//            if (is_array($value)) {
+//                if (isset($value['_reference'])) {
+//                    try {
+//                        $entity = $referencesRepository->getReference($value['_reference'], true);
+//                    } catch (ReferenceNotFoundException $e) {
+//                        if ('route___' === substr($value['_reference'], 0, 8)) {
+//                            $entity = $this->routeManager->getRepository()->findOneById(substr($value['_reference'], 8));
+//                        } elseif ('media___' === substr($value['_reference'], 0, 8)) {
+//                            $entity = $this->mediaManager->getRepository()->findOneById(substr($value['_reference'], 8));
+//                        } else {
+//                            $entity = null;
+//                        }
+//
+//                        if (!$entity) {
+//                            throw $e;
+//                        }
+//                    } finally {
+//                        if ($entity ?? false) {
+//                            $value = $entity;
+//                        }
+//                    }
+//                } elseif (isset($value['_entity'])) {
+//                    ['class' => $class, 'id' => $id] = $value['_entity'];
+//                    $value = $this->contentManager->getEntityManager()->getRepository($class)->findOneBy($id);
+//                } else {
+//                    $this->replaceModuleFixtureReferences($value, $referencesRepository);
+//                }
+//            }
+//        }
+//    }
 }

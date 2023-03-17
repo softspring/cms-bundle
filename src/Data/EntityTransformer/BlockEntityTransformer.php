@@ -1,7 +1,8 @@
 <?php
 
-namespace Softspring\CmsBundle\Data\Transformer;
+namespace Softspring\CmsBundle\Data\EntityTransformer;
 
+use Softspring\CmsBundle\Data\DataTransformer;
 use Softspring\CmsBundle\Data\Exception\InvalidElementException;
 use Softspring\CmsBundle\Data\Exception\ReferenceNotFoundException;
 use Softspring\CmsBundle\Data\Exception\RunPreloadBeforeImportException;
@@ -10,13 +11,20 @@ use Softspring\CmsBundle\Manager\BlockManagerInterface;
 use Softspring\CmsBundle\Model\BlockInterface;
 use Softspring\CmsBundle\Utils\Slugger;
 
-class BlockTransformer extends AbstractDataTransformer
+class BlockEntityTransformer implements EntityTransformerInterface
 {
     protected BlockManagerInterface $blockManager;
+    protected DataTransformer $dataTransformer;
 
-    public function __construct(BlockManagerInterface $blockManager)
+    public function __construct(BlockManagerInterface $blockManager, DataTransformer $dataTransformer)
     {
         $this->blockManager = $blockManager;
+        $this->dataTransformer = $dataTransformer;
+    }
+
+    public static function getPriority(): int
+    {
+        return 0;
     }
 
     public function supports(string $type, $data = null): bool
@@ -40,7 +48,7 @@ class BlockTransformer extends AbstractDataTransformer
             'block' => [
                 'type' => $block->getType(),
                 'name' => $block->getName(),
-                'data' => $this->exportData($block->getData(), $this->blockManager->getEntityManager(), $files),
+                'data' => $this->dataTransformer->export($block->getData(), $files),
             ],
         ];
     }
