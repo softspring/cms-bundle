@@ -1,6 +1,6 @@
 <?php
 
-namespace Softspring\CmsBundle\Data\Transformer;
+namespace Softspring\CmsBundle\Data\EntityTransformer;
 
 use Softspring\CmsBundle\Data\Exception\ReferenceNotFoundException;
 use Softspring\CmsBundle\Data\Exception\RunPreloadBeforeImportException;
@@ -10,7 +10,7 @@ use Softspring\MediaBundle\EntityManager\MediaVersionManagerInterface;
 use Softspring\MediaBundle\Model\MediaInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class MediaTransformer extends AbstractDataTransformer implements DataTransformerInterface
+class MediaEntityTransformer implements EntityTransformerInterface
 {
     protected MediaManagerInterface $mediaManager;
     protected MediaVersionManagerInterface $mediaVersionManager;
@@ -19,6 +19,11 @@ class MediaTransformer extends AbstractDataTransformer implements DataTransforme
     {
         $this->mediaManager = $mediaManager;
         $this->mediaVersionManager = $mediaVersionManager;
+    }
+
+    public static function getPriority(): int
+    {
+        return 0;
     }
 
     public function supports(string $type, $data = null): bool

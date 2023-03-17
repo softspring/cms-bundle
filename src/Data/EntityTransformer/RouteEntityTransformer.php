@@ -1,6 +1,6 @@
 <?php
 
-namespace Softspring\CmsBundle\Data\Transformer;
+namespace Softspring\CmsBundle\Data\EntityTransformer;
 
 use Softspring\CmsBundle\Data\Exception\InvalidElementException;
 use Softspring\CmsBundle\Data\Exception\ReferenceNotFoundException;
@@ -11,7 +11,7 @@ use Softspring\CmsBundle\Manager\RoutePathManagerInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Utils\Slugger;
 
-class RouteTransformer extends AbstractDataTransformer
+class RouteEntityTransformer implements EntityTransformerInterface
 {
     protected RouteManagerInterface $routeManager;
     protected RoutePathManagerInterface $routePathManager;
@@ -20,6 +20,11 @@ class RouteTransformer extends AbstractDataTransformer
     {
         $this->routeManager = $routeManager;
         $this->routePathManager = $routePathManager;
+    }
+
+    public static function getPriority(): int
+    {
+        return 0;
     }
 
     public function supports(string $type, $data = null): bool

@@ -1,6 +1,6 @@
 <?php
 
-namespace Softspring\CmsBundle\Data\Transformer;
+namespace Softspring\CmsBundle\Data\EntityTransformer;
 
 use Softspring\CmsBundle\Data\Exception\InvalidElementException;
 use Softspring\CmsBundle\Data\Exception\ReferenceNotFoundException;
@@ -12,7 +12,7 @@ use Softspring\CmsBundle\Model\MenuInterface;
 use Softspring\CmsBundle\Model\MenuItemInterface;
 use Softspring\CmsBundle\Utils\Slugger;
 
-class MenuTransformer extends AbstractDataTransformer
+class MenuEntityTransformer implements EntityTransformerInterface
 {
     protected MenuManagerInterface $menuManager;
     protected MenuItemManagerInterface $menuItemManager;
@@ -21,6 +21,11 @@ class MenuTransformer extends AbstractDataTransformer
     {
         $this->menuManager = $menuManager;
         $this->menuItemManager = $menuItemManager;
+    }
+
+    public static function getPriority(): int
+    {
+        return 0;
     }
 
     public function supports(string $type, $data = null): bool

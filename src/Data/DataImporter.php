@@ -3,8 +3,8 @@
 namespace Softspring\CmsBundle\Data;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Softspring\CmsBundle\Data\EntityTransformer\EntityTransformerInterface;
 use Softspring\CmsBundle\Data\Exception\DataTransformerNotFoundException;
-use Softspring\CmsBundle\Data\Transformer\DataTransformerInterface;
 
 class DataImporter extends AbstractDataImportExport
 {
@@ -13,12 +13,12 @@ class DataImporter extends AbstractDataImportExport
     protected ReferencesRepository $referenceRepository;
 
     /**
-     * @param DataTransformerInterface[] $transformers
+     * @param EntityTransformerInterface[] $entityTransformers
      */
-    public function __construct(EntityManagerInterface $em, iterable $transformers)
+    public function __construct(EntityManagerInterface $em, iterable $entityTransformers)
     {
         $this->em = $em;
-        parent::__construct($transformers);
+        parent::__construct($entityTransformers);
         $this->referenceRepository = new ReferencesRepository();
     }
 

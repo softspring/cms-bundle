@@ -2,31 +2,31 @@
 
 namespace Softspring\CmsBundle\Data;
 
+use Softspring\CmsBundle\Data\EntityTransformer\EntityTransformerInterface;
 use Softspring\CmsBundle\Data\Exception\DataTransformerNotFoundException;
-use Softspring\CmsBundle\Data\Transformer\DataTransformerInterface;
 
 abstract class AbstractDataImportExport
 {
     /**
-     * @var DataTransformerInterface[]
+     * @var EntityTransformerInterface[]
      */
-    protected iterable $transformers;
+    protected iterable $entityTransformers;
 
     /**
-     * @param DataTransformerInterface[] $transformers
+     * @param EntityTransformerInterface[] $entityTransformers
      */
-    public function __construct(iterable $transformers)
+    public function __construct(iterable $entityTransformers)
     {
-        $this->transformers = $transformers;
+        $this->entityTransformers = $entityTransformers;
     }
 
     /**
      * @throws DataTransformerNotFoundException
      */
-    protected function getDataTransformer(string $type, $data = null): DataTransformerInterface
+    protected function getDataTransformer(string $type, $data = null): EntityTransformerInterface
     {
-        /** @var DataTransformerInterface $transformer */
-        foreach ($this->transformers as $transformer) {
+        /** @var EntityTransformerInterface $transformer */
+        foreach ($this->entityTransformers as $transformer) {
             if ($transformer->supports($type, $data)) {
                 return $transformer;
             }

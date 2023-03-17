@@ -1,16 +1,16 @@
 <?php
 
-namespace Softspring\CmsBundle\Data\Transformer;
+namespace Softspring\CmsBundle\Data\EntityTransformer;
 
 use Softspring\CmsBundle\Data\Exception\InvalidElementException;
 use Softspring\CmsBundle\Data\Exception\RunPreloadBeforeImportException;
 use Softspring\CmsBundle\Data\ReferencesRepository;
 
-interface DataTransformerInterface
+interface EntityTransformerInterface
 {
     public static function getPriority(): int;
 
-    public function supports(string $type, $data = null): bool;
+    public function supports(string $fieldName, $fieldValue = null): bool;
 
     /**
      * @throws InvalidElementException

@@ -3,7 +3,8 @@
 namespace Softspring\CmsBundle\Data;
 
 use Google\Cloud\Storage\StorageClient;
-use Softspring\CmsBundle\Data\Transformer\DataTransformerInterface;
+use Softspring\CmsBundle\Data\EntityTransformer\ContentEntityTransformerInterface;
+use Softspring\CmsBundle\Data\EntityTransformer\EntityTransformerInterface;
 use Softspring\CmsBundle\Model\BlockInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
@@ -17,11 +18,11 @@ class DataExporter extends AbstractDataImportExport
     protected ReferencesRepository $referenceRepository;
 
     /**
-     * @param DataTransformerInterface[] $transformers
+     * @param EntityTransformerInterface[] $entityTransformers
      */
-    public function __construct(iterable $transformers)
+    public function __construct(iterable $entityTransformers)
     {
-        parent::__construct($transformers);
+        parent::__construct($entityTransformers);
         $this->referenceRepository = new ReferencesRepository();
     }
 
@@ -69,7 +70,9 @@ class DataExporter extends AbstractDataImportExport
         !is_dir("$path/contents") && mkdir("$path/contents", 0755, true);
         $file = "$path/contents/".Slugger::lowerSlug($content->getName()).'.yaml';
         $files = [];
-        $filePath = YamlContent::save($this->getDataTransformer($contentType, $content)->export($content, $files, $contentVersion, $contentType), $file);
+        /** @var ContentEntityTransformerInterface $transformer */
+        $transformer = $this->getDataTransformer($contentType, $content);
+        $filePath = YamlContent::save($transformer->export($content, $files, $contentVersion, $contentType), $file);
 
         foreach ($content->getRoutes() as $route) {
             self::exportRoute($route, $path);
