@@ -116,7 +116,6 @@ abstract class ContentEntityTransformer implements ContentEntityTransformerInter
         foreach ($contentData['versions'] as $version) {
             if ($version['layout'] && $version['data']) {
                 $version = $this->importVersion($content, $version['layout'], $version['data'], $referencesRepository, $options);
-
                 if ($options['auto_publish_version'] ?? false) {
                     $content->setPublishedVersion($version);
                 }

@@ -31,6 +31,6 @@ class RouteFieldTransformer implements FieldTransformerInterface
 
     public function import(mixed $data, ReferencesRepository $referencesRepository, array $options = []): mixed
     {
-        return $referencesRepository->getReference($data, true);
+        return $referencesRepository->getReference($data['_reference'], true);
     }
 }

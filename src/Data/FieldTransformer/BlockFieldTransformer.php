@@ -18,11 +18,6 @@ class BlockFieldTransformer implements FieldTransformerInterface
         return $data instanceof BlockInterface;
     }
 
-    public function supportsImport(string $type, mixed $data): bool
-    {
-        return isset($data['_reference']) && str_starts_with($data['_reference'], 'block___');
-    }
-
     public function export(mixed $data, &$files = []): mixed
     {
         return [
@@ -30,8 +25,13 @@ class BlockFieldTransformer implements FieldTransformerInterface
         ];
     }
 
+    public function supportsImport(string $type, mixed $data): bool
+    {
+        return isset($data['_reference']) && str_starts_with($data['_reference'], 'block___');
+    }
+
     public function import(mixed $data, ReferencesRepository $referencesRepository, array $options = []): mixed
     {
-        return $referencesRepository->getReference($data, true);
+        return $referencesRepository->getReference($data['_reference'], true);
     }
 }

@@ -10,3 +10,16 @@ This is a common error if database instance has a low value for [sort_buffer_siz
 
 The solution is easy: increase this value, for example to 512k.
 
+## Silent fail using a lot of ESI blocks or menus and http cache
+
+If you use a lot of menus (sometimes about 20-30 items) you can experiment a silent error. 
+
+You can try disabling tracing in http_cache:
+
+```yaml
+# config/packages/framework.yaml
+framework:
+    http_cache:
+        trace_level: none
+    esi: true
+```
