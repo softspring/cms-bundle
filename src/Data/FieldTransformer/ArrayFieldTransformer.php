@@ -41,7 +41,7 @@ class ArrayFieldTransformer implements FieldTransformerInterface
     public function import(mixed $data, ReferencesRepository $referencesRepository, array $options = []): mixed
     {
         foreach ($data as $key => $value) {
-            $data[$key] = $this->dataTransformer->import($data, $referencesRepository, $options);
+            $data[$key] = $this->dataTransformer->import($value, $referencesRepository, $options);
         }
 
         return $data;
