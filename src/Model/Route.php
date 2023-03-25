@@ -59,6 +59,10 @@ abstract class Route implements RouteInterface
     public function setSite(?string $site): void
     {
         $this->site = $site;
+
+        foreach ($this->getPaths() as $path) {
+            $path->setSite($site);
+        }
     }
 
     /**
@@ -74,6 +78,7 @@ abstract class Route implements RouteInterface
         if (!$this->paths->contains($path)) {
             $this->paths->add($path);
             $path->setRoute($this);
+            $path->setSite($this->getSite());
         }
     }
 
