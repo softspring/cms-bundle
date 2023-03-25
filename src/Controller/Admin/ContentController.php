@@ -62,7 +62,7 @@ class ContentController extends AbstractController
     public function create(Request $request): Response
     {
         $contentConfig = $this->getContentConfig($request);
-        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']];
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']] + ['extra_fields' => $contentConfig['extra_fields']];
 
 //        if (!empty($config['is_granted'])) {
 //            $this->denyAccessUnlessGranted($config['is_granted'], null, sprintf('Access denied, user is not %s.', $config['is_granted']));
@@ -118,7 +118,7 @@ class ContentController extends AbstractController
     public function read(string $content, Request $request): Response
     {
         $contentConfig = $this->getContentConfig($request);
-        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']];
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']] + ['extra_fields' => $contentConfig['extra_fields']];
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
@@ -152,7 +152,7 @@ class ContentController extends AbstractController
     public function update(string $content, Request $request): Response
     {
         $contentConfig = $this->getContentConfig($request);
-        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']];
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']] + ['extra_fields' => $contentConfig['extra_fields']];
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
@@ -208,7 +208,7 @@ class ContentController extends AbstractController
     public function delete(string $content, Request $request): Response
     {
         $contentConfig = $this->getContentConfig($request);
-        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']];
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']] + ['extra_fields' => $contentConfig['extra_fields']];
 
         /** @var ContentInterface|null $entity */
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
@@ -286,7 +286,7 @@ class ContentController extends AbstractController
     public function import(Request $request, bool $confirm = false): Response
     {
         $contentConfig = $this->getContentConfig($request);
-        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']];
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']] + ['extra_fields' => $contentConfig['extra_fields']];
 
 //        if (!empty($config['is_granted'])) {
 //            $this->denyAccessUnlessGranted($config['is_granted'], null, sprintf('Access denied, user is not %s.', $config['is_granted']));
@@ -341,7 +341,7 @@ class ContentController extends AbstractController
     public function list(Request $request): Response
     {
         $contentConfig = $this->getContentConfig($request);
-        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']];
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']] + ['extra_fields' => $contentConfig['extra_fields']];
 
         if (!empty($config['list_is_granted'])) {
             $this->denyAccessUnlessGranted($config['list_is_granted'], null, sprintf('Access denied, user is not %s.', $config['list_is_granted']));
@@ -378,7 +378,7 @@ class ContentController extends AbstractController
     public function content(string $content, Request $request, string $prevVersion = null): Response
     {
         $contentConfig = $this->getContentConfig($request);
-        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']];
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']] + ['extra_fields' => $contentConfig['extra_fields']];
 
         /** @var ?ContentInterface $entity */
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
@@ -525,7 +525,7 @@ class ContentController extends AbstractController
     public function preview(string $content, Request $request, ContentVersionInterface $version = null): Response
     {
         $contentConfig = $this->getContentConfig($request);
-        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']];
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']] + ['extra_fields' => $contentConfig['extra_fields']];
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
@@ -561,7 +561,7 @@ class ContentController extends AbstractController
     public function publishVersion(string $content, Request $request, string $version): Response
     {
         $contentConfig = $this->getContentConfig($request);
-        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']];
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']] + ['extra_fields' => $contentConfig['extra_fields']];
 
         /** @var ?ContentInterface $entity */
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
@@ -588,7 +588,7 @@ class ContentController extends AbstractController
     public function previewContent(string $content, Request $request, string $version = null): Response
     {
         $contentConfig = $this->getContentConfig($request);
-        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']];
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']] + ['extra_fields' => $contentConfig['extra_fields']];
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
@@ -616,7 +616,7 @@ class ContentController extends AbstractController
     public function versions(string $content, Request $request): Response
     {
         $contentConfig = $this->getContentConfig($request);
-        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']];
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']] + ['extra_fields' => $contentConfig['extra_fields']];
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
@@ -650,7 +650,7 @@ class ContentController extends AbstractController
     public function cleanupVersions(string $content, Request $request): Response
     {
         $contentConfig = $this->getContentConfig($request);
-        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']];
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']] + ['extra_fields' => $contentConfig['extra_fields']];
 
         /** @var ?ContentInterface $entity */
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
@@ -678,7 +678,7 @@ class ContentController extends AbstractController
     public function markKeepVersion(string $content, Request $request, string $version, bool $keep): Response
     {
         $contentConfig = $this->getContentConfig($request);
-        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']];
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']] + ['extra_fields' => $contentConfig['extra_fields']];
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
