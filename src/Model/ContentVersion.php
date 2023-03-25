@@ -2,6 +2,9 @@
 
 namespace Softspring\CmsBundle\Model;
 
+use Doctrine\Common\Collections\Collection;
+use Softspring\MediaBundle\Model\MediaInterface;
+
 abstract class ContentVersion implements ContentVersionInterface
 {
     protected ?ContentInterface $content = null;
@@ -21,6 +24,10 @@ abstract class ContentVersion implements ContentVersionInterface
     protected ?array $compiled = null;
 
     protected bool $keep = false;
+
+    protected ?Collection $medias = null;
+
+    protected ?Collection $routes = null;
 
     public function getContent(): ?ContentInterface
     {
@@ -132,5 +139,49 @@ abstract class ContentVersion implements ContentVersionInterface
     public function setKeep(bool $keep): void
     {
         $this->keep = $keep;
+    }
+
+    public function addMedia(MediaInterface $media): void
+    {
+        if (!$this->medias->contains($media)) {
+            $this->medias->add($media);
+        }
+    }
+
+    public function removeMedia(MediaInterface $media): void
+    {
+        if ($this->medias->contains($media)) {
+            $this->medias->removeElement($media);
+        }
+    }
+
+    /**
+     * @psalm-return ?Collection|MediaInterface[]
+     */
+    public function getMedias(): Collection
+    {
+        return $this->medias;
+    }
+
+    public function addRoute(RouteInterface $route): void
+    {
+        if (!$this->routes->contains($route)) {
+            $this->routes->add($route);
+        }
+    }
+
+    public function removeRoute(RouteInterface $route): void
+    {
+        if ($this->routes->contains($route)) {
+            $this->routes->removeElement($route);
+        }
+    }
+
+    /**
+     * @psalm-return ?Collection|RouteInterface[]
+     */
+    public function getRoutes(): Collection
+    {
+        return $this->routes;
     }
 }

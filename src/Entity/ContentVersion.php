@@ -2,11 +2,18 @@
 
 namespace Softspring\CmsBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Softspring\CmsBundle\Model\ContentVersion as ContentVersionModel;
 
 class ContentVersion extends ContentVersionModel
 {
     protected ?string $id;
+
+    public function __construct()
+    {
+        $this->medias = new ArrayCollection();
+        $this->routes = new ArrayCollection();
+    }
 
     public function getId(): ?string
     {
