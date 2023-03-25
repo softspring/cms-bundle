@@ -112,8 +112,8 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
 
         $container->prependExtensionConfig('doctrine_migrations', [
             'migrations_paths' => [
-                'Softspring\CmsBundle\Migrations'=> '@SfsCmsBundle/src/Migrations',
-            ]
+                'Softspring\CmsBundle\Migrations' => '@SfsCmsBundle/src/Migrations',
+            ],
         ]);
     }
 }
