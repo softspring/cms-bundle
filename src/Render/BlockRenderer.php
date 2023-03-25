@@ -33,7 +33,7 @@ class BlockRenderer extends AbstractRenderer
     {
         $params = array_map(function ($k, $v) {
             if (is_bool($v)) {
-                return "'$k':" . ($v?'true':'false');
+                return "'$k':".($v ? 'true' : 'false');
             }
 
             return is_string($v) ? "'$k':'$v'" : "'$k':$v";
@@ -66,7 +66,7 @@ class BlockRenderer extends AbstractRenderer
             $params_string = $this->paramsAsString($params);
             $controller = "controller('Softspring\\\\CmsBundle\\\\Controller\\\\BlockController::renderByType', {{$params_string}})";
 
-            if ($renderFunction == 'render_esi') {
+            if ('render_esi' == $renderFunction) {
                 // {{ fragment_uri(controller, absolute = false, strict = true, sign = true) }}
                 $twigCode = "{{ $renderFunction(fragment_uri($controller, false, true, true)) }}";
             } else {
