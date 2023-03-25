@@ -11,25 +11,16 @@ class AddTwigNamespacesPass implements CompilerPassInterface
     {
         $twigFilesystemLoaderDefinition = $container->getDefinition('twig.loader.native_filesystem');
 
-        // register project namespaces before collections to allow overriding
-        $twigFilesystemLoaderDefinition->addMethodCall('addPath', ['%kernel.project_dir%/cms', 'cms']);
-        $twigFilesystemLoaderDefinition->addMethodCall('addPath', ['%kernel.project_dir%/cms/modules', 'module']); // use @module/html/render.html.twig
-        $twigFilesystemLoaderDefinition->addMethodCall('addPath', ['%kernel.project_dir%/cms/contents', 'content']); // use @content/article/render.html.twig
-        $twigFilesystemLoaderDefinition->addMethodCall('addPath', ['%kernel.project_dir%/cms/blocks', 'block']); // use @block/header/render.html.twig
-        $twigFilesystemLoaderDefinition->addMethodCall('addPath', ['%kernel.project_dir%/cms/layouts', 'layout']); // use @layout/default/render.html.twig
-        $twigFilesystemLoaderDefinition->addMethodCall('addPath', ['%kernel.project_dir%/cms/menus', 'menu']); // use @menu/main/render.html.twig
-        $twigFilesystemLoaderDefinition->addMethodCall('addPath', ['%kernel.project_dir%/cms/sites', 'site']); // use @site/error_pages/404.html.twig
+        foreach (array_reverse($container->getParameter('sfs_cms.collections')) as $collectionPath) {
+            $collectionPath = $container->getParameter('kernel.project_dir').'/'.trim($collectionPath, '/');
 
-        foreach ($container->getParameter('sfs_cms.collections') as $collectionPath) {
-            // add modules path if exists
-            $modulesPath = $container->getParameter('kernel.project_dir').'/'.trim($collectionPath, '/').'/modules';
-            if (is_dir($modulesPath)) {
-                $twigFilesystemLoaderDefinition->addMethodCall('addPath', [$modulesPath, 'module']);
-            }
-            // add layouts path if exists
-            $layoutsPath = $container->getParameter('kernel.project_dir').'/'.trim($collectionPath, '/').'/layouts';
-            if (is_dir($layoutsPath)) {
-                $twigFilesystemLoaderDefinition->addMethodCall('addPath', [$layoutsPath, 'layout']);
+            $twigFilesystemLoaderDefinition->addMethodCall('addPath', [$collectionPath, 'cms']);
+
+            foreach (['module', 'block', 'content', 'layout', 'menu', 'site'] as $item) {
+                $path = "$collectionPath/{$item}s";
+                if (is_dir($path)) {
+                    $twigFilesystemLoaderDefinition->addMethodCall('addPath', [$path, $item]);
+                }
             }
         }
     }
