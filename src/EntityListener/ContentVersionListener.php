@@ -96,12 +96,16 @@ class ContentVersionListener
         $contentVersion->setData($data);
 
         // add media references
-        foreach ($entities as $entity) if ($entity instanceof MediaInterface) {
-            $contentVersion->addMedia($entity);
+        foreach ($entities as $entity) {
+            if ($entity instanceof MediaInterface) {
+                $contentVersion->addMedia($entity);
+            }
         }
         // add route references
-        foreach ($entities as $entity) if ($entity instanceof RouteInterface) {
-            $contentVersion->addRoute($entity);
+        foreach ($entities as $entity) {
+            if ($entity instanceof RouteInterface) {
+                $contentVersion->addRoute($entity);
+            }
         }
     }
 
