@@ -28,6 +28,7 @@
             <join-column name="route_id" referenced-column-name="id" on-delete="CASCADE" />
         </many-to-one>
 
+        <field name="site" column="site" type="string" nullable="true"/>
     </mapped-superclass>
 
 </doctrine-mapping>

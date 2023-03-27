@@ -109,5 +109,11 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
                 '%kernel.project_dir%/vendor/softspring/polymorphic-form-type/templates' => 'SfsPolymorphicFormType',
             ],
         ]);
+
+        $container->prependExtensionConfig('doctrine_migrations', [
+            'migrations_paths' => [
+                'Softspring\CmsBundle\Migrations' => '@SfsCmsBundle/src/Migrations',
+            ],
+        ]);
     }
 }

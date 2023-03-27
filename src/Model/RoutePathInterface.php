@@ -12,6 +12,10 @@ interface RoutePathInterface
 
     public function setRoute(?RouteInterface $route): void;
 
+    public function getSite(): ?string;
+
+    public function setSite(?string $site): void;
+
     public function getPath(): ?string;
 
     public function setPath(?string $path): void;

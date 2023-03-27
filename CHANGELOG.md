@@ -1,5 +1,7 @@
 # CHANGELOG
 
+On update to 5.1 versions, run migrations.
+
 ## [v5.0.5](https://github.com/softspring/cms-bundle/releases/tag/v5.0.5)
 
 ### Upgrading

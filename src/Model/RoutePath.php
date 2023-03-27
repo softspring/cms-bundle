@@ -8,6 +8,8 @@ abstract class RoutePath implements RoutePathInterface
 
     protected ?RouteInterface $route = null;
 
+    protected ?string $site = null;
+
     protected ?string $path = null;
 
     protected ?int $cacheTtl = null;
@@ -27,6 +29,16 @@ abstract class RoutePath implements RoutePathInterface
     public function setRoute(?RouteInterface $route): void
     {
         $this->route = $route;
+    }
+
+    public function getSite(): ?string
+    {
+        return $this->site;
+    }
+
+    public function setSite(?string $site): void
+    {
+        $this->site = $site;
     }
 
     public function getPath(): ?string
