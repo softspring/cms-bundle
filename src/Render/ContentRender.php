@@ -38,6 +38,11 @@ class ContentRender
     {
         $this->cmsLogger && $this->cmsLogger->debug(sprintf('Rendering %s page version', $version->getContent()->getName()));
 
+        // preload all medias
+        $version->getMedias();
+        // preload all routes
+        $version->getRoutes();
+
         $layout = $this->cmsConfig->getLayout($version->getLayout());
 
         $containers = $version->getCompiledModules()[$this->requestStack->getCurrentRequest()->getLocale()] ?? $this->renderModules($version);
@@ -51,6 +56,11 @@ class ContentRender
 
     public function renderModules(ContentVersionInterface $version): array
     {
+        // preload all medias
+        $version->getMedias();
+        // preload all routes
+        $version->getRoutes();
+
         $layout = $this->cmsConfig->getLayout($version->getLayout());
         $versionData = $version->getData();
 

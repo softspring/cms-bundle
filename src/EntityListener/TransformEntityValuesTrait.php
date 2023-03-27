@@ -7,10 +7,12 @@ use Doctrine\Persistence\ObjectManager;
 
 trait TransformEntityValuesTrait
 {
-    protected function transformEntityValues($value, ObjectManager $objectManager)
+    protected function transformEntityValues($value, ObjectManager $objectManager, array &$entities = [])
     {
         if (is_object($value)) {
             try {
+                $entities[] = $value;
+
                 return [
                     '_entity_class' => get_class($value),
                     '_entity_id' => $objectManager->getClassMetadata(get_class($value))->getIdentifierValues($value),
@@ -19,7 +21,7 @@ trait TransformEntityValuesTrait
             }
         } elseif (is_array($value)) {
             foreach ($value as $key => $value2) {
-                $value[$key] = $this->transformEntityValues($value2, $objectManager);
+                $value[$key] = $this->transformEntityValues($value2, $objectManager, $entities);
             }
         }
 

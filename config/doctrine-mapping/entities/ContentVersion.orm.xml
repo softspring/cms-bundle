@@ -16,6 +16,28 @@
         <many-to-one field="content" target-entity="Softspring\CmsBundle\Model\ContentInterface" inversed-by="versions">
             <join-column name="content_id" on-delete="CASCADE"/>
         </many-to-one>
+
+        <many-to-many field="medias" target-entity="Softspring\MediaBundle\Model\MediaInterface">
+            <join-table name="cms_content_version_medias">
+                <join-columns>
+                    <join-column name="content_version_id" referenced-column-name="id" on-delete="CASCADE" />
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="media_id" referenced-column-name="id" on-delete="RESTRICT" />
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+
+        <many-to-many field="routes" target-entity="Softspring\CmsBundle\Model\RouteInterface">
+            <join-table name="cms_content_version_routes">
+                <join-columns>
+                    <join-column name="content_version_id" referenced-column-name="id" on-delete="CASCADE" />
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="route_id" referenced-column-name="id" on-delete="RESTRICT" />
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
     </entity>
 
 </doctrine-mapping>

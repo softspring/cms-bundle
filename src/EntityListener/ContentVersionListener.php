@@ -5,7 +5,9 @@ namespace Softspring\CmsBundle\EntityListener;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
+use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Render\ContentRender;
+use Softspring\MediaBundle\Model\MediaInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class ContentVersionListener
@@ -74,23 +76,37 @@ class ContentVersionListener
             return;
         }
 
+        $entities = [];
         $data = $contentVersion->getData();
         foreach ($data as $layout => $modules) {
             foreach ($modules as $m => $module) {
                 if (isset($module['modules'])) {
                     foreach ($module['modules'] as $sm => $submodule) {
                         foreach ($submodule as $field => $value) {
-                            $data[$layout][$m]['modules'][$sm][$field] = $this->transformEntityValues($value, $event->getObjectManager());
+                            $data[$layout][$m]['modules'][$sm][$field] = $this->transformEntityValues($value, $event->getObjectManager(), $entities);
                         }
                     }
                 } else {
                     foreach ($module as $field => $value) {
-                        $data[$layout][$m][$field] = $this->transformEntityValues($value, $event->getObjectManager());
+                        $data[$layout][$m][$field] = $this->transformEntityValues($value, $event->getObjectManager(), $entities);
                     }
                 }
             }
         }
         $contentVersion->setData($data);
+
+        // add media references
+        foreach ($entities as $entity) {
+            if ($entity instanceof MediaInterface) {
+                $contentVersion->addMedia($entity);
+            }
+        }
+        // add route references
+        foreach ($entities as $entity) {
+            if ($entity instanceof RouteInterface) {
+                $contentVersion->addRoute($entity);
+            }
+        }
     }
 
     protected function untransform(ContentVersionInterface $contentVersion, LifecycleEventArgs $event)
