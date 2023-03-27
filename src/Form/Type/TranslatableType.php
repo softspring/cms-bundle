@@ -32,7 +32,7 @@ class TranslatableType extends AbstractType
             'languages' => $this->enabledLocales,
             'default_language' => $this->defaultLocale,
             'children_attr' => [],
-            'type' => null,
+            'type' => 'text',
             'type_options' => [],
         ]);
 
