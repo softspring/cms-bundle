@@ -11,7 +11,7 @@ final class Version20230325180014 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Store site in route path to use in restrictions';
     }
 
     public function up(Schema $schema): void
