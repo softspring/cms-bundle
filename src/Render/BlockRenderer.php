@@ -29,6 +29,19 @@ class BlockRenderer extends AbstractRenderer
         $this->esiEnabled = (bool) $esi;
     }
 
+    protected function paramsAsString(array $params): string
+    {
+        $params = array_map(function ($k, $v) {
+            if (is_bool($v)) {
+                return "'$k':".($v ? 'true' : 'false');
+            }
+
+            return is_string($v) ? "'$k':'$v'" : "'$k':$v";
+        }, array_keys($params), array_values($params));
+
+        return implode(',', $params);
+    }
+
     public function renderBlockByType(string $type, array $params = []): string
     {
         $blockConfig = $this->cmsConfig->getBlock($type);
@@ -39,18 +52,26 @@ class BlockRenderer extends AbstractRenderer
             }
 
             $renderFunction = 'render_esi';
+            $params['ignore_errors'] = true;
         } else {
             $renderFunction = 'render';
         }
 
         if (!empty($blockConfig['render_url'])) {
-            $params_string = implode(',', array_map(fn ($k, $v) => "'$k':'$v'", array_keys($params), array_values($params)));
+            $params_string = $this->paramsAsString($params);
             $twigCode = "{{ $renderFunction(url('{$blockConfig['render_url']}', {{$params_string}})) }}";
         } else {
             // $twigCode = "{{ $renderFunction(url('sfs_cms_block_render_by_type', {'type':'$type'})) }}";
             $params['type'] = $type;
-            $params_string = implode(',', array_map(fn ($k, $v) => "'$k':'$v'", array_keys($params), array_values($params)));
-            $twigCode = "{{ $renderFunction(controller('Softspring\\\\CmsBundle\\\\Controller\\\\BlockController::renderByType', {{$params_string}})) }}";
+            $params_string = $this->paramsAsString($params);
+            $controller = "controller('Softspring\\\\CmsBundle\\\\Controller\\\\BlockController::renderByType', {{$params_string}})";
+
+            if ('render_esi' == $renderFunction) {
+                // {{ fragment_uri(controller, absolute = false, strict = true, sign = true) }}
+                $twigCode = "{{ $renderFunction(fragment_uri($controller, false, true, true)) }}";
+            } else {
+                $twigCode = "{{ $renderFunction($controller) }}";
+            }
         }
 
         $template = twig_template_from_string($this->twig, $twigCode);
