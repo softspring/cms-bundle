@@ -47,19 +47,21 @@ class CmsRouter implements RouterInterface, RequestMatcherInterface, WarmableInt
             // first try to generate with Symfony's route generator
             return $this->staticRouter->generate($name, $parameters, $referenceType);
         } catch (RouteNotFoundException $e) {
+            $params = array_filter($parameters, fn ($key) => '_locale' != $key, ARRAY_FILTER_USE_KEY);
+
             // if it does not exist, try witch CMS routes
             switch ($referenceType) {
                 case UrlGeneratorInterface::ABSOLUTE_URL:
-                    $url = $this->urlGenerator->getUrl($name, $parameters['_locale'] ?? '', isset($parameters['__twig_extra_route_defined_check']));
+                    $url = $this->urlGenerator->getUrl($name, $parameters['_locale'] ?? '', $params, isset($parameters['__twig_extra_route_defined_check']));
                     break;
 
                 case UrlGeneratorInterface::ABSOLUTE_PATH:
                 case UrlGeneratorInterface::RELATIVE_PATH:
-                    $url = $this->urlGenerator->getPath($name, $parameters['_locale'] ?? '', isset($parameters['__twig_extra_route_defined_check']));
+                    $url = $this->urlGenerator->getPath($name, $parameters['_locale'] ?? '', $params, isset($parameters['__twig_extra_route_defined_check']));
                     break;
 
                 case UrlGeneratorInterface::NETWORK_PATH:
-                    $url = $this->urlGenerator->getUrl($name, $parameters['_locale'] ?? '', isset($parameters['__twig_extra_route_defined_check']));
+                    $url = $this->urlGenerator->getUrl($name, $parameters['_locale'] ?? '', $params, isset($parameters['__twig_extra_route_defined_check']));
                     $url = preg_replace('/^(https?)/', '', $url);
                     break;
 
