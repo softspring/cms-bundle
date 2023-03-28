@@ -53,6 +53,7 @@ class CmsConfig
 
     /**
      * @throws InvalidModuleException
+     * @throws DisabledModuleException
      */
     public function getModule(string $id, bool $required = true, bool $onlyEnabled = true): ?array
     {
