@@ -92,6 +92,9 @@ class ConfigLoader
         return $modules;
     }
 
+    /**
+     * @throws MissingLayoutsException
+     */
     public function getLayouts(ContainerBuilder $containerBuilder): array
     {
         $processor = new Processor();
