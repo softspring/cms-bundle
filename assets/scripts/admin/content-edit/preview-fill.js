@@ -12,7 +12,13 @@ window.addEventListener('load', (event) => {
     document.addEventListener('change', function (event) {
         if (!event.target) return;
 
-        let modulePreview = event.target.closest('.cms-module-edit').querySelector('.module-preview');
+        let moduleEdit = event.target.closest('.cms-module-edit');
+
+        if (!moduleEdit) {
+            return;
+        }
+
+        let modulePreview = moduleEdit.querySelector('.module-preview');
 
         let dataAttributes = Object.keys(event.target.dataset);
         dataAttributes.forEach(function (dataAttribute) {
