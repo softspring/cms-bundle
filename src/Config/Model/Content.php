@@ -85,13 +85,13 @@ class Content implements ConfigurationInterface
                                 'admin_page.form.seo.sitemapChangefreq.values.monthly' => 'monthly',
                                 'admin_page.form.seo.sitemapChangefreq.values.yearly' => 'yearly',
                                 'admin_page.form.seo.sitemapChangefreq.values.never' => 'never',
-                            ]
+                            ],
                         ]],
                         'sitemapPriority' => ['type' => 'number', 'type_options' => [
                             'required' => false,
                             'scale' => 1,
                             'constraints' => [
-                                [ 'constraint' => 'range', 'options' => ['min' => 0, 'max' => 1] ],
+                                ['constraint' => 'range', 'options' => ['min' => 0, 'max' => 1]],
                             ],
                         ]],
                     ])
