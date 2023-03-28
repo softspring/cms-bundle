@@ -20,6 +20,10 @@ interface RoutePathInterface
 
     public function setPath(?string $path): void;
 
+    public function getCompiledPath(): ?string;
+
+    public function setCompiledPath(?string $compiledPath): void;
+
     public function getCacheTtl(): ?int;
 
     public function setCacheTtl(?int $cacheTtl): void;
@@ -27,4 +31,6 @@ interface RoutePathInterface
     public function getLocale(): ?string;
 
     public function setLocale(?string $locale): void;
+
+    public function compilePath(): void;
 }

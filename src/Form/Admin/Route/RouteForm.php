@@ -69,7 +69,7 @@ class RouteForm extends AbstractType
                     //                'NOT_FOUND' => RouteInterface::TYPE_NOT_FOUND,
                     'admin_routes.form.type.values.redirect_to_route' => RouteInterface::TYPE_REDIRECT_TO_ROUTE,
                     'admin_routes.form.type.values.redirect_to_url' => RouteInterface::TYPE_REDIRECT_TO_URL,
-                    //                'PARENT_ROUTE' => RouteInterface::TYPE_PARENT_ROUTE,
+                    'admin_routes.form.type.values.parent_route' => RouteInterface::TYPE_PARENT_ROUTE,
                 ],
                 'choice_attr' => function ($value) {
                     return [
@@ -91,6 +91,24 @@ class RouteForm extends AbstractType
                 'choice_attr' => function (ContentInterface $content) {
                     return [
                         'data-site' => $content->getSite(),
+                    ];
+                },
+                // 'constraints' => new NotBlank(),
+            ]);
+
+            $builder->add('parent', EntityType::class, [
+                'class' => RouteInterface::class,
+                'required' => false,
+                'em' => $this->em,
+                'choice_filter' => function (?RouteInterface $parent) {
+                    return !$parent || $parent->getType() == RouteInterface::TYPE_PARENT_ROUTE;
+                },
+                'choice_label' => function (RouteInterface $parent) {
+                    return $parent->getId();
+                },
+                'choice_attr' => function (RouteInterface $parent) {
+                    return [
+                        'data-site' => $parent->getSite(),
                     ];
                 },
                 // 'constraints' => new NotBlank(),

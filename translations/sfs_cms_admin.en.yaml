@@ -101,7 +101,7 @@ admin_routes:
         fields:
             id.header: "Route"
             site.header: "Site"
-            page.header: "Page"
+            content.header: "Content"
             path.header: "URL"
             type.header: "Type"
         filter_form:

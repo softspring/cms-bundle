@@ -87,7 +87,7 @@ class UrlGenerator
         $route = $routePath->getRoute();
         $locale = $routePath->getLocale();
 
-        return $this->getSiteSchemeAndHost($route, $locale).$this->getSiteOrLocalePath($route, $locale).'/'.$routePath->getPath();
+        return $this->getSiteSchemeAndHost($route, $locale).$this->getSiteOrLocalePath($route, $locale).'/'.$routePath->getCompiledPath();
     }
 
     /**
@@ -102,7 +102,7 @@ class UrlGenerator
         $route = $routePath->getRoute();
         $locale = $routePath->getLocale();
 
-        return $this->getSiteOrLocalePath($route, $locale).'/'.$routePath->getPath();
+        return $this->getSiteOrLocalePath($route, $locale).'/'.$routePath->getCompiledPath();
     }
 
     /**
@@ -155,7 +155,7 @@ class UrlGenerator
 
         $path = $path ?: $route->getPaths()->first();
 
-        return $path->getPath();
+        return $path->getCompiledPath();
     }
 
     protected function getRoute($routeName): ?RouteInterface

@@ -12,10 +12,16 @@ abstract class Route implements RouteInterface
     protected ?string $site = null;
 
     /**
-     * @var RoutePathInterface[]|Collection
+     * @psalm-var RoutePathInterface[]|Collection
      */
     protected Collection $paths;
 
+    /**
+     * @psalm-var RouteInterface[]|Collection
+     */
+    protected Collection $children;
+
+    protected ?RouteInterface $parent = null;
     protected ?ContentInterface $content = null;
     protected ?string $redirectUrl = null;
     protected ?array $symfonyRoute = null;
@@ -24,6 +30,7 @@ abstract class Route implements RouteInterface
     public function __construct()
     {
         $this->paths = new ArrayCollection();
+        $this->children = new ArrayCollection();
     }
 
     public function __toString()
@@ -66,9 +73,9 @@ abstract class Route implements RouteInterface
     }
 
     /**
-     * @return RoutePathInterface[]|Collection
+     * @psalm-return RoutePathInterface[]|Collection
      */
-    public function getPaths()
+    public function getPaths(): Collection
     {
         return $this->paths;
     }
@@ -129,5 +136,55 @@ abstract class Route implements RouteInterface
     public function setRedirectType(?int $redirectType): void
     {
         $this->redirectType = $redirectType;
+    }
+
+    public function getParent(): ?RouteInterface
+    {
+        return $this->parent;
+    }
+
+    public function setParent(?RouteInterface $parent): void
+    {
+        $this->parent = $parent;
+        $this->compilePaths();
+    }
+
+    /**
+     * @return RouteInterface[]|Collection
+     */
+    public function getChildren(): ?Collection
+    {
+        return $this->children;
+    }
+
+    public function addChild(RouteInterface $child): void
+    {
+        if (!$this->children->contains($child)) {
+            $this->children->add($child);
+            $child->setParent($this);
+        }
+    }
+
+    public function removeChild(RouteInterface $child): void
+    {
+        if ($this->children->contains($child)) {
+            $this->children->removeElement($child);
+            $child->setParent(null);
+            $child->compilePaths();
+        }
+    }
+
+    public function compilePaths(): void
+    {
+        foreach ($this->getPaths() as $path) {
+            $path->compilePath();
+        }
+    }
+
+    public function compileChildrenPaths(): void
+    {
+        foreach ($this->getChildren() as $child) {
+            $child->compilePaths();
+        }
     }
 }

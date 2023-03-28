@@ -4,11 +4,13 @@
     <tr>
         <td class="p-3">{{ route.id }}</td>
         <td class="p-3">{{ route.site|sfs_cms_site_name }}</td>
-        <td class="p-3">
-            {% for path in route.paths %}
-                <a href="{{ sfs_cms_route_path_url(path) }}" target="_blank">{{ sfs_cms_route_path_path(path) }}</a><br/>
-            {% endfor %}
-        </td>
+{#        <td class="p-3">#}
+{#            {% if route.type != constant('Softspring\\CmsBundle\\Model\\RouteInterface::TYPE_PARENT_ROUTE') %}#}
+{#                {% for path in route.paths %}#}
+{#                    <a href="{{ sfs_cms_route_path_url(path) }}" target="_blank">{{ sfs_cms_route_path_path(path) }}</a><br/>#}
+{#                {% endfor %}#}
+{#            {% endif %}#}
+{#        </td>#}
         <td class="p-3">
             {{ ('admin_routes.types.'~route.type~'.name')|trans({'%redirectType%': route.redirectType}) }}
         </td>

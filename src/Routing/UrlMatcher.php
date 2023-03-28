@@ -165,8 +165,9 @@ class UrlMatcher
             $qb = $this->em->getRepository(RoutePathInterface::class)->createQueryBuilder('rp');
             $qb->select('rp');
             $qb->leftJoin('rp.route', 'r');
-            $qb->andWhere('rp.path = :path');
+            $qb->andWhere('rp.compiledPath = :path');
             $qb->setParameter('path', trim($path, '/'));
+            $qb->andWhere('r.type != 4');
             $qb->andWhere('r.site = :site');
             $qb->setParameter('site', $site);
 

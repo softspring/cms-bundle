@@ -14,8 +14,11 @@
             </cascade>
         </one-to-many>
 
-<!--        <many-to-one field="content" target-entity="Softspring\CmsBundle\Model\ContentInterface" inversed-by="routes">-->
-<!--        </many-to-one>-->
+        <one-to-many field="children" target-entity="Softspring\CmsBundle\Model\RouteInterface" mapped-by="parent" orphan-removal="true">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
     </entity>
 
 </doctrine-mapping>
