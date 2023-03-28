@@ -47,7 +47,7 @@ class CmsRouter implements RouterInterface, RequestMatcherInterface, WarmableInt
             // first try to generate with Symfony's route generator
             return $this->staticRouter->generate($name, $parameters, $referenceType);
         } catch (RouteNotFoundException $e) {
-            $params = array_filter($parameters, fn ($key) => $key != '_locale', ARRAY_FILTER_USE_KEY );
+            $params = array_filter($parameters, fn ($key) => '_locale' != $key, ARRAY_FILTER_USE_KEY);
 
             // if it does not exist, try witch CMS routes
             switch ($referenceType) {
