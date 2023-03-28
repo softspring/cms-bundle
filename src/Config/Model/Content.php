@@ -75,6 +75,25 @@ class Content implements ConfigurationInterface
                         'noIndex' => ['type' => 'checkbox', 'type_options' => ['required' => false]],
                         'noFollow' => ['type' => 'checkbox', 'type_options' => ['required' => false]],
                         'sitemap' => ['type' => 'checkbox', 'type_options' => ['required' => false]],
+                        'sitemapChangefreq' => ['type' => 'choice', 'type_options' => [
+                            'choices' => [
+                                'admin_page.form.seo.sitemapChangefreq.values.empty' => false,
+                                'admin_page.form.seo.sitemapChangefreq.values.always' => 'always',
+                                'admin_page.form.seo.sitemapChangefreq.values.hourly' => 'hourly',
+                                'admin_page.form.seo.sitemapChangefreq.values.daily' => 'daily',
+                                'admin_page.form.seo.sitemapChangefreq.values.weekly' => 'weekly',
+                                'admin_page.form.seo.sitemapChangefreq.values.monthly' => 'monthly',
+                                'admin_page.form.seo.sitemapChangefreq.values.yearly' => 'yearly',
+                                'admin_page.form.seo.sitemapChangefreq.values.never' => 'never',
+                            ],
+                        ]],
+                        'sitemapPriority' => ['type' => 'number', 'type_options' => [
+                            'required' => false,
+                            'scale' => 1,
+                            'constraints' => [
+                                ['constraint' => 'range', 'options' => ['min' => 0, 'max' => 1]],
+                            ],
+                        ]],
                     ])
                     ->useAttributeAsKey('key')
                     ->arrayPrototype()
