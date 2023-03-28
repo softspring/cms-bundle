@@ -26,7 +26,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $processor = new Processor();
         $configuration = new Configuration();
         $config = $processor->processConfiguration($configuration, $configs);
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config/services'));
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../../config/services'));
 
         // prepend default bundle collection
         array_unshift($config['collections'], 'vendor/softspring/cms-bundle/cms');
