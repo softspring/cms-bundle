@@ -96,8 +96,9 @@ abstract class RoutePath implements RoutePathInterface
             return;
         }
 
-        if ($this->getRoute()->getType() == RouteInterface::TYPE_PARENT_ROUTE) {
+        if (RouteInterface::TYPE_PARENT_ROUTE == $this->getRoute()->getType()) {
             $this->compiledPath = null;
+
             return;
         }
 
@@ -105,7 +106,7 @@ abstract class RoutePath implements RoutePathInterface
 
         $parentRoute = $this->getRoute()->getParent();
         while ($parentRoute) {
-            $slugs[] = $parentRoute->getPaths()->filter(fn(RoutePathInterface $path) => $path->getLocale() == $this->getLocale())->first()?->getPath();
+            $slugs[] = $parentRoute->getPaths()->filter(fn (RoutePathInterface $path) => $path->getLocale() == $this->getLocale())->first()?->getPath();
             $parentRoute = $parentRoute->getParent();
         }
 
