@@ -25,11 +25,14 @@
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="edit" role="tabpanel" aria-labelledby="edit-tab">
                 <div class="container pt-3 pb-3">
-                    {{ form_row(form.name) }}
-                    {{ form_row(form.site) }}
-                    {{ form_label(form.routes) }}
-                    {{ form_widget(form.routes.0) }}
-                    {{ form_rest(form) }}
+                    {% block form_fields %}
+                        {{ form_row(form.name) }}
+                        {{ form_row(form.site) }}
+                        {% if form.extraData is defined %}{{ form_widget(form.extraData) }}{% endif %}
+                        {{ form_label(form.routes) }}
+                        {{ form_widget(form.routes.0) }}
+                        {{ form_rest(form) }}
+                    {% endblock form_fields %}
                 </div>
             </div>
         </div>
