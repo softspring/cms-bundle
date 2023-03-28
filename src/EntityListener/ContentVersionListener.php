@@ -2,8 +2,10 @@
 
 namespace Softspring\CmsBundle\EntityListener;
 
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PostLoadEventArgs;
+use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Render\ContentRender;
@@ -25,28 +27,28 @@ class ContentVersionListener
         $this->requestStack = $requestStack;
     }
 
-    public function postLoad(ContentVersionInterface $contentVersion, LifecycleEventArgs $event)
+    public function postLoad(ContentVersionInterface $contentVersion, PostLoadEventArgs $event): void
     {
         $this->untransform($contentVersion, $event);
     }
 
-    public function preUpdate(ContentVersionInterface $contentVersion, PreUpdateEventArgs $event)
+    public function preUpdate(ContentVersionInterface $contentVersion, PreUpdateEventArgs $event): void
     {
         $this->transform($contentVersion, $event);
     }
 
-    public function postUpdate(ContentVersionInterface $contentVersion, PreUpdateEventArgs $event)
+    public function postUpdate(ContentVersionInterface $contentVersion, PreUpdateEventArgs $event): void
     {
         $this->saveCompiled($contentVersion, $event);
     }
 
-    public function prePersist(ContentVersionInterface $contentVersion, LifecycleEventArgs $event)
+    public function prePersist(ContentVersionInterface $contentVersion, PrePersistEventArgs $event): void
     {
         $this->saveCompiled($contentVersion, $event);
         $this->transform($contentVersion, $event);
     }
 
-    protected function saveCompiled(ContentVersionInterface $contentVersion, LifecycleEventArgs $event)
+    protected function saveCompiled(ContentVersionInterface $contentVersion, LifecycleEventArgs $event): void
     {
         $request = $this->requestStack->getCurrentRequest();
 

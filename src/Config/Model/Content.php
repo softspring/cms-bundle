@@ -30,8 +30,6 @@ class Content implements ConfigurationInterface
             ->children()
                 ->integerNode('revision')->isRequired()->end()
 
-//                ->scalarNode('render_template')->defaultValue("@content/{$this->contentName}/render.html.twig")->end()
-//                ->scalarNode('edit_template')->defaultValue("@content/{$this->contentName}/edit.html.twig")->end()
                 ->scalarNode('entity_class')->isRequired()->end()
                 ->scalarNode('default_layout')->defaultValue('default')->end()
 

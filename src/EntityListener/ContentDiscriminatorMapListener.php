@@ -22,7 +22,7 @@ class ContentDiscriminatorMapListener implements EventSubscriberInterface
     /**
      * @throws MappingException
      */
-    public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs)
+    public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs): void
     {
         /** @var ClassMetadataInfo $metadata */
         $metadata = $eventArgs->getClassMetadata();

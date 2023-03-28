@@ -14,8 +14,6 @@
             </cascade>
         </one-to-many>
 
-<!--        <many-to-one field="content" target-entity="Softspring\CmsBundle\Model\ContentInterface" inversed-by="routes">-->
-<!--        </many-to-one>-->
     </entity>
 
 </doctrine-mapping>

@@ -12,9 +12,6 @@ class BlockManager implements BlockManagerInterface
 
     protected EntityManagerInterface $em;
 
-    /**
-     * BlockManager constructor.
-     */
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;

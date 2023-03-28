@@ -40,7 +40,7 @@ interface ContentInterface
 
     public function getExtraData(): ?array;
 
-    public function setExtraData(?array $data): void;
+    public function setExtraData(?array $extraData): void;
 
     public function getSeo(): ?array;
 

@@ -13,12 +13,12 @@ interface ContentVersionManagerInterface extends CrudlEntityManagerInterface
     public function createEntity(): object;
 
     /**
-     * @param ContentVersionInterface $entity
+     * @psalm-param ContentVersionInterface $entity
      */
     public function saveEntity(object $entity): void;
 
     /**
-     * @param ContentVersionInterface $entity
+     * @psalm-param ContentVersionInterface $entity
      */
     public function deleteEntity(object $entity): void;
 }

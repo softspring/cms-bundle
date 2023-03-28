@@ -37,7 +37,7 @@ interface MenuItemInterface
     public function setParent(?MenuItemInterface $parent): void;
 
     /**
-     * @return Collection|MenuItemInterface[]|null
+     * @psalm-return Collection|MenuItemInterface[]|null
      */
     public function getItems(): ?Collection;
 

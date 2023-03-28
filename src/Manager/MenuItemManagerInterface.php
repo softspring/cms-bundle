@@ -13,12 +13,12 @@ interface MenuItemManagerInterface extends CrudlEntityManagerInterface
     public function createEntity(): object;
 
     /**
-     * @param MenuItemInterface $entity
+     * @psalm-param MenuItemInterface $entity
      */
     public function saveEntity(object $entity): void;
 
     /**
-     * @param MenuItemInterface $entity
+     * @psalm-param MenuItemInterface $entity
      */
     public function deleteEntity(object $entity): void;
 }
