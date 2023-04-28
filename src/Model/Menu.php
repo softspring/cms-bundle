@@ -13,7 +13,7 @@ class Menu implements MenuInterface
 
     protected ?string $type = null;
 
-    /** @var Collection|MenuItemInterface[]|null */
+    /** @psalm-var Collection|MenuItemInterface[]|null */
     protected ?Collection $items = null;
 
     public function __construct()

@@ -12,7 +12,7 @@ abstract class Route implements RouteInterface
     protected ?string $site = null;
 
     /**
-     * @var RoutePathInterface[]|Collection
+     * @psalm-var RoutePathInterface[]|Collection
      */
     protected Collection $paths;
 
@@ -65,10 +65,7 @@ abstract class Route implements RouteInterface
         }
     }
 
-    /**
-     * @return RoutePathInterface[]|Collection
-     */
-    public function getPaths()
+    public function getPaths(): Collection
     {
         return $this->paths;
     }

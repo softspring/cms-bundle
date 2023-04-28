@@ -13,12 +13,12 @@ interface RouteManagerInterface extends CrudlEntityManagerInterface
     public function createEntity(): object;
 
     /**
-     * @param RouteInterface $entity
+     * @psalm-param RouteInterface $entity
      */
     public function saveEntity(object $entity): void;
 
     /**
-     * @param RouteInterface $entity
+     * @psalm-param RouteInterface $entity
      */
     public function deleteEntity(object $entity): void;
 

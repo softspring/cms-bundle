@@ -17,7 +17,7 @@ interface MenuInterface
     public function getName(): ?string;
 
     /**
-     * @return Collection|MenuItemInterface[]|null
+     * @psalm-return Collection|MenuItemInterface[]|null
      */
     public function getItems(): ?Collection;
 

@@ -10,7 +10,6 @@ services:
             $em: '@sfs_cms.entity_manager'
             $blockTypes: [] # '%sfs_cms.block.types%'
             $formFactory: '@form.factory'
-#            $siteType: '' # '%sfs_cms.site.type%'
             $enabledLocales: '%kernel.enabled_locales%'
             $defaultLocale: '%kernel.default_locale%'
             $container: '@service_container'

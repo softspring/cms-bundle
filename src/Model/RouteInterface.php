@@ -25,9 +25,9 @@ interface RouteInterface
     public function setSite(?string $site): void;
 
     /**
-     * @return RoutePathInterface[]|Collection
+     * @psalm-return RoutePathInterface[]|Collection
      */
-    public function getPaths();
+    public function getPaths(): Collection;
 
     public function addPath(RoutePathInterface $path): void;
 
