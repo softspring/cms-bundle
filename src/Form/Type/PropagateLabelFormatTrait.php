@@ -11,7 +11,7 @@ trait PropagateLabelFormatTrait
     {
         foreach ($view->children as $childName => $childView) {
             if (isset($view->children[$childName]->vars['label_format'])) {
-//                $view->children[$childName]->vars['label_format'] = str_replace('.form.', ".form.{$view->vars['name']}.", $view->children[$childName]->vars['label_format']);
+                //                $view->children[$childName]->vars['label_format'] = str_replace('.form.', ".form.{$view->vars['name']}.", $view->children[$childName]->vars['label_format']);
                 $view->children[$childName]->vars['label_format'] = str_replace('.%name%.', ".{$view->vars['name']}.%name%.", $view->children[$childName]->vars['label_format']);
             }
         }

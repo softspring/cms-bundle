@@ -33,9 +33,9 @@ class ContentContentForm extends AbstractType implements ContentContentFormInter
             'layout' => null,
         ]);
 
-//        $resolver->setNormalizer('label_format', function (Options $options, $value) {
-//            return "admin_{$options['content']['_id']}.form.%name%.label";
-//        });
+        //        $resolver->setNormalizer('label_format', function (Options $options, $value) {
+        //            return "admin_{$options['content']['_id']}.form.%name%.label";
+        //        });
 
         $resolver->setRequired('content_type');
         $resolver->setAllowedTypes('content_type', ['string']);
