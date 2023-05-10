@@ -13,7 +13,7 @@ use Twig\Environment;
 
 class ContentRender
 {
-    const LOCALE_HIDDEN_MODULE = '<!-- locale hidden module -->';
+    public const LOCALE_HIDDEN_MODULE = '<!-- locale hidden module -->';
 
     protected Environment $twig;
 
