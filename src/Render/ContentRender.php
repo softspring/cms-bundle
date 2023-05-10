@@ -13,6 +13,8 @@ use Twig\Environment;
 
 class ContentRender
 {
+    const LOCALE_HIDDEN_MODULE = '<!-- locale hidden module -->';
+
     protected Environment $twig;
 
     protected CmsConfig $cmsConfig;
@@ -84,7 +86,7 @@ class ContentRender
             $currentLocale = $this->requestStack->getCurrentRequest()->getLocale();
 
             if (!in_array($currentLocale, $module['locale_filter'])) {
-                return '<!-- locale hidden module -->';
+                return self::LOCALE_HIDDEN_MODULE;
             }
         }
 
