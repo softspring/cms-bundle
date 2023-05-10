@@ -117,9 +117,7 @@ class UrlMatcher
             switch ($route->getType()) {
                 case RouteInterface::TYPE_CONTENT:
                     $attributes['_route'] = $routePath->getRoute()->getId();
-                    if (isset($attributes['_route_params'])) {
-                        $attributes['_route_params'] = [];
-                    }
+                    $attributes['_route_params'] = [];
                     $attributes['_controller'] = 'Softspring\CmsBundle\Controller\ContentController::renderRoutePath';
                     $attributes['routePath'] = $routePath;
                     break;
