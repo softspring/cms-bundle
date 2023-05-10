@@ -48,6 +48,7 @@ class UrlGenerator
             return '#';
         }
 
+        $routeParams = array_filter($routeParams);
         $queryString = !empty($routeParams) ? '?'.http_build_query($routeParams) : '';
 
         return $this->getSiteSchemeAndHost($route, $locale).$this->getSiteOrLocalePath($route, $locale).'/'.$this->getRoutePath($route, $locale).$queryString;
@@ -74,6 +75,7 @@ class UrlGenerator
             return '#';
         }
 
+        $routeParams = array_filter($routeParams);
         $queryString = !empty($routeParams) ? '?'.http_build_query($routeParams) : '';
 
         return $this->getSiteOrLocalePath($route, $locale).'/'.$this->getRoutePath($route, $locale).$queryString;

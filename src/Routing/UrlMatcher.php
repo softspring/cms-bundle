@@ -83,7 +83,7 @@ class UrlMatcher
         }
 
         foreach ($siteConfig['paths'] as $path) {
-            if ($path['path'] == substr($pathInfo, 0, strlen($path['path']))) {
+            if (str_starts_with($pathInfo, $path['path'])) {
                 if ($path['locale']) {
                     if (!empty($attributes['_sfs_cms_locale'])) {
                         // TODO resolve conflict
@@ -117,7 +117,9 @@ class UrlMatcher
             switch ($route->getType()) {
                 case RouteInterface::TYPE_CONTENT:
                     $attributes['_route'] = $routePath->getRoute()->getId();
-                    $attributes['_route_params'] = [];
+                    if (isset($attributes['_route_params'])) {
+                        $attributes['_route_params'] = [];
+                    }
                     $attributes['_controller'] = 'Softspring\CmsBundle\Controller\ContentController::renderRoutePath';
                     $attributes['routePath'] = $routePath;
                     break;
