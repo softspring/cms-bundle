@@ -1,3 +1,7 @@
+body {
+    --sfs-cms-module-form-width: 450px;
+}
+
 .tox-notifications-container {
     display: none;
 }
@@ -227,7 +231,7 @@
             position: fixed;
             right: 0;
             top: 75px;
-            width: 300px;
+            width: var(--sfs-cms-module-form-width);
             height: calc(100vh - 76px);
             overflow-y: auto;
             background-color: white;
@@ -339,7 +343,7 @@
 }
 
 #content-form {
-    width: 300px;
+    width: var(--sfs-cms-module-form-width);
     flex-shrink: 0;
 }
 
