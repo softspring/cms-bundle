@@ -46,6 +46,7 @@ class UrlMatcher
         }
 
         $pathInfo = $request->getPathInfo();
+        $pathInfoHasTrailingSlash = str_ends_with($pathInfo, '/');
 
         if ($siteConfig['slash_route']['enabled'] && '/' === $pathInfo) {
             switch ($siteConfig['slash_route']['behaviour']) {
@@ -90,7 +91,15 @@ class UrlMatcher
                     }
                     $attributes['_sfs_cms_locale'] = $path['locale'];
                     $attributes['_sfs_cms_locale_path'] = $path['path'];
+
                     $pathInfo = substr($pathInfo, strlen($path['path']));
+
+                    if ($path['trailing_slash_on_root'] && '' === $pathInfo && !$pathInfoHasTrailingSlash) {
+                        $url = parse_url($request->getUri());
+                        $url = sprintf('%s://%s%s', $url['scheme'], $url['host'], $url['path'].'/');
+
+                        return $this->generateRedirect($url, Response::HTTP_MOVED_PERMANENTLY);
+                    }
                 }
             }
         }
@@ -114,22 +123,24 @@ class UrlMatcher
                 return $this->generateRedirect($this->urlGenerator->getUrl($route->getId(), $routePath->getLocale()), $siteConfig['slash_route']['redirect_code'] ?: Response::HTTP_FOUND);
             }
 
-            switch ($route->getType()) {
-                case RouteInterface::TYPE_CONTENT:
-                    $attributes['_route'] = $routePath->getRoute()->getId();
-                    $attributes['_route_params'] = [];
-                    $attributes['_controller'] = 'Softspring\CmsBundle\Controller\ContentController::renderRoutePath';
-                    $attributes['routePath'] = $routePath;
-                    break;
+            if ($attributes['_sfs_cms_locale_path']) {
+                switch ($route->getType()) {
+                    case RouteInterface::TYPE_CONTENT:
+                        $attributes['_route'] = $routePath->getRoute()->getId();
+                        $attributes['_route_params'] = [];
+                        $attributes['_controller'] = 'Softspring\CmsBundle\Controller\ContentController::renderRoutePath';
+                        $attributes['routePath'] = $routePath;
+                        break;
 
-                case RouteInterface::TYPE_REDIRECT_TO_URL:
-                    return $this->generateRedirect($route->getRedirectUrl(), $route->getRedirectType() ?? Response::HTTP_FOUND);
+                    case RouteInterface::TYPE_REDIRECT_TO_URL:
+                        return $this->generateRedirect($route->getRedirectUrl(), $route->getRedirectType() ?? Response::HTTP_FOUND);
 
-                case RouteInterface::TYPE_REDIRECT_TO_ROUTE:
-                    return $this->generateRedirectToRoute($route->getSymfonyRoute(), $route->getRedirectType() ?? Response::HTTP_FOUND);
+                    case RouteInterface::TYPE_REDIRECT_TO_ROUTE:
+                        return $this->generateRedirectToRoute($route->getSymfonyRoute(), $route->getRedirectType() ?? Response::HTTP_FOUND);
 
-                default:
-                    throw new \Exception(sprintf('Route type %u not yet implemented', $route->getType()));
+                    default:
+                        throw new \Exception(sprintf('Route type %u not yet implemented', $route->getType()));
+                }
             }
         }
 
