@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\EventListener;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -12,10 +13,12 @@ use Twig\Environment;
 class ErrorPageListener implements EventSubscriberInterface
 {
     protected Environment $twig;
+    protected LoggerInterface $logger;
 
-    public function __construct(Environment $twig)
+    public function __construct(Environment $twig, LoggerInterface $cmsLogger)
     {
         $this->twig = $twig;
+        $this->logger = $cmsLogger;
     }
 
     public static function getSubscribedEvents(): array
@@ -82,8 +85,7 @@ class ErrorPageListener implements EventSubscriberInterface
                 }
             } catch (\Exception $e) {
                 // do not throw any exception, try render next template
-                // maybe log something
-                $m = $e->getMessage();
+                $this->logger->error(sprintf('ERROR RENDERING ERROR PAGE (%s): %s', $template, $e->getMessage()));
             }
         }
 
