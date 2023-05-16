@@ -158,8 +158,8 @@ class UrlMatcherTest extends TestCase
                 'enabled' => false,
             ],
             'paths' => [
-                ['path' => '/es', 'locale' => 'es'],
-                ['path' => '/en', 'locale' => 'en'],
+                ['path' => '/es', 'locale' => 'es', 'trailing_slash_on_root' => false],
+                ['path' => '/en', 'locale' => 'en', 'trailing_slash_on_root' => false],
             ],
             'sitemaps' => [],
             'sitemaps_index' => ['enabled' => false],
@@ -191,8 +191,8 @@ class UrlMatcherTest extends TestCase
                 'enabled' => false,
             ],
             'paths' => [
-                ['path' => '/es', 'locale' => 'es'],
-                ['path' => '/en', 'locale' => 'en'],
+                ['path' => '/es', 'locale' => 'es', 'trailing_slash_on_root' => false],
+                ['path' => '/en', 'locale' => 'en', 'trailing_slash_on_root' => false],
             ],
             'sitemaps' => [],
             'sitemaps_index' => ['enabled' => false],
