@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Routing;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface;
@@ -18,12 +19,14 @@ class CmsRouter implements RouterInterface, RequestMatcherInterface, WarmableInt
     protected Router $staticRouter;
     protected UrlMatcher $urlMatcher;
     protected UrlGenerator $urlGenerator;
+    protected LoggerInterface $logger;
 
-    public function __construct(Router $staticRouter, UrlMatcher $urlMatcher, UrlGenerator $urlGenerator)
+    public function __construct(Router $staticRouter, UrlMatcher $urlMatcher, UrlGenerator $urlGenerator, LoggerInterface $cmsLogger)
     {
         $this->staticRouter = $staticRouter;
         $this->urlMatcher = $urlMatcher;
         $this->urlGenerator = $urlGenerator;
+        $this->logger = $cmsLogger;
     }
 
     public function setContext(RequestContext $context): void
@@ -80,7 +83,12 @@ class CmsRouter implements RouterInterface, RequestMatcherInterface, WarmableInt
 
     public function matchRequest(Request $request): array
     {
-        $attributes = $this->urlMatcher->matchRequest($request);
+        try {
+            $attributes = $this->urlMatcher->matchRequest($request);
+        } catch (\Exception $e) {
+            $attributes = [];
+            $this->logger->warning(sprintf('Caught exception in CmsRouter->matchRequest: %s', $e->getMessage()));
+        }
 
         if (isset($attributes['_controller'])) {
             return $attributes;
