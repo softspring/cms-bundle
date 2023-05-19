@@ -10,6 +10,10 @@ import:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController::import
     path: /import
 
+import_version:
+    controller: Softspring\CmsBundle\Controller\Admin\ContentController::importVersion
+    path: /{content}/import-version
+
 details:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController::read
     path: /{content}
@@ -53,6 +57,10 @@ preview_content_version:
 publish_version:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController::publishVersion
     path: /{content}/{version}/publish-version
+
+unpublish:
+    controller: Softspring\CmsBundle\Controller\Admin\ContentController::unpublish
+    path: /{content}/unpublish
 
 keep_version:
     controller: Softspring\CmsBundle\Controller\Admin\ContentController::markKeepVersion

@@ -22,7 +22,13 @@
             <div class="col-12 col-md-3 col-lg-2 text-md-end mb-md-2">Sitio</div>
             <div class="col-12 col-md-9 col-lg-10 mb-2">{{ entity.site|sfs_cms_site_name }}</div>
             <div class="col-12 col-md-3 col-lg-2 text-md-end mb-md-2">Published</div>
-            <div class="col-12 col-md-9 col-lg-10 mb-2">{{ entity.publishedVersion ? entity.publishedVersion.createdAt|date('H:i d-m-Y') : 'no' }}</div>
+            <div class="col-12 col-md-9 col-lg-10 mb-2">
+                {{ entity.publishedVersion ? entity.publishedVersion.createdAt|date('H:i d-m-Y') : 'no' }}
+                {% if entity.publishedVersion %}
+                    <a href="{{ url('sfs_cms_admin_content_'~content~'_unpublish', {'content':entity}) }}"
+                       onclick="return confirm('{{ ('admin_'~content~'.read.actions.unpublish.confirm')|trans({'%name%':entity.name}) }}')">{{ ('admin_'~content~'.read.actions.unpublish.link')|trans({'%name%':entity.name})|lower }}</a>
+                {% endif %}
+            </div>
 
         </div>
         <div class="row mt-4 border-bottom border-dark">

@@ -19,7 +19,10 @@ admin_page:
     
     publish:
         version_has_been_published_flash: "La versión se ha publicado"
-        
+
+    unpublish:
+        has_been_unpublished_flash: "La página se ha despublicado"
+
     import:
         meta.title: "Importar página"
         title: "Importar página"
@@ -30,10 +33,24 @@ admin_page:
         form:
             file.label: "Fichero a importar"
 
+    import_version:
+        meta.title: "Importar versión"
+        title: "Importar versión"
+        breadcrumb: "Importar versión"
+        actions:
+            import.button: "Importar versión"
+            cancel.button: "Cancelar"
+        form:
+            file.label: "Fichero a importar"
+
     read:
         meta.title: "General"
         title: "%name%"
         breadcrumb: "General"
+        actions:
+            unpublish:
+                confirm: "¿estás seguro de despublicar esta página?"
+                link: "Despublicar"
 
     versions:
         meta.title: "Versiones"
@@ -57,6 +74,7 @@ admin_page:
             preview.link: "Previsualizar"
             export.link: "Exportar"
             publish.link: "Publicar versión"
+            import_version.link: "Importar versión"
             cleanup_versions.link: "Limpiar versiones"
             keep.link: "Mantener versión, pinchar para desmarcar"
             nokeep.link: "No mantener esta versión, pinchar para mantener"

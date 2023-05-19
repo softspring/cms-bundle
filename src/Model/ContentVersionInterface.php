@@ -22,6 +22,14 @@ interface ContentVersionInterface
 
     public function setOrigin(?int $origin): void;
 
+    public function getOriginDescription(): ?string;
+
+    public function setOriginDescription(?string $originDescription): void;
+
+    public function getNote(): ?string;
+
+    public function setNote(?string $note): void;
+
     public function getLayout(): ?string;
 
     public function setLayout(?string $layout): void;

@@ -14,6 +14,9 @@
             </options>
         </field>
 
+        <field name="originDescription" column="origin_description" type="string" nullable="true"/>
+        <field name="note" column="note" type="string" nullable="true"/>
+
         <field name="compiledModules" column="compiled_modules" type="json" nullable="true"/>
         <field name="compiled" column="compiled" type="json" nullable="true"/>
 
