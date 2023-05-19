@@ -20,7 +20,7 @@ abstract class MenuItem implements MenuItemInterface
     protected ?MenuItemInterface $parent = null;
 
     /**
-     * @var Collection|MenuItemInterface[]|null
+     * @psalm-var Collection|MenuItemInterface[]|null
      */
     protected ?Collection $items = null;
 

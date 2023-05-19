@@ -32,7 +32,7 @@ class UrlGenerator
      *
      * @throws \Exception
      */
-    public function getUrl($routeOrName, ?string $locale = null, bool $onlyChecking = false): string
+    public function getUrl($routeOrName, ?string $locale = null, array $routeParams = [], bool $onlyChecking = false): string
     {
         if ($this->isPreview()) {
             return 'javascript:confirm(\'Esto es una previsualización!\')';
@@ -48,7 +48,9 @@ class UrlGenerator
             return '#';
         }
 
-        return $this->getSiteSchemeAndHost($route, $locale).$this->getSiteOrLocalePath($route, $locale).'/'.$this->getRoutePath($route, $locale);
+        $queryString = !empty($routeParams) ? '?'.http_build_query($routeParams) : '';
+
+        return $this->getSiteSchemeAndHost($route, $locale).$this->getSiteOrLocalePath($route, $locale).'/'.$this->getRoutePath($route, $locale).$queryString;
     }
 
     /**
@@ -56,7 +58,7 @@ class UrlGenerator
      *
      * @throws \Exception
      */
-    public function getPath($routeOrName, ?string $locale = null, bool $onlyChecking = false): string
+    public function getPath($routeOrName, ?string $locale = null, array $routeParams = [], bool $onlyChecking = false): string
     {
         if ($this->isPreview()) {
             return 'javascript:confirm(\'Esto es una previsualización!\')';
@@ -72,7 +74,9 @@ class UrlGenerator
             return '#';
         }
 
-        return $this->getSiteOrLocalePath($route, $locale).'/'.$this->getRoutePath($route, $locale);
+        $queryString = !empty($routeParams) ? '?'.http_build_query($routeParams) : '';
+
+        return $this->getSiteOrLocalePath($route, $locale).'/'.$this->getRoutePath($route, $locale).$queryString;
     }
 
     /**

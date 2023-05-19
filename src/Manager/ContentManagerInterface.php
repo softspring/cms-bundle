@@ -15,12 +15,12 @@ interface ContentManagerInterface extends CrudlEntityManagerInterface
     public function createEntity(?string $type = null): object;
 
     /**
-     * @param ContentInterface $entity
+     * @psalm-param ContentInterface $entity
      */
     public function saveEntity(object $entity): void;
 
     /**
-     * @param ContentInterface $entity
+     * @psalm-param ContentInterface $entity
      */
     public function deleteEntity(object $entity): void;
 

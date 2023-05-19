@@ -64,41 +64,41 @@ class ContentController extends AbstractController
         $contentConfig = $this->getContentConfig($request);
         $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']] + ['extra_fields' => $contentConfig['extra_fields']];
 
-//        if (!empty($config['is_granted'])) {
-//            $this->denyAccessUnlessGranted($config['is_granted'], null, sprintf('Access denied, user is not %s.', $config['is_granted']));
-//        }
+        //        if (!empty($config['is_granted'])) {
+        //            $this->denyAccessUnlessGranted($config['is_granted'], null, sprintf('Access denied, user is not %s.', $config['is_granted']));
+        //        }
 
         $entity = $this->contentManager->createEntity($config['_id']);
         $entity->addRoute($this->routeManager->createEntity());
 
-//        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
-//            return $response;
-//        }
+        //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
+        //            return $response;
+        //        }
 
         $form = $this->createForm($config['create_type'], $entity, ['content' => $config, 'method' => 'POST'])->handleRequest($request);
-//
-//        $this->dispatchFromConfig($config, 'form_init_event_name', new FormEvent($form, $request));
-//
+        //
+        //        $this->dispatchFromConfig($config, 'form_init_event_name', new FormEvent($form, $request));
+        //
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
-//                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_valid_event_name', new GetResponseFormEvent($form, $request))) {
-//                    return $response;
-//                }
+                //                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_valid_event_name', new GetResponseFormEvent($form, $request))) {
+                //                    return $response;
+                //                }
 
                 $entity->getRoutes()->map(function (RouteInterface $route) use ($entity) {
                     $route->setSite($entity->getSite());
                 });
                 $this->contentManager->saveEntity($entity);
 
-//                if ($response = $this->dispatchGetResponseFromConfig($config, 'success_event_name', new GetResponseEntityEvent($entity, $request))) {
-//                    return $response;
-//                }
+                //                if ($response = $this->dispatchGetResponseFromConfig($config, 'success_event_name', new GetResponseEntityEvent($entity, $request))) {
+                //                    return $response;
+                //                }
 
                 return $this->redirect(!empty($config['create_success_redirect_to']) ? $this->generateUrl($config['create_success_redirect_to']) : $this->generateUrl("sfs_cms_admin_content_{$config['_id']}_content", ['content' => $entity]));
-//            } else {
-//                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_invalid_event_name', new GetResponseFormEvent($form, $request))) {
-//                    return $response;
-//                }
+                //            } else {
+                //                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_invalid_event_name', new GetResponseFormEvent($form, $request))) {
+                //                    return $response;
+                //                }
             }
         }
 
@@ -109,8 +109,8 @@ class ContentController extends AbstractController
             'entity' => $entity,
             'form' => $form->createView(),
         ]);
-//
-//        $this->dispatchFromConfig($config, 'view_event_name', new ViewEvent($viewData));
+        //
+        //        $this->dispatchFromConfig($config, 'view_event_name', new ViewEvent($viewData));
 
         return $this->render($config['create_view'], $viewData->getArrayCopy());
     }
@@ -122,19 +122,19 @@ class ContentController extends AbstractController
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
-//        if (!empty($config['is_granted'])) {
-//            $this->denyAccessUnlessGranted($config['is_granted'], $entity, sprintf('Access denied, user is not %s.', $config['is_granted']));
-//        }
+        //        if (!empty($config['is_granted'])) {
+        //            $this->denyAccessUnlessGranted($config['is_granted'], $entity, sprintf('Access denied, user is not %s.', $config['is_granted']));
+        //        }
 
         if (!$entity) {
             return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
-//        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
-//            return $response;
-//        }
+        //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
+        //            return $response;
+        //        }
 
-//        $deleteForm = $this->getDeleteForm($entity, $request, $this->deleteForm);
+        //        $deleteForm = $this->getDeleteForm($entity, $request, $this->deleteForm);
 
         // show view
         $viewData = new \ArrayObject([
@@ -144,7 +144,7 @@ class ContentController extends AbstractController
 //            'deleteForm' => $deleteForm ? $deleteForm->createView() : null,
         ]);
 
-//        $this->dispatchFromConfig($config, 'view_event_name', new ViewEvent($viewData));
+        //        $this->dispatchFromConfig($config, 'view_event_name', new ViewEvent($viewData));
 
         return $this->render($config['read_view'], $viewData->getArrayCopy());
     }
@@ -156,39 +156,39 @@ class ContentController extends AbstractController
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
-//        if (!empty($config['is_granted'])) {
-//            $this->denyAccessUnlessGranted($config['is_granted'], null, sprintf('Access denied, user is not %s.', $config['is_granted']));
-//        }
+        //        if (!empty($config['is_granted'])) {
+        //            $this->denyAccessUnlessGranted($config['is_granted'], null, sprintf('Access denied, user is not %s.', $config['is_granted']));
+        //        }
 
         if (!$entity) {
             return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
-//        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
-//            return $response;
-//        }
+        //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
+        //            return $response;
+        //        }
 
         $form = $this->createForm($config['update_type'], $entity, ['content' => $config, 'method' => 'POST'])->handleRequest($request);
-//
-//        $this->dispatchFromConfig($config, 'form_init_event_name', new FormEvent($form, $request));
-//
+        //
+        //        $this->dispatchFromConfig($config, 'form_init_event_name', new FormEvent($form, $request));
+        //
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
-//                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_valid_event_name', new GetResponseFormEvent($form, $request))) {
-//                    return $response;
-//                }
+                //                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_valid_event_name', new GetResponseFormEvent($form, $request))) {
+                //                    return $response;
+                //                }
 
                 $this->contentManager->saveEntity($entity);
 
-//                if ($response = $this->dispatchGetResponseFromConfig($config, 'success_event_name', new GetResponseEntityEvent($entity, $request))) {
-//                    return $response;
-//                }
+                //                if ($response = $this->dispatchGetResponseFromConfig($config, 'success_event_name', new GetResponseEntityEvent($entity, $request))) {
+                //                    return $response;
+                //                }
 
                 return !empty($config['update_success_redirect_to']) ? $this->redirectToRoute($config['update_success_redirect_to']) : $this->redirectBack($config['_id'], $entity, $request);
-//            } else {
-//                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_invalid_event_name', new GetResponseFormEvent($form, $request))) {
-//                    return $response;
-//                }
+                //            } else {
+                //                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_invalid_event_name', new GetResponseFormEvent($form, $request))) {
+                //                    return $response;
+                //                }
             }
         }
 
@@ -199,8 +199,8 @@ class ContentController extends AbstractController
             'entity' => $entity,
             'form' => $form->createView(),
         ]);
-//
-//        $this->dispatchFromConfig($config, 'view_event_name', new ViewEvent($viewData));
+        //
+        //        $this->dispatchFromConfig($config, 'view_event_name', new ViewEvent($viewData));
 
         return $this->render($config['update_view'], $viewData->getArrayCopy());
     }
@@ -213,27 +213,27 @@ class ContentController extends AbstractController
         /** @var ContentInterface|null $entity */
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
-//        if (!empty($config['is_granted'])) {
-//            $this->denyAccessUnlessGranted($config['is_granted'], null, sprintf('Access denied, user is not %s.', $config['is_granted']));
-//        }
+        //        if (!empty($config['is_granted'])) {
+        //            $this->denyAccessUnlessGranted($config['is_granted'], null, sprintf('Access denied, user is not %s.', $config['is_granted']));
+        //        }
 
         if (!$entity) {
             return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
-//        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
-//            return $response;
-//        }
+        //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
+        //            return $response;
+        //        }
 
         $form = $this->createForm($config['delete_type'], $entity, ['content' => $config, 'method' => 'POST', 'entity' => $entity])->handleRequest($request);
-//
-//        $this->dispatchFromConfig($config, 'form_init_event_name', new FormEvent($form, $request));
-//
+        //
+        //        $this->dispatchFromConfig($config, 'form_init_event_name', new FormEvent($form, $request));
+        //
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
-//                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_valid_event_name', new GetResponseFormEvent($form, $request))) {
-//                    return $response;
-//                }
+                //                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_valid_event_name', new GetResponseFormEvent($form, $request))) {
+                //                    return $response;
+                //                }
 
                 switch ($form->get('action')->getData()) {
                     case 'change':
@@ -258,15 +258,15 @@ class ContentController extends AbstractController
 
                 $this->contentManager->deleteEntity($entity);
 
-//                if ($response = $this->dispatchGetResponseFromConfig($config, 'success_event_name', new GetResponseEntityEvent($entity, $request))) {
-//                    return $response;
-//                }
+                //                if ($response = $this->dispatchGetResponseFromConfig($config, 'success_event_name', new GetResponseEntityEvent($entity, $request))) {
+                //                    return $response;
+                //                }
 
                 return !empty($config['delete_success_redirect_to']) ? $this->redirectToRoute($config['delete_success_redirect_to']) : $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_list");
-//            } else {
-//                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_invalid_event_name', new GetResponseFormEvent($form, $request))) {
-//                    return $response;
-//                }
+                //            } else {
+                //                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_invalid_event_name', new GetResponseFormEvent($form, $request))) {
+                //                    return $response;
+                //                }
             }
         }
 
@@ -277,8 +277,8 @@ class ContentController extends AbstractController
             'entity' => $entity,
             'form' => $form->createView(),
         ]);
-//
-//        $this->dispatchFromConfig($config, 'view_event_name', new ViewEvent($viewData));
+        //
+        //        $this->dispatchFromConfig($config, 'view_event_name', new ViewEvent($viewData));
 
         return $this->render($config['delete_view'], $viewData->getArrayCopy());
     }
@@ -288,40 +288,40 @@ class ContentController extends AbstractController
         $contentConfig = $this->getContentConfig($request);
         $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']] + ['extra_fields' => $contentConfig['extra_fields']];
 
-//        if (!empty($config['is_granted'])) {
-//            $this->denyAccessUnlessGranted($config['is_granted'], null, sprintf('Access denied, user is not %s.', $config['is_granted']));
-//        }
+        //        if (!empty($config['is_granted'])) {
+        //            $this->denyAccessUnlessGranted($config['is_granted'], null, sprintf('Access denied, user is not %s.', $config['is_granted']));
+        //        }
 
-//        $entity = $this->contentManager->createEntity($config['_id']);
-//        $entity->addRoute($this->routeManager->createEntity());
+        //        $entity = $this->contentManager->createEntity($config['_id']);
+        //        $entity->addRoute($this->routeManager->createEntity());
 
-//        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
-//            return $response;
-//        }
+        //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
+        //            return $response;
+        //        }
 
         $form = $this->createForm($config['import_type'], null, ['content' => $config, 'method' => 'POST'])->handleRequest($request);
-//
-//        $this->dispatchFromConfig($config, 'form_init_event_name', new FormEvent($form, $request));
-//
+        //
+        //        $this->dispatchFromConfig($config, 'form_init_event_name', new FormEvent($form, $request));
+        //
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
-//                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_valid_event_name', new GetResponseFormEvent($form, $request))) {
-//                    return $response;
-//                }
+                //                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_valid_event_name', new GetResponseFormEvent($form, $request))) {
+                //                    return $response;
+                //                }
 
                 /** @var UploadedFile $zipFile */
                 $zipFile = $form->getData()['file'];
                 $this->dataImporter->import(ZipContent::read($zipFile->getPath(), $zipFile->getBasename()), ['version_origin' => ContentVersionInterface::ORIGIN_IMPORT]);
 
-//                if ($response = $this->dispatchGetResponseFromConfig($config, 'success_event_name', new GetResponseEntityEvent($entity, $request))) {
-//                    return $response;
-//                }
+                //                if ($response = $this->dispatchGetResponseFromConfig($config, 'success_event_name', new GetResponseEntityEvent($entity, $request))) {
+                //                    return $response;
+                //                }
 
                 return $this->redirect(!empty($config['import_success_redirect_to']) ? $this->generateUrl($config['import_success_redirect_to']) : $this->generateUrl("sfs_cms_admin_content_{$config['_id']}_list"));
-//            } else {
-//                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_invalid_event_name', new GetResponseFormEvent($form, $request))) {
-//                    return $response;
-//                }
+                //            } else {
+                //                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_invalid_event_name', new GetResponseFormEvent($form, $request))) {
+                //                    return $response;
+                //                }
             }
         }
 
@@ -332,8 +332,8 @@ class ContentController extends AbstractController
             'form' => $form->createView(),
             'confirm' => $confirm,
         ]);
-//
-//        $this->dispatchFromConfig($config, 'view_event_name', new ViewEvent($viewData));
+        //
+        //        $this->dispatchFromConfig($config, 'view_event_name', new ViewEvent($viewData));
 
         return $this->render($config['import_view'], $viewData->getArrayCopy());
     }
@@ -383,9 +383,9 @@ class ContentController extends AbstractController
         /** @var ?ContentInterface $entity */
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
-//        if (!empty($config['is_granted'])) {
-//            $this->denyAccessUnlessGranted($config['is_granted'], null, sprintf('Access denied, user is not %s.', $config['is_granted']));
-//        }
+        //        if (!empty($config['is_granted'])) {
+        //            $this->denyAccessUnlessGranted($config['is_granted'], null, sprintf('Access denied, user is not %s.', $config['is_granted']));
+        //        }
 
         if (!$entity) {
             return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
@@ -393,9 +393,9 @@ class ContentController extends AbstractController
 
         $request->attributes->set('content', $entity);
 
-//        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
-//            return $response;
-//        }
+        //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
+        //            return $response;
+        //        }
 
         if ($prevVersion) {
             $prevVersion = $entity->getVersions()->filter(fn (ContentVersionInterface $version) => $version->getId() == $prevVersion)->first();
@@ -414,20 +414,20 @@ class ContentController extends AbstractController
             'method' => 'POST',
             'content_type' => $config['_id'],
         ])->handleRequest($request);
-//
-//        $this->dispatchFromConfig($config, 'form_init_event_name', new FormEvent($form, $request));
-//
+        //
+        //        $this->dispatchFromConfig($config, 'form_init_event_name', new FormEvent($form, $request));
+        //
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
-//                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_valid_event_name', new GetResponseFormEvent($form, $request))) {
-//                    return $response;
-//                }
+                //                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_valid_event_name', new GetResponseFormEvent($form, $request))) {
+                //                    return $response;
+                //                }
 
                 $this->contentManager->saveEntity($entity);
 
-//                if ($response = $this->dispatchGetResponseFromConfig($config, 'success_event_name', new GetResponseEntityEvent($entity, $request))) {
-//                    return $response;
-//                }
+                //                if ($response = $this->dispatchGetResponseFromConfig($config, 'success_event_name', new GetResponseEntityEvent($entity, $request))) {
+                //                    return $response;
+                //                }
 
                 if ('content' == $request->request->get('goto')) {
                     return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_content", ['content' => $entity]);
@@ -442,10 +442,10 @@ class ContentController extends AbstractController
                 }
 
                 return !empty($config['content_success_redirect_to']) ? $this->redirectToRoute($config['content_success_redirect_to']) : $this->redirectBack($config['_id'], $entity, $request);
-//            } else {
-//                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_invalid_event_name', new GetResponseFormEvent($form, $request))) {
-//                    return $response;
-//                }
+                //            } else {
+                //                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_invalid_event_name', new GetResponseFormEvent($form, $request))) {
+                //                    return $response;
+                //                }
             }
         }
 
@@ -460,8 +460,8 @@ class ContentController extends AbstractController
             'form' => $form->createView(),
             'enabledLocales' => $this->enabledLocales,
         ]);
-//
-//        $this->dispatchFromConfig($config, 'view_event_name', new ViewEvent($viewData));
+        //
+        //        $this->dispatchFromConfig($config, 'view_event_name', new ViewEvent($viewData));
 
         return $this->render($config['content_view'], $viewData->getArrayCopy());
     }
@@ -473,39 +473,39 @@ class ContentController extends AbstractController
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
-//        if (!empty($config['is_granted'])) {
-//            $this->denyAccessUnlessGranted($config['is_granted'], null, sprintf('Access denied, user is not %s.', $config['is_granted']));
-//        }
+        //        if (!empty($config['is_granted'])) {
+        //            $this->denyAccessUnlessGranted($config['is_granted'], null, sprintf('Access denied, user is not %s.', $config['is_granted']));
+        //        }
 
         if (!$entity) {
             return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
-//        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
-//            return $response;
-//        }
+        //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
+        //            return $response;
+        //        }
 
         $form = $this->createForm($config['seo_type'], $entity, ['content' => $config, 'method' => 'POST'])->handleRequest($request);
-//
-//        $this->dispatchFromConfig($config, 'form_init_event_name', new FormEvent($form, $request));
-//
+        //
+        //        $this->dispatchFromConfig($config, 'form_init_event_name', new FormEvent($form, $request));
+        //
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
-//                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_valid_event_name', new GetResponseFormEvent($form, $request))) {
-//                    return $response;
-//                }
+                //                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_valid_event_name', new GetResponseFormEvent($form, $request))) {
+                //                    return $response;
+                //                }
 
                 $this->contentManager->saveEntity($entity);
 
-//                if ($response = $this->dispatchGetResponseFromConfig($config, 'success_event_name', new GetResponseEntityEvent($entity, $request))) {
-//                    return $response;
-//                }
+                //                if ($response = $this->dispatchGetResponseFromConfig($config, 'success_event_name', new GetResponseEntityEvent($entity, $request))) {
+                //                    return $response;
+                //                }
 
                 return !empty($config['seo_success_redirect_to']) ? $this->redirectToRoute($config['seo_success_redirect_to']) : $this->redirectBack($config['_id'], $entity, $request);
-//            } else {
-//                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_invalid_event_name', new GetResponseFormEvent($form, $request))) {
-//                    return $response;
-//                }
+                //            } else {
+                //                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_invalid_event_name', new GetResponseFormEvent($form, $request))) {
+                //                    return $response;
+                //                }
             }
         }
 
@@ -516,8 +516,8 @@ class ContentController extends AbstractController
             'entity' => $entity,
             'form' => $form->createView(),
         ]);
-//
-//        $this->dispatchFromConfig($config, 'view_event_name', new ViewEvent($viewData));
+        //
+        //        $this->dispatchFromConfig($config, 'view_event_name', new ViewEvent($viewData));
 
         return $this->render($config['seo_view'], $viewData->getArrayCopy());
     }
@@ -529,19 +529,19 @@ class ContentController extends AbstractController
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
-//        if (!empty($config['is_granted'])) {
-//            $this->denyAccessUnlessGranted($config['is_granted'], $entity, sprintf('Access denied, user is not %s.', $config['is_granted']));
-//        }
+        //        if (!empty($config['is_granted'])) {
+        //            $this->denyAccessUnlessGranted($config['is_granted'], $entity, sprintf('Access denied, user is not %s.', $config['is_granted']));
+        //        }
 
         if (!$entity) {
             return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
-//        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
-//            return $response;
-//        }
+        //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
+        //            return $response;
+        //        }
 
-//        $deleteForm = $this->getDeleteForm($entity, $request, $this->deleteForm);
+        //        $deleteForm = $this->getDeleteForm($entity, $request, $this->deleteForm);
 
         // show view
         $viewData = new \ArrayObject([
@@ -553,7 +553,7 @@ class ContentController extends AbstractController
             'enabledLocales' => $this->enabledLocales,
         ]);
 
-//        $this->dispatchFromConfig($config, 'view_event_name', new ViewEvent($viewData));
+        //        $this->dispatchFromConfig($config, 'view_event_name', new ViewEvent($viewData));
 
         return $this->render($config['preview_view'], $viewData->getArrayCopy());
     }
@@ -592,9 +592,9 @@ class ContentController extends AbstractController
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
-//        if (!empty($config['is_granted'])) {
-//            $this->denyAccessUnlessGranted($config['is_granted'], $entity, sprintf('Access denied, user is not %s.', $config['is_granted']));
-//        }
+        //        if (!empty($config['is_granted'])) {
+        //            $this->denyAccessUnlessGranted($config['is_granted'], $entity, sprintf('Access denied, user is not %s.', $config['is_granted']));
+        //        }
 
         if (!$entity) {
             return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
@@ -620,19 +620,19 @@ class ContentController extends AbstractController
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
-//        if (!empty($config['is_granted'])) {
-//            $this->denyAccessUnlessGranted($config['is_granted'], $entity, sprintf('Access denied, user is not %s.', $config['is_granted']));
-//        }
+        //        if (!empty($config['is_granted'])) {
+        //            $this->denyAccessUnlessGranted($config['is_granted'], $entity, sprintf('Access denied, user is not %s.', $config['is_granted']));
+        //        }
 
         if (!$entity) {
             return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
-//        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
-//            return $response;
-//        }
+        //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
+        //            return $response;
+        //        }
 
-//        $deleteForm = $this->getDeleteForm($entity, $request, $this->deleteForm);
+        //        $deleteForm = $this->getDeleteForm($entity, $request, $this->deleteForm);
 
         // show view
         $viewData = new \ArrayObject([
@@ -642,7 +642,7 @@ class ContentController extends AbstractController
 //            'deleteForm' => $deleteForm ? $deleteForm->createView() : null,
         ]);
 
-//        $this->dispatchFromConfig($config, 'view_event_name', new ViewEvent($viewData));
+        //        $this->dispatchFromConfig($config, 'view_event_name', new ViewEvent($viewData));
 
         return $this->render($config['versions_view'], $viewData->getArrayCopy());
     }
@@ -655,9 +655,9 @@ class ContentController extends AbstractController
         /** @var ?ContentInterface $entity */
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
-//        if (!empty($config['is_granted'])) {
-//            $this->denyAccessUnlessGranted($config['is_granted'], $entity, sprintf('Access denied, user is not %s.', $config['is_granted']));
-//        }
+        //        if (!empty($config['is_granted'])) {
+        //            $this->denyAccessUnlessGranted($config['is_granted'], $entity, sprintf('Access denied, user is not %s.', $config['is_granted']));
+        //        }
 
         if (!$entity) {
             return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");

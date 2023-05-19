@@ -25,7 +25,7 @@ class ContentController extends AbstractController
         $publishedVersion = $content->getPublishedVersion();
 
         if (!$publishedVersion) {
-            return new Response('', Response::HTTP_NOT_FOUND);
+            throw $this->createNotFoundException();
         }
 
         $pageContent = $publishedVersion->getCompiled()[$request->getLocale()] ?? $this->contentRender->render($publishedVersion);

@@ -2,8 +2,8 @@
 
 namespace Softspring\CmsBundle\Form\Admin\Content;
 
-use Softspring\Component\CrudlController\Form\EntityCreateFormInterface;
+use Symfony\Component\Form\FormTypeInterface;
 
-interface ContentCreateFormInterface extends EntityCreateFormInterface
+interface ContentCreateFormInterface extends FormTypeInterface
 {
 }

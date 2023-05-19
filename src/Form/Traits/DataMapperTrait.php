@@ -11,7 +11,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 
 trait DataMapperTrait
 {
-    public function mapDataToForms($data, iterable $forms)
+    public function mapDataToForms($data, iterable $forms): void
     {
         $empty = null === $data || [] === $data;
 
@@ -31,7 +31,7 @@ trait DataMapperTrait
         }
     }
 
-    public function mapFormsToData(iterable $forms, &$data)
+    public function mapFormsToData(iterable $forms, &$data): void
     {
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
 

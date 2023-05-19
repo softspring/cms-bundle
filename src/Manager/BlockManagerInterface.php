@@ -8,17 +8,17 @@ use Softspring\Component\CrudlController\Manager\CrudlEntityManagerInterface;
 interface BlockManagerInterface extends CrudlEntityManagerInterface
 {
     /**
-     * @return BlockInterface
+     * @psalm-return BlockInterface
      */
     public function createEntity(string $blockType = null): object;
 
     /**
-     * @param BlockInterface $entity
+     * @psalm-param BlockInterface $entity
      */
     public function saveEntity(object $entity): void;
 
     /**
-     * @param BlockInterface $entity
+     * @psalm-param BlockInterface $entity
      */
     public function deleteEntity(object $entity): void;
 }

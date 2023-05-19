@@ -74,6 +74,7 @@ class Site implements ConfigurationInterface
                         ->children()
                             ->scalarNode('path')->isRequired()->end()
                             ->scalarNode('locale')->defaultFalse()->end()
+                            ->scalarNode('trailing_slash_on_root')->defaultFalse()->end()
                         ->end()
                     ->end()
                 ->end()

@@ -44,6 +44,7 @@ class ContentCreateForm extends AbstractType implements ContentCreateFormInterfa
         if (!empty($options['content']['extra_fields'])) {
             $builder->add('extraData', DynamicFormType::class, [
                 'form_fields' => $options['content']['extra_fields'],
+                'translation_domain' => 'sfs_cms_contents',
             ]);
         }
 

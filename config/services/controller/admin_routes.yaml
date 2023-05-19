@@ -19,8 +19,8 @@ services:
     Softspring\CmsBundle\Form\Admin\Route\:
         resource: '../../../src/Form/Admin/Route/Route*'
 
-    Softspring\CmsBundle\EventListener\Admin\:
-        resource: '../../../src/EventListener/Admin/Route*'
+#    Softspring\CmsBundle\EventListener\Admin\:
+#        resource: '../../../src/EventListener/Admin/Route*'
 
     Softspring\CmsBundle\Manager\RouteManagerInterface:
         class: Softspring\CmsBundle\Manager\RouteManager

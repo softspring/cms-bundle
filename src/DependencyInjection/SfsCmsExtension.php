@@ -64,7 +64,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         // configure block classes
         $container->setParameter('sfs_cms.block.class', $config['block']['class'] ?? null);
         $container->setParameter('sfs_cms.block.find_field_name', $config['block']['find_field_name'] ?? null);
-//        $container->setParameter('sfs_cms.block.types', $config['block']['types'] ?? []);
+        //        $container->setParameter('sfs_cms.block.types', $config['block']['types'] ?? []);
 
         // load services
         $loader->load('services.yaml');
@@ -110,10 +110,11 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
             ],
         ]);
 
+        $doctrineConfig = $container->getExtensionConfig('doctrine_migrations');
         $container->prependExtensionConfig('doctrine_migrations', [
-            'migrations_paths' => [
+            'migrations_paths' => array_merge(array_pop($doctrineConfig)['migrations_paths'] ?? [], [
                 'Softspring\CmsBundle\Migrations' => '@SfsCmsBundle/src/Migrations',
-            ],
+            ]),
         ]);
     }
 }

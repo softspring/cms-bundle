@@ -12,14 +12,14 @@ abstract class Content implements ContentInterface
     protected ?string $site = null;
 
     /**
-     * @var ContentVersionInterface[]|Collection
+     * @psalm-var ContentVersionInterface[]|Collection
      */
     protected Collection $versions;
 
     protected ?int $lastVersionNumber = null;
 
     /**
-     * @var RouteInterface[]|Collection
+     * @psalm-var RouteInterface[]|Collection
      */
     protected Collection $routes;
 
@@ -62,7 +62,7 @@ abstract class Content implements ContentInterface
     }
 
     /**
-     * @return Collection|ContentVersionInterface[]
+     * @psalm-return Collection|ContentVersionInterface[]
      */
     public function getVersions(): Collection
     {
@@ -95,7 +95,7 @@ abstract class Content implements ContentInterface
     }
 
     /**
-     * @return Collection|RouteInterface[]
+     * @psalm-return Collection|RouteInterface[]
      */
     public function getRoutes(): Collection
     {

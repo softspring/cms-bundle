@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Routing;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface;
@@ -18,12 +19,14 @@ class CmsRouter implements RouterInterface, RequestMatcherInterface, WarmableInt
     protected Router $staticRouter;
     protected UrlMatcher $urlMatcher;
     protected UrlGenerator $urlGenerator;
+    protected LoggerInterface $logger;
 
-    public function __construct(Router $staticRouter, UrlMatcher $urlMatcher, UrlGenerator $urlGenerator)
+    public function __construct(Router $staticRouter, UrlMatcher $urlMatcher, UrlGenerator $urlGenerator, LoggerInterface $cmsLogger)
     {
         $this->staticRouter = $staticRouter;
         $this->urlMatcher = $urlMatcher;
         $this->urlGenerator = $urlGenerator;
+        $this->logger = $cmsLogger;
     }
 
     public function setContext(RequestContext $context): void
@@ -47,19 +50,21 @@ class CmsRouter implements RouterInterface, RequestMatcherInterface, WarmableInt
             // first try to generate with Symfony's route generator
             return $this->staticRouter->generate($name, $parameters, $referenceType);
         } catch (RouteNotFoundException $e) {
+            $params = array_filter($parameters, fn ($key) => '_locale' != $key, ARRAY_FILTER_USE_KEY);
+
             // if it does not exist, try witch CMS routes
             switch ($referenceType) {
                 case UrlGeneratorInterface::ABSOLUTE_URL:
-                    $url = $this->urlGenerator->getUrl($name, $parameters['_locale'] ?? '', isset($parameters['__twig_extra_route_defined_check']));
+                    $url = $this->urlGenerator->getUrl($name, $parameters['_locale'] ?? '', $params, isset($parameters['__twig_extra_route_defined_check']));
                     break;
 
                 case UrlGeneratorInterface::ABSOLUTE_PATH:
                 case UrlGeneratorInterface::RELATIVE_PATH:
-                    $url = $this->urlGenerator->getPath($name, $parameters['_locale'] ?? '', isset($parameters['__twig_extra_route_defined_check']));
+                    $url = $this->urlGenerator->getPath($name, $parameters['_locale'] ?? '', $params, isset($parameters['__twig_extra_route_defined_check']));
                     break;
 
                 case UrlGeneratorInterface::NETWORK_PATH:
-                    $url = $this->urlGenerator->getUrl($name, $parameters['_locale'] ?? '', isset($parameters['__twig_extra_route_defined_check']));
+                    $url = $this->urlGenerator->getUrl($name, $parameters['_locale'] ?? '', $params, isset($parameters['__twig_extra_route_defined_check']));
                     $url = preg_replace('/^(https?)/', '', $url);
                     break;
 
@@ -78,7 +83,12 @@ class CmsRouter implements RouterInterface, RequestMatcherInterface, WarmableInt
 
     public function matchRequest(Request $request): array
     {
-        $attributes = $this->urlMatcher->matchRequest($request);
+        try {
+            $attributes = $this->urlMatcher->matchRequest($request);
+        } catch (\Exception $e) {
+            $attributes = [];
+            $this->logger->warning(sprintf('Caught exception in CmsRouter->matchRequest: %s', $e->getMessage()));
+        }
 
         if (isset($attributes['_controller'])) {
             return $attributes;

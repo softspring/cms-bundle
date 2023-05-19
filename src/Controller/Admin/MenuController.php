@@ -101,20 +101,20 @@ class MenuController extends AbstractController
 
     public function delete(string $menu, Request $request): Response
     {
-//        $config = $this->getMenuConfig($request);
+        //        $config = $this->getMenuConfig($request);
 
         return new Response();
     }
 
     public function list(Request $request, MenuListFilterFormInterface $filterForm): Response
     {
-//        if (!empty($config['list_is_granted'])) {
-//            $this->denyAccessUnlessGranted($config['list_is_granted'], null, sprintf('Access denied, user is not %s.', $config['list_is_granted']));
-//        }
-//
-//        if ($response = $this->dispatchGetResponse("sfs_cms.admin.menus.initialize_event_name", new GetResponseRequestEvent($request))) {
-//            return $response;
-//        }
+        //        if (!empty($config['list_is_granted'])) {
+        //            $this->denyAccessUnlessGranted($config['list_is_granted'], null, sprintf('Access denied, user is not %s.', $config['list_is_granted']));
+        //        }
+        //
+        //        if ($response = $this->dispatchGetResponse("sfs_cms.admin.menus.initialize_event_name", new GetResponseRequestEvent($request))) {
+        //            return $response;
+        //        }
 
         $form = $this->createForm(get_class($filterForm))->handleRequest($request);
         $filterEvent = FilterEvent::createFromFilterForm($form, $request);
