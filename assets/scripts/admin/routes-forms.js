@@ -132,9 +132,9 @@ window.addEventListener('load', (event) => {
         });
     });
 
-    [...document.querySelectorAll('[data-route-params]')].forEach((routeParamsField) => {
-        if (!routeParamsField.value) {
-            routeParamsField.closest('div').classList.add('d-none');
+    [...document.querySelectorAll('[data-route-params]')].forEach((routeNameField) => {
+        if (!routeNameField.value) {
+            document.getElementById(routeNameField.dataset.routeParams).closest('div').classList.add('d-none');
         }
     });
 });
