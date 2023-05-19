@@ -116,12 +116,14 @@ admin_routes:
             cacheTtl.label: "Tiempo de cache"
         id.label: "Identificador"
         site.label: "Sitio"
+        parent.label: "Ruta padre"
         type:
             label: "Tipo"
             values:
                 content: "Contenido"
                 redirect_to_route: "Redirección a ruta"
                 redirect_to_url: "Redirección a URL"
+                parent_route: "Padre"
         content.label: "Contenido"
         redirectUrl.label: "Redirigir a URL"
         symfonyRoute:

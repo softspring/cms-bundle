@@ -75,6 +75,11 @@ class DataExporter extends AbstractDataImportExport
         $filePath = YamlContent::save($transformer->export($content, $files, $contentVersion, $contentType), $file);
 
         foreach ($content->getRoutes() as $route) {
+            $parentRoute = $route->getParent();
+            while ($parentRoute) {
+                self::exportRoute($parentRoute, $path);
+                $parentRoute = $parentRoute->getParent();
+            }
             self::exportRoute($route, $path);
         }
 

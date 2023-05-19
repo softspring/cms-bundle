@@ -5,6 +5,7 @@ namespace Softspring\CmsBundle\Data;
 use Doctrine\ORM\EntityManagerInterface;
 use Softspring\CmsBundle\Data\EntityTransformer\EntityTransformerInterface;
 use Softspring\CmsBundle\Data\Exception\DataTransformerNotFoundException;
+use Softspring\CmsBundle\Model\RouteInterface;
 
 class DataImporter extends AbstractDataImportExport
 {
@@ -42,11 +43,22 @@ class DataImporter extends AbstractDataImportExport
         $this->em->flush();
         unset($contents['media']);
 
+        // import parent routes before to allow import children
+        foreach ($contents['routes'] ?? [] as $routeData) {
+            if (RouteInterface::TYPE_PARENT_ROUTE === $routeData['route']['type']) {
+                $parentRoute = $this->getDataTransformer('routes', $routeData)->import($routeData, $this->referenceRepository, $options);
+                $this->em->persist($parentRoute);
+            }
+        }
+        $this->em->flush();
+
         // import rest of contents
         foreach ($contents as $type => $elements) {
             foreach ($elements as $data) {
-                $entity = $this->getDataTransformer($type, $data)->import($data, $this->referenceRepository, $options);
-                $this->em->persist($entity);
+                if ('routes' !== $type || RouteInterface::TYPE_PARENT_ROUTE !== $data['route']['type']) {
+                    $entity = $this->getDataTransformer($type, $data)->import($data, $this->referenceRepository, $options);
+                    $this->em->persist($entity);
+                }
             }
         }
         $this->em->flush();

@@ -28,6 +28,9 @@ interface RouteInterface
 
     public function setParent(?RouteInterface $parent): void;
 
+    /**
+     * @psalm-return RouteInterface[]|Collection|null
+     */
     public function getChildren(): ?Collection;
 
     public function addChild(RouteInterface $child): void;
