@@ -101,7 +101,7 @@ admin_routes:
         fields:
             id.header: "Route"
             site.header: "Site"
-            page.header: "Page"
+            content.header: "Content"
             path.header: "URL"
             type.header: "Type"
         filter_form:
@@ -116,12 +116,14 @@ admin_routes:
             cacheTtl.label: "Cache time"
         id.label: "Identifier"
         site.label: "Site"
+        parent.label: "Parent route"
         type:
             label: "Type"
             values:
                 content: "Content"
                 redirect_to_route: "Redirect to route"
                 redirect_to_url: "Redirect to URL"
+                parent_route: "Parent"
         content.label: "Content"
         redirectUrl.label: "Redirect URL"
         symfonyRoute:

@@ -14,6 +14,10 @@
         <many-to-one field="content" target-entity="Softspring\CmsBundle\Model\ContentInterface" inversed-by="routes">
             <join-column name="content_id" referenced-column-name="id" on-delete="CASCADE" />
         </many-to-one>
+
+        <many-to-one field="parent" target-entity="Softspring\CmsBundle\Model\RouteInterface" inversed-by="children">
+            <join-column name="parent_id" referenced-column-name="id" on-delete="RESTRICT" />
+        </many-to-one>
     </mapped-superclass>
 
 </doctrine-mapping>

@@ -24,6 +24,19 @@ interface RouteInterface
 
     public function setSite(?string $site): void;
 
+    public function getParent(): ?RouteInterface;
+
+    public function setParent(?RouteInterface $parent): void;
+
+    /**
+     * @psalm-return RouteInterface[]|Collection|null
+     */
+    public function getChildren(): ?Collection;
+
+    public function addChild(RouteInterface $child): void;
+
+    public function removeChild(RouteInterface $child): void;
+
     /**
      * @psalm-return RoutePathInterface[]|Collection
      */
@@ -48,4 +61,8 @@ interface RouteInterface
     public function getRedirectType(): ?int;
 
     public function setRedirectType(?int $redirectType): void;
+
+    public function compilePaths(): void;
+
+    public function compileChildrenPaths(): void;
 }

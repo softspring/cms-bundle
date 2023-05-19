@@ -12,6 +12,12 @@
             </options>
         </field>
 
+        <field name="compiledPath" column="compiled_path" nullable="true" length="255">
+            <options>
+                <option name="fixed">true</option>
+            </options>
+        </field>
+
         <field name="cacheTtl" column="cache_ttl" type="integer" nullable="true">
             <options>
                 <option name="unsigned">true</option>

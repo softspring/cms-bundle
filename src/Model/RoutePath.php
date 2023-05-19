@@ -12,6 +12,8 @@ abstract class RoutePath implements RoutePathInterface
 
     protected ?string $path = null;
 
+    protected ?string $compiledPath = null;
+
     protected ?int $cacheTtl = null;
 
     protected ?string $locale = null;
@@ -29,6 +31,8 @@ abstract class RoutePath implements RoutePathInterface
     public function setRoute(?RouteInterface $route): void
     {
         $this->route = $route;
+        $this->compilePath();
+        $this->getRoute()?->compileChildrenPaths();
     }
 
     public function getSite(): ?string
@@ -49,6 +53,18 @@ abstract class RoutePath implements RoutePathInterface
     public function setPath(?string $path): void
     {
         $this->path = $path;
+        $this->compilePath();
+        $this->getRoute()?->compileChildrenPaths();
+    }
+
+    public function getCompiledPath(): ?string
+    {
+        return $this->compiledPath;
+    }
+
+    public function setCompiledPath(?string $compiledPath): void
+    {
+        $this->compiledPath = $compiledPath;
     }
 
     public function getCacheTtl(): ?int
@@ -69,5 +85,40 @@ abstract class RoutePath implements RoutePathInterface
     public function setLocale(?string $locale): void
     {
         $this->locale = $locale;
+        $this->compilePath();
+        $this->getRoute()?->compileChildrenPaths();
+    }
+
+    public function compilePath(): void
+    {
+        if (!$this->getRoute()) {
+            // not yet
+            return;
+        }
+
+        if (RouteInterface::TYPE_PARENT_ROUTE == $this->getRoute()->getType()) {
+            $this->compiledPath = null;
+
+            $this->getRoute()->compileChildrenPaths();
+
+            return;
+        }
+
+        $slugs = [];
+
+        $parentRoute = $this->getRoute()->getParent();
+        while ($parentRoute) {
+            /** @var RoutePathInterface|false $parentRoutePath */
+            $parentRoutePath = $parentRoute->getPaths()->filter(fn (RoutePathInterface $path) => $path->getLocale() == $this->getLocale())->first();
+            if ($parentRoutePath) {
+                $slugs[] = $parentRoutePath->getPath();
+            }
+            $parentRoute = $parentRoute->getParent();
+        }
+
+        $slugs = array_reverse($slugs);
+        $slugs[] = $this->getPath();
+
+        $this->setCompiledPath(trim(implode('/', $slugs), '/'));
     }
 }

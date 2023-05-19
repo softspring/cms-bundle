@@ -48,6 +48,7 @@ class RouteEntityTransformer implements EntityTransformerInterface
                 'id' => $route->getId(),
                 'site' => $route->getSite(),
                 'type' => $route->getType(),
+                'parent' => $route->getParent()?->getId(),
                 'symfony_route' => $route->getSymfonyRoute(),
                 'content' => null,
                 'redirect_type' => $route->getRedirectType(),
@@ -91,14 +92,16 @@ class RouteEntityTransformer implements EntityTransformerInterface
         $route->setSite($routeData['site']);
         $route->setType(RouteInterface::TYPE_UNKNOWN);
 
+        if ($routeData['parent']) {
+            $route->setParent($referencesRepository->getReference("route___{$routeData['parent']}", true));
+        }
+
         switch ($routeData['type']) {
             case RouteInterface::TYPE_CONTENT:
-                $route->setType(RouteInterface::TYPE_CONTENT);
                 $route->setContent($referencesRepository->getReference("content___{$routeData['content']}", true));
                 break;
 
             case RouteInterface::TYPE_REDIRECT_TO_URL:
-                $route->setType(RouteInterface::TYPE_REDIRECT_TO_URL);
                 $route->setRedirectUrl($routeData['redirect_url']);
                 $route->setRedirectType($routeData['redirect_type']);
                 break;
@@ -107,9 +110,16 @@ class RouteEntityTransformer implements EntityTransformerInterface
                 $route->setSymfonyRoute($routeData['symfony_route']);
                 break;
 
+            case RouteInterface::TYPE_PARENT_ROUTE:
+                // nothing to do
+                break;
+
             default:
                 throw new \Exception(sprintf('Route type %u not yet implemented', $routeData['type']));
         }
+
+        // store valid type
+        $route->setType($routeData['type']);
 
         foreach ($route->getPaths() as $existingPath) {
             $route->removePath($existingPath);

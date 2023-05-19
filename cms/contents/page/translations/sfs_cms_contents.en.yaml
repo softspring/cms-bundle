@@ -154,6 +154,7 @@ admin_page:
             label: "Routes"
             id.label: "Route id"
             site.label: "Site"
+            parent.label: "Parent route"
             paths:
                 label: "URLs"
                 path.label: "URL segment"
