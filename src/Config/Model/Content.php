@@ -9,6 +9,7 @@ use Softspring\CmsBundle\Form\Admin\Content\ContentImportForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentListFilterForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentSeoForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentUpdateForm;
+use Softspring\CmsBundle\Form\Admin\Content\ContentVersionImportForm;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -121,6 +122,10 @@ class Content implements ConfigurationInterface
                         ->scalarNode('import_view')->defaultValue('@SfsCms/admin/content/import.html.twig')->end()
                         ->scalarNode('import_type')->defaultValue(ContentImportForm::class)->end()
                         ->scalarNode('import_success_redirect_to')->defaultValue('')->end()
+                        ->scalarNode('import_version_is_granted')->defaultValue('')->end()
+                        ->scalarNode('import_version_view')->defaultValue('@SfsCms/admin/content/import_version.html.twig')->end()
+                        ->scalarNode('import_version_type')->defaultValue(ContentVersionImportForm::class)->end()
+                        ->scalarNode('import_version_success_redirect_to')->defaultValue('')->end()
                         ->scalarNode('read_view')->defaultValue('@SfsCms/admin/content/read.html.twig')->end()
                         ->scalarNode('preview_view')->defaultValue('@SfsCms/admin/content/preview.html.twig')->end()
                         ->scalarNode('versions_view')->defaultValue('@SfsCms/admin/content/versions.html.twig')->end()

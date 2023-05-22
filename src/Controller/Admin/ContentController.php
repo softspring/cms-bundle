@@ -20,6 +20,7 @@ use Softspring\Component\Events\GetResponseRequestEvent;
 use Softspring\Component\Events\ViewEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\WebProfilerBundle\EventListener\WebDebugToolbarListener;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -338,6 +339,93 @@ class ContentController extends AbstractController
         return $this->render($config['import_view'], $viewData->getArrayCopy());
     }
 
+    public function importVersion(string $content, Request $request): Response
+    {
+        $contentConfig = $this->getContentConfig($request);
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']] + ['extra_fields' => $contentConfig['extra_fields']];
+
+        /** @var ?ContentInterface $entity */
+        $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
+
+        if (!$entity) {
+            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
+        }
+        //        if (!empty($config['is_granted'])) {
+        //            $this->denyAccessUnlessGranted($config['is_granted'], null, sprintf('Access denied, user is not %s.', $config['is_granted']));
+        //        }
+
+        //        $entity = $this->contentManager->createEntity($config['_id']);
+        //        $entity->addRoute($this->routeManager->createEntity());
+
+        //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
+        //            return $response;
+        //        }
+
+        $form = $this->createForm($config['import_version_type'], null, ['content' => $config, 'method' => 'POST'])->handleRequest($request);
+        //
+        //        $this->dispatchFromConfig($config, 'form_init_event_name', new FormEvent($form, $request));
+        //
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                //                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_valid_event_name', new GetResponseFormEvent($form, $request))) {
+                //                    return $response;
+                //                }
+
+                /** @var UploadedFile $zipFile */
+                $zipFile = $form->getData()['file'];
+                $data = ZipContent::read($zipFile->getPath(), $zipFile->getBasename());
+
+                // TODO MOVE THIS CODE TO A DATA PROCESSOR
+                foreach ($data['contents'] as $id => $content) {
+                    $contentType = key($content);
+                    $contentData = current($content);
+                    $versionData = $contentData['versions'][0];
+
+                    if ($contentType !== $contentConfig['_id']) {
+                        $form->addError(new FormError(sprintf('Incompatible types, you are trying to import a "%s" version to a "%s" content.', $contentType, $contentConfig['_id'])));
+                        break;
+                    }
+
+                    //                    if ($id !== $entity->getId()) {
+                    //                        $form->addError(new FormError('Bad type'));
+                    //                        break;
+                    //                    }
+
+                    try {
+                        $version = $this->dataImporter->importVersion($contentType, $entity, $versionData, $data, ['version_origin' => ContentVersionInterface::ORIGIN_IMPORT]);
+                        $version->setOriginDescription($zipFile->getClientOriginalName());
+                        $this->contentManager->saveEntity($entity);
+
+                        //                if ($response = $this->dispatchGetResponseFromConfig($config, 'success_event_name', new GetResponseEntityEvent($entity, $request))) {
+                        //                    return $response;
+                        //                }
+
+                        return $this->redirect(!empty($config['import_version_success_redirect_to']) ? $this->generateUrl($config['import_version_success_redirect_to']) : $this->generateUrl("sfs_cms_admin_content_{$config['_id']}_versions", ['content' => $entity]));
+                    } catch (\Exception $e) {
+                        $form->addError(new FormError(sprintf('Han error has been produced during importing: %s', $e->getMessage())));
+                    }
+                }
+
+                //            } else {
+                //                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_invalid_event_name', new GetResponseFormEvent($form, $request))) {
+                //                    return $response;
+                //                }
+            }
+        }
+
+        // show view
+        $viewData = new \ArrayObject([
+            'entity' => $entity,
+            'content' => $config['_id'],
+            'content_config' => $contentConfig,
+            'form' => $form->createView(),
+        ]);
+        //
+        //        $this->dispatchFromConfig($config, 'view_event_name', new ViewEvent($viewData));
+
+        return $this->render($config['import_version_view'], $viewData->getArrayCopy());
+    }
+
     public function list(Request $request): Response
     {
         $contentConfig = $this->getContentConfig($request);
@@ -402,6 +490,7 @@ class ContentController extends AbstractController
         }
 
         $version = $this->contentManager->createVersion($entity, $prevVersion, ContentVersionInterface::ORIGIN_EDIT);
+        $prevVersion && $version->setOriginDescription('v'.$prevVersion->getVersionNumber());
 
         /** @var ?array $contentContentForm */
         $contentContentForm = $request->request->get('content_content_form');
@@ -585,6 +674,26 @@ class ContentController extends AbstractController
         return $this->redirectBack($config['_id'], $entity, $request, $version);
     }
 
+    public function unpublish(string $content, Request $request): Response
+    {
+        $contentConfig = $this->getContentConfig($request);
+        $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']] + ['extra_fields' => $contentConfig['extra_fields']];
+
+        /** @var ?ContentInterface $entity */
+        $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
+
+        if (!$entity) {
+            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
+        }
+
+        $entity->setPublishedVersion(null);
+        $this->contentManager->saveEntity($entity);
+
+        $request->getSession()->getFlashBag()->add('success', $this->translator->trans('admin_'.$config['_id'].'.unpublish.has_been_unpublished_flash', [], 'sfs_cms_contents'));
+
+        return $this->redirectBack($config['_id'], $entity, $request);
+    }
+
     public function previewContent(string $content, Request $request, string $version = null): Response
     {
         $contentConfig = $this->getContentConfig($request);
@@ -731,12 +840,11 @@ class ContentController extends AbstractController
 
             case 'preview':
                 if ($version) {
-                    return $this->redirectToRoute("sfs_cms_admin_content_{$configId}_preview", ['content' => $entity]);
-                } else {
                     return $this->redirectToRoute("sfs_cms_admin_content_{$configId}_preview_version", ['content' => $entity, 'version' => $version]);
                 }
 
-                // no break
+                return $this->redirectToRoute("sfs_cms_admin_content_{$configId}_preview", ['content' => $entity]);
+
             default:
                 return $this->redirectToRoute("sfs_cms_admin_content_{$configId}_details", ['content' => $entity]);
         }

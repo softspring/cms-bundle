@@ -11,6 +11,10 @@ abstract class ContentVersion implements ContentVersionInterface
 
     protected ?int $origin = null;
 
+    protected ?string $originDescription = null;
+
+    protected ?string $note = null;
+
     protected ?string $layout = null;
 
     protected ?int $createdAt = null;
@@ -47,6 +51,26 @@ abstract class ContentVersion implements ContentVersionInterface
     public function setOrigin(?int $origin): void
     {
         $this->origin = $origin;
+    }
+
+    public function getOriginDescription(): ?string
+    {
+        return $this->originDescription;
+    }
+
+    public function setOriginDescription(?string $originDescription): void
+    {
+        $this->originDescription = $originDescription;
+    }
+
+    public function getNote(): ?string
+    {
+        return $this->note;
+    }
+
+    public function setNote(?string $note): void
+    {
+        $this->note = $note;
     }
 
     public function getLayout(): ?string

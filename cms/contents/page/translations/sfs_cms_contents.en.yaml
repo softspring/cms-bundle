@@ -20,6 +20,9 @@ admin_page:
     publish:
         version_has_been_published_flash: "Version has been published"
 
+    unpublish:
+        has_been_unpublished_flash: "The page has been unpublished"
+
     import:
         meta.title: "Import page"
         title: "Import page"
@@ -30,10 +33,24 @@ admin_page:
         form:
             file.label: "Import content file"
 
+    import_version:
+        meta.title: "Import version"
+        title: "Import version"
+        breadcrumb: "Import version"
+        actions:
+            import.button: "Import version"
+            cancel.button: "Cancel"
+        form:
+            file.label: "Import content file"
+
     read:
         meta.title: "General"
         title: "%name%"
         breadcrumb: "General"
+        actions:
+            unpublish:
+                confirm: "are you sure to unpublish this page?"
+                link: "Unpublish"
 
     versions:
         meta.title: "Versions"
@@ -57,6 +74,7 @@ admin_page:
             preview.link: "Preview"
             export.link: "Export"
             publish.link: "Publish version"
+            import_version.link: "Import version"
             cleanup_versions.link: "Cleanup versions"
             keep.link: "Keep version, click to no keep"
             nokeep.link: "Do not keep version, click to keep"
