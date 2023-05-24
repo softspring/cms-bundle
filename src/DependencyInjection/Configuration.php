@@ -26,6 +26,7 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->enumNode('identification')->values(['domain', 'path'])->defaultValue('domain')->end()
+                        ->scalarNode('class')->defaultValue('Softspring\CmsBundle\Entity\Site')->end()
                         ->booleanNode('throw_not_found')->defaultTrue()->end()
                     ->end()
                 ->end()

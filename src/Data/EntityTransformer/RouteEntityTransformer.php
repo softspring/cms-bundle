@@ -8,18 +8,22 @@ use Softspring\CmsBundle\Data\Exception\RunPreloadBeforeImportException;
 use Softspring\CmsBundle\Data\ReferencesRepository;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Manager\RoutePathManagerInterface;
+use Softspring\CmsBundle\Manager\SiteManagerInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
+use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\Utils\Slugger;
 
 class RouteEntityTransformer implements EntityTransformerInterface
 {
     protected RouteManagerInterface $routeManager;
     protected RoutePathManagerInterface $routePathManager;
+    protected SiteManagerInterface $siteManager;
 
-    public function __construct(RouteManagerInterface $routeManager, RoutePathManagerInterface $routePathManager)
+    public function __construct(RouteManagerInterface $routeManager, RoutePathManagerInterface $routePathManager, SiteManagerInterface $siteManager)
     {
         $this->routeManager = $routeManager;
         $this->routePathManager = $routePathManager;
+        $this->siteManager = $siteManager;
     }
 
     public static function getPriority(): int
@@ -46,7 +50,7 @@ class RouteEntityTransformer implements EntityTransformerInterface
         $dump = [
             'route' => [
                 'id' => $route->getId(),
-                'site' => $route->getSite(),
+                'sites' => $route->getSites()->map(fn(SiteInterface $site) => $site->getId())->toArray(),
                 'type' => $route->getType(),
                 'parent' => $route->getParent()?->getId(),
                 'symfony_route' => $route->getSymfonyRoute(),
@@ -89,7 +93,14 @@ class RouteEntityTransformer implements EntityTransformerInterface
         }
 
         $route->setId($routeData['id']);
-        $route->setSite($routeData['site']);
+
+        // @deprecated: FIX OLD FIXTURES
+        $routeData['sites'] = isset($routeData['site']) ? [$routeData['site']] : $routeData['sites'];
+
+        foreach ($routeData['sites'] as $site) {
+            $route->addSite($referencesRepository->getReference("site___{$site}", true));
+        }
+
         $route->setType(RouteInterface::TYPE_UNKNOWN);
 
         if ($routeData['parent']) {

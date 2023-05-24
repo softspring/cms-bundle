@@ -11,6 +11,19 @@
     </div>
 {% endblock module_locale_filter_widget %}
 
+{% block module_site_filter_widget %}
+    <div class="input-group mb-3">
+        <div {{ block('widget_container_attributes') }} class="row">
+            {%- for child in form %}
+                <div class="col">
+                    {{- form_widget(child, {'attr': {'data-cms-module-site-filter':''}}) -}}
+                    {{- form_label(child, null, {translation_domain: choice_translation_domain}) -}}
+                </div>
+            {% endfor -%}
+        </div>
+    </div>
+{% endblock module_site_filter_widget %}
+
 {% block module_collection_row %}
     {% with { 'attr': form.vars.collection_row_attr|default({}) } %}
         <div {{ block('attributes') }}>
@@ -120,6 +133,11 @@
                     <div class="alert alert-warning mt-3" role="alert">{{ form.vars.deprecated }}</div>
                 {% endif %}
 
+                {% if form.site_filter is defined %}
+                    {{ form_label(form.site_filter) }}
+                    {{ form_widget(form.site_filter) }}
+                {% endif %}
+
                 {% if form.locale_filter is defined %}
                     {{ form_label(form.locale_filter) }}
                     {{ form_widget(form.locale_filter) }}
@@ -179,6 +197,11 @@
             <div class="container">
                 {% if form.vars.deprecated %}
                     <div class="alert alert-warning mt-3" role="alert">{{ form.vars.deprecated }}</div>
+                {% endif %}
+
+                {% if form.site_filter is defined %}
+                    {{ form_label(form.site_filter) }}
+                    {{ form_widget(form.site_filter) }}
                 {% endif %}
 
                 {% if form.locale_filter is defined %}
@@ -243,6 +266,11 @@
             <div class="container">
                 {% if form.vars.deprecated %}
                     <div class="alert alert-warning mt-3" role="alert">{{ form.vars.deprecated }}</div>
+                {% endif %}
+
+                {% if form.site_filter is defined %}
+                    {{ form_label(form.site_filter) }}
+                    {{ form_widget(form.site_filter) }}
                 {% endif %}
 
                 {% if form.locale_filter is defined %}

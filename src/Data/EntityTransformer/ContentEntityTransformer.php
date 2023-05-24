@@ -9,8 +9,10 @@ use Softspring\CmsBundle\Data\Exception\RunPreloadBeforeImportException;
 use Softspring\CmsBundle\Data\ReferencesRepository;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
+use Softspring\CmsBundle\Manager\SiteManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
+use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\Utils\Slugger;
 use Softspring\MediaBundle\EntityManager\MediaManagerInterface;
 
@@ -19,13 +21,15 @@ abstract class ContentEntityTransformer implements ContentEntityTransformerInter
     protected ContentManagerInterface $contentManager;
     protected RouteManagerInterface $routeManager;
     protected MediaManagerInterface $mediaManager;
+    protected SiteManagerInterface $siteManager;
     protected DataTransformer $dataTransformer;
 
-    public function __construct(ContentManagerInterface $contentManager, RouteManagerInterface $routeManager, MediaManagerInterface $mediaManager, DataTransformer $dataTransformer)
+    public function __construct(ContentManagerInterface $contentManager, RouteManagerInterface $routeManager, MediaManagerInterface $mediaManager, SiteManagerInterface $siteManager, DataTransformer $dataTransformer)
     {
         $this->contentManager = $contentManager;
         $this->routeManager = $routeManager;
         $this->mediaManager = $mediaManager;
+        $this->siteManager = $siteManager;
         $this->dataTransformer = $dataTransformer;
     }
 
@@ -75,7 +79,7 @@ abstract class ContentEntityTransformer implements ContentEntityTransformerInter
         return [
             $contentType => [
                 'name' => $content->getName(),
-                'site' => $content->getSite(),
+                'sites' => $content->getSites()->map(fn(SiteInterface $site) => $site->getId())->toArray(),
                 'extra' => $content->getExtraData(),
                 'seo' => $content->getSeo(),
                 'versions' => $versions,
@@ -108,8 +112,15 @@ abstract class ContentEntityTransformer implements ContentEntityTransformerInter
         // cleanup versions
         $content->removeVersion($content->getVersions()->first());
 
-        $content->setSite($contentData['site']);
         $content->setName($contentData['name']);
+
+        // @deprecated: FIX OLD FIXTURES
+        $contentData['sites'] = isset($contentData['site']) ? [$contentData['site']] : $contentData['sites'];
+
+        foreach ($contentData['sites'] as $site) {
+            $content->addSite($referencesRepository->getReference("site___{$site}", true));
+        }
+
         $content->setExtraData($contentData['extra']);
         $content->setSeo($contentData['seo']);
 
@@ -133,42 +144,4 @@ abstract class ContentEntityTransformer implements ContentEntityTransformerInter
 
         return $version;
     }
-
-//    protected function replaceModuleFixtureReferences(&$data, ReferencesRepository $referencesRepository)
-//    {
-//        if (!is_array($data)) {
-//            return;
-//        }
-//
-//        foreach ($data as $key => &$value) {
-//            if (is_array($value)) {
-//                if (isset($value['_reference'])) {
-//                    try {
-//                        $entity = $referencesRepository->getReference($value['_reference'], true);
-//                    } catch (ReferenceNotFoundException $e) {
-//                        if ('route___' === substr($value['_reference'], 0, 8)) {
-//                            $entity = $this->routeManager->getRepository()->findOneById(substr($value['_reference'], 8));
-//                        } elseif ('media___' === substr($value['_reference'], 0, 8)) {
-//                            $entity = $this->mediaManager->getRepository()->findOneById(substr($value['_reference'], 8));
-//                        } else {
-//                            $entity = null;
-//                        }
-//
-//                        if (!$entity) {
-//                            throw $e;
-//                        }
-//                    } finally {
-//                        if ($entity ?? false) {
-//                            $value = $entity;
-//                        }
-//                    }
-//                } elseif (isset($value['_entity'])) {
-//                    ['class' => $class, 'id' => $id] = $value['_entity'];
-//                    $value = $this->contentManager->getEntityManager()->getRepository($class)->findOneBy($id);
-//                } else {
-//                    $this->replaceModuleFixtureReferences($value, $referencesRepository);
-//                }
-//            }
-//        }
-//    }
 }

@@ -63,7 +63,7 @@ admin_blocks:
 #admin_content:
 #    form:
 #        name.label: "Name"
-#        site.label: "Site web"
+#        sites.label: "Sites web"
 #        layout.label: "Diseño"
 #        modules.label: "Módulos"
 #        seo.label: "SEO"
@@ -100,13 +100,14 @@ admin_routes:
             preview.link: "Preview"
         fields:
             id.header: "Route"
-            site.header: "Site"
+            sites.header: "Sites"
             content.header: "Content"
+            page.header: "Page"
             path.header: "URL"
             type.header: "Type"
         filter_form:
             id.label: "Route"
-            site.label: "Site"
+            sites.label: "Sites"
     form:
         paths:
             add.button: "Add URL paths"
@@ -115,7 +116,7 @@ admin_routes:
             locale.label: "Locale"
             cacheTtl.label: "Cache time"
         id.label: "Identifier"
-        site.label: "Site"
+        sites.label: "Sites"
         parent.label: "Parent route"
         type:
             label: "Type"

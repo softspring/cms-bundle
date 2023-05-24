@@ -9,7 +9,7 @@ abstract class Route implements RouteInterface
 {
     protected ?string $id = null;
     protected ?int $type = null;
-    protected ?string $site = null;
+    protected ?Collection $sites = null;
 
     /**
      * @psalm-var RoutePathInterface[]|Collection
@@ -29,6 +29,7 @@ abstract class Route implements RouteInterface
 
     public function __construct()
     {
+        $this->sites = new ArrayCollection();
         $this->paths = new ArrayCollection();
         $this->children = new ArrayCollection();
     }
@@ -58,18 +59,36 @@ abstract class Route implements RouteInterface
         $this->type = $type;
     }
 
-    public function getSite(): ?string
+    public function getSites(): Collection
     {
-        return $this->site;
+        return $this->sites;
     }
 
-    public function setSite(?string $site): void
+    public function addSite(SiteInterface $site): void
     {
-        $this->site = $site;
+        if (!$this->getSites()->contains($site)) {
+            $this->getSites()->add($site);
 
-        foreach ($this->getPaths() as $path) {
-            $path->setSite($site);
+            foreach ($this->getPaths() as $path) {
+                $path->addSite($site);
+            }
         }
+    }
+
+    public function removeSite(SiteInterface $site): void
+    {
+        if ($this->getSites()->contains($site)) {
+            $this->getSites()->removeElement($site);
+
+            foreach ($this->getPaths() as $path) {
+                $path->removeSite($site);
+            }
+        }
+    }
+
+    public function hasSite(string $site): bool
+    {
+        return (bool) $this->getSites()->filter(fn(SiteInterface $routeSite) => "$routeSite" === "$site")->count();
     }
 
     /**
@@ -85,7 +104,10 @@ abstract class Route implements RouteInterface
         if (!$this->paths->contains($path)) {
             $this->paths->add($path);
             $path->setRoute($this);
-            $path->setSite($this->getSite());
+
+            foreach ($this->getSites() as $site) {
+                $path->addSite($site);
+            }
         }
     }
 

@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Form\Module;
 
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Form\Traits\DataMapperTrait;
+use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\Component\PolymorphicFormType\Form\DataTransformer\NodeDataTransformer;
 use Softspring\Component\PolymorphicFormType\Form\Discriminator\NodeDiscriminator;
 use Softspring\Component\PolymorphicFormType\Form\EventListener\NodesResizeFormListener;
@@ -62,6 +63,7 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
             $typesOptions[$moduleId]['module_id'] = $moduleId;
             $typesOptions[$moduleId]['module_revision'] = $config['revision'];
             $typesOptions[$moduleId]['module_migrations'] = $config['revision_migration_scripts'];
+            $typesOptions[$moduleId]['content'] = null;
         }
 
         return $typesOptions;
@@ -95,6 +97,7 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
             'types_options' => $this->configureModulesTypesOptions(),
             'discriminator_map' => $this->configureModulesDiscriminatorMap(),
             'discriminator_field' => '_module',
+            'content' => null,
             'allowed_modules' => null,
             'allowed_container_modules' => null,
             'compatible_contents' => [],
@@ -104,6 +107,9 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
             'prototype' => false, // recursive prototypes can cause memory issues and malfunctions
             'collection_row_attr' => [],
         ]);
+
+        $resolver->setRequired('content');
+        $resolver->setAllowedTypes('content', [ContentInterface::class]);
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -121,6 +127,7 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
         // propagate container fields
         foreach ($options['types_map'] as $type => $typeClass) {
             $options['types_options'][$type]['content_type'] = $options['content_type'];
+            $options['types_options'][$type]['content'] = $options['content'];
             $options['types_options'][$type]['row_class'] = $options['module_row_class'];
 
             if (ContainerModuleType::class == $typeClass) {
@@ -168,6 +175,7 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
         // propagate container fields
         foreach ($options['types_map'] as $type => $typeClass) {
             $options['types_options'][$type]['content_type'] = $options['content_type'];
+            $options['types_options'][$type]['content'] = $options['content'];
             $options['types_options'][$type]['row_class'] = $options['module_row_class'];
 
             if (ContainerModuleType::class == $typeClass) {

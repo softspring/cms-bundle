@@ -2,6 +2,6 @@
 
 namespace Softspring\CmsBundle\Exception;
 
-class SiteHasNotACanonicalHostException extends \Exception
+class SiteHasNotACanonicalHostException extends SiteResolutionException
 {
 }

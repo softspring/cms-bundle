@@ -4,6 +4,7 @@ grid:
     prototype_button_icon: '<i class="bi bi-layout-three-columns"></i>'
     form:
         locale_filter.label: "Locales"
+        site_filter.label: "Sites"
         modules.label: "Modules"
         id.label: "Id"
         class.label: "Classes"

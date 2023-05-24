@@ -29,14 +29,14 @@ class SiteResolverListener implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        [$siteId, $siteConfig, $siteHostConfig] = $this->siteResolver->resolveSiteAndHost($request);
+        [$siteId, $site, $siteHostConfig] = $this->siteResolver->resolveSiteAndHost($request);
 
         if (!$siteId) {
             return;
         }
 
         $request->attributes->set('_site', $siteId);
-        $request->attributes->set('_sfs_cms_site', $siteConfig + ['id' => $siteId]);
+        $request->attributes->set('_sfs_cms_site', $site);
         $request->attributes->set('_sfs_cms_site_host_config', $siteHostConfig);
     }
 }

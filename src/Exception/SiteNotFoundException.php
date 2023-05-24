@@ -2,6 +2,6 @@
 
 namespace Softspring\CmsBundle\Exception;
 
-class SiteNotFoundException extends \Exception
+class SiteNotFoundException extends SiteResolutionException
 {
 }

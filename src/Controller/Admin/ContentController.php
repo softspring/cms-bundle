@@ -87,7 +87,9 @@ class ContentController extends AbstractController
                 //                }
 
                 $entity->getRoutes()->map(function (RouteInterface $route) use ($entity) {
-                    $route->setSite($entity->getSite());
+                    foreach ($entity->getSites() as $site) {
+                        $route->addSite($site);
+                    }
                 });
                 $this->contentManager->saveEntity($entity);
 
@@ -499,6 +501,7 @@ class ContentController extends AbstractController
         }
 
         $form = $this->createForm($config['content_type'], $version, [
+            'content' => $entity,
             'layout' => $version->getLayout(),
             'method' => 'POST',
             'content_type' => $config['_id'],

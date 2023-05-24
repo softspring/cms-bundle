@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Form\Admin;
 
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Form\Module\ModuleCollectionType;
+use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Utils\Hash;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -23,6 +24,8 @@ class LayoutContentType extends AbstractType
         $resolver->setRequired('layout');
         $resolver->setRequired('content_type');
         $resolver->setAllowedTypes('content_type', ['string']);
+        $resolver->setRequired('content');
+        $resolver->setAllowedTypes('content', [ContentInterface::class]);
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -39,6 +42,7 @@ class LayoutContentType extends AbstractType
                 'prototype_name' => '__'.Hash::generate().'__',
                 'module_collection_class' => 'container-fluid',
                 'module_row_class' => 'row',
+                'content' => $options['content'],
             ]);
         }
     }

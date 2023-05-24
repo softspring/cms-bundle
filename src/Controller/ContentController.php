@@ -28,7 +28,7 @@ class ContentController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        $pageContent = $publishedVersion->getCompiled()[$request->getLocale()] ?? $this->contentRender->render($publishedVersion);
+        $pageContent = $publishedVersion->getCompiled()["{$request->attributes->get('_sfs_cms_site')}"][$request->getLocale()] ?? $this->contentRender->render($publishedVersion);
 
         // create response
         $response = new Response($pageContent);

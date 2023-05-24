@@ -2,13 +2,16 @@
 
 namespace Softspring\CmsBundle\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
 abstract class RoutePath implements RoutePathInterface
 {
     protected ?string $id = null;
 
     protected ?RouteInterface $route = null;
 
-    protected ?string $site = null;
+    protected ?Collection $sites = null;
 
     protected ?string $path = null;
 
@@ -17,6 +20,11 @@ abstract class RoutePath implements RoutePathInterface
     protected ?int $cacheTtl = null;
 
     protected ?string $locale = null;
+
+    public function __construct()
+    {
+        $this->sites = new ArrayCollection();
+    }
 
     public function getId(): ?string
     {
@@ -35,14 +43,23 @@ abstract class RoutePath implements RoutePathInterface
         $this->getRoute()?->compileChildrenPaths();
     }
 
-    public function getSite(): ?string
+    public function getSites(): Collection
     {
-        return $this->site;
+        return $this->sites;
     }
 
-    public function setSite(?string $site): void
+    public function addSite(SiteInterface $site): void
     {
-        $this->site = $site;
+        if (!$this->getSites()->contains($site)) {
+            $this->getSites()->add($site);
+        }
+    }
+
+    public function removeSite(SiteInterface $site): void
+    {
+        if ($this->getSites()->contains($site)) {
+            $this->getSites()->removeElement($site);
+        }
     }
 
     public function getPath(): ?string

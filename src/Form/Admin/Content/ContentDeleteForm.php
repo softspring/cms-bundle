@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityRepository;
 use Softspring\CmsBundle\Form\Type\SymfonyRouteType;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
+use Softspring\CmsBundle\Model\SiteInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -71,7 +72,7 @@ class ContentDeleteForm extends AbstractType implements ContentUpdateFormInterfa
             },
             'choice_attr' => function (ContentInterface $content) {
                 return [
-                    'data-site' => $content->getSite(),
+                    'data-site' => $content->getSites()->map(fn(SiteInterface $site) => $site->getId()),
                 ];
             },
             'query_builder' => function (EntityRepository $entityRepository) use ($options) {

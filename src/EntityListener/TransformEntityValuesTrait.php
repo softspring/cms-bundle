@@ -2,14 +2,19 @@
 
 namespace Softspring\CmsBundle\EntityListener;
 
-use Doctrine\ORM\Mapping\MappingException;
+use Doctrine\ORM\Mapping\MappingException as ORMMappingException;
+use Doctrine\Persistence\Mapping\MappingException as PersistenceMappingException;
 use Doctrine\Persistence\ObjectManager;
 
 trait TransformEntityValuesTrait
 {
     protected function transformEntityValues($value, ObjectManager $objectManager, array &$entities = [])
     {
-        if (is_object($value)) {
+        if (is_array($value) || is_iterable($value)) {
+            foreach ($value as $key => $value2) {
+                $value[$key] = $this->transformEntityValues($value2, $objectManager, $entities);
+            }
+        } elseif (is_object($value)) {
             try {
                 $entities[] = $value;
 
@@ -17,11 +22,7 @@ trait TransformEntityValuesTrait
                     '_entity_class' => get_class($value),
                     '_entity_id' => $objectManager->getClassMetadata(get_class($value))->getIdentifierValues($value),
                 ];
-            } catch (MappingException $e) {
-            }
-        } elseif (is_array($value)) {
-            foreach ($value as $key => $value2) {
-                $value[$key] = $this->transformEntityValues($value2, $objectManager, $entities);
+            } catch (ORMMappingException|PersistenceMappingException $e) {
             }
         }
 

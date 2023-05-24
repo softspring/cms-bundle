@@ -37,7 +37,7 @@ class ContentCreateForm extends AbstractType implements ContentCreateFormInterfa
             ],
         ]);
 
-        $builder->add('site', SiteChoiceType::class, [
+        $builder->add('sites', SiteChoiceType::class, [
             'content' => $options['content'],
         ]);
 

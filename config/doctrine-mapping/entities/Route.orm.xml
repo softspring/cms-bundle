@@ -19,6 +19,17 @@
                 <cascade-persist/>
             </cascade>
         </one-to-many>
+
+        <many-to-many field="sites" target-entity="Softspring\CmsBundle\Model\SiteInterface">
+            <join-table name="cms_route_sites">
+                <join-columns>
+                    <join-column name="route_id" referenced-column-name="id" on-delete="CASCADE" />
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="site_id" referenced-column-name="id" on-delete="RESTRICT" />
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
     </entity>
 
 </doctrine-mapping>

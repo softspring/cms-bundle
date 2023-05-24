@@ -5,6 +5,7 @@ namespace Softspring\CmsBundle\DataCollector;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Model\RoutePathInterface;
+use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\Render\BlockRenderer;
 use Softspring\CmsBundle\Render\ContentRender;
 use Softspring\CmsBundle\Render\MenuRenderer;
@@ -53,7 +54,7 @@ class ContentDataCollector extends DataCollector
         }
 
         $this->data['_sfs_cms_site'] = $request->attributes->get('_sfs_cms_site');
-        $this->data['site_name'] = $this->translator->trans($this->data['_sfs_cms_site']['id'].'.name', [], 'sfs_cms_sites');
+        $this->data['site_name'] = $this->translator->trans($this->data['_sfs_cms_site']->getId().'.name', [], 'sfs_cms_sites');
         $this->data['_sfs_cms_locale'] = $request->attributes->get('_sfs_cms_locale');
         $this->data['_sfs_cms_locale_path'] = $request->attributes->get('_sfs_cms_locale_path');
         $this->data['_route'] = $request->attributes->get('_route');
@@ -106,7 +107,7 @@ class ContentDataCollector extends DataCollector
         return $this->data['site_name'] ?? '';
     }
 
-    public function getSiteConfig(): ?array
+    public function getSiteConfig(): ?SiteInterface
     {
         return $this->data['_sfs_cms_site'] ?? null;
     }

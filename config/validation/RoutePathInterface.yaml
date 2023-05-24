@@ -1,5 +1,5 @@
-Softspring\CmsBundle\Model\RoutePathInterface:
-    constraints:
-        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
-            fields: ['compiledPath', 'locale', 'site']
-            ignoreNull: true
+#Softspring\CmsBundle\Model\RoutePathInterface:
+#    constraints:
+#        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+#            fields: ['compiledPath', 'locale', 'site']
+#            ignoreNull: true

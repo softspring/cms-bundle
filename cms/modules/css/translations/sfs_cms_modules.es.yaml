@@ -4,4 +4,5 @@ css:
     prototype_button_icon: '<i class="bi bi-filetype-css"></i>'
     form:
         locale_filter.label: "Idiomas"
+        site_filter.label: "Sites"
         css.label: "Estilos CSS"

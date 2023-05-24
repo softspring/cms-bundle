@@ -48,9 +48,10 @@ class ContentListFilterForm extends PaginatorForm
         ]);
 
         if (sizeof($this->cmsConfig->getSitesForContent($options['content_config']['_id'])) > 1) {
-            $builder->add('site', SiteChoiceType::class, [
+            $builder->add('sites', SiteChoiceType::class, [
                 'required' => false,
-                'property_path' => '[site]',
+                'property_path' => '[sites.id]',
+                'multiple' => false,
                 'content' => $options['content_config'],
             ]);
         }

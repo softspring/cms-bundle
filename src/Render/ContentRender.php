@@ -13,6 +13,7 @@ use Twig\Environment;
 
 class ContentRender
 {
+    public const SITE_HIDDEN_MODULE = '<!-- site hidden module -->';
     public const LOCALE_HIDDEN_MODULE = '<!-- locale hidden module -->';
 
     protected Environment $twig;
@@ -47,7 +48,9 @@ class ContentRender
 
         $layout = $this->cmsConfig->getLayout($version->getLayout());
 
-        $containers = $version->getCompiledModules()[$this->requestStack->getCurrentRequest()->getLocale()] ?? $this->renderModules($version);
+        $request = $this->requestStack->getCurrentRequest();
+
+        $containers = $version->getCompiledModules()["{$request->attributes->get('_sfs_cms_site')}"][$request->getLocale()] ?? $this->renderModules($version);
 
         return $this->twig->render($layout['render_template'], [
             'containers' => $containers,
@@ -82,6 +85,19 @@ class ContentRender
 
     protected function renderModule(array $module, ContentVersionInterface $version, array &$profilerDebugCollectorData): string
     {
+        if (isset($module['site_filter'])) {
+            $currentSite = $this->requestStack->getCurrentRequest()->get('_sfs_cms_site');
+
+            $siteFilters = [];
+            foreach ($module['site_filter'] as $site) {
+                $siteFilters[] = is_string($site) ? $this->cmsConfig->getSite($site) : $site;
+            }
+
+            if (!in_array($currentSite, $siteFilters)) {
+                return self::SITE_HIDDEN_MODULE;
+            }
+        }
+
         if (isset($module['locale_filter'])) {
             $currentLocale = $this->requestStack->getCurrentRequest()->getLocale();
 

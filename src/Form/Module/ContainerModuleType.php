@@ -44,6 +44,7 @@ class ContainerModuleType extends DynamicFormModuleType
             // random prototype name to allow multiple levels
             'prototype_name' => '__'.Hash::generate().'__',
             'collection_row_attr' => $options['collection_row_attr'],
+            'content' => $options['content'],
         ]);
     }
 }

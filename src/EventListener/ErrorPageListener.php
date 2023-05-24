@@ -3,6 +3,7 @@
 namespace Softspring\CmsBundle\EventListener;
 
 use Psr\Log\LoggerInterface;
+use Softspring\CmsBundle\Model\SiteInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -36,18 +37,18 @@ class ErrorPageListener implements EventSubscriberInterface
             return;
         }
 
-        $siteConfig = $request->attributes->get('_sfs_cms_site');
-        if (!$siteConfig['error_pages']) {
+        $site = $request->attributes->get('_sfs_cms_site');
+        if (!$site->getConfig()['error_pages']) {
             return;
         }
 
         $exception = $event->getThrowable();
-        $locale = $request->getLocale() ?: $siteConfig['default_locale'];
+        $locale = $request->getLocale() ?: $site->getConfig()['default_locale'];
 
         $errorPage = null;
 
         if ($exception instanceof NotFoundHttpException) {
-            $errorPage = $this->renderErrorTemplate($this->searchErrorTemplate('404', $locale, $siteConfig), $locale);
+            $errorPage = $this->renderErrorTemplate($this->searchErrorTemplate('404', $locale, $site), $locale);
         }
 
         if ($errorPage) {
@@ -56,11 +57,11 @@ class ErrorPageListener implements EventSubscriberInterface
         }
     }
 
-    protected function searchErrorTemplate(string $errorCode, string $locale, $siteConfig): array
+    protected function searchErrorTemplate(string $errorCode, string $locale, SiteInterface $site): array
     {
         $errorTemplates = [];
 
-        foreach ($siteConfig['error_pages'] as $_errorCode => $templates) {
+        foreach ($site->getConfig()['error_pages'] as $_errorCode => $templates) {
             $_errorCode = "$_errorCode";
             if ($errorCode === $_errorCode) {
                 $errorTemplates = array_merge($errorTemplates, $templates[$locale]);

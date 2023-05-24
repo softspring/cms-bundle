@@ -45,9 +45,10 @@ class RouteListFilterForm extends PaginatorForm implements RouteListFilterFormIn
         ]);
 
         if (sizeof($this->cmsConfig->getSites()) > 1) {
-            $builder->add('site', SiteChoiceType::class, [
+            $builder->add('sites', SiteChoiceType::class, [
                 'required' => false,
-                'property_path' => '[site]',
+                'property_path' => '[sites.id]',
+                'multiple' => false,
             ]);
         }
     }

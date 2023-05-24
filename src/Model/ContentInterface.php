@@ -12,12 +12,17 @@ interface ContentInterface
 
     public function setName(?string $name): void;
 
-    public function getSite(): ?string;
+    /**
+     * @psalm-return SiteInterface[]|Collection
+     */
+    public function getSites(): Collection;
 
-    public function setSite(?string $site): void;
+    public function addSite(SiteInterface $site): void;
+
+    public function removeSite(SiteInterface $site): void;
 
     /**
-     * @return ContentVersionInterface[]|Collection
+     * @psalm-return ContentVersionInterface[]|Collection
      */
     public function getVersions(): Collection;
 
