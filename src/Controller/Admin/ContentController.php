@@ -835,7 +835,7 @@ class ContentController extends AbstractController
         return $this->redirectToRoute($route, $routeParams);
     }
 
-    protected function redirectBack(string $configId, ContentInterface $entity, Request $request, ?ContentVersionInterface $version = null): RedirectResponse
+    protected function redirectBack(string $configId, ContentInterface $entity, Request $request, ContentVersionInterface $version = null): RedirectResponse
     {
         switch ($request->query->get('back')) {
             case 'versions':

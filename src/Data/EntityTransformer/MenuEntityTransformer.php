@@ -88,7 +88,7 @@ class MenuEntityTransformer implements EntityTransformerInterface
         return $menu;
     }
 
-    public function createMenuItem(MenuInterface $menu, array $text, ?array $route = null): MenuItemInterface
+    public function createMenuItem(MenuInterface $menu, array $text, array $route = null): MenuItemInterface
     {
         $item = $this->menuItemManager->createEntity();
         $menu->addItem($item);
