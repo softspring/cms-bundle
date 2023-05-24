@@ -3,7 +3,6 @@
 namespace Softspring\CmsBundle\DataFixtures\Purger;
 
 use Doctrine\Bundle\FixturesBundle\Purger\PurgerFactory;
-use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\Common\DataFixtures\Purger\PurgerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -21,8 +20,8 @@ class CmsPurgerFactory implements PurgerFactory
             }
         }
 
-        $purger = new ORMPurger($em, $excluded);
-        $purger->setPurgeMode($purgeWithTruncate ? ORMPurger::PURGE_MODE_TRUNCATE : ORMPurger::PURGE_MODE_DELETE);
+        $purger = new CmsPurger($em, $excluded);
+        $purger->setPurgeMode($purgeWithTruncate ? CmsPurger::PURGE_MODE_TRUNCATE : CmsPurger::PURGE_MODE_DELETE);
 
         return $purger;
     }
