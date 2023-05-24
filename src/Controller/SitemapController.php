@@ -3,9 +3,9 @@
 namespace Softspring\CmsBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
+use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\Routing\UrlGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,25 +16,27 @@ class SitemapController extends AbstractController
     protected EntityManagerInterface $em;
     protected Environment $twig;
     protected UrlGenerator $urlGenerator;
-    protected CmsConfig $cmsConfig;
 
-    public function __construct(EntityManagerInterface $em, Environment $twig, UrlGenerator $urlGenerator, CmsConfig $cmsConfig)
+    public function __construct(EntityManagerInterface $em, Environment $twig, UrlGenerator $urlGenerator)
     {
         $this->em = $em;
         $this->twig = $twig;
         $this->urlGenerator = $urlGenerator;
-        $this->cmsConfig = $cmsConfig;
     }
 
-    public function sitemap(string $site, string $sitemap): Response
+    public function sitemap(SiteInterface $site, string $sitemap): Response
     {
-        $siteConfig = $this->cmsConfig->getSite($site);
+        $siteConfig = $site->getConfig();
         $sitemapConfig = $siteConfig['sitemaps'][$sitemap];
 
         $urls = [];
 
+        $qb = $this->em->getRepository(ContentInterface::class)->createQueryBuilder('c');
+        $qb->leftJoin('c.sites', 's');
+        $qb->andWhere('s = :site')->setParameter('site', $site);
+
         /** @var ContentInterface $content */
-        foreach ($this->em->getRepository(ContentInterface::class)->findBy(['site' => $site]) as $content) {
+        foreach ($qb->getQuery()->getResult() as $content) {
             if (!$content->getPublishedVersion()) {
                 continue;
             }
@@ -78,7 +80,7 @@ class SitemapController extends AbstractController
                         foreach ($contentRoute->getPaths() as $path) {
                             $url['alternates'][] = [
                                 'locale' => $path->getLocale(),
-                                'url' => $this->urlGenerator->getUrl($contentRoute, $path->getLocale()),
+                                'url' => $this->urlGenerator->getUrl($contentRoute, $path->getLocale(), $site),
                             ];
                         }
                     }
@@ -98,9 +100,9 @@ class SitemapController extends AbstractController
         return $this->render('@SfsCms/sitemap/sitemap.xml.twig', ['urls' => $urls], $response);
     }
 
-    public function index(string $site): Response
+    public function index(SiteInterface $site): Response
     {
-        $siteConfig = $this->cmsConfig->getSite($site);
+        $siteConfig = $site->getConfig();
         $hostAndProtocol = 'https://';
         foreach ($siteConfig['hosts'] as $host) {
             if ($host['canonical']) {

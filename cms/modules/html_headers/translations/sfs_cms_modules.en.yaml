@@ -4,6 +4,7 @@ html_headers:
     prototype_button_icon: '<i class="bi bi-code-slash"></i>'
     form:
         locale_filter.label: "Locales"
+        site_filter.label: "Sites"
         code:
             label: "Code"
             preview.placeholder: "here you can insert meta tags"

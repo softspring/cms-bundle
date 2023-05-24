@@ -3,9 +3,11 @@
 namespace Softspring\CmsBundle\Data;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Data\EntityTransformer\ContentEntityTransformerInterface;
 use Softspring\CmsBundle\Data\EntityTransformer\EntityTransformerInterface;
 use Softspring\CmsBundle\Data\Exception\DataTransformerNotFoundException;
+use Softspring\CmsBundle\Manager\SiteManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
@@ -18,13 +20,19 @@ class DataImporter extends AbstractDataImportExport
     protected ReferencesRepository $referenceRepository;
     protected MediaManagerInterface $mediaManager;
 
+    protected CmsConfig $cmsConfig;
+
+    protected SiteManagerInterface $siteManager;
+
     /**
      * @param EntityTransformerInterface[] $entityTransformers
      */
-    public function __construct(EntityManagerInterface $em, iterable $entityTransformers, MediaManagerInterface $mediaManager)
+    public function __construct(EntityManagerInterface $em, iterable $entityTransformers, CmsConfig $cmsConfig, SiteManagerInterface $siteManager, MediaManagerInterface $mediaManager)
     {
         $this->em = $em;
         $this->mediaManager = $mediaManager;
+        $this->cmsConfig = $cmsConfig;
+        $this->siteManager = $siteManager;
         parent::__construct($entityTransformers);
         $this->referenceRepository = new ReferencesRepository();
     }
@@ -34,6 +42,16 @@ class DataImporter extends AbstractDataImportExport
      */
     public function import(array $contents, array $options = []): void
     {
+        // preload sites
+        foreach ($this->cmsConfig->getSites() as $previousExistingSite) {
+            // create sites again because they will be removed by fixtures purge
+            $newSite = $this->siteManager->createEntity();
+            $newSite->setId("$previousExistingSite");
+            $newSite->setConfig($previousExistingSite->getConfig());
+            $this->referenceRepository->addReference("site___{$newSite}", $newSite);
+            $this->em->persist($newSite);
+        }
+
         // do preloading
         foreach ($contents as $type => $elements) {
             foreach ($elements as $data) {

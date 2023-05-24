@@ -37,12 +37,12 @@ class RouterExtension extends AbstractExtension
         ];
     }
 
-    public function generatePath($route, ?string $locale = null): string
+    public function generatePath($route, string $locale = null, $site = null): string
     {
-        return $this->generateUrl($route, $locale, UrlGeneratorInterface::ABSOLUTE_PATH);
+        return $this->generateUrl($route, $locale, $site, UrlGeneratorInterface::ABSOLUTE_PATH);
     }
 
-    public function generateUrl($route, ?string $locale = null, int $referenceType = UrlGeneratorInterface::ABSOLUTE_URL): string
+    public function generateUrl($route, string $locale = null, $site = null, int $referenceType = UrlGeneratorInterface::ABSOLUTE_URL): string
     {
         if (is_null($route)) {
             return '#';
@@ -56,7 +56,11 @@ class RouterExtension extends AbstractExtension
             $params = $route['route_params'] ?? [];
 
             if ($locale) {
-                $params['_locale'] = $this->requestStack->getCurrentRequest()->getLocale();
+                $params['_locale'] = $this->requestStack->getCurrentRequest()->getLocale(); // TODO CHECK THIS ????
+            }
+
+            if ($site) {
+                $params['_site'] = $site;
             }
 
             return $this->router->generate($route['route_name'], $params, $referenceType);

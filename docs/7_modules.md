@@ -256,6 +256,7 @@ rating:
     prototype_button_icon: '<i class="bi bi-star"></i>' #Icon in module selector modal
     form:
         locale_filter.label: "Locales" #If your application has languages, a language selector will appear to control the display of the module by language.
+        site_filter.label: "Sites"
         background.label: "Background image"
         media.label: "Image"
         id.label: "Id"
@@ -535,6 +536,7 @@ button:
     prototype_button_icon: '<i class="bi bi-link"></i>'
     form:
         locale_filter.label: "Locales"
+        site_filter.label: "Sites"
         id.label: "Id"
         class.label: "Classes"
         button_text.label: "Button text"

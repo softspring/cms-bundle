@@ -9,6 +9,8 @@ use Softspring\CmsBundle\Config\Exception\InvalidLayoutException;
 use Softspring\CmsBundle\Config\Exception\InvalidMenuException;
 use Softspring\CmsBundle\Config\Exception\InvalidModuleException;
 use Softspring\CmsBundle\Config\Exception\InvalidSiteException;
+use Softspring\CmsBundle\Manager\SiteManagerInterface;
+use Softspring\CmsBundle\Model\SiteInterface;
 
 class CmsConfig
 {
@@ -17,16 +19,23 @@ class CmsConfig
     protected array $contents;
     protected array $menus;
     protected array $blocks;
-    protected array $sites;
+    protected array $siteConfigs;
+    protected SiteManagerInterface $siteManager;
 
-    public function __construct(array $layouts, array $modules, array $contents, array $menus, array $blocks, array $sites)
+    /**
+     * @var SiteInterface[]|null
+     */
+    protected ?array $siteEntities = null;
+
+    public function __construct(array $layouts, array $modules, array $contents, array $menus, array $blocks, array $sites, SiteManagerInterface $siteManager)
     {
         $this->layouts = $layouts;
         $this->modules = $modules;
         $this->contents = $contents;
         $this->menus = $menus;
         $this->blocks = $blocks;
-        $this->sites = $sites;
+        $this->siteConfigs = $sites;
+        $this->siteManager = $siteManager;
     }
 
     public function getLayouts(): array
@@ -132,23 +141,49 @@ class CmsConfig
 
     public function getSites(): array
     {
-        return $this->sites;
+        if (null === $this->siteEntities) {
+            $this->siteEntities = [];
+
+            foreach ($this->siteManager->getRepository()->findAll() as $siteEntity) {
+                if (!isset($this->siteConfigs["$siteEntity"])) {
+                    $this->siteManager->deleteEntity($siteEntity);
+                }
+                $siteEntity->setConfig($this->siteConfigs["$siteEntity"]);
+                $this->siteEntities["$siteEntity"] = $siteEntity;
+            }
+
+            foreach ($this->siteConfigs as $siteId => $config) {
+                if (!isset($this->siteEntities[$siteId])) {
+                    $siteEntity = $this->siteManager->createEntity();
+                    $siteEntity->setId($siteId);
+                    $siteEntity->setConfig($config);
+                    $this->siteManager->saveEntity($siteEntity);
+                    $this->siteEntities["$siteEntity"] = $siteEntity;
+                }
+            }
+        }
+
+        return $this->siteEntities;
     }
 
     /**
      * @throws InvalidSiteException
      */
-    public function getSite(string $id, bool $required = true): ?array
+    public function getSite(string $id, bool $required = true): ?SiteInterface
     {
-        if ($required && !isset($this->sites[$id])) {
-            throw new InvalidSiteException($id, $this->sites);
+        $sites = $this->getSites();
+
+        if ($required && !isset($sites[$id])) {
+            throw new InvalidSiteException($id, $sites);
         }
 
-        return $this->sites[$id] ?? null;
+        return $sites[$id] ?? null;
     }
 
     public function getSitesForContent(string $contentType): array
     {
-        return array_filter($this->sites, fn (array $site) => in_array($contentType, $site['allowed_content_types']));
+        $sites = $this->getSites();
+
+        return array_filter($sites, fn (SiteInterface $site) => in_array($contentType, $site->getConfig()['allowed_content_types']));
     }
 }

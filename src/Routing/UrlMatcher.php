@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Softspring\CmsBundle\Exception\SiteHasNotACanonicalHostException;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Model\RoutePathInterface;
+use Softspring\CmsBundle\Model\SiteInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -26,6 +27,7 @@ class UrlMatcher
 
     /**
      * @throws SiteHasNotACanonicalHostException
+     * @throws \Exception
      */
     public function matchRequest(Request $request): ?array
     {
@@ -33,16 +35,17 @@ class UrlMatcher
             return [];
         }
 
-        $siteConfig = $request->attributes->get('_sfs_cms_site');
+        /** @var SiteInterface $site */
+        $site = $request->attributes->get('_sfs_cms_site');
+        $siteConfig = $site->getConfig();
         $siteHostConfig = $request->attributes->get('_sfs_cms_site_host_config');
-        $siteId = $siteConfig['id'];
 
         if ($siteConfig['https_redirect'] && 'http' === $request->getScheme()) {
-            return $this->generateRedirect($this->siteResolver->getCanonicalRedirectUrl($siteConfig, $request), Response::HTTP_MOVED_PERMANENTLY);
+            return $this->generateRedirect($this->siteResolver->getCanonicalRedirectUrl($site, $request), Response::HTTP_MOVED_PERMANENTLY);
         }
 
         if ($siteHostConfig['redirect_to_canonical']) {
-            return $this->generateRedirect($this->siteResolver->getCanonicalRedirectUrl($siteConfig, $request), Response::HTTP_MOVED_PERMANENTLY);
+            return $this->generateRedirect($this->siteResolver->getCanonicalRedirectUrl($site, $request), Response::HTTP_MOVED_PERMANENTLY);
         }
 
         $pathInfo = $request->getPathInfo();
@@ -65,7 +68,7 @@ class UrlMatcher
                 return [
                     '_controller' => 'Softspring\CmsBundle\Controller\SitemapController::sitemap',
                     'sitemap' => $sitemap,
-                    'site' => $siteId,
+                    'site' => $site,
                 ];
             }
         }
@@ -73,7 +76,7 @@ class UrlMatcher
         if ($siteConfig['sitemaps_index']['enabled'] && '/'.trim($siteConfig['sitemaps_index']['url'], '/') === $pathInfo) {
             return [
                 '_controller' => 'Softspring\CmsBundle\Controller\SitemapController::index',
-                'site' => $siteId,
+                'site' => $site,
             ];
         }
 
@@ -84,7 +87,7 @@ class UrlMatcher
         }
 
         foreach ($siteConfig['paths'] as $path) {
-            if ($path['path'] == substr($pathInfo, 0, strlen($path['path']))) {
+            if (str_starts_with($pathInfo, $path['path'])) {
                 if ($path['locale']) {
                     if (!empty($attributes['_sfs_cms_locale'])) {
                         // TODO resolve conflict
@@ -105,7 +108,7 @@ class UrlMatcher
         }
 
         // search in database or redis-cache (TODO) ;)
-        if ($routePath = $this->searchRoutePath($siteId, $pathInfo, $attributes['_sfs_cms_locale'] ?? null)) {
+        if ($routePath = $this->searchRoutePath($site, $pathInfo, $attributes['_sfs_cms_locale'] ?? null)) {
             $route = $routePath->getRoute();
 
             if ($routePath->getLocale()) {
@@ -170,16 +173,17 @@ class UrlMatcher
         ];
     }
 
-    protected function searchRoutePath(string $site, string $path, ?string $locale = null): ?RoutePathInterface
+    protected function searchRoutePath(SiteInterface $site, string $path, string $locale = null): ?RoutePathInterface
     {
         try {
             $qb = $this->em->getRepository(RoutePathInterface::class)->createQueryBuilder('rp');
             $qb->select('rp');
             $qb->leftJoin('rp.route', 'r');
+            $qb->leftJoin('rp.sites', 's');
             $qb->andWhere('rp.compiledPath = :path');
             $qb->setParameter('path', trim($path, '/'));
+            $qb->andWhere('s = :site');
             $qb->andWhere('r.type != 4');
-            $qb->andWhere('r.site = :site');
             $qb->setParameter('site', $site);
 
             if ($locale) {

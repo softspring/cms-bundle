@@ -30,6 +30,7 @@ services:
             $menus: '%sfs_cms.menus%'
             $blocks: '%sfs_cms.blocks%'
             $sites: '%sfs_cms.sites%'
+            $siteManager: '@Softspring\CmsBundle\Manager\SiteManagerInterface'
 
     Softspring\CmsBundle\Command\:
         resource: '../../src/Command/*'

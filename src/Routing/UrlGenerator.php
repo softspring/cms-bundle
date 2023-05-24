@@ -7,6 +7,8 @@ use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Model\RoutePathInterface;
+use Softspring\CmsBundle\Model\SiteInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
@@ -32,7 +34,7 @@ class UrlGenerator
      *
      * @throws \Exception
      */
-    public function getUrl($routeOrName, ?string $locale = null, array $routeParams = [], bool $onlyChecking = false): string
+    public function getUrl($routeOrName, string $locale = null, $site = null, array $routeParams = [], bool $onlyChecking = false): string
     {
         if ($this->isPreview()) {
             return 'javascript:confirm(\'Esto es una previsualización!\')';
@@ -50,7 +52,7 @@ class UrlGenerator
 
         $queryString = !empty($routeParams) ? '?'.http_build_query($routeParams) : '';
 
-        return $this->getSiteSchemeAndHost($route, $locale).$this->getSiteOrLocalePath($route, $locale).'/'.$this->getRoutePath($route, $locale).$queryString;
+        return $this->getSiteSchemeAndHost($route, $locale, $site).$this->getSiteOrLocalePath($route, $locale, $site).'/'.$this->getRoutePath($route, $locale, $site).$queryString;
     }
 
     /**
@@ -58,7 +60,7 @@ class UrlGenerator
      *
      * @throws \Exception
      */
-    public function getPath($routeOrName, ?string $locale = null, array $routeParams = [], bool $onlyChecking = false): string
+    public function getPath($routeOrName, string $locale = null, $site = null, array $routeParams = [], bool $onlyChecking = false): string
     {
         if ($this->isPreview()) {
             return 'javascript:confirm(\'Esto es una previsualización!\')';
@@ -76,13 +78,13 @@ class UrlGenerator
 
         $queryString = !empty($routeParams) ? '?'.http_build_query($routeParams) : '';
 
-        return $this->getSiteOrLocalePath($route, $locale).'/'.$this->getRoutePath($route, $locale).$queryString;
+        return $this->getSiteOrLocalePath($route, $locale, $site).'/'.$this->getRoutePath($route, $locale, $site).$queryString;
     }
 
     /**
      * @throws \Exception
      */
-    public function getUrlFixed(RoutePathInterface $routePath): string
+    public function getUrlFixed(RoutePathInterface $routePath, $site = null): string
     {
         if ($this->isPreview()) {
             return 'javascript:confirm(\'Esto es una previsualización!\')';
@@ -91,13 +93,13 @@ class UrlGenerator
         $route = $routePath->getRoute();
         $locale = $routePath->getLocale();
 
-        return $this->getSiteSchemeAndHost($route, $locale).$this->getSiteOrLocalePath($route, $locale).'/'.$routePath->getCompiledPath();
+        return $this->getSiteSchemeAndHost($route, $locale, $site).$this->getSiteOrLocalePath($route, $locale, $site).'/'.$routePath->getCompiledPath();
     }
 
     /**
      * @throws \Exception
      */
-    public function getPathFixed(RoutePathInterface $routePath): string
+    public function getPathFixed(RoutePathInterface $routePath, $site = null): string
     {
         if ($this->isPreview()) {
             return 'javascript:confirm(\'Esto es una previsualización!\')';
@@ -106,7 +108,7 @@ class UrlGenerator
         $route = $routePath->getRoute();
         $locale = $routePath->getLocale();
 
-        return $this->getSiteOrLocalePath($route, $locale).'/'.$routePath->getCompiledPath();
+        return $this->getSiteOrLocalePath($route, $locale, $site).'/'.$routePath->getCompiledPath();
     }
 
     /**
@@ -146,7 +148,7 @@ class UrlGenerator
         return implode(' ', $attrs);
     }
 
-    protected function getRoutePath(RouteInterface $route, ?string $locale = null): string
+    protected function getRoutePath(RouteInterface $route, string $locale = null, $site = null): string
     {
         $locale = $locale ?: $this->requestStack->getCurrentRequest()->getLocale();
 
@@ -186,12 +188,16 @@ class UrlGenerator
         return $request->attributes->has('_cms_preview');
     }
 
-    protected function getSiteSchemeAndHost(RouteInterface $route, ?string $locale): string
+    protected function getSiteSchemeAndHost(RouteInterface $route, ?string $locale, $site = null): string
     {
         $locale = $locale ?: $this->requestStack->getCurrentRequest()->getLocale();
-        $siteConfig = $this->cmsConfig->getSite($route->getSite());
+        $site = $this->getSite($site, $this->requestStack->getCurrentRequest());
 
-        foreach ($siteConfig['hosts'] as $hostConfig) {
+        if (!$route->hasSite("$site")) {
+            throw new RouteNotFoundException();
+        }
+
+        foreach ($site->getConfig()['hosts'] as $hostConfig) {
             if ($hostConfig['canonical'] && (!$hostConfig['locale'] || $hostConfig['locale'] === $locale)) {
                 $scheme = $hostConfig['scheme'] ?: $this->requestStack->getCurrentRequest()->getScheme();
                 $host = $hostConfig['domain'];
@@ -203,21 +209,42 @@ class UrlGenerator
         return $this->requestStack->getCurrentRequest()->getSchemeAndHttpHost();
     }
 
-    protected function getSiteOrLocalePath(RouteInterface $route, ?string $locale): string
+    protected function getSiteOrLocalePath(RouteInterface $route, ?string $locale, $site = null): string
     {
         $locale = $locale ?: $this->requestStack->getCurrentRequest()->getLocale();
-        $siteConfig = $this->cmsConfig->getSite($route->getSite());
+        $site = $this->getSite($site, $this->requestStack->getCurrentRequest());
+
+        if (!$route->hasSite("$site")) {
+            throw new RouteNotFoundException();
+        }
 
         if ('path' == $this->siteConfig['identification']) {
             throw new \Exception('Not yet implemented');
         }
 
-        foreach ($siteConfig['paths'] as $pathConfig) {
+        foreach ($site->getConfig()['paths'] as $pathConfig) {
             if (!empty($pathConfig['locale']) && $pathConfig['locale'] === $locale) {
                 return '/'.trim($pathConfig['path'], '/');
             }
         }
 
         return '';
+    }
+
+    protected function getSite($site, ?Request $request): ?SiteInterface
+    {
+        if ($site instanceof SiteInterface) {
+            return $site;
+        }
+
+        if (is_string($site)) {
+            $this->cmsConfig->getSite($site);
+        }
+
+        if ($request && $request->attributes->has('_sfs_cms_site')) {
+            return $request->attributes->get('_sfs_cms_site');
+        }
+
+        return null;
     }
 }

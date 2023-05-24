@@ -5,6 +5,8 @@ namespace Softspring\CmsBundle\Routing;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Exception\SiteHasNotACanonicalHostException;
 use Softspring\CmsBundle\Exception\SiteNotFoundException;
+use Softspring\CmsBundle\Exception\SiteResolutionException;
+use Softspring\CmsBundle\Model\SiteInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class SiteResolver
@@ -20,25 +22,26 @@ class SiteResolver
 
     /**
      * @throws SiteNotFoundException
+     * @throws SiteResolutionException
      */
     public function resolveSiteAndHost(Request $request): ?array
     {
         switch ($this->siteConfig['identification']) {
             case 'domain':
                 $host = $request->getHost();
-                foreach ($this->cmsConfig->getSites() as $siteId => $siteConfig) {
-                    foreach ($siteConfig['hosts'] as $hostConfig) {
+                foreach ($this->cmsConfig->getSites() as $siteId => $site) {
+                    foreach ($site->getConfig()['hosts'] as $hostConfig) {
                         if ($host === $hostConfig['domain']) {
-                            return [$siteId, $siteConfig, $hostConfig];
+                            return [$siteId, $site, $hostConfig];
                         }
                     }
                 }
                 break;
 
             case 'path':
-            default:
                 // $path = $request->getBasePath();
-                throw new \Exception('Not yet implemented');
+            default:
+                throw new SiteResolutionException(sprintf('Site resolution %s identification method is not yet implemented', $this->siteConfig['identification']));
         }
 
         if ($this->siteConfig['throw_not_found']) {
@@ -51,11 +54,11 @@ class SiteResolver
     /**
      * @throws SiteHasNotACanonicalHostException
      */
-    public function getCanonicalRedirectUrl(array $siteConfig, Request $request): string
+    public function getCanonicalRedirectUrl(SiteInterface $site, Request $request): string
     {
         $canonicalHost = '';
         $canonicalScheme = $request->getScheme();
-        foreach ($siteConfig['hosts'] as $hostConfig) {
+        foreach ($site->getConfig()['hosts'] as $hostConfig) {
             if ($hostConfig['canonical']) {
                 $canonicalHost = $hostConfig['domain'];
                 if ($hostConfig['scheme']) {

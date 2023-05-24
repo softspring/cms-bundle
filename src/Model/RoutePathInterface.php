@@ -2,6 +2,8 @@
 
 namespace Softspring\CmsBundle\Model;
 
+use Doctrine\Common\Collections\Collection;
+
 interface RoutePathInterface
 {
     public const TYPE_REDIRECT_TO_CANONICAL = 1;
@@ -12,9 +14,14 @@ interface RoutePathInterface
 
     public function setRoute(?RouteInterface $route): void;
 
-    public function getSite(): ?string;
+    /**
+     * @psalm-return SiteInterface[]|Collection
+     */
+    public function getSites(): Collection;
 
-    public function setSite(?string $site): void;
+    public function addSite(SiteInterface $site): void;
+
+    public function removeSite(SiteInterface $site): void;
 
     public function getPath(): ?string;
 

@@ -19,8 +19,8 @@
         <div class="row align-items-center border-bottom border-dark">
             <div class="col-12 col-md-3 col-lg-2 text-md-end mb-md-2">Name</div>
             <div class="col-12 col-md-9 col-lg-10 mb-2 h4"><strong>{{ entity.name }}</strong></div>
-            <div class="col-12 col-md-3 col-lg-2 text-md-end mb-md-2">Sitio</div>
-            <div class="col-12 col-md-9 col-lg-10 mb-2">{{ entity.site|sfs_cms_site_name }}</div>
+            <div class="col-12 col-md-3 col-lg-2 text-md-end mb-md-2">Sitios</div>
+            <div class="col-12 col-md-9 col-lg-10 mb-2">{{ entity.sites|map((site) => site|sfs_cms_site_name)|join(', ') }}</div>
             <div class="col-12 col-md-3 col-lg-2 text-md-end mb-md-2">Published</div>
             <div class="col-12 col-md-9 col-lg-10 mb-2">
                 {{ entity.publishedVersion ? entity.publishedVersion.createdAt|date('H:i d-m-Y') : 'no' }}
@@ -67,12 +67,14 @@
                 <h2 class="h5">Routes</h2>
                 <ul class="list-unstyled">
                 {% for route in entity.routes %}
-                {% for path in route.paths %}
-                    <li>
-                        <a href="{{ sfs_cms_route_path_url(path) }}" target="_blank">{{ sfs_cms_route_path_path(path) }} <span class="mdi mdi-18px mdi-open-in-new"></span></a>
-                        {% if path.cacheTtl %}(cache {{ path.cacheTtl }} seconds){% endif %}
-                    </li>
-                {% endfor %}
+                    {% for site in route.sites %}
+                        {% for path in route.paths %}
+                        <li>
+                            {{ site|sfs_cms_site_name }}: <a href="{{ sfs_cms_route_path_url(path, site) }}" target="_blank">{{ sfs_cms_route_path_path(path, site) }} <span class="mdi mdi-18px mdi-open-in-new"></span></a>
+                            {% if path.cacheTtl %}(cache {{ path.cacheTtl }} seconds){% endif %}
+                        </li>
+                        {% endfor %}
+                    {% endfor %}
                 {% endfor %}
                 </ul>
             </div>

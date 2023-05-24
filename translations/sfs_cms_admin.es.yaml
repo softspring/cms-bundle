@@ -63,7 +63,7 @@ admin_blocks:
 #admin_content:
 #    form:
 #        name.label: "Nombre"
-#        site.label: "Sitio web"
+#        sites.label: "Sitios web"
 #        layout.label: "Diseño"
 #        modules.label: "Módulos"
 #        seo.label: "SEO"
@@ -100,13 +100,14 @@ admin_routes:
             preview.link: "Previsualizar"
         fields:
             id.header: "Ruta"
-            site.header: "Sitio"
+            sites.header: "Sitios"
             content.header: "Contenido"
+            page.header: "Página"
             path.header: "URL"
             type.header: "Tipo"
         filter_form:
             id.label: "Ruta"
-            site.label: "Sitio"
+            sites.label: "Sites"
     form:
         paths:
             add.button: "Añadir segmento de URL"
@@ -115,7 +116,7 @@ admin_routes:
             locale.label: "Idioma"
             cacheTtl.label: "Tiempo de cache"
         id.label: "Identificador"
-        site.label: "Sitio"
+        sites.label: "Sites"
         parent.label: "Ruta padre"
         type:
             label: "Tipo"

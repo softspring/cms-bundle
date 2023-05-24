@@ -162,16 +162,16 @@ admin_page:
             name.header: "Nombre"
         filter_form:
             name.label: "Nombre"
-            site.label: "Sitio"
+            sites.label: "Sitios"
 
     form:
         name.label: "Nombre"
-        site.label: "Site"
+        sites.label: "Sites"
         routes:
             0.label: ""
             label: "Rutas"
             id.label: "Identificador"
-            site.label: "Site"
+            sites.label: "Sites"
             parent.label: "Ruta padre"
             paths:
                 label: "URLs"

@@ -58,18 +58,23 @@ class ContentVersionListener
         }
 
         $originalLocale = $request->getLocale();
+        $originalSite = $request->attributes->get('_sfs_cms_site');
 
         $compiled = [];
         $compiledModules = [];
-        foreach ($this->enabledLocales as $locale) {
-            $request->setLocale($locale);
-            // $compiled[$locale] = $this->contentRender->render($contentVersion);
-            $compiledModules[$locale] = $this->contentRender->renderModules($contentVersion);
+        foreach ($contentVersion->getContent()->getSites() as $site) {
+            foreach ($this->enabledLocales as $locale) {
+                $request->setLocale($locale);
+                $request->attributes->set('_sfs_cms_site', $site);
+                // $compiled[$locale] = $this->contentRender->render($contentVersion);
+                $compiledModules["$site"][$locale] = $this->contentRender->renderModules($contentVersion);
+            }
         }
         $contentVersion->setCompiled($compiled);
         $contentVersion->setCompiledModules($compiledModules);
 
         $request->setLocale($originalLocale);
+        $request->attributes->set('_sfs_cms_site', $originalSite);
     }
 
     protected function transform(ContentVersionInterface $contentVersion, LifecycleEventArgs $event)

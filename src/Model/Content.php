@@ -9,7 +9,7 @@ abstract class Content implements ContentInterface
 {
     protected ?string $name = null;
 
-    protected ?string $site = null;
+    protected ?Collection $sites = null;
 
     /**
      * @psalm-var ContentVersionInterface[]|Collection
@@ -33,6 +33,7 @@ abstract class Content implements ContentInterface
 
     public function __construct()
     {
+        $this->sites = new ArrayCollection();
         $this->versions = new ArrayCollection();
         $this->routes = new ArrayCollection();
     }
@@ -47,17 +48,30 @@ abstract class Content implements ContentInterface
         $this->name = $name;
     }
 
-    public function getSite(): ?string
+    public function getSites(): Collection
     {
-        return $this->site;
+        return $this->sites;
     }
 
-    public function setSite(?string $site): void
+    public function addSite(SiteInterface $site): void
     {
-        $this->site = $site;
+        if (!$this->getSites()->contains($site)) {
+            $this->getSites()->add($site);
 
-        foreach ($this->getRoutes() as $route) {
-            $route->setSite($site);
+            foreach ($this->getRoutes() as $route) {
+                $route->addSite($site);
+            }
+        }
+    }
+
+    public function removeSite(SiteInterface $site): void
+    {
+        if ($this->getSites()->contains($site)) {
+            $this->getSites()->removeElement($site);
+
+            foreach ($this->getRoutes() as $route) {
+                $route->removeSite($site);
+            }
         }
     }
 
@@ -107,7 +121,7 @@ abstract class Content implements ContentInterface
         if (!$this->routes->contains($route)) {
             $this->routes->add($route);
             $route->setContent($this);
-            $route->setSite($this->getSite());
+            // $route->setSite($this->getSite()); TODO FIX THIS
         }
     }
 

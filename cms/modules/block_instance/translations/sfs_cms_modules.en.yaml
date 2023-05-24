@@ -4,6 +4,7 @@ block_instance:
     prototype_button_icon: '<i class="bi bi-puzzle"></i>'
     form:
         locale_filter.label: "Locales"
+        site_filter.label: "Sites"
         id.label: "Id"
         class.label: "Classes"
         block.label: "Block"

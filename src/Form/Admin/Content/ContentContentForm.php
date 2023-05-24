@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Softspring\CmsBundle\Form\Admin\LayoutContentType;
 use Softspring\CmsBundle\Form\Module\ModuleCollectionType;
 use Softspring\CmsBundle\Form\Type\LayoutType;
+use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -31,6 +32,8 @@ class ContentContentForm extends AbstractType implements ContentContentFormInter
             'validation_groups' => ['Default', 'create'],
             'translation_domain' => 'sfs_cms_contents',
             'layout' => null,
+            'content_type' => null,
+            'content' => null,
         ]);
 
         //        $resolver->setNormalizer('label_format', function (Options $options, $value) {
@@ -39,6 +42,9 @@ class ContentContentForm extends AbstractType implements ContentContentFormInter
 
         $resolver->setRequired('content_type');
         $resolver->setAllowedTypes('content_type', ['string']);
+
+        $resolver->setRequired('content');
+        $resolver->setAllowedTypes('content', [ContentInterface::class]);
 
         $resolver->setNormalizer('label_format', function (Options $options, $value) {
             return "admin_{$options['content_type']}.form.%name%.label";
@@ -51,6 +57,7 @@ class ContentContentForm extends AbstractType implements ContentContentFormInter
         $builder->add('data', LayoutContentType::class, [
             'layout' => $options['layout'],
             'content_type' => $options['content_type'],
+            'content' => $options['content'],
         ]);
         $builder->add('_ok', HiddenType::class, [
             'mapped' => false,
@@ -69,6 +76,7 @@ class ContentContentForm extends AbstractType implements ContentContentFormInter
             'module_row_class' => 'row',
             'prototype' => true,
             'mapped' => false,
+            'content' => $options['content'],
         ]);
     }
 }

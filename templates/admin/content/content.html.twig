@@ -37,6 +37,15 @@
                             </select>
                         {% endif %}
                     </div>
+                    <div class="text-end me-3">
+                        {% if entity.sites|length > 1 %}
+                            <select class="form-select" id="contentEditionSiteSelection">
+                                {% for site in entity.sites %}
+                                    <option value="{{ site }}">{{ site|sfs_cms_site_name }}</option>
+                                {% endfor %}
+                            </select>
+                        {% endif %}
+                    </div>
 
                     <div class="text-end">
                         {% if app.request.query.get('back') == 'versions' %}

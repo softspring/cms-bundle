@@ -20,9 +20,16 @@ interface RouteInterface
 
     public function setType(?int $type): void;
 
-    public function getSite(): ?string;
+    /**
+     * @psalm-return SiteInterface[]|Collection
+     */
+    public function getSites(): Collection;
 
-    public function setSite(?string $site): void;
+    public function addSite(SiteInterface $site): void;
+
+    public function removeSite(SiteInterface $site): void;
+
+    public function hasSite(string $site): bool;
 
     public function getParent(): ?RouteInterface;
 

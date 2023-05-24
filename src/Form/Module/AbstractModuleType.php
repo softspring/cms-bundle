@@ -2,6 +2,8 @@
 
 namespace Softspring\CmsBundle\Form\Module;
 
+use Softspring\CmsBundle\Form\Admin\SiteChoiceType;
+use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\Component\PolymorphicFormType\Form\Type\Node\AbstractNodeType;
 use Symfony\Component\Form\Event\PreSetDataEvent;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -29,8 +31,10 @@ abstract class AbstractModuleType extends AbstractNodeType
             'module_migrations' => [],
             'translation_domain' => 'sfs_cms_modules',
             'content_type' => null,
+            'content' => null,
             'row_class' => '',
             'locale_filter' => true,
+            'site_filter' => true,
             'deprecated' => false,
         ]);
 
@@ -45,6 +49,9 @@ abstract class AbstractModuleType extends AbstractNodeType
 
         $resolver->setRequired('content_type');
         $resolver->setAllowedTypes('content_type', ['string']);
+
+        $resolver->setRequired('content');
+        $resolver->setAllowedTypes('content', [ContentInterface::class]);
 
         $resolver->setDefault('form_template', null);
         $resolver->setAllowedTypes('form_template', ['null', 'string']);
@@ -87,6 +94,33 @@ abstract class AbstractModuleType extends AbstractNodeType
                 if (!isset($data['locale_filter'])) {
                     // set all locales on no stored locale_filter
                     $data['locale_filter'] = $this->enabledLocales;
+                }
+
+                $event->setData($data);
+            });
+        }
+
+        if ($options['site_filter'] && $options['content']->getSites()->count() > 1) {
+            $builder->add('site_filter', SiteChoiceType::class, [
+                'multiple' => true,
+                'expanded' => true,
+                'block_prefix' => 'module_site_filter',
+                'choice_translation_domain' => false,
+                'content' => $options['content'],
+            ]);
+
+            $builder->addEventListener(FormEvents::PRE_SET_DATA, function (PreSetDataEvent $event) {
+                $data = $event->getData();
+                $availableSites = $event->getForm()->getConfig()->getOption('content')->getSites()->toArray();
+
+                if (null === $data) {
+                    // set all locales on prototyping (data = null)
+                    $data = ['site_filter' => $availableSites];
+                }
+
+                if (!isset($data['site_filter'])) {
+                    // set all locales on no stored site_filter
+                    $data['site_filter'] = $availableSites;
                 }
 
                 $event->setData($data);

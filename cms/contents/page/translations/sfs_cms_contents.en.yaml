@@ -162,16 +162,16 @@ admin_page:
             name.header: "Name"
         filter_form:
             name.label: "Name"
-            site.label: "Site"
+            sites.label: "Sites"
 
     form:
         name.label: "Name"
-        site.label: "Site"
+        sites.label: "Sites"
         routes:
             0.label: ""
             label: "Routes"
             id.label: "Route id"
-            site.label: "Site"
+            sites.label: "Sites"
             parent.label: "Parent route"
             paths:
                 label: "URLs"
