@@ -141,7 +141,7 @@ class CmsConfig
 
     public function getSites(): array
     {
-        if ($this->siteEntities === null) {
+        if (null === $this->siteEntities) {
             $this->siteEntities = [];
 
             foreach ($this->siteManager->getRepository()->findAll() as $siteEntity) {
@@ -152,12 +152,14 @@ class CmsConfig
                 $this->siteEntities["$siteEntity"] = $siteEntity;
             }
 
-            foreach ($this->siteConfigs as $siteId => $config) if (!isset($this->siteEntities[$siteId])) {
-                $siteEntity = $this->siteManager->createEntity();
-                $siteEntity->setId($siteId);
-                $siteEntity->setConfig($config);
-                $this->siteManager->saveEntity($siteEntity);
-                $this->siteEntities["$siteEntity"] = $siteEntity;
+            foreach ($this->siteConfigs as $siteId => $config) {
+                if (!isset($this->siteEntities[$siteId])) {
+                    $siteEntity = $this->siteManager->createEntity();
+                    $siteEntity->setId($siteId);
+                    $siteEntity->setConfig($config);
+                    $this->siteManager->saveEntity($siteEntity);
+                    $this->siteEntities["$siteEntity"] = $siteEntity;
+                }
             }
         }
 

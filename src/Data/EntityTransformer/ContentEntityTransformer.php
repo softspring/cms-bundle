@@ -79,7 +79,7 @@ abstract class ContentEntityTransformer implements ContentEntityTransformerInter
         return [
             $contentType => [
                 'name' => $content->getName(),
-                'sites' => $content->getSites()->map(fn(SiteInterface $site) => $site->getId())->toArray(),
+                'sites' => $content->getSites()->map(fn (SiteInterface $site) => $site->getId())->toArray(),
                 'extra' => $content->getExtraData(),
                 'seo' => $content->getSeo(),
                 'versions' => $versions,

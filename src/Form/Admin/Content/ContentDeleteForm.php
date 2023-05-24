@@ -72,7 +72,7 @@ class ContentDeleteForm extends AbstractType implements ContentUpdateFormInterfa
             },
             'choice_attr' => function (ContentInterface $content) {
                 return [
-                    'data-site' => $content->getSites()->map(fn(SiteInterface $site) => $site->getId()),
+                    'data-site' => $content->getSites()->map(fn (SiteInterface $site) => $site->getId()),
                 ];
             },
             'query_builder' => function (EntityRepository $entityRepository) use ($options) {

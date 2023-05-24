@@ -40,11 +40,13 @@ class RouteForm extends AbstractType
             'translation_domain' => 'sfs_cms_admin',
             'constraints' => new Callback(function (RouteInterface $value, ExecutionContextInterface $context, $payload) {
                 if ($value->getContent()) {
-                    foreach ($value->getSites() as $site) if (!$value->getContent()->getSites()->contains($site)) {
-                        $context->buildViolation('The content must have the same sites as route selected ones')
-                            ->atPath('sites')
-                            ->addViolation();
-                        break;
+                    foreach ($value->getSites() as $site) {
+                        if (!$value->getContent()->getSites()->contains($site)) {
+                            $context->buildViolation('The content must have the same sites as route selected ones')
+                                ->atPath('sites')
+                                ->addViolation();
+                            break;
+                        }
                     }
                 }
             }),
@@ -73,7 +75,7 @@ class RouteForm extends AbstractType
             },
             'choice_attr' => function (RouteInterface $parent) {
                 return [
-                    'data-site' => $parent->getSite(),
+                    'data-site' => $parent->getSites()->map(fn (SiteInterface $site) => "$site"),
                 ];
             },
         ]);
@@ -110,7 +112,7 @@ class RouteForm extends AbstractType
                 },
                 'choice_attr' => function (ContentInterface $content) {
                     return [
-                        'data-site' => $content->getSites()->map(fn(SiteInterface $site) => $site->getId()),
+                        'data-site' => $content->getSites()->map(fn (SiteInterface $site) => $site->getId()),
                     ];
                 },
                 // 'constraints' => new NotBlank(),

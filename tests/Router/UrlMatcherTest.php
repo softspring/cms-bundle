@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Softspring\CmsBundle\Entity\Page;
 use Softspring\CmsBundle\Entity\Route;
 use Softspring\CmsBundle\Entity\RoutePath;
+use Softspring\CmsBundle\Entity\Site;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Routing\SiteResolver;
 use Softspring\CmsBundle\Routing\UrlGenerator;
@@ -52,6 +53,9 @@ class UrlMatcherTest extends TestCase
     public function testHttpsRedirect()
     {
         $siteConfig = ['https_redirect' => true];
+        $site = new Site();
+        $site->setId('default');
+        $site->setConfig($siteConfig);
         $hostConfig = [];
 
         $this->siteResolver->method('getCanonicalRedirectUrl')->willReturn('https://example.org/redirect');
@@ -59,7 +63,7 @@ class UrlMatcherTest extends TestCase
         $urlMatcher = new UrlMatcher($this->em, $this->urlGenerator, $this->siteResolver);
         $request = new Request();
         $request->attributes->set('_site', 'default');
-        $request->attributes->set('_sfs_cms_site', $siteConfig + ['id' => 'default']);
+        $request->attributes->set('_sfs_cms_site', $site);
         $request->attributes->set('_sfs_cms_site_host_config', $hostConfig);
         $attributes = $urlMatcher->matchRequest($request);
 
@@ -73,6 +77,9 @@ class UrlMatcherTest extends TestCase
     public function testRedirectToCanonical()
     {
         $siteConfig = ['https_redirect' => true];
+        $site = new Site();
+        $site->setId('default');
+        $site->setConfig($siteConfig);
         $hostConfig = ['redirect_to_canonical' => true];
 
         $this->siteResolver->method('getCanonicalRedirectUrl')->willReturn('https://example.org/redirect');
@@ -80,7 +87,7 @@ class UrlMatcherTest extends TestCase
         $urlMatcher = new UrlMatcher($this->em, $this->urlGenerator, $this->siteResolver);
         $request = new Request([], [], [], [], [], ['HTTPS' => true]);
         $request->attributes->set('_site', 'default');
-        $request->attributes->set('_sfs_cms_site', $siteConfig + ['id' => 'default']);
+        $request->attributes->set('_sfs_cms_site', $site);
         $request->attributes->set('_sfs_cms_site_host_config', $hostConfig);
         $attributes = $urlMatcher->matchRequest($request);
         $this->assertEquals([
@@ -104,6 +111,9 @@ class UrlMatcherTest extends TestCase
             'sitemaps' => [],
             'sitemaps_index' => ['enabled' => false],
         ];
+        $site = new Site();
+        $site->setId('default');
+        $site->setConfig($siteConfig);
         $hostConfig = ['redirect_to_canonical' => false];
 
         $this->urlGenerator->method('getUrl')->willReturn('https://example.org/home-page');
@@ -111,7 +121,7 @@ class UrlMatcherTest extends TestCase
         $urlMatcher = new UrlMatcher($this->em, $this->urlGenerator, $this->siteResolver);
         $request = new Request([], [], [], [], [], ['HTTPS' => true]);
         $request->attributes->set('_site', 'default');
-        $request->attributes->set('_sfs_cms_site', $siteConfig + ['id' => 'default']);
+        $request->attributes->set('_sfs_cms_site', $site);
         $request->attributes->set('_sfs_cms_site_host_config', $hostConfig);
         $attributes = $urlMatcher->matchRequest($request);
         $this->assertEquals([
@@ -133,6 +143,9 @@ class UrlMatcherTest extends TestCase
             'sitemaps' => [],
             'sitemaps_index' => ['enabled' => false],
         ];
+        $site = new Site();
+        $site->setId('default');
+        $site->setConfig($siteConfig);
         $hostConfig = ['redirect_to_canonical' => false, 'locale' => 'es'];
 
         $this->query->method('getOneOrNullResult')->willReturn(null);
@@ -140,7 +153,7 @@ class UrlMatcherTest extends TestCase
         $urlMatcher = new UrlMatcher($this->em, $this->urlGenerator, $this->siteResolver);
         $request = new Request([], [], [], [], [], ['HTTPS' => true]);
         $request->attributes->set('_site', 'default');
-        $request->attributes->set('_sfs_cms_site', $siteConfig + ['id' => 'default']);
+        $request->attributes->set('_sfs_cms_site', $site);
         $request->attributes->set('_sfs_cms_site_host_config', $hostConfig);
         $attributes = $urlMatcher->matchRequest($request);
         $this->assertEquals([
@@ -164,6 +177,9 @@ class UrlMatcherTest extends TestCase
             'sitemaps' => [],
             'sitemaps_index' => ['enabled' => false],
         ];
+        $site = new Site();
+        $site->setId('default');
+        $site->setConfig($siteConfig);
         $hostConfig = ['redirect_to_canonical' => false, 'locale' => 'es'];
 
         $this->query->method('getOneOrNullResult')->willReturn(null);
@@ -171,7 +187,7 @@ class UrlMatcherTest extends TestCase
         $urlMatcher = new UrlMatcher($this->em, $this->urlGenerator, $this->siteResolver);
         $request = new Request([], [], [], [], [], ['HTTPS' => true, 'SERVER_NAME' => 'sfs-cms.org', 'REQUEST_URI' => 'https://sfs-cms.org/en/test-url']);
         $request->attributes->set('_site', 'default');
-        $request->attributes->set('_sfs_cms_site', $siteConfig + ['id' => 'default']);
+        $request->attributes->set('_sfs_cms_site', $site);
         $request->attributes->set('_sfs_cms_site_host_config', $hostConfig);
         $attributes = $urlMatcher->matchRequest($request);
         $this->assertEquals([
@@ -197,10 +213,13 @@ class UrlMatcherTest extends TestCase
             'sitemaps' => [],
             'sitemaps_index' => ['enabled' => false],
         ];
+        $site = new Site();
+        $site->setId('default');
+        $site->setConfig($siteConfig);
         $hostConfig = ['redirect_to_canonical' => false, 'locale' => 'es'];
 
         $route = new Route();
-        $route->setSite('default');
+        $route->addSite($site);
         $route->setId('example');
         $route->setType(RouteInterface::TYPE_CONTENT);
         $route->setContent(new Page());
@@ -212,7 +231,7 @@ class UrlMatcherTest extends TestCase
         $urlMatcher = new UrlMatcher($this->em, $this->urlGenerator, $this->siteResolver);
         $request = new Request([], [], [], [], [], ['HTTPS' => true, 'SERVER_NAME' => 'sfs-cms.org', 'REQUEST_URI' => 'https://sfs-cms.org/en/test-url']);
         $request->attributes->set('_site', 'default');
-        $request->attributes->set('_sfs_cms_site', $siteConfig + ['id' => 'default']);
+        $request->attributes->set('_sfs_cms_site', $site);
         $request->attributes->set('_sfs_cms_site_host_config', $hostConfig);
         $attributes = $urlMatcher->matchRequest($request);
         $this->assertEquals([

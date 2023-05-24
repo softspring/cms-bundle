@@ -3,13 +3,11 @@
 namespace Softspring\CmsBundle\Form\Admin;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 

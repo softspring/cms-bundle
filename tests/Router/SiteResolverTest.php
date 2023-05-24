@@ -2,20 +2,25 @@
 
 namespace Softspring\CmsBundle\Test\Config\Router;
 
+use Doctrine\ORM\EntityRepository;
 use PHPUnit\Framework\TestCase;
 use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Entity\Site;
 use Softspring\CmsBundle\Exception\SiteHasNotACanonicalHostException;
 use Softspring\CmsBundle\Exception\SiteNotFoundException;
+use Softspring\CmsBundle\Manager\SiteManager;
+use Softspring\CmsBundle\Manager\SiteManagerInterface;
 use Softspring\CmsBundle\Routing\SiteResolver;
 use Symfony\Component\HttpFoundation\Request;
 
 class SiteResolverTest extends TestCase
 {
     protected CmsConfig $cmsConfig;
+    protected SiteManagerInterface $siteManager;
 
     protected function setUp(): void
     {
-        $this->cmsConfig = new CmsConfig([], [], [], [], [], [
+        $sitesConfig = [
             'default' => [
                 '_id' => 'default',
                 'hosts' => [
@@ -42,7 +47,23 @@ class SiteResolverTest extends TestCase
                     ['domain' => 'store.sfs-cms.org', 'locale' => 'en', 'scheme' => 'https', 'canonical' => true, 'redirect_to_canonical' => false],
                 ],
             ],
-        ]);
+        ];
+
+        $sites = array_map(function(array $siteConfig) {
+            $site = new Site();
+            $site->setId($siteConfig['_id']);
+            $site->setConfig($siteConfig);
+            return $site;
+        }, $sitesConfig);
+
+        $repository = $this->createMock(EntityRepository::class);
+        $repository->method('findAll')->willReturn($sites);
+
+        $this->siteManager = $this->createMock(SiteManager::class);
+        $this->siteManager->method('getRepository')->willReturn($repository);
+        $this->siteManager->method('createEntity')->willReturnCallback(function () { return new Site(); });
+
+        $this->cmsConfig = new CmsConfig([], [], [], [], [], $sitesConfig, $this->siteManager);
     }
 
     public function testResolveWithHost()

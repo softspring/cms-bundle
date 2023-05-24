@@ -88,7 +88,7 @@ abstract class Route implements RouteInterface
 
     public function hasSite(string $site): bool
     {
-        return (bool) $this->getSites()->filter(fn(SiteInterface $routeSite) => "$routeSite" === "$site")->count();
+        return (bool) $this->getSites()->filter(fn (SiteInterface $routeSite) => "$routeSite" === "$site")->count();
     }
 
     /**
