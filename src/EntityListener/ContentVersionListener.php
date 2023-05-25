@@ -90,13 +90,11 @@ class ContentVersionListener
                 foreach ($module as $field => $value) {
                     if ('modules' !== $field) {
                         $data[$layout][$m][$field] = $this->transformEntityValues($value, $event->getObjectManager(), $entities);
-                    }
-                }
-
-                if (isset($module['modules'])) {
-                    foreach ($module['modules'] as $sm => $submodule) {
-                        foreach ($submodule as $field => $value) {
-                            $data[$layout][$m]['modules'][$sm][$field] = $this->transformEntityValues($value, $event->getObjectManager(), $entities);
+                    } else {
+                        foreach ($value as $sm => $submodule) {
+                            foreach ($submodule as $field => $value) {
+                                $data[$layout][$m]['modules'][$sm][$field] = $this->transformEntityValues($value, $event->getObjectManager(), $entities);
+                            }
                         }
                     }
                 }
@@ -130,13 +128,11 @@ class ContentVersionListener
                 foreach ($module as $field => $value) {
                     if ('modules' !== $field) {
                         $data[$layout][$m][$field] = $this->untransformEntityValues($value, $event->getObjectManager());
-                    }
-                }
-
-                if (isset($module['modules'])) {
-                    foreach ($module['modules'] as $sm => $submodule) {
-                        foreach ($submodule as $field => $value) {
-                            $data[$layout][$m]['modules'][$sm][$field] = $this->untransformEntityValues($value, $event->getObjectManager());
+                    } else {
+                        foreach ($value as $sm => $submodule) {
+                            foreach ($submodule as $field => $value) {
+                                $data[$layout][$m]['modules'][$sm][$field] = $this->untransformEntityValues($value, $event->getObjectManager());
+                            }
                         }
                     }
                 }
