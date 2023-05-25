@@ -6,6 +6,8 @@ class Site implements SiteInterface
 {
     protected ?string $id;
 
+    protected ?array $config = null;
+
     public function getId(): ?string
     {
         return $this->id;
@@ -20,8 +22,6 @@ class Site implements SiteInterface
     {
         return "{$this->getId()}";
     }
-
-    protected ?array $config;
 
     public function getConfig(): ?array
     {

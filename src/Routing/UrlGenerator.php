@@ -194,7 +194,7 @@ class UrlGenerator
         $site = $this->getSite($site, $this->requestStack->getCurrentRequest());
 
         if (!$route->hasSite("$site")) {
-            throw new RouteNotFoundException();
+            $site = $route->getSites()->first();
         }
 
         foreach ($site->getConfig()['hosts'] as $hostConfig) {
@@ -215,7 +215,7 @@ class UrlGenerator
         $site = $this->getSite($site, $this->requestStack->getCurrentRequest());
 
         if (!$route->hasSite("$site")) {
-            throw new RouteNotFoundException();
+            $site = $route->getSites()->first();
         }
 
         if ('path' == $this->siteConfig['identification']) {

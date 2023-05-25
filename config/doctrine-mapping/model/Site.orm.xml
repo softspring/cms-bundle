@@ -5,6 +5,7 @@
                       https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <mapped-superclass name="Softspring\CmsBundle\Model\Site" table="cms_site">
+        <field name="config" column="config" type="json" nullable="true"/>
     </mapped-superclass>
 
 </doctrine-mapping>

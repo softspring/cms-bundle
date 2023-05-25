@@ -27,7 +27,7 @@
 
                             {% if entity.sites|length > 1 %}
                                 <select class="form-select" name="site" onchange="this.form.submit()">>
-                                    {% for site in entity.sites %}
+                                    {% for site in entity.sitesSorted %}
                                         <option value="{{ site }}">{{ site|sfs_cms_site_name }}</option>
                                     {% endfor %}
                                 </select>
@@ -55,7 +55,7 @@
         </header>
         <main class="flex-fill d-flex flex-row align-items-stretch bg-light  min-vh-100">
             <div class="pt-4 h-100 w-100">
-                <iframe name="previewFrame" id="preview" src="{{ url('sfs_cms_admin_content_'~content~'_preview_content_version', {'content':entity, 'version':version, 'locale': app.request.query.get('locale', enabledLocales[0]|default(app.request.defaultLocale))}) }}" width="100%" height="100%"></iframe>
+                <iframe name="previewFrame" id="preview" src="{{ url('sfs_cms_admin_content_'~content~'_preview_content_version', {'content':entity, 'version':version, 'site': entity.sitesSorted.first, 'locale': app.request.query.get('locale', enabledLocales[0]|default(app.request.defaultLocale))}) }}" width="100%" height="100%"></iframe>
             </div>
         </main>
     </div>

@@ -147,9 +147,11 @@ class CmsConfig
             foreach ($this->siteManager->getRepository()->findAll() as $siteEntity) {
                 if (!isset($this->siteConfigs["$siteEntity"])) {
                     $this->siteManager->deleteEntity($siteEntity);
+                } else {
+                    $siteEntity->setConfig($this->siteConfigs["$siteEntity"]);
+                    $this->siteManager->saveEntity($siteEntity);
+                    $this->siteEntities["$siteEntity"] = $siteEntity;
                 }
-                $siteEntity->setConfig($this->siteConfigs["$siteEntity"]);
-                $this->siteEntities["$siteEntity"] = $siteEntity;
             }
 
             foreach ($this->siteConfigs as $siteId => $config) {
