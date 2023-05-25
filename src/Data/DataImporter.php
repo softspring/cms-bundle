@@ -43,13 +43,8 @@ class DataImporter extends AbstractDataImportExport
     public function import(array $contents, array $options = []): void
     {
         // preload sites
-        foreach ($this->cmsConfig->getSites() as $previousExistingSite) {
-            // create sites again because they will be removed by fixtures purge
-            $newSite = $this->siteManager->createEntity();
-            $newSite->setId("$previousExistingSite");
-            $newSite->setConfig($previousExistingSite->getConfig());
-            $this->referenceRepository->addReference("site___{$newSite}", $newSite);
-            $this->em->persist($newSite);
+        foreach ($this->cmsConfig->getSites() as $site) {
+            $this->referenceRepository->addReference("site___{$site}", $site);
         }
 
         // do preloading
