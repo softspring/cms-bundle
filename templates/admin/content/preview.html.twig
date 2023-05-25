@@ -18,7 +18,7 @@
                     <div class="text-end me-3">
                         <form class="d-flex" action="{{ url('sfs_cms_admin_content_'~content~'_preview_content', {'content':entity}) }}" method="GET" target="previewFrame">
                             {% if enabledLocales|length > 1 %}
-                                <select class="form-select" name="locale" onchange="this.form.submit()">
+                                <select class="form-select mx-1" name="locale" onchange="this.form.submit()">
                                     {% for locale in enabledLocales %}
                                         <option value="{{ locale|lower }}">{{ locale|upper }}</option>
                                     {% endfor %}
@@ -26,7 +26,7 @@
                             {% endif %}
 
                             {% if entity.sites|length > 1 %}
-                                <select class="form-select" name="site" onchange="this.form.submit()">>
+                                <select class="form-select mx-1" name="site" onchange="this.form.submit()">
                                     {% for site in entity.sitesSorted %}
                                         <option value="{{ site }}">{{ site|sfs_cms_site_name }}</option>
                                     {% endfor %}
@@ -35,19 +35,19 @@
                         </form>
                     </div>
 
-                    <div class="text-end">
-                        <a id="previewExternalLink" target="_blank" class="btn btn-light" href="{{ url('sfs_cms_admin_content_'~content~'_preview_content', {'content':entity, 'locale':app.request.query.get('locale', 'es')}) }}">{{ ('admin_'~content~'.preview.actions.open.button')|trans }} <i class="bi bi-box-arrow-up-right"></i></a>
+                    <div class="d-flex justify-content-end">
+                        <a id="previewExternalLink" target="_blank" class="btn btn-light mx-1" href="{{ url('sfs_cms_admin_content_'~content~'_preview_content', {'content':entity, 'locale':app.request.query.get('locale', 'es')}) }}">{{ ('admin_'~content~'.preview.actions.open.button')|trans }} <i class="bi bi-box-arrow-up-right"></i></a>
                         {% if app.request.query.get('back') == 'versions' %}
-                            <a href="{{ url('sfs_cms_admin_content_'~content~'_versions', {'content':entity}) }}" class="btn btn-light">{{ ('admin_'~content~'.preview.actions.cancel.button')|trans }}</a>
+                            <a href="{{ url('sfs_cms_admin_content_'~content~'_versions', {'content':entity}) }}" class="btn btn-light mx-1">{{ ('admin_'~content~'.preview.actions.cancel.button')|trans }}</a>
                         {% else %}
-                            <a href="{{ url('sfs_cms_admin_content_'~content~'_details', {'content':entity}) }}" class="btn btn-light">{{ ('admin_'~content~'.preview.actions.cancel.button')|trans }}</a>
+                            <a href="{{ url('sfs_cms_admin_content_'~content~'_details', {'content':entity}) }}" class="btn btn-light mx-1">{{ ('admin_'~content~'.preview.actions.cancel.button')|trans }}</a>
                         {% endif %}
-                        <a href="{{ url('sfs_cms_admin_content_'~content~'_content', {'content':entity}) }}" class="btn btn-light">{{ ('admin_'~content~'.preview.actions.content.button')|trans }}</a>
+                        <a href="{{ url('sfs_cms_admin_content_'~content~'_content', {'content':entity}) }}" class="btn btn-light mx-1">{{ ('admin_'~content~'.preview.actions.content.button')|trans }}</a>
 
                         {% if version.published %}
-                            <span class="btn btn-light disabled">{{ ('admin_'~content~'.preview.actions.published.button')|trans }}</span>
+                            <span class="btn btn-light disabled mx-1">{{ ('admin_'~content~'.preview.actions.published.button')|trans }}</span>
                         {% else %}
-                            <a href="{{ url('sfs_cms_admin_content_'~content~'_publish_version', {'content':entity, 'version':version, 'back':'preview'}) }}" class="btn btn-light">{{ ('admin_'~content~'.preview.actions.publish.button')|trans }}</a>
+                            <a href="{{ url('sfs_cms_admin_content_'~content~'_publish_version', {'content':entity, 'version':version, 'back':'preview'}) }}" class="btn btn-light mx-1">{{ ('admin_'~content~'.preview.actions.publish.button')|trans }}</a>
                         {% endif %}
                     </div>
                 </div>
