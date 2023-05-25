@@ -102,12 +102,12 @@ class ContentDataCollector extends DataCollector
         return $this->data['cache'] ?? [];
     }
 
-    public function getSite(): string
+    public function getSiteName(): string
     {
         return $this->data['site_name'] ?? '';
     }
 
-    public function getSiteConfig(): ?SiteInterface
+    public function getSite(): ?SiteInterface
     {
         return $this->data['_sfs_cms_site'] ?? null;
     }

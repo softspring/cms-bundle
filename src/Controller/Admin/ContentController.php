@@ -11,6 +11,7 @@ use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
+use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\Render\ContentRender;
 use Softspring\CmsBundle\Utils\Slugger;
 use Softspring\CmsBundle\Utils\ZipContent;
@@ -396,6 +397,7 @@ class ContentController extends AbstractController
                     try {
                         $version = $this->dataImporter->importVersion($contentType, $entity, $versionData, $data, ['version_origin' => ContentVersionInterface::ORIGIN_IMPORT]);
                         $version->setOriginDescription($zipFile->getClientOriginalName());
+                        $version->setKeep(true);
                         $this->contentManager->saveEntity($entity);
 
                         //                if ($response = $this->dispatchGetResponseFromConfig($config, 'success_event_name', new GetResponseEntityEvent($entity, $request))) {
@@ -719,6 +721,9 @@ class ContentController extends AbstractController
         $this->webDebugToolbarListener && $this->webDebugToolbarListener->setMode(WebDebugToolbarListener::DISABLED);
 
         $request->setLocale($request->query->get('locale', 'es'));
+
+        $site = $request->query->has('site') ? $this->em->getRepository(SiteInterface::class)->findOneById($request->query->get('site')) : $entity->getSites()->first();
+        $request->attributes->set('_sfs_cms_site', $site);
 
         $request->attributes->set('_cms_preview', true);
 

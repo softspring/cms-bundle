@@ -16,13 +16,23 @@
                     <div class="col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"></div>
 
                     <div class="text-end me-3">
-                        {% if enabledLocales|length > 1 %}
-                            <select class="form-select" onchange="document.getElementById('preview').src = this.value; document.getElementById('previewExternalLink').href = this.value">
-                                {% for locale in enabledLocales %}
-                                    <option value="{{ url('sfs_cms_admin_content_'~content~'_preview_content', {'content':entity, 'locale':locale|lower}) }}">{{ locale|upper }}</option>
-                                {% endfor %}
-                            </select>
-                        {% endif %}
+                        <form class="d-flex" action="{{ url('sfs_cms_admin_content_'~content~'_preview_content', {'content':entity}) }}" method="GET" target="previewFrame">
+                            {% if enabledLocales|length > 1 %}
+                                <select class="form-select" name="locale" onchange="this.form.submit()">
+                                    {% for locale in enabledLocales %}
+                                        <option value="{{ locale|lower }}">{{ locale|upper }}</option>
+                                    {% endfor %}
+                                </select>
+                            {% endif %}
+
+                            {% if entity.sites|length > 1 %}
+                                <select class="form-select" name="site" onchange="this.form.submit()">>
+                                    {% for site in entity.sites %}
+                                        <option value="{{ site }}">{{ site|sfs_cms_site_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            {% endif %}
+                        </form>
                     </div>
 
                     <div class="text-end">
@@ -45,7 +55,7 @@
         </header>
         <main class="flex-fill d-flex flex-row align-items-stretch bg-light  min-vh-100">
             <div class="pt-4 h-100 w-100">
-                <iframe id="preview" src="{{ url('sfs_cms_admin_content_'~content~'_preview_content_version', {'content':entity, 'version':version, 'locale': app.request.query.get('locale', enabledLocales[0]|default(app.request.defaultLocale))}) }}" width="100%" height="100%"></iframe>
+                <iframe name="previewFrame" id="preview" src="{{ url('sfs_cms_admin_content_'~content~'_preview_content_version', {'content':entity, 'version':version, 'locale': app.request.query.get('locale', enabledLocales[0]|default(app.request.defaultLocale))}) }}" width="100%" height="100%"></iframe>
             </div>
         </main>
     </div>

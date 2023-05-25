@@ -87,15 +87,15 @@ class ContentVersionListener
         $data = $contentVersion->getData();
         foreach ($data as $layout => $modules) {
             foreach ($modules as $m => $module) {
-                if (isset($module['modules'])) {
-                    foreach ($module['modules'] as $sm => $submodule) {
-                        foreach ($submodule as $field => $value) {
-                            $data[$layout][$m]['modules'][$sm][$field] = $this->transformEntityValues($value, $event->getObjectManager(), $entities);
-                        }
-                    }
-                } else {
-                    foreach ($module as $field => $value) {
+                foreach ($module as $field => $value) {
+                    if ('modules' !== $field) {
                         $data[$layout][$m][$field] = $this->transformEntityValues($value, $event->getObjectManager(), $entities);
+                    } else {
+                        foreach ($value as $sm => $submodule) {
+                            foreach ($submodule as $field => $value) {
+                                $data[$layout][$m]['modules'][$sm][$field] = $this->transformEntityValues($value, $event->getObjectManager(), $entities);
+                            }
+                        }
                     }
                 }
             }
@@ -125,15 +125,15 @@ class ContentVersionListener
         $data = $contentVersion->getData();
         foreach ($data as $layout => $modules) {
             foreach ($modules as $m => $module) {
-                if (isset($module['modules'])) {
-                    foreach ($module['modules'] as $sm => $submodule) {
-                        foreach ($submodule as $field => $value) {
-                            $data[$layout][$m]['modules'][$sm][$field] = $this->untransformEntityValues($value, $event->getObjectManager());
-                        }
-                    }
-                } else {
-                    foreach ($module as $field => $value) {
+                foreach ($module as $field => $value) {
+                    if ('modules' !== $field) {
                         $data[$layout][$m][$field] = $this->untransformEntityValues($value, $event->getObjectManager());
+                    } else {
+                        foreach ($value as $sm => $submodule) {
+                            foreach ($submodule as $field => $value) {
+                                $data[$layout][$m]['modules'][$sm][$field] = $this->untransformEntityValues($value, $event->getObjectManager());
+                            }
+                        }
                     }
                 }
             }

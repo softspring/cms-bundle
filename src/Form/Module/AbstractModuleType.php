@@ -111,16 +111,16 @@ abstract class AbstractModuleType extends AbstractNodeType
 
             $builder->addEventListener(FormEvents::PRE_SET_DATA, function (PreSetDataEvent $event) {
                 $data = $event->getData();
-                $availableSites = $event->getForm()->getConfig()->getOption('content')->getSites()->toArray();
+                $allAvailableSites = $event->getForm()->getConfig()->getOption('content')->getSites()->toArray();
 
                 if (null === $data) {
                     // set all locales on prototyping (data = null)
-                    $data = ['site_filter' => $availableSites];
+                    $data = ['site_filter' => $allAvailableSites];
                 }
 
                 if (!isset($data['site_filter'])) {
                     // set all locales on no stored site_filter
-                    $data['site_filter'] = $availableSites;
+                    $data['site_filter'] = $allAvailableSites;
                 }
 
                 $event->setData($data);
