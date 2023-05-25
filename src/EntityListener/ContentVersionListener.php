@@ -87,8 +87,10 @@ class ContentVersionListener
         $data = $contentVersion->getData();
         foreach ($data as $layout => $modules) {
             foreach ($modules as $m => $module) {
-                foreach ($module as $field => $value) if ($field !== 'modules') {
-                    $data[$layout][$m][$field] = $this->transformEntityValues($value, $event->getObjectManager(), $entities);
+                foreach ($module as $field => $value) {
+                    if ('modules' !== $field) {
+                        $data[$layout][$m][$field] = $this->transformEntityValues($value, $event->getObjectManager(), $entities);
+                    }
                 }
 
                 if (isset($module['modules'])) {
@@ -125,8 +127,10 @@ class ContentVersionListener
         $data = $contentVersion->getData();
         foreach ($data as $layout => $modules) {
             foreach ($modules as $m => $module) {
-                foreach ($module as $field => $value) if ($field !== 'modules') {
-                    $data[$layout][$m][$field] = $this->untransformEntityValues($value, $event->getObjectManager());
+                foreach ($module as $field => $value) {
+                    if ('modules' !== $field) {
+                        $data[$layout][$m][$field] = $this->untransformEntityValues($value, $event->getObjectManager());
+                    }
                 }
 
                 if (isset($module['modules'])) {

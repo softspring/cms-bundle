@@ -5,7 +5,6 @@ namespace Softspring\CmsBundle\Form\Admin;
 use Doctrine\ORM\EntityManagerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Model\ContentInterface;
-use Softspring\CmsBundle\Model\Site;
 use Softspring\CmsBundle\Model\SiteInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -55,7 +54,7 @@ class SiteChoiceType extends AbstractType
             $siteChoices = array_values($siteChoices);
 
             usort($siteChoices, function (SiteInterface $a, SiteInterface $b) {
-                return ($a->getConfig()['extra']['order']??500) <=> ($b->getConfig()['extra']['order']??500);
+                return ($a->getConfig()['extra']['order'] ?? 500) <=> ($b->getConfig()['extra']['order'] ?? 500);
             });
 
             return $siteChoices;
