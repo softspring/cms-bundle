@@ -81,7 +81,9 @@ class RouteForm extends AbstractType
         ]);
 
         if (!$options['content_relative']) {
-            $builder->add('sites', SiteChoiceType::class);
+            $builder->add('sites', SiteChoiceType::class, [
+                'by_reference' => false,
+            ]);
 
             $builder->add('type', ChoiceType::class, [
                 'choices' => [
