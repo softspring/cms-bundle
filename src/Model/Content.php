@@ -53,6 +53,17 @@ abstract class Content implements ContentInterface
         return $this->sites;
     }
 
+    public function getSitesSorted(): Collection
+    {
+        $sites = $this->getSites()->toArray();
+
+        usort($sites, function (SiteInterface $a, SiteInterface $b) {
+            return ($a->getConfig()['extra']['order']??500) <=> ($b->getConfig()['extra']['order']??500);
+        });
+
+        return new ArrayCollection($sites);
+    }
+
     public function addSite(SiteInterface $site): void
     {
         if (!$this->getSites()->contains($site)) {

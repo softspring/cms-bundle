@@ -90,6 +90,11 @@ class DataImporter extends AbstractDataImportExport
 
     public function importVersion(string $type, ContentInterface $content, array $versionData, array $zipData, array $options = []): ?ContentVersionInterface
     {
+        // preload sites
+        foreach ($this->cmsConfig->getSites() as $site) {
+            $this->referenceRepository->addReference("site___{$site}", $site);
+        }
+
         /** @var ContentEntityTransformerInterface $transformer */
         $transformer = $this->getDataTransformer($type);
 

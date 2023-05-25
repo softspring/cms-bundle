@@ -40,7 +40,7 @@
                     <div class="text-end me-3">
                         {% if entity.sites|length > 1 %}
                             <select class="form-select" id="contentEditionSiteSelection">
-                                {% for site in entity.sites %}
+                                {% for site in entity.sitesSorted %}
                                     <option value="{{ site }}">{{ site|sfs_cms_site_name }}</option>
                                 {% endfor %}
                             </select>
