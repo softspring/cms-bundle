@@ -90,6 +90,10 @@ admin_routes:
         actions:
             update.button: "Guardar cambios"
             cancel.button: "Cancelar"
+    read:
+        meta.title: "Detalles de la ruta"
+        title: "Detalles de la ruta"
+        breadcrumb: "Detalles de la ruta"
     list:
         meta.title: "Rutas"
         title: "Rutas"
@@ -97,6 +101,7 @@ admin_routes:
         actions:
             create.link: "Nueva ruta"
             update.link: "Editar"
+            details.link: "Ver ruta"
             preview.link: "Previsualizar"
         fields:
             id.header: "Ruta"

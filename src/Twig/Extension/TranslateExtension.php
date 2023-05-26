@@ -5,6 +5,7 @@ namespace Softspring\CmsBundle\Twig\Extension;
 use Softspring\CmsBundle\Model\RoutePathInterface;
 use Softspring\CmsBundle\Routing\UrlGenerator;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -13,13 +14,15 @@ class TranslateExtension extends AbstractExtension
 {
     protected RequestStack $requestStack;
     protected array $enabledLocales;
-    protected UrlGenerator $urlGenerator;
+    protected UrlGenerator $cmsUrlGenerator;
+    protected UrlGeneratorInterface $symfonyUrlGenerator;
 
-    public function __construct(RequestStack $requestStack, array $enabledLocales, UrlGenerator $urlGenerator)
+    public function __construct(RequestStack $requestStack, array $enabledLocales, UrlGenerator $cmsUrlGenerator, UrlGeneratorInterface $symfonyUrlGenerator)
     {
         $this->requestStack = $requestStack;
         $this->enabledLocales = $enabledLocales;
-        $this->urlGenerator = $urlGenerator;
+        $this->cmsUrlGenerator = $cmsUrlGenerator;
+        $this->symfonyUrlGenerator = $symfonyUrlGenerator;
     }
 
     /**
@@ -71,26 +74,32 @@ class TranslateExtension extends AbstractExtension
         /** @var ?RoutePathInterface $routePath */
         $routePath = $request->attributes->get('routePath');
 
-        if (!$routePath) {
-            return [];
-        }
-
         $alternates = [];
 
         foreach ($this->enabledLocales as $locale) {
-            $hasLocalizedRoutePath = (bool) $routePath->getRoute()->getPaths()->filter(fn (RoutePathInterface $routePath) => $routePath->getLocale() == $locale)->count();
+            if ($routePath) {
+                $hasLocalizedRoutePath = (bool) $routePath->getRoute()->getPaths()->filter(fn (RoutePathInterface $routePath) => $routePath->getLocale() == $locale)->count();
 
-            if (!$hasLocalizedRoutePath) {
-                continue;
+                if (!$hasLocalizedRoutePath) {
+                    continue;
+                }
+
+                $url = $this->cmsUrlGenerator->getUrl($routePath->getRoute(), $locale);
+
+                if ('#' === $url) {
+                    continue;
+                }
+
+                $alternates[$locale] = $url;
+            } else {
+                $routeName = $request->attributes->get('_route');
+                $routeParams = $request->attributes->get('_route_params');
+                $routeParams['_locale'] = $locale;
+                unset($routeParams['_sfs_cms_locale']);
+                unset($routeParams['_sfs_cms_locale_path']);
+
+                $alternates[$locale] = $this->symfonyUrlGenerator->generate($routeName, $routeParams, UrlGeneratorInterface::ABSOLUTE_URL);
             }
-
-            $url = $this->urlGenerator->getUrl($routePath->getRoute(), $locale);
-
-            if ('#' === $url) {
-                continue;
-            }
-
-            $alternates[$locale] = $url;
         }
 
         return $alternates;
@@ -99,28 +108,33 @@ class TranslateExtension extends AbstractExtension
     public function getLocalePaths(string $defaultRoute = null): array
     {
         $request = $this->requestStack->getCurrentRequest();
-        $currentLocale = $request->getLocale();
 
         /** @var ?RoutePathInterface $routePath */
         $routePath = $request->attributes->get('routePath');
 
-        if (!$routePath) {
-            return [];
-        }
-
         $localePaths = [];
 
         foreach ($this->enabledLocales as $locale) {
-            if (isset($localePaths[$locale])) {
-                continue;
-            }
+            if ($routePath) {
+                if (isset($localePaths[$locale])) {
+                    continue;
+                }
 
-            $hasLocalizedRoutePath = (bool) $routePath->getRoute()->getPaths()->filter(fn (RoutePathInterface $routePath) => $routePath->getLocale() == $locale)->count();
+                $hasLocalizedRoutePath = (bool) $routePath->getRoute()->getPaths()->filter(fn (RoutePathInterface $routePath) => $routePath->getLocale() == $locale)->count();
 
-            if ($hasLocalizedRoutePath) {
-                $localePaths[$locale] = $this->urlGenerator->getPath($routePath->getRoute(), $locale);
+                if ($hasLocalizedRoutePath) {
+                    $localePaths[$locale] = $this->cmsUrlGenerator->getPath($routePath->getRoute(), $locale);
+                } else {
+                    $localePaths[$locale] = $defaultRoute ? $this->cmsUrlGenerator->getPath($defaultRoute, $locale) : '#';
+                }
             } else {
-                $localePaths[$locale] = $defaultRoute ? $this->urlGenerator->getPath($defaultRoute, $locale) : '#';
+                $routeName = $request->attributes->get('_route');
+                $routeParams = $request->attributes->get('_route_params');
+                $routeParams['_locale'] = $locale;
+                unset($routeParams['_sfs_cms_locale']);
+                unset($routeParams['_sfs_cms_locale_path']);
+
+                $localePaths[$locale] = $this->symfonyUrlGenerator->generate($routeName, $routeParams, UrlGeneratorInterface::ABSOLUTE_PATH);
             }
         }
 

@@ -4,18 +4,42 @@
 
 {% block breadcrums_content %}
     {{ parent() }}
-    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_routes_list') }}">{{ 'admin_routes.list.breadcrumb'|trans }}</a></li>
-    <li class="breadcrumb-item active" aria-current="content">{{ 'admin_routes.read.breadcrumb'|trans({'%name%': route.name|default(route.id) }) }}</li>
+    <li class="breadcrumb-item"><a
+            href="{{ url('sfs_cms_admin_routes_list') }}">{{ 'admin_routes.list.breadcrumb'|trans }}</a></li>
+    <li class="breadcrumb-item active"
+        aria-current="content">{{ 'admin_routes.read.breadcrumb'|trans({'%name%': route.name|default(route.id) }) }}</li>
 {% endblock breadcrums_content %}
 
 {% block content %}
     <h1 class="h3">{{ 'admin_routes.read.title'|trans }}</h1>
 
     <div class="container-fluid bg-white p-4">
-        {% for site in route.sites %}
-            {% for path in route.paths %}
-                <a href="{{ sfs_cms_route_path_url(path, site) }}" target="_blank">{{ sfs_cms_route_path_path(path, site) }}</a><br/>
-            {% endfor %}
-        {% endfor %}
+        <div>
+            <span>Route </span><span>{{ route.id }}</span>
+        </div>
+        <div>
+            <span>Sites </span><span>{{ route.sites|map((site) => site|sfs_cms_site_name)|join(', ') }}</span>
+        </div>
+        <div>
+            <span>Type</span><span>{{ ('admin_routes.types.'~route.type~'.name')|trans }}</span>
+        </div>
+        <div>
+            <span>Page</span><span>{{ route.content.name|default('') }}</span>
+        </div>
+
+        <div>
+            <h3>Routes by sites</h3>
+            <ul>
+                {% for site in route.sites %}
+                    {% for path in route.paths %}
+                        <li>
+                            <a href="{{ sfs_cms_route_path_url(path, site) }}" target="_blank">
+                                {{ site|sfs_cms_site_name }}: {{ sfs_cms_route_path_url(path, site) }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 {% endblock content %}
