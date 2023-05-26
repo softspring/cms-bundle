@@ -90,6 +90,10 @@ admin_routes:
         actions:
             update.button: "Save changes"
             cancel.button: "Cancel"
+    read:
+        meta.title: "Route details"
+        title: "Route details"
+        breadcrumb: "Route details"
     list:
         meta.title: "Routes"
         title: "Routes"
@@ -97,6 +101,7 @@ admin_routes:
         actions:
             create.link: "New route"
             update.link: "Edit"
+            details.link: "View"
             preview.link: "Preview"
             details.link: "View"
         fields:
