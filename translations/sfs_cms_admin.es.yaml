@@ -98,6 +98,7 @@ admin_routes:
             create.link: "Nueva ruta"
             update.link: "Editar"
             preview.link: "Previsualizar"
+            details.link: "Ver"
         fields:
             id.header: "Ruta"
             sites.header: "Sitios"
