@@ -14,25 +14,42 @@ use Softspring\Component\CrudlController\Event\FilterEvent;
 use Softspring\Component\Events\DispatchGetResponseTrait;
 use Softspring\Component\Events\ViewEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Twig\Environment;
 
 class BlockController extends AbstractController
 {
     use DispatchGetResponseTrait;
 
+    protected FormFactoryInterface $formFactory;
+    protected Environment $twig;
     protected BlockManagerInterface $blockManager;
     protected CmsConfig $cmsConfig;
     protected EventDispatcherInterface $eventDispatcher;
     protected array $enabledLocales;
 
-    public function __construct(BlockManagerInterface $blockManager, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, array $enabledLocales)
+    public function __construct(FormFactoryInterface $formFactory, Environment $twig, BlockManagerInterface $blockManager, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, array $enabledLocales)
     {
+        $this->formFactory = $formFactory;
+        $this->twig = $twig;
         $this->blockManager = $blockManager;
         $this->cmsConfig = $cmsConfig;
         $this->eventDispatcher = $eventDispatcher;
         $this->enabledLocales = $enabledLocales;
+    }
+
+    protected function createForm(string $type, mixed $data = null, array $options = []): FormInterface
+    {
+        return $this->formFactory->create($type, $data, $options);
+    }
+
+    protected function renderView(string $view, array $parameters = []): string
+    {
+        return $this->twig->render($view, $parameters);
     }
 
     /**

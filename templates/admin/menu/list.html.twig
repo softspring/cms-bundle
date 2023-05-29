@@ -11,63 +11,79 @@
 {% endblock breadcrums_content %}
 
 {% block content %}
-    <div class="d-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3">{{ 'admin_menus.list.title'|trans }}</h1>
-
-{#        #}{# TODO restrict by permission #}
-        <div class="float-end">
-            <div class="dropdown">
-                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                    {{ 'admin_menus.list.actions.create.link'|trans }}
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    {% for menuKey, menuConfig in menus_config %}
-                        <li><a class="dropdown-item" href="{{ url('sfs_cms_admin_menus_create', {'menuType':menuKey}) }}">{{ menuKey }}</a></li>
-                    {% endfor %}
-                </ul>
+    {% if menus_config is empty %}
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3">{{ 'admin_menus.list.title'|trans }}</h1>
+        </div>
+        <div class="container-fluid bg-white p-4">
+            <div class="p-5 m-5">
+                <p class="text-center text-muted">
+                    No menus are configured.
+                    <br/>
+                    <br/>
+                    Check how to configure menus at <a href="https://github.com/softspring/cms-bundle" target="_blank">documentation</a>
+                </p>
             </div>
         </div>
-    </div>
+    {% else %}
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3">{{ 'admin_menus.list.title'|trans }}</h1>
 
-    <div class="container-fluid bg-white p-4">
-        {% if filterForm.vars.submitted or entities|length %}
-            <div class="mb-4">
-                {{ form_start(filterForm) }}
-                <div class="row">
-                    {% if filterForm.name is defined %}<div class="col">{{ form_row(filterForm.name, {'row_class':'form-floating'}) }}</div>{% endif %}
-{#                    {% if filterForm.search is defined %}<div class="col">{{ form_row(filterForm.search, {'row_class': 'form-floating'}) }}</div>{% endif %}#}
-
-                    <div class="col">
-                        <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
-                    </div>
+    {#        #}{# TODO restrict by permission #}
+            <div class="float-end">
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ 'admin_menus.list.actions.create.link'|trans }}
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        {% for menuKey, menuConfig in menus_config %}
+                            <li><a class="dropdown-item" href="{{ url('sfs_cms_admin_menus_create', {'menuType':menuKey}) }}">{{ menuKey }}</a></li>
+                        {% endfor %}
+                    </ul>
                 </div>
-                {{ form_widget(filterForm) }}
-                {{ form_rest(filterForm) }}
-                {{ form_end(filterForm) }}
             </div>
-        {% endif %}
+        </div>
 
-        {% embed '@SfsComponents/paginator/table.html.twig' with {'collection':entities, 'pagination_route': 'sfs_cms_admin_menus_list'} %}
-            {% trans_default_domain 'sfs_cms_admin' %}
-            {% block ths %}
-                <th scope="col">
-                    <a href="{{ entities.sortToggleUrl(app.request, 'name') }}" class="text-dark">
-                        {{ 'admin_menus.list.fields.name.header'|trans }}
-                        {% if entities.sortedBy('name', 'asc') %}<i class="bi bi-caret-up-fill"></i>{% elseif entities.sortedBy('name', 'desc') %}<i class="bi bi-caret-down-fill"></i>{% endif %}
-                    </a>
-                </th>
-                <th scope="col">
-                    <a href="{{ entities.sortToggleUrl(app.request, 'type') }}" class="text-dark">
-                        {{ 'admin_menus.list.fields.type.header'|trans }}
-                        {% if entities.sortedBy('type', 'asc') %}<i class="bi bi-caret-up-fill"></i>{% elseif entities.sortedBy('type', 'desc') %}<i class="bi bi-caret-down-fill"></i>{% endif %}
-                    </a>
-                </th>
-                <th class="">&nbsp;</th>
-            {% endblock ths %}
+        <div class="container-fluid bg-white p-4">
+            {% if filterForm.vars.submitted or entities|length %}
+                <div class="mb-4">
+                    {{ form_start(filterForm) }}
+                    <div class="row">
+                        {% if filterForm.name is defined %}<div class="col">{{ form_row(filterForm.name, {'row_class':'form-floating'}) }}</div>{% endif %}
+    {#                    {% if filterForm.search is defined %}<div class="col">{{ form_row(filterForm.search, {'row_class': 'form-floating'}) }}</div>{% endif %}#}
 
-            {% block tbody %}
-                {% include '@SfsCms/admin/menu/list-page.html.twig' %}
-            {% endblock tbody %}
-        {% endembed %}
-    </div>
+                        <div class="col">
+                            <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+                        </div>
+                    </div>
+                    {{ form_widget(filterForm) }}
+                    {{ form_rest(filterForm) }}
+                    {{ form_end(filterForm) }}
+                </div>
+            {% endif %}
+
+            {% embed '@SfsComponents/paginator/table.html.twig' with {'collection':entities, 'pagination_route': 'sfs_cms_admin_menus_list'} %}
+                {% trans_default_domain 'sfs_cms_admin' %}
+                {% block ths %}
+                    <th scope="col">
+                        <a href="{{ entities.sortToggleUrl(app.request, 'name') }}" class="text-dark">
+                            {{ 'admin_menus.list.fields.name.header'|trans }}
+                            {% if entities.sortedBy('name', 'asc') %}<i class="bi bi-caret-up-fill"></i>{% elseif entities.sortedBy('name', 'desc') %}<i class="bi bi-caret-down-fill"></i>{% endif %}
+                        </a>
+                    </th>
+                    <th scope="col">
+                        <a href="{{ entities.sortToggleUrl(app.request, 'type') }}" class="text-dark">
+                            {{ 'admin_menus.list.fields.type.header'|trans }}
+                            {% if entities.sortedBy('type', 'asc') %}<i class="bi bi-caret-up-fill"></i>{% elseif entities.sortedBy('type', 'desc') %}<i class="bi bi-caret-down-fill"></i>{% endif %}
+                        </a>
+                    </th>
+                    <th class="">&nbsp;</th>
+                {% endblock ths %}
+
+                {% block tbody %}
+                    {% include '@SfsCms/admin/menu/list-page.html.twig' %}
+                {% endblock tbody %}
+            {% endembed %}
+        </div>
+    {% endif %}
 {% endblock content %}
