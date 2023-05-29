@@ -19,9 +19,9 @@ class CmsRouter implements RouterInterface, RequestMatcherInterface, WarmableInt
     protected Router $staticRouter;
     protected UrlMatcher $urlMatcher;
     protected UrlGenerator $urlGenerator;
-    protected LoggerInterface $logger;
+    protected ?LoggerInterface $logger;
 
-    public function __construct(Router $staticRouter, UrlMatcher $urlMatcher, UrlGenerator $urlGenerator, LoggerInterface $cmsLogger)
+    public function __construct(Router $staticRouter, UrlMatcher $urlMatcher, UrlGenerator $urlGenerator, ?LoggerInterface $cmsLogger)
     {
         $this->staticRouter = $staticRouter;
         $this->urlMatcher = $urlMatcher;
@@ -87,7 +87,7 @@ class CmsRouter implements RouterInterface, RequestMatcherInterface, WarmableInt
             $attributes = $this->urlMatcher->matchRequest($request);
         } catch (\Exception $e) {
             $attributes = [];
-            $this->logger->warning(sprintf('Caught exception in CmsRouter->matchRequest: %s', $e->getMessage()));
+            $this->logger && $this->logger->warning(sprintf('Caught exception in CmsRouter->matchRequest: %s', $e->getMessage()));
         }
 
         if (isset($attributes['_controller'])) {
