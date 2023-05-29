@@ -22,12 +22,15 @@ use Softspring\Component\Events\ViewEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\WebProfilerBundle\EventListener\WebDebugToolbarListener;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Environment;
 
 class ContentController extends AbstractController
 {
@@ -35,6 +38,8 @@ class ContentController extends AbstractController
 
     protected EntityManagerInterface $em;
 
+    protected FormFactoryInterface $formFactory;
+    protected Environment $twig;
     protected ContentManagerInterface $contentManager;
     protected TranslatorInterface $translator;
     protected RouteManagerInterface $routeManager;
@@ -46,8 +51,10 @@ class ContentController extends AbstractController
     protected DataExporter $dataExporter;
     protected ?WebDebugToolbarListener $webDebugToolbarListener;
 
-    public function __construct(EntityManagerInterface $em, ContentManagerInterface $contentManager, TranslatorInterface $translator, RouteManagerInterface $routeManager, ContentRender $contentRender, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, array $enabledLocales, DataImporter $dataImporter, DataExporter $dataExporter, ?WebDebugToolbarListener $webDebugToolbarListener)
+    public function __construct(FormFactoryInterface $formFactory, Environment $twig, EntityManagerInterface $em, ContentManagerInterface $contentManager, TranslatorInterface $translator, RouteManagerInterface $routeManager, ContentRender $contentRender, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, array $enabledLocales, DataImporter $dataImporter, DataExporter $dataExporter, ?WebDebugToolbarListener $webDebugToolbarListener)
     {
+        $this->formFactory = $formFactory;
+        $this->twig = $twig;
         $this->em = $em;
         $this->contentManager = $contentManager;
         $this->routeManager = $routeManager;
@@ -60,6 +67,17 @@ class ContentController extends AbstractController
         $this->dataExporter = $dataExporter;
         $this->webDebugToolbarListener = $webDebugToolbarListener;
     }
+
+    protected function createForm(string $type, mixed $data = null, array $options = []): FormInterface
+    {
+        return $this->formFactory->create($type, $data, $options);
+    }
+
+    protected function renderView(string $view, array $parameters = []): string
+    {
+        return $this->twig->render($view, $parameters);
+    }
+
 
     public function create(Request $request): Response
     {

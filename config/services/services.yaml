@@ -37,7 +37,7 @@ services:
 
     Softspring\CmsBundle\Controller\:
         resource: '../../src/Controller/*'
-        public: true
+        tags: ['controller.service_arguments']
 
     Softspring\CmsBundle\DataFixtures\:
         resource: '../../src/DataFixtures/*'
