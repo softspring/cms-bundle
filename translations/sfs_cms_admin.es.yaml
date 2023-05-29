@@ -103,7 +103,6 @@ admin_routes:
             update.link: "Editar"
             details.link: "Ver ruta"
             preview.link: "Previsualizar"
-            details.link: "Ver"
         fields:
             id.header: "Ruta"
             sites.header: "Sitios"
