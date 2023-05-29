@@ -19,7 +19,7 @@ site:
         5xx:
             es: [ '@site/default/error_pages/5xx.html.twig', '/srv/cms/site/default/error_pages/5xx-es.html' ]
             en: [ '@site/default/error_pages/5xx.html.twig', '/srv/cms/site/default/error_pages/5xx-en.html' ]
-    slash_route:
-        behaviour: 'redirect_to_route_with_user_language'
-        route: 'home'
+#    slash_route:
+#        behaviour: 'redirect_to_route_with_user_language'
+#        route: 'home'
 
