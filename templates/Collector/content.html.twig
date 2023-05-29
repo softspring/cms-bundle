@@ -150,7 +150,7 @@
 {% block panel %}
     <h2>CMS Response</h2>
 
-    {% if collector.site.config is empty %}
+    {% if collector.site is empty or collector.site.config is empty %}
         <div class="empty">
             <p>This is not a CMS response.</p>
         </div>
