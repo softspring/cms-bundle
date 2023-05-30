@@ -514,10 +514,8 @@ class ContentController extends AbstractController
         $version = $this->contentManager->createVersion($entity, $prevVersion, ContentVersionInterface::ORIGIN_EDIT);
         $prevVersion && $version->setOriginDescription('v'.$prevVersion->getVersionNumber());
 
-        /** @var ?array $contentContentForm */
-        $contentContentForm = $request->request->get('content_content_form');
-        if ($contentContentForm) {
-            $version->setLayout($contentContentForm['layout']);
+        if ($request->request->has('content_content_form')) {
+            $version->setLayout($request->request->all()['content_content_form']['layout']);
         }
 
         $form = $this->createForm($config['content_type'], $version, [
