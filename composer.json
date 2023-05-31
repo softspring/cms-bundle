@@ -21,6 +21,7 @@
         "softspring/dynamic-form-type": "^5.1",
         "softspring/events": "^5.1",
         "softspring/media-bundle": "^5.1",
+        "softspring/permissions-bundle": "^5.1",
         "softspring/polymorphic-form-type": "^5.1",
         "softspring/twig-extra-bundle": "^5.1",
         "symfony/config": "^5.4|^6.0",
