@@ -6,7 +6,7 @@ use Symfony\Bridge\Twig\DataCollector\TwigDataCollector as BaseTwigDataCollector
 
 class TwigDataCollector extends BaseTwigDataCollector
 {
-    public function reset()
+    public function reset(): void
     {
         // do not remove data, to prevent overriding on _fragments or subrequests
 
