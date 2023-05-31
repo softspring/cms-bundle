@@ -62,7 +62,11 @@
                                 <li>
                                     <button class="btn btn-primary dropdown-item" name="goto" value="general">{{ ('admin_'~content~'.content.actions.save_and_exit.button')|trans }}</button>
                                     <button class="btn btn-primary dropdown-item" name="goto" value="preview">{{ ('admin_'~content~'.content.actions.save_and_preview.button')|trans }}</button>
-                                    <button class="btn btn-primary dropdown-item" name="goto" value="publish">{{ ('admin_'~content~'.content.actions.save_and_publish.button')|trans }}</button>
+                                    {% if not content_config.admin.publish_version_is_granted or is_granted(content_config.admin.publish_version_is_granted, form.vars.data) %}
+                                        <button class="btn btn-primary dropdown-item" name="goto" value="publish">{{ ('admin_'~content~'.content.actions.save_and_publish.button')|trans }}</button>
+                                    {% else %}
+                                        <button class="btn btn-primary dropdown-item disabled" name="goto">{{ ('admin_'~content~'.content.actions.save_and_publish.button')|trans }}</button>
+                                    {% endif %}
                                 </li>
                             </ul>
                         </div>

@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Controller\Admin;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\InvalidMenuException;
 use Softspring\CmsBundle\Form\Admin\Menu\MenuForm;
@@ -51,7 +52,7 @@ class MenuController extends AbstractController
     }
 
     /**
-     * @ Security(expression="is_granted('ROLE_SFS_CMS_ADMIN_MENUS_CREATE', menuType)")
+     * @Security(expression="is_granted('PERMISSION_SFS_CMS_ADMIN_MENUS_CREATE', menuType)")
      */
     public function create(string $menuType, Request $request): Response
     {
@@ -90,7 +91,7 @@ class MenuController extends AbstractController
     }
 
     /**
-     * @ Security(expression="is_granted('ROLE_SFS_CMS_ADMIN_MENUS_UPDATE', menu)")
+     * @Security(expression="is_granted('PERMISSION_SFS_CMS_ADMIN_MENUS_UPDATE', menu)")
      */
     public function update(MenuInterface $menu, Request $request): Response
     {
@@ -116,6 +117,9 @@ class MenuController extends AbstractController
         return $this->render('@SfsCms/admin/menu/update.html.twig', $viewData->getArrayCopy());
     }
 
+    /**
+     * @Security(expression="is_granted('PERMISSION_SFS_CMS_ADMIN_MENUS_DELETE', menu)")
+     */
     public function delete(string $menu, Request $request): Response
     {
         //        $config = $this->getMenuConfig($request);
@@ -123,6 +127,9 @@ class MenuController extends AbstractController
         return new Response();
     }
 
+    /**
+     * @Security(expression="is_granted('PERMISSION_SFS_CMS_ADMIN_MENUS_LIST')")
+     */
     public function list(Request $request, MenuListFilterFormInterface $filterForm): Response
     {
         //        if (!empty($config['list_is_granted'])) {

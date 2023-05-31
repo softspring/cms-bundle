@@ -16,8 +16,13 @@
 
         {# TODO restrict by permission #}
         <div class="float-end">
-            <a class="btn btn-outline-primary" href="{{ url('sfs_cms_admin_content_'~content~'_create') }}">{{ ('admin_'~content~'.list.actions.create.link')|trans }}</a>
-            <a class="btn btn-outline-primary" href="{{ url('sfs_cms_admin_content_'~content~'_import') }}">{{ ('admin_'~content~'.list.actions.import.link')|trans }}</a>
+            {% if not content_config.admin.create_is_granted or is_granted(content_config.admin.create_is_granted) %}
+                <a class="btn btn-outline-primary" href="{{ url('sfs_cms_admin_content_'~content~'_create') }}">{{ ('admin_'~content~'.list.actions.create.link')|trans }}</a>
+            {% endif %}
+
+            {% if not content_config.admin.import_is_granted or is_granted(content_config.admin.import_is_granted) %}
+                <a class="btn btn-outline-primary" href="{{ url('sfs_cms_admin_content_'~content~'_import') }}">{{ ('admin_'~content~'.list.actions.import.link')|trans }}</a>
+            {% endif %}
         </div>
     </div>
 
@@ -60,7 +65,18 @@
 
                 {% block empty_message %}
                     <p class="text-center text-muted">
-                        <a href="{{ url('sfs_cms_admin_content_'~content~'_create') }}">Create</a> or <a href="{{ url('sfs_cms_admin_content_'~content~'_import') }}">import</a> your first page!
+                        {% if not content_config.admin.create_is_granted or is_granted(content_config.admin.create_is_granted) %}
+                            <a href="{{ url('sfs_cms_admin_content_'~content~'_create') }}">Create</a>
+                        {% else %}
+                            Create
+                        {% endif %}
+                        or
+                        {% if not content_config.admin.create_is_granted or is_granted(content_config.admin.create_is_granted) %}
+                            <a href="{{ url('sfs_cms_admin_content_'~content~'_import') }}">import</a>
+                        {% else %}
+                            import
+                        {% endif %}
+                        your first page!
                     </p>
                     <p class="text-center text-muted">
                         If you need help go to <a href="https://github.com/softspring/cms-bundle" target="_blank">documentation</a>

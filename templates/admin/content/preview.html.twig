@@ -42,12 +42,21 @@
                         {% else %}
                             <a href="{{ url('sfs_cms_admin_content_'~content~'_details', {'content':entity}) }}" class="btn btn-light mx-1">{{ ('admin_'~content~'.preview.actions.cancel.button')|trans }}</a>
                         {% endif %}
-                        <a href="{{ url('sfs_cms_admin_content_'~content~'_content', {'content':entity}) }}" class="btn btn-light mx-1">{{ ('admin_'~content~'.preview.actions.content.button')|trans }}</a>
+
+                        {% if not content_config.admin.content_is_granted or is_granted(content_config.admin.content_is_granted, version) %}
+                            <a href="{{ url('sfs_cms_admin_content_'~content~'_content', {'content':entity}) }}" class="btn btn-light mx-1">{{ ('admin_'~content~'.preview.actions.content.button')|trans }}</a>
+                        {% else %}
+                            <a class="btn btn-light mx-1 disabled">{{ ('admin_'~content~'.preview.actions.content.button')|trans }}</a>
+                        {% endif %}
 
                         {% if version.published %}
                             <span class="btn btn-light disabled mx-1">{{ ('admin_'~content~'.preview.actions.published.button')|trans }}</span>
                         {% else %}
-                            <a href="{{ url('sfs_cms_admin_content_'~content~'_publish_version', {'content':entity, 'version':version, 'back':'preview'}) }}" class="btn btn-light mx-1">{{ ('admin_'~content~'.preview.actions.publish.button')|trans }}</a>
+                            {% if not content_config.admin.publish_version_is_granted or is_granted(content_config.admin.publish_version_is_granted, version) %}
+                                <a href="{{ url('sfs_cms_admin_content_'~content~'_publish_version', {'content':entity, 'version':version, 'back':'preview'}) }}" class="btn btn-light mx-1">{{ ('admin_'~content~'.preview.actions.publish.button')|trans }}</a>
+                            {% else %}
+                                <a class="btn btn-light mx-1 disabled">{{ ('admin_'~content~'.preview.actions.publish.button')|trans }}</a>
+                            {% endif %}
                         {% endif %}
                     </div>
                 </div>

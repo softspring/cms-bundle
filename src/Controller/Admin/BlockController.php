@@ -53,7 +53,7 @@ class BlockController extends AbstractController
     }
 
     /**
-     * @ Security(expression="is_granted('ROLE_SFS_CMS_ADMIN_BLOCKS_CREATE', blockType)")
+     * @Security(expression="is_granted('PERMISSION_SFS_CMS_ADMIN_BLOCKS_CREATE', blockType)")
      */
     public function create(string $blockType, Request $request, BlockCreateFormInterface $createForm): Response
     {
@@ -92,7 +92,7 @@ class BlockController extends AbstractController
     }
 
     /**
-     * @ Security(expression="is_granted('ROLE_SFS_CMS_ADMIN_BLOCKS_UPDATE', block)")
+     * @Security(expression="is_granted('PERMISSION_SFS_CMS_ADMIN_BLOCKS_UPDATE', block)")
      */
     public function update(BlockInterface $block, Request $request, BlockUpdateFormInterface $updateForm): Response
     {
@@ -118,6 +118,9 @@ class BlockController extends AbstractController
         return $this->render('@SfsCms/admin/block/update.html.twig', $viewData->getArrayCopy());
     }
 
+    /**
+     * @Security(expression="is_granted('PERMISSION_SFS_CMS_ADMIN_BLOCKS_DELETE', block)")
+     */
     public function delete(string $block, Request $request): Response
     {
         //        $config = $this->getBlockConfig($request);
@@ -125,6 +128,9 @@ class BlockController extends AbstractController
         return new Response();
     }
 
+    /**
+     * @Security(expression="is_granted('PERMISSION_SFS_CMS_ADMIN_BLOCKS_LIST')")
+     */
     public function list(Request $request): Response
     {
         //        if (!empty($config['list_is_granted'])) {

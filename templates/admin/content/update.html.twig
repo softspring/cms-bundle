@@ -35,7 +35,11 @@
                 {% endblock %}
 
                 <div class="d-flex justify-content-end align-items-center">
-                    <a href="{{ url('sfs_cms_admin_content_'~content~'_delete', {'content':entity}) }}" class="btn btn-outline-danger">{{ ('admin_'~content~'.update.actions.delete.button')|trans }}</a>
+                    {% if not content_config.admin.delete_is_granted or is_granted(content_config.admin.delete_is_granted, entity) %}
+                        <a href="{{ url('sfs_cms_admin_content_'~content~'_delete', {'content':entity}) }}" class="btn btn-outline-danger">{{ ('admin_'~content~'.update.actions.delete.button')|trans }}</a>
+                    {% else %}
+                        <a class="btn btn-outline-danger disabled">{{ ('admin_'~content~'.update.actions.delete.button')|trans }}</a>
+                    {% endif %}
                     <a href="{{ url('sfs_cms_admin_content_'~content~'_list') }}" class="btn btn-outline-secondary ms-3">{{ ('admin_'~content~'.update.actions.cancel.button')|trans }}</a>
                     <input type="submit" value="{{ ('admin_'~content~'.update.actions.update.button')|trans }}" class="btn btn-primary ms-3" />
                 </div>
