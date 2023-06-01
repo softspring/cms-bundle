@@ -25,7 +25,7 @@ window.addEventListener('load', (event) => {
         if (htmlTargetElements.length) {
 
             if (widget.disabled) {
-                htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.style.backgroundColor = 'transparent');
+                htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.style.backgroundColor = null);
             } else {
                 htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.style.backgroundColor = widget.value);
             }

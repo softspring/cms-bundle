@@ -1,1 +1,3 @@
-{% if block %}{{ sfs_cms_block_by_type(block) }}{% endif %}
+<div id="{{ id|default('') }}" class="{{ class|default('') }}">
+    {% if block %}{{ sfs_cms_block_by_type(block) }}{% endif %}
+</div>
