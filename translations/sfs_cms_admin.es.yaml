@@ -101,7 +101,7 @@ admin_routes:
         actions:
             create.link: "Nueva ruta"
             update.link: "Editar"
-            details.link: "Ver ruta"
+            details.link: "Ver"
             preview.link: "Previsualizar"
         fields:
             id.header: "Ruta"
