@@ -9,10 +9,6 @@ parameters:
             count: 1
             path: src/Routing/UrlGenerator.php
         -
-            message: "#Empty array passed to foreach.#"
-            count: 1
-            path: src/Form/Module/ModuleCollectionType.php
-        -
             message: "#Class Softspring\\\\CmsBundle\\\\DataCollector\\\\TwigDataCollector extends @final class Symfony\\\\Bridge\\\\Twig\\\\DataCollector\\\\TwigDataCollector.#"
             count: 1
             path: src/DataCollector/TwigDataCollector.php
