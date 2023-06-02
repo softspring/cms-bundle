@@ -1,3 +1,3 @@
-<div id="{{ id|default('') }}" class="{{ class|default('') }}">
+{% if id|default(false) or class|default(false) %}<div {% if id|default(false)%}id="{{ id|default('') }}"{% endif %} {% if class|default(false)%}class="{{ class|default('') }}"{% endif %}>{% endif %}
     {% if block %}{{ sfs_cms_block_by_type(block) }}{% endif %}
-</div>
+{% if id|default(false) or class|default(false) %}</div>{% endif %}
