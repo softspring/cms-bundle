@@ -28,6 +28,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
@@ -38,6 +39,7 @@ class ContentController extends AbstractController
 
     protected EntityManagerInterface $em;
 
+    protected AuthorizationCheckerInterface $authorizationChecker;
     protected FormFactoryInterface $formFactory;
     protected Environment $twig;
     protected ContentManagerInterface $contentManager;
@@ -51,8 +53,9 @@ class ContentController extends AbstractController
     protected DataExporter $dataExporter;
     protected ?WebDebugToolbarListener $webDebugToolbarListener;
 
-    public function __construct(FormFactoryInterface $formFactory, Environment $twig, EntityManagerInterface $em, ContentManagerInterface $contentManager, TranslatorInterface $translator, RouteManagerInterface $routeManager, ContentRender $contentRender, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, array $enabledLocales, DataImporter $dataImporter, DataExporter $dataExporter, ?WebDebugToolbarListener $webDebugToolbarListener)
+    public function __construct(AuthorizationCheckerInterface $authorizationChecker, FormFactoryInterface $formFactory, Environment $twig, EntityManagerInterface $em, ContentManagerInterface $contentManager, TranslatorInterface $translator, RouteManagerInterface $routeManager, ContentRender $contentRender, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, array $enabledLocales, DataImporter $dataImporter, DataExporter $dataExporter, ?WebDebugToolbarListener $webDebugToolbarListener)
     {
+        $this->authorizationChecker = $authorizationChecker;
         $this->formFactory = $formFactory;
         $this->twig = $twig;
         $this->em = $em;
@@ -78,15 +81,19 @@ class ContentController extends AbstractController
         return $this->twig->render($view, $parameters);
     }
 
+    protected function isGranted(mixed $attribute, mixed $subject = null): bool
+    {
+        return $this->authorizationChecker->isGranted($attribute, $subject);
+    }
 
     public function create(Request $request): Response
     {
         $contentConfig = $this->getContentConfig($request);
         $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']] + ['extra_fields' => $contentConfig['extra_fields']];
 
-        //        if (!empty($config['is_granted'])) {
-        //            $this->denyAccessUnlessGranted($config['is_granted'], null, sprintf('Access denied, user is not %s.', $config['is_granted']));
-        //        }
+        if (!empty($config['create_is_granted'])) {
+            $this->denyAccessUnlessGranted($config['create_is_granted'], null, sprintf('Access denied, user is not %s.', $config['create_is_granted']));
+        }
 
         $entity = $this->contentManager->createEntity($config['_id']);
         $entity->addRoute($this->routeManager->createEntity());
@@ -144,9 +151,9 @@ class ContentController extends AbstractController
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
-        //        if (!empty($config['is_granted'])) {
-        //            $this->denyAccessUnlessGranted($config['is_granted'], $entity, sprintf('Access denied, user is not %s.', $config['is_granted']));
-        //        }
+        if (!empty($config['read_is_granted'])) {
+            $this->denyAccessUnlessGranted($config['read_is_granted'], $entity, sprintf('Access denied, user is not %s.', $config['read_is_granted']));
+        }
 
         if (!$entity) {
             return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
@@ -178,9 +185,9 @@ class ContentController extends AbstractController
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
-        //        if (!empty($config['is_granted'])) {
-        //            $this->denyAccessUnlessGranted($config['is_granted'], null, sprintf('Access denied, user is not %s.', $config['is_granted']));
-        //        }
+        if (!empty($config['update_is_granted'])) {
+            $this->denyAccessUnlessGranted($config['update_is_granted'], null, sprintf('Access denied, user is not %s.', $config['update_is_granted']));
+        }
 
         if (!$entity) {
             return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
@@ -235,9 +242,9 @@ class ContentController extends AbstractController
         /** @var ContentInterface|null $entity */
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
-        //        if (!empty($config['is_granted'])) {
-        //            $this->denyAccessUnlessGranted($config['is_granted'], null, sprintf('Access denied, user is not %s.', $config['is_granted']));
-        //        }
+        if (!empty($config['delete_is_granted'])) {
+            $this->denyAccessUnlessGranted($config['delete_is_granted'], null, sprintf('Access denied, user is not %s.', $config['delete_is_granted']));
+        }
 
         if (!$entity) {
             return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
@@ -310,9 +317,9 @@ class ContentController extends AbstractController
         $contentConfig = $this->getContentConfig($request);
         $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']] + ['extra_fields' => $contentConfig['extra_fields']];
 
-        //        if (!empty($config['is_granted'])) {
-        //            $this->denyAccessUnlessGranted($config['is_granted'], null, sprintf('Access denied, user is not %s.', $config['is_granted']));
-        //        }
+        if (!empty($config['import_is_granted'])) {
+            $this->denyAccessUnlessGranted($config['import_is_granted'], null, sprintf('Access denied, user is not %s.', $config['import_is_granted']));
+        }
 
         //        $entity = $this->contentManager->createEntity($config['_id']);
         //        $entity->addRoute($this->routeManager->createEntity());
@@ -371,9 +378,9 @@ class ContentController extends AbstractController
         if (!$entity) {
             return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
-        //        if (!empty($config['is_granted'])) {
-        //            $this->denyAccessUnlessGranted($config['is_granted'], null, sprintf('Access denied, user is not %s.', $config['is_granted']));
-        //        }
+        if (!empty($config['import_version_is_granted'])) {
+            $this->denyAccessUnlessGranted($config['import_version_is_granted'], null, sprintf('Access denied, user is not %s.', $config['import_version_is_granted']));
+        }
 
         //        $entity = $this->contentManager->createEntity($config['_id']);
         //        $entity->addRoute($this->routeManager->createEntity());
@@ -493,9 +500,9 @@ class ContentController extends AbstractController
         /** @var ?ContentInterface $entity */
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
-        //        if (!empty($config['is_granted'])) {
-        //            $this->denyAccessUnlessGranted($config['is_granted'], null, sprintf('Access denied, user is not %s.', $config['is_granted']));
-        //        }
+        if (!empty($config['content_is_granted'])) {
+            $this->denyAccessUnlessGranted($config['content_is_granted'], null, sprintf('Access denied, user is not %s.', $config['content_is_granted']));
+        }
 
         if (!$entity) {
             return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
@@ -583,9 +590,9 @@ class ContentController extends AbstractController
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
-        //        if (!empty($config['is_granted'])) {
-        //            $this->denyAccessUnlessGranted($config['is_granted'], null, sprintf('Access denied, user is not %s.', $config['is_granted']));
-        //        }
+        if (!empty($config['seo_is_granted'])) {
+            $this->denyAccessUnlessGranted($config['seo_is_granted'], null, sprintf('Access denied, user is not %s.', $config['seo_is_granted']));
+        }
 
         if (!$entity) {
             return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
@@ -639,9 +646,9 @@ class ContentController extends AbstractController
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
-        //        if (!empty($config['is_granted'])) {
-        //            $this->denyAccessUnlessGranted($config['is_granted'], $entity, sprintf('Access denied, user is not %s.', $config['is_granted']));
-        //        }
+        if (!empty($config['preview_is_granted'])) {
+            $this->denyAccessUnlessGranted($config['preview_is_granted'], $entity, sprintf('Access denied, user is not %s.', $config['preview_is_granted']));
+        }
 
         if (!$entity) {
             return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
@@ -676,6 +683,10 @@ class ContentController extends AbstractController
         /** @var ?ContentInterface $entity */
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
+        if (!empty($config['publish_version_is_granted'])) {
+            $this->denyAccessUnlessGranted($config['publish_version_is_granted'], null, sprintf('Access denied, user is not %s.', $config['publish_version_is_granted']));
+        }
+
         if (!$entity) {
             return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
@@ -703,6 +714,10 @@ class ContentController extends AbstractController
         /** @var ?ContentInterface $entity */
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
+        if (!empty($config['unpublish_is_granted'])) {
+            $this->denyAccessUnlessGranted($config['unpublish_is_granted'], null, sprintf('Access denied, user is not %s.', $config['unpublish_is_granted']));
+        }
+
         if (!$entity) {
             return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
@@ -722,9 +737,9 @@ class ContentController extends AbstractController
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
-        //        if (!empty($config['is_granted'])) {
-        //            $this->denyAccessUnlessGranted($config['is_granted'], $entity, sprintf('Access denied, user is not %s.', $config['is_granted']));
-        //        }
+        if (!empty($config['preview_is_granted'])) {
+            $this->denyAccessUnlessGranted($config['preview_is_granted'], $entity, sprintf('Access denied, user is not %s.', $config['preview_is_granted']));
+        }
 
         if (!$entity) {
             return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
@@ -753,9 +768,9 @@ class ContentController extends AbstractController
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
-        //        if (!empty($config['is_granted'])) {
-        //            $this->denyAccessUnlessGranted($config['is_granted'], $entity, sprintf('Access denied, user is not %s.', $config['is_granted']));
-        //        }
+        if (!empty($config['versions_is_granted'])) {
+            $this->denyAccessUnlessGranted($config['versions_is_granted'], $entity, sprintf('Access denied, user is not %s.', $config['versions_is_granted']));
+        }
 
         if (!$entity) {
             return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
@@ -788,9 +803,9 @@ class ContentController extends AbstractController
         /** @var ?ContentInterface $entity */
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
-        //        if (!empty($config['is_granted'])) {
-        //            $this->denyAccessUnlessGranted($config['is_granted'], $entity, sprintf('Access denied, user is not %s.', $config['is_granted']));
-        //        }
+        if (!empty($config['cleanup_versions_is_granted'])) {
+            $this->denyAccessUnlessGranted($config['cleanup_versions_is_granted'], $entity, sprintf('Access denied, user is not %s.', $config['cleanup_versions_is_granted']));
+        }
 
         if (!$entity) {
             return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
@@ -815,6 +830,10 @@ class ContentController extends AbstractController
 
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
+        if (!empty($config['keep_version_is_granted'])) {
+            $this->denyAccessUnlessGranted($config['keep_version_is_granted'], null, sprintf('Access denied, user is not %s.', $config['keep_version_is_granted']));
+        }
+
         if (!$entity) {
             return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
@@ -833,6 +852,10 @@ class ContentController extends AbstractController
 
         /** @var ?ContentInterface $content */
         $content = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
+
+        if (!empty($config['export_version_is_granted'])) {
+            $this->denyAccessUnlessGranted($config['export_version_is_granted'], null, sprintf('Access denied, user is not %s.', $config['export_version_is_granted']));
+        }
 
         if (!$content) {
             return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");

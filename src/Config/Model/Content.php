@@ -110,41 +110,61 @@ class Content implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->children()
                         // TODO add events config
-                        ->scalarNode('list_is_granted')->defaultValue('')->end()
+                        ->scalarNode('list_is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_LIST')->end()
                         ->scalarNode('list_view')->defaultValue('@SfsCms/admin/content/list.html.twig')->end()
                         ->scalarNode('list_page_view')->defaultValue('@SfsCms/admin/content/list-page.html.twig')->end()
                         ->scalarNode('list_filter_form')->defaultValue(ContentListFilterForm::class)->end()
-                        ->scalarNode('create_is_granted')->defaultValue('')->end()
+
+                        ->scalarNode('create_is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_CREATE')->end()
                         ->scalarNode('create_view')->defaultValue('@SfsCms/admin/content/create.html.twig')->end()
                         ->scalarNode('create_type')->defaultValue(ContentCreateForm::class)->end()
                         ->scalarNode('create_success_redirect_to')->defaultValue('')->end()
-                        ->scalarNode('import_is_granted')->defaultValue('')->end()
+
+                        ->scalarNode('import_is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_IMPORT')->end()
                         ->scalarNode('import_view')->defaultValue('@SfsCms/admin/content/import.html.twig')->end()
                         ->scalarNode('import_type')->defaultValue(ContentImportForm::class)->end()
                         ->scalarNode('import_success_redirect_to')->defaultValue('')->end()
-                        ->scalarNode('import_version_is_granted')->defaultValue('')->end()
+
+                        ->scalarNode('import_version_is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_IMPORT_VERSION')->end()
                         ->scalarNode('import_version_view')->defaultValue('@SfsCms/admin/content/import_version.html.twig')->end()
                         ->scalarNode('import_version_type')->defaultValue(ContentVersionImportForm::class)->end()
                         ->scalarNode('import_version_success_redirect_to')->defaultValue('')->end()
+
+                        ->scalarNode('read_is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_READ')->end()
                         ->scalarNode('read_view')->defaultValue('@SfsCms/admin/content/read.html.twig')->end()
+
+                        ->scalarNode('preview_is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_PREVIEW')->end()
                         ->scalarNode('preview_view')->defaultValue('@SfsCms/admin/content/preview.html.twig')->end()
+
+                        ->scalarNode('versions_is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSIONS')->end()
                         ->scalarNode('versions_view')->defaultValue('@SfsCms/admin/content/versions.html.twig')->end()
-                        ->scalarNode('update_is_granted')->defaultValue('')->end()
+
+                        ->scalarNode('cleanup_versions_is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_CLEANUP_VERSIONS')->end()
+                        ->scalarNode('keep_version_is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_KEEP_VERSION')->end()
+                        ->scalarNode('export_version_is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_EXPORT_VERSION')->end()
+
+                        ->scalarNode('update_is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_UPDATE')->end()
                         ->scalarNode('update_view')->defaultValue('@SfsCms/admin/content/update.html.twig')->end()
                         ->scalarNode('update_type')->defaultValue(ContentUpdateForm::class)->end()
                         ->scalarNode('update_success_redirect_to')->defaultValue('')->end()
-                        ->scalarNode('delete_is_granted')->defaultValue('')->end()
+
+                        ->scalarNode('delete_is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_DELETE')->end()
                         ->scalarNode('delete_view')->defaultValue('@SfsCms/admin/content/delete.html.twig')->end()
                         ->scalarNode('delete_type')->defaultValue(ContentDeleteForm::class)->end()
                         ->scalarNode('delete_success_redirect_to')->defaultValue('')->end()
-                        ->scalarNode('seo_is_granted')->defaultValue('')->end()
+
+                        ->scalarNode('seo_is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_SEO')->end()
                         ->scalarNode('seo_view')->defaultValue('@SfsCms/admin/content/seo.html.twig')->end()
                         ->scalarNode('seo_type')->defaultValue(ContentSeoForm::class)->end()
                         ->scalarNode('seo_success_redirect_to')->defaultValue('')->end()
-                        ->scalarNode('content_is_granted')->defaultValue('')->end()
+
+                        ->scalarNode('content_is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_CONTENT')->end()
                         ->scalarNode('content_view')->defaultValue('@SfsCms/admin/content/content.html.twig')->end()
                         ->scalarNode('content_type')->defaultValue(ContentContentForm::class)->end()
                         ->scalarNode('content_success_redirect_to')->defaultValue('')->end()
+
+                        ->scalarNode('publish_version_is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_PUBLISH_VERSION')->end()
+                        ->scalarNode('unpublish_is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_UNPUBLISH')->end()
                     ->end()
                 ->end()
             ->end()
