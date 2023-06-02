@@ -5,6 +5,10 @@ parameters:
             count: 1
             path: src/Form\Type/SymfonyRouteType.php
         -
+            message: "#Empty array passed to foreach.#"
+            path: src/Form/Module/ModuleCollectionType.php
+            reportUnmatched: false # ignore error on newer-versions
+        -
             message: "#Parameter \\#2 $array of function implode expects array<string>, array<int|string, array<int, string>|string> given.#"
             count: 1
             path: src/Routing/UrlGenerator.php
