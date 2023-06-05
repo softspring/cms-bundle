@@ -14,6 +14,9 @@
         </id>
 
         <many-to-many field="sites" target-entity="Softspring\CmsBundle\Model\SiteInterface">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
             <join-table name="cms_route_path_sites">
                 <join-columns>
                     <join-column name="route_path_id" referenced-column-name="id" on-delete="CASCADE" />
