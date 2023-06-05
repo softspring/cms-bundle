@@ -65,6 +65,7 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
 
     public function load(ObjectManager $manager)
     {
+        $manager->clear();
         $this->dataImporter->import($this->readFixtures(), ['version_origin' => ContentVersionInterface::ORIGIN_FIXTURE, 'auto_publish_version' => true]);
     }
 
