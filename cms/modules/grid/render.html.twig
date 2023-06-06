@@ -1,6 +1,6 @@
-<div class="grid-module row {{ class|default('') }}" id="{{ id|default('') }}"
+<div class="grid-module row {{ class|default() }}" id="{{ id|default('') }}"
      style="{{ bg_color|default(false) ? 'background-color:'~bg_color : '' }}">
     {% for content in contents|filter(content => content != constant('Softspring\\CmsBundle\\Render\\ContentRender::LOCALE_HIDDEN_MODULE') and content != constant('Softspring\\CmsBundle\\Render\\ContentRender::SITE_HIDDEN_MODULE')) %}
-        <div class="{{ node_row_class|default(node_row_class_custom|default('col')) }}">{{ content|raw }}</div>
+        <div class="{{ node_row_class|default(node_row_class_custom|default('col')) }} mb-4 mb-md-0">{{ content|raw }}</div>
     {% endfor %}
 </div>
