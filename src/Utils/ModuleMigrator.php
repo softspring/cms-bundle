@@ -26,4 +26,17 @@ class ModuleMigrator
             'route_params' => [],
         ];
     }
+
+    public static function symfonyRouteToLink(array $symfonyRoute): array
+    {
+        return [
+            'type' => 'route',
+            'route_name' => $symfonyRoute['route_name'],
+            'route_params' => $symfonyRoute['route_params'],
+            'url' => null,
+            'anchor' => null,
+            'target' => '_self',
+            'custom_target' => null,
+        ];
+    }
 }
