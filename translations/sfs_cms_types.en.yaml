@@ -1,3 +1,17 @@
 block_info:
     not_esi_warning: 'This block type is not configured as ESI. This means that the block is rendered and stored in database when you press Save button, and it will show at it is now when the page is delivered.'
     schedulable_info: 'This block type is schedulable. This means that the block can vary along the time, also can be empty if no block is scheduled for some time and date range.'
+    
+link_type:
+    type:
+        values:
+            anchor: 'Anchor'
+            route: 'Route'
+            url: 'URL'
+    target:
+        values:
+            _self: 'Same frame'
+            _blank: 'New window'
+            _parent: 'Parent frame'
+            _top: 'Top frame'
+            custom: 'Custom frame'

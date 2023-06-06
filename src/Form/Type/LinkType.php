@@ -13,10 +13,11 @@ class LinkType extends SymfonyRouteType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('type', ChoiceType::class, [
+            'choice_translation_domain' => 'sfs_cms_types',
             'choices' => [
-                'anchor' => 'anchor',
-                'route' => 'route',
-                'url' => 'url',
+                'link_type.type.values.anchor' => 'anchor',
+                'link_type.type.values.route' => 'route',
+                'link_type.type.values.url' => 'url',
             ],
         ]);
 
@@ -26,12 +27,13 @@ class LinkType extends SymfonyRouteType
         $builder->add('url', TextType::class);
 
         $builder->add('target', ChoiceType::class, [
+            'choice_translation_domain' => 'sfs_cms_types',
             'choices' => [
-                '_self' => '_self',
-                '_blank' => '_blank',
-                '_parent' => '_parent',
-                '_top' => '_top',
-                'custom' => 'custom',
+                'link_type.target.values._self' => '_self',
+                'link_type.target.values._blank' => '_blank',
+                'link_type.target.values._parent' => '_parent',
+                'link_type.target.values._top' => '_top',
+                'link_type.target.values.custom' => 'custom',
             ],
         ]);
 
