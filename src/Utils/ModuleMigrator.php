@@ -27,13 +27,13 @@ class ModuleMigrator
         ];
     }
 
-    public static function symfonyRouteToLink(array $symfonyRoute): array
+    public static function symfonyRouteToLink(?array $symfonyRoute): array
     {
         return [
-            'type' => 'route',
-            'route_name' => $symfonyRoute['route_name'],
-            'route_params' => $symfonyRoute['route_params'],
-            'url' => null,
+            'type' => !empty($symfonyRoute) ? 'route' : 'url',
+            'route_name' => !empty($symfonyRoute) ? $symfonyRoute['route_name'] : null,
+            'route_params' => !empty($symfonyRoute) ? $symfonyRoute['route_params'] : null,
+            'url' => !empty($symfonyRoute) ? null : '',
             'anchor' => null,
             'target' => '_self',
             'custom_target' => null,
