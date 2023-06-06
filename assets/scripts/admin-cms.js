@@ -17,3 +17,5 @@ import './admin/form-collections';
 
 import './types/block-type';
 import './types/color-type';
+import './types/link-type';
+import './types/symfony-route-type';
