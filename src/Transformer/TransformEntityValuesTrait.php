@@ -1,6 +1,6 @@
 <?php
 
-namespace Softspring\CmsBundle\EntityListener;
+namespace Softspring\CmsBundle\Transformer;
 
 use Doctrine\ORM\Mapping\MappingException as ORMMappingException;
 use Doctrine\Persistence\Mapping\MappingException as PersistenceMappingException;

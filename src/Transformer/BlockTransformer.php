@@ -1,0 +1,50 @@
+<?php
+
+namespace Softspring\CmsBundle\Transformer;
+
+use Doctrine\ORM\EntityManagerInterface;
+use Softspring\CmsBundle\Model\BlockInterface;
+
+class BlockTransformer implements TransformerInterface
+{
+    use TransformEntityValuesTrait;
+
+    public function transform(object $entity, EntityManagerInterface $em): void
+    {
+        $block = $this->getBlock($entity);
+
+        if (!$block->getData()) {
+            return;
+        }
+
+        $extraData = $block->getData();
+        foreach ($extraData as $field => $value) {
+            $extraData[$field] = $this->transformEntityValues($value, $em);
+        }
+        $block->setData($extraData);
+    }
+
+    public function untransform(object $entity, EntityManagerInterface $em): void
+    {
+        $block = $this->getBlock($entity);
+
+        if (!$block->getData()) {
+            return;
+        }
+
+        $extraData = $block->getData();
+        foreach ($extraData as $field => $value) {
+            $extraData[$field] = $this->untransformEntityValues($value, $em);
+        }
+        $block->setData($extraData);
+    }
+
+    protected function getBlock($entity): BlockInterface
+    {
+        if (!$entity instanceof BlockInterface) {
+            throw new UnsupportedException(BlockInterface::class, get_class($entity));
+        }
+
+        return $entity;
+    }
+}

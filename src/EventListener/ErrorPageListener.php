@@ -61,7 +61,7 @@ class ErrorPageListener implements EventSubscriberInterface
     {
         $errorTemplates = [];
 
-        foreach ($site->getConfig()['error_pages'] as $_errorCode => $templates) {
+        foreach ($site->getConfig()['error_pages'] as $_errorCode => $templates) if (isset($templates[$locale])) {
             $_errorCode = "$_errorCode";
             if ($errorCode === $_errorCode) {
                 $errorTemplates = array_merge($errorTemplates, $templates[$locale]);
