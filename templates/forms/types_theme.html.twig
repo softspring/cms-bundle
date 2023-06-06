@@ -68,7 +68,7 @@
 {% block translatable_widget %}
     {% if form|length > 1 %}
         {% for field in form %}
-            <div class="input-group mb-3">
+            <div class="input-group mb-3 flex-nowrap">
                 <div class="input-group-prepend">
                     <span class="input-group-text">
                         {{ field.vars.label|upper }}
