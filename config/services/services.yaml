@@ -78,6 +78,9 @@ services:
 
     Softspring\CmsBundle\Routing\:
         resource: '../../src/Routing/*'
+
+    Softspring\CmsBundle\Transformer\:
+        resource: '../../src/Transformer/*'
         
     Softspring\CmsBundle\Routing\CmsRouter:
         decorates: 'router.default'
@@ -111,6 +114,10 @@ services:
             - { name: 'doctrine.orm.entity_listener', event: 'postLoad', entity: 'Softspring\CmsBundle\Entity\Content',  priority: 10 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
             - { name: 'doctrine.orm.entity_listener', event: 'preUpdate', entity: 'Softspring\CmsBundle\Entity\Content',  priority: 10 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
             - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: 'Softspring\CmsBundle\Entity\Content',  priority: 10 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
+
+    Softspring\CmsBundle\EntityListener\ContentVersionCompileListener:
+        tags:
+            - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: 'Softspring\CmsBundle\Entity\ContentVersion',  priority: 11 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
 
     Softspring\CmsBundle\EntityListener\ContentVersionListener:
         tags:
