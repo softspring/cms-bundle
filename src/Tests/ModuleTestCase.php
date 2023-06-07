@@ -22,8 +22,10 @@ abstract class ModuleTestCase extends TestCase
         $revisions = $this->provideDataForMigrations();
 
         foreach ($revisions as $originRevision) {
-            foreach ($revisions as $targetRevision) if ($originRevision['_revision'] < $targetRevision['_revision']) {
-                $this->assertMigrateTest($originRevision, $targetRevision);
+            foreach ($revisions as $targetRevision) {
+                if ($originRevision['_revision'] < $targetRevision['_revision']) {
+                    $this->assertMigrateTest($originRevision, $targetRevision);
+                }
             }
         }
     }
