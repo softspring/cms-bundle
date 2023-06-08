@@ -140,6 +140,19 @@ abstract class ContentVersion implements ContentVersionInterface
         $this->compiled = $compiled;
     }
 
+    public function hasCompileErrors(): bool
+    {
+        foreach ($this->getCompiled() ?? [] as $siteCompiled) {
+            foreach ($siteCompiled ?? [] as $localeCompiled) {
+                if (str_contains($localeCompiled, 'MODULE_RENDER_ERROR')) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public function isPublished(): bool
     {
         return $this->getContent()->getPublishedVersion() == $this;

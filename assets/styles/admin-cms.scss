@@ -240,6 +240,10 @@ body {
         }
     }
 
+    &.has-errors {
+        border: 2px dashed $danger;
+    }
+
     &.cms-module-deprecated {
         border-color: rgba(var(--bs-warning-rgb), 0.5) !important;
 
