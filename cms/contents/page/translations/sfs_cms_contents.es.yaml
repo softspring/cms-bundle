@@ -139,6 +139,9 @@ admin_page:
         meta.title: "Editar contenido"
         title: "%name%"
         breadcrumb: "Editar contenido"
+        render_error: "Se ha producido un error al compilar la página, revisa la configuración."
+        validation_error: "Los cambios no se han guardado, la página tiene algunos errores, revisa la configuración."
+        success_saved: "Los cambios se han guardado."
         actions:
             save.button: "Guardar cambios"
             save_and_exit.button: "Guardar y salir"
