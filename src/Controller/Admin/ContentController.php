@@ -13,6 +13,7 @@ use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\Render\ContentRender;
+use Softspring\CmsBundle\Render\RenderErrorException;
 use Softspring\CmsBundle\Utils\Slugger;
 use Softspring\CmsBundle\Utils\ZipContent;
 use Softspring\Component\CrudlController\Event\FilterEvent;
@@ -497,28 +498,28 @@ class ContentController extends AbstractController
         $contentConfig = $this->getContentConfig($request);
         $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']] + ['extra_fields' => $contentConfig['extra_fields']];
 
-        /** @var ?ContentInterface $entity */
-        $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
+        /** @var ?ContentInterface $content */
+        $content = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
         if (!empty($config['content_is_granted'])) {
             $this->denyAccessUnlessGranted($config['content_is_granted'], null, sprintf('Access denied, user is not %s.', $config['content_is_granted']));
         }
 
-        if (!$entity) {
+        if (!$content) {
             return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
-        $request->attributes->set('content', $entity);
+        $request->attributes->set('content', $content);
 
-        //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
+        //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($content, $request))) {
         //            return $response;
         //        }
 
         if ($prevVersion) {
-            $prevVersion = $entity->getVersions()->filter(fn (ContentVersionInterface $version) => $version->getId() == $prevVersion)->first();
+            $prevVersion = $content->getVersions()->filter(fn (ContentVersionInterface $version) => $version->getId() == $prevVersion)->first();
         }
 
-        $version = $this->contentManager->createVersion($entity, $prevVersion, ContentVersionInterface::ORIGIN_EDIT);
+        $version = $this->contentManager->createVersion($content, $prevVersion, ContentVersionInterface::ORIGIN_EDIT);
         $prevVersion && $version->setOriginDescription('v'.$prevVersion->getVersionNumber());
 
         if ($request->request->has('content_content_form')) {
@@ -526,7 +527,7 @@ class ContentController extends AbstractController
         }
 
         $form = $this->createForm($config['content_type'], $version, [
-            'content' => $entity,
+            'content' => $content,
             'layout' => $version->getLayout(),
             'method' => 'POST',
             'content_type' => $config['_id'],
@@ -540,25 +541,30 @@ class ContentController extends AbstractController
                 //                    return $response;
                 //                }
 
-                $this->contentManager->saveEntity($entity);
+                try {
+                    $this->contentManager->saveEntity($content);
 
-                //                if ($response = $this->dispatchGetResponseFromConfig($config, 'success_event_name', new GetResponseEntityEvent($entity, $request))) {
-                //                    return $response;
-                //                }
+                    //                if ($response = $this->dispatchGetResponseFromConfig($config, 'success_event_name', new GetResponseEntityEvent($content, $request))) {
+                    //                    return $response;
+                    //                }
 
-                if ('content' == $request->request->get('goto')) {
-                    return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_content", ['content' => $entity]);
+                    if ('content' == $request->request->get('goto')) {
+                        return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_content", ['content' => $content]);
+                    }
+
+                    if ('preview' == $request->request->get('goto')) {
+                        return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_preview", ['content' => $content]);
+                    }
+
+                    if ('publish' == $request->request->get('goto')) {
+                        return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_publish_version", ['content' => $content, 'version' => $version]);
+                    }
+
+                    return !empty($config['content_success_redirect_to']) ? $this->redirectToRoute($config['content_success_redirect_to']) : $this->redirectBack($config['_id'], $content, $request);
+                } catch (RenderErrorException $e) {
+                    $e->getRenderErrorList()->formMapErrors($form);
                 }
 
-                if ('preview' == $request->request->get('goto')) {
-                    return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_preview", ['content' => $entity]);
-                }
-
-                if ('publish' == $request->request->get('goto')) {
-                    return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_publish_version", ['content' => $entity, 'version' => $version]);
-                }
-
-                return !empty($config['content_success_redirect_to']) ? $this->redirectToRoute($config['content_success_redirect_to']) : $this->redirectBack($config['_id'], $entity, $request);
                 //            } else {
                 //                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_invalid_event_name', new GetResponseFormEvent($form, $request))) {
                 //                    return $response;
@@ -572,7 +578,7 @@ class ContentController extends AbstractController
         $viewData = new \ArrayObject([
             'content' => $config['_id'],
             'content_config' => $contentConfig,
-            'entity' => $entity,
+            'entity' => $content,
             'layout' => $this->cmsConfig->getLayout($version->getLayout()),
             'form' => $form->createView(),
             'enabledLocales' => $this->enabledLocales,

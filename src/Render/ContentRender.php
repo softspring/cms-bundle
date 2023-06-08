@@ -37,7 +37,7 @@ class ContentRender
         $this->profilerEnabled = (bool) $profiler;
     }
 
-    public function render(ContentVersionInterface $version): string
+    public function render(ContentVersionInterface $version, RenderErrorList $renderErrorList = null): string
     {
         $this->cmsLogger && $this->cmsLogger->debug(sprintf('Rendering %s page version', $version->getContent()->getName()));
 
@@ -50,7 +50,7 @@ class ContentRender
 
         $request = $this->requestStack->getCurrentRequest();
 
-        $containers = $version->getCompiledModules()["{$request->attributes->get('_sfs_cms_site')}"][$request->getLocale()] ?? $this->renderModules($version);
+        $containers = $version->getCompiledModules()["{$request->attributes->get('_sfs_cms_site')}"][$request->getLocale()] ?? $this->renderModules($version, $renderErrorList);
 
         return $this->twig->render($layout['render_template'], [
             'containers' => $containers,
@@ -59,7 +59,7 @@ class ContentRender
         ]);
     }
 
-    public function renderModules(ContentVersionInterface $version): array
+    public function renderModules(ContentVersionInterface $version, RenderErrorList $renderErrorList = null): array
     {
         // preload all medias
         $version->getMedias();
@@ -70,20 +70,26 @@ class ContentRender
         $versionData = $version->getData();
 
         $containers = [];
+        $renderErrorList && $renderErrorList->resetLocation();
+        $renderErrorList && $renderErrorList->pushLocation('data');
         foreach ($layout['containers'] as $layoutContainerId => $layoutContainerConfig) {
             $layoutContainer = $versionData ? $versionData[$layoutContainerId] ?? [] : [];
             $containers[$layoutContainerId] = '';
 
-            foreach ($layoutContainer as $module) {
+            $renderErrorList && $renderErrorList->pushLocation($layoutContainerId);
+            foreach ($layoutContainer as $i => $module) {
                 $this->profilerDebugCollectorData[$layoutContainerId] = [];
-                $containers[$layoutContainerId] .= $this->renderModule($module, $version, $this->profilerDebugCollectorData[$layoutContainerId]);
+                $renderErrorList && $renderErrorList->pushLocation($i);
+                $containers[$layoutContainerId] .= $this->renderModule($module, $version, $this->profilerDebugCollectorData[$layoutContainerId], $renderErrorList);
+                $renderErrorList && $renderErrorList->popLocation();
             }
+            $renderErrorList && $renderErrorList->popLocation();
         }
 
         return $containers;
     }
 
-    protected function renderModule(array $module, ContentVersionInterface $version, array &$profilerDebugCollectorData): string
+    protected function renderModule(array $module, ContentVersionInterface $version, array &$profilerDebugCollectorData, RenderErrorList $renderErrorList = null): string
     {
         if (isset($module['site_filter'])) {
             $currentSite = $this->requestStack->getCurrentRequest()->get('_sfs_cms_site');
@@ -120,11 +126,25 @@ class ContentRender
                 'modules' => [],
             ];
 
-            foreach ($module['modules'] as $submodule) {
-                $module['contents'][] = $this->renderModule($submodule, $version, $profilerDebugCollectorData[sizeof($profilerDebugCollectorData) - 1]['modules']);
+            $renderErrorList && $renderErrorList->pushLocation('modules');
+            foreach ($module['modules'] as $i => $submodule) {
+                $renderErrorList && $renderErrorList->pushLocation($i);
+                $module['contents'][] = $this->renderModule($submodule, $version, $profilerDebugCollectorData[sizeof($profilerDebugCollectorData) - 1]['modules'], $renderErrorList);
+                $renderErrorList && $renderErrorList->popLocation();
             }
+            $renderErrorList && $renderErrorList->popLocation();
 
-            return $this->twig->render($moduleConfig['render_template'], $module);
+            try {
+                return $this->twig->render($moduleConfig['render_template'], $module);
+            } catch (\Exception $exception) {
+                $this->cmsLogger && $this->cmsLogger->error(sprintf('Error rendering %s template: %s', $moduleConfig['render_template'], $exception->getMessage()));
+                $renderErrorList && $renderErrorList->add($moduleConfig['render_template'], $exception, [
+                    'moduleConfig' => $moduleConfig,
+                    'moduleData' => $module,
+                ]);
+
+                return '<div class="alert alert-danger" role="alert"><!-- MODULE_RENDER_ERROR -->We\'re sorry, an error has been produced rendering this content, please review content configuration and try again. If the problem persist talk to developers.</div>';
+            }
         }
 
         $module += [
@@ -137,7 +157,17 @@ class ContentRender
             'config' => $moduleConfig,
         ];
 
-        return $this->twig->render($moduleConfig['render_template'], $module);
+        try {
+            return $this->twig->render($moduleConfig['render_template'], $module);
+        } catch (\Exception $exception) {
+            $this->cmsLogger && $this->cmsLogger->error(sprintf('Error rendering %s template: %s %s', $moduleConfig['render_template'], $exception->getMessage(), $renderErrorList ? $renderErrorList->currentLocation() : ''));
+            $renderErrorList && $renderErrorList->add($moduleConfig['render_template'], $exception, [
+                'moduleConfig' => $moduleConfig,
+                'moduleData' => $module,
+            ]);
+
+            return '<div class="alert alert-danger" role="alert"><!-- MODULE_RENDER_ERROR -->We\'re sorry, an error has been produced rendering this content, please review content configuration and try again. If the problem persist talk to developers.</div>';
+        }
     }
 
     private function isContainer($module): bool
