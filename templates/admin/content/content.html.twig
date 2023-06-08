@@ -9,8 +9,7 @@
     '@SfsPolymorphicFormType/polymorphic-form-theme.html.twig'
     '@SfsCms/forms/modules_theme.html.twig'
     '@SfsCms/forms/types_theme.html.twig'
-    '@SfsMedia/forms/media_type_theme.html.twig'
-%}
+    '@SfsMedia/forms/media_type_theme.html.twig' %}
 
 {% block body %}
     {{ form_start(form) }}
@@ -49,23 +48,31 @@
 
                     <div class="text-end">
                         {% if app.request.query.get('back') == 'versions' %}
-                            <a href="{{ url('sfs_cms_admin_content_'~content~'_versions', {'content':entity}) }}" class="btn btn-light">{{ ('admin_'~content~'.content.actions.cancel.button')|trans }}</a>
+                            <a href="{{ url('sfs_cms_admin_content_'~content~'_versions', {'content':entity}) }}"
+                               class="btn btn-light">{{ ('admin_'~content~'.content.actions.cancel.button')|trans }}</a>
                         {% else %}
-                            <a href="{{ url('sfs_cms_admin_content_'~content~'_details', {'content':entity}) }}" class="btn btn-light">{{ ('admin_'~content~'.content.actions.cancel.button')|trans }}</a>
+                            <a href="{{ url('sfs_cms_admin_content_'~content~'_details', {'content':entity}) }}"
+                               class="btn btn-light">{{ ('admin_'~content~'.content.actions.cancel.button')|trans }}</a>
                         {% endif %}
 
                         <div class="btn-group" role="group">
-                            <button name="goto" value="content" type="submit" class="btn btn-primary ms-3">{{ ('admin_'~content~'.content.actions.save.button')|trans }}</button>
-                            <button name="goto" id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button name="goto" value="content" type="submit"
+                                    class="btn btn-primary ms-3">{{ ('admin_'~content~'.content.actions.save.button')|trans }}</button>
+                            <button name="goto" id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                 <li>
-                                    <button class="btn btn-primary dropdown-item" name="goto" value="general">{{ ('admin_'~content~'.content.actions.save_and_exit.button')|trans }}</button>
-                                    <button class="btn btn-primary dropdown-item" name="goto" value="preview">{{ ('admin_'~content~'.content.actions.save_and_preview.button')|trans }}</button>
+                                    <button class="btn btn-primary dropdown-item" name="goto"
+                                            value="general">{{ ('admin_'~content~'.content.actions.save_and_exit.button')|trans }}</button>
+                                    <button class="btn btn-primary dropdown-item" name="goto"
+                                            value="preview">{{ ('admin_'~content~'.content.actions.save_and_preview.button')|trans }}</button>
                                     {% if not content_config.admin.publish_version_is_granted or is_granted(content_config.admin.publish_version_is_granted, form.vars.data) %}
-                                        <button class="btn btn-primary dropdown-item" name="goto" value="publish">{{ ('admin_'~content~'.content.actions.save_and_publish.button')|trans }}</button>
+                                        <button class="btn btn-primary dropdown-item" name="goto"
+                                                value="publish">{{ ('admin_'~content~'.content.actions.save_and_publish.button')|trans }}</button>
                                     {% else %}
-                                        <button class="btn btn-primary dropdown-item disabled" name="goto">{{ ('admin_'~content~'.content.actions.save_and_publish.button')|trans }}</button>
+                                        <button class="btn btn-primary dropdown-item disabled"
+                                                name="goto">{{ ('admin_'~content~'.content.actions.save_and_publish.button')|trans }}</button>
                                     {% endif %}
                                 </li>
                             </ul>
@@ -84,8 +91,8 @@
             </div>
         </main>
     </div>
-    {#        <iframe id="previewFrame" src="/preview.html"></iframe>#}
-    {#        <button onclick="document.getElementById('previewFrame').contentWindow.document.getElementsByTagName('body')[0].innerHTML = 'Otra cosa'; return false;">Change</button>#}
+    {#        <iframe id="previewFrame" src="/preview.html"></iframe> #}
+    {#        <button onclick="document.getElementById('previewFrame').contentWindow.document.getElementsByTagName('body')[0].innerHTML = 'Otra cosa'; return false;">Change</button> #}
 
 
     {{ form_widget(form.module_prototypes_collection) }}
@@ -96,11 +103,21 @@
         document.getElementById("content_content_form__ok").value = 0;
     </script>
 
+    {% if alert|default(false) or app.request.query.has('saved') %}
+        <div class="fixed-top w-50 float-right m-5">
+            <div class="alert alert-{{ alert[0]|default('success') }} alert-dismissible fade show" role="alert">
+                {{ alert[1]|default('admin_'~content~'.content.success_saved')|trans|raw }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    {% endif %}
+
     {% include '@SfsMedia/forms/media_type_modal.html.twig' %}
 {% endblock body %}
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="https://cdn.tiny.cloud/1/0zxo7hhr52tjj8ir7zp8ujyxq2xrwy561vrc8oqr6oozfjbi/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://cdn.tiny.cloud/1/0zxo7hhr52tjj8ir7zp8ujyxq2xrwy561vrc8oqr6oozfjbi/tinymce/6/tinymce.min.js"
+            referrerpolicy="origin"></script>
 {% endblock javascripts %}
 

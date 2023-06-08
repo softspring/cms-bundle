@@ -549,7 +549,7 @@ class ContentController extends AbstractController
                     //                }
 
                     if ('content' == $request->request->get('goto')) {
-                        return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_content", ['content' => $content]);
+                        return $this->redirectToRoute("sfs_cms_admin_content_{$config['_id']}_content", ['content' => $content, 'saved' => 1]);
                     }
 
                     if ('preview' == $request->request->get('goto')) {
@@ -563,9 +563,11 @@ class ContentController extends AbstractController
                     return !empty($config['content_success_redirect_to']) ? $this->redirectToRoute($config['content_success_redirect_to']) : $this->redirectBack($config['_id'], $content, $request);
                 } catch (RenderErrorException $e) {
                     $e->getRenderErrorList()->formMapErrors($form);
+                    $alert = ['error', 'admin_'.$config['_id'].'.content.render_error'];
                 }
 
-                //            } else {
+            } else {
+                $alert = ['warning', 'admin_'.$config['_id'].'.content.validation_error'];
                 //                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_invalid_event_name', new GetResponseFormEvent($form, $request))) {
                 //                    return $response;
                 //                }
@@ -576,6 +578,7 @@ class ContentController extends AbstractController
 
         // show view
         $viewData = new \ArrayObject([
+            'alert' => $alert ?? null,
             'content' => $config['_id'],
             'content_config' => $contentConfig,
             'entity' => $content,
