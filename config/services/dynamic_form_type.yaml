@@ -1,0 +1,18 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+        
+    Softspring\Component\DynamicFormType\Form\Extension\Type\DynamicConstraintsExtension:
+        tags: [ { name: 'form.type_extension', priority: -200 } ]
+
+    Softspring\Component\DynamicFormType\Form\Extension\Type\DynamicTypesExtension:
+        class: Softspring\CmsBundle\Form\Extension\DynamicTypesExtension
+        tags: [ { name: 'form.type_extension' } ]
+
+    Softspring\Component\DynamicFormType\Form\Resolver\ConstraintResolverInterface:
+        class: Softspring\Component\DynamicFormType\Form\Resolver\ConstraintResolver
+
+    Softspring\Component\DynamicFormType\Form\Resolver\TypeResolverInterface:
+        class: Softspring\CmsBundle\Form\Resolver\TypeResolver

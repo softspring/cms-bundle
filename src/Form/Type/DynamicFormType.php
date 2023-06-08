@@ -2,7 +2,6 @@
 
 namespace Softspring\CmsBundle\Form\Type;
 
-use Softspring\CmsBundle\Form\DynamicFormTrait;
 use Softspring\Component\DynamicFormType\Form\DynamicFormType as BaseDynamicFormType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -10,12 +9,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class DynamicFormType extends BaseDynamicFormType
 {
-    use DynamicFormTrait;
-
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        parent::configureOptions($resolver);
-
         $resolver->setDefaults([
             'translation_domain' => 'sfs_cms_modules',
         ]);

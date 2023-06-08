@@ -89,7 +89,7 @@
 {% block dynamic_form_module_row %}
     <div data-polymorphic="node" {{ block('widget_container_attributes') }}>
         <div class="insert-module" data-polymorphic-position="before"  data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal" title="Insert module here"></div>
-        <div class="cms-module {{ form.vars.deprecated?'cms-module-deprecated':'' }}">
+        <div class="cms-module {{ form.vars.deprecated?'cms-module-deprecated':'' }} {% if form.vars.module_errors|length %}has-errors{% endif %}">
             <div class="cms-module-header">
                 <div class="cms-module-title">
                     {#                    <span class="order-polymorphic-node" id="{{ id }}_order_index">{{ form.vars.name }}</span>##}
@@ -104,7 +104,7 @@
                 </div>
             </div>
             <div class="cms-module-body">
-                {{ form_widget(form) }}{{ form_errors(form) }}
+                {{ form_widget(form) }}
             </div>
         </div>
     </div>
@@ -129,6 +129,12 @@
                 <button type="button" class="btn-close" data-cms-module-form-close="" aria-label="Close"></button>
             </div>
             <div class="container text-start">
+                {% if form.vars.errors|length %}
+                    <div class="alert alert-danger mt-3" role="alert">
+                        {{ form_errors(form) }}
+                    </div>
+                {% endif %}
+
                 {% if form.vars.deprecated %}
                     <div class="alert alert-warning mt-3" role="alert">{{ form.vars.deprecated }}</div>
                 {% endif %}
@@ -145,6 +151,7 @@
 
                 {% if form_template|default(false) %}
                     {% include form_template %}
+                    {{ form_rest(form) }}
                 {% else %}
                     {{ form_widget(form) }}
                 {% endif %}

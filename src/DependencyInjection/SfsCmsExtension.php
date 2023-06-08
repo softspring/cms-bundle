@@ -69,6 +69,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
 
         // load services
         $loader->load('services.yaml');
+        $loader->load('dynamic_form_type.yaml');
         $loader->load('controller/admin_routes.yaml');
         $loader->load('controller/admin_content.yaml');
 
