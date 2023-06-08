@@ -5,6 +5,7 @@ namespace Softspring\CmsBundle\DataFixtures;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
+use Psr\Log\LoggerInterface;
 use Softspring\CmsBundle\Data\DataImporter;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -16,12 +17,14 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
     protected ContainerInterface $container;
     protected DataImporter $dataImporter;
     protected string $fixturesPath;
+    protected ?LoggerInterface $cmsLogger;
 
-    public function __construct(ContainerInterface $container, DataImporter $dataImporter)
+    public function __construct(ContainerInterface $container, DataImporter $dataImporter, ?LoggerInterface $cmsLogger)
     {
         $this->container = $container;
         $this->dataImporter = $dataImporter;
         $this->fixturesPath = $this->container->getParameter('kernel.project_dir').'/cms/fixtures';
+        $this->cmsLogger = $cmsLogger;
     }
 
     protected function readFixtures(): array
@@ -31,6 +34,8 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
         foreach (['contents', 'routes', 'blocks', 'menus'] as $type) {
             if (is_dir("$this->fixturesPath/$type")) {
                 foreach ((new Finder())->in("$this->fixturesPath/$type")->files() as $contentFile) {
+                    $this->cmsLogger && $this->cmsLogger->debug(sprintf('Fixture "%s/%s" found', $contentFile->getPath(), $contentFile->getFilename()));
+
                     $data = Yaml::parseFile($contentFile->getRealPath());
                     $id = $contentFile->getFilenameWithoutExtension();
                     $contents[$type][$id] = $data;
@@ -40,6 +45,8 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
 
         if (is_dir("$this->fixturesPath/media")) {
             foreach ((new Finder())->in("$this->fixturesPath/media")->files()->name('*.json') as $mediaConfig) {
+                $this->cmsLogger && $this->cmsLogger->debug(sprintf('Media "%s/%s" found', $mediaConfig->getPath(), $mediaConfig->getFilename()));
+
                 $data = json_decode(file_get_contents($mediaConfig->getRealPath()), true);
                 $id = $mediaConfig->getFilenameWithoutExtension();
                 $contents['media'][$id] = [
