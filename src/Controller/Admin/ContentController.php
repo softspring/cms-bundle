@@ -565,7 +565,6 @@ class ContentController extends AbstractController
                     $e->getRenderErrorList()->formMapErrors($form);
                     $alert = ['error', 'admin_'.$config['_id'].'.content.render_error'];
                 }
-
             } else {
                 $alert = ['warning', 'admin_'.$config['_id'].'.content.validation_error'];
                 //                if ($response = $this->dispatchGetResponseFromConfig($config, 'form_invalid_event_name', new GetResponseFormEvent($form, $request))) {
