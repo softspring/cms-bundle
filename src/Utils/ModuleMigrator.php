@@ -10,6 +10,8 @@ class ModuleMigrator
             $moduleData = (include $migrationScript)($moduleData, (int) ($moduleData['_revision'] ?? 1), $toRevision);
         }
 
+        $moduleData['_revision'] = $toRevision;
+
         return $moduleData;
     }
 
