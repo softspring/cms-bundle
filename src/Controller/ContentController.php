@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Controller;
 
+use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Model\RoutePathInterface;
 use Softspring\CmsBundle\Render\ContentRender;
@@ -12,10 +13,12 @@ use Symfony\Component\HttpFoundation\Response;
 class ContentController extends AbstractController
 {
     protected ContentRender $contentRender;
+    protected ContentVersionManagerInterface $contentVersionManager;
 
-    public function __construct(ContentRender $contentRender)
+    public function __construct(ContentRender $contentRender, ContentVersionManagerInterface $contentVersionManager)
     {
         $this->contentRender = $contentRender;
+        $this->contentVersionManager = $contentVersionManager;
     }
 
     public function renderRoutePath(RoutePathInterface $routePath, Request $request): Response
@@ -28,7 +31,15 @@ class ContentController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        $pageContent = $publishedVersion->getCompiled()["{$request->attributes->get('_sfs_cms_site')}"][$request->getLocale()] ?? $this->contentRender->render($publishedVersion);
+        $compiled = $publishedVersion->getCompiled();
+        if (!isset($compiled["{$request->attributes->get('_sfs_cms_site')}"][$request->getLocale()])) {
+            // if this content is not yet compiled, store it in database
+            $compiled["{$request->attributes->get('_sfs_cms_site')}"][$request->getLocale()] = $this->contentRender->render($publishedVersion);
+            $publishedVersion->setCompiled($compiled);
+            $this->contentVersionManager->saveEntity($publishedVersion);
+        }
+
+        $pageContent = $compiled["{$request->attributes->get('_sfs_cms_site')}"][$request->getLocale()];
 
         // create response
         $response = new Response($pageContent);
