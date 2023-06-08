@@ -139,6 +139,11 @@ class CmsConfig
         return $this->blocks[$id] ?? null;
     }
 
+    public function clearSites(): void
+    {
+        $this->siteEntities = null;
+    }
+
     public function getSites(): array
     {
         if (null === $this->siteEntities) {

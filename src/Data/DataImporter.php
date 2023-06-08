@@ -42,6 +42,8 @@ class DataImporter extends AbstractDataImportExport
      */
     public function import(array $contents, array $options = []): void
     {
+        $this->cmsConfig->clearSites();
+        $this->em->clear();
         // preload sites
         foreach ($this->cmsConfig->getSites() as $site) {
             $this->cmsLogger && $this->cmsLogger->info(sprintf('Preload site "%s"', "$site"));
