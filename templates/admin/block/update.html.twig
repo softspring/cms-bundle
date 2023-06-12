@@ -26,7 +26,10 @@
                 {{ form_row(form.publishEndDate) }}
             {% endif %}
 
-            {{ form_widget(form.data) }}
+            {% if block_config.form_template|default(false) %}
+                {% include block_config.form_template %}
+            {% endif  %}
+
             {{ form_rest(form) }}
 
             <div class="d-flex justify-content-end align-items-center">

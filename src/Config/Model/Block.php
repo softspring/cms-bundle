@@ -38,18 +38,12 @@ class Block implements ConfigurationInterface
                 })
                 ->thenInvalid('A block defined as static can not have form_options.')
             ->end()
-//            ->validate()
-//                ->ifTrue(function ($config) {
-//                    return $config['static'] && !empty($config['edit_template']);
-//                })
-//                ->thenInvalid('A block defined as static can not have edit_template.')
-//            ->end()
-//            ->validate()
-//                ->ifTrue(function ($config) {
-//                    return $config['static'] && !empty($config['form_template']);
-//                })
-//                ->thenInvalid('A block defined as static can not have form_template.')
-//            ->end()
+            ->validate()
+                ->ifTrue(function ($config) {
+                    return $config['static'] && !empty($config['form_template']);
+                })
+                ->thenInvalid('A block defined as static can not have form_template.')
+            ->end()
             ->validate()
                 ->ifTrue(function ($config) {
                     return $config['static'] && $config['schedulable'];
@@ -60,8 +54,7 @@ class Block implements ConfigurationInterface
                 ->integerNode('revision')->isRequired()->end()
 
                 ->scalarNode('render_template')->defaultValue("@block/{$this->blockName}/render.html.twig")->end()
-                // ->scalarNode('edit_template')->end()
-                // ->scalarNode('form_template')->end()
+                ->scalarNode('form_template')->end()
 
                 ->booleanNode('esi')->defaultTrue()->end()
                 ->integerNode('cache_ttl')->defaultFalse()->end()
@@ -71,10 +64,13 @@ class Block implements ConfigurationInterface
                 ->scalarNode('render_url')->end()
 
                 // TODO review this ???
-                ->scalarNode('form_type')->end()
+                ->scalarNode('form_type')
+                    ->setDeprecated()
+                ->end()
 
                 // TODO review this ???
                 ->arrayNode('form_options')
+                    ->setDeprecated()
                     ->useAttributeAsKey('key')
                     ->prototype('variable')->end()
                 ->end()
