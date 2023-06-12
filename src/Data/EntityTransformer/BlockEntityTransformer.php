@@ -48,6 +48,8 @@ class BlockEntityTransformer implements EntityTransformerInterface
             'block' => [
                 'type' => $block->getType(),
                 'name' => $block->getName(),
+                'publish_start_date' => $block->getPublishStartDate() ? $block->getPublishStartDate()->format('Y-m-d H:i:s') : null,
+                'publish_end_date' => $block->getPublishEndDate() ? $block->getPublishEndDate()->format('Y-m-d H:i:s') : null,
                 'data' => $this->dataTransformer->export($block->getData(), $files),
             ],
         ];
@@ -71,6 +73,8 @@ class BlockEntityTransformer implements EntityTransformerInterface
 
         $block->setName($data['block']['name']);
         $block->setData($data['block']['data']);
+        $block->setPublishStartDate($data['block']['publish_start_date'] ? new \DateTime($data['block']['publish_start_date']) : null);
+        $block->setPublishEndDate($data['block']['publish_end_date'] ? new \DateTime($data['block']['publish_end_date']) : null);
 
         return $block;
     }
