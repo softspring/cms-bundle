@@ -6,12 +6,13 @@ use Psr\Log\LoggerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Form\Module\ContainerModuleType;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
+use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\Utils\ModuleMigrator;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Twig\Environment;
 
-class ContentRender
+class ContentRender extends AbstractRenderer
 {
     public const SITE_HIDDEN_MODULE = '<!-- site hidden module -->';
     public const LOCALE_HIDDEN_MODULE = '<!-- locale hidden module -->';
@@ -30,9 +31,9 @@ class ContentRender
 
     public function __construct(Environment $twig, CmsConfig $cmsConfig, RequestStack $requestStack, ?LoggerInterface $cmsLogger, ?Profiler $profiler)
     {
+        parent::__construct($requestStack);
         $this->twig = $twig;
         $this->cmsConfig = $cmsConfig;
-        $this->requestStack = $requestStack;
         $this->cmsLogger = $cmsLogger;
         $this->profilerEnabled = (bool) $profiler;
     }
@@ -50,7 +51,10 @@ class ContentRender
 
         $request = $this->requestStack->getCurrentRequest();
 
-        $containers = $version->getCompiledModules()["{$request->attributes->get('_sfs_cms_site')}"][$request->getLocale()] ?? $this->renderModules($version, $renderErrorList);
+        $site = $request->attributes->get('_sfs_cms_site');
+        $locale = $request->getLocale();
+
+        $containers = $version->getCompiledModules()["$site"][$locale] ?? $this->renderModules($version, $site, $locale, $renderErrorList);
 
         return $this->twig->render($layout['render_template'], [
             'containers' => $containers,
@@ -59,34 +63,36 @@ class ContentRender
         ]);
     }
 
-    public function renderModules(ContentVersionInterface $version, RenderErrorList $renderErrorList = null): array
+    public function renderModules(ContentVersionInterface $version, SiteInterface $site, string $locale, RenderErrorList $renderErrorList = null): array
     {
-        // preload all medias
-        $version->getMedias();
-        // preload all routes
-        $version->getRoutes();
+        return $this->encapsulateRequestRender($site, $locale, function () use ($version, $renderErrorList): array {
+            // preload all medias
+            $version->getMedias();
+            // preload all routes
+            $version->getRoutes();
 
-        $layout = $this->cmsConfig->getLayout($version->getLayout());
-        $versionData = $version->getData();
+            $layout = $this->cmsConfig->getLayout($version->getLayout());
+            $versionData = $version->getData();
 
-        $containers = [];
-        $renderErrorList && $renderErrorList->resetLocation();
-        $renderErrorList && $renderErrorList->pushLocation('data');
-        foreach ($layout['containers'] as $layoutContainerId => $layoutContainerConfig) {
-            $layoutContainer = $versionData ? $versionData[$layoutContainerId] ?? [] : [];
-            $containers[$layoutContainerId] = '';
+            $containers = [];
+            $renderErrorList && $renderErrorList->resetLocation();
+            $renderErrorList && $renderErrorList->pushLocation('data');
+            foreach ($layout['containers'] as $layoutContainerId => $layoutContainerConfig) {
+                $layoutContainer = $versionData ? $versionData[$layoutContainerId] ?? [] : [];
+                $containers[$layoutContainerId] = '';
 
-            $renderErrorList && $renderErrorList->pushLocation($layoutContainerId);
-            foreach ($layoutContainer as $i => $module) {
-                $this->profilerDebugCollectorData[$layoutContainerId] = [];
-                $renderErrorList && $renderErrorList->pushLocation($i);
-                $containers[$layoutContainerId] .= $this->renderModule($module, $version, $this->profilerDebugCollectorData[$layoutContainerId], $renderErrorList);
+                $renderErrorList && $renderErrorList->pushLocation($layoutContainerId);
+                foreach ($layoutContainer as $i => $module) {
+                    $this->profilerDebugCollectorData[$layoutContainerId] = [];
+                    $renderErrorList && $renderErrorList->pushLocation($i);
+                    $containers[$layoutContainerId] .= $this->renderModule($module, $version, $this->profilerDebugCollectorData[$layoutContainerId], $renderErrorList);
+                    $renderErrorList && $renderErrorList->popLocation();
+                }
                 $renderErrorList && $renderErrorList->popLocation();
             }
-            $renderErrorList && $renderErrorList->popLocation();
-        }
 
-        return $containers;
+            return $containers;
+        });
     }
 
     protected function renderModule(array $module, ContentVersionInterface $version, array &$profilerDebugCollectorData, RenderErrorList $renderErrorList = null): string

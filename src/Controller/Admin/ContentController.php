@@ -759,9 +759,10 @@ class ContentController extends AbstractController
 
         $this->webDebugToolbarListener && $this->webDebugToolbarListener->setMode(WebDebugToolbarListener::DISABLED);
 
-        $request->setLocale($request->query->get('locale', 'es'));
+        $request->setLocale($request->query->get('_locale', 'en'));
 
-        $site = $request->query->has('site') ? $this->em->getRepository(SiteInterface::class)->findOneById($request->query->get('site')) : $entity->getSites()->first();
+        $site = $request->query->has('_site') ? $this->em->getRepository(SiteInterface::class)->findOneById($request->query->get('_site')) : $entity->getSites()->first();
+        $request->attributes->set('_site', "$site");
         $request->attributes->set('_sfs_cms_site', $site);
 
         $request->attributes->set('_cms_preview', true);

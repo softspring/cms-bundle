@@ -105,7 +105,7 @@
 
     {% if alert|default(false) or app.request.query.has('saved') %}
         <div class="fixed-top w-50 float-right m-5">
-            <div class="alert alert-{{ alert[0]|default('success') }} alert-dismissible fade show" role="alert">
+            <div class="alert alert-{{ alert[0]|default('success')|replace({'error':'danger'}) }} alert-dismissible fade show" role="alert">
                 {{ alert[1]|default('admin_'~content~'.content.success_saved')|trans|raw }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
