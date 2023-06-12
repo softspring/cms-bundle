@@ -93,6 +93,34 @@
     {{ form_widget(form, {'attr':attr}) }}
 {% endblock %}
 
+{% block siteable_widget %}
+    {% if form|length > 1 %}
+        {% for field in form %}
+            <div class="input-group mb-3 flex-nowrap">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        {{ field.vars.label|upper }}
+{#                        <img alt="{{ field.vars.label|upper }}" title="{{ field.vars.label|upper }}" src="https://unpkg.com/language-icons/icons/{{ field.vars.label|lower }}.svg" height="15" class="border"/>&nbsp;#}
+                    </span>
+                </div>
+                {{ form_widget(field) }}
+            </div>
+        {% endfor %}
+    {% else %}
+        {{ form_widget(form|first) }}
+    {% endif %}
+{% endblock siteable_widget %}
+
+{% block siteable_element_widget %}
+    {% if attr['data-edit-content-input']|default(false) %}
+        {% set attr = attr|merge({'data-edit-content-input': attr['data-edit-content-input']~'.'~form.vars.label|lower}) -%}
+    {% endif %}
+    {% if attr['data-media-preview-input']|default(false) %}
+        {% set attr = attr|merge({'data-media-preview-input': attr['data-media-preview-input']~'.'~form.vars.label|lower}) -%}
+    {% endif %}
+    {{ form_widget(form, {'attr':attr}) }}
+{% endblock %}
+
 {% block html_class_widget %}
     <div class="input-group mb-3">
         <div class="input-group-prepend">
