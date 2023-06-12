@@ -65,12 +65,12 @@ class Block implements ConfigurationInterface
 
                 // TODO review this ???
                 ->scalarNode('form_type')
-                    ->setDeprecated()
+                    ->setDeprecated('softspring/cms-bundle', '5.1')
                 ->end()
 
                 // TODO review this ???
                 ->arrayNode('form_options')
-                    ->setDeprecated()
+                    ->setDeprecated('softspring/cms-bundle', '5.1')
                     ->useAttributeAsKey('key')
                     ->prototype('variable')->end()
                 ->end()
