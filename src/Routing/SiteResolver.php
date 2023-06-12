@@ -56,17 +56,8 @@ class SiteResolver
      */
     public function getCanonicalRedirectUrl(SiteInterface $site, Request $request): string
     {
-        $canonicalHost = '';
-        $canonicalScheme = $request->getScheme();
-        foreach ($site->getConfig()['hosts'] as $hostConfig) {
-            if ($hostConfig['canonical']) {
-                $canonicalHost = $hostConfig['domain'];
-                if ($hostConfig['scheme']) {
-                    $canonicalScheme = $hostConfig['scheme'];
-                }
-                break;
-            }
-        }
+        $canonicalHost = $site->getCanonicalHost() ?? '';
+        $canonicalScheme = $site->getCanonicalScheme() ?? $request->getScheme();
 
         if (!$canonicalHost) {
             throw new SiteHasNotACanonicalHostException();
