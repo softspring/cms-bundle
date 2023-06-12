@@ -13,4 +13,8 @@ interface SiteInterface
     public function setConfig(?array $config): void;
 
     public function getConfig(): ?array;
+
+    public function getCanonicalHost(): ?string;
+
+    public function getCanonicalScheme(): ?string;
 }

@@ -32,4 +32,26 @@ class Site implements SiteInterface
     {
         $this->config = $config;
     }
+
+    public function getCanonicalHost(): ?string
+    {
+        foreach ($this->getConfig()['hosts'] as $hostConfig) {
+            if ($hostConfig['canonical']) {
+                return $hostConfig['domain'];
+            }
+        }
+
+        return null;
+    }
+
+    public function getCanonicalScheme(): ?string
+    {
+        foreach ($this->getConfig()['hosts'] as $hostConfig) {
+            if ($hostConfig['canonical'] && $hostConfig['scheme']) {
+                return $hostConfig['scheme'];
+            }
+        }
+
+        return null;
+    }
 }
