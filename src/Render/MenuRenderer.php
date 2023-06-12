@@ -52,7 +52,7 @@ class MenuRenderer extends AbstractRenderer
             ];
         }
 
-        return $this->encapsulateEsiCapableRender(function() use ($template) { return $template->render(); });
+        return $this->encapsulateEsiCapableRender(function () use ($template) { return $template->render(); });
     }
 
     public function getDebugCollectorData(): array

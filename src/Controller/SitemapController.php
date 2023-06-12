@@ -103,7 +103,7 @@ class SitemapController extends AbstractController
     public function index(SiteInterface $site): Response
     {
         $siteConfig = $site->getConfig();
-        $hostAndProtocol = ($site->getCanonicalScheme()??'https') .'://' . $site->getCanonicalHost();
+        $hostAndProtocol = ($site->getCanonicalScheme() ?? 'https').'://'.$site->getCanonicalHost();
 
         $sitemaps = [];
 

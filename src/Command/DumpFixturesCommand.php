@@ -35,7 +35,6 @@ class DumpFixturesCommand extends Command
         $this->addArgument('elements', InputArgument::OPTIONAL);
     }
 
-
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('Removed fixtures/media files');
@@ -48,13 +47,14 @@ class DumpFixturesCommand extends Command
         $elementTypes = ['contents', 'routes', 'menus', 'blocks'];
         if ($elements && !in_array($elements, $elementTypes)) {
             $output->writeln(sprintf('<error>Invalid "%s" element type, use: %s</error>', $elements, implode(', ', $elementTypes)));
+
             return Command::INVALID;
         }
 
-        (!$elements || $elements == 'contents') && $this->dumpContents($output);
-        (!$elements || $elements == 'routes') && $this->dumpRoutes($output);
-        (!$elements || $elements == 'menus') && $this->dumpMenus($output);
-        (!$elements || $elements == 'blocks') && $this->dumpBlocks($output);
+        (!$elements || 'contents' == $elements) && $this->dumpContents($output);
+        (!$elements || 'routes' == $elements) && $this->dumpRoutes($output);
+        (!$elements || 'menus' == $elements) && $this->dumpMenus($output);
+        (!$elements || 'blocks' == $elements) && $this->dumpBlocks($output);
 
         return Command::SUCCESS;
     }
