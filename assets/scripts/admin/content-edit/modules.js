@@ -1,4 +1,4 @@
-import { filterCurrentTranslatableElementsLanguage } from './locale-filter-preview';
+import { filterCurrentFilterElements } from './filter-preview';
 import { getPolymorphicCollectionLastIndex } from '../../../../../polymorphic-form-type/assets/scripts/polymorphic-form-type';
 
 window.addEventListener('load', (event) => {
@@ -76,7 +76,7 @@ window.addEventListener('load', (event) => {
         if (module) {
             moduleFocus(module);
         }
-        filterCurrentTranslatableElementsLanguage();
+        filterCurrentFilterElements();
     });
 
     document.addEventListener("polymorphic.node.add.after", function (event) { // (1)
@@ -84,7 +84,7 @@ window.addEventListener('load', (event) => {
         if (module) {
             moduleFocus(module);
         }
-        filterCurrentTranslatableElementsLanguage();
+        filterCurrentFilterElements();
     });
 
     const prototypesModal = document.getElementById('module_prototypes_collection_modal');

@@ -1,4 +1,4 @@
-import { getSelectedLanguage } from './locale-filter-preview';
+import { getSelectedLanguage } from './filter-preview';
 
 window.addEventListener('load', (event) => {
     let cssCodeNotValidatedWarningShown = false;
