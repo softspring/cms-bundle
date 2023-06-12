@@ -10,6 +10,7 @@ use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\MenuInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -29,6 +30,12 @@ class DumpFixturesCommand extends Command
         $this->cmsConfig = $cmsConfig;
     }
 
+    protected function configure(): void
+    {
+        $this->addArgument('elements', InputArgument::OPTIONAL);
+    }
+
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('Removed fixtures/media files');
@@ -36,10 +43,18 @@ class DumpFixturesCommand extends Command
         array_map('unlink', glob("$mediaPath/*.*"));
         is_dir($mediaPath) && rmdir($mediaPath);
 
-        $this->dumpContents($output);
-        $this->dumpRoutes($output);
-        $this->dumpMenus($output);
-        $this->dumpBlocks($output);
+        $elements = $input->getArgument('elements');
+
+        $elementTypes = ['contents', 'routes', 'menus', 'blocks'];
+        if ($elements && !in_array($elements, $elementTypes)) {
+            $output->writeln(sprintf('<error>Invalid "%s" element type, use: %s</error>', $elements, implode(', ', $elementTypes)));
+            return Command::INVALID;
+        }
+
+        (!$elements || $elements == 'contents') && $this->dumpContents($output);
+        (!$elements || $elements == 'routes') && $this->dumpRoutes($output);
+        (!$elements || $elements == 'menus') && $this->dumpMenus($output);
+        (!$elements || $elements == 'blocks') && $this->dumpBlocks($output);
 
         return Command::SUCCESS;
     }
