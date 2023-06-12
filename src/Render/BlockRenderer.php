@@ -83,7 +83,7 @@ class BlockRenderer extends AbstractRenderer
             ];
         }
 
-        return $template->render();
+        return $this->encapsulateEsiCapableRender(function() use ($template) { return $template->render(); });
     }
 
     public function renderBlock(BlockInterface $block): string
@@ -120,7 +120,7 @@ class BlockRenderer extends AbstractRenderer
             ];
         }
 
-        return $template->render();
+        return $this->encapsulateEsiCapableRender(function() use ($template) { return $template->render(); });
     }
 
     public function getDebugCollectorData(): array

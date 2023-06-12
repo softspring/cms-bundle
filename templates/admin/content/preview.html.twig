@@ -18,7 +18,7 @@
                     <div class="text-end me-3">
                         <form class="d-flex" action="{{ url('sfs_cms_admin_content_'~content~'_preview_content', {'content':entity}) }}" method="GET" target="previewFrame">
                             {% if enabledLocales|length > 1 %}
-                                <select class="form-select mx-1" name="locale" onchange="this.form.submit()">
+                                <select class="form-select mx-1" name="_locale" onchange="this.form.submit()">
                                     {% for locale in enabledLocales %}
                                         <option value="{{ locale|lower }}">{{ locale|upper }}</option>
                                     {% endfor %}
@@ -26,7 +26,7 @@
                             {% endif %}
 
                             {% if entity.sites|length > 1 %}
-                                <select class="form-select mx-1" name="site" onchange="this.form.submit()">
+                                <select class="form-select mx-1" name="_site" onchange="this.form.submit()">
                                     {% for site in entity.sitesSorted %}
                                         <option value="{{ site }}">{{ site|sfs_cms_site_name }}</option>
                                     {% endfor %}
@@ -36,7 +36,7 @@
                     </div>
 
                     <div class="d-flex justify-content-end">
-                        <a id="previewExternalLink" target="_blank" class="btn btn-light mx-1" href="{{ url('sfs_cms_admin_content_'~content~'_preview_content', {'content':entity, 'locale':app.request.query.get('locale', 'es')}) }}">{{ ('admin_'~content~'.preview.actions.open.button')|trans }} <i class="bi bi-box-arrow-up-right"></i></a>
+                        <a id="previewExternalLink" target="_blank" class="btn btn-light mx-1" href="{{ url('sfs_cms_admin_content_'~content~'_preview_content', {'content':entity, '_locale':app.request.query.get('_locale', 'es')}) }}">{{ ('admin_'~content~'.preview.actions.open.button')|trans }} <i class="bi bi-box-arrow-up-right"></i></a>
                         {% if app.request.query.get('back') == 'versions' %}
                             <a href="{{ url('sfs_cms_admin_content_'~content~'_versions', {'content':entity}) }}" class="btn btn-light mx-1">{{ ('admin_'~content~'.preview.actions.cancel.button')|trans }}</a>
                         {% else %}
@@ -64,7 +64,7 @@
         </header>
         <main class="flex-fill d-flex flex-row align-items-stretch bg-light  min-vh-100">
             <div class="pt-4 h-100 w-100">
-                <iframe name="previewFrame" id="preview" src="{{ url('sfs_cms_admin_content_'~content~'_preview_content_version', {'content':entity, 'version':version, 'site': entity.sitesSorted.first, 'locale': app.request.query.get('locale', enabledLocales[0]|default(app.request.defaultLocale))}) }}" width="100%" height="100%"></iframe>
+                <iframe name="previewFrame" id="preview" src="{{ url('sfs_cms_admin_content_'~content~'_preview_content_version', {'content':entity, 'version':version, '_site': entity.sitesSorted.first, '_locale': app.request.query.get('_locale', enabledLocales[0]|default(app.request.defaultLocale))}) }}" width="100%" height="100%"></iframe>
             </div>
         </main>
     </div>

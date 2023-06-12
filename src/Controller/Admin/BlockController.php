@@ -84,6 +84,7 @@ class BlockController extends AbstractController
         }
 
         $viewData = new \ArrayObject([
+            'block_config' => $config,
             'entity' => $entity,
             'form' => $form->createView(),
         ]);
@@ -111,6 +112,7 @@ class BlockController extends AbstractController
         }
 
         $viewData = new \ArrayObject([
+            'block_config' => $config,
             'block' => $block,
             'form' => $form->createView(),
         ]);
