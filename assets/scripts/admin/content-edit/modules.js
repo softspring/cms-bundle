@@ -1,5 +1,5 @@
 import { filterCurrentFilterElements } from './filter-preview';
-import { getPolymorphicCollectionLastIndex } from '../../../../../polymorphic-form-type/assets/scripts/polymorphic-form-type';
+import { getPolymorphicCollectionLastIndex } from '@softspring/polymorphic-form-type/scripts/polymorphic-form-type';
 
 window.addEventListener('load', (event) => {
     function moduleFocus(module) {

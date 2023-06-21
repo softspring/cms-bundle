@@ -37,3 +37,13 @@ return [
 ];
 ```
 
+### Step 3: Install yarn dependencies
+
+Install node dependencies for assets building, please do it in this order:
+
+```bash
+yarn add "file:vendor/softspring/polymorphic-form-type/assets" --dev
+yarn add "file:vendor/softspring/media-bundle/assets" --dev
+yarn add "file:vendor/softspring/cms-bundle/assets" --dev
+```
+

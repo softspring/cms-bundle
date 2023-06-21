@@ -1,7 +1,13 @@
 {
-    "name": "@softspring/cms",
+    "name": "@softspring/cms-bundle",
     "version": "5.0.0-dev",
     "dependencies": {
+        "@softspring/media-bundle": "file:./../../media-bundle/assets",
+        "@softspring/polymorphic-form-type": "file:./../../polymorphic-form-type/assets",
         "underscore.string": "^3.3.6"
-    }
+    },
+  "devDependencies": {
+      "@softspring/media-bundle": "file:vendor/softspring/media-bundle/assets",
+      "@softspring/polymorphic-form-type": "file:vendor/softspring/polymorphic-form-type/assets"
+  }
 }
