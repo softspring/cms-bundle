@@ -3,8 +3,8 @@
     "license": "MIT",
     "version": "5.0.0-dev",
     "dependencies": {
-        "@softspring/media-bundle": "file:../vendor/softspring/media-bundle/assets",
-        "@softspring/polymorphic-form-type": "file:../vendor/softspring/polymorphic-form-type/assets",
+        "@softspring/media-bundle": "*",
+        "@softspring/polymorphic-form-type": "*",
         "underscore.string": "^3.3.6"
     }
 }
