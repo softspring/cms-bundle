@@ -68,7 +68,7 @@ class BlockRenderer extends AbstractRenderer
 
             if ('render_esi' == $renderFunction) {
                 // {{ fragment_uri(controller, absolute = false, strict = true, sign = true) }}
-                $twigCode = "{{ $renderFunction(fragment_uri($controller, false, true, true)) }}";
+                $twigCode = "{{ $renderFunction(fragment_uri($controller, true, true, true)) }}";
             } else {
                 $twigCode = "{{ $renderFunction($controller) }}";
             }
