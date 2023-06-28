@@ -98,7 +98,7 @@ class TranslateExtension extends AbstractExtension
                 unset($routeParams['_sfs_cms_locale']);
                 unset($routeParams['_sfs_cms_locale_path']);
 
-                $alternates[$locale] = $this->symfonyUrlGenerator->generate($routeName, $routeParams, UrlGeneratorInterface::ABSOLUTE_URL);
+                $alternates[$locale] = $routeName ? $this->symfonyUrlGenerator->generate($routeName, $routeParams, UrlGeneratorInterface::ABSOLUTE_URL) : '#';
             }
         }
 
