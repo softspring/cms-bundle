@@ -2,9 +2,11 @@
     "name": "@softspring/cms-bundle",
     "license": "MIT",
     "version": "5.0.0-dev",
+    "dependencies": {
+        "underscore.string": "^3.3.6"
+    },
     "peerDependencies": {
         "@softspring/media-bundle": "*",
-        "@softspring/polymorphic-form-type": "*",
-        "underscore.string": "^3.3.6"
+        "@softspring/polymorphic-form-type": "*"
     }
 }
