@@ -48,15 +48,21 @@ class TranslatableType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         foreach ($options['languages'] as $lang) {
-            $builder->add($lang, $this->getFieldType($options['type']), [
+            $childrenOptions = [
                 'required' => $lang == $options['default_language'],
                 'label' => $lang,
                 'translation_domain' => false,
                 'block_prefix' => 'translatable_element',
-            ] + $options['type_options']
-            + [
-                'attr' => $options['children_attr'] + ($options['type_options']['attr'] ?? []),
+                'attr' => [],
+            ];
+
+            $childrenOptions = array_merge($childrenOptions, $options['type_options']);
+
+            $childrenOptions['attr'] = array_merge($childrenOptions['attr'], ($options['type_options']['attr'] ?? []), [
+                'data-input-lang' => $lang,
             ]);
+
+            $builder->add($lang, $this->getFieldType($options['type']), $childrenOptions);
         }
     }
 }
