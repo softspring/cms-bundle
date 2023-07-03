@@ -137,6 +137,7 @@ class UrlGenerator
         }
 
         foreach ($attrs as $attr => $value) {
+            /* @phpstan-ignore-next-line */
             if ('rel' === $attr && is_array($value)) {
                 $value = implode(',', $value);
             }
@@ -145,7 +146,6 @@ class UrlGenerator
             unset($attrs[$attr]);
         }
 
-        /* @phpstan-ignore-next-line */
         return implode(' ', $attrs);
     }
 
