@@ -200,7 +200,12 @@
         <div class="cms-module-form text-dark">
             <div class="d-flex justify-content-between border-bottom bg-gray-200 p-3">
                 <div>
-                    <span data-polymorphic="node-index" class="pe-3" id="{{ id }}_order_index">{{ form.vars.name }}</span>
+                    <span data-polymorphic="node-index" class="pe-3 d-none" id="{{ id }}_order_index">{{ form.vars.name }}</span>
+
+                    <span class="icon me-3">
+                        {{ ( form.vars.prototype_button_label~'_icon')|trans(form.vars.label_translation_parameters, form.vars.translation_domain)|raw }}
+                    </span>
+
                     <strong>{{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}</strong>
                     {% if form.vars.deprecated %}<i class="bi bi-exclamation-diamond text-warning"></i>{% endif %}
                 </div>
@@ -268,7 +273,12 @@
         <div class="cms-module-form text-dark">
             <div class="d-flex justify-content-between border-bottom bg-gray-200 p-3">
                 <div>
-                    <span data-polymorphic="node-index" class="pe-3" id="{{ id }}_order_index">{{ form.vars.name }}</span>
+                    <span data-polymorphic="node-index" class="pe-3 d-none" id="{{ id }}_order_index">{{ form.vars.name }}</span>
+
+                    <span class="icon me-3">
+                        {{ ( form.vars.prototype_button_label~'_icon')|trans(form.vars.label_translation_parameters, form.vars.translation_domain)|raw }}
+                    </span>
+
                     <strong>{{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}</strong>
                     {% if form.vars.deprecated %}<i class="bi bi-exclamation-diamond text-warning"></i>{% endif %}
                 </div>

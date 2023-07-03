@@ -18,8 +18,6 @@ window.addEventListener('load', (event) => {
             return;
         }
 
-        let modulePreview = moduleEdit.querySelector('.module-preview');
-
         let dataAttributes = Object.keys(event.target.dataset);
         dataAttributes.forEach(function (dataAttribute) {
             if (!dataAttribute.startsWith('editFillInput')) { return; }
@@ -31,14 +29,23 @@ window.addEventListener('load', (event) => {
             let kebabizedSourceField = kebabize(sourceField);
             let sourceElement = event.target.options == undefined ? event.target : event.target.options[event.target.selectedIndex];
 
-            let htmlTargetElements = modulePreview.querySelectorAll("[data-edit-fill-target-" + kebabizedTargetField + "]");
+            let htmlTargetElements = moduleEdit.querySelectorAll("[data-edit-fill-target-" + kebabizedTargetField + "]");
             if (htmlTargetElements.length) {
                 htmlTargetElements.forEach(function (htmlTargetElement) {
                     let value = sourceElement.getAttribute('data-'+kebabizedSourceField);
                     if (htmlTargetElement.hasAttribute('data-lang') && sourceElement.hasAttribute('data-'+kebabizedSourceField+'-'+htmlTargetElement.dataset.lang)) {
                         value = sourceElement.getAttribute('data-'+kebabizedSourceField+'-'+htmlTargetElement.dataset.lang);
                     }
-                    htmlTargetElement.innerHTML = value;
+                    if (htmlTargetElement.hasAttribute('data-input-lang') && sourceElement.hasAttribute('data-'+kebabizedSourceField+'-'+htmlTargetElement.dataset.inputLang)) {
+                        value = sourceElement.getAttribute('data-'+kebabizedSourceField+'-'+htmlTargetElement.dataset.inputLang);
+                    }
+
+                    if (htmlTargetElement.tagName === 'INPUT') {
+                        htmlTargetElement.value = value;
+                        htmlTargetElement.dispatchEvent(new Event('change'));
+                    } else {
+                        htmlTargetElement.innerHTML = value;
+                    }
                 });
             }
         });
