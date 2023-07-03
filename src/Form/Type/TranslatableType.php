@@ -58,7 +58,7 @@ class TranslatableType extends AbstractType
 
             $childrenOptions = array_merge($childrenOptions, $options['type_options']);
 
-            $childrenOptions['attr'] = array_merge($childrenOptions['attr'], ($options['type_options']['attr'] ?? []), [
+            $childrenOptions['attr'] = array_merge($childrenOptions['attr'], $options['type_options']['attr'] ?? [], [
                 'data-input-lang' => $lang,
             ]);
 

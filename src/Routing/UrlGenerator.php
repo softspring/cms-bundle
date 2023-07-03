@@ -145,6 +145,7 @@ class UrlGenerator
             unset($attrs[$attr]);
         }
 
+        /* @phpstan-ignore-next-line */
         return implode(' ', $attrs);
     }
 
