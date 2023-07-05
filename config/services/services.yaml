@@ -73,6 +73,9 @@ services:
     Softspring\CmsBundle\Data\:
         resource: '../../src/Data/*'
 
+    Softspring\CmsBundle\Helper\:
+        resource: '../../src/Helper/*'
+
     Softspring\CmsBundle\Manager\:
         resource: '../../src/Manager/*'
 
