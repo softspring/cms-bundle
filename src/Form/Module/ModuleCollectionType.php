@@ -85,7 +85,7 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
         return $typesMap;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
 
@@ -112,14 +112,14 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
         $resolver->setAllowedTypes('content', [ContentInterface::class]);
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $options = $this->removeInvalidModulesForContentType($options);
         parent::buildForm($builder, $options);
         $builder->setDataMapper($this);
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $options = $this->filterAllowedModules($options);
         $options = $this->removeInvalidModulesForContentType($options);
@@ -164,7 +164,7 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
     /**
      * Configure event subscriber for resizing with data transformer.
      */
-    protected function configureResizeEventSubscriber(FormBuilderInterface $builder, array $options)
+    protected function configureResizeEventSubscriber(FormBuilderInterface $builder, array $options): void
     {
         if (empty($options['discriminator_map'])) {
             throw new RuntimeException('discriminator_map must be set');

@@ -12,7 +12,7 @@ class DynamicFormModuleType extends AbstractModuleType
         return 'dynamic_form_module';
     }
 
-    protected function finishChildView(FormView $view, FormInterface $form, array $options)
+    protected function finishChildView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['module_errors'] = $form->getErrors(true, true);
     }
