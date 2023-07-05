@@ -39,4 +39,23 @@ window.addEventListener('load', (event) => {
 
         colorDatePicker(event.target);
     });
+
+    document.addEventListener('change', function (event) {
+        if (!event.target || !event.target.matches('[data-color-type=widget]')) {
+            return;
+        }
+
+        let widget = event.target;
+        let toggler = widget.closest('.input-group').querySelector('[data-color-type=toggler]');
+
+        if (!toggler) {
+            return;
+        }
+
+        if (widget.value && !toggler.checked) {
+            toggler.checked = true;
+        }
+
+        colorDatePicker(toggler);
+    });
 });

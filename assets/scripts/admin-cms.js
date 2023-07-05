@@ -11,6 +11,7 @@ import './admin/content-edit/preview-fill';
 import './admin/content-edit/preview-id';
 import './admin/content-edit/preview-media-choice';
 import './admin/content-edit/preview-media-modal';
+import './admin/content-edit/preview-toggle';
 
 import './admin/routes-forms';
 import './admin/form-collections';
