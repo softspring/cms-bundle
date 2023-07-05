@@ -4,6 +4,10 @@ namespace Softspring\CmsBundle\Render;
 
 use Psr\Log\LoggerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Config\Exception\DisabledModuleException;
+use Softspring\CmsBundle\Config\Exception\InvalidLayoutException;
+use Softspring\CmsBundle\Config\Exception\InvalidModuleException;
+use Softspring\CmsBundle\Config\Exception\InvalidSiteException;
 use Softspring\CmsBundle\Form\Module\ContainerModuleType;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
@@ -11,6 +15,9 @@ use Softspring\CmsBundle\Utils\ModuleMigrator;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class ContentRender extends AbstractRenderer
 {
@@ -38,6 +45,15 @@ class ContentRender extends AbstractRenderer
         $this->profilerEnabled = (bool) $profiler;
     }
 
+    /**
+     * @throws DisabledModuleException
+     * @throws InvalidLayoutException
+     * @throws InvalidModuleException
+     * @throws InvalidSiteException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
     public function render(ContentVersionInterface $version, RenderErrorList $renderErrorList = null): string
     {
         $this->cmsLogger && $this->cmsLogger->debug(sprintf('Rendering %s page version', $version->getContent()->getName()));
@@ -63,6 +79,12 @@ class ContentRender extends AbstractRenderer
         ]);
     }
 
+    /**
+     * @throws DisabledModuleException
+     * @throws InvalidModuleException
+     * @throws InvalidSiteException
+     * @throws InvalidLayoutException
+     */
     public function renderModules(ContentVersionInterface $version, SiteInterface $site, string $locale, RenderErrorList $renderErrorList = null): array
     {
         return $this->encapsulateRequestRender($site, $locale, function () use ($version, $renderErrorList): array {
@@ -95,7 +117,31 @@ class ContentRender extends AbstractRenderer
         });
     }
 
-    protected function renderModule(array $module, ContentVersionInterface $version, array &$profilerDebugCollectorData, RenderErrorList $renderErrorList = null): string
+    /**
+     * @throws InvalidSiteException
+     * @throws DisabledModuleException
+     * @throws InvalidModuleException
+     */
+    public function renderModuleById(string $moduleId, array $data, RenderErrorList $renderErrorList = null): string
+    {
+        $moduleConfig = $this->cmsConfig->getModule($moduleId);
+
+        $module = $data;
+        $module['_module'] = $moduleId;
+        // simulate it is latest module revision
+        $module['_revision'] = $moduleConfig['revision'];
+
+        $profilerDebugCollectorData = [];
+
+        return $this->renderModule($module, null, $profilerDebugCollectorData, $renderErrorList);
+    }
+
+    /**
+     * @throws InvalidSiteException
+     * @throws DisabledModuleException
+     * @throws InvalidModuleException
+     */
+    protected function renderModule(array $module, ?ContentVersionInterface $version, array &$profilerDebugCollectorData, RenderErrorList $renderErrorList = null): string
     {
         if (isset($module['site_filter'])) {
             $currentSite = $this->requestStack->getCurrentRequest()->get('_sfs_cms_site');
@@ -156,7 +202,7 @@ class ContentRender extends AbstractRenderer
         $module += [
             '_config' => $moduleConfig,
             '_version' => $version,
-            '_content' => $version->getContent(),
+            '_content' => $version?->getContent(),
         ];
 
         $profilerDebugCollectorData[] = [
@@ -176,6 +222,10 @@ class ContentRender extends AbstractRenderer
         }
     }
 
+    /**
+     * @throws DisabledModuleException
+     * @throws InvalidModuleException
+     */
     private function isContainer($module): bool
     {
         $module = $this->cmsConfig->getModule($module['_module']);
