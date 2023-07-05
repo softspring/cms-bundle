@@ -42,7 +42,7 @@ window.addEventListener('load', (event) => {
 
                     if (htmlTargetElement.tagName === 'INPUT') {
                         htmlTargetElement.value = value;
-                        htmlTargetElement.dispatchEvent(new Event('change'));
+                        htmlTargetElement.dispatchEvent(new Event('change', { bubbles: true }));
                     } else {
                         htmlTargetElement.innerHTML = value;
                     }
