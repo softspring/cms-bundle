@@ -38,6 +38,7 @@ class LocaleHelper
         }
 
         $availableLocales = array_values($availableLocales);
+        $availableLocales = array_unique($availableLocales);
 
         sort($availableLocales);
 
