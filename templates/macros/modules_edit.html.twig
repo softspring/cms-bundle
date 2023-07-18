@@ -1,0 +1,147 @@
+{%- macro locale(locale) -%}
+{%- apply spaceless -%}
+    data-lang="{{ locale }}"
+{%- endapply -%}
+{%- endmacro -%}
+
+{%- macro site(site) -%}
+{%- apply spaceless -%}
+    data-site="{{ site }}"
+{%- endapply -%}
+{%- endmacro -%}
+
+{%- macro link_id (idFormField) -%}
+{%- apply spaceless -%}
+    {% set module_name = _self.module_name(idFormField) %}
+
+    {% if idFormField.vars.attr['data-edit-id-input']|default(false) %}
+        id="{{ idFormField.vars.data|default('') }}"
+        data-edit-id-target="{{ idFormField.vars.attr['data-edit-id-input'] }}"
+    {% else %}
+        data-edit-config-error="{{ module_name ? 'The '~module_name~' module' : 'This module' }} is bad configured. Missing 'data-edit-id-input' attribute in {{ idFormField.vars.name }} field ({{ idFormField.vars.id }})."
+    {% endif %}
+{%- endapply -%}
+{%- endmacro -%}
+
+{%- macro link_class (classFormField, defaultClasses = '') -%}
+{%- apply spaceless -%}
+    {% set module_name = _self.module_name(classFormField) %}
+
+    {% if classFormField.vars.attr['data-edit-class-input']|default(false) %}
+        class="{{ defaultClasses }} {{ classFormField.vars.data|default('') }}"
+        data-edit-class-default="{{ defaultClasses }}"
+        data-edit-class-target="{{ classFormField.vars.attr['data-edit-class-input'] }}"
+    {% else %}
+        class="{{ defaultClasses }}"
+        data-edit-config-error="{{ module_name ? 'The '~module_name~' module' : 'This module' }} is bad configured. Missing 'data-edit-class-input' attribute in {{ classFormField.vars.name }} field ({{ classFormField.vars.id }})."
+    {% endif %}
+{%- endapply -%}
+{%- endmacro -%}
+
+{%- macro link_content (contentFormField, locale = null, contentEditable = true, placeholderTransKey = null, hideIfEmpty = false, fill = false) -%}
+{%- apply spaceless -%}
+    {% set module_name = _self.module_name(contentFormField) %}
+
+    {% if locale == null and contentFormField.vars.attr['data-input-lang']|default(false) %}
+        {% set locale = contentFormField.vars.attr['data-input-lang'] %}
+    {% endif %}
+
+    {% if module_name and placeholderTransKey is same as null  %}
+        {% set placeholderTransKey = module_name ~ '.form.'~contentFormField.vars.name~'.placeholder' %}
+    {% endif %}
+
+    {% if placeholderTransKey and locale %}
+        {% set placeholder = placeholderTransKey|trans({}, 'sfs_cms_modules', locale) %}
+        {% if app.environment != 'dev' and placeholder == placeholderTransKey %}
+            {% set placeholder = false %}
+        {% endif %}
+    {% endif %}
+
+    {% if contentFormField.vars.attr['data-edit-content-input']|default(false) %}
+        {% if contentEditable %}contenteditable="true"{% endif %}
+
+        {% if locale %}
+            {{ _self.locale(locale) }}
+            data-edit-content-target="{{ contentFormField.vars.attr['data-edit-content-input'] }}.{{ locale }}"
+        {% else %}
+            data-edit-content-target="{{ contentFormField.vars.attr['data-edit-content-input'] }}"
+        {% endif %}
+
+        {% if placeholder|default(false) %}
+            data-edit-content-placeholder="{{ placeholder }}"
+        {% endif %}
+
+        {% if hideIfEmpty %}
+            data-edit-content-hide-if-empty="true"
+        {% endif %}
+
+        {% if fill %}
+            {{ _self.fill(fill) }}
+        {% endif %}
+
+    {% else %}
+        data-edit-config-error="{{ module_name ? 'The '~module_name~' module' : 'This module' }} is bad configured. Missing 'data-edit-content-input' attribute in {{ contentFormField.vars.name }} field ({{ contentFormField.vars.id }})."
+    {% endif %}
+{%- endapply -%}
+{%- endmacro -%}
+
+{%- macro link_bg_color (bgColorFormField, drawStyle=true, additionalStyles=null) -%}
+{%- apply spaceless -%}
+    {% set module_name = _self.module_name(bgColorFormField) %}
+
+    {% if bgColorFormField.vars.attr['data-edit-bgcolor-input']|default(false) %}
+        data-edit-bgcolor-target="{{ bgColorFormField.vars.attr['data-edit-bgcolor-input'] }}"
+        {% if drawStyle %}
+            style="{{ _self.bg_color_style(bgColorFormField) }} {{ additionalStyles|default('') }}"
+        {% endif %}
+    {% else %}
+        data-edit-config-error="{{ module_name ? 'The '~module_name~' module' : 'This module' }} is bad configured. Missing 'data-edit-bgcolor-input' attribute in {{ bgColorFormField.vars.name }} field ({{ bgColorFormField.vars.id }})."
+    {% endif %}
+{%- endapply -%}
+{%- endmacro -%}
+
+{%- macro bg_color_style(bgColorFormField) -%}
+{%- apply spaceless -%}
+    {{ bgColorFormField.vars.data ? 'background-color:'~bgColorFormField.vars.data : '' }}
+{%- endapply -%}
+{%- endmacro -%}
+
+{%- macro link_toggle(formField) -%}
+    {%- apply spaceless -%}
+        {% set module_name = _self.module_name(formField) %}
+
+        {% if formField.vars.attr['data-edit-content-toggle-input']|default(false) %}
+            data-edit-content-toggle-target="{{ formField.vars.attr['data-edit-content-toggle-input'] }}"
+        {% else %}
+            data-edit-config-error="{{ module_name ? 'The '~module_name~' module' : 'This module' }} is bad configured. Missing 'data-edit-content-toggle-input' attribute in {{ formField.vars.name }} field ({{ bgColorFormField.vars.id }})."
+        {% endif %}
+    {%- endapply -%}
+{%- endmacro -%}
+
+{%- macro link_media_preview (mediaPreviewFormField) -%}
+{%- apply spaceless -%}
+    {% set module_name = _self.module_name(mediaPreviewFormField) %}
+
+    {% if mediaPreviewFormField.vars.attr['data-media-preview-input']|default(false) %}
+        data-media-preview-target="{{ mediaPreviewFormField.vars.attr['data-media-preview-input'] }}"
+    {% else %}
+        data-edit-config-error="{{ module_name ? 'The '~module_name~' module' : 'This module' }} is bad configured. Missing 'data-media-preview-input' attribute in {{ mediaPreviewFormField.vars.name }} field ({{ mediaPreviewFormField.vars.id }})."
+    {% endif %}
+{%- endapply -%}
+{%- endmacro -%}
+
+{%- macro fill (id) -%}
+{%- apply spaceless -%}
+    data-edit-fill-target-{{ id }}
+{%- endapply -%}
+{%- endmacro -%}
+
+{%- macro module_name (formField) -%}
+{%- apply spaceless -%}
+    {% if formField.parent._module is defined %}
+        {{ formField.parent._module.vars.value }}
+    {% elseif formField.parent.parent._module is defined %}
+        {{ formField.parent.parent._module.vars.value }}
+    {% endif %}
+{%- endapply -%}
+{%- endmacro module_name -%}

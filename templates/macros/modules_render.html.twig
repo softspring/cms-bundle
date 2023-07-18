@@ -1,0 +1,23 @@
+{%- macro id (idValue) -%}
+{% apply spaceless %}
+    {% if idValue|default %}id="{{ idValue }}"{% endif %}
+{% endapply %}
+{%- endmacro -%}
+
+{%- macro class (classesValue, defaultClasses = '') -%}
+{% apply spaceless %}
+    {% if classesValue|default or defaultClasses|default %}class="{{ (defaultClasses~' '~classesValue|default(''))|trim }}"{% endif %}
+{% endapply %}
+{%- endmacro -%}
+
+{%- macro bg_color(bg_color, additionalStyles='') -%}
+{% apply spaceless %}
+    {% if bg_color|default or additionalStyles|default %}style="{{ bg_color|default }} {{ additionalStyles }}"{% endif %}
+{% endapply %}
+{%- endmacro -%}
+
+{%- macro bg_color_style(bg_color) -%}
+{% apply spaceless %}
+    {{ bg_color|default ? 'background-color:'~bg_color : '' }}
+{% endapply %}
+{%- endmacro -%}
