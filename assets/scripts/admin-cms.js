@@ -1,3 +1,4 @@
+import './admin/content-edit/config-errors';
 import './admin/content-edit/site-filter-modules';
 import './admin/content-edit/locale-filter-modules';
 import './admin/content-edit/filter-preview';
