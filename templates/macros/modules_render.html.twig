@@ -12,7 +12,7 @@
 
 {%- macro bg_color(bg_color, additionalStyles='') -%}
 {% apply spaceless %}
-    {% if bg_color|default or additionalStyles|default %}style="{{ bg_color|default }} {{ additionalStyles }}"{% endif %}
+    {% if bg_color|default or additionalStyles|default %}style="{{ _self.bg_color_style(bg_color) }} {{ additionalStyles }}"{% endif %}
 {% endapply %}
 {%- endmacro -%}
 
