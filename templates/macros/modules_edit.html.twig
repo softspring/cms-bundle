@@ -23,18 +23,33 @@
 {%- endapply -%}
 {%- endmacro -%}
 
-{%- macro link_class (classFormField, defaultClasses = '') -%}
+{%- macro link_class (classFormFields, defaultClasses = '') -%}
 {%- apply spaceless -%}
-    {% set module_name = _self.module_name(classFormField) %}
+    {# convert to array of form fields #}
+    {% set classFormFields = classFormFields.vars is not defined ? classFormFields : [classFormFields] %}
+    {% set module_name = _self.module_name(classFormFields|first) %}
 
-    {% if classFormField.vars.attr['data-edit-class-input']|default(false) %}
-        class="{{ defaultClasses }} {{ classFormField.vars.data|default('') }}"
-        data-edit-class-default="{{ defaultClasses }}"
-        data-edit-class-target="{{ classFormField.vars.attr['data-edit-class-input'] }}"
-    {% else %}
-        class="{{ defaultClasses }}"
-        data-edit-config-error="{{ module_name ? 'The '~module_name~' module' : 'This module' }} is bad configured. Missing 'data-edit-class-input' attribute in {{ classFormField.vars.name }} field ({{ classFormField.vars.id }})."
-    {% endif %}
+    {% set value = [defaultClasses] %}
+    {% set classTarget = false %}
+    {% for classFormField in classFormFields %}
+        {% if classFormField.vars.attr['data-edit-class-input']|default(false) is same as false %}
+            data-edit-config-error="{{ module_name ? 'The '~module_name~' module' : 'This module' }} is bad configured. Missing 'data-edit-class-input' attribute in {{ classFormField.vars.name }} field ({{ classFormField.vars.id }})."
+        {% else %}
+            {% if not classTarget %}
+                {% set classTarget = classFormField.vars.attr['data-edit-class-input'] %}
+            {% elseif classTarget != classFormField.vars.attr['data-edit-class-input'] %}
+                data-edit-config-error="{{ module_name ? 'The '~module_name~' module' : 'This module' }} is bad configured. Multiple 'data-edit-class-input' different values for same element."
+            {% endif %}
+        {% endif %}
+
+        {% if classFormField.vars.data|default %}
+            {% set value = value|merge([classFormField.vars.data]) %}
+        {% endif %}
+    {% endfor %}
+
+    class="{{ value|join(' ') }}"
+    data-edit-class-default="{{ defaultClasses }}"
+    {% if classTarget %}data-edit-class-target="{{ classTarget }}"{% endif %}
 {%- endapply -%}
 {%- endmacro -%}
 
@@ -47,7 +62,11 @@
     {% endif %}
 
     {% if module_name and placeholderTransKey is same as null  %}
-        {% set placeholderTransKey = module_name ~ '.form.'~contentFormField.vars.name~'.placeholder' %}
+        {% if contentFormField.vars.name == locale %} {# is a translation field #}
+            {% set placeholderTransKey = module_name ~ '.form.'~contentFormField.parent.vars.name~'.placeholder' %}
+        {% else %}
+            {% set placeholderTransKey = module_name ~ '.form.'~contentFormField.vars.name~'.placeholder' %}
+        {% endif %}
     {% endif %}
 
     {% if placeholderTransKey and locale %}
