@@ -10,36 +10,40 @@
 {%- endapply -%}
 {%- endmacro -%}
 
-{%- macro link_id (idFormField) -%}
+{%- macro link_id (formField) -%}
 {%- apply spaceless -%}
-    {% set module_name = _self.module_name(idFormField) %}
+    {{ _self._update_link_value(formField, 'data-edit-id-input') }}
 
-    {% if idFormField.vars.attr['data-edit-id-input']|default(false) %}
-        id="{{ idFormField.vars.data|default('') }}"
-        data-edit-id-target="{{ idFormField.vars.attr['data-edit-id-input'] }}"
-    {% else %}
-        data-edit-config-error="{{ module_name ? 'The '~module_name~' module' : 'This module' }} is bad configured. Missing 'data-edit-id-input' attribute in {{ idFormField.vars.name }} field ({{ idFormField.vars.id }})."
-    {% endif %}
+    id="{{ formField.vars.data|default('') }}"
+    data-edit-id-target="{{ formField.vars.attr['data-edit-id-input'] }}"
 {%- endapply -%}
 {%- endmacro -%}
 
-{%- macro link_class (classFormFields, defaultClasses = '') -%}
+{%- macro link_block (formField) -%}
+{%- apply spaceless -%}
+    {{ _self._update_link_value(formField, 'data-block-preview-input') }}
+    data-block-preview-target="{{ formField.vars.attr['data-block-preview-input'] }}"
+{%- endapply -%}
+{%- endmacro -%}
+
+{%- macro link_class (formFields, defaultClasses = '') -%}
 {%- apply spaceless -%}
     {# convert to array of form fields #}
-    {% set classFormFields = classFormFields.vars is not defined ? classFormFields : [classFormFields] %}
-    {% set module_name = _self.module_name(classFormFields|first) %}
+    {% set formFields = formFields.vars is not defined ? formFields : [formFields] %}
+    {% set module_name = _self._module_name(formFields|first) %}
 
     {% set value = [defaultClasses] %}
     {% set classTarget = false %}
-    {% for classFormField in classFormFields %}
-        {% if classFormField.vars.attr['data-edit-class-input']|default(false) is same as false %}
-            data-edit-config-error="{{ module_name ? 'The '~module_name~' module' : 'This module' }} is bad configured. Missing 'data-edit-class-input' attribute in {{ classFormField.vars.name }} field ({{ classFormField.vars.id }})."
-        {% else %}
-            {% if not classTarget %}
-                {% set classTarget = classFormField.vars.attr['data-edit-class-input'] %}
-            {% elseif classTarget != classFormField.vars.attr['data-edit-class-input'] %}
-                data-edit-config-error="{{ module_name ? 'The '~module_name~' module' : 'This module' }} is bad configured. Multiple 'data-edit-class-input' different values for same element."
-            {% endif %}
+    {% for classFormField in formFields %}
+        {% if classTarget and not classFormField.vars.attr['data-edit-class-input']|default(false) %}
+            {{ _self._update_link_value(classFormField, 'data-edit-class-input', classTarget) }}
+        {% endif %}
+
+        {% if not classTarget %}
+            {{ _self._update_link_value(classFormField, 'data-edit-class-input') }}
+            {% set classTarget = classFormField.vars.attr['data-edit-class-input']|default %}
+        {% elseif classTarget != classFormField.vars.attr['data-edit-class-input']|default %}
+            data-edit-config-error="{{ module_name ? 'The '~module_name~' module' : 'This module' }} is bad configured. Multiple 'data-edit-class-input' different values for same element."
         {% endif %}
 
         {% if classFormField.vars.data|default %}
@@ -53,19 +57,20 @@
 {%- endapply -%}
 {%- endmacro -%}
 
-{%- macro link_content (contentFormField, locale = null, contentEditable = true, placeholderTransKey = null, hideIfEmpty = false, fill = false) -%}
+{%- macro link_content (formField, locale = null, contentEditable = true, placeholderTransKey = null, hideIfEmpty = false, fill = false) -%}
 {%- apply spaceless -%}
-    {% set module_name = _self.module_name(contentFormField) %}
+    {% set module_name = _self._module_name(formField) %}
+    {{ _self._update_link_value(formField, 'data-edit-content-input') }}
 
-    {% if locale == null and contentFormField.vars.attr['data-input-lang']|default(false) %}
-        {% set locale = contentFormField.vars.attr['data-input-lang'] %}
+    {% if locale == null and formField.vars.attr['data-input-lang']|default(false) %}
+        {% set locale = formField.vars.attr['data-input-lang'] %}
     {% endif %}
 
     {% if module_name and placeholderTransKey is same as null  %}
-        {% if contentFormField.vars.name == locale %} {# is a translation field #}
-            {% set placeholderTransKey = module_name ~ '.form.'~contentFormField.parent.vars.name~'.placeholder' %}
+        {% if formField.vars.name == locale %} {# is a translation field #}
+            {% set placeholderTransKey = module_name ~ '.form.'~formField.parent.vars.name~'.placeholder' %}
         {% else %}
-            {% set placeholderTransKey = module_name ~ '.form.'~contentFormField.vars.name~'.placeholder' %}
+            {% set placeholderTransKey = module_name ~ '.form.'~formField.vars.name~'.placeholder' %}
         {% endif %}
     {% endif %}
 
@@ -76,76 +81,74 @@
         {% endif %}
     {% endif %}
 
-    {% if contentFormField.vars.attr['data-edit-content-input']|default(false) %}
-        {% if contentEditable %}contenteditable="true"{% endif %}
+    {% if contentEditable %}contenteditable="true"{% endif %}
 
-        {% if locale %}
-            {{ _self.locale(locale) }}
-            data-edit-content-target="{{ contentFormField.vars.attr['data-edit-content-input'] }}.{{ locale }}"
-        {% else %}
-            data-edit-content-target="{{ contentFormField.vars.attr['data-edit-content-input'] }}"
-        {% endif %}
-
-        {% if placeholder|default(false) %}
-            data-edit-content-placeholder="{{ placeholder }}"
-        {% endif %}
-
-        {% if hideIfEmpty %}
-            data-edit-content-hide-if-empty="true"
-        {% endif %}
-
-        {% if fill %}
-            {{ _self.fill(fill) }}
-        {% endif %}
-
+    {% if locale %}
+        {{ _self.locale(locale) }}
+        data-edit-content-target="{{ formField.vars.attr['data-edit-content-input'] }}.{{ locale }}"
     {% else %}
-        data-edit-config-error="{{ module_name ? 'The '~module_name~' module' : 'This module' }} is bad configured. Missing 'data-edit-content-input' attribute in {{ contentFormField.vars.name }} field ({{ contentFormField.vars.id }})."
+        data-edit-content-target="{{ formField.vars.attr['data-edit-content-input'] }}"
+    {% endif %}
+
+    {% if placeholder|default(false) %}
+        data-edit-content-placeholder="{{ placeholder }}"
+    {% endif %}
+
+    {% if hideIfEmpty %}
+        data-edit-content-hide-if-empty="true"
+    {% endif %}
+
+    {% if fill %}
+        {{ _self.fill(fill) }}
     {% endif %}
 {%- endapply -%}
 {%- endmacro -%}
 
-{%- macro link_bg_color (bgColorFormField, drawStyle=true, additionalStyles=null) -%}
+{%- macro link_bg_color (formField, drawStyle=true, additionalStyles=null) -%}
 {%- apply spaceless -%}
-    {% set module_name = _self.module_name(bgColorFormField) %}
+    {{ _self._update_link_value(formField, 'data-edit-bgcolor-input') }}
 
-    {% if bgColorFormField.vars.attr['data-edit-bgcolor-input']|default(false) %}
-        data-edit-bgcolor-target="{{ bgColorFormField.vars.attr['data-edit-bgcolor-input'] }}"
-        {% if drawStyle %}
-            style="{{ _self.bg_color_style(bgColorFormField) }} {{ additionalStyles|default('') }}"
-        {% endif %}
-    {% else %}
-        data-edit-config-error="{{ module_name ? 'The '~module_name~' module' : 'This module' }} is bad configured. Missing 'data-edit-bgcolor-input' attribute in {{ bgColorFormField.vars.name }} field ({{ bgColorFormField.vars.id }})."
+    data-edit-bgcolor-target="{{ formField.vars.attr['data-edit-bgcolor-input'] }}"
+    {% if drawStyle %}
+        style="{{ _self.bg_color_style(formField) }} {{ additionalStyles|default('') }}"
     {% endif %}
 {%- endapply -%}
 {%- endmacro -%}
 
-{%- macro bg_color_style(bgColorFormField) -%}
+{%- macro bg_color_style(formField) -%}
 {%- apply spaceless -%}
-    {{ bgColorFormField.vars.data ? 'background-color:'~bgColorFormField.vars.data : '' }}
+    {{ formField.vars.data ? 'background-color:'~formField.vars.data : '' }}
 {%- endapply -%}
 {%- endmacro -%}
 
 {%- macro link_toggle(formField) -%}
     {%- apply spaceless -%}
-        {% set module_name = _self.module_name(formField) %}
-
-        {% if formField.vars.attr['data-edit-content-toggle-input']|default(false) %}
-            data-edit-content-toggle-target="{{ formField.vars.attr['data-edit-content-toggle-input'] }}"
-        {% else %}
-            data-edit-config-error="{{ module_name ? 'The '~module_name~' module' : 'This module' }} is bad configured. Missing 'data-edit-content-toggle-input' attribute in {{ formField.vars.name }} field ({{ bgColorFormField.vars.id }})."
-        {% endif %}
+        {{ _self._update_link_value(formField, 'data-edit-content-toggle-input') }}
+        data-edit-content-toggle-target="{{ formField.vars.attr['data-edit-content-toggle-input'] }}"
     {%- endapply -%}
 {%- endmacro -%}
 
-{%- macro link_media_preview (mediaPreviewFormField) -%}
+{%- macro link_media_preview (formField) -%}
 {%- apply spaceless -%}
-    {% set module_name = _self.module_name(mediaPreviewFormField) %}
+    {{ _self._update_link_value(formField, 'data-media-preview-input') }}
+    data-media-preview-target="{{ formField.vars.attr['data-media-preview-input'] }}"
+{%- endapply -%}
+{%- endmacro -%}
 
-    {% if mediaPreviewFormField.vars.attr['data-media-preview-input']|default(false) %}
-        data-media-preview-target="{{ mediaPreviewFormField.vars.attr['data-media-preview-input'] }}"
-    {% else %}
-        data-edit-config-error="{{ module_name ? 'The '~module_name~' module' : 'This module' }} is bad configured. Missing 'data-media-preview-input' attribute in {{ mediaPreviewFormField.vars.name }} field ({{ mediaPreviewFormField.vars.id }})."
-    {% endif %}
+{%- macro start_link_tag_type (formField, attributes = [], drawOpeningAngles = true) -%}
+{%- apply spaceless -%}
+    {{ _self._update_link_value(formField, 'data-edit-tag-type-input') }}
+
+    {% if drawOpeningAngles %}<{% endif %}{{ formField.vars.data }}
+    data-edit-tag-type-target="{{ formField.vars.attr['data-edit-tag-type-input'] }}"
+    {% if attributes is not empty %}{{ attributes|join(' ')|raw }}{% endif %}
+    {% if drawOpeningAngles %}>{% endif %}{{ formField.vars.data }}
+{%- endapply -%}
+{%- endmacro -%}
+
+{%- macro end_link_tag_type (formField, drawClosingAngles = true) -%}
+{%- apply spaceless -%}
+    {% if drawClosingAngles %}</{% endif %}{{ formField.vars.data }}{% if drawClosingAngles %}>{% endif %}
 {%- endapply -%}
 {%- endmacro -%}
 
@@ -155,7 +158,7 @@
 {%- endapply -%}
 {%- endmacro -%}
 
-{%- macro module_name (formField) -%}
+{%- macro _module_name (formField) -%}
 {%- apply spaceless -%}
     {% if formField.parent._module is defined %}
         {{ formField.parent._module.vars.value }}
@@ -163,4 +166,12 @@
         {{ formField.parent.parent._module.vars.value }}
     {% endif %}
 {%- endapply -%}
-{%- endmacro module_name -%}
+{%- endmacro _module_name -%}
+
+{%- macro _update_link_value (formField, dataField, value = false) -%}
+{%- apply spaceless -%}
+    {% if not formField.vars.attr[dataField]|default(false) %}
+        {{ sfs_cms_form_view_set_attr(formField, dataField, value|default((formField.vars.name~'_'~random())|sfs_cms_sha1|slice(0,8))) }}
+    {% endif %}
+{%- endapply -%}
+{%- endmacro _update_link_value -%}
