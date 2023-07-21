@@ -1,12 +1,9 @@
+{% import '@SfsCms/macros/modules_edit.html.twig' as module %}
+
 {% set tagType = form.tag_type.vars.data|default('div') %}
 {% set containerType = form.container_type.vars.data|default('container') %}
 
-<{{ tagType }} class="{{ containerType}} border border-2 module-container"
-    data-edit-class-target="containerClass"
-    data-edit-class-default="border border-2 module-container"
-
-    data-edit-bgcolor-target="containerColorDiv"
-    style="{{ form.bg_color.vars.data ? 'background-color:'~form.bg_color.vars.data : '' }}">
+<{{ tagType }} {{ module.link_class(form.class, 'border border-2 module-container') }} {{ module.link_bg_color(form.bg_color) }}>
     {{ form_row(form.modules, {'container': {
         'attr': {
             'id': form.id.vars.data,

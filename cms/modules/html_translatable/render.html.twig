@@ -1,3 +1,5 @@
-{% if id|default(false) or class|default(false) %}<div id="{{ id|default('') }}" class="{{ class|default('') }}">{% endif %}
+{% import '@SfsCms/macros/modules_render.html.twig' as module %}
+
+{% if id|default(false) or class|default(false) %}<div {{ module.link_id(form.id) }} {{ module.link_class(form.class) }}>{% endif %}
 {{ code[app.request.locale]|default('')|raw }}
 {% if id|default(false) or class|default(false) %}</div>{% endif %}

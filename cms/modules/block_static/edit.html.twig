@@ -1,12 +1,6 @@
 {% trans_default_domain 'sfs_cms_modules' %}
-{% set defaultDivClass = '' %}
-<div id="{{ form.id.vars.data|default('') }}"
-     data-edit-id-target="blockId"
+{% import '@SfsCms/macros/modules_edit.html.twig' as module %}
 
-     class="{{ defaultDivClass }} {{ form.class.vars.data|default('') }}"
-     data-edit-class-target="blockClassDiv"
-     data-edit-class-default="{{ defaultDivClass }}"
-     data-block-preview-target="blockPreview"
->
+<div {{ module.link_id(form.id) }} {{ module.link_class(form.class) }} {{ module.link_block(form.block) }}>
     {{ form.block.vars.block_preview|raw }}
 </div>

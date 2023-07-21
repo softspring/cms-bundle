@@ -1,4 +1,6 @@
-<{{ tag_type }} class="container-module {{ container_type }} {{ class|default('') }}" {{ (id|default(false))? 'id='~ id|default('')}}  style="{{ bg_color|default(false) ? 'background-color:'~bg_color : '' }}">
+{% import '@SfsCms/macros/modules_render.html.twig' as module %}
+
+<{{ tag_type }} {{ module.id(id) }} {{ module.class(class, 'container-module '~container_type) }} {{ module.bg_color(bg_color) }}>
 {% for content in contents %}
     {{ content|raw }}
 {% endfor %}

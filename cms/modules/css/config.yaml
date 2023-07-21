@@ -11,6 +11,4 @@ module:
         form_fields:
             css:
                 type: 'css'
-                type_options:
-                    attr:
-                        data-edit-content-input: 'css'
+                

@@ -10,18 +10,9 @@ module:
         form_fields:
             id:
                 type: 'id'
-                type_options:
-                    attr:
-                        data-edit-id-input: 'blockId'
 
             class:
                 type: 'class'
-                type_options:
-                    attr:
-                        data-edit-class-input: 'blockClassDiv'
 
             block:
                 type: 'blockStatic'
-                type_options:
-                    attr:
-                        data-block-preview-input: 'blockPreview'
