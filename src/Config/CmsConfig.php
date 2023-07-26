@@ -57,7 +57,7 @@ class CmsConfig
 
     public function getModules(bool $onlyEnabled = true): array
     {
-        return array_filter($this->modules, fn ($module) => !$onlyEnabled || $module['enabled']);
+        return array_filter($this->modules, fn($module) => !$onlyEnabled || $module['enabled']);
     }
 
     /**
@@ -144,18 +144,32 @@ class CmsConfig
         $this->siteEntities = null;
     }
 
+    private ?bool $sitesTableExists = null;
+
+    private function sitesTableExists(): bool
+    {
+        if ($this->sitesTableExists === null) {
+            $schema = $this->siteManager->getEntityManager()->getConnection()->getSchemaManager();
+            $this->sitesTableExists = $schema->tablesExist('cms_sites');
+        }
+
+        return $this->sitesTableExists;
+    }
+
     public function getSites(): array
     {
         if (null === $this->siteEntities) {
             $this->siteEntities = [];
 
-            foreach ($this->siteManager->getRepository()->findAll() as $siteEntity) {
-                if (!isset($this->siteConfigs["$siteEntity"])) {
-                    $this->siteManager->deleteEntity($siteEntity);
-                } else {
-                    $siteEntity->setConfig($this->siteConfigs["$siteEntity"]);
-                    $this->siteManager->saveEntity($siteEntity);
-                    $this->siteEntities["$siteEntity"] = $siteEntity;
+            if ($this->sitesTableExists()) {
+                foreach ($this->siteManager->getRepository()->findAll() as $siteEntity) {
+                    if (!isset($this->siteConfigs["$siteEntity"])) {
+                        $this->siteManager->deleteEntity($siteEntity);
+                    } else {
+                        $siteEntity->setConfig($this->siteConfigs["$siteEntity"]);
+                        $this->siteManager->saveEntity($siteEntity);
+                        $this->siteEntities["$siteEntity"] = $siteEntity;
+                    }
                 }
             }
 
@@ -164,7 +178,9 @@ class CmsConfig
                     $siteEntity = $this->siteManager->createEntity();
                     $siteEntity->setId($siteId);
                     $siteEntity->setConfig($config);
-                    $this->siteManager->saveEntity($siteEntity);
+                    if ($this->sitesTableExists()) {
+                        $this->siteManager->saveEntity($siteEntity);
+                    }
                     $this->siteEntities["$siteEntity"] = $siteEntity;
                 }
             }
@@ -191,6 +207,6 @@ class CmsConfig
     {
         $sites = $this->getSites();
 
-        return array_filter($sites, fn (SiteInterface $site) => in_array($contentType, $site->getConfig()['allowed_content_types']));
+        return array_filter($sites, fn(SiteInterface $site) => in_array($contentType, $site->getConfig()['allowed_content_types']));
     }
 }
