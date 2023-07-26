@@ -149,8 +149,14 @@ class CmsConfig
     private function sitesTableExists(): bool
     {
         if (null === $this->sitesTableExists) {
-            $schema = $this->siteManager->getEntityManager()->getConnection()->getSchemaManager();
-            $this->sitesTableExists = $schema->tablesExist('cms_sites');
+            $connection = $this->siteManager->getEntityManager()->getConnection(); // ->getSchemaManager();
+            $result = $connection->executeQuery('SHOW tables');
+            $this->sitesTableExists = false;
+            foreach ($result->fetchAllAssociative() as $value) {
+                if (current($value)) {
+                    $this->sitesTableExists = true;
+                }
+            }
         }
 
         return $this->sitesTableExists;
