@@ -49,7 +49,7 @@ class SiteResolverTest extends TestCase
             ],
         ];
 
-        $sites = array_map(function(array $siteConfig) {
+        $sites = array_map(function (array $siteConfig) {
             $site = new Site();
             $site->setId($siteConfig['_id']);
             $site->setConfig($siteConfig);
@@ -61,9 +61,25 @@ class SiteResolverTest extends TestCase
 
         $this->siteManager = $this->createMock(SiteManager::class);
         $this->siteManager->method('getRepository')->willReturn($repository);
-        $this->siteManager->method('createEntity')->willReturnCallback(function () { return new Site(); });
+        $this->siteManager->method('createEntity')->willReturnCallback(function () {
+            return new Site();
+        });
 
-        $this->cmsConfig = new CmsConfig([], [], [], [], [], $sitesConfig, $this->siteManager);
+        $this->cmsConfig = $this->createMock(CmsConfig::class);
+        $this->cmsConfig->method('getSites')->willReturnCallback(function () use ($sitesConfig) {
+            return array_map(function ($config) {
+                $site = new Site();
+                $site->setId($config['_id']);
+                $site->setConfig($config);
+                return $site;
+            }, $sitesConfig);
+        });
+        $this->cmsConfig->method('getSite')->willReturnCallback(function ($siteName) use ($sitesConfig) {
+            $site = new Site();
+            $site->setId($sitesConfig[$siteName]['_id']);
+            $site->setConfig($sitesConfig[$siteName]);
+            return $site;
+        });
     }
 
     public function testResolveWithHost()
