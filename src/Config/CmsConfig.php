@@ -153,7 +153,7 @@ class CmsConfig
             $result = $connection->executeQuery('SHOW tables');
             $this->sitesTableExists = false;
             foreach ($result->fetchAllAssociative() as $value) {
-                if (current($value)) {
+                if (current($value) == 'cms_sites') {
                     $this->sitesTableExists = true;
                 }
             }
