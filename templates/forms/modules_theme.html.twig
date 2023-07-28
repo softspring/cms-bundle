@@ -136,7 +136,20 @@
             <div class="container text-start">
                 {% if form.vars.errors|length %}
                     <div class="alert alert-danger mt-3" role="alert">
-                        {{ form_errors(form) }}
+                        {%- for error in form.vars.errors -%}
+                            <div class="invalid-feedback d-block">{{ error.message }}</div>
+
+                            {% if app.environment == 'dev' and error.cause.location|default(false) %}
+                                <div class="invalid-feedback d-block mt-2">
+                                    <div class="mb-2"><strong>DEV INFO</strong></div>
+                                    <div class="mb-2"><strong>{{ error.cause.template }}</strong></div>
+                                    <div><strong>{{ error.cause.exception.message }}</strong></div>
+                                    {#{{ dump(error.cause.location) }}#}
+                                    {#{{ dump(error.cause.exception) }}#}
+                                    {#{{ dump(error.cause.contextData) }}#}
+                                </div>
+                            {% endif %}
+                        {%- endfor -%}
                     </div>
                 {% endif %}
 
