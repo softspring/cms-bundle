@@ -67,7 +67,7 @@ class RenderErrorList
         foreach ($this->getErrors() as $error) {
             $paths = array_map(fn ($v) => trim($v, '[]'), explode('][', $error['location']));
             $field = $this->getMappedForm($form, $paths);
-            $field && $field->addError(new FormError('An error has been produced during module render. Please review module configuration and try again. If the problem persists contact with developers.'));
+            $field && $field->addError(new FormError('An error has been produced during module render. Please review module configuration and try again. If the problem persists contact with developers.', null, [], null, $error));
         }
     }
 
