@@ -47,8 +47,12 @@ class TranslateExtension extends AbstractExtension
         ];
     }
 
-    public function translate(array $translatableText): string
+    public function translate(?array $translatableText): string
     {
+        if (null === $translatableText) {
+            return '';
+        }
+
         $request = $this->requestStack->getCurrentRequest();
 
         if (isset($translatableText[$request->getLocale()])) {
