@@ -21,4 +21,6 @@ interface ContentVersionManagerInterface extends CrudlEntityManagerInterface
      * @psalm-param ContentVersionInterface $entity
      */
     public function deleteEntity(object $entity): void;
+
+    public function canSaveCompiled(ContentVersionInterface $version): bool;
 }

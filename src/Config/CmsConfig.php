@@ -10,6 +10,7 @@ use Softspring\CmsBundle\Config\Exception\InvalidMenuException;
 use Softspring\CmsBundle\Config\Exception\InvalidModuleException;
 use Softspring\CmsBundle\Config\Exception\InvalidSiteException;
 use Softspring\CmsBundle\Manager\SiteManagerInterface;
+use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
 
 class CmsConfig
@@ -85,8 +86,17 @@ class CmsConfig
     /**
      * @throws InvalidContentException
      */
-    public function getContent(string $id, bool $required = true): ?array
+    public function getContent($id, bool $required = true): ?array
     {
+        if ($id instanceof ContentInterface) {
+            foreach ($this->contents as $c => $content) {
+                if ($content['entity_class'] == get_class($id)) {
+                    $id = $c;
+                    break;
+                }
+            }
+        }
+
         if ($required && !isset($this->contents[$id])) {
             throw new InvalidContentException($id, $this->contents);
         }

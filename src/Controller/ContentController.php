@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Controller;
 
+use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Model\RoutePathInterface;
@@ -13,11 +14,13 @@ use Symfony\Component\HttpFoundation\Response;
 class ContentController extends AbstractController
 {
     protected ContentRender $contentRender;
+    protected ContentManagerInterface $contentManager;
     protected ContentVersionManagerInterface $contentVersionManager;
 
-    public function __construct(ContentRender $contentRender, ContentVersionManagerInterface $contentVersionManager)
+    public function __construct(ContentRender $contentRender, ContentManagerInterface $contentManager, ContentVersionManagerInterface $contentVersionManager)
     {
         $this->contentRender = $contentRender;
+        $this->contentManager = $contentManager;
         $this->contentVersionManager = $contentVersionManager;
     }
 
@@ -31,12 +34,16 @@ class ContentController extends AbstractController
             throw $this->createNotFoundException();
         }
 
+        $canSaveCompiled = $this->contentVersionManager->canSaveCompiled($publishedVersion);
         $compiled = $publishedVersion->getCompiled();
-        if (!isset($compiled["{$request->attributes->get('_sfs_cms_site')}"][$request->getLocale()])) {
+        if (!isset($compiled["{$request->attributes->get('_sfs_cms_site')}"][$request->getLocale()]) || !$canSaveCompiled) {
             // if this content is not yet compiled, store it in database
             $compiled["{$request->attributes->get('_sfs_cms_site')}"][$request->getLocale()] = $this->contentRender->render($publishedVersion);
-            $publishedVersion->setCompiled($compiled);
-            $this->contentVersionManager->saveEntity($publishedVersion);
+
+            if ($canSaveCompiled) {
+                $publishedVersion->setCompiled($compiled);
+                $this->contentVersionManager->saveEntity($publishedVersion);
+            }
         }
 
         $pageContent = $compiled["{$request->attributes->get('_sfs_cms_site')}"][$request->getLocale()];

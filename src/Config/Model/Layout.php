@@ -22,6 +22,7 @@ class Layout implements ConfigurationInterface
         $rootNode
             ->children()
                 ->integerNode('revision')->isRequired()->end()
+                ->booleanNode('save_compiled')->defaultTrue()->end()
 
                 ->scalarNode('render_template')->defaultValue("@layout/{$this->layoutName}/render.html.twig")->end()
                 ->scalarNode('edit_template')->defaultValue("@layout/{$this->layoutName}/edit.html.twig")->end()

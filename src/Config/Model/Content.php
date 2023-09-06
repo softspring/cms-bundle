@@ -30,6 +30,7 @@ class Content implements ConfigurationInterface
         $rootNode
             ->children()
                 ->integerNode('revision')->isRequired()->end()
+                ->booleanNode('save_compiled')->defaultTrue()->end()
 
                 ->scalarNode('entity_class')->isRequired()->end()
                 ->scalarNode('default_layout')->defaultValue('default')->end()
