@@ -16,12 +16,14 @@ class ContentController extends AbstractController
     protected ContentRender $contentRender;
     protected ContentManagerInterface $contentManager;
     protected ContentVersionManagerInterface $contentVersionManager;
+    protected string $prefixCompiled;
 
-    public function __construct(ContentRender $contentRender, ContentManagerInterface $contentManager, ContentVersionManagerInterface $contentVersionManager)
+    public function __construct(ContentRender $contentRender, ContentManagerInterface $contentManager, ContentVersionManagerInterface $contentVersionManager, string $prefixCompiled)
     {
         $this->contentRender = $contentRender;
         $this->contentManager = $contentManager;
         $this->contentVersionManager = $contentVersionManager;
+        $this->prefixCompiled = $prefixCompiled;
     }
 
     public function renderRoutePath(RoutePathInterface $routePath, Request $request): Response
@@ -36,9 +38,10 @@ class ContentController extends AbstractController
 
         $canSaveCompiled = $this->contentVersionManager->canSaveCompiled($publishedVersion);
         $compiled = $publishedVersion->getCompiled();
-        if (!isset($compiled["{$request->attributes->get('_sfs_cms_site')}"][$request->getLocale()]) || !$canSaveCompiled) {
+        $compiledKey = "{$this->prefixCompiled}{$request->attributes->get('_sfs_cms_site')}/{$request->getLocale()}";
+        if (!isset($compiled[$compiledKey]) || !$canSaveCompiled) {
             // if this content is not yet compiled, store it in database
-            $compiled["{$request->attributes->get('_sfs_cms_site')}"][$request->getLocale()] = $this->contentRender->render($publishedVersion);
+            $compiled[$compiledKey] = $this->contentRender->render($publishedVersion);
 
             if ($canSaveCompiled) {
                 $publishedVersion->setCompiled($compiled);
@@ -46,7 +49,7 @@ class ContentController extends AbstractController
             }
         }
 
-        $pageContent = $compiled["{$request->attributes->get('_sfs_cms_site')}"][$request->getLocale()];
+        $pageContent = $compiled[$compiledKey];
 
         // create response
         $response = new Response($pageContent);

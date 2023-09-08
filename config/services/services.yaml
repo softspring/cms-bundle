@@ -21,6 +21,8 @@ services:
             $cmsLogger: '@?monolog.logger.cms'
             $debug: '%kernel.debug%'
             $defaultRestrictPatterns: '%sfs_cms.form_type.symfony_route.default_restrict_patterns%'
+            $saveCompiled: '%sfs_cms.content.save_compiled%'
+            $prefixCompiled: '%sfs_cms.content.prefix_compiled%'
 
     Softspring\CmsBundle\Config\CmsConfig:
         arguments:

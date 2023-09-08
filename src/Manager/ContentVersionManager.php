@@ -13,11 +13,13 @@ class ContentVersionManager implements ContentVersionManagerInterface
 
     protected EntityManagerInterface $em;
     protected CmsConfig $cmsConfig;
+    protected bool $saveCompiled;
 
-    public function __construct(EntityManagerInterface $em, CmsConfig $cmsConfig)
+    public function __construct(EntityManagerInterface $em, CmsConfig $cmsConfig, bool $saveCompiled)
     {
         $this->em = $em;
         $this->cmsConfig = $cmsConfig;
+        $this->saveCompiled = $saveCompiled;
     }
 
     public function getTargetClass(): string
@@ -27,6 +29,10 @@ class ContentVersionManager implements ContentVersionManagerInterface
 
     public function canSaveCompiled(ContentVersionInterface $version): bool
     {
+        if (false === $this->saveCompiled) {
+            return false;
+        }
+
         $contentConfig = $this->cmsConfig->getContent($version->getContent());
 
         if (false === $contentConfig['save_compiled']) {
