@@ -143,8 +143,15 @@ abstract class ContentVersion implements ContentVersionInterface
     public function hasCompileErrors(): bool
     {
         foreach ($this->getCompiled() ?? [] as $siteCompiled) {
-            foreach ($siteCompiled ?? [] as $localeCompiled) {
-                if (str_contains($localeCompiled, 'MODULE_RENDER_ERROR')) {
+            if (is_array($siteCompiled)) {
+                /* @deprecated: to be removed in next versions */
+                foreach ($siteCompiled as $localeCompiled) {
+                    if (str_contains($localeCompiled, 'MODULE_RENDER_ERROR')) {
+                        return true;
+                    }
+                }
+            } elseif (is_string($siteCompiled)) {
+                if (str_contains($siteCompiled, 'MODULE_RENDER_ERROR')) {
                     return true;
                 }
             }
