@@ -22,7 +22,7 @@ class UserType extends AbstractType
         return EntityType::class;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'required' => false,
@@ -34,7 +34,7 @@ class UserType extends AbstractType
         ]);
     }
 
-    //    public function buildForm(FormBuilderInterface $builder, array $options)
+    //    public function buildForm(FormBuilderInterface $builder, array $options): void
     //    {
     //        /** @var EntityManagerInterface $em */
     //        $em = $options['em'];

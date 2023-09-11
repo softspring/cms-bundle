@@ -20,7 +20,7 @@ class ResolveDoctrineTargetEntityPass extends AbstractResolveDoctrineTargetEntit
         return $container->getParameter('sfs_cms.entity_manager_name');
     }
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $this->setTargetEntityFromParameter('sfs_cms.block.class', BlockInterface::class, $container, true);
         $this->setTargetEntityFromParameter('sfs_cms.route.class', RouteInterface::class, $container, true);

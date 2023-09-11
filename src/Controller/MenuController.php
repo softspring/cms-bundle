@@ -8,17 +8,20 @@ use Softspring\CmsBundle\Manager\MenuManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Environment;
 
 class MenuController extends AbstractController
 {
     protected CmsConfig $cmsConfig;
     protected MenuManagerInterface $menuManager;
+    protected Environment $twig;
     protected ?LoggerInterface $cmsLogger;
 
-    public function __construct(CmsConfig $cmsConfig, MenuManagerInterface $menuManager, ?LoggerInterface $cmsLogger)
+    public function __construct(CmsConfig $cmsConfig, MenuManagerInterface $menuManager, Environment $twig, ?LoggerInterface $cmsLogger)
     {
         $this->cmsConfig = $cmsConfig;
         $this->menuManager = $menuManager;
+        $this->twig = $twig;
         $this->cmsLogger = $cmsLogger;
     }
 
@@ -35,9 +38,9 @@ class MenuController extends AbstractController
                 return new Response();
             }
 
-            $response = $this->render($config['render_template'], [
+            $response = new Response($this->twig->render($config['render_template'], [
                 'menu' => $menu,
-            ]);
+            ]));
 
             if (false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
                 $response->setPublic();

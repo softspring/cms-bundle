@@ -24,7 +24,7 @@ class RoutePathType extends AbstractType
         $this->enabledLocales = $enabledLocales;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => $this->routePathManager->getEntityClass(),
@@ -38,7 +38,7 @@ class RoutePathType extends AbstractType
         $resolver->setAllowedTypes('default_language', 'string');
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('path', TextType::class, [
             'required' => false,

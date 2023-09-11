@@ -20,7 +20,7 @@ class MenuItemCollectionType extends AbstractType
         return 'menu_item_collection';
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'entry_type' => MenuItemType::class,

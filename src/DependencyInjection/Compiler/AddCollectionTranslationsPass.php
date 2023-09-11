@@ -9,7 +9,7 @@ use Symfony\Component\Finder\Finder;
 
 class AddCollectionTranslationsPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $translator = $container->findDefinition('translator.default');
 

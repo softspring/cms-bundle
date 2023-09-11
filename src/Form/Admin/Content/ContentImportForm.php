@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ContentImportForm extends AbstractType implements ContentImportFormInterface
 {
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'validation_groups' => ['Default', 'import'],
@@ -25,7 +25,7 @@ class ContentImportForm extends AbstractType implements ContentImportFormInterfa
         });
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         // TODO CHECK ALLOWED CONTENT TYPE
 

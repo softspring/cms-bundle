@@ -101,7 +101,7 @@ class BlockStaticType extends AbstractType
         ));
     }
 
-    public function finishView(FormView $view, FormInterface $form, array $options)
+    public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['block_preview'] = ''; // $options['block_attr'];
 
