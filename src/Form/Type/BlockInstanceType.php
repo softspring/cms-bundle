@@ -38,7 +38,7 @@ class BlockInstanceType extends AbstractType
         return EntityType::class;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'class' => BlockInterface::class,
@@ -96,7 +96,7 @@ class BlockInstanceType extends AbstractType
         });
     }
 
-    public function finishView(FormView $view, FormInterface $form, array $options)
+    public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['block_preview'] = ''; // $options['block_attr'];
 

@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ContentVersionImportForm extends AbstractType implements ContentVersionImportFormInterface
 {
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'validation_groups' => ['Default', 'import_version'],
@@ -25,7 +25,7 @@ class ContentVersionImportForm extends AbstractType implements ContentVersionImp
         });
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('file', FileType::class, [
             'constraints' => [

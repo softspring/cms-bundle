@@ -69,6 +69,8 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('content_class')->defaultValue('Softspring\CmsBundle\Entity\Content')->end()
                         ->scalarNode('content_version_class')->defaultValue('Softspring\CmsBundle\Entity\ContentVersion')->end()
                         ->scalarNode('find_field_name')->defaultValue('id')->end()
+                        ->booleanNode('save_compiled')->defaultTrue()->end()
+                        ->scalarNode('prefix_compiled')->defaultValue('')->end()
                     ->end()
                 ->end()
 

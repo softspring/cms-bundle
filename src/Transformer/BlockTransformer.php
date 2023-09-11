@@ -2,14 +2,14 @@
 
 namespace Softspring\CmsBundle\Transformer;
 
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ObjectManager;
 use Softspring\CmsBundle\Model\BlockInterface;
 
 class BlockTransformer implements TransformerInterface
 {
     use TransformEntityValuesTrait;
 
-    public function transform(object $entity, EntityManagerInterface $em): void
+    public function transform(object $entity, ObjectManager $em): void
     {
         $block = $this->getBlock($entity);
 
@@ -24,7 +24,7 @@ class BlockTransformer implements TransformerInterface
         $block->setData($extraData);
     }
 
-    public function untransform(object $entity, EntityManagerInterface $em): void
+    public function untransform(object $entity, ObjectManager $em): void
     {
         $block = $this->getBlock($entity);
 

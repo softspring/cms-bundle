@@ -23,3 +23,53 @@ framework:
         trace_level: none
     esi: true
 ```
+
+## After deploying a new version assets are not loaded
+
+SfsCms compiles contents, and stores them in database by default to be used later and improve performance.
+
+Sometimes, after an assets build for deploy, you can experience that assets are not loaded. This is because the 
+ content is compiled and stored in database, and it includes assets references.
+
+**Re-publish solution**
+
+One solution is to re-publish the content version in admin panel.
+
+**Disable content compilation storing**
+
+Another solution is to disable content compilation storing in general:
+
+```yaml
+# config/packages/sfs_cms.yaml
+sfs_cms:
+    content:
+        save_compiled: false
+```
+
+or for a specific layout:
+
+```yaml
+# cms/layouts/<your-layout>/config.yaml
+layout:
+    save_compiled: false
+```
+
+or for a specific content type:
+
+```yaml
+# cms/contents/<your-content-type>/config.yaml
+content:
+    save_compiled: false
+```
+
+**Prefix compiled contents by version**
+
+The last solution is to prefix compiled contents by version, so when you deploy a new version, the content is not found
+ and is compiled and stored again.
+
+```yaml
+# config/packages/sfs_cms.yaml
+sfs_cms:
+    content:
+        prefix_compiled: '%env(APP_VERSION)%/'
+```

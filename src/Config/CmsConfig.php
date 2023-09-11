@@ -10,6 +10,7 @@ use Softspring\CmsBundle\Config\Exception\InvalidMenuException;
 use Softspring\CmsBundle\Config\Exception\InvalidModuleException;
 use Softspring\CmsBundle\Config\Exception\InvalidSiteException;
 use Softspring\CmsBundle\Manager\SiteManagerInterface;
+use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
 
 class CmsConfig
@@ -85,8 +86,17 @@ class CmsConfig
     /**
      * @throws InvalidContentException
      */
-    public function getContent(string $id, bool $required = true): ?array
+    public function getContent($id, bool $required = true): ?array
     {
+        if ($id instanceof ContentInterface) {
+            foreach ($this->contents as $c => $content) {
+                if ($content['entity_class'] == get_class($id)) {
+                    $id = $c;
+                    break;
+                }
+            }
+        }
+
         if ($required && !isset($this->contents[$id])) {
             throw new InvalidContentException($id, $this->contents);
         }
@@ -144,18 +154,38 @@ class CmsConfig
         $this->siteEntities = null;
     }
 
+    private ?bool $sitesTableExists = null;
+
+    private function sitesTableExists(): bool
+    {
+        if (null === $this->sitesTableExists) {
+            $connection = $this->siteManager->getEntityManager()->getConnection();
+            $result = $connection->executeQuery('SHOW tables');
+            $this->sitesTableExists = false;
+            foreach ($result->fetchAllAssociative() as $value) {
+                if ('cms_site' == current($value)) {
+                    $this->sitesTableExists = true;
+                }
+            }
+        }
+
+        return $this->sitesTableExists;
+    }
+
     public function getSites(): array
     {
         if (null === $this->siteEntities) {
             $this->siteEntities = [];
 
-            foreach ($this->siteManager->getRepository()->findAll() as $siteEntity) {
-                if (!isset($this->siteConfigs["$siteEntity"])) {
-                    $this->siteManager->deleteEntity($siteEntity);
-                } else {
-                    $siteEntity->setConfig($this->siteConfigs["$siteEntity"]);
-                    $this->siteManager->saveEntity($siteEntity);
-                    $this->siteEntities["$siteEntity"] = $siteEntity;
+            if ($this->sitesTableExists()) {
+                foreach ($this->siteManager->getRepository()->findAll() as $siteEntity) {
+                    if (!isset($this->siteConfigs["$siteEntity"])) {
+                        $this->siteManager->deleteEntity($siteEntity);
+                    } else {
+                        $siteEntity->setConfig($this->siteConfigs["$siteEntity"]);
+                        $this->siteManager->saveEntity($siteEntity);
+                        $this->siteEntities["$siteEntity"] = $siteEntity;
+                    }
                 }
             }
 
@@ -164,7 +194,9 @@ class CmsConfig
                     $siteEntity = $this->siteManager->createEntity();
                     $siteEntity->setId($siteId);
                     $siteEntity->setConfig($config);
-                    $this->siteManager->saveEntity($siteEntity);
+                    if ($this->sitesTableExists()) {
+                        $this->siteManager->saveEntity($siteEntity);
+                    }
                     $this->siteEntities["$siteEntity"] = $siteEntity;
                 }
             }

@@ -19,7 +19,7 @@ class LayoutContentType extends AbstractType
         $this->cmsConfig = $cmsConfig;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired('layout');
         $resolver->setRequired('content_type');
@@ -28,7 +28,7 @@ class LayoutContentType extends AbstractType
         $resolver->setAllowedTypes('content', [ContentInterface::class]);
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $layoutConfig = $this->cmsConfig->getLayout($options['layout']);
 

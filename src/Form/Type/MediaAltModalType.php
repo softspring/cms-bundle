@@ -16,7 +16,7 @@ class MediaAltModalType extends AbstractType
         return 'cms_media_alt_modal';
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'media_type_options' => [],
@@ -25,7 +25,7 @@ class MediaAltModalType extends AbstractType
         ]);
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('media', MediaModalType::class, $options['media_type_options']);
 

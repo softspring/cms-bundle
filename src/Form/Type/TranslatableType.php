@@ -25,7 +25,7 @@ class TranslatableType extends AbstractType
         return 'translatable';
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'required' => false,
@@ -45,7 +45,7 @@ class TranslatableType extends AbstractType
         $resolver->setAllowedTypes('type_options', 'array');
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         foreach ($options['languages'] as $lang) {
             $childrenOptions = [

@@ -4,16 +4,22 @@ namespace Softspring\CmsBundle\EventListener;
 
 use Softspring\CmsBundle\Routing\SiteResolver;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class SiteResolverListener implements EventSubscriberInterface
 {
     protected SiteResolver $siteResolver;
+    protected RequestStack $requestStack;
 
-    public function __construct(SiteResolver $siteResolver)
+    protected ?Request $originRequest = null;
+
+    public function __construct(SiteResolver $siteResolver, RequestStack $requestStack)
     {
         $this->siteResolver = $siteResolver;
+        $this->requestStack = $requestStack;
     }
 
     public static function getSubscribedEvents(): array
@@ -38,5 +44,11 @@ class SiteResolverListener implements EventSubscriberInterface
         $request->attributes->set('_site', $siteId);
         $request->attributes->set('_sfs_cms_site', $site);
         $request->attributes->set('_sfs_cms_site_host_config', $siteHostConfig);
+
+        if (!$this->originRequest) {
+            $this->originRequest = $this->requestStack->getMainRequest();
+        }
+
+        $request->attributes->set('_sfs_cms_origin_request', $this->originRequest);
     }
 }
