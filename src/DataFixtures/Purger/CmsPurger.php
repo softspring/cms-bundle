@@ -25,28 +25,21 @@ class CmsPurger implements PurgerInterface, ORMPurgerInterface
     public const PURGE_MODE_DELETE = 1;
     public const PURGE_MODE_TRUNCATE = 2;
 
-    /** @var EntityManagerInterface|null */
-    private $em;
+    private ?EntityManagerInterface $em;
 
     /**
      * If the purge should be done through DELETE or TRUNCATE statements.
-     *
-     * @var int
      */
-    private $purgeMode = self::PURGE_MODE_DELETE;
+    private int $purgeMode = self::PURGE_MODE_DELETE;
 
     /**
      * Table/view names to be excluded from purge.
-     *
      * @var string[]
      */
-    private $excluded;
+    private array $excluded;
 
     /**
-     * Construct new purger instance.
-     *
-     * @param EntityManagerInterface|null $em       entityManagerInterface instance used for persistence
-     * @param string[]                    $excluded array of table/view names to be excluded from purge
+     * @param string[] $excluded array of table/view names to be excluded from purge
      */
     public function __construct(EntityManagerInterface $em = null, array $excluded = [])
     {
@@ -56,42 +49,34 @@ class CmsPurger implements PurgerInterface, ORMPurgerInterface
 
     /**
      * Set the purge mode.
-     *
-     * @param int $mode
-     *
-     * @return void
      */
-    public function setPurgeMode($mode)
+    public function setPurgeMode(int $mode): void
     {
         $this->purgeMode = $mode;
     }
 
     /**
      * Get the purge mode.
-     *
-     * @return int
      */
-    public function getPurgeMode()
+    public function getPurgeMode(): int
     {
         return $this->purgeMode;
     }
 
-    public function setEntityManager(EntityManagerInterface $em)
+    public function setEntityManager(EntityManagerInterface $em): void
     {
         $this->em = $em;
     }
 
     /**
      * Retrieve the EntityManagerInterface instance this purger instance is using.
-     *
-     * @return EntityManagerInterface
      */
-    public function getObjectManager()
+    public function getObjectManager(): ?EntityManagerInterface
     {
         return $this->em;
     }
 
-    public function purge()
+    public function purge(): void
     {
         $classes = [];
 
@@ -171,7 +156,7 @@ class CmsPurger implements PurgerInterface, ORMPurgerInterface
      *
      * @return ClassMetadata[]
      */
-    private function getCommitOrder(EntityManagerInterface $em, array $classes)
+    private function getCommitOrder(EntityManagerInterface $em, array $classes): array
     {
         $sorter = new TopologicalSorter();
 
@@ -230,7 +215,7 @@ class CmsPurger implements PurgerInterface, ORMPurgerInterface
      *
      * @return string[]
      */
-    private function getAssociationTables(array $classes, AbstractPlatform $platform)
+    private function getAssociationTables(array $classes, AbstractPlatform $platform): array
     {
         $associationTables = [];
 

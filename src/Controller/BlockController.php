@@ -10,6 +10,7 @@ use Softspring\CmsBundle\Model\BlockInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Environment;
 
 class BlockController extends AbstractController
 {
@@ -19,14 +20,16 @@ class BlockController extends AbstractController
     protected CmsConfig $cmsConfig;
     protected BlockManagerInterface $blockManager;
     protected bool $debug;
+    protected Environment $twig;
     protected ?LoggerInterface $cmsLogger;
 
-    public function __construct(EntityManagerInterface $em, CmsConfig $cmsConfig, BlockManagerInterface $blockManager, bool $debug, ?LoggerInterface $cmsLogger)
+    public function __construct(EntityManagerInterface $em, CmsConfig $cmsConfig, BlockManagerInterface $blockManager, bool $debug, Environment $twig, ?LoggerInterface $cmsLogger)
     {
         $this->em = $em;
         $this->cmsConfig = $cmsConfig;
         $this->blockManager = $blockManager;
         $this->debug = $debug;
+        $this->twig = $twig;
         $this->cmsLogger = $cmsLogger;
     }
 
@@ -46,9 +49,9 @@ class BlockController extends AbstractController
                     return new Response();
                 }
 
-                $response = $this->render($config['render_template'], $block->getData() + ['_block' => $block]);
+                $response = new Response($this->twig->render($config['render_template'], $block->getData() + ['_block' => $block]));
             } else {
-                $response = $this->render($config['render_template']);
+                $response = new Response($this->twig->render($config['render_template']));
             }
 
             if (false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
@@ -80,9 +83,9 @@ class BlockController extends AbstractController
             $config = $this->cmsConfig->getBlock($type);
 
             if (!$config['static']) {
-                $response = $this->render($config['render_template'], $block->getData() + ['_block' => $block]);
+                $response = new Response($this->twig->render($config['render_template'], $block->getData() + ['_block' => $block]));
             } else {
-                $response = $this->render($config['render_template']);
+                $response = new Response($this->twig->render($config['render_template']));
             }
 
             if (false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {

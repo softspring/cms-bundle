@@ -2,17 +2,17 @@
 
 namespace Softspring\CmsBundle\Transformer;
 
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ObjectManager;
 
 interface TransformerInterface
 {
     /**
      * @throws UnsupportedException
      */
-    public function transform(object $entity, EntityManagerInterface $em): void;
+    public function transform(object $entity, ObjectManager $em): void;
 
     /**
      * @throws UnsupportedException
      */
-    public function untransform(object $entity, EntityManagerInterface $em): void;
+    public function untransform(object $entity, ObjectManager $em): void;
 }
