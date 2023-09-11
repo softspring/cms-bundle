@@ -41,7 +41,7 @@ class CmsPurger implements PurgerInterface, ORMPurgerInterface
     /**
      * @param string[] $excluded array of table/view names to be excluded from purge
      */
-    public function __construct(?EntityManagerInterface $em = null, array $excluded = [])
+    public function __construct(EntityManagerInterface $em = null, array $excluded = [])
     {
         $this->em = $em;
         $this->excluded = $excluded;
@@ -235,7 +235,7 @@ class CmsPurger implements PurgerInterface, ORMPurgerInterface
     private function getTableName(ClassMetadata $class, AbstractPlatform $platform): string
     {
         if (isset($class->table['schema']) && !\method_exists($class, 'getSchemaName')) {
-            return $class->table['schema'] . '.' .
+            return $class->table['schema'].'.'.
                 $this->em->getConfiguration()
                     ->getQuoteStrategy()
                     ->getTableName($class, $platform);
@@ -246,13 +246,12 @@ class CmsPurger implements PurgerInterface, ORMPurgerInterface
 
     /** @param mixed[] $assoc */
     private function getJoinTableName(
-        array            $assoc,
-        ClassMetadata    $class,
+        array $assoc,
+        ClassMetadata $class,
         AbstractPlatform $platform
-    ): string
-    {
+    ): string {
         if (isset($assoc['joinTable']['schema']) && !\method_exists($class, 'getSchemaName')) {
-            return $assoc['joinTable']['schema'] . '.' .
+            return $assoc['joinTable']['schema'].'.'.
                 $this->em->getConfiguration()
                     ->getQuoteStrategy()
                     ->getJoinTableName($assoc, $class, $platform);
@@ -265,7 +264,7 @@ class CmsPurger implements PurgerInterface, ORMPurgerInterface
     {
         $tableIdentifier = new Identifier($tableName);
 
-        return 'DELETE FROM ' . $tableIdentifier->getQuotedName($platform);
+        return 'DELETE FROM '.$tableIdentifier->getQuotedName($platform);
     }
 
     private function disableForeignKeyChecksForMySQL(Connection $connection): void
