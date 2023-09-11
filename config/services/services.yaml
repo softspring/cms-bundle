@@ -131,4 +131,5 @@ services:
             - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: 'Softspring\CmsBundle\Entity\ContentVersion',  priority: 10 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
 
     Softspring\CmsBundle\EntityListener\ContentDiscriminatorMapListener:
-        tags: ['doctrine.event_subscriber']
+        tags:
+            - { name: 'doctrine.event_listener', event: 'loadClassMetadata' }

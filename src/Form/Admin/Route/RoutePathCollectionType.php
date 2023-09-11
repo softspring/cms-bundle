@@ -20,7 +20,7 @@ class RoutePathCollectionType extends AbstractType
         return 'route_path_collection';
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'entry_type' => RoutePathType::class,

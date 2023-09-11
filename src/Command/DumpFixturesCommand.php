@@ -16,8 +16,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class DumpFixturesCommand extends Command
 {
-    protected static $defaultName = 'sfs:cms:dump-fixtures';
-
     protected DataExporter $dataExporter;
     protected EntityManagerInterface $em;
     protected CmsConfig $cmsConfig;
@@ -32,6 +30,7 @@ class DumpFixturesCommand extends Command
 
     protected function configure(): void
     {
+        $this->setName('sfs:cms:dump-fixtures');
         $this->addArgument('elements', InputArgument::OPTIONAL);
     }
 

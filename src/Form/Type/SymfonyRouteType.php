@@ -34,7 +34,7 @@ class SymfonyRouteType extends AbstractType
         $this->defaultRestrictPatterns = $defaultRestrictPatterns;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'required' => false,
@@ -54,7 +54,7 @@ class SymfonyRouteType extends AbstractType
         });
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('route_name', ChoiceType::class, [
             'required' => $options['required'],
@@ -107,7 +107,7 @@ class SymfonyRouteType extends AbstractType
 
     protected ?array $routes = null;
 
-    public function finishView(FormView $view, FormInterface $form, array $options)
+    public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         $this->propagateLabelFinishView($view, $form, $options);
 

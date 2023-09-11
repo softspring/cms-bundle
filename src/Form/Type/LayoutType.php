@@ -21,7 +21,7 @@ class LayoutType extends AbstractType
         return ChoiceType::class;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $layouts = array_keys($this->cmsConfig->getLayouts());
 
