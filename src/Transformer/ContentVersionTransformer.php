@@ -2,7 +2,7 @@
 
 namespace Softspring\CmsBundle\Transformer;
 
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ObjectManager;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\MediaBundle\Model\MediaInterface;
@@ -11,7 +11,7 @@ class ContentVersionTransformer implements TransformerInterface
 {
     use TransformEntityValuesTrait;
 
-    public function transform(object $entity, EntityManagerInterface $em): void
+    public function transform(object $entity, ObjectManager $em): void
     {
         $contentVersion = $this->getContentVersion($entity);
 
@@ -40,14 +40,14 @@ class ContentVersionTransformer implements TransformerInterface
         }
     }
 
-    protected function transformLayout(string $layout, array $modules, array &$data, EntityManagerInterface $em, array &$entities): void
+    protected function transformLayout(string $layout, array $modules, array &$data, ObjectManager $em, array &$entities): void
     {
         foreach ($modules as $module => $fields) {
             $this->transformModule($fields, $data[$layout][$module], $em, $entities);
         }
     }
 
-    protected function transformModule(array $fields, array &$data, EntityManagerInterface $em, array &$entities): void
+    protected function transformModule(array $fields, array &$data, ObjectManager $em, array &$entities): void
     {
         foreach ($fields as $field => $value) {
             if ('modules' === $field) {
@@ -58,7 +58,7 @@ class ContentVersionTransformer implements TransformerInterface
         }
     }
 
-    protected function transformSubmodule(array $submodules, array &$data, EntityManagerInterface $em, array &$entities): void
+    protected function transformSubmodule(array $submodules, array &$data, ObjectManager $em, array &$entities): void
     {
         foreach ($submodules as $submodule => $fields) {
             foreach ($fields as $field => $value) {
@@ -67,7 +67,7 @@ class ContentVersionTransformer implements TransformerInterface
         }
     }
 
-    public function untransform(object $entity, EntityManagerInterface $em): void
+    public function untransform(object $entity, ObjectManager $em): void
     {
         $contentVersion = $this->getContentVersion($entity);
 
@@ -82,14 +82,14 @@ class ContentVersionTransformer implements TransformerInterface
         $contentVersion->setData($data);
     }
 
-    protected function untransformLayout(string $layout, array $modules, array &$data, EntityManagerInterface $em): void
+    protected function untransformLayout(string $layout, array $modules, array &$data, ObjectManager $em): void
     {
         foreach ($modules as $module => $fields) {
             $this->untransformModule($fields, $data[$layout][$module], $em);
         }
     }
 
-    protected function untransformModule(array $fields, array &$data, EntityManagerInterface $em): void
+    protected function untransformModule(array $fields, array &$data, ObjectManager $em): void
     {
         foreach ($fields as $field => $value) {
             if ('modules' === $field) {
@@ -100,7 +100,7 @@ class ContentVersionTransformer implements TransformerInterface
         }
     }
 
-    protected function untransformSubmodule(array $submodules, array &$data, EntityManagerInterface $em): void
+    protected function untransformSubmodule(array $submodules, array &$data, ObjectManager $em): void
     {
         foreach ($submodules as $submodule => $fields) {
             foreach ($fields as $field => $value) {
