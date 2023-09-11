@@ -13,7 +13,7 @@
         "doctrine/doctrine-bundle": "^2.6",
         "doctrine/migrations": "^3.2",
         "doctrine/orm": "^2.14",
-        "sensio/framework-extra-bundle": "^5.4|^6.3",
+        "sensio/framework-extra-bundle": "^5.4|^6.2",
         "softspring/components": "^5.1",
         "softspring/crudl-controller": "^5.1",
         "softspring/doctrine-migrations-version-comparator": "^5.1",
