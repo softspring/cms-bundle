@@ -2,14 +2,14 @@
 
 namespace Softspring\CmsBundle\Transformer;
 
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ObjectManager;
 use Softspring\CmsBundle\Model\ContentInterface;
 
 class ContentTransformer implements TransformerInterface
 {
     use TransformEntityValuesTrait;
 
-    public function transform(object $entity, EntityManagerInterface $em): void
+    public function transform(object $entity, ObjectManager $em): void
     {
         $content = $this->getContent($entity);
 
@@ -24,7 +24,7 @@ class ContentTransformer implements TransformerInterface
         $content->setExtraData($extraData);
     }
 
-    public function untransform(object $entity, EntityManagerInterface $em): void
+    public function untransform(object $entity, ObjectManager $em): void
     {
         $content = $this->getContent($entity);
 
