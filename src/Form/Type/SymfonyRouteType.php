@@ -34,6 +34,11 @@ class SymfonyRouteType extends AbstractType
         $this->defaultRestrictPatterns = $defaultRestrictPatterns;
     }
 
+    public function getBlockPrefix(): string
+    {
+        return 'symfony_route';
+    }
+
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
