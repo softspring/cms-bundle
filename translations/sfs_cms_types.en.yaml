@@ -15,3 +15,7 @@ link_type:
             _parent: 'Parent frame'
             _top: 'Top frame'
             custom: 'Custom frame'
+
+symfony_route:
+    show_parameters_link: 'show parameters'
+    hide_parameters_link: 'hide parameters'

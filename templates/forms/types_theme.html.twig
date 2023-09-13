@@ -184,3 +184,9 @@
 {% endblock block_type_widget %}
 
 
+{% block symfony_route_widget %}
+    {{ form_row(form.route_name) }}
+    <a href="javascript: void(0)" data-route-show-params="{{ form.route_params.vars.id }}">{{ 'symfony_route.show_parameters_link'|trans({}, 'sfs_cms_types') }}</a>
+    <a href="javascript: void(0)" data-route-hide-params="{{ form.route_params.vars.id }}">{{ 'symfony_route.hide_parameters_link'|trans({}, 'sfs_cms_types') }}</a>
+    {{ form_row(form.route_params) }}
+{% endblock symfony_route_widget %}
