@@ -77,6 +77,11 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
 
         $loader->load('data_collector.yaml');
 
+        $version = InstalledVersions::getVersion('symfony/twig-bridge');
+        if (version_compare($version, '6.0.0') < 0) {
+            $loader->load('data_collector_twig.yaml');
+        }
+
         if (class_exists(MakerBundle::class)) {
             $loader->load('makers.yaml');
         }
