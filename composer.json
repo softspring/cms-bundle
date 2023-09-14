@@ -24,13 +24,13 @@
         "softspring/permissions-bundle": "^5.1",
         "softspring/polymorphic-form-type": "^5.1",
         "softspring/twig-extra-bundle": "^5.1",
-        "symfony/config": "^5.4|^6.3",
-        "symfony/intl": "^5.4|^6.3",
-        "symfony/routing": "^5.4|^6.3",
-        "symfony/uid": "^5.4|^6.3",
+        "symfony/config": "^5.4|^6.0",
+        "symfony/intl": "^5.4|^6.0",
+        "symfony/routing": "^5.4|^6.0",
+        "symfony/uid": "^5.4|^6.0",
         "symfony/validator": "^6.2",
-        "symfony/yaml": "^5.4|^6.3",
-        "twig/twig": "^2.10|^3.4"
+        "symfony/yaml": "^5.4|^6.0",
+        "twig/twig": "^2.10|^3.0"
     },
     "require-dev": {
         "doctrine/data-fixtures": "^1.6",
@@ -42,7 +42,7 @@
         "phpunit/phpunit": "^10.2.0",
         "softspring/user-bundle": "^5.1",
         "symfony/maker-bundle": "^1.38",
-        "symfony/web-profiler-bundle": "^5.4|^6.3"
+        "symfony/web-profiler-bundle": "^5.4|^6.0"
     },
     "autoload": {
         "psr-4": {
