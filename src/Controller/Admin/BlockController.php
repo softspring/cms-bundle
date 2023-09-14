@@ -17,6 +17,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Twig\Environment;
 
@@ -29,15 +30,17 @@ class BlockController extends AbstractController
     protected BlockManagerInterface $blockManager;
     protected CmsConfig $cmsConfig;
     protected EventDispatcherInterface $eventDispatcher;
+    protected AuthorizationCheckerInterface $authorizationChecker;
     protected array $enabledLocales;
 
-    public function __construct(FormFactoryInterface $formFactory, Environment $twig, BlockManagerInterface $blockManager, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, array $enabledLocales)
+    public function __construct(FormFactoryInterface $formFactory, Environment $twig, BlockManagerInterface $blockManager, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, AuthorizationCheckerInterface $authorizationChecker, array $enabledLocales)
     {
         $this->formFactory = $formFactory;
         $this->twig = $twig;
         $this->blockManager = $blockManager;
         $this->cmsConfig = $cmsConfig;
         $this->eventDispatcher = $eventDispatcher;
+        $this->authorizationChecker = $authorizationChecker;
         $this->enabledLocales = $enabledLocales;
     }
 
@@ -51,9 +54,14 @@ class BlockController extends AbstractController
         return $this->twig->render($view, $parameters);
     }
 
+    protected function isGranted(mixed $attribute, mixed $subject = null): bool
+    {
+        return $this->authorizationChecker->isGranted($attribute, $subject);
+    }
+
     public function create(string $blockType, Request $request, BlockCreateFormInterface $createForm): Response
     {
-        $this->isGranted('PERMISSION_SFS_CMS_ADMIN_BLOCKS_CREATE', $blockType);
+        $this->denyAccessUnlessGranted('PERMISSION_SFS_CMS_ADMIN_BLOCKS_CREATE', $blockType);
 
         try {
             $config = $this->getBlockConfig($blockType);
@@ -92,7 +100,7 @@ class BlockController extends AbstractController
 
     public function update(BlockInterface $block, Request $request, BlockUpdateFormInterface $updateForm): Response
     {
-        $this->isGranted('PERMISSION_SFS_CMS_ADMIN_BLOCKS_UPDATE', $block);
+        $this->denyAccessUnlessGranted('PERMISSION_SFS_CMS_ADMIN_BLOCKS_UPDATE', $block);
 
         $config = $this->getBlockConfig($block->getType());
 
@@ -119,7 +127,7 @@ class BlockController extends AbstractController
 
     public function delete(string $block, Request $request): Response
     {
-        $this->isGranted('PERMISSION_SFS_CMS_ADMIN_BLOCKS_DELETE', $block);
+        $this->denyAccessUnlessGranted('PERMISSION_SFS_CMS_ADMIN_BLOCKS_DELETE', $block);
 
         //        $config = $this->getBlockConfig($request);
         //
@@ -128,7 +136,7 @@ class BlockController extends AbstractController
 
     public function list(Request $request): Response
     {
-        $this->isGranted('PERMISSION_SFS_CMS_ADMIN_BLOCKS_LIST');
+        $this->denyAccessUnlessGranted('PERMISSION_SFS_CMS_ADMIN_BLOCKS_LIST');
 
         //        if (!empty($config['list_is_granted'])) {
         //            $this->denyAccessUnlessGranted($config['list_is_granted'], null, sprintf('Access denied, user is not %s.', $config['list_is_granted']));
