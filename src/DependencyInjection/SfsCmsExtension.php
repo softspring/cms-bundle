@@ -6,6 +6,7 @@ use Composer\InstalledVersions;
 use Softspring\CmsBundle\Config\ConfigLoader;
 use Softspring\CmsBundle\Data\EntityTransformer\EntityTransformerInterface;
 use Softspring\CmsBundle\Data\FieldTransformer\FieldTransformerInterface;
+use Softspring\CmsBundle\Entity;
 use Softspring\CmsBundle\Model\BlockInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Symfony\Bundle\MakerBundle\MakerBundle;
@@ -58,6 +59,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $container->setParameter('sfs_cms.content.find_field_name', $config['content']['find_field_name'] ?? null);
         $container->setParameter('sfs_cms.content.save_compiled', $config['content']['save_compiled'] ?? null);
         $container->setParameter('sfs_cms.content.prefix_compiled', $config['content']['prefix_compiled'] ?? null);
+        $container->setParameter('sfs_cms.content.page_class', $config['content']['page_class'] ?? null);
 
         // configure menu classes
         $container->setParameter('sfs_cms.menu.class', $config['menu']['class']);
@@ -68,6 +70,8 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $container->setParameter('sfs_cms.block.class', $config['block']['class'] ?? null);
         $container->setParameter('sfs_cms.block.find_field_name', $config['block']['find_field_name'] ?? null);
         //        $container->setParameter('sfs_cms.block.types', $config['block']['types'] ?? []);
+
+        $this->processDataClasses($container);
 
         // load services
         $loader->load('services.yaml');
@@ -85,6 +89,31 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         if (class_exists(MakerBundle::class)) {
             $loader->load('makers.yaml');
         }
+    }
+
+    protected function processDataClasses(ContainerBuilder $container): void
+    {
+        $superClassList = [];
+
+        $defaultClasses = [
+            'sfs_cms.site.class' => Entity\Site::class,
+            'sfs_cms.route.class' => Entity\Route::class,
+            'sfs_cms.route.path_class' => Entity\RoutePath::class,
+            'sfs_cms.content.content_class' => Entity\Content::class,
+            'sfs_cms.content.content_version_class' => Entity\ContentVersion::class,
+            'sfs_cms.content.page_class' => Entity\Page::class,
+            'sfs_cms.menu.class' => Entity\Menu::class,
+            'sfs_cms.menu.item_class' => Entity\MenuItem::class,
+            'sfs_cms.block.class' => Entity\Block::class,
+        ];
+
+        foreach ($defaultClasses as $parameter => $defaultEntityClass) {
+            if ($container->getParameter($parameter) !== $defaultEntityClass) {
+                $superClassList[] = $defaultEntityClass;
+            }
+        }
+
+        $container->setParameter('sfs_cms.convert_superclass_list', $superClassList);
     }
 
     public function prepend(ContainerBuilder $container): void
