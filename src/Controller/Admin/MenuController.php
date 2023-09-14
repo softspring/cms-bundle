@@ -16,6 +16,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Twig\Environment;
 
@@ -28,15 +29,17 @@ class MenuController extends AbstractController
     protected MenuManagerInterface $menuManager;
     protected CmsConfig $cmsConfig;
     protected EventDispatcherInterface $eventDispatcher;
+    protected AuthorizationCheckerInterface $authorizationChecker;
     protected array $enabledLocales;
 
-    public function __construct(FormFactoryInterface $formFactory, Environment $twig, MenuManagerInterface $menuManager, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, array $enabledLocales)
+    public function __construct(FormFactoryInterface $formFactory, Environment $twig, MenuManagerInterface $menuManager, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, AuthorizationCheckerInterface $authorizationChecker, array $enabledLocales)
     {
         $this->formFactory = $formFactory;
         $this->twig = $twig;
         $this->menuManager = $menuManager;
         $this->cmsConfig = $cmsConfig;
         $this->eventDispatcher = $eventDispatcher;
+        $this->authorizationChecker = $authorizationChecker;
         $this->enabledLocales = $enabledLocales;
     }
 
@@ -50,9 +53,14 @@ class MenuController extends AbstractController
         return $this->twig->render($view, $parameters);
     }
 
+    protected function isGranted(mixed $attribute, mixed $subject = null): bool
+    {
+        return $this->authorizationChecker->isGranted($attribute, $subject);
+    }
+
     public function create(string $menuType, Request $request): Response
     {
-        $this->isGranted('PERMISSION_SFS_CMS_ADMIN_MENUS_CREATE', $menuType);
+        $this->denyAccessUnlessGranted('PERMISSION_SFS_CMS_ADMIN_MENUS_CREATE', $menuType);
 
         try {
             $config = $this->getMenuConfig($menuType);
@@ -90,7 +98,7 @@ class MenuController extends AbstractController
 
     public function update(MenuInterface $menu, Request $request): Response
     {
-        $this->isGranted('PERMISSION_SFS_CMS_ADMIN_MENUS_UPDATE', $menu);
+        $this->denyAccessUnlessGranted('PERMISSION_SFS_CMS_ADMIN_MENUS_UPDATE', $menu);
 
         $config = $this->getMenuConfig($menu->getType());
 
@@ -116,7 +124,7 @@ class MenuController extends AbstractController
 
     public function delete(string $menu, Request $request): Response
     {
-        $this->isGranted('PERMISSION_SFS_CMS_ADMIN_MENUS_DELETE', $menu);
+        $this->denyAccessUnlessGranted('PERMISSION_SFS_CMS_ADMIN_MENUS_DELETE', $menu);
 
         //        $config = $this->getMenuConfig($request);
 
@@ -125,7 +133,7 @@ class MenuController extends AbstractController
 
     public function list(Request $request, MenuListFilterFormInterface $filterForm): Response
     {
-        $this->isGranted('PERMISSION_SFS_CMS_ADMIN_MENUS_LIST');
+        $this->denyAccessUnlessGranted('PERMISSION_SFS_CMS_ADMIN_MENUS_LIST');
 
         //        if (!empty($config['list_is_granted'])) {
         //            $this->denyAccessUnlessGranted($config['list_is_granted'], null, sprintf('Access denied, user is not %s.', $config['list_is_granted']));
