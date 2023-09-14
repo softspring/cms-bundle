@@ -138,8 +138,12 @@ window.addEventListener('load', (event) => {
      * @param {PolymorphicEvent} event
      */
     document.addEventListener("polymorphic.node.insert.before", function (event) {
-        event.collection(modulesCollection);
-        event.position(modulesCollectionInsertIndex !== null ? modulesCollectionInsertIndex : getPolymorphicCollectionLastIndex(modulesCollection) + 1);
+        if (modulesCollection) {
+            event.collection(modulesCollection);
+            event.position(modulesCollectionInsertIndex !== null ? modulesCollectionInsertIndex : getPolymorphicCollectionLastIndex(modulesCollection) + 1);
+        } else {
+            modulesCollection = document.getElementById(event.target.dataset.polymorphicCollection);
+        }
 
         const moduleThumbnail = event._originEvent.target;
         let prototype = moduleThumbnail.dataset.polymorphicPrototype;
@@ -155,13 +159,17 @@ window.addEventListener('load', (event) => {
         prototype = prototype.replace(new RegExp('content_content_form_module_prototypes_collection', 'g'), modulesCollection.id);
         prototype = prototype.replace(new RegExp('content_content_form\\[module_prototypes_collection\\]', 'g'), modulesCollection.dataset.fullName);
         event.prototype(prototype);
+
+        // reset variables
+        modulesCollection = null;
+        modulesCollectionInsertIndex = null;
     });
 
     /**
      * @param {PolymorphicEvent} event
      */
     document.addEventListener("polymorphic.node.insert.after", function (event) {
-        if (event.collection().dataset.moduleRowClass === undefined) {
+        if (!event.collection() || !event.node() || event.collection().dataset.moduleRowClass === undefined) {
             return;
         }
 
@@ -177,7 +185,12 @@ window.addEventListener('load', (event) => {
             up.classList.add('bi-chevron-left');
         }
 
-
         moduleFocus(event.node().querySelector('.cms-module'));
+
+        // on insert focus into first contenteditable element
+        const contentEditableElement = event.node().querySelector('[contenteditable]');
+        if (contentEditableElement) {
+            contentEditableElement.focus();
+        }
     });
 });
