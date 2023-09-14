@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\DependencyInjection;
 
+use Softspring\CmsBundle\Entity;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -26,7 +27,7 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->enumNode('identification')->values(['domain', 'path'])->defaultValue('domain')->end()
-                        ->scalarNode('class')->defaultValue('Softspring\CmsBundle\Entity\Site')->end()
+                        ->scalarNode('class')->defaultValue(Entity\Site::class)->end()
                         ->booleanNode('throw_not_found')->defaultTrue()->end()
                     ->end()
                 ->end()
@@ -34,7 +35,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('block')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('class')->defaultValue('Softspring\CmsBundle\Entity\Block')->end()
+                        ->scalarNode('class')->defaultValue(Entity\Block::class)->end()
                         ->scalarNode('find_field_name')->defaultValue('id')->end()
 
                         ->arrayNode('types')
@@ -57,8 +58,8 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('route')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('class')->defaultValue('Softspring\CmsBundle\Entity\Route')->end()
-                        ->scalarNode('path_class')->defaultValue('Softspring\CmsBundle\Entity\RoutePath')->end()
+                        ->scalarNode('class')->defaultValue(Entity\Route::class)->end()
+                        ->scalarNode('path_class')->defaultValue(Entity\RoutePath::class)->end()
                         ->scalarNode('find_field_name')->defaultValue('id')->end()
                     ->end()
                 ->end()
@@ -66,8 +67,9 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('content')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('content_class')->defaultValue('Softspring\CmsBundle\Entity\Content')->end()
-                        ->scalarNode('content_version_class')->defaultValue('Softspring\CmsBundle\Entity\ContentVersion')->end()
+                        ->scalarNode('content_class')->defaultValue(Entity\Content::class)->end()
+                        ->scalarNode('content_version_class')->defaultValue(Entity\ContentVersion::class)->end()
+                        ->scalarNode('page_class')->defaultValue(Entity\Page::class)->end()
                         ->scalarNode('find_field_name')->defaultValue('id')->end()
                         ->booleanNode('save_compiled')->defaultTrue()->end()
                         ->scalarNode('prefix_compiled')->defaultValue('')->end()
@@ -77,8 +79,8 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('menu')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('class')->defaultValue('Softspring\CmsBundle\Entity\Menu')->end()
-                        ->scalarNode('item_class')->defaultValue('Softspring\CmsBundle\Entity\MenuItem')->end()
+                        ->scalarNode('class')->defaultValue(Entity\Menu::class)->end()
+                        ->scalarNode('item_class')->defaultValue(Entity\MenuItem::class)->end()
                         ->scalarNode('find_field_name')->defaultValue('id')->end()
                     ->end()
                 ->end()
