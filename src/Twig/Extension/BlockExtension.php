@@ -29,11 +29,11 @@ class BlockExtension extends AbstractExtension
         ];
     }
 
-    public function renderBlockById($id): string
+    public function renderBlockById($id, string $locale = null): string
     {
         $block = $this->findOneBy($id);
 
-        return $block ? $this->blockRenderer->renderBlock($block) : "<!-- block $id not found -->";
+        return $block ? $this->blockRenderer->renderBlock($block, $locale) : "<!-- block $id not found -->";
     }
 
     public function findOneBy($criteria, array $orderBy = []): ?BlockInterface

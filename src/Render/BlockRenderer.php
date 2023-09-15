@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Render;
 
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Model\BlockInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\HttpCache\Esi;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
@@ -42,7 +43,7 @@ class BlockRenderer extends AbstractRenderer
         return implode(',', $params);
     }
 
-    public function renderBlockByType(string $type, array $params = []): string
+    public function renderBlockByType(string $type, array $params = [], string $locale = null): string
     {
         $blockConfig = $this->cmsConfig->getBlock($type);
 
@@ -57,6 +58,7 @@ class BlockRenderer extends AbstractRenderer
             $renderFunction = 'render';
         }
 
+        $locale && $params['_locale'] = $locale;
         if (!empty($blockConfig['render_url'])) {
             $params_string = $this->paramsAsString($params);
             $twigCode = "{{ $renderFunction(url('{$blockConfig['render_url']}', {{$params_string}})) }}";
@@ -83,10 +85,14 @@ class BlockRenderer extends AbstractRenderer
             ];
         }
 
-        return $this->encapsulateEsiCapableRender(function () use ($template) { return $template->render(); });
+        return $this->encapsulateEsiCapableRender(function (Request $request) use ($template, $locale) {
+            $locale && $request->setLocale($locale);
+
+            return $template->render();
+        });
     }
 
-    public function renderBlock(BlockInterface $block): string
+    public function renderBlock(BlockInterface $block, string $locale = null): string
     {
         $type = $block->getType();
         $blockId = $block->getId();
@@ -104,10 +110,12 @@ class BlockRenderer extends AbstractRenderer
         }
 
         if (!empty($blockConfig['render_url'])) {
-            $twigCode = "{{ $renderFunction(url('{$blockConfig['render_url']}')) }}";
+            $localeParam = $locale ? ", {'_locale':'$locale'}" : '';
+            $twigCode = "{{ $renderFunction(url('{$blockConfig['render_url']}'$localeParam)) }}";
         } else {
             // $twigCode = "{{ $renderFunction(url('sfs_cms_block_render_by_type', {'type':'$type'})) }}";
-            $twigCode = "{{ $renderFunction(controller('Softspring\\\\CmsBundle\\\\Controller\\\\BlockController::renderById', {'id':'$blockId'})) }}";
+            $localeParam = $locale ? ", '_locale':'$locale'" : '';
+            $twigCode = "{{ $renderFunction(controller('Softspring\\\\CmsBundle\\\\Controller\\\\BlockController::renderById', {'id':'$blockId'$localeParam})) }}";
         }
 
         $template = twig_template_from_string($this->twig, $twigCode);
@@ -120,7 +128,11 @@ class BlockRenderer extends AbstractRenderer
             ];
         }
 
-        return $this->encapsulateEsiCapableRender(function () use ($template) { return $template->render(); });
+        return $this->encapsulateEsiCapableRender(function (Request $request) use ($template, $locale) {
+            $locale && $request->setLocale($locale);
+
+            return $template->render();
+        });
     }
 
     public function getDebugCollectorData(): array
