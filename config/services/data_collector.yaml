@@ -12,9 +12,3 @@ services:
     Softspring\CmsBundle\DataCollector\ContentDataCollector:
         tags:
             - { name: 'data_collector', template: '@SfsCms/Collector/content.html.twig', id: 'cms',  priority: 332 }
-
-    data_collector.twig:
-        class: Softspring\CmsBundle\DataCollector\TwigDataCollector
-        arguments: ['@twig.profile', '@twig']
-        tags:
-            - { name: 'data_collector', template: '@WebProfiler/Collector/twig.html.twig', id: 'twig',  priority: 257 }

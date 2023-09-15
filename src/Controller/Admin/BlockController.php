@@ -2,7 +2,6 @@
 
 namespace Softspring\CmsBundle\Controller\Admin;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\InvalidBlockException;
 use Softspring\CmsBundle\Form\Admin\Block\BlockCreateFormInterface;
@@ -18,6 +17,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Twig\Environment;
 
@@ -30,15 +30,17 @@ class BlockController extends AbstractController
     protected BlockManagerInterface $blockManager;
     protected CmsConfig $cmsConfig;
     protected EventDispatcherInterface $eventDispatcher;
+    protected AuthorizationCheckerInterface $authorizationChecker;
     protected array $enabledLocales;
 
-    public function __construct(FormFactoryInterface $formFactory, Environment $twig, BlockManagerInterface $blockManager, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, array $enabledLocales)
+    public function __construct(FormFactoryInterface $formFactory, Environment $twig, BlockManagerInterface $blockManager, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, AuthorizationCheckerInterface $authorizationChecker, array $enabledLocales)
     {
         $this->formFactory = $formFactory;
         $this->twig = $twig;
         $this->blockManager = $blockManager;
         $this->cmsConfig = $cmsConfig;
         $this->eventDispatcher = $eventDispatcher;
+        $this->authorizationChecker = $authorizationChecker;
         $this->enabledLocales = $enabledLocales;
     }
 
@@ -52,11 +54,15 @@ class BlockController extends AbstractController
         return $this->twig->render($view, $parameters);
     }
 
-    /**
-     * @Security(expression="is_granted('PERMISSION_SFS_CMS_ADMIN_BLOCKS_CREATE', blockType)")
-     */
+    protected function isGranted(mixed $attribute, mixed $subject = null): bool
+    {
+        return $this->authorizationChecker->isGranted($attribute, $subject);
+    }
+
     public function create(string $blockType, Request $request, BlockCreateFormInterface $createForm): Response
     {
+        $this->denyAccessUnlessGranted('PERMISSION_SFS_CMS_ADMIN_BLOCKS_CREATE', $blockType);
+
         try {
             $config = $this->getBlockConfig($blockType);
         } catch (InvalidBlockException $e) {
@@ -92,11 +98,10 @@ class BlockController extends AbstractController
         return $this->render('@SfsCms/admin/block/create.html.twig', $viewData->getArrayCopy());
     }
 
-    /**
-     * @Security(expression="is_granted('PERMISSION_SFS_CMS_ADMIN_BLOCKS_UPDATE', block)")
-     */
     public function update(BlockInterface $block, Request $request, BlockUpdateFormInterface $updateForm): Response
     {
+        $this->denyAccessUnlessGranted('PERMISSION_SFS_CMS_ADMIN_BLOCKS_UPDATE', $block);
+
         $config = $this->getBlockConfig($block->getType());
 
         $form = $this->createForm(get_class($updateForm), $block, ['block_config' => $config, 'method' => 'POST'])->handleRequest($request);
@@ -120,21 +125,19 @@ class BlockController extends AbstractController
         return $this->render('@SfsCms/admin/block/update.html.twig', $viewData->getArrayCopy());
     }
 
-    /**
-     * @Security(expression="is_granted('PERMISSION_SFS_CMS_ADMIN_BLOCKS_DELETE', block)")
-     */
     public function delete(string $block, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('PERMISSION_SFS_CMS_ADMIN_BLOCKS_DELETE', $block);
+
         //        $config = $this->getBlockConfig($request);
         //
         return new Response();
     }
 
-    /**
-     * @Security(expression="is_granted('PERMISSION_SFS_CMS_ADMIN_BLOCKS_LIST')")
-     */
     public function list(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('PERMISSION_SFS_CMS_ADMIN_BLOCKS_LIST');
+
         //        if (!empty($config['list_is_granted'])) {
         //            $this->denyAccessUnlessGranted($config['list_is_granted'], null, sprintf('Access denied, user is not %s.', $config['list_is_granted']));
         //        }

@@ -1,0 +1,11 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    data_collector.twig:
+        class: Softspring\CmsBundle\DataCollector\TwigDataCollector
+        arguments: ['@twig.profile', '@twig']
+        tags:
+            - { name: 'data_collector', template: '@WebProfiler/Collector/twig.html.twig', id: 'twig',  priority: 257 }

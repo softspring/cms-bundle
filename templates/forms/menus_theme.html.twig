@@ -63,10 +63,7 @@
     <div class="row {{ not form.parent.vars.valid ? 'show-invalid' }}">
         <div class="col-sm-2">{{ form_label(form.text) }}</div>
         <div class="col-sm">{{ form_widget(form.text) }}{{ form_errors(form.text) }}</div>
-        <div class="col-sm-2">{{ form_label(form.symfonyRoute.route_name) }}</div>
-        <div class="col-sm">{{ form_widget(form.symfonyRoute.route_name) }}{{ form_errors(form.symfonyRoute.route_name) }}</div>
-        <div class="col-sm-2">{{ form_label(form.symfonyRoute.route_params) }}</div>
-        <div class="col-sm">{{ form_widget(form.symfonyRoute.route_params) }}{{ form_errors(form.symfonyRoute.route_params) }}</div>
+        <div class="col">{{ form_label(form.symfonyRoute) }}</div>
         {{ form_rest(form) }}
     </div>
 {% endblock menu_item_widget %}

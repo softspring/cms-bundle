@@ -2,7 +2,6 @@
 
 namespace Softspring\CmsBundle\Controller\Admin;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\InvalidMenuException;
 use Softspring\CmsBundle\Form\Admin\Menu\MenuForm;
@@ -17,6 +16,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Twig\Environment;
 
@@ -29,15 +29,17 @@ class MenuController extends AbstractController
     protected MenuManagerInterface $menuManager;
     protected CmsConfig $cmsConfig;
     protected EventDispatcherInterface $eventDispatcher;
+    protected AuthorizationCheckerInterface $authorizationChecker;
     protected array $enabledLocales;
 
-    public function __construct(FormFactoryInterface $formFactory, Environment $twig, MenuManagerInterface $menuManager, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, array $enabledLocales)
+    public function __construct(FormFactoryInterface $formFactory, Environment $twig, MenuManagerInterface $menuManager, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, AuthorizationCheckerInterface $authorizationChecker, array $enabledLocales)
     {
         $this->formFactory = $formFactory;
         $this->twig = $twig;
         $this->menuManager = $menuManager;
         $this->cmsConfig = $cmsConfig;
         $this->eventDispatcher = $eventDispatcher;
+        $this->authorizationChecker = $authorizationChecker;
         $this->enabledLocales = $enabledLocales;
     }
 
@@ -51,11 +53,15 @@ class MenuController extends AbstractController
         return $this->twig->render($view, $parameters);
     }
 
-    /**
-     * @Security(expression="is_granted('PERMISSION_SFS_CMS_ADMIN_MENUS_CREATE', menuType)")
-     */
+    protected function isGranted(mixed $attribute, mixed $subject = null): bool
+    {
+        return $this->authorizationChecker->isGranted($attribute, $subject);
+    }
+
     public function create(string $menuType, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('PERMISSION_SFS_CMS_ADMIN_MENUS_CREATE', $menuType);
+
         try {
             $config = $this->getMenuConfig($menuType);
         } catch (InvalidMenuException $e) {
@@ -90,11 +96,10 @@ class MenuController extends AbstractController
         return $this->render('@SfsCms/admin/menu/create.html.twig', $viewData->getArrayCopy());
     }
 
-    /**
-     * @Security(expression="is_granted('PERMISSION_SFS_CMS_ADMIN_MENUS_UPDATE', menu)")
-     */
     public function update(MenuInterface $menu, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('PERMISSION_SFS_CMS_ADMIN_MENUS_UPDATE', $menu);
+
         $config = $this->getMenuConfig($menu->getType());
 
         $form = $this->createForm(MenuForm::class, $menu, ['menu_config' => $config, 'method' => 'POST'])->handleRequest($request);
@@ -117,21 +122,19 @@ class MenuController extends AbstractController
         return $this->render('@SfsCms/admin/menu/update.html.twig', $viewData->getArrayCopy());
     }
 
-    /**
-     * @Security(expression="is_granted('PERMISSION_SFS_CMS_ADMIN_MENUS_DELETE', menu)")
-     */
     public function delete(string $menu, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('PERMISSION_SFS_CMS_ADMIN_MENUS_DELETE', $menu);
+
         //        $config = $this->getMenuConfig($request);
 
         return new Response();
     }
 
-    /**
-     * @Security(expression="is_granted('PERMISSION_SFS_CMS_ADMIN_MENUS_LIST')")
-     */
     public function list(Request $request, MenuListFilterFormInterface $filterForm): Response
     {
+        $this->denyAccessUnlessGranted('PERMISSION_SFS_CMS_ADMIN_MENUS_LIST');
+
         //        if (!empty($config['list_is_granted'])) {
         //            $this->denyAccessUnlessGranted($config['list_is_granted'], null, sprintf('Access denied, user is not %s.', $config['list_is_granted']));
         //        }
