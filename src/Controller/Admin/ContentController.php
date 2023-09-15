@@ -609,7 +609,7 @@ class ContentController extends AbstractController
         }
 
         if (!$entity) {
-            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
+            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', [], $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
         //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
@@ -665,7 +665,7 @@ class ContentController extends AbstractController
         }
 
         if (!$entity) {
-            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
+            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', [], $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
         //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
@@ -702,7 +702,7 @@ class ContentController extends AbstractController
         }
 
         if (!$entity) {
-            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
+            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', [], $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
         if ($version) {
@@ -733,7 +733,7 @@ class ContentController extends AbstractController
         }
 
         if (!$entity) {
-            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
+            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', [], $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
         $entity->setPublishedVersion(null);
@@ -756,7 +756,7 @@ class ContentController extends AbstractController
         }
 
         if (!$entity) {
-            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
+            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', [], $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
         if ($version) {
@@ -788,7 +788,7 @@ class ContentController extends AbstractController
         }
 
         if (!$entity) {
-            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
+            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', [], $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
         //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
@@ -823,7 +823,7 @@ class ContentController extends AbstractController
         }
 
         if (!$entity) {
-            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
+            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', [], $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
         /** @var ContentVersionInterface $version */
@@ -874,7 +874,6 @@ class ContentController extends AbstractController
 
         if (!$content) {
             return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', [], $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
-
         }
 
         /** @var ContentVersionInterface $version */
