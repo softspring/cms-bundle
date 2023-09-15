@@ -20,6 +20,7 @@ use Softspring\Component\CrudlController\Event\FilterEvent;
 use Softspring\Component\Events\DispatchGetResponseTrait;
 use Softspring\Component\Events\GetResponseRequestEvent;
 use Softspring\Component\Events\ViewEvent;
+use Softspring\Component\PolymorphicFormType\Form\Exception\MissingFormTypeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\WebProfilerBundle\EventListener\WebDebugToolbarListener;
 use Symfony\Component\Form\FormError;
@@ -157,7 +158,7 @@ class ContentController extends AbstractController
         }
 
         if (!$entity) {
-            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
+            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', [], $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
         //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
@@ -191,7 +192,7 @@ class ContentController extends AbstractController
         }
 
         if (!$entity) {
-            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
+            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', [], $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
         //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
@@ -248,7 +249,7 @@ class ContentController extends AbstractController
         }
 
         if (!$entity) {
-            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
+            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', [], $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
         //        if ($response = $this->dispatchGetResponseFromConfig($config, 'initialize_event_name', new GetResponseEntityEvent($entity, $request))) {
@@ -377,7 +378,7 @@ class ContentController extends AbstractController
         $entity = $this->contentManager->getRepository($config['_id'])->findOneBy(['id' => $content]);
 
         if (!$entity) {
-            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
+            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', [], $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
         if (!empty($config['import_version_is_granted'])) {
             $this->denyAccessUnlessGranted($config['import_version_is_granted'], null, sprintf('Access denied, user is not %s.', $config['import_version_is_granted']));
@@ -506,7 +507,7 @@ class ContentController extends AbstractController
         }
 
         if (!$content) {
-            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
+            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', [], $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
         $request->attributes->set('content', $content);
@@ -526,12 +527,17 @@ class ContentController extends AbstractController
             $version->setLayout($request->request->all()['content_content_form']['layout']);
         }
 
-        $form = $this->createForm($config['content_type'], $version, [
-            'content' => $content,
-            'layout' => $version->getLayout(),
-            'method' => 'POST',
-            'content_type' => $config['_id'],
-        ])->handleRequest($request);
+        try {
+            $form = $this->createForm($config['content_type'], $version, [
+                'content' => $content,
+                'layout' => $version->getLayout(),
+                'method' => 'POST',
+                'content_type' => $config['_id'],
+            ])->handleRequest($request);
+        } catch (MissingFormTypeException $exception) {
+            return $this->flashAndRedirectToRoute($request, 'error', 'module_not_configured', ['%module%' => $exception->getDiscriminator()], $config['_id'], "sfs_cms_admin_content_{$config['_id']}_details", ['content' => $content]);
+        }
+
         //
         //        $this->dispatchFromConfig($config, 'form_init_event_name', new FormEvent($form, $request));
         //
@@ -844,7 +850,7 @@ class ContentController extends AbstractController
         }
 
         if (!$entity) {
-            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
+            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', [], $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
         }
 
         /** @var ContentVersionInterface $version */
@@ -867,7 +873,8 @@ class ContentController extends AbstractController
         }
 
         if (!$content) {
-            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
+            return $this->flashAndRedirectToRoute($request, 'warning', 'entity_not_found_flash', [], $config['_id'], "sfs_cms_admin_content_{$config['_id']}_list");
+
         }
 
         /** @var ContentVersionInterface $version */
@@ -881,9 +888,9 @@ class ContentController extends AbstractController
         return ZipContent::dumpResponse($path, $exportName);
     }
 
-    protected function flashAndRedirectToRoute(Request $request, string $type, string $messageId, string $configId, string $route, array $routeParams = []): RedirectResponse
+    protected function flashAndRedirectToRoute(Request $request, string $type, string $messageId, array $messageParameters, string $configId, string $route, array $routeParams = []): RedirectResponse
     {
-        $request->getSession()->getFlashBag()->add($type, $this->translator->trans('admin_'.$configId.'.'.$messageId, [], 'sfs_cms_contents'));
+        $request->getSession()->getFlashBag()->add($type, $this->translator->trans('admin_'.$configId.'.'.$messageId, $messageParameters, 'sfs_cms_contents'));
 
         return $this->redirectToRoute($route, $routeParams);
     }
