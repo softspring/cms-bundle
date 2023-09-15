@@ -41,8 +41,9 @@ class BlockStaticType extends AbstractType
             'required' => false,
             'block_types' => null,
             'choice_value' => '_id',
+            'choice_translation_domain' => 'sfs_cms_blocks',
             'choice_label' => function (?object $blockConfig) {
-                return $blockConfig->_id ?? '';
+                return $blockConfig->_id ? "{$blockConfig->_id}.name" : '';
             },
             'choice_filter' => function (?object $blockConfig) {
                 return $blockConfig && $blockConfig->static;
