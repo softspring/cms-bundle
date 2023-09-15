@@ -1,16 +1,11 @@
 {% trans_default_domain 'sfs_cms_modules' %}
+{% import '@SfsCms/macros/modules_edit.html.twig' as module %}
+
 {% set defaultDivClass = 'text-break content-escape' %}
 {% for locale,localeField in form.code %}
-    <div id="{{ form.id.vars.data|default('') }}"
-         data-edit-id-target="htmlId"
-
-         class="{{ defaultDivClass }} {{ form.class.vars.data|default('') }}"
-         data-edit-class-target="htmlClassDiv"
-         data-edit-class-default="{{ defaultDivClass }}"
-
-         data-edit-content-target="code.{{ locale }}" data-lang="{{ locale }}"
+    <div {{ module.link_id(form.id) }} {{ module.link_class(form.class) }}
+        {{ module.link_content(localeField, locale, false, 'html_translatable.form.code.preview.placeholder') }}
          data-edit-content-validate="html"
-         data-edit-content-placeholder="{{ 'html_translatable.form.code.preview.placeholder'|trans }}"
     >
         {{ localeField.vars.data|default()|replace({'href': 'href-invalidate'})|raw }}
     </div>

@@ -1,5 +1,7 @@
 {% trans_default_domain 'sfs_cms_modules' %}
-<pre><code><span id="{{ form.id.vars.data|default('') }}" class="text-dark text-monospace content-escape"
+{% import '@SfsCms/macros/modules_edit.html.twig' as module %}
+
+<pre><code><span class="text-dark text-monospace content-escape"
      data-edit-content-target="code"
      data-edit-content-escape="true"
      data-edit-content-validate="html"

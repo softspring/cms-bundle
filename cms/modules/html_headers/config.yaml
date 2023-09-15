@@ -10,6 +10,3 @@ module:
         form_fields:
             code:
                 type: 'html'
-                type_options:
-                    attr:
-                        data-edit-content-input: 'code'

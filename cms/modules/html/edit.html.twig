@@ -1,12 +1,7 @@
 {% trans_default_domain 'sfs_cms_modules' %}
-{% set defaultDivClass = 'text-break content-escape' %}
-<div id="{{ form.id.vars.data|default('') }}"
-    data-edit-id-target="htmlId"
+{% import '@SfsCms/macros/modules_edit.html.twig' as module %}
 
-    class="{{ defaultDivClass }} {{ form.class.vars.data|default('') }}"
-    data-edit-class-target="htmlClassDiv"
-    data-edit-class-default="{{ defaultDivClass }}"
-
+<div {{ module.link_id(form.id) }} {{ module.link_class(form.class, 'text-break content-escape') }}
     data-edit-content-target="code"
     data-edit-content-validate="html"
     data-edit-content-placeholder="{{ 'html.form.code.placeholder'|trans }}"

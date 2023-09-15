@@ -1,1 +1,7 @@
-{% if block %}{{ sfs_cms_block_by_type(block) }}{% endif %}
+{% import '@SfsCms/macros/modules_render.html.twig' as module %}
+
+{% if block %}
+    {% if id|default(false) or class|default(false) %}<div {{ module.id(id) }} {{ module.class(class) }}>{% endif %}
+        {{ sfs_cms_block_by_type(block) }}
+    {% if id|default(false) or class|default(false) %}</div>{% endif %}
+{% endif %}
