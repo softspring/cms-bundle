@@ -142,7 +142,7 @@
     {% if drawOpeningAngles %}<{% endif %}{{ formField.vars.data }}
     data-edit-tag-type-target="{{ formField.vars.attr['data-edit-tag-type-input'] }}"
     {% if attributes is not empty %}{{ attributes|join(' ')|raw }}{% endif %}
-    {% if drawOpeningAngles %}>{% endif %}{{ formField.vars.data }}
+    {% if drawOpeningAngles %}>{% endif %}
 {%- endapply -%}
 {%- endmacro -%}
 

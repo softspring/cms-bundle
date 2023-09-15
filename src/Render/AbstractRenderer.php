@@ -34,7 +34,7 @@ abstract class AbstractRenderer
 
         $currentRequest->headers->set('Surrogate-Capability', 'ESI/1.0');
 
-        $result = $renderFunction();
+        $result = $renderFunction($currentRequest);
 
         isset($originalSurrogateCapability) ? $currentRequest->headers->set('Surrogate-Capability', $originalSurrogateCapability) : $currentRequest->headers->remove('Surrogate-Capability');
 
@@ -43,8 +43,8 @@ abstract class AbstractRenderer
 
     protected function encapsulateRequestRender(SiteInterface $site, string $locale, callable $renderFunction)
     {
-        $this->requestStack->push($this->generateRequest($locale, $site));
-        $result = $renderFunction();
+        $this->requestStack->push($request = $this->generateRequest($locale, $site));
+        $result = $renderFunction($request);
         $this->requestStack->pop();
 
         return $result;
