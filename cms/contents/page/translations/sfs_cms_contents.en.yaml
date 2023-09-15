@@ -1,5 +1,6 @@
 admin_page:
     entity_not_found_flash: "Page not found"
+    module_not_configured: "Can not edit this page version because of %module% module is not configured. Maybe the version has been imported from another project or this module has been removed. Please talk to developers."
     
     tabs_menu:
         details: "General"
