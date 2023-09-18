@@ -79,7 +79,7 @@ class DataImporter extends AbstractDataImportExport
 
         // import rest of contents
         foreach (['routes', 'blocks', 'menus', 'contents'] as $type) {
-            $elements = $contents[$type];
+            $elements = $contents[$type] ?? [];
             foreach ($elements as $data) {
                 if ('routes' !== $type || RouteInterface::TYPE_PARENT_ROUTE !== $data['route']['type']) {
                     $dataName = $data[$type]['name'] ?? $data[$type]['id'] ?? current($data)['name'] ?? '';
