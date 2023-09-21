@@ -122,4 +122,9 @@ class SitemapController extends AbstractController
 
         return $this->render('@SfsCms/sitemap/index.xml.twig', ['sitemaps' => $sitemaps], $response);
     }
+
+    protected function renderView(string $view, array $parameters = []): string
+    {
+        return $this->twig->render($view, $parameters);
+    }
 }
