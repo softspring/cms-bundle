@@ -50,7 +50,7 @@ class RouteEntityTransformer implements EntityTransformerInterface
         $dump = [
             'route' => [
                 'id' => $route->getId(),
-                'sites' => $route->getSites()->map(fn(SiteInterface $site) => $site->getId())->toArray(),
+                'sites' => $route->getSites()->map(fn (SiteInterface $site) => $site->getId())->toArray(),
                 'type' => $route->getType(),
                 'parent' => $route->getParent()?->getId(),
                 'symfony_route' => $route->getSymfonyRoute(),
