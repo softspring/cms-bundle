@@ -1,10 +1,53 @@
 # CHANGELOG
 
-On update to 5.1 versions, run migrations.
+## [v5.1.0](https://github.com/softspring/cms-bundle/releases/tag/v5.1.0)
 
-Skip existing migrations if already created:
+### Upgrading
+
+There are too many changes in this version, so you must check your code to adapt it to the new version.
+
+As we noticed in README, this bundle is still under development, so it has changed a lot since the last version.
+
+We are not going to provide a full changelog.
+
+#### Assets installing
+
+Upgrade your package.json to use the appropriated assets:
+
+```json
+{
+    "dependencies": {
+        "@softspring/cms": "file:vendor/softspring/cms-bundle/assets",
+        "@softspring/cms-module-collection": "file:vendor/softspring/cms-module-collection/assets",
+        "@softspring/media": "file:vendor/softspring/media-bundle/assets",
+        "@softspring/polymorphic-form-type": "file:vendor/softspring/polymorphic-form-type/assets"
+    }
+}
+```
+
+Now you can use directly in you JS:
+
+```js
+import '@softspring/cms/scripts/admin-cms';
+import '@softspring/media/scripts/media-type';
+import '@softspring/polymorphic-form-type/scripts/polymorphic-form-type';
+import '@softspring/cms-module-collection/modules';
+```
+
+#### Doctrine migrations
+
+After 5.1 versions, CMS contains migrations to update the database schema. 
+
+If your version is older than 5.1, probably your database is already created, so ignore the origin migration with:
 
     bin/console doctrine:migrations:version "Softspring\CmsBundle\Migrations\Version20230301000000" --add --no-interaction
+
+and run a diff to check if there are any changes:
+
+    bin/console doctrine:migrations:diff --namespace=DoctrineMigrations
+
+Take care of the namespace parameter, it must be the same as the one configured in your `doctrine_migrations.yaml` file. 
+
 
 ## [v5.0.5](https://github.com/softspring/cms-bundle/releases/tag/v5.0.5)
 

@@ -133,3 +133,9 @@ services:
     Softspring\CmsBundle\EntityListener\ContentDiscriminatorMapListener:
         tags:
             - { name: 'doctrine.event_listener', event: 'loadClassMetadata' }
+
+    Softspring\CmsBundle\EventListener\OverrideDoctrineClassSuperclassListener:
+        arguments:
+            $superclassList: '%sfs_cms.convert_superclass_list%'
+        tags:
+            - { name: doctrine.event_listener, event: loadClassMetadata, priority: 500 }
