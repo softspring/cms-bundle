@@ -9,16 +9,20 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
 
 class ErrorPageListener implements EventSubscriberInterface
 {
     protected Environment $twig;
+    protected RouterInterface $router;
     protected ?LoggerInterface $logger;
 
-    public function __construct(Environment $twig, ?LoggerInterface $cmsLogger)
+    public function __construct(Environment $twig, RouterInterface $router, ?LoggerInterface $cmsLogger)
     {
         $this->twig = $twig;
+        $this->router = $router;
         $this->logger = $cmsLogger;
     }
 
@@ -44,6 +48,9 @@ class ErrorPageListener implements EventSubscriberInterface
 
         $exception = $event->getThrowable();
         $locale = $request->getLocale() ?: $site->getConfig()['default_locale'];
+
+        // fix missing _locale in router context
+        $this->router->setContext((new RequestContext())->setParameter('_locale', $locale));
 
         $errorPage = null;
 

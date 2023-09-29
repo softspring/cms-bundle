@@ -80,6 +80,7 @@ class Site implements ConfigurationInterface
                 ->end()
 
                 ->arrayNode('slash_route')
+                    ->performNoDeepMerging()
                     ->validate()
                         ->ifTrue(fn ($config) => $config['enabled'] && empty($config['behaviour']))
                         ->thenInvalid('If slash_route option is enabled, it requires a behaviour')
@@ -102,6 +103,7 @@ class Site implements ConfigurationInterface
 
                 // TODO NOT YET IMPLEMENTED
                 ->arrayNode('error_pages')
+                    ->performNoDeepMerging()
                     ->useAttributeAsKey('key')
                     ->prototype('variable')->end()
                 ->end()
