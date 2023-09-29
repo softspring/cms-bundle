@@ -31,6 +31,8 @@ window.addEventListener('load', (event) => {
                 version = config[event.target.dataset.mediaType].video[0];
             } else if (config[event.target.dataset.mediaType].picture) {
                 version = config[event.target.dataset.mediaType].picture[0];
+            } else if (config[event.target.dataset.mediaType].videoSet) {
+                version = config[event.target.dataset.mediaType].videoSet[0];
             }
 
             // show required preview in every html element
@@ -71,6 +73,10 @@ window.addEventListener('load', (event) => {
 
             case 'picture':
                 previewMedia = mediaInput.dataset['mediaPicture'+versionName];
+                break;
+
+            case 'videoSet':
+                previewMedia = mediaInput.dataset['mediaVideoSet'+versionName];
                 break;
         }
 
