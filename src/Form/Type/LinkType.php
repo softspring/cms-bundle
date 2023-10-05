@@ -10,13 +10,18 @@ use Symfony\Component\Form\FormView;
 
 class LinkType extends SymfonyRouteType
 {
+    public function getBlockPrefix(): string
+    {
+        return 'link';
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('type', ChoiceType::class, [
             'choice_translation_domain' => 'sfs_cms_types',
             'choices' => [
-                'link_type.type.values.anchor' => 'anchor',
                 'link_type.type.values.route' => 'route',
+                'link_type.type.values.anchor' => 'anchor',
                 'link_type.type.values.url' => 'url',
             ],
         ]);
