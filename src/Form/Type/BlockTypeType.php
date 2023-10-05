@@ -19,6 +19,7 @@ class BlockTypeType extends BlockStaticType
             'choice_filter' => function (?object $blockConfig) {
                 return $blockConfig && !$blockConfig->static;
             },
+            'choice_translation_domain' => false,
         ]);
     }
 }
