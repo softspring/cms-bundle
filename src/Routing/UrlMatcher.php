@@ -191,7 +191,7 @@ class UrlMatcher
                 $qb->setParameter('locale', $locale);
             }
 
-            return $qb->getQuery()->getResult(AbstractQuery::HYDRATE_OBJECT)[0] ?? null;
+            return $qb->getQuery()->setCacheable(true)->setResultCacheLifetime(60)->getResult(AbstractQuery::HYDRATE_OBJECT)[0] ?? null;
         } catch (TableNotFoundException $e) {
             // prevent error before creating database schema
             return null;

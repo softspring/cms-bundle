@@ -5,7 +5,7 @@
                       https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <entity name="Softspring\CmsBundle\Entity\Menu" table="cms_menu">
-        <cache usage="NONSTRICT_READ_WRITE" region="default" />
+        <cache usage="NONSTRICT_READ_WRITE" />
         <id name="id" type="string" length="36" column="id">
             <options><option name="fixed">true</option></options>
             <generator strategy="CUSTOM" />
