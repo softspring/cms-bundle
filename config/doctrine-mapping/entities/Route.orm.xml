@@ -9,18 +9,21 @@
         <id name="id" type="string" column="id"/>
 
         <one-to-many field="paths" target-entity="Softspring\CmsBundle\Model\RoutePathInterface" mapped-by="route" orphan-removal="true">
+            <cache usage="NONSTRICT_READ_WRITE" />
             <cascade>
                 <cascade-persist/>
             </cascade>
         </one-to-many>
 
         <one-to-many field="children" target-entity="Softspring\CmsBundle\Model\RouteInterface" mapped-by="parent" orphan-removal="true">
+            <cache usage="NONSTRICT_READ_WRITE" />
             <cascade>
                 <cascade-persist/>
             </cascade>
         </one-to-many>
 
         <many-to-many field="sites" target-entity="Softspring\CmsBundle\Model\SiteInterface">
+            <cache usage="NONSTRICT_READ_WRITE" />
             <cascade>
                 <cascade-persist/>
             </cascade>

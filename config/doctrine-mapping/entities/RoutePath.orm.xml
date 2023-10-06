@@ -14,6 +14,7 @@
         </id>
 
         <many-to-many field="sites" target-entity="Softspring\CmsBundle\Model\SiteInterface">
+            <cache usage="NONSTRICT_READ_WRITE" />
             <cascade>
                 <cascade-persist/>
             </cascade>
