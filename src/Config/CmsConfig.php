@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Config;
 
+use Doctrine\Persistence\Proxy;
 use Softspring\CmsBundle\Config\Exception\DisabledModuleException;
 use Softspring\CmsBundle\Config\Exception\InvalidBlockException;
 use Softspring\CmsBundle\Config\Exception\InvalidContentException;
@@ -90,7 +91,8 @@ class CmsConfig
     {
         if ($id instanceof ContentInterface) {
             foreach ($this->contents as $c => $content) {
-                if ($content['entity_class'] == get_class($id)) {
+                $class = str_replace('Proxies\\'.Proxy::MARKER.'\\', '', get_class($id));
+                if ($content['entity_class'] == $class) {
                     $id = $c;
                     break;
                 }
