@@ -48,6 +48,7 @@ class CmsRouter implements RouterInterface, RequestMatcherInterface, WarmableInt
     {
         try {
             $cleanParams = array_filter($parameters, fn ($key) => !in_array($key, ['_sfs_cms_locale', '_sfs_cms_locale_path']), ARRAY_FILTER_USE_KEY);
+
             // first try to generate with Symfony's route generator
             return $this->staticRouter->generate($name, $cleanParams, $referenceType);
         } catch (RouteNotFoundException $e) {
