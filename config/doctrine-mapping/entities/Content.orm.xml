@@ -5,7 +5,7 @@
                       https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <entity name="Softspring\CmsBundle\Entity\Content" inheritance-type="JOINED" table="cms_content">
-        <cache usage="NONSTRICT_READ_WRITE" region="default" />
+        <cache usage="NONSTRICT_READ_WRITE" />
 
         <discriminator-column name="discr" type="string" length="30"/>
         <discriminator-map>
