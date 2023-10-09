@@ -239,7 +239,9 @@ class UrlGenerator
         }
 
         if (is_string($site)) {
-            $this->cmsConfig->getSite($site);
+            if ($site = $this->cmsConfig->getSite($site)) {
+                return $site;
+            }
         }
 
         if ($request && $request->attributes->has('_sfs_cms_site')) {
