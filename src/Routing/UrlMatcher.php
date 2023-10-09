@@ -139,7 +139,11 @@ class UrlMatcher
                         return $this->generateRedirect($route->getRedirectUrl(), $route->getRedirectType() ?? Response::HTTP_FOUND);
 
                     case RouteInterface::TYPE_REDIRECT_TO_ROUTE:
-                        return $this->generateRedirectToRoute($route->getSymfonyRoute(), $route->getRedirectType() ?? Response::HTTP_FOUND);
+                        $sfRoute = $route->getSymfonyRoute();
+                        isset($attributes['_sfs_cms_locale']) && $sfRoute['route_params']['_sfs_cms_locale'] = $attributes['_sfs_cms_locale'];
+                        $sfRoute['route_params']['_sfs_cms_site'] = $site;
+
+                        return $this->generateRedirectToRoute($sfRoute, $route->getRedirectType() ?? Response::HTTP_FOUND);
 
                     default:
                         throw new \Exception(sprintf('Route type %u not yet implemented', $route->getType()));
