@@ -149,6 +149,8 @@ class UrlMatcherTest extends TestCase
         $hostConfig = ['redirect_to_canonical' => false, 'locale' => 'es'];
 
         $this->query->method('getOneOrNullResult')->willReturn(null);
+        $this->query->method('setCacheable')->willReturn($this->query);
+        $this->query->method('setResultCacheLifetime')->willReturn($this->query);
 
         $urlMatcher = new UrlMatcher($this->em, $this->urlGenerator, $this->siteResolver);
         $request = new Request([], [], [], [], [], ['HTTPS' => true]);
@@ -183,6 +185,8 @@ class UrlMatcherTest extends TestCase
         $hostConfig = ['redirect_to_canonical' => false, 'locale' => 'es'];
 
         $this->query->method('getOneOrNullResult')->willReturn(null);
+        $this->query->method('setCacheable')->willReturn($this->query);
+        $this->query->method('setResultCacheLifetime')->willReturn($this->query);
 
         $urlMatcher = new UrlMatcher($this->em, $this->urlGenerator, $this->siteResolver);
         $request = new Request([], [], [], [], [], ['HTTPS' => true, 'SERVER_NAME' => 'sfs-cms.org', 'REQUEST_URI' => 'https://sfs-cms.org/en/test-url']);
@@ -227,6 +231,8 @@ class UrlMatcherTest extends TestCase
         $routePath->setLocale('fr');
 
         $this->query->method('getOneOrNullResult')->willReturn($routePath);
+        $this->query->method('setCacheable')->willReturn($this->query);
+        $this->query->method('setResultCacheLifetime')->willReturn($this->query);
 
         $urlMatcher = new UrlMatcher($this->em, $this->urlGenerator, $this->siteResolver);
         $request = new Request([], [], [], [], [], ['HTTPS' => true, 'SERVER_NAME' => 'sfs-cms.org', 'REQUEST_URI' => 'https://sfs-cms.org/en/test-url']);

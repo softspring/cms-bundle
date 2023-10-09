@@ -5,7 +5,7 @@
                       https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <entity name="Softspring\CmsBundle\Entity\Content" inheritance-type="JOINED" table="cms_content">
-        <cache usage="NONSTRICT_READ_WRITE" region="default" />
+        <cache usage="NONSTRICT_READ_WRITE" />
 
         <discriminator-column name="discr" type="string" length="30"/>
         <discriminator-map>
@@ -19,6 +19,7 @@
         </id>
 
         <many-to-many field="sites" target-entity="Softspring\CmsBundle\Model\SiteInterface">
+            <cache usage="NONSTRICT_READ_WRITE" />
             <cascade>
                 <cascade-persist/>
             </cascade>
@@ -33,6 +34,7 @@
         </many-to-many>
 
         <one-to-many field="versions" target-entity="Softspring\CmsBundle\Model\ContentVersionInterface" mapped-by="content">
+            <cache usage="NONSTRICT_READ_WRITE" />
             <cascade>
                 <cascade-persist/>
             </cascade>
@@ -42,10 +44,12 @@
         </one-to-many>
 
         <many-to-one field="publishedVersion" target-entity="Softspring\CmsBundle\Model\ContentVersionInterface">
+            <cache usage="NONSTRICT_READ_WRITE" />
             <join-column name="published_version_id" on-delete="SET NULL"/>
         </many-to-one>
 
         <one-to-many field="routes" target-entity="Softspring\CmsBundle\Model\RouteInterface" mapped-by="content">
+            <cache usage="NONSTRICT_READ_WRITE" />
             <cascade>
                 <cascade-persist/>
             </cascade>

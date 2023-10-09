@@ -59,6 +59,7 @@ class BlockStaticType extends AbstractType
 
                 return $attr;
             },
+            'choice_translation_domain' => false,
         ]);
 
         $resolver->addAllowedTypes('block_types', ['null', 'array', 'string']);
