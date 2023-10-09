@@ -47,24 +47,29 @@ class CmsRouter implements RouterInterface, RequestMatcherInterface, WarmableInt
     public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
     {
         try {
+            $cleanParams = array_filter($parameters, fn ($key) => !in_array($key, ['_sfs_cms_locale', '_sfs_cms_locale_path']), ARRAY_FILTER_USE_KEY);
+
             // first try to generate with Symfony's route generator
-            return $this->staticRouter->generate($name, $parameters, $referenceType);
+            return $this->staticRouter->generate($name, $cleanParams, $referenceType);
         } catch (RouteNotFoundException $e) {
-            $params = array_filter($parameters, fn ($key) => !in_array($key, ['_locale', '_site']), ARRAY_FILTER_USE_KEY);
+            $cleanParams = array_filter($parameters, fn ($key) => !in_array($key, ['_locale', '_site', '_sfs_cms_locale', '_sfs_cms_site', '_sfs_cms_locale_path', 'routePath', '_route_params']), ARRAY_FILTER_USE_KEY);
+            $locale = $parameters['_locale'] ?? $parameters['_sfs_cms_locale'] ?? null;
+            $site = $parameters['_site'] ?? $parameters['_sfs_cms_site'] ?? null;
+            $onlyChecking = isset($parameters['__twig_extra_route_defined_check']);
 
             // if it does not exist, try witch CMS routes
             switch ($referenceType) {
                 case UrlGeneratorInterface::ABSOLUTE_URL:
-                    $url = $this->urlGenerator->getUrl($name, $parameters['_locale'] ?? '', $parameters['_site'] ?? null, $params, isset($parameters['__twig_extra_route_defined_check']));
+                    $url = $this->urlGenerator->getUrl($name, $locale, $site, $cleanParams, $onlyChecking);
                     break;
 
                 case UrlGeneratorInterface::ABSOLUTE_PATH:
                 case UrlGeneratorInterface::RELATIVE_PATH:
-                    $url = $this->urlGenerator->getPath($name, $parameters['_locale'] ?? '', $parameters['_site'] ?? null, $params, isset($parameters['__twig_extra_route_defined_check']));
+                    $url = $this->urlGenerator->getPath($name, $locale, $site, $cleanParams, $onlyChecking);
                     break;
 
                 case UrlGeneratorInterface::NETWORK_PATH:
-                    $url = $this->urlGenerator->getUrl($name, $parameters['_locale'] ?? '', $parameters['_site'] ?? null, $params, isset($parameters['__twig_extra_route_defined_check']));
+                    $url = $this->urlGenerator->getUrl($name, $locale, $site, $cleanParams, $onlyChecking);
                     $url = preg_replace('/^(https?)/', '', $url);
                     break;
 
