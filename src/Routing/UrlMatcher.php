@@ -64,7 +64,7 @@ class UrlMatcher
         }
 
         foreach ($siteConfig['sitemaps'] as $sitemap => $sitemapConfig) {
-            if ('/' . trim($sitemapConfig['url'], '/') === $pathInfo) {
+            if ('/'.trim($sitemapConfig['url'], '/') === $pathInfo) {
                 return [
                     '_controller' => 'Softspring\CmsBundle\Controller\SitemapController::sitemap',
                     'sitemap' => $sitemap,
@@ -73,7 +73,7 @@ class UrlMatcher
             }
         }
 
-        if ($siteConfig['sitemaps_index']['enabled'] && '/' . trim($siteConfig['sitemaps_index']['url'], '/') === $pathInfo) {
+        if ($siteConfig['sitemaps_index']['enabled'] && '/'.trim($siteConfig['sitemaps_index']['url'], '/') === $pathInfo) {
             return [
                 '_controller' => 'Softspring\CmsBundle\Controller\SitemapController::index',
                 'site' => $site,
@@ -99,7 +99,7 @@ class UrlMatcher
 
                     if ($path['trailing_slash_on_root'] && '' === $pathInfo && !$pathInfoHasTrailingSlash) {
                         $url = parse_url($request->getUri());
-                        $url = sprintf('%s://%s%s', $url['scheme'], $url['host'], $url['path'] . '/');
+                        $url = sprintf('%s://%s%s', $url['scheme'], $url['host'], $url['path'].'/');
 
                         return $this->generateRedirect($url, Response::HTTP_MOVED_PERMANENTLY);
                     }
@@ -142,6 +142,7 @@ class UrlMatcher
                         $sfRoute = $route->getSymfonyRoute();
                         isset($attributes['_sfs_cms_locale']) && $sfRoute['route_params']['_sfs_cms_locale'] = $attributes['_sfs_cms_locale'];
                         isset($attributes['_sfs_cms_site']) && $sfRoute['route_params']['_sfs_cms_site'] = $attributes['_sfs_cms_site'];
+
                         return $this->generateRedirectToRoute($sfRoute, $route->getRedirectType() ?? Response::HTTP_FOUND);
 
                     default:
