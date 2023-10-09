@@ -82,7 +82,7 @@ class SymfonyRouteType extends AbstractType
                     $attr["data-route-parameter-$parameter"] = $route->getRequirement($parameter);
                 }
 
-                isset($attr['data-route-parameter']) && $attr['data-route-parameter'] = implode(' ;; ', (array)$attr['data-route-parameter']);
+                isset($attr['data-route-parameter']) && $attr['data-route-parameter'] = implode(' ;; ', (array) $attr['data-route-parameter']);
 
                 return $attr;
             },
