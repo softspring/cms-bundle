@@ -141,7 +141,7 @@ class UrlMatcher
                     case RouteInterface::TYPE_REDIRECT_TO_ROUTE:
                         $sfRoute = $route->getSymfonyRoute();
                         isset($attributes['_sfs_cms_locale']) && $sfRoute['route_params']['_sfs_cms_locale'] = $attributes['_sfs_cms_locale'];
-                        isset($attributes['_sfs_cms_site']) && $sfRoute['route_params']['_sfs_cms_site'] = $attributes['_sfs_cms_site'];
+                        $sfRoute['route_params']['_sfs_cms_site'] = $site;
 
                         return $this->generateRedirectToRoute($sfRoute, $route->getRedirectType() ?? Response::HTTP_FOUND);
 
