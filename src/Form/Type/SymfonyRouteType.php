@@ -68,8 +68,8 @@ class SymfonyRouteType extends AbstractType
             'choice_label' => function (?Route $route) {
                 return $route ? $route->getDefault('_form___route_name') : '';
             },
-            'choice_value' => function (?Route $route) {
-                return $route ? $route->getDefault('_form___route_name') : '';
+            'choice_value' => function ($route) {
+                return $route instanceof Route ? $route->getDefault('_form___route_name') : ($route ? $route->getId() : '');
             },
             'choice_attr' => function (?Route $route) {
                 $attr = [];
@@ -82,7 +82,7 @@ class SymfonyRouteType extends AbstractType
                     $attr["data-route-parameter-$parameter"] = $route->getRequirement($parameter);
                 }
 
-                isset($attr['data-route-parameter']) && $attr['data-route-parameter'] = implode(' ;; ', (array) $attr['data-route-parameter']);
+                isset($attr['data-route-parameter']) && $attr['data-route-parameter'] = implode(' ;; ', (array)$attr['data-route-parameter']);
 
                 return $attr;
             },
