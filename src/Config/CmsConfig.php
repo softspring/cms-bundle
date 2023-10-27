@@ -184,8 +184,12 @@ class CmsConfig
                     if (!isset($this->siteConfigs["$siteEntity"])) {
                         $this->siteManager->deleteEntity($siteEntity);
                     } else {
-                        $siteEntity->setConfig($this->siteConfigs["$siteEntity"]);
-                        $this->siteManager->saveEntity($siteEntity);
+                        $entityConfig = $siteEntity->getConfig();
+                        $cmsConfig = $this->siteConfigs["$siteEntity"];
+                        if ($entityConfig != $cmsConfig) {
+                            $siteEntity->setConfig($cmsConfig);
+                            $this->siteManager->saveEntity($siteEntity);
+                        }
                         $this->siteEntities["$siteEntity"] = $siteEntity;
                     }
                 }
