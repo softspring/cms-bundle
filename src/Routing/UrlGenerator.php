@@ -118,7 +118,7 @@ class UrlGenerator
      */
     public function getRouteAttributes($routeOrName): string
     {
-        $route = $routeOrName instanceof RouteInterface ? $routeOrName : (is_array($routeOrName) ? $this->getRoute($routeOrName['route_name']) : $this->getRoute($routeOrName));
+        $route = $routeOrName instanceof RouteInterface ? $routeOrName : (is_array($routeOrName) ? $this->getRoute($routeOrName['route_name']) : $this->getRoute($routeOrName, true));
 
         if (!$route) {
             return '';
@@ -165,7 +165,7 @@ class UrlGenerator
         return $path->getCompiledPath();
     }
 
-    protected function getRoute($routeName): ?RouteInterface
+    protected function getRoute($routeName, bool $silence = false): ?RouteInterface
     {
         if (!$routeName) {
             $this->cmsLogger && $this->cmsLogger->error('Empty route');
@@ -175,7 +175,7 @@ class UrlGenerator
 
         $route = $this->routeManager->getRepository()->findOneById($routeName);
 
-        if (!$route) {
+        if (!$route && !$silence) {
             $this->cmsLogger && $this->cmsLogger->error(sprintf('Route %s not found', $routeName));
         }
 
