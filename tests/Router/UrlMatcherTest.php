@@ -70,7 +70,7 @@ class UrlMatcherTest extends TestCase
         $this->assertEquals([
             '_controller' => 'Softspring\CmsBundle\Controller\RedirectController::redirectToUrl',
             'url' => 'https://example.org/redirect',
-            'statusCode' => 301,
+            'statusCode' => 308,
         ], $attributes);
     }
 
@@ -93,7 +93,7 @@ class UrlMatcherTest extends TestCase
         $this->assertEquals([
             '_controller' => 'Softspring\CmsBundle\Controller\RedirectController::redirectToUrl',
             'url' => 'https://example.org/redirect',
-            'statusCode' => 301,
+            'statusCode' => 308,
         ], $attributes);
     }
 

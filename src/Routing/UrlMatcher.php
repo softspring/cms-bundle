@@ -41,11 +41,11 @@ class UrlMatcher
         $siteHostConfig = $request->attributes->get('_sfs_cms_site_host_config');
 
         if ($siteConfig['https_redirect'] && 'http' === $request->getScheme()) {
-            return $this->generateRedirect($this->siteResolver->getCanonicalRedirectUrl($site, $request), Response::HTTP_MOVED_PERMANENTLY);
+            return $this->generateRedirect($this->siteResolver->getCanonicalRedirectUrl($site, $request), Response::HTTP_PERMANENTLY_REDIRECT);
         }
 
         if ($siteHostConfig['redirect_to_canonical']) {
-            return $this->generateRedirect($this->siteResolver->getCanonicalRedirectUrl($site, $request), Response::HTTP_MOVED_PERMANENTLY);
+            return $this->generateRedirect($this->siteResolver->getCanonicalRedirectUrl($site, $request), Response::HTTP_PERMANENTLY_REDIRECT);
         }
 
         $pathInfo = $request->getPathInfo();
@@ -56,7 +56,7 @@ class UrlMatcher
                 case 'redirect_to_route_with_user_language':
                     $userLocale = $request->getPreferredLanguage($siteConfig['locales']);
 
-                    return $this->generateRedirect($this->urlGenerator->getUrl($siteConfig['slash_route']['route'], $userLocale), $siteConfig['slash_route']['redirect_code'] ?: Response::HTTP_FOUND);
+                    return $this->generateRedirect($this->urlGenerator->getUrl($siteConfig['slash_route']['route'], $userLocale), $siteConfig['slash_route']['redirect_code'] ?: Response::HTTP_TEMPORARY_REDIRECT);
 
                 default:
                     throw new \Exception('Not yet implemented');
@@ -101,7 +101,7 @@ class UrlMatcher
                         $url = parse_url($request->getUri());
                         $url = sprintf('%s://%s%s', $url['scheme'], $url['host'], $url['path'].'/');
 
-                        return $this->generateRedirect($url, Response::HTTP_MOVED_PERMANENTLY);
+                        return $this->generateRedirect($url, Response::HTTP_PERMANENTLY_REDIRECT);
                     }
                 }
             }
@@ -123,7 +123,7 @@ class UrlMatcher
             }
 
             if (empty($attributes['_sfs_cms_locale_path']) && $siteConfig['locale_path_redirect_if_empty']) {
-                return $this->generateRedirect($this->urlGenerator->getUrl($route->getId(), $routePath->getLocale()), $siteConfig['slash_route']['redirect_code'] ?: Response::HTTP_FOUND);
+                return $this->generateRedirect($this->urlGenerator->getUrl($route->getId(), $routePath->getLocale()), $siteConfig['slash_route']['redirect_code'] ?: Response::HTTP_TEMPORARY_REDIRECT);
             }
 
             if ($attributes['_sfs_cms_locale_path']) {
