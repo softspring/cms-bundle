@@ -3,6 +3,7 @@
 namespace Softspring\CmsBundle\Render;
 
 use Softspring\CmsBundle\Model\SiteInterface;
+use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -56,8 +57,10 @@ abstract class AbstractRenderer
         $this->router->getContext()->setParameter('_locale', $locale);
 
         // update translator context locale
-        $originTranslatorLocale = $this->translator->getLocale();
-        method_exists($this->translator, 'setLocale') && $this->translator->setLocale($locale);
+        if ($this->translator instanceof Translator) {
+            $originTranslatorLocale = $this->translator->getLocale();
+            $this->translator->setLocale($locale);
+        }
 
         // render for a specific request
         $this->requestStack->push($this->generateRequest($locale, $site));
@@ -65,7 +68,9 @@ abstract class AbstractRenderer
         $this->requestStack->pop();
 
         // restore translator context locale
-        method_exists($this->translator, 'setLocale') && $this->translator->setLocale($originTranslatorLocale);
+        if ($this->translator instanceof Translator && isset($originTranslatorLocale)) {
+            $this->translator->setLocale($originTranslatorLocale);
+        }
 
         // restore router context locale
         $this->router->getContext()->setParameter('_locale', $routingContextLocale);
