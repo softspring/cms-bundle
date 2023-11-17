@@ -14,6 +14,8 @@ use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\Utils\ModuleMigrator;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -36,9 +38,9 @@ class ContentRender extends AbstractRenderer
 
     protected array $profilerDebugCollectorData = [];
 
-    public function __construct(Environment $twig, CmsConfig $cmsConfig, RequestStack $requestStack, ?LoggerInterface $cmsLogger, ?Profiler $profiler)
+    public function __construct(Environment $twig, TranslatorInterface $translator, RouterInterface $router, CmsConfig $cmsConfig, RequestStack $requestStack, ?LoggerInterface $cmsLogger, ?Profiler $profiler)
     {
-        parent::__construct($requestStack);
+        parent::__construct($requestStack, $translator, $router);
         $this->twig = $twig;
         $this->cmsConfig = $cmsConfig;
         $this->cmsLogger = $cmsLogger;

@@ -8,23 +8,22 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\HttpCache\Esi;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 class BlockRenderer extends AbstractRenderer
 {
     protected CmsConfig $cmsConfig;
     protected Environment $twig;
-    protected RouterInterface $router;
     protected bool $profilerEnabled;
     protected bool $esiEnabled;
     protected array $profilerDebugCollectorData = [];
 
-    public function __construct(RequestStack $requestStack, CmsConfig $cmsConfig, Environment $twig, RouterInterface $router, ?Profiler $profiler, ?Esi $esi)
+    public function __construct(RequestStack $requestStack, TranslatorInterface $translator, CmsConfig $cmsConfig, Environment $twig, RouterInterface $router, ?Profiler $profiler, ?Esi $esi)
     {
-        parent::__construct($requestStack);
+        parent::__construct($requestStack, $translator, $router);
         $this->cmsConfig = $cmsConfig;
         $this->twig = $twig;
-        $this->router = $router;
         $this->profilerEnabled = (bool) $profiler;
         $this->esiEnabled = (bool) $esi;
     }

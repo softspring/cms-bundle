@@ -44,7 +44,7 @@ class BlockController extends AbstractController
                 $block = $this->getMoreRestrictiveBlock($this->blockManager->getRepository()->findByType($type));
 
                 if (!$block) {
-                    $this->cmsLogger && $this->cmsLogger->error(sprintf('CMS missing block %s', $type));
+                    $this->cmsLogger && $this->cmsLogger->notice(sprintf('CMS block %s not found', $type));
 
                     return new Response();
                 }

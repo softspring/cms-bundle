@@ -6,6 +6,8 @@ use Softspring\CmsBundle\Config\CmsConfig;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\HttpCache\Esi;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 class MenuRenderer extends AbstractRenderer
@@ -16,9 +18,9 @@ class MenuRenderer extends AbstractRenderer
     protected bool $esiEnabled;
     protected array $profilerDebugCollectorData = [];
 
-    public function __construct(RequestStack $requestStack, CmsConfig $cmsConfig, Environment $twig, ?Profiler $profiler, ?Esi $esi)
+    public function __construct(RequestStack $requestStack, TranslatorInterface $translator, RouterInterface $router, CmsConfig $cmsConfig, Environment $twig, ?Profiler $profiler, ?Esi $esi)
     {
-        parent::__construct($requestStack);
+        parent::__construct($requestStack, $translator, $router);
         $this->cmsConfig = $cmsConfig;
         $this->twig = $twig;
         $this->profilerEnabled = (bool) $profiler;

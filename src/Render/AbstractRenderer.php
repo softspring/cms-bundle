@@ -3,18 +3,27 @@
 namespace Softspring\CmsBundle\Render;
 
 use Softspring\CmsBundle\Model\SiteInterface;
+use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class AbstractRenderer
 {
     protected RequestStack $requestStack;
 
-    public function __construct(RequestStack $requestStack)
+    protected TranslatorInterface $translator;
+
+    protected RouterInterface $router;
+
+    public function __construct(RequestStack $requestStack, TranslatorInterface $translator, RouterInterface $router)
     {
         $this->requestStack = $requestStack;
+        $this->translator = $translator;
+        $this->router = $router;
     }
 
     protected function isPreview(): bool
@@ -43,9 +52,28 @@ abstract class AbstractRenderer
 
     protected function encapsulateRequestRender(SiteInterface $site, string $locale, callable $renderFunction)
     {
+        // update router context locale
+        $routingContextLocale = $this->router->getContext()->getParameter('_locale');
+        $this->router->getContext()->setParameter('_locale', $locale);
+
+        // update translator context locale
+        if ($this->translator instanceof Translator) {
+            $originTranslatorLocale = $this->translator->getLocale();
+            $this->translator->setLocale($locale);
+        }
+
+        // render for a specific request
         $this->requestStack->push($this->generateRequest($locale, $site));
         $result = $renderFunction();
         $this->requestStack->pop();
+
+        // restore translator context locale
+        if ($this->translator instanceof Translator) {
+            $this->translator->setLocale($originTranslatorLocale);
+        }
+
+        // restore router context locale
+        $this->router->getContext()->setParameter('_locale', $routingContextLocale);
 
         return $result;
     }
