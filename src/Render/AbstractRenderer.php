@@ -68,7 +68,7 @@ abstract class AbstractRenderer
         $this->requestStack->pop();
 
         // restore translator context locale
-        if ($this->translator instanceof Translator && isset($originTranslatorLocale)) {
+        if ($this->translator instanceof Translator) {
             $this->translator->setLocale($originTranslatorLocale);
         }
 
