@@ -1,6 +1,9 @@
-<div class="row pt-3">
-    <div class="col-12">
-        {{ form_row(form.code, {'attr': {'style': 'min-height: 400px'}}) }}
-    </div>
-</div>
-{{ form_rest(form) }}
+{% embed '@SfsCms/forms/modules_form_block.html.twig' with { 'name': 'code', 'accordion': accordion, 'open': true } %}
+    {% block form %}
+        <div class="row">
+            <div class="col-12">
+                {{ form_row(form.code, {'attr': {'style': 'min-height: 400px'}}) }}
+            </div>
+        </div>
+    {% endblock %}
+{% endembed %}

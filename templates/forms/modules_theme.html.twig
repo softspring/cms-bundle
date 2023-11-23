@@ -133,7 +133,7 @@
                 {# form_name #}
                 <button type="button" class="btn-close" data-cms-module-form-close="" aria-label="Close"></button>
             </div>
-            <div class="container text-start">
+            <div class="text-start">
                 {% if form.vars.errors|length %}
                     <div class="alert alert-danger mt-3" role="alert">
                         {%- for error in form.vars.errors -%}
@@ -157,22 +157,38 @@
                     <div class="alert alert-warning mt-3" role="alert">{{ form.vars.deprecated }}</div>
                 {% endif %}
 
-                {% if form.site_filter is defined %}
-                    {{ form_label(form.site_filter) }}
-                    {{ form_widget(form.site_filter) }}
-                {% endif %}
+                {{ form_widget(form._module) }}
+                {{ form_widget(form._revision) }}
 
-                {% if form.locale_filter is defined %}
-                    {{ form_label(form.locale_filter) }}
-                    {{ form_widget(form.locale_filter) }}
-                {% endif %}
+                <div class="accordion accordion-flush" id="moduleForm-{{ id }}">
+                    {% if form.site_filter is defined or form.locale_filter is defined %}
+                        {% embed '@SfsCms/forms/modules_form_block.html.twig' with { 'name': 'filters', 'accordion': 'moduleForm-'~id } %}
+                            {% block form %}
+                                {% if form.site_filter is defined %}
+                                    {{ form_label(form.site_filter) }}
+                                    {{ form_widget(form.site_filter) }}
+                                {% endif %}
 
-                {% if form_template|default(false) %}
-                    {% include form_template %}
-                    {{ form_rest(form) }}
-                {% else %}
-                    {{ form_widget(form) }}
-                {% endif %}
+                                {% if form.locale_filter is defined %}
+                                    {{ form_label(form.locale_filter) }}
+                                    {{ form_widget(form.locale_filter) }}
+                                {% endif %}
+                            {% endblock %}
+                        {% endembed %}
+                    {% endif %}
+
+                    {% if form_template|default(false) %}
+                        {% include form_template with {'accordion': 'moduleForm-'~id} %}
+                    {% endif %}
+
+                    {% if form|filter(child => not child.rendered)|length %}
+                        {% embed '@SfsCms/forms/modules_form_block.html.twig' with { 'name': 'others', 'accordion': 'moduleForm-'~id } %}
+                            {% block form %}
+                                {{ form_rest(form) }}
+                            {% endblock %}
+                        {% endembed %}
+                     {% endif %}
+                </div>
             </div>
         </div>
     </div>

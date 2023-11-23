@@ -3,6 +3,11 @@ block_static:
     prototype_button: "Static block"
     prototype_button_icon: '<i class="bi bi-puzzle-fill"></i>'
     form:
+        _group:
+            filters: "Filters"
+            others: "Others"
+            attributes: "Attributes"
+            block: "Block"
         locale_filter.label: "Locales"
         site_filter.label: "Sites"
         id.label: "Id"
