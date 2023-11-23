@@ -1,6 +1,10 @@
 admin:
     global_breadcrumb: "CMS"
 
+admin_content:
+    content:
+        max_input_vars_raw: "You have reached the max_input_vars (%maxInputVars%). Please remove some fields to continue. <br/>If you need to increase this limit, please contact your provider."
+
 admin_blocks:
     list:
         meta.title: "Blocks"

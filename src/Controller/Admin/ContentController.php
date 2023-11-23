@@ -590,6 +590,9 @@ class ContentController extends AbstractController
             'layout' => $this->cmsConfig->getLayout($version->getLayout()),
             'form' => $form->createView(),
             'enabledLocales' => $this->enabledLocales,
+
+            // @see https://www.php.net/manual/en/info.configuration.php#ini.max-input-vars
+            'maxInputVars' => ini_get('max_input_vars'),
         ]);
         //
         //        $this->dispatchFromConfig($config, 'view_event_name', new ViewEvent($viewData));
