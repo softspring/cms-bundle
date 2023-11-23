@@ -9,8 +9,7 @@ class ResolvePluginDoctrineTargetEntityPass extends AbstractResolveDoctrineTarge
 {
     public function __construct(
         protected array $targetEntities = [],
-    )
-    {
+    ) {
     }
 
     protected function getEntityManagerName(ContainerBuilder $container): string

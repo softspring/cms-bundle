@@ -81,6 +81,6 @@ class SfsCmsPlugin extends Bundle
     {
         $basename = preg_replace('/Plugin$/', '', $this->getName());
 
-        return $this->getNamespace() . '\\DependencyInjection\\' . $basename . 'Extension';
+        return $this->getNamespace().'\\DependencyInjection\\'.$basename.'Extension';
     }
 }
