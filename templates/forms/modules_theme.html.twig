@@ -165,13 +165,15 @@
                         {% embed '@SfsCms/forms/modules_form_block.html.twig' with { 'name': 'filters', 'accordion': 'moduleForm-'~id } %}
                             {% block form %}
                                 {% if form.site_filter is defined %}
-                                    {{ form_label(form.site_filter) }}
-                                    {{ form_widget(form.site_filter) }}
+                                    <div class="col-12">
+                                        {{ form_row(form.site_filter) }}
+                                    </div>
                                 {% endif %}
 
                                 {% if form.locale_filter is defined %}
-                                    {{ form_label(form.locale_filter) }}
-                                    {{ form_widget(form.locale_filter) }}
+                                    <div class="col-12">
+                                        {{ form_row(form.locale_filter) }}
+                                    </div>
                                 {% endif %}
                             {% endblock %}
                         {% endembed %}

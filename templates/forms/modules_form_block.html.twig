@@ -1,5 +1,7 @@
 {% set itemId = 'block_'~random(1..100000) %}
 {% set open = open is defined ? open : false %}
+{% set row = row is defined ? row : true %}
+
 <div class="accordion-item">
     <h2 class="accordion-header" id="{{ itemId }}-heading">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#{{ itemId }}-collapse"
@@ -9,7 +11,9 @@
     </h2>
     <div id="{{ itemId }}-collapse" class="accordion-collapse collapse {{ open ? 'show' : '' }}" aria-labelledby="{{ itemId }}-heading" {% if accordion|default(false) %}data-bs-parent="#{{ accordion }}"{% endif %}>
         <div class="accordion-body">
+            {% if row %}<div class="row">{% endif %}
             {% block form %}{% endblock %}
+            {% if row %}</div>{% endif %}
         </div>
     </div>
 </div>
