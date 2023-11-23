@@ -17,7 +17,7 @@
             <join-column name="content_id" on-delete="CASCADE"/>
         </many-to-one>
 
-        <many-to-many field="medias" target-entity="Softspring\MediaBundle\Model\MediaInterface">
+        <many-to-many field="medias" target-entity="Softspring\MediaBundle\Model\MediaInterface" fetch="EXTRA_LAZY">
             <join-table name="cms_content_version_medias">
                 <join-columns>
                     <join-column name="content_version_id" referenced-column-name="id" on-delete="CASCADE" />
@@ -28,7 +28,7 @@
             </join-table>
         </many-to-many>
 
-        <many-to-many field="routes" target-entity="Softspring\CmsBundle\Model\RouteInterface">
+        <many-to-many field="routes" target-entity="Softspring\CmsBundle\Model\RouteInterface" fetch="EXTRA_LAZY">
             <join-table name="cms_content_version_routes">
                 <join-columns>
                     <join-column name="content_version_id" referenced-column-name="id" on-delete="CASCADE" />
