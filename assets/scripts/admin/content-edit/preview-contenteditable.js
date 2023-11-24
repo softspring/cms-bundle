@@ -97,4 +97,116 @@ window.addEventListener('load', (event) => {
             }
         }
     });
+
+    /** ************************************************************************************************************ *
+     * Highlighting input and target elements on focus on linked elements
+     * ************************************************************************************************************* */
+
+    /**
+     * Show accordion item, same as click on it
+     */
+    function accordionItemShow(accordionItem)    {
+        let formGroupCollapse = accordionItem.querySelector('.collapse');
+        let formGroupButton = accordionItem.querySelector('.accordion-header button');
+
+        formGroupCollapse.classList.add('show');
+        formGroupCollapse.classList.remove('d-none');
+        formGroupButton.setAttribute('aria-expanded', 'true');
+        formGroupButton.classList.remove('collapsed');
+    }
+
+    /**
+     * Hide accordion item
+     */
+    function accordionItemHide(accordionItem)    {
+        let formGroupCollapse = accordionItem.querySelector('.collapse');
+        let formGroupButton = accordionItem.querySelector('.accordion-header button');
+
+        formGroupCollapse.classList.remove('show');
+        formGroupCollapse.classList.add('d-none');
+        formGroupButton.setAttribute('aria-expanded', 'false');
+        formGroupButton.classList.add('collapsed');
+    }
+
+    /**
+     * Show form group accordion item, and hide the rest
+     */
+    function showFormGroup(accordionElement)    {
+        accordionItemShow(accordionElement);
+
+        let accordion = accordionElement.closest('.accordion');
+        let accordionItems = accordion.querySelectorAll('.accordion-item');
+        accordionItems.forEach(function(accordionItem) {
+            if (accordionItem !== accordionElement) {
+                accordionItemHide(accordionItem);
+            }
+        });
+    }
+
+    /**
+     * On focus in and input, highlights the target element
+     */
+    window.addEventListener('focusin', function (event) {
+        if (!event.target || !event.target.hasAttribute('data-edit-content-input')) return;
+
+        let modulePreview = event.target.closest('.cms-module-edit').querySelector('.module-preview');
+
+        let htmlTargetElements = modulePreview.querySelectorAll("[data-edit-content-target='" + event.target.dataset.editContentInput + "']");
+        if (htmlTargetElements.length) {
+            htmlTargetElements.forEach(function(htmlTargetElement) {
+                htmlTargetElement.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
+                htmlTargetElement.classList.add('edit-content-linked-focus');
+            });
+        }
+    });
+
+    /**
+     * On focus in a content editable element, highlights the input element
+     */
+    window.addEventListener('focusin', function (event) {
+        if (!event.target || !event.target.hasAttribute('data-edit-content-target')) return;
+
+        let moduleForm = event.target.closest('.cms-module-edit').querySelector('.cms-module-form');
+
+        let htmlInputElements = moduleForm.querySelectorAll("[data-edit-content-input='" + event.target.dataset.editContentTarget + "']");
+        if (htmlInputElements.length) {
+            htmlInputElements.forEach(function(htmlInputElement) {
+                htmlInputElement.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
+                htmlInputElement.classList.add('edit-content-linked-focus');
+                showFormGroup(htmlInputElement.closest('.accordion-item'));
+            });
+        }
+    });
+
+    /**
+     * On focus out and input, un-highlights the target element
+     */
+    window.addEventListener('focusout', function (event) {
+        if (!event.target || !event.target.hasAttribute('data-edit-content-input')) return;
+
+        let modulePreview = event.target.closest('.cms-module-edit').querySelector('.module-preview');
+
+        let htmlTargetElements = modulePreview.querySelectorAll("[data-edit-content-target='" + event.target.dataset.editContentInput + "']");
+        if (htmlTargetElements.length) {
+            htmlTargetElements.forEach(function(htmlTargetElement) {
+                htmlTargetElement.classList.remove('edit-content-linked-focus');
+            });
+        }
+    });
+
+    /**
+     * On focus out a content editable element, un-highlights the input element
+     */
+    window.addEventListener('focusout', function (event) {
+        if (!event.target || !event.target.hasAttribute('data-edit-content-target')) return;
+
+        let moduleForm = event.target.closest('.cms-module-edit').querySelector('.cms-module-form');
+
+        let htmlInputElements = moduleForm.querySelectorAll("[data-edit-content-input='" + event.target.dataset.editContentTarget + "']");
+        if (htmlInputElements.length) {
+            htmlInputElements.forEach(function(htmlInputElement) {
+                htmlInputElement.classList.remove('edit-content-linked-focus');
+            });
+        }
+    });
 });
