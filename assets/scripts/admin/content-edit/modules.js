@@ -87,6 +87,14 @@ window.addEventListener('load', (event) => {
         filterCurrentFilterElements();
     });
 
+    document.addEventListener("polymorphic.node.duplicate.after", function (event) { // (1)
+        var module = event.target.querySelector('.cms-module');
+        if (module) {
+            moduleFocus(module);
+        }
+        filterCurrentFilterElements();
+    });
+
     const prototypesModal = document.getElementById('module_prototypes_collection_modal');
     let modulesCollection;
     let modulesCollectionInsertIndex;
