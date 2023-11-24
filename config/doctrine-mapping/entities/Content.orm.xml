@@ -18,7 +18,7 @@
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>
 
-        <many-to-many field="sites" target-entity="Softspring\CmsBundle\Model\SiteInterface">
+        <many-to-many field="sites" target-entity="Softspring\CmsBundle\Model\SiteInterface" fetch="EXTRA_LAZY">
             <cache usage="NONSTRICT_READ_WRITE" />
             <cascade>
                 <cascade-persist/>
@@ -33,7 +33,7 @@
             </join-table>
         </many-to-many>
 
-        <one-to-many field="versions" target-entity="Softspring\CmsBundle\Model\ContentVersionInterface" mapped-by="content">
+        <one-to-many field="versions" target-entity="Softspring\CmsBundle\Model\ContentVersionInterface" mapped-by="content" fetch="EXTRA_LAZY">
             <cache usage="NONSTRICT_READ_WRITE" />
             <cascade>
                 <cascade-persist/>
@@ -43,7 +43,7 @@
             </order-by>
         </one-to-many>
 
-        <many-to-one field="publishedVersion" target-entity="Softspring\CmsBundle\Model\ContentVersionInterface">
+        <many-to-one field="publishedVersion" target-entity="Softspring\CmsBundle\Model\ContentVersionInterface" fetch="EAGER">
             <cache usage="NONSTRICT_READ_WRITE" />
             <join-column name="published_version_id" on-delete="SET NULL"/>
         </many-to-one>
