@@ -1,3 +1,5 @@
+import {filterCurrentFilterElements} from "./filter-preview";
+
 function localeHideModules(locale) {
     document.querySelectorAll('[data-cms-module-locale-filter][value='+locale+']').forEach(function (widget) {
         let localeVisible = widget.checked;
@@ -38,6 +40,13 @@ window.addEventListener('load', (event) => {
 
         localeHideModules(contentEditionLanguageSelector.value);
     }
+
+    window.addEventListener('focusin', function (event) {
+        if (!event.target || !event.target.hasAttribute('data-input-lang')) return;
+
+        document.getElementById('contentEditionLanguageSelection').value = event.target.getAttribute('data-input-lang');
+        filterCurrentFilterElements();
+    });
 });
 
 export { localeHideModules };
