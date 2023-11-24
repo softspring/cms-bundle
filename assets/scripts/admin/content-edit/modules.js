@@ -87,6 +87,14 @@ window.addEventListener('load', (event) => {
         filterCurrentFilterElements();
     });
 
+    document.addEventListener("polymorphic.node.duplicate.after", function (event) { // (1)
+        var module = event.target.querySelector('.cms-module');
+        if (module) {
+            moduleFocus(module);
+        }
+        filterCurrentFilterElements();
+    });
+
     const prototypesModal = document.getElementById('module_prototypes_collection_modal');
     let modulesCollection;
     let modulesCollectionInsertIndex;
@@ -193,4 +201,27 @@ window.addEventListener('load', (event) => {
             contentEditableElement.focus();
         }
     });
+
+    /**
+     * max_input_vars is defined in templates/admin/content/content.html.twig and is get from php options
+     */
+    function checkMaxInputVars()
+    {
+        let currentInputVars = document.querySelectorAll('input, textarea, select').length;
+        const buttons = document.querySelectorAll('#submitBtnGroupDrop1,#defaultSubmitBtn');
+        const maxInputVarsMessage = document.getElementById('maxInputVarsMessage');
+
+        if (currentInputVars > max_input_vars) {
+            [...buttons].forEach((button) => button.classList.add('disabled'));
+            maxInputVarsMessage.classList.remove('d-none');
+        } else {
+            [...buttons].forEach((button) => button.classList.remove('disabled'));
+            maxInputVarsMessage.classList.add('d-none');
+        }
+    }
+
+    document.addEventListener("polymorphic.node.delete.after", checkMaxInputVars);
+    document.addEventListener("polymorphic.node.insert.after", checkMaxInputVars);
+    document.addEventListener("polymorphic.node.add.after", checkMaxInputVars);
+    document.addEventListener("polymorphic.node.duplicate.after", checkMaxInputVars);
 });

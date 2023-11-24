@@ -1,6 +1,10 @@
 admin:
     global_breadcrumb: "CMS"
 
+admin_content:
+    content:
+        max_input_vars_raw: "Has alcanzado el número máximo de campos soportados (%maxInputVars%). Por favor, elimina algunos módulos para continuar. <br/>Si es necesario incrementar este límite habla con tu proveedor."
+
 admin_blocks:
     list:
         meta.title: "Bloques"

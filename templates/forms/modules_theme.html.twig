@@ -86,22 +86,21 @@
 {#{% block module_collection_entry %}#}
 {#{% endblock module_collection_entry %}#}
 
+{% block module_buttons %}
+    <div class="cms-module-buttons ps-2">
+        <button type="button" id="{{ id }}_up_node_button" data-polymorphic-action="up"><span class="bi bi-chevron-up h2"></span><span class="visually-hidden">^</span></button>
+        <button type="button" id="{{ id }}_down_node_button" data-polymorphic-action="down"><span class="bi bi-chevron-down h2"></span><span class="visually-hidden">v</span></button>
+        <button type="button" id="{{ id }}_duplicate_node_button" data-polymorphic-action="duplicate"><span class="bi bi-copy h2"></span><span class="visually-hidden">D</span></button>
+        <button type="button" id="{{ id }}_remove_node_button" data-polymorphic-action="delete" class="btn-close"><span class="visually-hidden">x</span></button>
+    </div>
+{% endblock %}
+
 {% block dynamic_form_module_row %}
     <div data-polymorphic="node" {{ block('widget_container_attributes') }}>
         <div class="insert-module" data-polymorphic-position="before"  data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal" title="Insert module here"></div>
         <div class="cms-module {{ form.vars.deprecated?'cms-module-deprecated':'' }} {% if form.vars.module_errors|length %}has-errors{% endif %}">
             <div class="cms-module-header">
-                <div class="cms-module-title">
-                    {#                    <span class="order-polymorphic-node" id="{{ id }}_order_index">{{ form.vars.name }}</span>##}
-                    {#                    {{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}#}
-                    {# form_name #}
-                </div>
-
-                <div class="cms-module-buttons">
-                    <button type="button" id="{{ id }}_up_node_button" data-polymorphic-action="up"><span class="bi bi-chevron-up h2"></span><span class="visually-hidden">^</span></button>
-                    <button type="button" id="{{ id }}_down_node_button" data-polymorphic-action="down"><span class="bi bi-chevron-down h2"></span><span class="visually-hidden">v</span></button>
-                    <button type="button" id="{{ id }}_remove_node_button" data-polymorphic-action="delete" class="btn-close ms-3"><span class="visually-hidden">x</span></button>
-                </div>
+                {{ block('module_buttons') }}
             </div>
             <div class="cms-module-body">
                 {{ form_widget(form) }}
@@ -201,17 +200,7 @@
         <div class="insert-module" data-polymorphic-position="before" data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal" title="Insert module here"></div>
         <div class="cms-module {{ form.vars.deprecated?'cms-module-deprecated':'' }}">
             <div class="cms-module-header">
-                <div class="cms-module-title">
-                    {#                    <span class="order-polymorphic-node" id="{{ id }}_order_index">{{ form.vars.name }}</span>##}
-                    {#                    {{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}#}
-                    {# form_name #}
-                </div>
-
-                <div class="cms-module-buttons">
-                    <button type="button" id="{{ id }}_down_node_button" data-polymorphic-action="down"><span class="bi bi-chevron-down h2"></span><span class="visually-hidden">v</span></button>
-                    <button type="button" id="{{ id }}_up_node_button" data-polymorphic-action="up"><span class="bi bi-chevron-up h2"></span><span class="visually-hidden">^</span></button>
-                    <button type="button" id="{{ id }}_remove_node_button" data-polymorphic-action="delete" class="btn-close ms-3"><span class="visually-hidden">x</span></button>
-                </div>
+                {{ block('module_buttons') }}
             </div>
             <div class="cms-module-body">
                 {{ form_widget(form) }}{{ form_errors(form) }}
@@ -274,17 +263,7 @@
 
         <div class="cms-module {{ form.vars.deprecated?'cms-module-deprecated':'' }}">
             <div class="cms-module-header">
-                <div class="cms-module-title">
-                    {#                    <span class="order-polymorphic-node" id="{{ id }}_order_index">{{ form.vars.name }}</span>##}
-                    {#                    {{ form.vars.label|trans(form.vars.label_translation_parameters, form.vars.translation_domain) }}#}
-                    {# form_name #}
-                </div>
-
-                <div class="cms-module-buttons">
-                    <button type="button" id="{{ id }}_down_node_button" data-polymorphic-action="down"><span class="bi bi-chevron-down"></span><span class="visually-hidden">v</span></button>
-                    <button type="button" id="{{ id }}_up_node_button" data-polymorphic-action="up"><span class="bi bi-chevron-up"></span><span class="visually-hidden">^</span></button>
-                    <button type="button" id="{{ id }}_remove_node_button" data-polymorphic-action="delete" class="btn-close ms-3"><span class="visually-hidden">x</span></button>
-                </div>
+                {{ block('module_buttons') }}
             </div>
             <div class="cms-module-body">
                 {{ form_widget(form) }}{{ form_errors(form) }}
