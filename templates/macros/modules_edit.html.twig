@@ -158,6 +158,16 @@
 {%- endapply -%}
 {%- endmacro -%}
 
+{#
+ # This macro inserts data attribute for inserting module on pressing enter
+ # @see assets/scripts/admin/content-edit/content-enter-inserts-module.js
+ #}
+{%- macro enter_inserts_module (moduleId) -%}
+{%- apply spaceless -%}
+    data-edit-content-enter-inserts-module="{{ moduleId }}"
+{%- endapply -%}
+{%- endmacro -%}
+
 {%- macro _module_name (formField) -%}
 {%- apply spaceless -%}
     {% if formField.parent._module is defined %}
