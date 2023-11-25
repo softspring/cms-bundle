@@ -7,6 +7,7 @@ container:
             filters: "Filtros"
             others: "Otros"
             attributes: "Atributos"
+            properties: "Propiedades"
         locale_filter.label: "Idiomas"
         site_filter.label: "Sites"
         modules.label: "Módulos"
