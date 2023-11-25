@@ -1,0 +1,8 @@
+debug:
+    label: "Debug"
+    prototype_button: "Debug"
+    prototype_button_icon: '<i class="bi bi-bug"></i>'
+    form:
+        _group:
+            filters: "Filtros"
+        locale_filter.label: "Idiomas"
