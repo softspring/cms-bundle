@@ -173,7 +173,8 @@ window.addEventListener('load', (event) => {
         modulesCollection = null;
         modulesCollectionInsertIndex = null;
 
-        Modal.getInstance(prototypesModal).hide();
+        const modal = Modal.getInstance(prototypesModal);
+        modal && modal.hide();
     });
 
     /**
@@ -196,7 +197,8 @@ window.addEventListener('load', (event) => {
             up.classList.add('bi-chevron-left');
         }
 
-        Modal.getInstance(prototypesModal).hide();
+        const modal = Modal.getInstance(prototypesModal);
+        modal && modal.hide();
 
         moduleFocus(event.node().querySelector('.cms-module'));
 
