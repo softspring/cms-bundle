@@ -1,21 +1,22 @@
 {% import '@SfsCms/macros/modules_edit.html.twig' as module %}
 
-<div class="row border border-2 module-container">
-    {{ form_row(form.modules, {
-        'container': {
-            'attr': {
-                'id': form.id.vars.data,
-                'class': 'py-5 '~form.class.vars.data|default(''),
-                'data-edit-id-target': 'gridIdDiv',
-                'data-edit-class-target': 'gridClassDiv',
-                'data-edit-class-default': 'p-2',
-                'data-edit-bgcolor-target': 'gridColorDiv',
-                'data-edit-collection-node-class-target': 'gridCollection',
-                'style': form.bg_color.vars.data ? 'background-color:'~form.bg_color.vars.data : ''
-            }
-        },
+{{ form_row(form.modules, {
+    'container': {
         'attr': {
-            'data-module-row-class': form.node_row_class.vars.data|default(form.node_row_class_custom.vars.data|default('col mb-4'))
+            'id': form.id.vars.data,
+            'data-edit-id-target': 'gridDivId',
+
+            'class': 'py-5 '~(form.class.vars.data|default),
+            'data-edit-class-target': 'gridDivClass',
+            'data-edit-class-default': 'py-5',
+
+            'data-edit-bgcolor-target': 'gridDivBgColor',
+            'style': form.bg_color.vars.data ? 'background-color:'~form.bg_color.vars.data : '',
+
+            'data-edit-collection-node-class-target': 'gridCollection',
         }
-    }) }}
-</div>
+    },
+    'attr': {
+        'data-module-row-class': form.node_row_class.vars.data|default(form.node_row_class_custom.vars.data|default('col mb-4'))
+    }
+}) }}

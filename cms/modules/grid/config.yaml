@@ -2,6 +2,7 @@ module:
     revision: 1
     group: 'container'
     edit_template: '@module/grid/edit.html.twig'
+    form_template: '@module/grid/form.html.twig'
     module_type: 'Softspring\CmsBundle\Form\Module\ContainerModuleType'
     module_options:
         module_collection_class: 'row'
@@ -11,16 +12,26 @@ module:
         form_fields:
             id:
                 type: 'id'
+                type_options:
+                    attr:
+                        data-edit-id-input: 'gridDivId'
 
             class:
                 type: 'class'
+                type_options:
+                    attr:
+                        data-edit-class-input: 'gridDivClass'
 
             bg_color:
                 type: 'color'
+                type_options:
+                    attr:
+                        data-edit-bgcolor-input: 'gridDivBgColor'
 
             node_row_class:
                 type: 'choice'
                 type_options:
+                    default_value: 'col'
                     choices:
                         "grid.form.node_row_class.values.col": 'col'
                         "grid.form.node_row_class.values.col-1": 'col-1'

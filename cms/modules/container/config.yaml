@@ -12,10 +12,16 @@ module:
         form_fields:
             id:
                 type: 'id'
+                type_options:
+                    attr:
+                        data-edit-id-input: 'containerDivId'
 
             class:
                 type: 'class'
-                
+                type_options:
+                    attr:
+                        data-edit-class-input: 'containerDivClass'
+
             container_type:
                 type: 'choice'
                 type_options:
@@ -23,6 +29,8 @@ module:
                     choices:
                         "container.form.container_type.values.container": 'container'
                         "container.form.container_type.values.fluid": 'container-fluid'
+                    attr:
+                        data-edit-class-input: 'containerDivClass'
                         
             tag_type:
                 type: 'choice'
@@ -35,3 +43,6 @@ module:
 
             bg_color:
                 type: 'color'
+                type_options:
+                    attr:
+                        data-edit-bgcolor-input: 'containerDivBgColor'
