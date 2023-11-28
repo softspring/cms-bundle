@@ -97,7 +97,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for version in entity.versions|slice(0,3) %}
+                    {% for version in entityLatestVersions %}
                         <tr>
                             <td>v{{ version.versionNumber }} {% if version.hasCompileErrors %}<i class="bi bi-exclamation-triangle text-warnging" title="This version has some compilation error"></i>{% endif %}</td>
                             <td>{{ ('admin_'~content~'.versions.origin.'~(version.origin|default('null')))|trans }}</td>
