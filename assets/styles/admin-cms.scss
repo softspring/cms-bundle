@@ -390,6 +390,12 @@ body {
     background-color: #f1f1f1;
 }
 
+[contenteditable]:focus-visible {
+    outline: none !important;
+}
+[contenteditable]:focus {
+    box-shadow: 0 0 15px rgba($primary, .5) !important;
+}
 .edit-content-linked-focus {
     box-shadow: 0 0 15px rgba($primary, .5);
 }
