@@ -11,12 +11,12 @@
         <field name="redirectUrl" column="redirect_url" type="text" nullable="true"/>
         <field name="symfonyRoute" column="symfony_route" type="json" nullable="true"/>
 
-        <many-to-one field="content" target-entity="Softspring\CmsBundle\Model\ContentInterface" inversed-by="routes">
+        <many-to-one field="content" target-entity="Softspring\CmsBundle\Model\ContentInterface" inversed-by="routes" fetch="EXTRA_LAZY">
             <cache usage="NONSTRICT_READ_WRITE" />
             <join-column name="content_id" referenced-column-name="id" on-delete="CASCADE" />
         </many-to-one>
 
-        <many-to-one field="parent" target-entity="Softspring\CmsBundle\Model\RouteInterface" inversed-by="children">
+        <many-to-one field="parent" target-entity="Softspring\CmsBundle\Model\RouteInterface" inversed-by="children" fetch="EXTRA_LAZY">
             <cache usage="NONSTRICT_READ_WRITE" />
             <join-column name="parent_id" referenced-column-name="id" on-delete="RESTRICT" />
         </many-to-one>
