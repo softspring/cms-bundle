@@ -43,7 +43,7 @@
             </order-by>
         </one-to-many>
 
-        <many-to-one field="publishedVersion" target-entity="Softspring\CmsBundle\Model\ContentVersionInterface" fetch="EAGER">
+        <many-to-one field="publishedVersion" target-entity="Softspring\CmsBundle\Model\ContentVersionInterface" fetch="EXTRA_LAZY">
             <cache usage="NONSTRICT_READ_WRITE" />
             <join-column name="published_version_id" on-delete="SET NULL"/>
         </many-to-one>

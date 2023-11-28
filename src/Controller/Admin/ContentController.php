@@ -7,6 +7,7 @@ use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Data\DataExporter;
 use Softspring\CmsBundle\Data\DataImporter;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
+use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
@@ -45,6 +46,7 @@ class ContentController extends AbstractController
     protected FormFactoryInterface $formFactory;
     protected Environment $twig;
     protected ContentManagerInterface $contentManager;
+    protected ContentVersionManagerInterface $contentVersionManager;
     protected TranslatorInterface $translator;
     protected RouteManagerInterface $routeManager;
     protected ContentRender $contentRender;
@@ -55,13 +57,14 @@ class ContentController extends AbstractController
     protected DataExporter $dataExporter;
     protected ?WebDebugToolbarListener $webDebugToolbarListener;
 
-    public function __construct(AuthorizationCheckerInterface $authorizationChecker, FormFactoryInterface $formFactory, Environment $twig, EntityManagerInterface $em, ContentManagerInterface $contentManager, TranslatorInterface $translator, RouteManagerInterface $routeManager, ContentRender $contentRender, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, array $enabledLocales, DataImporter $dataImporter, DataExporter $dataExporter, ?WebDebugToolbarListener $webDebugToolbarListener)
+    public function __construct(AuthorizationCheckerInterface $authorizationChecker, FormFactoryInterface $formFactory, Environment $twig, EntityManagerInterface $em, ContentManagerInterface $contentManager, ContentVersionManagerInterface $contentVersionManager, TranslatorInterface $translator, RouteManagerInterface $routeManager, ContentRender $contentRender, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, array $enabledLocales, DataImporter $dataImporter, DataExporter $dataExporter, ?WebDebugToolbarListener $webDebugToolbarListener)
     {
         $this->authorizationChecker = $authorizationChecker;
         $this->formFactory = $formFactory;
         $this->twig = $twig;
         $this->em = $em;
         $this->contentManager = $contentManager;
+        $this->contentVersionManager = $contentVersionManager;
         $this->routeManager = $routeManager;
         $this->translator = $translator;
         $this->contentRender = $contentRender;
@@ -172,6 +175,7 @@ class ContentController extends AbstractController
             'content' => $config['_id'],
             'content_config' => $contentConfig,
             'entity' => $entity,
+            'entityLatestVersions' => $this->contentVersionManager->getLatestVersions($entity, 3),
 //            'deleteForm' => $deleteForm ? $deleteForm->createView() : null,
         ]);
 
