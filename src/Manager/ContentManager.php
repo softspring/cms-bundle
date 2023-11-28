@@ -56,9 +56,8 @@ class ContentManager implements ContentManagerInterface
         $version = $this->contentVersionManager->createEntity();
         $version->setLayout('default');
 
-        if (!$prevVersion && $content->getVersions()->count()) {
-            /** @var ContentVersionInterface $prevVersion */
-            $prevVersion = $content->getVersions()->first();
+        if (!$prevVersion && $content->getLastVersion()) {
+            $prevVersion = $content->getLastVersion();
         }
 
         if ($prevVersion) {
@@ -71,6 +70,7 @@ class ContentManager implements ContentManagerInterface
         $version->setOrigin($origin);
 
         $content->addVersion($version);
+        $content->setLastVersion($version);
 
         return $version;
     }
