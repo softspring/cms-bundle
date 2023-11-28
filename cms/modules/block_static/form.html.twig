@@ -1,12 +1,18 @@
-<div class="row pt-3">
-    <div class="col-12">
-        {{ form_row(form.id) }}
-    </div>
-    <div class="col-12">
-        {{ form_row(form.class) }}
-    </div>
-    <div class="col-12">
-        {{ form_row(form.block) }}
-    </div>
-</div>
-{{ form_rest(form) }}
+{% embed '@SfsCms/forms/modules_form_block.html.twig' with { 'name': 'attributes', 'accordion': accordion } %}
+    {% block form %}
+        <div class="col-12">
+            {{ form_row(form.id) }}
+        </div>
+        <div class="col-12">
+            {{ form_row(form.class) }}
+        </div>
+    {% endblock %}
+{% endembed %}
+
+{% embed '@SfsCms/forms/modules_form_block.html.twig' with { 'name': 'block', 'accordion': accordion, 'open': true } %}
+    {% block form %}
+        <div class="col-12">
+            {{ form_row(form.block) }}
+        </div>
+    {% endblock %}
+{% endembed %}

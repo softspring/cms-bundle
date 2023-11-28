@@ -1,5 +1,6 @@
 import { filterCurrentFilterElements } from './filter-preview';
 import { getPolymorphicCollectionLastIndex } from '@softspring/polymorphic-form-type/scripts/polymorphic-form-type';
+import { Modal } from 'bootstrap';
 
 window.addEventListener('load', (event) => {
     function moduleFocus(module) {
@@ -171,6 +172,9 @@ window.addEventListener('load', (event) => {
         // reset variables
         modulesCollection = null;
         modulesCollectionInsertIndex = null;
+
+        const modal = Modal.getInstance(prototypesModal);
+        modal && modal.hide();
     });
 
     /**
@@ -192,6 +196,9 @@ window.addEventListener('load', (event) => {
             up.classList.remove('bi-chevron-up');
             up.classList.add('bi-chevron-left');
         }
+
+        const modal = Modal.getInstance(prototypesModal);
+        modal && modal.hide();
 
         moduleFocus(event.node().querySelector('.cms-module'));
 

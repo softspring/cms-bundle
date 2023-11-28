@@ -1,0 +1,19 @@
+{% embed '@SfsCms/forms/modules_form_block.html.twig' with { 'name': 'properties', 'accordion': accordion, 'open': true } %}
+    {% block form %}
+        <div class="col-12 mb-3">
+            {{ form_widget(form.id) }}
+        </div>
+        <div class="col-12 mb-3">
+            {{ form_widget(form.class) }}
+        </div>
+        <div class="col-12">
+            {{ form_row(form.container_type) }}
+        </div>
+        <div class="col-12">
+            {{ form_row(form.tag_type) }}
+        </div>
+        <div class="col-12">
+            {{ form_row(form.bg_color) }}
+        </div>
+    {% endblock %}
+{% endembed %}

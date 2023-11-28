@@ -11,8 +11,8 @@ window.addEventListener('load', (event) => {
     document.addEventListener('input', function (event) {
         if (!event.target || !event.target.hasAttribute('data-edit-class-input')) return;
 
-        let modulePreview = event.target.closest('.cms-module-edit').querySelector('.module-preview');
-        let moduleForm = event.target.closest('.cms-module-edit').querySelector('.cms-module-form');
+        let modulePreview = event.target.closest('.cms-module-edit').querySelector(':scope > .module-preview');
+        let moduleForm = event.target.closest('.cms-module-edit').querySelector(':scope > .cms-module-form');
 
         let htmlTargetElements = modulePreview.querySelectorAll("[data-edit-class-target='" + event.target.dataset.editClassInput + "']");
         let htmlInputsElements = moduleForm.querySelectorAll("[data-edit-class-input='" + event.target.dataset.editClassInput + "']");

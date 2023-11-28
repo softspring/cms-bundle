@@ -3,6 +3,11 @@ html_translatable:
     prototype_button: "Translatable HTML"
     prototype_button_icon: '<i class="bi bi-translate"></i>'
     form:
+        _group:
+            filters: "Filters"
+            others: "Others"
+            attributes: "Attributes"
+            code: "Code"
         locale_filter.label: "Locales"
         site_filter.label: "Sites"
         id.label: "Id"

@@ -2,6 +2,7 @@ module:
     revision: 2
     group: 'container'
     edit_template: '@module/container/edit.html.twig'
+    form_template: '@module/container/form.html.twig'
     module_type: 'Softspring\CmsBundle\Form\Module\ContainerModuleType'
     module_options:
         module_collection_class: 'container'
@@ -11,24 +12,37 @@ module:
         form_fields:
             id:
                 type: 'id'
-                
+                type_options:
+                    attr:
+                        data-edit-id-input: 'containerDivId'
+
+            class:
+                type: 'class'
+                type_options:
+                    attr:
+                        data-edit-class-input: 'containerDivClass'
+
             container_type:
                 type: 'choice'
                 type_options:
+                    default_value: 'container'
                     choices:
-                        "container.form.container_type.values.container": container
-                        "container.form.container_type.values.fluid": container-fluid
+                        "container.form.container_type.values.container": 'container'
+                        "container.form.container_type.values.fluid": 'container-fluid'
+                    attr:
+                        data-edit-class-input: 'containerDivClass'
                         
             tag_type:
                 type: 'choice'
                 type_options:
+                    default_value: 'div'
                     choices:
-                        "container.form.tag_type.values.div": div
-                        "container.form.tag_type.values.section": section
-                        "container.form.tag_type.values.article": article
-                        
-            class:
-                type: 'class'
+                        "container.form.tag_type.values.div": 'div'
+                        "container.form.tag_type.values.section": 'section'
+                        "container.form.tag_type.values.article": 'article'
 
             bg_color:
                 type: 'color'
+                type_options:
+                    attr:
+                        data-edit-bgcolor-input: 'containerDivBgColor'

@@ -1,0 +1,7 @@
+module:
+    revision: 1
+    group: 'basic'
+    enabled: false
+    edit_template: '@module/debug/edit.html.twig'
+    form_template: '@module/debug/form.html.twig'
+    module_type: 'Softspring\CmsBundle\Form\Module\EmptyModuleType'

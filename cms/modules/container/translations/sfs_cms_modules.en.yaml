@@ -3,6 +3,10 @@ container:
     prototype_button: "Container"
     prototype_button_icon: '<i class="bi bi-square"></i>'
     form:
+        _group:
+            filters: "Filters"
+            others: "Others"
+            properties: "Properties"
         locale_filter.label: "Locales"
         site_filter.label: "Sites"
         modules.label: "Modules"
