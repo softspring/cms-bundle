@@ -3,7 +3,7 @@
 namespace Softspring\CmsBundle\Form\Type;
 
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
-use Softspring\CmsBundle\Model\RouteInterface;
+use Softspring\CmsBundle\Repository\RouteRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -127,9 +127,10 @@ class SymfonyRouteType extends AbstractType
 
         $allRoutes = $this->router->getRouteCollection()->all();
 
-        /** @var RouteInterface $cmsRoute */
-        foreach ($this->routeManager->getRepository()->findAll() as $cmsRoute) {
-            $allRoutes[$cmsRoute->getId()] = new Route('', ['_sfs_cms_reference' => true]);
+        /** @var RouteRepository $repo */
+        $repo = $this->routeManager->getRepository();
+        foreach ($repo->getAllRouteIds() as $routeId) {
+            $allRoutes[$routeId] = new Route('', ['_sfs_cms_reference' => true]);
         }
 
         $this->routes = array_filter($allRoutes, function (Route $route, string $routeName) use ($options) {
