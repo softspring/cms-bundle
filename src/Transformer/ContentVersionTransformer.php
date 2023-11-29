@@ -3,6 +3,7 @@
 namespace Softspring\CmsBundle\Transformer;
 
 use Doctrine\Persistence\ObjectManager;
+use Softspring\CmsBundle\Model\ContentVersion;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\MediaBundle\Model\MediaInterface;
@@ -69,6 +70,7 @@ class ContentVersionTransformer implements TransformerInterface
 
     public function untransform(object $entity, ObjectManager $em): void
     {
+        /** @var ContentVersion $contentVersion */
         $contentVersion = $this->getContentVersion($entity);
 
         if (!$contentVersion->getData()) {
