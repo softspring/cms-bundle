@@ -8,7 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * @deprecated use TranslatableType
+ * @deprecated since CmsBundle 5.1 and will be removed in CmsBundle 5.2, use TranslatableType
  */
 class TranslatableTextType extends AbstractType
 {
