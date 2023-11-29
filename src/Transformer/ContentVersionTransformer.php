@@ -75,11 +75,13 @@ class ContentVersionTransformer implements TransformerInterface
             return;
         }
 
-        $data = $contentVersion->getData();
-        foreach ($data as $layout => $modules) {
-            $this->untransformLayout($layout, $modules, $data, $em);
-        }
-        $contentVersion->setData($data);
+        $contentVersion->_setDataCallback(function ($data) use ($em) {
+            foreach ($data as $layout => $modules) {
+                $this->untransformLayout($layout, $modules, $data, $em);
+            }
+
+            return $data;
+        });
     }
 
     protected function untransformLayout(string $layout, array $modules, array &$data, ObjectManager $em): void
