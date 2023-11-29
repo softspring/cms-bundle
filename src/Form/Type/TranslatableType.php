@@ -62,6 +62,10 @@ class TranslatableType extends AbstractType
                 'data-input-lang' => $lang,
             ]);
 
+            foreach ($options['children_attr']??[] as $attr => $value) {
+                $childrenOptions['attr'][$attr] = $value;
+            }
+
             $builder->add($lang, $this->getFieldType($options['type']), $childrenOptions);
         }
     }
