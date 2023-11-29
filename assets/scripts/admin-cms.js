@@ -14,6 +14,7 @@ import './admin/content-edit/preview-media-choice';
 import './admin/content-edit/preview-media-modal';
 import './admin/content-edit/preview-tag-type';
 import './admin/content-edit/preview-toggle';
+import './admin/content-edit/wysiwyg';
 
 import './admin/routes-forms';
 import './admin/form-collections';
