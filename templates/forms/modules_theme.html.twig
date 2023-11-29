@@ -28,9 +28,9 @@
     {% with { 'attr': form.vars.collection_row_attr|default({}) } %}
         <div {{ block('attributes') }}>
     {% endwith %}
-        {{ form_label(form) }} {# uses: module_collection_label #}
-        {{ form_errors(form) }}
-        {{ form_widget(form) }} {# uses: module_collection_widget #}
+    {{ form_label(form) }} {# uses: module_collection_label #}
+    {{ form_errors(form) }}
+    {{ form_widget(form) }} {# uses: module_collection_widget #}
     </div>
 {% endblock module_collection_row %}
 
@@ -68,7 +68,8 @@
 
         <div class="insert-module-at-the-end {{ attr['data-module-row-class'] }}">
             <a class="insert-module" data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal"
-               data-polymorphic-collection="{{ form.vars.id }}" data-polymorphic-position="latest" title="Insert module here"></a>
+               data-polymorphic-collection="{{ form.vars.id }}" data-polymorphic-position="latest"
+               title="Insert module here"></a>
         </div>
     </div>
 
@@ -77,21 +78,25 @@
     {% endif %}
 {% endblock module_collection_widget %}
 
-{#{% block module_collection_entry_row %}#}
-{#{% endblock module_collection_entry_row %}#}
+{# {% block module_collection_entry_row %} #}
+{# {% endblock module_collection_entry_row %} #}
 
-{#{% block module_collection_entry_widget %}#}
-{#{% endblock module_collection_entry_widget %}#}
+{# {% block module_collection_entry_widget %} #}
+{# {% endblock module_collection_entry_widget %} #}
 
-{#{% block module_collection_entry %}#}
-{#{% endblock module_collection_entry %}#}
+{# {% block module_collection_entry %} #}
+{# {% endblock module_collection_entry %} #}
 
 {% block module_buttons %}
     <div class="cms-module-buttons ps-2">
-        <button type="button" id="{{ id }}_up_node_button" data-polymorphic-action="up"><span class="bi bi-chevron-up h2"></span><span class="visually-hidden">^</span></button>
-        <button type="button" id="{{ id }}_down_node_button" data-polymorphic-action="down"><span class="bi bi-chevron-down h2"></span><span class="visually-hidden">v</span></button>
-        <button type="button" id="{{ id }}_duplicate_node_button" data-polymorphic-action="duplicate"><span class="bi bi-copy h2"></span><span class="visually-hidden">D</span></button>
-        <button type="button" id="{{ id }}_remove_node_button" data-polymorphic-action="delete" class="btn-close"><span class="visually-hidden">x</span></button>
+        <button type="button" id="{{ id }}_up_node_button" data-polymorphic-action="up"><span
+                    class="bi bi-chevron-up h2"></span><span class="visually-hidden">^</span></button>
+        <button type="button" id="{{ id }}_down_node_button" data-polymorphic-action="down"><span
+                    class="bi bi-chevron-down h2"></span><span class="visually-hidden">v</span></button>
+        <button type="button" id="{{ id }}_duplicate_node_button" data-polymorphic-action="duplicate"><span
+                    class="bi bi-copy h2"></span><span class="visually-hidden">D</span></button>
+        <button type="button" id="{{ id }}_remove_node_button" data-polymorphic-action="delete" class="btn-close"><span
+                    class="visually-hidden">x</span></button>
     </div>
 {% endblock %}
 
@@ -106,9 +111,9 @@
                         <div class="mb-2"><strong>DEV INFO</strong></div>
                         <div class="mb-2"><strong>{{ error.cause.template }}</strong></div>
                         <div><strong>{{ error.cause.exception.message }}</strong></div>
-                        {#{{ dump(error.cause.location) }}#}
-                        {#{{ dump(error.cause.exception) }}#}
-                        {#{{ dump(error.cause.contextData) }}#}
+                        {# {{ dump(error.cause.location) }} #}
+                        {# {{ dump(error.cause.exception) }} #}
+                        {# {{ dump(error.cause.contextData) }} #}
                     </div>
                 {% endif %}
             {%- endfor -%}
@@ -124,21 +129,19 @@
 
     <div class="accordion accordion-flush" id="moduleForm-{{ id }}">
         {% if form.site_filter is defined or form.locale_filter is defined %}
-            {% embed '@SfsCms/forms/modules_form_block.html.twig' with { 'name': 'filters', 'accordion': 'moduleForm-'~id } %}
-                {% block form %}
-                    {% if form.site_filter is defined %}
-                        <div class="col-12">
-                            {{ form_row(form.site_filter) }}
-                        </div>
-                    {% endif %}
+            {{ sfs_cms_admin_module_accordion_block_start(form, 'moduleForm-'~id, 'filters') }}
+            {% if form.site_filter is defined %}
+                <div class="col-12">
+                    {{ form_row(form.site_filter) }}
+                </div>
+            {% endif %}
 
-                    {% if form.locale_filter is defined %}
-                        <div class="col-12">
-                            {{ form_row(form.locale_filter) }}
-                        </div>
-                    {% endif %}
-                {% endblock %}
-            {% endembed %}
+            {% if form.locale_filter is defined %}
+                <div class="col-12">
+                    {{ form_row(form.locale_filter) }}
+                </div>
+            {% endif %}
+            {{ sfs_cms_admin_module_accordion_block_end() }}
         {% endif %}
 
         {% if form_template|default(false) %}
@@ -146,11 +149,9 @@
         {% endif %}
 
         {% if form|filter(child => not child.rendered)|length %}
-            {% embed '@SfsCms/forms/modules_form_block.html.twig' with { 'name': 'others', 'accordion': 'moduleForm-'~id } %}
-                {% block form %}
-                    {{ form_rest(form) }}
-                {% endblock %}
-            {% endembed %}
+            {{ sfs_cms_admin_module_accordion_block_start(form, 'moduleForm-'~id, 'others') }}
+            {{ form_rest(form) }}
+            {{ sfs_cms_admin_module_accordion_block_end() }}
         {% endif %}
     </div>
 {% endblock %}
@@ -172,7 +173,8 @@
 
 {% block dynamic_form_module_row %}
     <div data-polymorphic="node" {{ block('widget_container_attributes') }}>
-        <div class="insert-module" data-polymorphic-position="before"  data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal" title="Insert module here"></div>
+        <div class="insert-module" data-polymorphic-position="before" data-bs-toggle="modal"
+             data-bs-target="#module_prototypes_collection_modal" title="Insert module here"></div>
         <div class="cms-module {{ form.vars.deprecated?'cms-module-deprecated':'' }} {% if form.vars.module_errors|length %}has-errors{% endif %}">
             <div class="cms-module-header">
                 {{ block('module_buttons') }}
@@ -205,7 +207,8 @@
 
 {% block container_module_row %}
     <div data-polymorphic="node" {{ block('widget_container_attributes') }}>
-        <div class="insert-module" data-polymorphic-position="before" data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal" title="Insert module here"></div>
+        <div class="insert-module" data-polymorphic-position="before" data-bs-toggle="modal"
+             data-bs-target="#module_prototypes_collection_modal" title="Insert module here"></div>
         <div class="cms-module {{ form.vars.deprecated?'cms-module-deprecated':'' }}">
             <div class="cms-module-header">
                 {{ block('module_buttons') }}
@@ -238,7 +241,8 @@
 
 {% block empty_module_row %}
     <div data-polymorphic="node" {{ block('widget_container_attributes') }}>
-        <div class="insert-module" data-polymorphic-position="before" data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal" title="Insert module here"></div>
+        <div class="insert-module" data-polymorphic-position="before" data-bs-toggle="modal"
+             data-bs-target="#module_prototypes_collection_modal" title="Insert module here"></div>
 
         <div class="cms-module {{ form.vars.deprecated?'cms-module-deprecated':'' }}">
             <div class="cms-module-header">
@@ -271,7 +275,8 @@
 {% endblock empty_module_widget %}
 
 {% block module_prototypes_collection_widget %}
-    <section class="modal fade add-module-modal" id="module_prototypes_collection_modal" tabindex="-1" aria-labelledby="{{ form.vars.id }}_modal" aria-hidden="true">
+    <section class="modal fade add-module-modal" id="module_prototypes_collection_modal" tabindex="-1"
+             aria-labelledby="{{ form.vars.id }}_modal" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -289,14 +294,17 @@
                                     {% for key, prototype in prototypes %}
                                         {% set trans_domain = prototype.vars.translation_domain | default(translation_domain) | default(false) %}
                                         <div class="col-3 mb-3 modal-module">
-                                            <div data-polymorphic-action="insert" data-module-id="{{ prototype.vars.module_id }}" class="module-thumbnail" {{ block('polymorphic_prototype_button_attributes') }}>
+                                            <div data-polymorphic-action="insert"
+                                                 data-module-id="{{ prototype.vars.module_id }}"
+                                                 class="module-thumbnail" {{ block('polymorphic_prototype_button_attributes') }}>
                                                 <div class="icon">
                                                     {{ (not trans_domain ? '' : (prototype.vars.prototype_button_label~'_icon')|trans({}, trans_domain))|raw }}
                                                 </div>
                                                 <div class="name">
                                                     {{ not trans_domain ? prototype.vars.prototype_button_label : prototype.vars.prototype_button_label|trans({}, trans_domain) }}
                                                     {% if prototype.vars.deprecated %}
-                                                        <i class="bi bi-exclamation-diamond text-warning" title="{{ prototype.vars.deprecated }}"></i>
+                                                        <i class="bi bi-exclamation-diamond text-warning"
+                                                           title="{{ prototype.vars.deprecated }}"></i>
                                                     {% endif %}
                                                 </div>
                                             </div>
