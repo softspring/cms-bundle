@@ -112,12 +112,24 @@ abstract class ContentVersion implements ContentVersionInterface
 
     public function getData(): ?array
     {
+        if ($this->_getDataCallback) {
+            $this->data = call_user_func($this->_getDataCallback, $this->data);
+            $this->_getDataCallback = null;
+        }
+
         return $this->data;
     }
 
     public function setData(?array $data): void
     {
         $this->data = $data;
+    }
+
+    protected mixed $_getDataCallback = null;
+
+    public function _setDataCallback(callable $getDataCallback): void
+    {
+        $this->_getDataCallback = $getDataCallback;
     }
 
     public function getCompiledModules(): ?array

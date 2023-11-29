@@ -31,6 +31,8 @@ abstract class Content implements ContentInterface
 
     protected ?ContentVersionInterface $publishedVersion = null;
 
+    protected ?ContentVersionInterface $lastVersion = null;
+
     public function __construct()
     {
         $this->sites = new ArrayCollection();
@@ -171,5 +173,15 @@ abstract class Content implements ContentInterface
     public function setPublishedVersion(?ContentVersionInterface $publishedVersion): void
     {
         $this->publishedVersion = $publishedVersion;
+    }
+
+    public function getLastVersion(): ?ContentVersionInterface
+    {
+        return $this->lastVersion;
+    }
+
+    public function setLastVersion(?ContentVersionInterface $lastVersion): void
+    {
+        $this->lastVersion = $lastVersion;
     }
 }
