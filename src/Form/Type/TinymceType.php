@@ -8,6 +8,9 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @deprecated since CmsBundle 5.1 and will be removed in CmsBundle 5.2
+ */
 class TinymceType extends AbstractType
 {
     public function getParent(): string

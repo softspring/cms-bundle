@@ -45,31 +45,6 @@ window.addEventListener('load', (event) => {
         }
     });
 
-    document.addEventListener("polymorphic.node.insert.after", function (event) { // (1)
-        const tinymceFields = event.target.getElementsByClassName('tinymce');
-        if (tinymceFields) {
-            for (let i = 0; i < tinymceFields.length; i++) {
-                const tinymceField = tinymceFields[i];
-                tinymce.init({
-                    selector: '#' + tinymceField.id,
-                    plugins: '',
-                });
-            }
-        }
-    });
-
-    document.addEventListener("polymorphic.node.add.after", function (event) { // (1)
-        const tinymceFields = event.target.getElementsByClassName('tinymce');
-        if (tinymceFields) {
-            for (let i = 0; i < tinymceFields.length; i++) {
-                const tinymceField = tinymceFields[i];
-                tinymce.init({
-                    selector: '#' + tinymceField.id,
-                    plugins: '',
-                });
-            }
-        }
-    });
 
     document.addEventListener("polymorphic.node.insert.after", function (event) { // (1)
         var module = event.target.querySelector('.cms-module');

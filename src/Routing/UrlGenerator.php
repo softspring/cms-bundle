@@ -168,7 +168,7 @@ class UrlGenerator
     protected function getRoute($routeName, bool $silence = false): ?RouteInterface
     {
         if (!$routeName) {
-            $this->cmsLogger && $this->cmsLogger->error('Empty route');
+            $this->cmsLogger && $this->cmsLogger->warning('Empty route');
 
             return null;
         }
@@ -176,7 +176,7 @@ class UrlGenerator
         $route = $this->routeManager->getRepository()->findOneById($routeName);
 
         if (!$route && !$silence) {
-            $this->cmsLogger && $this->cmsLogger->error(sprintf('Route %s not found', $routeName));
+            $this->cmsLogger && $this->cmsLogger->warning(sprintf('Route %s not found', $routeName));
         }
 
         return $route;
