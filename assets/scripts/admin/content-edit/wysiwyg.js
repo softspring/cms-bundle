@@ -18,11 +18,18 @@
  * ></div>
  *
  * Extending events:
- * - sfs_cms.edit_content.wysiwyg.focusin: dispatched when the element is focused
- * - sfs_cms.edit_content.wysiwyg.focusout: dispatched when the element is unfocused
+ * - sfs_cms.content_edit.wysiwyg.focusin: dispatched when the element is focused
+ * - sfs_cms.content_edit.wysiwyg.focusout: dispatched when the element is unfocused
+ *
+ * Global configuration:
+ * - window.sfs_cms_tinymce_base_url: the base url for tinymce (default: /build/tinymce)
+ * - window.sfs_cms_tinymce_default_toolbar: the default toolbar to use as default
+ * - window.sfs_cms_tinymce_default_valid_elements: the valid elements to use as default
+ * - window.sfs_cms_tinymce_default_plugins: the plugins to use as default (space separated list)
  */
 
 import 'tinymce/tinymce';
+import {contentEditableUpdateInputsFromElement} from './contenteditable';
 
 /**
  * Create a tinymce wysiwyg editor
@@ -30,50 +37,37 @@ import 'tinymce/tinymce';
  * @private
  */
 function _createWysiwygTinyMCE(element) {
-    const defaultToolbar = 'undo redo | bold italic underline';
-    const defaultValidElements = 'strong,em,span[style],a[href],p';
-
+    const predeterminatedDefaultToolbar = 'bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor removeformat | link anchor code | ltr rtl | fontsize blocks | charmap emoticons';
+    const defaultToolbar = window.sfs_cms_tinymce_default_toolbar !== undefined ? window.sfs_cms_tinymce_default_toolbar : predeterminatedDefaultToolbar;
     const toolbar = element.dataset.editContentWysiwygToolbar ? element.dataset.editContentWysiwygToolbar : defaultToolbar;
+
+    const predeterminatedDefaultValidElements = 'strong,em,span[style],a[href],p[style],ul,ol,li,br,hr,h1,h2,h3,h4,h5,h6';
+    const defaultValidElements = window.sfs_cms_tinymce_default_valid_elements !== undefined ? window.sfs_cms_tinymce_default_valid_elements : predeterminatedDefaultValidElements;
     const validElements = element.dataset.editContentWysiwygValidElements ? element.dataset.editContentWysiwygValidElements : defaultValidElements;
+
+    const predeterminatedDefaultPlugins = 'image link media lists autolink anchor pagebreak charmap emoticons';
+    const defaultPlugins = window.sfs_cms_tinymce_default_plugins !== undefined ? window.sfs_cms_tinymce_default_plugins : predeterminatedDefaultPlugins;
+    const plugins = element.dataset.editContentWysiwygPlugins ? element.dataset.editContentWysiwygPlugins : defaultPlugins;
+
+    const predeterminatedValidStyles = '{ "*": "font-size,font-family,color,text-decoration,text-align" }';
+    const defaultValidStyles = window.sfs_cms_tinymce_default_valid_styles !== undefined ? window.sfs_cms_tinymce_default_valid_styles : predeterminatedValidStyles;
+    const validStyles = JSON.parse(element.dataset.editContentWysiwygValidStyles ? element.dataset.editContentWysiwygValidStyles : defaultValidStyles);
 
     tinymce.init({
         selector: '#' + element.id,
-        base_url: '/build/tinymce',
+        base_url: window.sfs_cms_tinymce_base_url !== undefined ? window.sfs_cms_tinymce_base_url : '/build/tinymce',
         highlight_on_focus: true,
         menubar: false,
         inline: true,
         hidden_input: false,
-        plugins: [
-            'lists',
-            'autolink'
-        ],
+        plugins: plugins,
         toolbar: toolbar,
         valid_elements: validElements,
-        valid_styles: {
-            '*': 'font-size,font-family,color,text-decoration,text-align'
-        },
+        valid_styles: validStyles,
         setup: (editor) => {
-            editor.on('click', (event) => {
-                console.log('Editor was clicked: ' + element.id)
-            });
             editor.on('change', (event) => {
-                console.log('Editor was changed: ' + element.id);
+                contentEditableUpdateInputsFromElement(element);
             });
-            editor.on('detach', (event) => {
-                console.log('Editor was detached: ' + element.id)
-            });
-            editor.on('activate', (event) => {
-                console.log('Editor was activated: ' + element.id);
-            });
-            editor.on('deactivate', (event) => {
-                console.log('Editor was deactivated: ' + element.id);
-            });
-            editor.on('remove', (event) => {
-                console.log('Editor was removed: ' + element.id);
-            });
-        },
-        init_instance_callback: (editor) => {
-            console.log(`Editor: ${editor.id} is now initialized.`);
         },
         min_height: 30,
     });
@@ -117,33 +111,33 @@ function destroyWysiwyg(element) {
  * Init wysiwyg editors
  * @private
  */
-function _initCmsWysiwyg() {
+function _init() {
     // dispatch event on focusin in a data-edit-content-wysiwyg element
     document.addEventListener('focusin', function (event) {
         if (!event.target || !event.target.hasAttribute('data-edit-content-wysiwyg')) return;
         event.preventDefault();
-        event.target.dispatchEvent(new CustomEvent('sfs_cms.edit_content.wysiwyg.focusin', {bubbles: true}));
+        event.target.dispatchEvent(new CustomEvent('sfs_cms.content_edit.wysiwyg.focusin', {bubbles: true}));
     });
 
     // dispatch event on focusout in a data-edit-content-wysiwyg element
     document.addEventListener('focusout', function (e) {
         if (!event.target || !event.target.hasAttribute('data-edit-content-wysiwyg')) return;
         event.preventDefault();
-        event.target.dispatchEvent(new CustomEvent('sfs_cms.edit_content.wysiwyg.focusout', {bubbles: true}));
+        event.target.dispatchEvent(new CustomEvent('sfs_cms.content_edit.wysiwyg.focusout', {bubbles: true}));
     });
 
     // create wysiwyg on focus
-    document.addEventListener('sfs_cms.edit_content.wysiwyg.focusin', (event) => {
+    document.addEventListener('sfs_cms.content_edit.wysiwyg.focusin', (event) => {
         event.preventDefault();
         createWysiwyg(event.target);
     });
 
     // destroy wysiwyg on focusout
-    document.addEventListener('sfs_cms.edit_content.wysiwyg.focusout', (event) => {
+    document.addEventListener('sfs_cms.content_edit.wysiwyg.focusout', (event) => {
         event.preventDefault();
-        destroyWysiwyg(event.target);
+        // destroyWysiwyg(event.target); <-- disabled because on tinymce modals and windows openings it loses focus and gets destroyed
     });
 }
 
 // init wysiwyg on window load
-window.addEventListener('load', _initCmsWysiwyg);
+window.addEventListener('load', _init);
