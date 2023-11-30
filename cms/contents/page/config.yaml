@@ -5,11 +5,11 @@ content:
     default_layout: 'default'
     seo:
         metaTitle:
-            type: translatableText
+            type: translatable
         metaDescription:
-            type: translatableText
+            type: translatable
         metaKeywords:
-            type: translatableText
+            type: translatable
         noIndex:
             type: checkbox
             type_options:

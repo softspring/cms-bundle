@@ -69,9 +69,9 @@ class Content implements ConfigurationInterface
 
                 ->arrayNode('seo')
                     ->defaultValue([
-                        'metaTitle' => ['type' => 'translatableText'],
-                        'metaDescription' => ['type' => 'translatableText'],
-                        'metaKeywords' => ['type' => 'translatableText'],
+                        'metaTitle' => ['type' => 'translatable'],
+                        'metaDescription' => ['type' => 'translatable'],
+                        'metaKeywords' => ['type' => 'translatable'],
                         'noIndex' => ['type' => 'checkbox', 'type_options' => ['required' => false]],
                         'noFollow' => ['type' => 'checkbox', 'type_options' => ['required' => false]],
                         'sitemap' => ['type' => 'checkbox', 'type_options' => ['required' => false]],
