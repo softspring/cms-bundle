@@ -57,6 +57,13 @@
 {%- endapply -%}
 {%- endmacro -%}
 
+{%- macro wysiwyg(type = 'tinymce') -%}
+{%- apply spaceless -%}
+    contenteditable="true"
+    data-edit-content-wysiwyg="{{ type }}"
+{%- endapply -%}
+{%- endmacro -%}
+
 {%- macro link_content (formField, locale = null, contentEditable = true, placeholderTransKey = null, hideIfEmpty = false, fill = false) -%}
 {%- apply spaceless -%}
     {% set module_name = _self._module_name(formField) %}

@@ -11,7 +11,6 @@ use Softspring\CmsBundle\Form\Module\DynamicFormModuleType;
 use Softspring\CmsBundle\Form\Resolver\TypeResolver;
 use Softspring\CmsBundle\Form\Type\LinkType;
 use Softspring\CmsBundle\Form\Type\SymfonyRouteType;
-use Softspring\CmsBundle\Form\Type\TranslatableTextType;
 use Softspring\CmsBundle\Form\Type\TranslatableType;
 use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
@@ -53,7 +52,7 @@ abstract class ModuleTestCase extends TypeTestCase
 
         $preloadedFormTypes = [];
         $preloadedFormTypes[] = new DynamicFormModuleType($cmsHelper);
-        $preloadedFormTypes[] = new TranslatableTextType($this->defaultLocale, $this->enabledLocales);
+        $preloadedFormTypes[] = new TranslatableType($this->defaultLocale, $this->enabledLocales);
         $preloadedFormTypes[] = new TranslatableType($this->defaultLocale, $this->enabledLocales);
         $preloadedFormTypes[] = new SymfonyRouteType($router, $routeManager, []);
         $preloadedFormTypes[] = new LinkType($router, $routeManager, []);
