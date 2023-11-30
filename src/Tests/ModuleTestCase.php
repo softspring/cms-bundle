@@ -5,6 +5,7 @@ namespace Softspring\CmsBundle\Tests;
 use Doctrine\ORM\EntityRepository;
 use Softspring\CmsBundle\Config\Model\Module;
 use Softspring\CmsBundle\Entity\Page;
+use Softspring\CmsBundle\Form\Extension\DefaultValueExtension;
 use Softspring\CmsBundle\Form\Extension\DynamicTypesExtension;
 use Softspring\CmsBundle\Form\Module\DynamicFormModuleType;
 use Softspring\CmsBundle\Form\Resolver\TypeResolver;
@@ -61,6 +62,7 @@ abstract class ModuleTestCase extends TypeTestCase
             $this->getValidatorExtension(),
             new DynamicFormExtension($cmsTypeResolver, new ConstraintResolver()),
             new PreloadedExtension($preloadedFormTypes, [DynamicFormModuleType::class => [new DynamicTypesExtension($cmsTypeResolver)]]),
+            new DefaultValueExtension(),
         ];
     }
 
