@@ -35,10 +35,10 @@
     "require-dev": {
         "doctrine/data-fixtures": "^1.6",
         "doctrine/doctrine-fixtures-bundle": "^3.4",
-        "friendsofphp/php-cs-fixer": "^3.38",
+        "friendsofphp/php-cs-fixer": "^3.40",
         "google/cloud-storage": "^1.30",
         "javihgil/doctrine-pagination-bundle": "^2.0",
-        "phpstan/phpstan": "^1.10.22",
+        "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^10.2.0",
         "softspring/user-bundle": "^5.2",
         "symfony/maker-bundle": "^1.38",
