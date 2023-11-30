@@ -62,6 +62,12 @@ abstract class ModuleTestCase extends TypeTestCase
             $this->getValidatorExtension(),
             new DynamicFormExtension($cmsTypeResolver, new ConstraintResolver()),
             new PreloadedExtension($preloadedFormTypes, [DynamicFormModuleType::class => [new DynamicTypesExtension($cmsTypeResolver)]]),
+        ];
+    }
+
+    protected function getTypeExtensions(): array
+    {
+        return [
             new DefaultValueExtension(),
         ];
     }
