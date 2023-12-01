@@ -2,43 +2,31 @@
 
 namespace Softspring\CmsBundle\Utils;
 
+use Softspring\CmsBundle\Config\CmsConfig;
+
+/**
+ * @deprecated renamed to DataMigrator, will be removed in 5.2
+ */
 class ModuleMigrator
 {
-    public static function migrate(array $migrationScripts, $moduleData, $toRevision): array
+    public static function migrate(array $migrationScripts, $moduleData, $toRevision, CmsConfig $cmsConfig = null): array
     {
-        foreach ($migrationScripts as $migrationScript) {
-            $moduleData = (include $migrationScript)($moduleData, (int) ($moduleData['_revision'] ?? 1), $toRevision);
-        }
+        trigger_deprecation('softspring/cms-bundle', '5.1', 'ModuleMigrator is deprecated, use DataMigrator instead.');
 
-        $moduleData['_revision'] = $toRevision;
-
-        return $moduleData;
+        return DataMigrator::migrate($migrationScripts, $moduleData, $toRevision, $cmsConfig);
     }
 
     public static function routeToSymfonyRoute(?string $oldRouteValue): array
     {
-        if (is_string($oldRouteValue) && '' !== $oldRouteValue && 'route___' !== substr($oldRouteValue, 0, 8)) {
-            error_log("Bad-formed '$oldRouteValue' route to migrate, has been set to null.");
-            $oldRouteValue = null;
-        }
+        trigger_deprecation('softspring/cms-bundle', '5.1', 'ModuleMigrator is deprecated, use DataMigrator instead.');
 
-        return [
-            // migrate from route___<route_name> format
-            'route_name' => $oldRouteValue ? substr($oldRouteValue, 8) : null,
-            'route_params' => [],
-        ];
+        return DataMigrator::routeToSymfonyRoute($oldRouteValue);
     }
 
     public static function symfonyRouteToLink(?array $symfonyRoute): array
     {
-        return [
-            'type' => !empty($symfonyRoute) ? 'route' : 'url',
-            'route_name' => !empty($symfonyRoute) ? $symfonyRoute['route_name'] : null,
-            'route_params' => !empty($symfonyRoute) ? $symfonyRoute['route_params'] : null,
-            'url' => !empty($symfonyRoute) ? null : '',
-            'anchor' => null,
-            'target' => '_self',
-            'custom_target' => null,
-        ];
+        trigger_deprecation('softspring/cms-bundle', '5.1', 'ModuleMigrator is deprecated, use DataMigrator instead.');
+
+        return DataMigrator::symfonyRouteToLink($symfonyRoute);
     }
 }

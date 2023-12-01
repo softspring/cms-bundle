@@ -9,6 +9,7 @@ use Softspring\CmsBundle\Form\Admin\Block\BlockListFilterForm;
 use Softspring\CmsBundle\Form\Admin\Block\BlockUpdateFormInterface;
 use Softspring\CmsBundle\Manager\BlockManagerInterface;
 use Softspring\CmsBundle\Model\BlockInterface;
+use Softspring\CmsBundle\Utils\DataMigrator;
 use Softspring\Component\CrudlController\Event\FilterEvent;
 use Softspring\Component\Events\DispatchGetResponseTrait;
 use Softspring\Component\Events\ViewEvent;
@@ -95,6 +96,8 @@ class BlockController extends AbstractController
         $this->isGranted('PERMISSION_SFS_CMS_ADMIN_BLOCKS_UPDATE', $block);
 
         $config = $this->getBlockConfig($block->getType());
+
+        $block->setData(DataMigrator::migrate($config['revision_migration_scripts'], $block->getData(), $config['revision'], $this->cmsConfig));
 
         $form = $this->createForm(get_class($updateForm), $block, ['block_config' => $config, 'method' => 'POST'])->handleRequest($request);
 
