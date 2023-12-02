@@ -7,6 +7,7 @@ use Psr\Log\LoggerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Manager\BlockManagerInterface;
 use Softspring\CmsBundle\Model\BlockInterface;
+use Softspring\CmsBundle\Utils\DataMigrator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,7 +50,8 @@ class BlockController extends AbstractController
                     return new Response();
                 }
 
-                $response = new Response($this->twig->render($config['render_template'], $block->getData() + ['_block' => $block]));
+                $blockData = DataMigrator::migrate($config['revision_migration_scripts'], $block->getData(), $config['revision'], $this->cmsConfig);
+                $response = new Response($this->twig->render($config['render_template'], $blockData + ['_block' => $block]));
             } else {
                 $response = new Response($this->twig->render($config['render_template']));
             }
@@ -83,7 +85,8 @@ class BlockController extends AbstractController
             $config = $this->cmsConfig->getBlock($type);
 
             if (!$config['static']) {
-                $response = new Response($this->twig->render($config['render_template'], $block->getData() + ['_block' => $block]));
+                $blockData = DataMigrator::migrate($config['revision_migration_scripts'], $block->getData(), $config['revision'], $this->cmsConfig);
+                $response = new Response($this->twig->render($config['render_template'], $blockData + ['_block' => $block]));
             } else {
                 $response = new Response($this->twig->render($config['render_template']));
             }

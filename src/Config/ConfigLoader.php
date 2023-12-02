@@ -154,6 +154,14 @@ class ConfigLoader
         foreach ($configurations as $blockName => $blockConfigs) {
             $blocks[$blockName] = $processor->processConfiguration(new Block($blockName), $blockConfigs);
             $blocks[$blockName]['_id'] = $blockName;
+            $blocks[$blockName]['revision_migration_scripts'] = [];
+
+            foreach ($this->collectionPaths as $collectionPath) {
+                $elementsPath = $this->container->getParameter('kernel.project_dir').'/'.trim($collectionPath, '/').'/blocks/'.$blockName;
+                if (is_file("$elementsPath/migrate.php")) {
+                    $blocks[$blockName]['revision_migration_scripts'][] = "$elementsPath/migrate.php";
+                }
+            }
         }
 
         return $blocks;
