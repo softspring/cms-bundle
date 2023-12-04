@@ -9,6 +9,7 @@ use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\Routing\UrlGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Twig\Environment;
 
 class SitemapController extends AbstractController
@@ -83,6 +84,37 @@ class SitemapController extends AbstractController
                                 'url' => $this->urlGenerator->getUrl($contentRoute, $path->getLocale(), $site),
                             ];
                         }
+	                    
+	                    // routes for content that are available in other sites should also be included
+	                    // check if the content route is available in other sites
+	                    $otherSites = $contentRoute->getSites()->filter(function (SiteInterface $otherSite) use ($site) {
+		                    return $otherSite->getId() !== $site->getId();
+	                    });
+	                    
+	                    // for all the other sites where the content route exists
+	                    foreach ($otherSites as $otherSite) {
+		                    
+		                    // loop on the route paths once more
+		                    foreach ($contentRoute->getPaths() as $path) {
+			                    
+			                    // checking for a url could generate a route not found exception
+			                    try {
+				                    
+				                    // check if this path is available in the other site
+				                    $pathTest = $this->urlGenerator->getUrl($contentRoute, $path->getLocale(), $otherSite, [], true);
+				                    if ($pathTest !== '#') {
+					                    
+					                    // if it is, add it to the alternates
+					                    $url['alternates'][] = [
+						                    'locale' => $path->getLocale(),
+						                    'url' => $this->urlGenerator->getUrl($contentRoute, $path->getLocale(), $otherSite),
+					                    ];
+				                    }
+			                    } catch (RouteNotFoundException $exception) {
+				                    // if it is not, do nothing for now. not all paths should be available for all sites
+			                    }
+		                    }
+	                    }
                     }
 
                     $urls[] = $url;
