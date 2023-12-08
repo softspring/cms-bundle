@@ -124,11 +124,9 @@ class SitemapController extends AbstractController
 
 		$response = new Response(null, 200, ['Content-type' => 'application/xml']);
 
-		$response->setPrivate();
-
 		if ($sitemapConfig['cache_ttl'] ?? false) {
-//            $response->setPublic();
-//            $response->setMaxAge($sitemapConfig['cache_ttl']);
+            $response->setPublic();
+            $response->setMaxAge($sitemapConfig['cache_ttl']);
 		}
 
 		return $this->render('@SfsCms/sitemap/sitemap.xml.twig', ['urls' => $urls], $response);
