@@ -17,13 +17,20 @@ class Sitemap implements XmlInterface
     protected array $siteConfig;
     protected array $sitemapConfig;
 
+    /**
+     * @throws InvalidSitemapException
+     */
     public function __construct(
         protected SiteInterface $site,
         protected string $sitemap,
         protected EntityManagerInterface $em,
         protected UrlGenerator $urlGenerator,
     ) {
-        $this->siteConfig = $this->site->getConfig();
+        $this->siteConfig = $this->site->getConfig() ?? [];
+
+        if (!isset($this->siteConfig['sitemaps'][$sitemap])) {
+            throw new InvalidSitemapException($sitemap);
+        }
         $this->sitemapConfig = $this->siteConfig['sitemaps'][$sitemap];
     }
 

@@ -13,7 +13,7 @@ class Index implements XmlInterface
     public function __construct(
         protected SiteInterface $site,
     ) {
-        $this->siteConfig = $this->site->getConfig();
+        $this->siteConfig = $this->site->getConfig() ?? [];
     }
 
     public function getResponse(): Response

@@ -14,6 +14,9 @@ class SitemapGenerator
     ) {
     }
 
+    /**
+     * @throws InvalidSitemapException
+     */
     public function sitemap(SiteInterface $site, string $sitemap): Sitemap
     {
         return new Sitemap($site, $sitemap, $this->em, $this->urlGenerator);
