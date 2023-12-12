@@ -148,40 +148,30 @@ class UrlGenerator
 
         return implode(' ', $attrs);
     }
-	
-	/**
-	 * @param string|RouteInterface $routeOrName
-	 * @param string $locale
-	 * @param SiteInterface $site
-	 *
-	 * @return bool|null
-	 */
-	public function testRouteForSitemapEligibility(string|RouteInterface $routeOrName, string $locale, SiteInterface $site): ?bool
-	{
-		
-		//try to resolve route or name into a real route object
-		$route = $routeOrName instanceof RouteInterface ? $routeOrName : $this->getRoute($routeOrName);
-		
-		//test the route
-		if (!$route) {
-			
-			//not finding a route when attempting to get one by name is fine too
-			return null;
-		}
-		
-		//check the sites of the route to determine eligibility by site
-		if ($route->getSites()->contains($site)) {
-			
-			//check the paths of the route to determine eligibility by locale
-			if ($route->getPaths()->filter(fn(RoutePathInterface $routePath) => $routePath->getLocale() == $locale)->first()) {
-				
-				//path exists for this site and locale
-				return true;
-			}
-		}
-		return false;
-	}
-	
+
+    public function testRouteForSitemapEligibility(string|RouteInterface $routeOrName, string $locale, SiteInterface $site): ?bool
+    {
+        // try to resolve route or name into a real route object
+        $route = $routeOrName instanceof RouteInterface ? $routeOrName : $this->getRoute($routeOrName);
+
+        // test the route
+        if (!$route) {
+            // not finding a route when attempting to get one by name is fine too
+            return null;
+        }
+
+        // check the sites of the route to determine eligibility by site
+        if ($route->getSites()->contains($site)) {
+            // check the paths of the route to determine eligibility by locale
+            if ($route->getPaths()->filter(fn (RoutePathInterface $routePath) => $routePath->getLocale() == $locale)->first()) {
+                // path exists for this site and locale
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     protected function getRoutePath(RouteInterface $route, string $locale = null, $site = null): string
     {
         $locale = $locale ?: $this->requestStack->getCurrentRequest()->getLocale();
