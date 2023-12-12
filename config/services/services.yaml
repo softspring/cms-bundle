@@ -104,6 +104,8 @@ services:
         class: Twig\Extension\StringLoaderExtension
         tags: ['twig.extension']
 
+    Softspring\CmsBundle\Sitemap\SitemapGenerator: ~
+    
     Softspring\CmsBundle\Twig\Extension\:
         resource: '../../src/Twig/Extension/*'
         tags: ['twig.extension']
