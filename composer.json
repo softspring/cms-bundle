@@ -39,7 +39,7 @@
         "friendsofphp/php-cs-fixer": "^3.40",
         "google/cloud-storage": "^1.30",
         "javihgil/doctrine-pagination-bundle": "^2.0",
-        "phpstan/phpstan": "^1.10",
+        "phpstan/phpstan": "^1.10.49",
         "phpunit/phpunit": "^10.2.0",
         "softspring/user-bundle": "^5.2",
         "symfony/maker-bundle": "^1.38",
