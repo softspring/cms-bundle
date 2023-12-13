@@ -56,7 +56,7 @@ class SiteTest extends TestCase
             ],
             'error_pages' => [],
             'sitemaps' => [],
-            'sitemaps_index' => ['enabled' => false, 'url' => false],
+            'sitemaps_index' => ['enabled' => false, 'url' => false, 'cache_ttl' => false],
         ], $config);
     }
 }
