@@ -23,9 +23,4 @@ class SitemapController extends AbstractController
     {
         return $this->sitemapGenerator->index($site)->getResponse();
     }
-
-    protected function renderView(string $view, array $parameters = []): string
-    {
-        return $this->twig->render($view, $parameters);
-    }
 }
