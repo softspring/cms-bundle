@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Softspring\CmsBundle\Entity\ContentVersion;
 use Softspring\CmsBundle\Entity\Page;
 use Softspring\CmsBundle\Entity\Route;
 use Softspring\CmsBundle\Entity\RoutePath;
@@ -103,7 +104,15 @@ class SitemapTest extends TestCase
                 'lastmod' => '2021-01-01',
                 'changefreq' => 'daily',
                 'priority' => '0.5',
-            ]
+                'xhtml:link' => [],
+            ],
+            [
+                'loc' => 'https://example.com',
+                'lastmod' => null,
+                'changefreq' => null,
+                'priority' => null,
+                'xhtml:link' => [],
+            ],
         ]);
 
         $xml = $sitemap->xml();
@@ -114,14 +123,19 @@ class SitemapTest extends TestCase
         $this->assertArrayHasKey('@xmlns', $data);
         $this->assertArrayHasKey('@xmlns:xhtml', $data);
         $this->assertArrayHasKey('url', $data);
-        $this->assertArrayHasKey('loc', $data['url']);
-        $this->assertArrayHasKey('lastmod', $data['url']);
-        $this->assertArrayHasKey('changefreq', $data['url']);
-        $this->assertArrayHasKey('priority', $data['url']);
-        $this->assertEquals('https://example.com', $data['url']['loc']);
-        $this->assertEquals('2021-01-01', $data['url']['lastmod']);
-        $this->assertEquals('daily', $data['url']['changefreq']);
-        $this->assertEquals('0.5', $data['url']['priority']);
+
+        $this->assertEquals([
+            'loc' => 'https://example.com',
+            'lastmod' => '2021-01-01',
+            'changefreq' => 'daily',
+            'priority' => '0.5',
+            'xhtml:link' => '',
+        ], $data['url'][0]);
+
+        $this->assertEquals([
+            'loc' => 'https://example.com',
+            'xhtml:link' => '',
+        ], $data['url'][1]);
     }
 
     public function testUrlsWithAlternates(): void
@@ -260,10 +274,152 @@ class SitemapTest extends TestCase
         $this->assertCount(2, $urls);
 
         $this->assertEquals('site1/es/path-1-1', $urls[0]['loc']);
-        $this->assertCount(0, $urls[0]['xhtml:link']);
-
         $this->assertEquals('site1/en/path-1-2', $urls[1]['loc']);
-        $this->assertCount(0, $urls[1]['xhtml:link']);
+    }
+
+    public function testUrlAttributes(): void
+    {
+        $site = new Site();
+        $site->setId('site1');
+        $site->setConfig([
+            'sitemaps' => [
+                'test' => [
+                    'alternates' => false,
+                    'alternates_locales' => false,
+                    'alternates_sites' => false,
+                ]
+            ],
+            'locales' => ['es', 'en'],
+        ]);
+
+        $content1 = new Page();
+        $content1->setPublishedVersion($version = new ContentVersion());
+        $version->setCreatedAt(new \DateTime('2000-01-01'));
+        $content1->setSeo([
+            'sitemapChangefreq' => 'daily',
+            'sitemapPriority' => 1.0,
+            'sitemap' => true,
+            'noIndex' => false,
+        ]);
+        $content1->addSite($site);
+        $content1->addRoute($route1 = new Route());
+        $route1->addPath($path1_1 = new RoutePath());
+        $path1_1->setPath('/path-1-1');
+        $path1_1->setLocale('es');
+        $route1->addSite($site);
+
+        $content2 = new Page();
+        $content2->setSeo([
+            'sitemap' => true,
+            'noIndex' => false,
+        ]);
+        $content2->addSite($site);
+        $content2->addRoute($route2 = new Route());
+        $route2->addPath($path2_1 = new RoutePath());
+        $path2_1->setPath('/path-1-1');
+        $path2_1->setLocale('es');
+        $route2->addSite($site);
+
+        $contentsCollection = new ArrayCollection([
+            $content1,
+            $content2,
+        ]);
+
+        $sitemap = $this->getMockBuilder(Sitemap::class,)
+            ->setConstructorArgs([$site, 'test', $this->em, $this->urlGenerator])
+            ->onlyMethods(['getSiteContents'])
+            ->getMock();
+        $sitemap->method('getSiteContents')->willReturn($contentsCollection);
+
+        $this->urlGenerator->method('getUrlFixed')->willReturnCallback(function (RoutePath $path, Site $site) {
+            return $site->getId().'/'.$path->getLocale().'/'.$path->getCompiledPath();
+        });
+
+        $urls = $sitemap->urls();
+
+        $this->assertEquals([
+            'loc' => 'site1/es/path-1-1',
+            'changefreq' => 'daily',
+            'priority' => '1.0',
+            'lastmod' => '2000-01-01',
+        ], $urls[0]);
+
+        $this->assertEquals([
+            'loc' => 'site1/es/path-1-1',
+        ], $urls[1]);
+    }
+
+    public function testUrlAttributesWithDefaultSiteValues(): void
+    {
+        $site = new Site();
+        $site->setId('site1');
+        $site->setConfig([
+            'sitemaps' => [
+                'test' => [
+                    'default_changefreq' => 'monthly',
+                    'default_priority' => 0.1,
+                    'alternates' => false,
+                    'alternates_locales' => false,
+                    'alternates_sites' => false,
+                ]
+            ],
+            'locales' => ['es', 'en'],
+        ]);
+
+        $content1 = new Page();
+        $content1->setSeo([
+            'sitemapChangefreq' => 'daily',
+            'sitemapPriority' => 1.0,
+            'sitemap' => true,
+            'noIndex' => false,
+        ]);
+        $content1->addSite($site);
+        $content1->addRoute($route1 = new Route());
+        $route1->addPath($path1_1 = new RoutePath());
+        $path1_1->setPath('/path-1-1');
+        $path1_1->setLocale('es');
+        $route1->addSite($site);
+
+        $content2 = new Page();
+        $content2->setSeo([
+            'sitemap' => true,
+            'noIndex' => false,
+        ]);
+        $content2->addSite($site);
+        $content2->addRoute($route2 = new Route());
+        $route2->addPath($path2_1 = new RoutePath());
+        $path2_1->setPath('/path-1-1');
+        $path2_1->setLocale('es');
+        $route2->addSite($site);
+
+        $contentsCollection = new ArrayCollection([
+            $content1,
+            $content2,
+        ]);
+
+        $sitemap = $this->getMockBuilder(Sitemap::class,)
+            ->setConstructorArgs([$site, 'test', $this->em, $this->urlGenerator])
+            ->onlyMethods(['getSiteContents'])
+            ->getMock();
+        $sitemap->method('getSiteContents')->willReturn($contentsCollection);
+
+        $this->urlGenerator->method('getUrlFixed')->willReturnCallback(function (RoutePath $path, Site $site) {
+            return $site->getId().'/'.$path->getLocale().'/'.$path->getCompiledPath();
+        });
+
+        $urls = $sitemap->urls();
+
+        $this->assertEquals([
+            'loc' => 'site1/es/path-1-1',
+            'changefreq' => 'daily',
+            'priority' => '1.0',
+        ], $urls[0]);
+
+        $this->assertEquals([
+            'loc' => 'site1/es/path-1-1',
+            'changefreq' => 'monthly',
+            'priority' => '0.1',
+        ], $urls[1]);
     }
 
     public function testSkipContents(): void

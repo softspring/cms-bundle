@@ -94,19 +94,47 @@ class Sitemap implements XmlInterface
                     continue;
                 }
 
-                $seo = $content->getSeo();
-
-                $urls[] = [
+                $urls[] = array_filter([
                     'loc' => $this->urlGenerator->getUrlFixed($path, $this->site),
                     'lastmod' => $content->getPublishedVersion()?->getCreatedAt()->format('Y-m-d'),
-                    'changefreq' => $seo['sitemapChangefreq'] ?? $this->sitemapConfig['default_changefreq'] ?? '',
-                    'priority' => $seo['sitemapPriority'] ?? $this->sitemapConfig['default_priority'] ?? '',
+                    'changefreq' => $this->getChangeFreq($content),
+                    'priority' => $this->getPriority($content),
                     'xhtml:link' => $this->generateRoutePathAlternates($path),
-                ];
+                ], fn ($v) => !empty($v));
             }
         }
 
         return $urls;
+    }
+
+    protected function getChangeFreq(ContentInterface $content): ?string
+    {
+        $seo = $content->getSeo();
+
+        if (!empty($seo['sitemapChangefreq'])) {
+            return $seo['sitemapChangefreq'];
+        }
+
+        if (!empty($this->sitemapConfig['default_changefreq'])) {
+            return $this->sitemapConfig['default_changefreq'];
+        }
+
+        return null;
+    }
+
+    protected function getPriority(ContentInterface $content): ?string
+    {
+        $seo = $content->getSeo();
+
+        if (!empty($seo['sitemapPriority'])) {
+            return sprintf('%.1F', floatval($seo['sitemapPriority']));
+        }
+
+        if (!empty($this->sitemapConfig['default_priority'])) {
+            return sprintf('%.1F', floatval($this->sitemapConfig['default_priority']));
+        }
+
+        return null;
     }
 
     /**
