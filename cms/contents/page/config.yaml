@@ -25,8 +25,9 @@ content:
         sitemapChangefreq:
             type: choice
             type_options:
+                required: false
                 choices:
-                    admin_page.form.seo.sitemapChangefreq.values.empty: false
+                    admin_page.form.seo.sitemapChangefreq.values.empty: ''
                     admin_page.form.seo.sitemapChangefreq.values.always: always
                     admin_page.form.seo.sitemapChangefreq.values.hourly: hourly
                     admin_page.form.seo.sitemapChangefreq.values.daily: daily
