@@ -2,7 +2,7 @@
 
 namespace Softspring\CmsBundle\Form\Traits;
 
-use Softspring\CmsBundle\Utils\ModuleMigrator;
+use Softspring\CmsBundle\Utils\DataMigrator;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\PropertyAccess\Exception\AccessException;
@@ -89,7 +89,7 @@ trait DataMapperTrait
         $toRevision = $form->getConfig()->getOption('module_revision');
         $migrationScripts = $form->getConfig()->getOption('module_migrations');
 
-        return ModuleMigrator::migrate($migrationScripts, $data, $toRevision);
+        return DataMigrator::migrate($migrationScripts, $data, $toRevision);
     }
 
     /**

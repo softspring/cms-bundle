@@ -45,6 +45,9 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $container->setParameter('sfs_cms.site_config', $config['site']);
         $container->setParameter('sfs_cms.site.class', $config['site']['class'] ?? null);
 
+        // enable/disable admin load (useful for separated admin/front projects or installations)
+        $adminEnabled = $config['admin'];
+        $container->setParameter('sfs_cms.admin', $adminEnabled);
         // set config parameters
         $container->setParameter('sfs_cms.entity_manager_name', $config['entity_manager']);
 
@@ -76,8 +79,10 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         // load services
         $loader->load('services.yaml');
         $loader->load('dynamic_form_type.yaml');
-        $loader->load('controller/admin_routes.yaml');
-        $loader->load('controller/admin_content.yaml');
+        $adminEnabled && $loader->load('controller/admin_blocks.yaml');
+        $adminEnabled && $loader->load('controller/admin_routes.yaml');
+        $adminEnabled && $loader->load('controller/admin_menus.yaml');
+        $adminEnabled && $loader->load('controller/admin_content.yaml');
 
         $loader->load('data_collector.yaml');
 

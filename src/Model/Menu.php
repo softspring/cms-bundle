@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 
 class Menu implements MenuInterface
 {
-    protected ?string $id;
+    protected ?string $id = null;
 
     protected ?string $name = null;
 

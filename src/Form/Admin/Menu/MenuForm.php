@@ -24,8 +24,9 @@ class MenuForm extends AbstractType
             'data_class' => MenuInterface::class,
             'label_format' => 'admin_menus.form.%name%.label',
             'translation_domain' => 'sfs_cms_admin',
-            'menu_config' => null,
         ]);
+
+        $resolver->setRequired('menu_config');
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void

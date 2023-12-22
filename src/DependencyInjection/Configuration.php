@@ -19,6 +19,8 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue('default')
                 ->end()
 
+                ->booleanNode('admin')->defaultTrue()->end()
+
                 ->arrayNode('collections')
                     ->scalarPrototype()->end()
                 ->end()

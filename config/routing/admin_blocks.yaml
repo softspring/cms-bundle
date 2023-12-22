@@ -1,11 +1,11 @@
 sfs_cms_admin_blocks_list:
-    controller: Softspring\CmsBundle\Controller\Admin\BlockController::list
+    controller: sfs_cms.admin.block.controller::list
     path: /
 
 sfs_cms_admin_blocks_create:
-    controller: Softspring\CmsBundle\Controller\Admin\BlockController::create
+    controller: sfs_cms.admin.block.controller::create
     path: /create/{blockType}
 
 sfs_cms_admin_blocks_update:
-    controller: Softspring\CmsBundle\Controller\Admin\BlockController::update
+    controller: sfs_cms.admin.block.controller::update
     path: /{block}/update

@@ -6,7 +6,7 @@ use Softspring\CmsBundle\Model\MenuItem as MenuItemModel;
 
 class MenuItem extends MenuItemModel
 {
-    protected ?string $id;
+    protected ?string $id = null;
 
     public function getId(): ?string
     {

@@ -20,8 +20,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ContentDataCollector extends DataCollector
 {
-    protected $data = [];
-
     protected BlockRenderer $blockRenderer;
     protected MenuRenderer $menuRenderer;
     protected ContentRender $contentRender;
@@ -78,7 +76,7 @@ class ContentDataCollector extends DataCollector
         return 'cms';
     }
 
-    public function reset()
+    public function reset(): void
     {
     }
 
