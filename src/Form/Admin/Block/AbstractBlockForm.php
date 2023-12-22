@@ -33,7 +33,6 @@ abstract class AbstractBlockForm extends AbstractType
             'data_class' => BlockInterface::class,
             'translation_domain' => 'sfs_cms_blocks',
             'label_format' => 'admin_blocks.form.%name%.label',
-            'block_config' => null,
         ]);
 
         $resolver->setRequired('block_config');

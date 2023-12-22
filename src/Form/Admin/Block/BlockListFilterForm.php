@@ -6,7 +6,7 @@ use Softspring\CmsBundle\Model\BlockInterface;
 use Softspring\Component\DoctrinePaginator\Form\PaginatorForm;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class BlockListFilterForm extends PaginatorForm
+class BlockListFilterForm extends PaginatorForm implements BlockListFilterFormInterface
 {
     public function configureOptions(OptionsResolver $resolver): void
     {

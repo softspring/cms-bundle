@@ -4,6 +4,33 @@ namespace Softspring\CmsBundle;
 
 class SfsCmsEvents
 {
+    // BLOCK LIST EVENTS
+    public const ADMIN_BLOCKS_LIST_INITIALIZE = 'sfs_cms.admin.blocks.list_initialize';
+    public const ADMIN_BLOCKS_LIST_FILTER = 'sfs_cms.admin.blocks.list_filter';
+    public const ADMIN_BLOCKS_LIST_VIEW = 'sfs_cms.admin.blocks.list_view';
+    // BLOCK CREATE EVENTS
+    public const ADMIN_BLOCKS_CREATE_INITIALIZE = 'sfs_cms.admin.blocks.create_initialize';
+    public const ADMIN_BLOCKS_CREATE_ENTITY = 'sfs_cms.admin.blocks.create_create_entity';
+    public const ADMIN_BLOCKS_CREATE_FORM_PREPARE = 'sfs_cms.admin.blocks.create_form_prepare';
+    public const ADMIN_BLOCKS_CREATE_FORM_INIT = 'sfs_cms.admin.blocks.create_form_init';
+    public const ADMIN_BLOCKS_CREATE_FORM_VALID = 'sfs_cms.admin.blocks.create_form_valid';
+    public const ADMIN_BLOCKS_CREATE_SUCCESS = 'sfs_cms.admin.blocks.create_success';
+    public const ADMIN_BLOCKS_CREATE_FAILURE = 'sfs_cms.admin.blocks.create_failure';
+    public const ADMIN_BLOCKS_CREATE_FORM_INVALID = 'sfs_cms.admin.blocks.create_form_invalid';
+    public const ADMIN_BLOCKS_CREATE_VIEW = 'sfs_cms.admin.blocks.create_view';
+    // BLOCK UPDATE EVENTS
+    public const ADMIN_BLOCKS_UPDATE_INITIALIZE = 'sfs_cms.admin.blocks.update_initialize';
+    public const ADMIN_BLOCKS_UPDATE_LOAD_ENTITY = 'sfs_cms.admin.blocks.update_load_entity';
+    public const ADMIN_BLOCKS_UPDATE_NOT_FOUND = 'sfs_cms.admin.blocks.update_not_found';
+    public const ADMIN_BLOCKS_UPDATE_FOUND = 'sfs_cms.admin.blocks.update_found';
+    public const ADMIN_BLOCKS_UPDATE_FORM_PREPARE = 'sfs_cms.admin.blocks.update_form_prepare';
+    public const ADMIN_BLOCKS_UPDATE_FORM_INIT = 'sfs_cms.admin.blocks.update_form_init';
+    public const ADMIN_BLOCKS_UPDATE_FORM_VALID = 'sfs_cms.admin.blocks.update_form_valid';
+    public const ADMIN_BLOCKS_UPDATE_SUCCESS = 'sfs_cms.admin.blocks.update_success';
+    public const ADMIN_BLOCKS_UPDATE_FAILURE = 'sfs_cms.admin.blocks.update_failure';
+    public const ADMIN_BLOCKS_UPDATE_FORM_INVALID = 'sfs_cms.admin.blocks.update_form_invalid';
+    public const ADMIN_BLOCKS_UPDATE_VIEW = 'sfs_cms.admin.blocks.update_view';
+
     // MENU LIST EVENTS
     public const ADMIN_MENUS_LIST_INITIALIZE = 'sfs_cms.admin.menus.list_initialize';
     public const ADMIN_MENUS_LIST_FILTER = 'sfs_cms.admin.menus.list_filter';

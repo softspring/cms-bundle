@@ -23,6 +23,9 @@ admin_blocks:
             create.link: "Nuevo bloque"
             update.button: "Editar"
             details.button: "Detalles"
+        no_blocks_configured:
+            message: "No hay bloques configurados."
+            link: "Sigue la <a href=\"https://github.com/softspring/cms-bundle\" target=\"_blank\">documentación</a> para saber cómo configurar bloques."
 
     create:
         meta.title: "Nuevo bloque"
@@ -37,6 +40,8 @@ admin_blocks:
         actions:
             create.button: "Crear"
             cancel.button: "Cancelar"
+        invalid_block_type_flash: "No se ha encontrado la configuración del bloque"
+        existing_singleton_instance_flash: "Ya hay una instancia de este bloque"
 
     update:
         meta.title: "Editar bloque"
@@ -52,6 +57,9 @@ admin_blocks:
             update.button: "Guardar cambios"
             cancel.button: "Cancelar"
             delete.button: "Eliminar"
+        invalid_block_type_flash: "No se ha encontrado la configuración del bloque"
+        success_flash: "El bloque se ha actualizado correctamente"
+        success_ttl_flash: "El bloque se ha actualizado. Por cuestiones de rendimiento, el bloque está cacheado durante %cacheTtl% segundos, por lo que puede que tardes en visualizar los cambios"
 
     delete:
         meta.title: "Eliminar bloque"

@@ -8,7 +8,6 @@ services:
         public: false
         bind:
             $em: '@sfs_cms.entity_manager'
-            $blockTypes: [] # '%sfs_cms.block.types%'
             $formFactory: '@form.factory'
             $enabledLocales: '%kernel.enabled_locales%'
             $defaultLocale: '%kernel.default_locale%'
