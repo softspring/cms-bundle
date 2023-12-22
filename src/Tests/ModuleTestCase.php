@@ -14,7 +14,7 @@ use Softspring\CmsBundle\Form\Type\SymfonyRouteType;
 use Softspring\CmsBundle\Form\Type\TranslatableType;
 use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
-use Softspring\CmsBundle\Utils\ModuleMigrator;
+use Softspring\CmsBundle\Utils\DataMigrator;
 use Softspring\Component\DynamicFormType\Form\Extension\DynamicFormExtension;
 use Softspring\Component\DynamicFormType\Form\Resolver\ConstraintResolver;
 use Symfony\Component\Config\Definition\Processor;
@@ -73,7 +73,7 @@ abstract class ModuleTestCase extends TypeTestCase
 
     protected function assertMigrateTest(array $originData, array $expectedData): void
     {
-        $migratedData = ModuleMigrator::migrate(["{$this->modulePath}/migrate.php"], $originData, $expectedData['_revision']);
+        $migratedData = DataMigrator::migrate(["{$this->modulePath}/migrate.php"], $originData, $expectedData['_revision']);
         $this->assertEquals($expectedData, $migratedData);
     }
 

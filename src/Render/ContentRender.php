@@ -11,7 +11,7 @@ use Softspring\CmsBundle\Config\Exception\InvalidSiteException;
 use Softspring\CmsBundle\Form\Module\ContainerModuleType;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
-use Softspring\CmsBundle\Utils\ModuleMigrator;
+use Softspring\CmsBundle\Utils\DataMigrator;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Twig\Environment;
@@ -168,7 +168,7 @@ class ContentRender extends AbstractRenderer
 
         $moduleConfig = $this->cmsConfig->getModule($module['_module']);
 
-        $module = ModuleMigrator::migrate($moduleConfig['revision_migration_scripts'], $module, $moduleConfig['revision']);
+        $module = DataMigrator::migrate($moduleConfig['revision_migration_scripts'], $module, $moduleConfig['revision']);
 
         if ($this->isContainer($module)) {
             $module['contents'] = [];
