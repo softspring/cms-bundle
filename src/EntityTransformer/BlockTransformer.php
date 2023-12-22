@@ -1,6 +1,6 @@
 <?php
 
-namespace Softspring\CmsBundle\Transformer;
+namespace Softspring\CmsBundle\EntityTransformer;
 
 use Doctrine\Persistence\ObjectManager;
 use Softspring\CmsBundle\Model\BlockInterface;
@@ -39,6 +39,9 @@ class BlockTransformer implements TransformerInterface
         $block->setData($extraData);
     }
 
+    /**
+     * @throws UnsupportedException
+     */
     protected function getBlock($entity): BlockInterface
     {
         if (!$entity instanceof BlockInterface) {

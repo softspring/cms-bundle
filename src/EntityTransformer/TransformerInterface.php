@@ -1,6 +1,6 @@
 <?php
 
-namespace Softspring\CmsBundle\Transformer;
+namespace Softspring\CmsBundle\EntityTransformer;
 
 use Doctrine\Persistence\ObjectManager;
 

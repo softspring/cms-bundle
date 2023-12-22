@@ -112,27 +112,9 @@ services:
         resource: '../../src/Twig/Extension/*'
         tags: ['twig.extension']
 
-    Softspring\CmsBundle\EntityListener\BlockListener:
-        tags:
-            - { name: 'doctrine.orm.entity_listener', event: 'postLoad', entity: 'Softspring\CmsBundle\Entity\Block',  priority: 10 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
-            - { name: 'doctrine.orm.entity_listener', event: 'preUpdate', entity: 'Softspring\CmsBundle\Entity\Block',  priority: 10 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
-            - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: 'Softspring\CmsBundle\Entity\Block',  priority: 10 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
-
-    Softspring\CmsBundle\EntityListener\ContentListener:
-        tags:
-            - { name: 'doctrine.orm.entity_listener', event: 'postLoad', entity: 'Softspring\CmsBundle\Entity\Content',  priority: 10 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
-            - { name: 'doctrine.orm.entity_listener', event: 'preUpdate', entity: 'Softspring\CmsBundle\Entity\Content',  priority: 10 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
-            - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: 'Softspring\CmsBundle\Entity\Content',  priority: 10 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
-
     Softspring\CmsBundle\EntityListener\ContentVersionCompileListener:
         tags:
             - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: 'Softspring\CmsBundle\Entity\ContentVersion',  priority: 11 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
-
-    Softspring\CmsBundle\EntityListener\ContentVersionListener:
-        tags:
-            - { name: 'doctrine.orm.entity_listener', event: 'postLoad', entity: 'Softspring\CmsBundle\Entity\ContentVersion',  priority: 10 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
-            - { name: 'doctrine.orm.entity_listener', event: 'preUpdate', entity: 'Softspring\CmsBundle\Entity\ContentVersion',  priority: 10 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
-            - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: 'Softspring\CmsBundle\Entity\ContentVersion',  priority: 10 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
 
     Softspring\CmsBundle\EntityListener\ContentDiscriminatorMapListener:
         tags:

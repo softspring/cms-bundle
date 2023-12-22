@@ -1,6 +1,6 @@
 <?php
 
-namespace Softspring\CmsBundle\Transformer;
+namespace Softspring\CmsBundle\EntityTransformer;
 
 class UnsupportedException extends \Exception
 {
