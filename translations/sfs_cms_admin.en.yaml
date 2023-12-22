@@ -16,13 +16,16 @@ admin_blocks:
         fields:
             name.header: "Name"
             type.header: "Type"
-#            sites.header: "Sites"
+            #            sites.header: "Sites"
             published.header: "Published"
         actions.header: "Actions"
         actions:
             create.link: "New block"
             update.button: "Edit"
             details.button: "Details"
+        no_blocks_configured:
+            message: "No blocks are configured."
+            link: "Check how to configure blocks at <a href=\"https://github.com/softspring/cms-bundle\" target=\"_blank\">documentation</a>"
 
     create:
         meta.title: "New block"
@@ -37,6 +40,8 @@ admin_blocks:
         actions:
             create.button: "Create"
             cancel.button: "Cancel"
+        invalid_block_type_flash: "No block configuration found"
+        existing_singleton_instance_flash: "There is already an instance of this block"
 
     update:
         meta.title: "Edit block"
@@ -52,6 +57,9 @@ admin_blocks:
             update.button: "Save changes"
             cancel.button: "Cancel"
             delete.button: "Delete"
+        invalid_block_type_flash: "No block configuration found"
+        success_flash: "The block has been updated"
+        success_ttl_flash: "The block has been updated. For performance reasons, the block is cached for %cacheTtl% seconds, so you may take a while to see the changes"
 
     delete:
         meta.title: "Delete block"

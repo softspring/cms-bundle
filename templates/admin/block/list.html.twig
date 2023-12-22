@@ -11,85 +11,87 @@
 {% endblock breadcrums_content %}
 
 {% block content %}
-    {% if config|filter((blockConfig) => not blockConfig.static) is empty %}
+
     <div class="d-flex align-items-center justify-content-between mb-4">
         <h1 class="h3">{{ 'admin_blocks.list.title'|trans }}</h1>
-    </div>
-    <div class="container-fluid bg-white p-4">
-        <div class="p-5 m-5">
-            <p class="text-center text-muted">
-                No blocks are configured.
-            </p>
-            <p class="text-center text-muted">
-                Check how to configure blocks at <a href="https://github.com/softspring/cms-bundle" target="_blank">documentation</a>
-            </p>
-        </div>
-    </div>
-    {% else %}
-        <div class="d-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3">{{ 'admin_blocks.list.title'|trans }}</h1>
 
-            <div class="float-end">
-                {% if is_granted('ROLE_SFS_CMS_ADMIN_BLOCKS_CREATE') %}
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownBlockButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                        {{ 'admin_blocks.list.actions.create.link'|trans }}
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownBlockButton1">
-                        {% for blockKey, blockConfig in config|filter((blockConfig) => not blockConfig.static) %}
-                            <li><a class="dropdown-item" href="{{ url('sfs_cms_admin_blocks_create', {'blockType':blockKey}) }}">
-                                {{ ('admin_'~blockKey~'.name')|trans({}, 'sfs_cms_blocks') }}
-                            </a></li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                {% endif %}
+        <div class="float-end">
+            {% if is_granted('PERMISSION_SFS_CMS_ADMIN_BLOCKS_CREATE') %}
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownBlockButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    {{ 'admin_blocks.list.actions.create.link'|trans }}
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownBlockButton1">
+                    {% for blockKey, blockConfig in blocks_config|filter((blockConfig) => not blockConfig.static) %}
+                        <li><a class="dropdown-item" href="{{ url('sfs_cms_admin_blocks_create', {'blockType':blockKey}) }}">
+                            {{ ('admin_'~blockKey~'.name')|trans({}, 'sfs_cms_blocks') }}
+                        </a></li>
+                    {% endfor %}
+                </ul>
             </div>
-        </div>
-
-        <div class="container-fluid bg-white p-4">
-            {% if entities|length %}
-                <div class="mb-4">
-                    {{ form_start(filterForm) }}
-                    <div class="row">
-                        {#                    {% if filterForm.name is defined %}<div class="col">{{ form_row(filterForm.name, {'row_class':'form-floating'}) }}</div>{% endif %}#}
-                        {#                    {% if filterForm.surname is defined %}<div class="col">{{ form_row(filterForm.surname, {'row_class':'form-floating'}) }}</div>{% endif %}#}
-                        {#                    {% if filterForm.email is defined %}<div class="col">{{ form_row(filterForm.email, {'row_class':'form-floating'}) }}</div>{% endif %}#}
-                        {#                    {% if filterForm.search is defined %}<div class="col">{{ form_row(filterForm.search, {'row_class': 'form-floating'}) }}</div>{% endif %}#}
-                    </div>
-                    {{ form_widget(filterForm) }}
-                    {{ form_rest(filterForm) }}
-                    {{ form_end(filterForm) }}
-                </div>
             {% endif %}
-
-            {% embed '@SfsComponents/paginator/table.html.twig' with {'collection':entities, 'pagination_menu': 'sfs_cms_admin_blocks_list'} %}
-                {% trans_default_domain 'sfs_cms_admin' %}
-                {% block ths %}
-                    <th scope="col">
-                        <a href="{{ entities.sortToggleUrl(app.request, 'name') }}" class="text-dark">
-                            {{ 'admin_blocks.list.fields.name.header'|trans }}
-                            {% if entities.sortedBy('name', 'asc') %}<i class="bi bi-caret-up-fill"></i>{% elseif entities.sortedBy('name', 'desc') %}<i class="bi bi-caret-down-fill"></i>{% endif %}
-                        </a>
-                    </th>
-                    <th scope="col">
-                        <a href="{{ entities.sortToggleUrl(app.request, 'type') }}" class="text-dark">
-                            {{ 'admin_blocks.list.fields.type.header'|trans }}
-                            {% if entities.sortedBy('type', 'asc') %}<i class="bi bi-caret-up-fill"></i>{% elseif entities.sortedBy('type', 'desc') %}<i class="bi bi-caret-down-fill"></i>{% endif %}
-                        </a>
-                    </th>
-    {#                {% if sfs_cms_blocks_are_multisite() %}#}
-    {#                    <th scope="col">{{ 'admin_blocks.list.fields.sites.header'|trans }}</th>#}
-    {#                {% endif %}#}
-
-                    <th scope="col">{{ 'admin_blocks.list.fields.published.header'|trans }}</th>
-                    <th class="">&nbsp;</th>
-                {% endblock ths %}
-
-                {% block tbody %}
-                    {% include '@SfsCms/admin/block/list-page.html.twig' %}
-                {% endblock tbody %}
-            {% endembed %}
         </div>
-    {% endif %}
+    </div>
+
+    <div class="container-fluid bg-white p-4">
+        {% if entities|length %}
+            <div class="mb-4">
+                {{ form_start(filterForm) }}
+                <div class="row">
+                    {#                    {% if filterForm.name is defined %}<div class="col">{{ form_row(filterForm.name, {'row_class':'form-floating'}) }}</div>{% endif %}#}
+                    {#                    {% if filterForm.surname is defined %}<div class="col">{{ form_row(filterForm.surname, {'row_class':'form-floating'}) }}</div>{% endif %}#}
+                    {#                    {% if filterForm.email is defined %}<div class="col">{{ form_row(filterForm.email, {'row_class':'form-floating'}) }}</div>{% endif %}#}
+                    {#                    {% if filterForm.search is defined %}<div class="col">{{ form_row(filterForm.search, {'row_class': 'form-floating'}) }}</div>{% endif %}#}
+                </div>
+                {{ form_widget(filterForm) }}
+                {{ form_rest(filterForm) }}
+                {{ form_end(filterForm) }}
+            </div>
+        {% endif %}
+
+        {% embed '@SfsComponents/paginator/table.html.twig' with {'collection':entities, 'pagination_menu': 'sfs_cms_admin_blocks_list', 'empty_message': 'admin_blocks.list.empty_message'|trans} %}
+            {% trans_default_domain 'sfs_cms_admin' %}
+            {% block ths %}
+                <th scope="col">
+                    <a href="{{ entities.sortToggleUrl(app.request, 'name') }}" class="text-dark">
+                        {{ 'admin_blocks.list.fields.name.header'|trans }}
+                        {% if entities.sortedBy('name', 'asc') %}<i class="bi bi-caret-up-fill"></i>{% elseif entities.sortedBy('name', 'desc') %}<i class="bi bi-caret-down-fill"></i>{% endif %}
+                    </a>
+                </th>
+                <th scope="col">
+                    <a href="{{ entities.sortToggleUrl(app.request, 'type') }}" class="text-dark">
+                        {{ 'admin_blocks.list.fields.type.header'|trans }}
+                        {% if entities.sortedBy('type', 'asc') %}<i class="bi bi-caret-up-fill"></i>{% elseif entities.sortedBy('type', 'desc') %}<i class="bi bi-caret-down-fill"></i>{% endif %}
+                    </a>
+                </th>
+{#                {% if sfs_cms_blocks_are_multisite() %}#}
+{#                    <th scope="col">{{ 'admin_blocks.list.fields.sites.header'|trans }}</th>#}
+{#                {% endif %}#}
+
+                <th scope="col">{{ 'admin_blocks.list.fields.published.header'|trans }}</th>
+                <th class="">&nbsp;</th>
+            {% endblock ths %}
+
+            {% block tbody %}
+                {% include '@SfsCms/admin/block/list-page.html.twig' %}
+            {% endblock tbody %}
+
+            {% block empty %}
+                {% if blocks_config|filter((blockConfig) => not blockConfig.static) is empty %}
+                <div class="container-fluid bg-white p-4">
+                    <div class="p-5 m-5">
+                        <p class="text-center text-muted">
+                            {{ 'admin_blocks.list.no_blocks_configured.message'|trans }}
+                        </p>
+                        <p class="text-center text-muted">
+                            {{ 'admin_blocks.list.no_blocks_configured.link'|trans|raw }}
+                        </p>
+                    </div>
+                </div>
+                {% else %}
+                    {{ parent() }}
+                {% endif %}
+            {% endblock empty %}
+        {% endembed %}
+    </div>
 {% endblock content %}
