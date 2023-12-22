@@ -1,6 +1,6 @@
 <?php
 
-namespace Softspring\CmsBundle\Transformer;
+namespace Softspring\CmsBundle\EntityTransformer;
 
 use Doctrine\ORM\Mapping\MappingException as ORMMappingException;
 use Doctrine\Persistence\Mapping\MappingException as PersistenceMappingException;
@@ -8,7 +8,7 @@ use Doctrine\Persistence\ObjectManager;
 
 trait TransformEntityValuesTrait
 {
-    protected function transformEntityValues($value, ObjectManager $objectManager, array &$entities = [])
+    protected function transformEntityValues($value, ObjectManager $objectManager, array &$entities = []): mixed
     {
         if (is_array($value) || is_iterable($value)) {
             foreach ($value as $key => $value2) {
@@ -29,7 +29,7 @@ trait TransformEntityValuesTrait
         return $value;
     }
 
-    protected function untransformEntityValues($value, ObjectManager $objectManager)
+    protected function untransformEntityValues($value, ObjectManager $objectManager): mixed
     {
         if (is_array($value)) {
             if (isset($value['_entity_class'])) {
