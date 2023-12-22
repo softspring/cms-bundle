@@ -6,7 +6,7 @@ use Softspring\CmsBundle\Model\Block as BlockModel;
 
 class Block extends BlockModel
 {
-    protected ?string $id;
+    protected ?string $id = null;
 
     public function getId(): ?string
     {

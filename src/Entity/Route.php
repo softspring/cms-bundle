@@ -6,5 +6,4 @@ use Softspring\CmsBundle\Model\Route as RouteModel;
 
 class Route extends RouteModel
 {
-    protected ?string $id;
 }
