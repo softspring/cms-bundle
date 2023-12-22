@@ -7,7 +7,7 @@ use Softspring\CmsBundle\Model\ContentVersion as ContentVersionModel;
 
 class ContentVersion extends ContentVersionModel
 {
-    protected ?string $id;
+    protected ?string $id = null;
 
     public function __construct()
     {
