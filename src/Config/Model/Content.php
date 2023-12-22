@@ -77,7 +77,7 @@ class Content implements ConfigurationInterface
                         'sitemap' => ['type' => 'checkbox', 'type_options' => ['required' => false]],
                         'sitemapChangefreq' => ['type' => 'choice', 'type_options' => [
                             'choices' => [
-                                'admin_page.form.seo.sitemapChangefreq.values.empty' => false,
+                                'admin_page.form.seo.sitemapChangefreq.values.empty' => '',
                                 'admin_page.form.seo.sitemapChangefreq.values.always' => 'always',
                                 'admin_page.form.seo.sitemapChangefreq.values.hourly' => 'hourly',
                                 'admin_page.form.seo.sitemapChangefreq.values.daily' => 'daily',
