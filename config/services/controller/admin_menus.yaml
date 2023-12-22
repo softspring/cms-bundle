@@ -1,0 +1,79 @@
+parameters:
+    sfs_cms.admin.menus.list_view: '@@SfsCms/admin/menu/list.html.twig'
+    sfs_cms.admin.menus.list_content_view: '@@SfsCms/admin/menu/list-content.html.twig'
+    sfs_cms.admin.menus.create_view: '@@SfsCms/admin/menu/create.html.twig'
+    sfs_cms.admin.menus.update_view: '@@SfsCms/admin/menu/update.html.twig'
+    sfs_cms.admin.menus.delete_view: '@@SfsCms/admin/menu/delete.html.twig'
+    sfs_cms.admin.menus.read_view: '@@SfsCms/admin/menu/read.html.twig'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+        bind:
+            $em: '@sfs_cms.entity_manager'
+#            $enabledLocales: '%kernel.enabled_locales%'
+#            $defaultLocale: '%kernel.default_locale%'
+
+
+    Softspring\CmsBundle\EventListener\Admin\Menu\:
+        resource: '../../src/EventListener/Admin/Menu/*'
+
+    Softspring\CmsBundle\Form\Admin\Menu\:
+        resource: '../../../src/Form/Admin/Menu/Menu*'
+    
+    #    Softspring\CmsBundle\EventListener\Admin\:
+    #        resource: '../../../src/EventListener/Admin/Menu*'
+
+    Softspring\CmsBundle\Manager\MenuManagerInterface:
+        class: Softspring\CmsBundle\Manager\MenuManager
+
+    sfs_cms.admin.menu.controller:
+        class: Softspring\Component\CrudlController\Controller\CrudlController
+        public: true
+        tags: [ 'controller.service_arguments' ]
+        arguments:
+            $manager: '@Softspring\CmsBundle\Manager\MenuManagerInterface'
+            $eventDispatcher: '@event_dispatcher'
+            $configs:
+                entity_attribute: 'menu'
+                list:
+                    is_granted: 'PERMISSION_SFS_CMS_ADMIN_MENUS_LIST'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_MENUS_LIST_INITIALIZE
+                    filter_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_MENUS_LIST_FILTER
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_MENUS_LIST_VIEW
+                    view: '%sfs_cms.admin.menus.list_view%'
+                    view_page: '%sfs_cms.admin.menus.list_content_view%'
+                    filter_form: '@Softspring\CmsBundle\Form\Admin\Menu\MenuListFilterFormInterface'
+                create:
+                    is_granted: 'PERMISSION_SFS_CMS_ADMIN_MENUS_CREATE'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_MENUS_CREATE_INITIALIZE
+                    create_entity_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_MENUS_CREATE_ENTITY
+                    form_prepare_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_MENUS_CREATE_FORM_PREPARE
+                    form_init_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_MENUS_CREATE_FORM_INIT
+                    form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_MENUS_CREATE_FORM_VALID
+                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_MENUS_CREATE_SUCCESS
+                    failure_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_MENUS_CREATE_FAILURE
+                    form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_MENUS_CREATE_FORM_INVALID
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_MENUS_CREATE_VIEW
+                    success_redirect_to: 'sfs_cms_admin_menus_list'
+                    view: '%sfs_cms.admin.menus.create_view%'
+                    form: 'Softspring\CmsBundle\Form\Admin\Menu\MenuForm'
+                update:
+                    is_granted: 'PERMISSION_SFS_CMS_ADMIN_MENUS_UPDATE'
+                    param_converter_key: 'id'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_MENUS_UPDATE_INITIALIZE
+                    load_entity_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_MENUS_UPDATE_LOAD_ENTITY
+                    not_found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_MENUS_UPDATE_NOT_FOUND
+                    found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_MENUS_UPDATE_FOUND
+                    form_prepare_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_MENUS_UPDATE_FORM_PREPARE
+                    form_init_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_MENUS_UPDATE_FORM_INIT
+                    form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_MENUS_UPDATE_FORM_VALID
+                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_MENUS_UPDATE_SUCCESS
+                    failure_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_MENUS_UPDATE_FAILURE
+                    form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_MENUS_UPDATE_FORM_INVALID
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_MENUS_UPDATE_VIEW
+                    success_redirect_to: 'sfs_cms_admin_menus_list'
+                    view: '%sfs_cms.admin.menus.update_view%'
+                    form: 'Softspring\CmsBundle\Form\Admin\Menu\MenuForm'

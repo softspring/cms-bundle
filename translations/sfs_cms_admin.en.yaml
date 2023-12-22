@@ -176,6 +176,8 @@ admin_menus:
         actions:
             create.button: "Create menu"
             cancel.button: "Cancel"
+        invalid_block_type_flash: "No menu configuration found"
+        existing_singleton_instance_flash: "There is already an instance of this menu"
 
     update:
         meta.title: "Edit menu"
@@ -184,6 +186,9 @@ admin_menus:
         actions:
             update.button: "Save changes"
             cancel.button: "Cancel"
+        invalid_block_type_flash: "No menu configuration found"
+        success_flash: "The menu has been updated"
+        success_ttl_flash: "The menu has been updated. For performance reasons, the menu is cached for %cacheTtl% seconds, so you may take a while to see the changes"
 
     form:
         name.label: "Name"
@@ -191,7 +196,7 @@ admin_menus:
             label: "Elements"
             add.button: "Add element"
             text.label: "Text"
-#            route.label: "Route"
+            #            route.label: "Route"
             symfonyRoute:
                 label: "Route"
                 route_name.label: "Route name"
