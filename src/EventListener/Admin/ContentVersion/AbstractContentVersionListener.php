@@ -2,7 +2,6 @@
 
 namespace Softspring\CmsBundle\EventListener\Admin\ContentVersion;
 
-use Google\Cloud\Core\Exception\NotFoundException;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\EventListener\Admin\ContentGetOptionTrait;
 use Softspring\CmsBundle\EventListener\Admin\ContentInitializeEventTrait;
@@ -19,6 +18,7 @@ use Softspring\Component\CrudlController\Event\ViewEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\EventDispatcher\Event;
@@ -70,7 +70,7 @@ abstract class AbstractContentVersionListener implements EventSubscriberInterfac
                 return;
             }
 
-            throw new NotFoundException();
+            throw new NotFoundHttpException();
         }
 
         $event->getRequest()->attributes->set('content', $entity);
