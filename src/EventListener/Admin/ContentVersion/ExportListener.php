@@ -88,16 +88,15 @@ class ExportListener extends AbstractContentVersionListener
         /** @var ContentInterface $content */
         $content = $event->getRequest()->attributes->get('content');
 
-//        $exportName = sprintf('%s-%s-v%s-%s.zip', Slugger::lowerSlug($content->getName()), $contentConfig['_id'], $version->getVersionNumber(), date('Y-m-d-H-i-s'));
-//        $this->serializer->dump(['contents' => [$content]], 'zip', [
-//            'zip_filename' => $exportName,
-//            'encoder' => 'yaml',
-//            'dump_version' => ContentEntityNormalizer::DUMP_VERSION_ID,
-//            'version_id' => $version->getId(),
-//        ]);
-//
-//        $event->setResponse(ZipContent::response($exportName));
-
+        //        $exportName = sprintf('%s-%s-v%s-%s.zip', Slugger::lowerSlug($content->getName()), $contentConfig['_id'], $version->getVersionNumber(), date('Y-m-d-H-i-s'));
+        //        $this->serializer->dump(['contents' => [$content]], 'zip', [
+        //            'zip_filename' => $exportName,
+        //            'encoder' => 'yaml',
+        //            'dump_version' => ContentEntityNormalizer::DUMP_VERSION_ID,
+        //            'version_id' => $version->getId(),
+        //        ]);
+        //
+        //        $event->setResponse(ZipContent::response($exportName));
 
         $path = tempnam(sys_get_temp_dir(), 'content_');
         unlink($path);

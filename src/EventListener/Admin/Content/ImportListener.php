@@ -113,11 +113,11 @@ class ImportListener extends AbstractContentListener
 
         $this->dataImporter->import(ZipContent::read($zipFile->getPath(), $zipFile->getBasename()), ['version_origin' => ContentVersionInterface::ORIGIN_IMPORT]);
 
-//        $this->serializer->load('zip', [
-//            'zip_filename' => $zipFile->getPathname(),
-//            'version_origin' => ContentVersionInterface::ORIGIN_IMPORT,
-//            'persist_and_flush' => true,
-//        ]);
+        //        $this->serializer->load('zip', [
+        //            'zip_filename' => $zipFile->getPathname(),
+        //            'version_origin' => ContentVersionInterface::ORIGIN_IMPORT,
+        //            'persist_and_flush' => true,
+        //        ]);
 
         $event->setApplied(true);
     }

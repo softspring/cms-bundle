@@ -167,7 +167,7 @@ class Content implements ConfigurationInterface
                                     unset($data[$deprecatedOption]);
                                 }
 
-                                /** @deprecated allow old options to prevent errors on existing templates */
+                                /* @deprecated allow old options to prevent errors on existing templates */
                                 $data[$deprecatedOption] = $data[$group][$attribute] ?? null;
                             }
 

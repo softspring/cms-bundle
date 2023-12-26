@@ -78,7 +78,6 @@ class SfsCmsEvents
     public const ADMIN_ROUTES_DELETE_FORM_INVALID = 'sfs_cms.admin.routes.delete_form_invalid';
     public const ADMIN_ROUTES_DELETE_VIEW = 'sfs_cms.admin.routes.delete_view';
 
-
     // CONTENT LIST EVENTS, ALL OF THEM ARE INTERNAL
     public const ADMIN_CONTENTS_LIST_INITIALIZE = 'sfs_cms.admin.contents.list_initialize';
     public const ADMIN_CONTENTS_LIST_FILTER_FORM_PREPARE = 'sfs_cms.admin.contents.filter_form_prepare';

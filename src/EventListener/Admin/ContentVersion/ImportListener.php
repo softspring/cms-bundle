@@ -119,14 +119,14 @@ class ImportListener extends AbstractContentVersionListener
         /** @var UploadedFile $zipFile */
         $zipFile = $form->get('file')->getData();
 
-//        $this->serializer->load('zip', [
-//            'zip_filename' => $zipFile->getPathname(),
-//            'content_to_load_version' => $entity,
-//            'version_origin' => ContentVersionInterface::ORIGIN_IMPORT,
-//            'version_origin_description' => $zipFile->getClientOriginalName(),
-//            'version_keep' => true,
-//            'persist_and_flush' => true,
-//        ]);
+        //        $this->serializer->load('zip', [
+        //            'zip_filename' => $zipFile->getPathname(),
+        //            'content_to_load_version' => $entity,
+        //            'version_origin' => ContentVersionInterface::ORIGIN_IMPORT,
+        //            'version_origin_description' => $zipFile->getClientOriginalName(),
+        //            'version_keep' => true,
+        //            'persist_and_flush' => true,
+        //        ]);
 
         $data = ZipContent::read($zipFile->getPath(), $zipFile->getBasename());
 
