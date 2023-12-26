@@ -20,11 +20,12 @@ class ContentCreateForm extends AbstractType implements ContentCreateFormInterfa
             'data_class' => ContentInterface::class,
             'validation_groups' => ['Default', 'create'],
             'translation_domain' => 'sfs_cms_contents',
-            'content' => null,
         ]);
 
+        $resolver->setRequired('content_config');
+
         $resolver->setNormalizer('label_format', function (Options $options, $value) {
-            return "admin_{$options['content']['_id']}.form.%name%.label";
+            return "admin_{$options['content_config']['_id']}.form.%name%.label";
         });
     }
 
@@ -38,13 +39,13 @@ class ContentCreateForm extends AbstractType implements ContentCreateFormInterfa
         ]);
 
         $builder->add('sites', SiteChoiceType::class, [
-            'content' => $options['content'],
+            'content' => $options['content_config'],
             'by_reference' => false,
         ]);
 
-        if (!empty($options['content']['extra_fields'])) {
+        if (!empty($options['content_config']['extra_fields'])) {
             $builder->add('extraData', DynamicFormType::class, [
-                'form_fields' => $options['content']['extra_fields'],
+                'form_fields' => $options['content_config']['extra_fields'],
                 'translation_domain' => 'sfs_cms_contents',
             ]);
         }
@@ -55,7 +56,7 @@ class ContentCreateForm extends AbstractType implements ContentCreateFormInterfa
             'entry_options' => [
                 'content_relative' => true,
                 'translation_domain' => 'sfs_cms_contents',
-                'label_format' => "admin_{$options['content']['_id']}.form.routes.%name%.label",
+                'label_format' => "admin_{$options['content_config']['_id']}.form.routes.%name%.label",
             ],
         ]);
     }

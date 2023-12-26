@@ -131,16 +131,16 @@ window.addEventListener('load', (event) => {
         const moduleThumbnail = event._originEvent.target;
         let prototype = moduleThumbnail.dataset.polymorphicPrototype;
         // COLLECTION
-        // content_content_form_data_main_1_modules_0
-        // content_content_form[data][main][1][modules][0]
+        // version_create_form_data_main_1_modules_0
+        // version_create_form[data][main][1][modules][0]
         // PROTOTYPE
-        // content_content_form_module_prototypes_collection____MODULE____class
-        // content_content_form[module_prototypes_collection][___MODULE___]
+        // version_create_form_module_prototypes_collection____MODULE____class
+        // version_create_form[module_prototypes_collection][___MODULE___]
         // RESULT
-        // content_content_form_data_main_1_modules_0_modules_0_class
-        // content_content_form[data][main][1][modules][0][modules][0][class]
-        prototype = prototype.replace(new RegExp('content_content_form_module_prototypes_collection', 'g'), modulesCollection.id);
-        prototype = prototype.replace(new RegExp('content_content_form\\[module_prototypes_collection\\]', 'g'), modulesCollection.dataset.fullName);
+        // version_create_form_data_main_1_modules_0_modules_0_class
+        // version_create_form[data][main][1][modules][0][modules][0][class]
+        prototype = prototype.replace(new RegExp('version_create_form_module_prototypes_collection', 'g'), modulesCollection.id);
+        prototype = prototype.replace(new RegExp('version_create_form\\[module_prototypes_collection\\]', 'g'), modulesCollection.dataset.fullName);
         event.prototype(prototype);
 
         // reset variables

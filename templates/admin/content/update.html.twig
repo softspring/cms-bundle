@@ -2,7 +2,7 @@
 
 {% extends '@SfsCms/admin_layout.html.twig' %}
 
-{% block title %}{{ ('admin_'~content~'.update.meta.title')|trans({'%name%':entity.name}) }}{% endblock %}
+{% block title %}{{ ('admin_'~content_type~'.update.meta.title')|trans({'%name%':entity.name}) }}{% endblock %}
 
 {% form_theme form
     'bootstrap_5_layout.html.twig'
@@ -12,12 +12,12 @@
 
 {% block breadcrums_content %}
     {{ parent() }}
-    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content~'_list') }}">{{ ('admin_'~content~'.list.breadcrumb')|trans }}</a></li>
-    <li class="breadcrumb-item active" aria-current="content">{{ ('admin_'~content~'.update.breadcrumb')|trans({'%name%':entity.name}) }}</li>
+    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content_type~'_list') }}">{{ ('admin_'~content_type~'.list.breadcrumb')|trans }}</a></li>
+    <li class="breadcrumb-item active" aria-current="content">{{ ('admin_'~content_type~'.update.breadcrumb')|trans({'%name%':entity.name}) }}</li>
 {% endblock breadcrums_content %}
 
 {% block content %}
-    <h1 class="h3">{{ ('admin_'~content~'.update.title')|trans({'%name%':entity.name}) }}</h1>
+    <h1 class="h3">{{ ('admin_'~content_type~'.update.title')|trans({'%name%':entity.name}) }}</h1>
 
     {% include '@SfsCms/admin/content/_content_tabs.html.twig' with {'current':'update', 'content':content, 'entity':entity} %}
 
@@ -35,13 +35,13 @@
                 {% endblock %}
 
                 <div class="d-flex justify-content-end align-items-center">
-                    {% if not content_config.admin.delete_is_granted or is_granted(content_config.admin.delete_is_granted, entity) %}
-                        <a href="{{ url('sfs_cms_admin_content_'~content~'_delete', {'content':entity}) }}" class="btn btn-outline-danger">{{ ('admin_'~content~'.update.actions.delete.button')|trans }}</a>
+                    {% if not content_config.admin.delete.is_granted or is_granted(content_config.admin.delete.is_granted, entity) %}
+                        <a href="{{ url('sfs_cms_admin_content_'~content_type~'_delete', {'content':entity}) }}" class="btn btn-outline-danger">{{ ('admin_'~content_type~'.update.actions.delete.button')|trans }}</a>
                     {% else %}
-                        <a class="btn btn-outline-danger disabled">{{ ('admin_'~content~'.update.actions.delete.button')|trans }}</a>
+                        <a class="btn btn-outline-danger disabled">{{ ('admin_'~content_type~'.update.actions.delete.button')|trans }}</a>
                     {% endif %}
-                    <a href="{{ url('sfs_cms_admin_content_'~content~'_list') }}" class="btn btn-outline-secondary ms-3">{{ ('admin_'~content~'.update.actions.cancel.button')|trans }}</a>
-                    <input type="submit" value="{{ ('admin_'~content~'.update.actions.update.button')|trans }}" class="btn btn-primary ms-3" />
+                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_list') }}" class="btn btn-outline-secondary ms-3">{{ ('admin_'~content_type~'.update.actions.cancel.button')|trans }}</a>
+                    <input type="submit" value="{{ ('admin_'~content_type~'.update.actions.update.button')|trans }}" class="btn btn-primary ms-3" />
                 </div>
             </div>
         </div>

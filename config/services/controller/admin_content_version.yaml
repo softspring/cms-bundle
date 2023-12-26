@@ -1,0 +1,99 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+        bind:
+            $em: '@sfs_cms.entity_manager'
+
+    Softspring\CmsBundle\EventListener\Admin\ContentVersion\:
+        resource: '../../src/EventListener/Admin/ContentVersion/*'
+
+    Softspring\CmsBundle\Form\Admin\ContentVersion\:
+        resource: '../../../src/Form/Admin/ContentVersion/*'
+
+    sfs_cms.admin.content_version.controller:
+        class: Softspring\Component\CrudlController\Controller\CrudlController
+        public: true
+        arguments:
+            $manager: '@Softspring\CmsBundle\Manager\ContentVersionManagerInterface'
+            $configs:
+                entity_attribute: 'version'
+                version_create:
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CREATE_INITIALIZE
+                    create_entity_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CREATE_ENTITY
+                    form_prepare_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CREATE_FORM_PREPARE
+                    form_init_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CREATE_FORM_INIT
+                    form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CREATE_FORM_VALID
+                    apply_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CREATE_APPLY
+                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CREATE_SUCCESS
+                    failure_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CREATE_FAILURE
+                    form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CREATE_FORM_INVALID
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CREATE_VIEW
+                    exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CREATE_EXCEPTION
+                version_import:
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_IMPORT_INITIALIZE
+                    create_entity_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_IMPORT_ENTITY
+                    form_prepare_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_IMPORT_FORM_PREPARE
+                    form_init_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_IMPORT_FORM_INIT
+                    form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_IMPORT_FORM_VALID
+                    apply_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_IMPORT_APPLY
+                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_IMPORT_SUCCESS
+                    failure_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_IMPORT_FAILURE
+                    form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_IMPORT_FORM_INVALID
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_IMPORT_VIEW
+                    exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_IMPORT_EXCEPTION
+                version_preview:
+                    param_converter_key: 'id'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_PREVIEW_INITIALIZE
+                    load_entity_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_PREVIEW_LOAD_ENTITY
+                    not_found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_PREVIEW_NOT_FOUND
+                    found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_PREVIEW_FOUND
+                    exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_PREVIEW_EXCEPTION
+                version_lock:
+                    param_converter_key: 'id'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_LOCK_INITIALIZE
+                    load_entity_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_LOCK_LOAD_ENTITY
+                    not_found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_LOCK_NOT_FOUND
+                    found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_LOCK_FOUND
+                    apply_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_LOCK_APPLY
+                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_LOCK_SUCCESS
+                    failure_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_LOCK_FAILURE
+                    exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_LOCK_EXCEPTION
+                version_publish:
+                    param_converter_key: 'id'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_PUBLISH_INITIALIZE
+                    load_entity_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_PUBLISH_LOAD_ENTITY
+                    not_found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_PUBLISH_NOT_FOUND
+                    found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_PUBLISH_FOUND
+                    apply_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_PUBLISH_APPLY
+                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_PUBLISH_SUCCESS
+                    failure_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_PUBLISH_FAILURE
+                    exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_PUBLISH_EXCEPTION
+                version_export:
+                    param_converter_key: 'id'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_EXPORT_INITIALIZE
+                    load_entity_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_EXPORT_LOAD_ENTITY
+                    not_found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_EXPORT_NOT_FOUND
+                    found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_EXPORT_FOUND
+                    apply_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_EXPORT_APPLY
+                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_EXPORT_SUCCESS
+                    failure_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_EXPORT_FAILURE
+                    exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_EXPORT_EXCEPTION
+                version_list:
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_LIST_INITIALIZE
+                    filter_form_prepare_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_LIST_FILTER_FORM_PREPARE
+                    filter_form_init_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_LIST_FILTER_FORM_INIT
+                    filter_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_LIST_FILTER
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_LIST_VIEW
+                    exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_LIST_EXCEPTION
+                version_cleanup:
+                    param_converter_key: 'id'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEANUP_INITIALIZE
+                    load_entity_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEANUP_LOAD_ENTITY
+                    not_found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEANUP_NOT_FOUND
+                    found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEANUP_FOUND
+                    apply_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEANUP_APPLY
+                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEANUP_SUCCESS
+                    failure_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEANUP_FAILURE
+                    exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEANUP_EXCEPTION

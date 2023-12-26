@@ -1,87 +1,105 @@
 list:
-    controller: Softspring\CmsBundle\Controller\Admin\ContentController::list
+    controller: sfs_cms.admin.content.controller::list
     path: /
 
 create:
-    controller: Softspring\CmsBundle\Controller\Admin\ContentController::create
+    controller: sfs_cms.admin.content.controller::create
     path: /create
 
 import:
-    controller: Softspring\CmsBundle\Controller\Admin\ContentController::import
+    controller: sfs_cms.admin.content.controller::create
     path: /import
-
-import_version:
-    controller: Softspring\CmsBundle\Controller\Admin\ContentController::importVersion
-    path: /{content}/import-version
+    defaults:
+        configKey: 'import'
 
 details:
-    controller: Softspring\CmsBundle\Controller\Admin\ContentController::read
+    controller: sfs_cms.admin.content.controller::read
     path: /{content}
 
-preview:
-    controller: Softspring\CmsBundle\Controller\Admin\ContentController::preview
-    path: /{content}/preview
-
-preview_version:
-    controller: Softspring\CmsBundle\Controller\Admin\ContentController::preview
-    path: /{content}/{version}/preview
-
 update:
-    controller: Softspring\CmsBundle\Controller\Admin\ContentController::update
+    controller: sfs_cms.admin.content.controller::update
     path: /{content}/update
 
 delete:
-    controller: Softspring\CmsBundle\Controller\Admin\ContentController::delete
+    controller: sfs_cms.admin.content.controller::delete
     path: /{content}/delete
 
 seo:
-    controller: Softspring\CmsBundle\Controller\Admin\ContentController::seo
+    controller: sfs_cms.admin.content.controller::update
     path: /{content}/seo
-
-content:
-    controller: Softspring\CmsBundle\Controller\Admin\ContentController::content
-    path: /{content}/content
-
-content_from_version:
-    controller: Softspring\CmsBundle\Controller\Admin\ContentController::content
-    path: /{content}/{prevVersion}/content
-
-preview_content:
-    controller: Softspring\CmsBundle\Controller\Admin\ContentController::previewContent
-    path: /{content}/preview-content
-
-preview_content_version:
-    controller: Softspring\CmsBundle\Controller\Admin\ContentController::previewContent
-    path: /{content}/{version}/preview-content
-
-publish_version:
-    controller: Softspring\CmsBundle\Controller\Admin\ContentController::publishVersion
-    path: /{content}/{version}/publish-version
+    defaults:
+        configKey: 'seo'
 
 unpublish:
-    controller: Softspring\CmsBundle\Controller\Admin\ContentController::unpublish
+    controller: sfs_cms.admin.content.controller::apply
     path: /{content}/unpublish
-
-keep_version:
-    controller: Softspring\CmsBundle\Controller\Admin\ContentController::markKeepVersion
-    path: /{content}/{version}/keep-version
     defaults:
-        keep: true
+        configKey: 'unpublish'
 
-unkeep_version:
-    controller: Softspring\CmsBundle\Controller\Admin\ContentController::markKeepVersion
-    path: /{content}/{version}/unkeep-version
+preview:
+    controller: sfs_cms.admin.content.controller::read
+    path: /{content}/preview
     defaults:
-        keep: false
+        configKey: 'preview'
 
-export_version:
-    controller: Softspring\CmsBundle\Controller\Admin\ContentController::exportVersion
-    path: /{content}/{version}/export-version
+content:
+    controller: sfs_cms.admin.content_version.controller::create
+    path: /{content}/content
+    defaults:
+        configKey: 'version_create'
+
+content_from_version:
+    controller: sfs_cms.admin.content_version.controller::create
+    path: /{content}/{prevVersion}/content
+    defaults:
+        configKey: 'version_create'
 
 versions:
-    controller: Softspring\CmsBundle\Controller\Admin\ContentController::versions
+    controller: sfs_cms.admin.content_version.controller::list
     path: /{content}/versions
+    defaults:
+        configKey: 'version_list'
+
+keep_version:
+    controller: sfs_cms.admin.content_version.controller::apply
+    path: /{content}/{version}/keep-version
+    defaults:
+        configKey: 'version_lock'
+        lock: true
+
+unkeep_version:
+    controller: sfs_cms.admin.content_version.controller::apply
+    path: /{content}/{version}/unkeep-version
+    defaults:
+        configKey: 'version_lock'
+        lock: false
+
+version_preview:
+    controller: sfs_cms.admin.content_version.controller::read
+    path: /{content}/{version}/preview
+    defaults:
+        configKey: 'version_preview'
+
+publish_version:
+    controller: sfs_cms.admin.content_version.controller::apply
+    path: /{content}/{version}/publish
+    defaults:
+        configKey: 'version_publish'
+
+export_version:
+    controller: sfs_cms.admin.content_version.controller::apply
+    path: /{content}/{version}/export
+    defaults:
+        configKey: 'version_export'
+
+import_version:
+    controller: sfs_cms.admin.content_version.controller::create
+    path: /{content}/import
+    defaults:
+        configKey: 'version_import'
 
 cleanup_versions:
-    controller: Softspring\CmsBundle\Controller\Admin\ContentController::cleanupVersions
-    path: /{content}/cleanup-versions
+    controller: sfs_cms.admin.content_version.controller::apply
+    path: /{content}/versions-cleanup
+    defaults:
+        configKey: 'version_cleanup'

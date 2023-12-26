@@ -29,4 +29,6 @@ interface ContentManagerInterface extends CrudlEntityManagerInterface
     public function getRepository(string $type = null): EntityRepository;
 
     public function getTypeClass(string $type = null): string;
+
+    public function getType(mixed $objectOrClassName = null): string;
 }

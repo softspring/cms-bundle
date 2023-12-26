@@ -17,11 +17,11 @@ class ContentImportForm extends AbstractType implements ContentImportFormInterfa
         $resolver->setDefaults([
             'validation_groups' => ['Default', 'import'],
             'translation_domain' => 'sfs_cms_contents',
-            'content' => null,
+            'content_config' => null,
         ]);
 
         $resolver->setNormalizer('label_format', function (Options $options, $value) {
-            return "admin_{$options['content']['_id']}.import.form.%name%.label";
+            return "admin_{$options['content_config']['_id']}.import.form.%name%.label";
         });
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Softspring\CmsBundle\Form\Admin\Content;
+namespace Softspring\CmsBundle\Form\Admin\ContentVersion;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Softspring\CmsBundle\Form\Admin\LayoutContentType;
@@ -15,7 +15,7 @@ use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotEqualTo;
 
-class ContentContentForm extends AbstractType implements ContentContentFormInterface
+class VersionCreateForm extends AbstractType implements VersionCreateFormInterface
 {
     protected EntityManagerInterface $em;
 
@@ -33,11 +33,11 @@ class ContentContentForm extends AbstractType implements ContentContentFormInter
             'translation_domain' => 'sfs_cms_contents',
             'layout' => null,
             'content_type' => null,
-            'content' => null,
+            'content_config' => null,
         ]);
 
         //        $resolver->setNormalizer('label_format', function (Options $options, $value) {
-        //            return "admin_{$options['content']['_id']}.form.%name%.label";
+        //            return "admin_{$options['content_config']['_id']}.form.%name%.label";
         //        });
 
         $resolver->setRequired('content_type');

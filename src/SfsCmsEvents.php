@@ -77,4 +77,176 @@ class SfsCmsEvents
     public const ADMIN_ROUTES_DELETE_SUCCESS = 'sfs_cms.admin.routes.delete_success';
     public const ADMIN_ROUTES_DELETE_FORM_INVALID = 'sfs_cms.admin.routes.delete_form_invalid';
     public const ADMIN_ROUTES_DELETE_VIEW = 'sfs_cms.admin.routes.delete_view';
+
+
+    // CONTENT LIST EVENTS, ALL OF THEM ARE INTERNAL
+    public const ADMIN_CONTENTS_LIST_INITIALIZE = 'sfs_cms.admin.contents.list_initialize';
+    public const ADMIN_CONTENTS_LIST_FILTER_FORM_PREPARE = 'sfs_cms.admin.contents.filter_form_prepare';
+    public const ADMIN_CONTENTS_LIST_FILTER_FORM_INIT = 'sfs_cms.admin.contents.filter_form_init';
+    public const ADMIN_CONTENTS_LIST_FILTER = 'sfs_cms.admin.contents.list_filter';
+    public const ADMIN_CONTENTS_LIST_VIEW = 'sfs_cms.admin.contents.list_view';
+    public const ADMIN_CONTENTS_LIST_EXCEPTION = 'sfs_cms.admin.contents.list_exception';
+    // CONTENT CREATE EVENTS, ALL OF THEM ARE INTERNAL
+    public const ADMIN_CONTENTS_CREATE_INITIALIZE = 'sfs_cms.admin.contents.create_initialize';
+    public const ADMIN_CONTENTS_CREATE_ENTITY = 'sfs_cms.admin.contents.create_create_entity';
+    public const ADMIN_CONTENTS_CREATE_FORM_PREPARE = 'sfs_cms.admin.contents.create_form_prepare';
+    public const ADMIN_CONTENTS_CREATE_FORM_INIT = 'sfs_cms.admin.contents.create_form_init';
+    public const ADMIN_CONTENTS_CREATE_FORM_VALID = 'sfs_cms.admin.contents.create_form_valid';
+    public const ADMIN_CONTENTS_CREATE_APPLY = 'sfs_cms.admin.contents.create_apply';
+    public const ADMIN_CONTENTS_CREATE_SUCCESS = 'sfs_cms.admin.contents.create_success';
+    public const ADMIN_CONTENTS_CREATE_FAILURE = 'sfs_cms.admin.contents.create_failure';
+    public const ADMIN_CONTENTS_CREATE_FORM_INVALID = 'sfs_cms.admin.contents.create_form_invalid';
+    public const ADMIN_CONTENTS_CREATE_VIEW = 'sfs_cms.admin.contents.create_view';
+    public const ADMIN_CONTENTS_CREATE_EXCEPTION = 'sfs_cms.admin.contents.create_exception';
+    // CONTENT IMPORT EVENTS, ALL OF THEM ARE INTERNAL
+    public const ADMIN_CONTENTS_IMPORT_INITIALIZE = 'sfs_cms.admin.contents.import_initialize';
+    public const ADMIN_CONTENTS_IMPORT_ENTITY = 'sfs_cms.admin.contents.import_import_entity';
+    public const ADMIN_CONTENTS_IMPORT_FORM_PREPARE = 'sfs_cms.admin.contents.import_form_prepare';
+    public const ADMIN_CONTENTS_IMPORT_FORM_INIT = 'sfs_cms.admin.contents.import_form_init';
+    public const ADMIN_CONTENTS_IMPORT_FORM_VALID = 'sfs_cms.admin.contents.import_form_valid';
+    public const ADMIN_CONTENTS_IMPORT_APPLY = 'sfs_cms.admin.contents.import_apply';
+    public const ADMIN_CONTENTS_IMPORT_SUCCESS = 'sfs_cms.admin.contents.import_success';
+    public const ADMIN_CONTENTS_IMPORT_FAILURE = 'sfs_cms.admin.contents.import_failure';
+    public const ADMIN_CONTENTS_IMPORT_FORM_INVALID = 'sfs_cms.admin.contents.import_form_invalid';
+    public const ADMIN_CONTENTS_IMPORT_VIEW = 'sfs_cms.admin.contents.import_view';
+    public const ADMIN_CONTENTS_IMPORT_EXCEPTION = 'sfs_cms.admin.contents.import_exception';
+    // CONTENT READ EVENTS, ALL OF THEM ARE INTERNAL
+    public const ADMIN_CONTENTS_READ_INITIALIZE = 'sfs_cms.admin.contents.read_initialize';
+    public const ADMIN_CONTENTS_READ_LOAD_ENTITY = 'sfs_cms.admin.contents.read_load_entity';
+    public const ADMIN_CONTENTS_READ_NOT_FOUND = 'sfs_cms.admin.contents.read_not_found';
+    public const ADMIN_CONTENTS_READ_FOUND = 'sfs_cms.admin.contents.read_found';
+    public const ADMIN_CONTENTS_READ_VIEW = 'sfs_cms.admin.contents.read_view';
+    public const ADMIN_CONTENTS_READ_EXCEPTION = 'sfs_cms.admin.contents.read_exception';
+    // CONTENT UPDATE EVENTS, ALL OF THEM ARE INTERNAL
+    public const ADMIN_CONTENTS_UPDATE_INITIALIZE = 'sfs_cms.admin.contents.update_initialize';
+    public const ADMIN_CONTENTS_UPDATE_LOAD_ENTITY = 'sfs_cms.admin.contents.update_load_entity';
+    public const ADMIN_CONTENTS_UPDATE_NOT_FOUND = 'sfs_cms.admin.contents.update_not_found';
+    public const ADMIN_CONTENTS_UPDATE_FOUND = 'sfs_cms.admin.contents.update_found';
+    public const ADMIN_CONTENTS_UPDATE_FORM_PREPARE = 'sfs_cms.admin.contents.update_form_prepare';
+    public const ADMIN_CONTENTS_UPDATE_FORM_INIT = 'sfs_cms.admin.contents.update_form_init';
+    public const ADMIN_CONTENTS_UPDATE_FORM_VALID = 'sfs_cms.admin.contents.update_form_valid';
+    public const ADMIN_CONTENTS_UPDATE_APPLY = 'sfs_cms.admin.contents.update_apply';
+    public const ADMIN_CONTENTS_UPDATE_SUCCESS = 'sfs_cms.admin.contents.update_success';
+    public const ADMIN_CONTENTS_UPDATE_FAILURE = 'sfs_cms.admin.contents.update_failure';
+    public const ADMIN_CONTENTS_UPDATE_FORM_INVALID = 'sfs_cms.admin.contents.update_form_invalid';
+    public const ADMIN_CONTENTS_UPDATE_VIEW = 'sfs_cms.admin.contents.update_view';
+    public const ADMIN_CONTENTS_UPDATE_EXCEPTION = 'sfs_cms.admin.contents.update_exception';
+    // CONTENT DELETE EVENTS, ALL OF THEM ARE INTERNAL
+    public const ADMIN_CONTENTS_DELETE_INITIALIZE = 'sfs_cms.admin.contents.delete_initialize';
+    public const ADMIN_CONTENTS_DELETE_LOAD_ENTITY = 'sfs_cms.admin.contents.delete_load_entity';
+    public const ADMIN_CONTENTS_DELETE_NOT_FOUND = 'sfs_cms.admin.contents.delete_not_found';
+    public const ADMIN_CONTENTS_DELETE_FOUND = 'sfs_cms.admin.contents.delete_found';
+    public const ADMIN_CONTENTS_DELETE_FORM_PREPARE = 'sfs_cms.admin.contents.delete_form_prepare';
+    public const ADMIN_CONTENTS_DELETE_FORM_INIT = 'sfs_cms.admin.contents.delete_form_init';
+    public const ADMIN_CONTENTS_DELETE_FORM_VALID = 'sfs_cms.admin.contents.delete_form_valid';
+    public const ADMIN_CONTENTS_DELETE_APPLY = 'sfs_cms.admin.contents.delete_apply';
+    public const ADMIN_CONTENTS_DELETE_SUCCESS = 'sfs_cms.admin.contents.delete_success';
+    public const ADMIN_CONTENTS_DELETE_FAILURE = 'sfs_cms.admin.contents.delete_failure';
+    public const ADMIN_CONTENTS_DELETE_FORM_INVALID = 'sfs_cms.admin.contents.delete_form_invalid';
+    public const ADMIN_CONTENTS_DELETE_VIEW = 'sfs_cms.admin.contents.delete_view';
+    public const ADMIN_CONTENTS_DELETE_EXCEPTION = 'sfs_cms.admin.contents.delete_exception';
+    // CONTENT SEO EVENTS, ALL OF THEM ARE INTERNAL
+    public const ADMIN_CONTENTS_SEO_INITIALIZE = 'sfs_cms.admin.contents.seo_initialize';
+    public const ADMIN_CONTENTS_SEO_LOAD_ENTITY = 'sfs_cms.admin.contents.seo_load_entity';
+    public const ADMIN_CONTENTS_SEO_NOT_FOUND = 'sfs_cms.admin.contents.seo_not_found';
+    public const ADMIN_CONTENTS_SEO_FOUND = 'sfs_cms.admin.contents.seo_found';
+    public const ADMIN_CONTENTS_SEO_FORM_PREPARE = 'sfs_cms.admin.contents.seo_form_prepare';
+    public const ADMIN_CONTENTS_SEO_FORM_INIT = 'sfs_cms.admin.contents.seo_form_init';
+    public const ADMIN_CONTENTS_SEO_FORM_VALID = 'sfs_cms.admin.contents.seo_form_valid';
+    public const ADMIN_CONTENTS_SEO_APPLY = 'sfs_cms.admin.contents.seo_apply';
+    public const ADMIN_CONTENTS_SEO_SUCCESS = 'sfs_cms.admin.contents.seo_success';
+    public const ADMIN_CONTENTS_SEO_FAILURE = 'sfs_cms.admin.contents.seo_failure';
+    public const ADMIN_CONTENTS_SEO_FORM_INVALID = 'sfs_cms.admin.contents.seo_form_invalid';
+    public const ADMIN_CONTENTS_SEO_VIEW = 'sfs_cms.admin.contents.seo_view';
+    public const ADMIN_CONTENTS_SEO_EXCEPTION = 'sfs_cms.admin.contents.seo_exception';
+    // CONTENT UNPUBLISH EVENTS, ALL OF THEM ARE INTERNAL
+    public const ADMIN_CONTENTS_UNPUBLISH_INITIALIZE = 'sfs_cms.admin.contents.unpublish_initialize';
+    public const ADMIN_CONTENTS_UNPUBLISH_LOAD_ENTITY = 'sfs_cms.admin.contents.unpublish_load_entity';
+    public const ADMIN_CONTENTS_UNPUBLISH_NOT_FOUND = 'sfs_cms.admin.contents.unpublish_not_found';
+    public const ADMIN_CONTENTS_UNPUBLISH_FOUND = 'sfs_cms.admin.contents.unpublish_found';
+    public const ADMIN_CONTENTS_UNPUBLISH_APPLY = 'sfs_cms.admin.contents.unpublish_apply';
+    public const ADMIN_CONTENTS_UNPUBLISH_SUCCESS = 'sfs_cms.admin.contents.unpublish_success';
+    public const ADMIN_CONTENTS_UNPUBLISH_FAILURE = 'sfs_cms.admin.contents.unpublish_failure';
+    public const ADMIN_CONTENTS_UNPUBLISH_EXCEPTION = 'sfs_cms.admin.contents.unpublish_exception';
+    // CONTENT PREVIEW EVENTS, ALL OF THEM ARE INTERNAL
+    public const ADMIN_CONTENTS_PREVIEW_INITIALIZE = 'sfs_cms.admin.contents.preview_initialize';
+    public const ADMIN_CONTENTS_PREVIEW_LOAD_ENTITY = 'sfs_cms.admin.contents.preview_load_entity';
+    public const ADMIN_CONTENTS_PREVIEW_NOT_FOUND = 'sfs_cms.admin.contents.preview_not_found';
+    public const ADMIN_CONTENTS_PREVIEW_FOUND = 'sfs_cms.admin.contents.preview_found';
+    public const ADMIN_CONTENTS_PREVIEW_VIEW = 'sfs_cms.admin.contents.preview_view';
+    public const ADMIN_CONTENTS_PREVIEW_EXCEPTION = 'sfs_cms.admin.contents.preview_exception';
+
+    // CONTENT_VERSION CREATE EVENTS, ALL OF THEM ARE INTERNAL
+    public const ADMIN_CONTENT_VERSIONS_CREATE_INITIALIZE = 'sfs_cms.admin.content_versions.create_initialize';
+    public const ADMIN_CONTENT_VERSIONS_CREATE_ENTITY = 'sfs_cms.admin.content_versions.create_create_entity';
+    public const ADMIN_CONTENT_VERSIONS_CREATE_FORM_PREPARE = 'sfs_cms.admin.content_versions.create_form_prepare';
+    public const ADMIN_CONTENT_VERSIONS_CREATE_FORM_INIT = 'sfs_cms.admin.content_versions.create_form_init';
+    public const ADMIN_CONTENT_VERSIONS_CREATE_FORM_VALID = 'sfs_cms.admin.content_versions.create_form_valid';
+    public const ADMIN_CONTENT_VERSIONS_CREATE_APPLY = 'sfs_cms.admin.content_versions.create_apply';
+    public const ADMIN_CONTENT_VERSIONS_CREATE_SUCCESS = 'sfs_cms.admin.content_versions.create_success';
+    public const ADMIN_CONTENT_VERSIONS_CREATE_FAILURE = 'sfs_cms.admin.content_versions.create_failure';
+    public const ADMIN_CONTENT_VERSIONS_CREATE_FORM_INVALID = 'sfs_cms.admin.content_versions.create_form_invalid';
+    public const ADMIN_CONTENT_VERSIONS_CREATE_VIEW = 'sfs_cms.admin.content_versions.create_view';
+    public const ADMIN_CONTENT_VERSIONS_CREATE_EXCEPTION = 'sfs_cms.admin.content_versions.create_exception';
+    // CONTENT_VERSION IMPORT EVENTS, ALL OF THEM ARE INTERNAL
+    public const ADMIN_CONTENT_VERSIONS_IMPORT_INITIALIZE = 'sfs_cms.admin.content_versions.import_initialize';
+    public const ADMIN_CONTENT_VERSIONS_IMPORT_ENTITY = 'sfs_cms.admin.content_versions.import_import_entity';
+    public const ADMIN_CONTENT_VERSIONS_IMPORT_FORM_PREPARE = 'sfs_cms.admin.content_versions.import_form_prepare';
+    public const ADMIN_CONTENT_VERSIONS_IMPORT_FORM_INIT = 'sfs_cms.admin.content_versions.import_form_init';
+    public const ADMIN_CONTENT_VERSIONS_IMPORT_FORM_VALID = 'sfs_cms.admin.content_versions.import_form_valid';
+    public const ADMIN_CONTENT_VERSIONS_IMPORT_APPLY = 'sfs_cms.admin.content_versions.import_apply';
+    public const ADMIN_CONTENT_VERSIONS_IMPORT_SUCCESS = 'sfs_cms.admin.content_versions.import_success';
+    public const ADMIN_CONTENT_VERSIONS_IMPORT_FAILURE = 'sfs_cms.admin.content_versions.import_failure';
+    public const ADMIN_CONTENT_VERSIONS_IMPORT_FORM_INVALID = 'sfs_cms.admin.content_versions.import_form_invalid';
+    public const ADMIN_CONTENT_VERSIONS_IMPORT_VIEW = 'sfs_cms.admin.content_versions.import_view';
+    public const ADMIN_CONTENT_VERSIONS_IMPORT_EXCEPTION = 'sfs_cms.admin.content_versions.import_exception';
+    // CONTENT_VERSION LIST EVENTS, ALL OF THEM ARE INTERNAL
+    public const ADMIN_CONTENT_VERSIONS_LIST_INITIALIZE = 'sfs_cms.admin.content_versions.list_initialize';
+    public const ADMIN_CONTENT_VERSIONS_LIST_FILTER_FORM_PREPARE = 'sfs_cms.admin.content_versions.list_filter_form_prepare';
+    public const ADMIN_CONTENT_VERSIONS_LIST_FILTER_FORM_INIT = 'sfs_cms.admin.content_versions.list_filter_form_init';
+    public const ADMIN_CONTENT_VERSIONS_LIST_FILTER = 'sfs_cms.admin.content_versions.list_filter';
+    public const ADMIN_CONTENT_VERSIONS_LIST_VIEW = 'sfs_cms.admin.content_versions.list_view';
+    public const ADMIN_CONTENT_VERSIONS_LIST_EXCEPTION = 'sfs_cms.admin.content_versions.list_exception';
+    // CONTENT_VERSION LOCK EVENTS, ALL OF THEM ARE INTERNAL
+    public const ADMIN_CONTENT_VERSIONS_LOCK_INITIALIZE = 'sfs_cms.admin.content_versions.lock_initialize';
+    public const ADMIN_CONTENT_VERSIONS_LOCK_LOAD_ENTITY = 'sfs_cms.admin.content_versions.lock_load_entity';
+    public const ADMIN_CONTENT_VERSIONS_LOCK_NOT_FOUND = 'sfs_cms.admin.content_versions.lock_not_found';
+    public const ADMIN_CONTENT_VERSIONS_LOCK_FOUND = 'sfs_cms.admin.content_versions.lock_found';
+    public const ADMIN_CONTENT_VERSIONS_LOCK_APPLY = 'sfs_cms.admin.content_versions.lock_apply';
+    public const ADMIN_CONTENT_VERSIONS_LOCK_SUCCESS = 'sfs_cms.admin.content_versions.lock_success';
+    public const ADMIN_CONTENT_VERSIONS_LOCK_FAILURE = 'sfs_cms.admin.content_versions.lock_failure';
+    public const ADMIN_CONTENT_VERSIONS_LOCK_EXCEPTION = 'sfs_cms.admin.content_versions.lock_exception';
+    // CONTENT_VERSION PREVIEW EVENTS, ALL OF THEM ARE INTERNAL
+    public const ADMIN_CONTENT_VERSIONS_PREVIEW_INITIALIZE = 'sfs_cms.admin.content_versions.preview_initialize';
+    public const ADMIN_CONTENT_VERSIONS_PREVIEW_LOAD_ENTITY = 'sfs_cms.admin.content_versions.preview_load_entity';
+    public const ADMIN_CONTENT_VERSIONS_PREVIEW_NOT_FOUND = 'sfs_cms.admin.content_versions.preview_not_found';
+    public const ADMIN_CONTENT_VERSIONS_PREVIEW_FOUND = 'sfs_cms.admin.content_versions.preview_found';
+    public const ADMIN_CONTENT_VERSIONS_PREVIEW_EXCEPTION = 'sfs_cms.admin.content_versions.preview_exception';
+    // CONTENT_VERSION PUBLISH EVENTS, ALL OF THEM ARE INTERNAL
+    public const ADMIN_CONTENT_VERSIONS_PUBLISH_INITIALIZE = 'sfs_cms.admin.content_versions.publish_initialize';
+    public const ADMIN_CONTENT_VERSIONS_PUBLISH_LOAD_ENTITY = 'sfs_cms.admin.content_versions.publish_load_entity';
+    public const ADMIN_CONTENT_VERSIONS_PUBLISH_NOT_FOUND = 'sfs_cms.admin.content_versions.publish_not_found';
+    public const ADMIN_CONTENT_VERSIONS_PUBLISH_FOUND = 'sfs_cms.admin.content_versions.publish_found';
+    public const ADMIN_CONTENT_VERSIONS_PUBLISH_APPLY = 'sfs_cms.admin.content_versions.publish_apply';
+    public const ADMIN_CONTENT_VERSIONS_PUBLISH_SUCCESS = 'sfs_cms.admin.content_versions.publish_success';
+    public const ADMIN_CONTENT_VERSIONS_PUBLISH_FAILURE = 'sfs_cms.admin.content_versions.publish_failure';
+    public const ADMIN_CONTENT_VERSIONS_PUBLISH_EXCEPTION = 'sfs_cms.admin.content_versions.publish_exception';
+    // CONTENT_VERSION EXPORT EVENTS, ALL OF THEM ARE INTERNAL
+    public const ADMIN_CONTENT_VERSIONS_EXPORT_INITIALIZE = 'sfs_cms.admin.content_versions.export_initialize';
+    public const ADMIN_CONTENT_VERSIONS_EXPORT_LOAD_ENTITY = 'sfs_cms.admin.content_versions.export_load_entity';
+    public const ADMIN_CONTENT_VERSIONS_EXPORT_NOT_FOUND = 'sfs_cms.admin.content_versions.export_not_found';
+    public const ADMIN_CONTENT_VERSIONS_EXPORT_FOUND = 'sfs_cms.admin.content_versions.export_found';
+    public const ADMIN_CONTENT_VERSIONS_EXPORT_APPLY = 'sfs_cms.admin.content_versions.export_apply';
+    public const ADMIN_CONTENT_VERSIONS_EXPORT_SUCCESS = 'sfs_cms.admin.content_versions.export_success';
+    public const ADMIN_CONTENT_VERSIONS_EXPORT_FAILURE = 'sfs_cms.admin.content_versions.export_failure';
+    public const ADMIN_CONTENT_VERSIONS_EXPORT_EXCEPTION = 'sfs_cms.admin.content_versions.export_exception';
+    // CONTENT VERSION CLEANUP EVENTS, ALL OF THEM ARE INTERNAL
+    public const ADMIN_CONTENT_VERSIONS_CLEANUP_INITIALIZE = 'sfs_cms.admin.content_versions.cleanup_initialize';
+    public const ADMIN_CONTENT_VERSIONS_CLEANUP_LOAD_ENTITY = 'sfs_cms.admin.content_versions.cleanup_load_entity';
+    public const ADMIN_CONTENT_VERSIONS_CLEANUP_NOT_FOUND = 'sfs_cms.admin.content_versions.cleanup_not_found';
+    public const ADMIN_CONTENT_VERSIONS_CLEANUP_FOUND = 'sfs_cms.admin.content_versions.cleanup_found';
+    public const ADMIN_CONTENT_VERSIONS_CLEANUP_APPLY = 'sfs_cms.admin.content_versions.cleanup_apply';
+    public const ADMIN_CONTENT_VERSIONS_CLEANUP_SUCCESS = 'sfs_cms.admin.content_versions.cleanup_success';
+    public const ADMIN_CONTENT_VERSIONS_CLEANUP_FAILURE = 'sfs_cms.admin.content_versions.cleanup_failure';
+    public const ADMIN_CONTENT_VERSIONS_CLEANUP_EXCEPTION = 'sfs_cms.admin.content_versions.cleanup_exception';
 }

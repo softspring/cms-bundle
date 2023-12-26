@@ -21,6 +21,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
+        /** @deprecated remove on refactor to serializer */
         $container->registerForAutoconfiguration(EntityTransformerInterface::class)->addTag('sfs_cms.data.entity_transformer');
         $container->registerForAutoconfiguration(FieldTransformerInterface::class)->addTag('sfs_cms.data.field_transformer');
 
@@ -81,9 +82,10 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $loader->load('entity_transformer.yaml');
         $loader->load('dynamic_form_type.yaml');
         $adminEnabled && $loader->load('controller/admin_blocks.yaml');
-        $adminEnabled && $loader->load('controller/admin_routes.yaml');
-        $adminEnabled && $loader->load('controller/admin_menus.yaml');
         $adminEnabled && $loader->load('controller/admin_content.yaml');
+        $adminEnabled && $loader->load('controller/admin_content_version.yaml');
+        $adminEnabled && $loader->load('controller/admin_menus.yaml');
+        $adminEnabled && $loader->load('controller/admin_routes.yaml');
 
         $loader->load('data_collector.yaml');
 

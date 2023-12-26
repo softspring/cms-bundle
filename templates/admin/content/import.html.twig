@@ -2,16 +2,16 @@
 
 {% extends '@SfsCms/admin_layout.html.twig' %}
 
-{% block title %}{{ ('admin_'~content~'.import.meta.title')|trans }}{% endblock %}
+{% block title %}{{ ('admin_'~content_type~'.import.meta.title')|trans }}{% endblock %}
 
 {% block breadcrums_content %}
     {{ parent() }}
-    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content~'_list') }}">{{ ('admin_'~content~'.list.breadcrumb')|trans }}</a></li>
-    <li class="breadcrumb-item active" aria-current="content">{{ ('admin_'~content~'.import.breadcrumb')|trans }}</li>
+    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content_type~'_list') }}">{{ ('admin_'~content_type~'.list.breadcrumb')|trans }}</a></li>
+    <li class="breadcrumb-item active" aria-current="content">{{ ('admin_'~content_type~'.import.breadcrumb')|trans }}</li>
 {% endblock breadcrums_content %}
 
 {% block content %}
-    <h1 class="h3">{{ ('admin_'~content~'.import.title')|trans }}</h1>
+    <h1 class="h3">{{ ('admin_'~content_type~'.import.title')|trans }}</h1>
 
 
     {{ form_start(form) }}
@@ -28,8 +28,8 @@
         </div>
 
         <div class="d-flex justify-content-end align-items-center">
-        <a href="{{ url('sfs_cms_admin_content_'~content~'_list') }}" class="btn btn-outline-secondary">{{ ('admin_'~content~'.import.actions.cancel.button')|trans }}</a>
-        <input type="submit" value="{{ ('admin_'~content~'.import.actions.import.button')|trans }}" class="btn btn-primary ms-3" />
+        <a href="{{ url('sfs_cms_admin_content_'~content_type~'_list') }}" class="btn btn-outline-secondary">{{ ('admin_'~content_type~'.import.actions.cancel.button')|trans }}</a>
+        <input type="submit" value="{{ ('admin_'~content_type~'.import.actions.import.button')|trans }}" class="btn btn-primary ms-3" />
     </div>
     {{ form_end(form) }}
 {% endblock content %}
