@@ -3,25 +3,25 @@
 
 {% form_theme filterForm 'bootstrap_5_horizontal_layout.html.twig' %}
 
-{% block title %}{{ ('admin_'~content~'.list.meta.title')|trans }}{% endblock %}
+{% block title %}{{ ('admin_'~content_type~'.list.meta.title')|trans }}{% endblock %}
 
 {% block breadcrums_content %}
     {{ parent() }}
-    <li class="breadcrumb-item active" aria-current="page">{{ ('admin_'~content~'.list.breadcrumb')|trans }}</li>
+    <li class="breadcrumb-item active" aria-current="page">{{ ('admin_'~content_type~'.list.breadcrumb')|trans }}</li>
 {% endblock breadcrums_content %}
 
 {% block content %}
     <div class="d-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3">{{ ('admin_'~content~'.list.title')|trans }}</h1>
+        <h1 class="h3">{{ ('admin_'~content_type~'.list.title')|trans }}</h1>
 
         {# TODO restrict by permission #}
         <div class="float-end">
-            {% if not content_config.admin.create_is_granted or is_granted(content_config.admin.create_is_granted) %}
-                <a class="btn btn-outline-primary" href="{{ url('sfs_cms_admin_content_'~content~'_create') }}">{{ ('admin_'~content~'.list.actions.create.link')|trans }}</a>
+            {% if not content_config.admin.create.is_granted or is_granted(content_config.admin.create.is_granted) %}
+                <a class="btn btn-outline-primary" href="{{ url('sfs_cms_admin_content_'~content_type~'_create') }}">{{ ('admin_'~content_type~'.list.actions.create.link')|trans }}</a>
             {% endif %}
 
-            {% if not content_config.admin.import_is_granted or is_granted(content_config.admin.import_is_granted) %}
-                <a class="btn btn-outline-primary" href="{{ url('sfs_cms_admin_content_'~content~'_import') }}">{{ ('admin_'~content~'.list.actions.import.link')|trans }}</a>
+            {% if not content_config.admin.import.is_granted or is_granted(content_config.admin.import.is_granted) %}
+                <a class="btn btn-outline-primary" href="{{ url('sfs_cms_admin_content_'~content_type~'_import') }}">{{ ('admin_'~content_type~'.list.actions.import.link')|trans }}</a>
             {% endif %}
         </div>
     </div>
@@ -45,12 +45,12 @@
         {% endif %}
 
         {% block table %}
-            {% embed '@SfsComponents/paginator/table.html.twig' with {'collection':entities, 'pagination_route': 'sfs_cms_admin_content_'~content~'_list'} %}
+            {% embed '@SfsComponents/paginator/table.html.twig' with {'collection':entities, 'pagination_route': 'sfs_cms_admin_content_'~content_type~'_list'} %}
                 {% trans_default_domain 'sfs_cms_contents' %}
                 {% block ths %}
                     <th scope="col">
                         <a href="{{ entities.sortToggleUrl(app.request, 'name') }}" class="text-dark">
-                            {{ ('admin_'~content~'.list.fields.name.header')|trans }}
+                            {{ ('admin_'~content_type~'.list.fields.name.header')|trans }}
                             {% if entities.sortedBy('name', 'asc') %}<i class="bi bi-caret-up-fill"></i>{% elseif entities.sortedBy('name', 'desc') %}<i class="bi bi-caret-down-fill"></i>{% endif %}
                         </a>
                     </th>
@@ -65,14 +65,14 @@
 
                 {% block empty_message %}
                     <p class="text-center text-muted">
-                        {% if not content_config.admin.create_is_granted or is_granted(content_config.admin.create_is_granted) %}
-                            <a href="{{ url('sfs_cms_admin_content_'~content~'_create') }}">Create</a>
+                        {% if not content_config.admin.create.is_granted or is_granted(content_config.admin.create.is_granted) %}
+                            <a href="{{ url('sfs_cms_admin_content_'~content_type~'_create') }}">Create</a>
                         {% else %}
                             Create
                         {% endif %}
                         or
-                        {% if not content_config.admin.create_is_granted or is_granted(content_config.admin.create_is_granted) %}
-                            <a href="{{ url('sfs_cms_admin_content_'~content~'_import') }}">import</a>
+                        {% if not content_config.admin.create.is_granted or is_granted(content_config.admin.create.is_granted) %}
+                            <a href="{{ url('sfs_cms_admin_content_'~content_type~'_import') }}">import</a>
                         {% else %}
                             import
                         {% endif %}

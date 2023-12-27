@@ -18,20 +18,21 @@ class ContentSeoForm extends AbstractType
             'label_format' => 'admin_content.form.%name%.label',
             'validation_groups' => ['Default', 'create', 'update'],
             'translation_domain' => 'sfs_cms_contents',
-            'content' => null,
         ]);
 
+        $resolver->setRequired('content_config');
+
         $resolver->setNormalizer('label_format', function (Options $options, $value) {
-            return "admin_{$options['content']['_id']}.form.%name%.label";
+            return "admin_{$options['content_config']['_id']}.form.%name%.label";
         });
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('seo', DynamicFormType::class, [
-            'form_fields' => $options['content']['seo'] ?? [],
+            'form_fields' => $options['content_config']['seo'] ?? [],
             'translation_domain' => 'sfs_cms_contents',
-            'label_format' => "admin_{$options['content']['_id']}.form.seo.%name%.label",
+            'label_format' => "admin_{$options['content_config']['_id']}.form.seo.%name%.label",
         ]);
     }
 }

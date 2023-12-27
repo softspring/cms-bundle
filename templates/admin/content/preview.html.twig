@@ -2,7 +2,7 @@
 
 {% extends '@SfsCms/admin_layout.html.twig' %}
 
-{% block title %}{{ ('admin_'~content~'.preview.meta.title')|trans({'%name%':entity.name}) }}{% endblock %}
+{% block title %}{{ ('admin_'~content_type~'.preview.meta.title')|trans({'%name%':entity.name}) }}{% endblock %}
 
 {% block body %}
     <div class="d-flex flex-col align-items-stretch min-vh-100 pt-5">
@@ -10,13 +10,13 @@
             <div class="container-fluid">
                 <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                     <a href="#" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-                        {{ ('admin_'~content~'.preview.title')|trans({'%name%':entity.name}) }}
+                        {{ ('admin_'~content_type~'.preview.title')|trans({'%name%':entity.name}) }}
                     </a>
 
                     <div class="col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"></div>
 
                     <div class="text-end me-3">
-                        <form class="d-flex" action="{{ url('sfs_cms_admin_content_'~content~'_preview_content', {'content':entity}) }}" method="GET" target="previewFrame">
+                        <form class="d-flex" action="{{ url('sfs_cms_admin_content_'~content_type~'_version_preview', {'content':entity, 'version':version}) }}" method="GET" target="previewFrame">
                             {% if enabledLocales|length > 1 %}
                                 <select class="form-select mx-1" name="_locale" onchange="this.form.submit()">
                                     {% for locale in enabledLocales %}
@@ -36,26 +36,26 @@
                     </div>
 
                     <div class="d-flex justify-content-end">
-                        <a id="previewExternalLink" target="_blank" class="btn btn-light mx-1" href="{{ url('sfs_cms_admin_content_'~content~'_preview_content', {'content':entity, '_locale':app.request.query.get('_locale', 'es')}) }}">{{ ('admin_'~content~'.preview.actions.open.button')|trans }} <i class="bi bi-box-arrow-up-right"></i></a>
+                        <a id="previewExternalLink" target="_blank" class="btn btn-light mx-1" href="{{ url('sfs_cms_admin_content_'~content_type~'_version_preview', {'content':entity, 'version':version, '_locale':app.request.query.get('_locale', 'es')}) }}">{{ ('admin_'~content_type~'.preview.actions.open.button')|trans }} <i class="bi bi-box-arrow-up-right"></i></a>
                         {% if app.request.query.get('back') == 'versions' %}
-                            <a href="{{ url('sfs_cms_admin_content_'~content~'_versions', {'content':entity}) }}" class="btn btn-light mx-1">{{ ('admin_'~content~'.preview.actions.cancel.button')|trans }}</a>
+                            <a href="{{ url('sfs_cms_admin_content_'~content_type~'_versions', {'content':entity}) }}" class="btn btn-light mx-1">{{ ('admin_'~content_type~'.preview.actions.cancel.button')|trans }}</a>
                         {% else %}
-                            <a href="{{ url('sfs_cms_admin_content_'~content~'_details', {'content':entity}) }}" class="btn btn-light mx-1">{{ ('admin_'~content~'.preview.actions.cancel.button')|trans }}</a>
+                            <a href="{{ url('sfs_cms_admin_content_'~content_type~'_details', {'content':entity}) }}" class="btn btn-light mx-1">{{ ('admin_'~content_type~'.preview.actions.cancel.button')|trans }}</a>
                         {% endif %}
 
-                        {% if not content_config.admin.content_is_granted or is_granted(content_config.admin.content_is_granted, version) %}
-                            <a href="{{ url('sfs_cms_admin_content_'~content~'_content', {'content':entity}) }}" class="btn btn-light mx-1">{{ ('admin_'~content~'.preview.actions.content.button')|trans }}</a>
+                        {% if not content_config.admin.version_create.is_granted or is_granted(content_config.admin.version_create.is_granted, version) %}
+                            <a href="{{ url('sfs_cms_admin_content_'~content_type~'_content_from_version', {'content':entity, 'prevVersion':version}) }}" class="btn btn-light mx-1">{{ ('admin_'~content_type~'.preview.actions.content.button')|trans }}</a>
                         {% else %}
-                            <a class="btn btn-light mx-1 disabled">{{ ('admin_'~content~'.preview.actions.content.button')|trans }}</a>
+                            <a class="btn btn-light mx-1 disabled">{{ ('admin_'~content_type~'.preview.actions.content.button')|trans }}</a>
                         {% endif %}
 
                         {% if version.published %}
-                            <span class="btn btn-light disabled mx-1">{{ ('admin_'~content~'.preview.actions.published.button')|trans }}</span>
+                            <span class="btn btn-light disabled mx-1">{{ ('admin_'~content_type~'.preview.actions.published.button')|trans }}</span>
                         {% else %}
-                            {% if not content_config.admin.publish_version_is_granted or is_granted(content_config.admin.publish_version_is_granted, version) %}
-                                <a href="{{ url('sfs_cms_admin_content_'~content~'_publish_version', {'content':entity, 'version':version, 'back':'preview'}) }}" class="btn btn-light mx-1">{{ ('admin_'~content~'.preview.actions.publish.button')|trans }}</a>
+                            {% if not content_config.admin.publish_version.is_granted or is_granted(content_config.admin.publish_version.is_granted, version) %}
+                                <a href="{{ url('sfs_cms_admin_content_'~content_type~'_publish_version', {'content':entity, 'version':version, 'back':'preview'}) }}" class="btn btn-light mx-1">{{ ('admin_'~content_type~'.preview.actions.publish.button')|trans }}</a>
                             {% else %}
-                                <a class="btn btn-light mx-1 disabled">{{ ('admin_'~content~'.preview.actions.publish.button')|trans }}</a>
+                                <a class="btn btn-light mx-1 disabled">{{ ('admin_'~content_type~'.preview.actions.publish.button')|trans }}</a>
                             {% endif %}
                         {% endif %}
                     </div>
@@ -64,7 +64,7 @@
         </header>
         <main class="flex-fill d-flex flex-row align-items-stretch bg-light  min-vh-100">
             <div class="pt-4 h-100 w-100">
-                <iframe name="previewFrame" id="preview" src="{{ url('sfs_cms_admin_content_'~content~'_preview_content_version', {'content':entity, 'version':version, '_site': entity.sitesSorted.first, '_locale': app.request.query.get('_locale', enabledLocales[0]|default(app.request.defaultLocale))}) }}" width="100%" height="100%"></iframe>
+                <iframe name="previewFrame" id="preview" src="{{ url('sfs_cms_admin_content_'~content_type~'_version_preview', {'content':entity, 'version':version, '_site': entity.sitesSorted.first, '_locale': app.request.query.get('_locale', enabledLocales[0]|default(app.request.defaultLocale))}) }}" width="100%" height="100%"></iframe>
             </div>
         </main>
     </div>

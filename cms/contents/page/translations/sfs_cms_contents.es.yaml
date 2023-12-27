@@ -1,7 +1,6 @@
 admin_page:
     entity_not_found_flash: "La página no se ha encontrado"
-    module_not_configured: "Can not edit this page version because of %module% module is not configured. Maybe the version has been imported from another project or this module has been removed. Please talk to developers."
-    
+
     tabs_menu:
         details: "General"
         update: "Editar"
@@ -18,8 +17,9 @@ admin_page:
             create.button: "Crear página"
             cancel.button: "Cancelar"
     
-    publish:
-        version_has_been_published_flash: "La versión se ha publicado"
+    version_publish:
+        success_flash: "La versión se ha publicado"
+        failed_flash: "Se ha producido un error al publicar la versión<br/><small>%exception%</small>"
 
     unpublish:
         has_been_unpublished_flash: "La página se ha despublicado"
@@ -33,6 +33,9 @@ admin_page:
             cancel.button: "Cancelar"
         form:
             file.label: "Fichero a importar"
+        failure_flash: "Se ha producido un error al importar la página<br/><small>%exception%</small>"
+        duplicated_flash: "Se ha producido un error al importar la página, la página ya existe en la base de datos, intenta importarla como versión<br/><small>%exception%</small>"
+        success_flash: "La página se ha importado"
 
     import_version:
         meta.title: "Importar versión"
@@ -103,6 +106,7 @@ admin_page:
             update.button: "Guardar cambios"
             cancel.button: "Cancelar"
             delete.button: "Eliminar"
+        success_flash: "La página se ha actualizado"
 
     delete:
         meta.title: "Eliminar página"
@@ -112,7 +116,7 @@ admin_page:
         offer_backup: 'Si quieres puedes hacer un backup de la versión publicada de este contenido antes'
         index_warnings_raw: '<p><strong>¡No pierdas los enlaces e indexación!</strong></p>'
         actions:
-            export.button: Exportar
+            export.button: "Exportar"
             delete.button: "Eliminar definitivamente"
             cancel.button: "Cancelar"
         form:
@@ -127,6 +131,7 @@ admin_page:
                 label: "Redirigir a ruta"
                 route_name.label: "Nombre de ruta"
                 route_params.label: "Parámetros"
+        success_flash: "La página se ha eliminado"
 
     seo:
         meta.title: "Editar SEO"
@@ -135,6 +140,7 @@ admin_page:
         actions:
             save.button: "Guardar cambios"
             cancel.button: "Cancelar"
+        success_flash: "El SEO de la página se ha actualizado"
 
     content:
         meta.title: "Editar contenido"
@@ -149,6 +155,8 @@ admin_page:
             save_and_preview.button: "Guardar y previsualizar"
             save_and_publish.button: "Guardar y publicar"
             cancel.button: "Cancelar"
+    version_create:
+        module_not_configured: "Can not edit this page version because of %module% module is not configured. Maybe the version has been imported from another project or this module has been removed. Please talk to developers."
 
     list:
         meta.title: "Páginas"
@@ -201,3 +209,18 @@ admin_page:
                     yearly: "anualmente"
                     never: "nunca"
             sitemapPriority.label: "Prioridad de URL en el sitemap"
+
+    version_lock:
+        success_locked_flash: "La versión se ha bloqueado"
+        success_unlocked_flash: "La versión se ha desbloqueado"
+        failed_flash: "Se ha producido un error al bloquear/desbloquear la versión<br/><small>%exception%</small>"
+
+    version_export:
+        failed_flash: "Se ha producido un error al exportar la versión<br/><small>%exception%</small>"
+
+    version_import:
+        success_flash: "La versión se ha importado"
+        failed_flash: "Se ha producido un error al importar la versión<br/><small>%exception%</small>"
+
+    version_cleanup:
+        success_flash: "Se ha realizado la limpieza de versiones correctamente"

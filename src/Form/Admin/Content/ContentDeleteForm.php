@@ -32,14 +32,15 @@ class ContentDeleteForm extends AbstractType implements ContentUpdateFormInterfa
             'data_class' => ContentInterface::class,
             'validation_groups' => ['Default', 'delete'],
             'translation_domain' => 'sfs_cms_contents',
-            'content' => null,
-            'entity' => null,
         ]);
 
+        $resolver->setRequired('content_config');
+
+        $resolver->setRequired('entity');
         $resolver->setAllowedTypes('entity', ContentInterface::class);
 
         $resolver->setNormalizer('label_format', function (Options $options, $value) {
-            return "admin_{$options['content']['_id']}.delete.form.%name%.label";
+            return "admin_{$options['content_config']['_id']}.delete.form.%name%.label";
         });
     }
 
@@ -50,9 +51,9 @@ class ContentDeleteForm extends AbstractType implements ContentUpdateFormInterfa
             'expanded' => true,
             'required' => true,
             'choices' => [
-                "admin_{$options['content']['_id']}.delete.form.action.options.delete" => 'delete',
-                "admin_{$options['content']['_id']}.delete.form.action.options.change" => 'change',
-                "admin_{$options['content']['_id']}.delete.form.action.options.redirect" => 'redirect',
+                "admin_{$options['content_config']['_id']}.delete.form.action.options.delete" => 'delete',
+                "admin_{$options['content_config']['_id']}.delete.form.action.options.change" => 'change',
+                "admin_{$options['content_config']['_id']}.delete.form.action.options.redirect" => 'redirect',
             ],
             'choice_attr' => function ($value) {
                 return [

@@ -1,7 +1,6 @@
 admin_page:
     entity_not_found_flash: "Page not found"
-    module_not_configured: "Can not edit this page version because of %module% module is not configured. Maybe the version has been imported from another project or this module has been removed. Please talk to developers."
-    
+
     tabs_menu:
         details: "General"
         update: "Edit"
@@ -18,8 +17,9 @@ admin_page:
             create.button: "Create page"
             cancel.button: "Cancel"
     
-    publish:
-        version_has_been_published_flash: "Version has been published"
+    version_publish:
+        success_flash: "Version has been published"
+        failed_flash: "An error has been produced during the version publication"
 
     unpublish:
         has_been_unpublished_flash: "The page has been unpublished"
@@ -33,6 +33,9 @@ admin_page:
             cancel.button: "Cancel"
         form:
             file.label: "Import content file"
+        failure_flash: "An error has been produced during the page import<br/><small>%exception%</small>"
+        duplicated_flash: "An error has been produced during the page import, the page already exists in the database, try to import it as a version<br/><small>%exception%</small>"
+        success_flash: "Page has been imported"
 
     import_version:
         meta.title: "Import version"
@@ -103,6 +106,7 @@ admin_page:
             update.button: "Save changes"
             cancel.button: "Cancel"
             delete.button: "Delete"
+        success_flash: "Page has been updated"
 
     delete:
         meta.title: "Delete page"
@@ -127,6 +131,7 @@ admin_page:
                 label: "Redirect to route"
                 route_name.label: "Route name"
                 route_params.label: "Parameters"
+        success_flash: "Page has been deleted"
 
     seo:
         meta.title: "Edit SEO"
@@ -135,6 +140,7 @@ admin_page:
         actions:
             save.button: "Save changes"
             cancel.button: "Cancel"
+        success_flash: "Page SEO has been updated"
 
     content:
         meta.title: "Edit content"
@@ -149,6 +155,8 @@ admin_page:
             save_and_preview.button: "Save and preview"
             save_and_publish.button: "Save and publish"
             cancel.button: "Cancel"
+    version_create:
+        module_not_configured: "Can not edit this page version because of %module% module is not configured. Maybe the version has been imported from another project or this module has been removed. Please talk to developers."
 
     list:
         meta.title: "Pages"
@@ -201,3 +209,18 @@ admin_page:
                     yearly: "yearly"
                     never: "never"
             sitemapPriority.label: "URL priority for sitemap"
+
+    version_lock:
+        success_locked_flash: "Version has been locked"
+        success_unlocked_flash: "Version has been unlocked"
+        failed_flash: "An error has been produced during the version lock/unlock"
+
+    version_export:
+        failed_flash: "An error has been produced during the version export"
+
+    version_import:
+        success_flash: "Version has been imported"
+        failed_flash: "An error has been produced during the version import"
+
+    version_cleanup:
+        success_flash: "Versions cleanup has been done correctly"

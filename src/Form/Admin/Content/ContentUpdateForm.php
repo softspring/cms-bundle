@@ -19,11 +19,12 @@ class ContentUpdateForm extends AbstractType implements ContentUpdateFormInterfa
             'data_class' => ContentInterface::class,
             'validation_groups' => ['Default', 'update'],
             'translation_domain' => 'sfs_cms_contents',
-            'content' => null,
         ]);
 
+        $resolver->setRequired('content_config');
+
         $resolver->setNormalizer('label_format', function (Options $options, $value) {
-            return "admin_{$options['content']['_id']}.form.%name%.label";
+            return "admin_{$options['content_config']['_id']}.form.%name%.label";
         });
     }
 
@@ -31,9 +32,9 @@ class ContentUpdateForm extends AbstractType implements ContentUpdateFormInterfa
     {
         $builder->add('name', TextType::class);
 
-        if (!empty($options['content']['extra_fields'])) {
+        if (!empty($options['content_config']['extra_fields'])) {
             $builder->add('extraData', DynamicFormType::class, [
-                'form_fields' => $options['content']['extra_fields'],
+                'form_fields' => $options['content_config']['extra_fields'],
                 'translation_domain' => 'sfs_cms_contents',
             ]);
         }
@@ -44,7 +45,7 @@ class ContentUpdateForm extends AbstractType implements ContentUpdateFormInterfa
             'entry_options' => [
                 'content_relative' => true,
                 'translation_domain' => 'sfs_cms_contents',
-                'label_format' => "admin_{$options['content']['_id']}.form.routes.%name%.label",
+                'label_format' => "admin_{$options['content_config']['_id']}.form.routes.%name%.label",
             ],
         ]);
     }

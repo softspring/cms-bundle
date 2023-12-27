@@ -80,6 +80,19 @@ class ContentManager implements ContentManagerInterface
         return $this->getTypeConfig($type)['entity_class'];
     }
 
+    public function getType(mixed $objectOrClassName = null): string
+    {
+        $className = is_object($objectOrClassName) ? get_class($objectOrClassName) : $objectOrClassName;
+
+        foreach ($this->cmsConfig->getContents() as $type => $config) {
+            if ($config['entity_class'] === $className) {
+                return $type;
+            }
+        }
+
+        throw new \Exception(sprintf('Content type not found for class "%s"', $className));
+    }
+
     protected function getTypeDefaultLayout(string $type = null): string
     {
         return $this->getTypeConfig($type)['default_layout'];

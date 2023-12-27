@@ -2,7 +2,7 @@
 
 {% extends '@SfsCms/admin_layout.html.twig' %}
 
-{% block title %}{{ ('admin_'~content~'.seo.meta.title')|trans({'%name%':entity.name}) }}{% endblock %}
+{% block title %}{{ ('admin_'~content_type~'.seo.meta.title')|trans({'%name%':entity.name}) }}{% endblock %}
 
 {% form_theme form
     'bootstrap_5_layout.html.twig'
@@ -12,12 +12,12 @@
 
 {% block breadcrums_content %}
     {{ parent() }}
-    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content~'_list') }}">{{ ('admin_'~content~'.list.breadcrumb')|trans }}</a></li>
-    <li class="breadcrumb-item active" aria-current="content">{{ ('admin_'~content~'.seo.breadcrumb')|trans({'%name%':entity.name}) }}</li>
+    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content_type~'_list') }}">{{ ('admin_'~content_type~'.list.breadcrumb')|trans }}</a></li>
+    <li class="breadcrumb-item active" aria-current="content">{{ ('admin_'~content_type~'.seo.breadcrumb')|trans({'%name%':entity.name}) }}</li>
 {% endblock breadcrums_content %}
 
 {% block content %}
-    <h1 class="h3">{{ ('admin_'~content~'.seo.title')|trans({'%name%':entity.name}) }}</h1>
+    <h1 class="h3">{{ ('admin_'~content_type~'.seo.title')|trans({'%name%':entity.name}) }}</h1>
 
     {% include '@SfsCms/admin/content/_content_tabs.html.twig' with {'current':'seo', 'content':content, 'entity':entity} %}
 
@@ -30,8 +30,8 @@
                 {{ form_rest(form) }}
 
                 <div class="d-flex justify-content-end align-items-center">
-                    <a href="{{ url('sfs_cms_admin_content_'~content~'_list') }}" class="btn btn-outline-secondary">{{ ('admin_'~content~'.seo.actions.cancel.button')|trans }}</a>
-                    <input type="submit" value="{{ ('admin_'~content~'.seo.actions.save.button')|trans }}" class="btn btn-primary ms-3" />
+                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_list') }}" class="btn btn-outline-secondary">{{ ('admin_'~content_type~'.seo.actions.cancel.button')|trans }}</a>
+                    <input type="submit" value="{{ ('admin_'~content_type~'.seo.actions.save.button')|trans }}" class="btn btn-primary ms-3" />
                 </div>
             </div>
         </div>

@@ -2,16 +2,16 @@
 
 {% extends '@SfsCms/admin_layout.html.twig' %}
 
-{% block title %}{{ ('admin_'~content~'.read.meta.title')|trans({'%name%':entity.name}) }}{% endblock %}
+{% block title %}{{ ('admin_'~content_type~'.read.meta.title')|trans({'%name%':entity.name}) }}{% endblock %}
 
 {% block breadcrums_content %}
     {{ parent() }}
-    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content~'_list') }}">{{ ('admin_'~content~'.list.breadcrumb')|trans }}</a></li>
-    <li class="breadcrumb-item active" aria-current="content">{{ ('admin_'~content~'.read.breadcrumb')|trans({'%name%':entity.name}) }}</li>
+    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content_type~'_list') }}">{{ ('admin_'~content_type~'.list.breadcrumb')|trans }}</a></li>
+    <li class="breadcrumb-item active" aria-current="content">{{ ('admin_'~content_type~'.read.breadcrumb')|trans({'%name%':entity.name}) }}</li>
 {% endblock breadcrums_content %}
 
 {% block content %}
-    <h1 class="h2">{{ ('admin_'~content~'.read.title')|trans({'%name%':entity.name}) }}</h1>
+    <h1 class="h2">{{ ('admin_'~content_type~'.read.title')|trans({'%name%':entity.name}) }}</h1>
 
     {% include '@SfsCms/admin/content/_content_tabs.html.twig' with {'current':'read', 'content':content, 'entity':entity} %}
 
@@ -25,10 +25,10 @@
             <div class="col-12 col-md-9 col-lg-10 mb-2">
                 {{ entity.publishedVersion ? entity.publishedVersion.createdAt|date('H:i d-m-Y') : 'no' }}
 
-                {% if not content_config.admin.unpublish_is_granted or is_granted(content_config.admin.unpublish_is_granted, entity) %}
+                {% if not content_config.admin.unpublish.is_granted or is_granted(content_config.admin.unpublish.is_granted, entity) %}
                     {% if entity.publishedVersion %}
-                        <a href="{{ url('sfs_cms_admin_content_'~content~'_unpublish', {'content':entity}) }}"
-                           onclick="return confirm('{{ ('admin_'~content~'.read.actions.unpublish.confirm')|trans({'%name%':entity.name}) }}')">{{ ('admin_'~content~'.read.actions.unpublish.link')|trans({'%name%':entity.name})|lower }}</a>
+                        <a href="{{ url('sfs_cms_admin_content_'~content_type~'_unpublish', {'content':entity}) }}"
+                           onclick="return confirm('{{ ('admin_'~content_type~'.read.actions.unpublish.confirm')|trans({'%name%':entity.name}) }}')">{{ ('admin_'~content_type~'.read.actions.unpublish.link')|trans({'%name%':entity.name})|lower }}</a>
                     {% endif %}
                 {% endif %}
             </div>
@@ -89,10 +89,10 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>{{ ('admin_'~content~'.versions.fields.id.header')|trans }}</th>
-                        <th>{{ ('admin_'~content~'.versions.fields.origin.header')|trans }}</th>
-                        <th>{{ ('admin_'~content~'.versions.fields.created.header')|trans }}</th>
-                        <th>{{ ('admin_'~content~'.versions.fields.publish_status.header')|trans }}</th>
+                        <th>{{ ('admin_'~content_type~'.versions.fields.id.header')|trans }}</th>
+                        <th>{{ ('admin_'~content_type~'.versions.fields.origin.header')|trans }}</th>
+                        <th>{{ ('admin_'~content_type~'.versions.fields.created.header')|trans }}</th>
+                        <th>{{ ('admin_'~content_type~'.versions.fields.publish_status.header')|trans }}</th>
                         <th>&nbsp;</th>
                     </tr>
                     </thead>
@@ -100,26 +100,26 @@
                     {% for version in entityLatestVersions %}
                         <tr>
                             <td>v{{ version.versionNumber }} {% if version.hasCompileErrors %}<i class="bi bi-exclamation-triangle text-warnging" title="This version has some compilation error"></i>{% endif %}</td>
-                            <td>{{ ('admin_'~content~'.versions.origin.'~(version.origin|default('null')))|trans }}</td>
+                            <td>{{ ('admin_'~content_type~'.versions.origin.'~(version.origin|default('null')))|trans }}</td>
                             <td>{{ version.createdAt ? version.createdAt|date('H:i:s d-m-Y') : '' }}</td>
 {#                            <td>{{ loop.index0 == 0 ? 'publicada' : '' }}</td>#}
                             <td>{{ version.published ? 'publicada' : '' }}</td>
                             <td>
-                                {% if not content_config.admin.content_is_granted or is_granted(content_config.admin.content_is_granted, version) %}
-                                    <a href="{{ url('sfs_cms_admin_content_'~content~'_content_from_version', {'content':entity, 'prevVersion':version}) }}" class="ms-2 text-nowrap">{{ ('admin_'~content~'.versions.actions.edit.link')|trans }} <span class="bi bi-pencil"></span></a>
+                                {% if not content_config.admin.version_create.is_granted or is_granted(content_config.admin.version_create.is_granted, version) %}
+                                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_content_from_version', {'content':entity, 'prevVersion':version}) }}" class="ms-2 text-nowrap">{{ ('admin_'~content_type~'.versions.actions.edit.link')|trans }} <span class="bi bi-pencil"></span></a>
                                 {% endif %}
 
-                                {% if not content_config.admin.preview_is_granted or is_granted(content_config.admin.preview_is_granted, version) %}
-                                    <a href="{{ url('sfs_cms_admin_content_'~content~'_preview_version', {'content':entity, 'version':version}) }}" class="ms-2 text-nowrap">{{ ('admin_'~content~'.versions.actions.preview.link')|trans }} <span class="bi bi-eye"></span></a>
+                                {% if not content_config.admin.preview.is_granted or is_granted(content_config.admin.preview.is_granted, version) %}
+                                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_preview', {'content':entity, 'version':version}) }}" class="ms-2 text-nowrap">{{ ('admin_'~content_type~'.versions.actions.preview.link')|trans }} <span class="bi bi-eye"></span></a>
                                 {% endif %}
 
-                                {% if not content_config.admin.export_version_is_granted or is_granted(content_config.admin.export_version_is_granted, version) %}
-                                    <a href="{{ url('sfs_cms_admin_content_'~content~'_export_version', {'content':entity, 'version':version}) }}" class="ms-2 text-nowrap">{{ ('admin_'~content~'.versions.actions.export.link')|trans }} <span class="bi bi-box-arrow-down"></span></a>
+                                {% if not content_config.admin.export_version.is_granted or is_granted(content_config.admin.export_version.is_granted, version) %}
+                                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_export_version', {'content':entity, 'version':version}) }}" class="ms-2 text-nowrap">{{ ('admin_'~content_type~'.versions.actions.export.link')|trans }} <span class="bi bi-box-arrow-down"></span></a>
                                 {% endif %}
 
-                                {% if not content_config.admin.publish_version_is_granted or is_granted(content_config.admin.publish_version_is_granted, version) %}
+                                {% if not content_config.admin.publish_version.is_granted or is_granted(content_config.admin.publish_version.is_granted, version) %}
                                     {% if not version.published %}
-                                        <a href="{{ url('sfs_cms_admin_content_'~content~'_publish_version', {'content':entity, 'version':version}) }}" class="ms-2 text-nowrap">{{ ('admin_'~content~'.versions.actions.publish.link')|trans }} <span class="bi bi-file-earmark-arrow-up"></span></a>
+                                        <a href="{{ url('sfs_cms_admin_content_'~content_type~'_publish_version', {'content':entity, 'version':version}) }}" class="ms-2 text-nowrap">{{ ('admin_'~content_type~'.versions.actions.publish.link')|trans }} <span class="bi bi-file-earmark-arrow-up"></span></a>
                                     {% endif %}
                                 {% endif %}
                             </td>

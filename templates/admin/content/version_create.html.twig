@@ -1,0 +1,124 @@
+{% trans_default_domain 'sfs_cms_contents' %}
+
+{% extends '@SfsCms/admin_layout.html.twig' %}
+
+{% block title %}{{ ('admin_'~content_type~'.content.meta.title')|trans({'%name%':entity.name}) }}{% endblock %}
+
+{% form_theme form
+    'bootstrap_5_layout.html.twig'
+    '@SfsPolymorphicFormType/polymorphic-form-theme.html.twig'
+    '@SfsCms/forms/modules_theme.html.twig'
+    '@SfsCms/forms/types_theme.html.twig'
+    '@SfsMedia/forms/media_type_theme.html.twig' %}
+
+{% block body %}
+    <script type="text/javascript">
+        const max_input_vars = {{ maxInputVars }};
+    </script>
+
+    <div id="maxInputVarsMessage" class="container-fluid bg-warning fixed-top px-5 py-3 text-center text-dark d-none" style="z-index: 10000">
+        {{ 'admin_content.content.max_input_vars_raw'|trans({'%maxInputVars%': maxInputVars}, 'sfs_cms_admin')|raw }}
+    </div>
+
+    {{ form_start(form, {'attr': {'novalidate':''}}) }}
+    <div class="d-flex flex-col align-items-stretch min-vh-100 pt-5">
+        <header class="cms-content-header flex-fill p-3 bg-dark fixed-top border-bottom">
+            <div class="container-fluid">
+                <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                    <a href="#" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                        {{ ('admin_'~content_type~'.content.title')|trans({'%name%':entity.name}) }}
+                    </a>
+
+                    <div class="col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"></div>
+
+                    <div class="text-end me-3">
+                        {{ form_widget(form.layout, {'attr':{'onchange':"confirm('Si continuas se pueden eliminar datos ¿quieres continuar?') && (document.getElementById('version_create_form__ok').value = 1) && submit()"}}) }}
+                    </div>
+
+                    <div class="text-end me-3">
+                        {% if enabledLocales|length > 1 %}
+                            <select class="form-select" id="contentEditionLanguageSelection">
+                                {% for locale in enabledLocales %}
+                                    <option value="{{ locale|lower }}">{{ locale|upper }}</option>
+                                {% endfor %}
+                            </select>
+                        {% endif %}
+                    </div>
+                    <div class="text-end me-3">
+                        {% if entity.sites|length > 1 %}
+                            <select class="form-select" id="contentEditionSiteSelection">
+                                {% for site in entity.sitesSorted %}
+                                    <option value="{{ site }}">{{ site|sfs_cms_site_name }}</option>
+                                {% endfor %}
+                            </select>
+                        {% endif %}
+                    </div>
+
+                    <div class="text-end">
+                        {% if app.request.query.get('back') == 'versions' %}
+                            <a href="{{ url('sfs_cms_admin_content_'~content_type~'_versions', {'content':entity}) }}"
+                               class="btn btn-light">{{ ('admin_'~content_type~'.content.actions.cancel.button')|trans }}</a>
+                        {% else %}
+                            <a href="{{ url('sfs_cms_admin_content_'~content_type~'_details', {'content':entity}) }}"
+                               class="btn btn-light">{{ ('admin_'~content_type~'.content.actions.cancel.button')|trans }}</a>
+                        {% endif %}
+
+                        <div class="btn-group" role="group">
+                            <button name="goto" value="content" type="submit"
+                                    class="btn btn-primary ms-3" id="defaultSubmitBtn">{{ ('admin_'~content_type~'.content.actions.save.button')|trans }}</button>
+                            <button name="goto" id="submitBtnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="submitBtnGroupDrop1">
+                                <li>
+                                    <button class="btn btn-primary dropdown-item" name="goto"
+                                            value="general">{{ ('admin_'~content_type~'.content.actions.save_and_exit.button')|trans }}</button>
+                                    <button class="btn btn-primary dropdown-item" name="goto"
+                                            value="preview">{{ ('admin_'~content_type~'.content.actions.save_and_preview.button')|trans }}</button>
+                                    {% if not content_config.admin.publish_version.is_granted or is_granted(content_config.admin.publish_version.is_granted, form.vars.data) %}
+                                        <button class="btn btn-primary dropdown-item" name="goto"
+                                                value="publish">{{ ('admin_'~content_type~'.content.actions.save_and_publish.button')|trans }}</button>
+                                    {% else %}
+                                        <button class="btn btn-primary dropdown-item disabled"
+                                                name="goto">{{ ('admin_'~content_type~'.content.actions.save_and_publish.button')|trans }}</button>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main class="cms-content-main flex-fill d-flex flex-row align-items-stretch bg-light h-100">
+            <div class="row h-100 w-100 mx-0">
+                <div class="col px-0">
+                    {{ form_errors(form) }}
+                    {% include layout_config.edit_template %}
+                </div>
+                <div class="col-2 h-100 bg-white d-none" id="content-form"></div>
+            </div>
+        </main>
+    </div>
+    {#        <iframe id="previewFrame" src="/preview.html"></iframe> #}
+    {#        <button onclick="document.getElementById('previewFrame').contentWindow.document.getElementsByTagName('body')[0].innerHTML = 'Otra cosa'; return false;">Change</button> #}
+
+
+    {{ form_widget(form.module_prototypes_collection) }}
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
+
+    <script type="text/javascript">
+        document.getElementById("version_create_form__ok").value = 0;
+    </script>
+
+    {% if alert|default(false) or app.request.query.has('saved') %}
+        <div class="fixed-top w-50 float-right m-5">
+            <div class="alert alert-{{ alert[0]|default('success')|replace({'error':'danger'}) }} alert-dismissible fade show" role="alert">
+                {{ alert[1]|default('admin_'~content_type~'.content.success_saved')|trans|raw }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    {% endif %}
+
+    {% include '@SfsMedia/forms/media_type_modal.html.twig' %}
+{% endblock body %}
