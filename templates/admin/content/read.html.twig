@@ -99,7 +99,7 @@
                     <tbody>
                     {% for version in entityLatestVersions %}
                         <tr>
-                            <td>v{{ version.versionNumber }} {% if version.hasCompileErrors %}<i class="bi bi-exclamation-triangle text-warnging" title="This version has some compilation error"></i>{% endif %}</td>
+                            <td>v{{ version.versionNumber }} {% if version.hasCompileErrors %}<i class="bi bi-exclamation-triangle text-danger" title="This version has some compilation error"></i>{% endif %}</td>
                             <td>{{ ('admin_'~content_type~'.versions.origin.'~(version.origin|default('null')))|trans }}</td>
                             <td>{{ version.createdAt ? version.createdAt|date('H:i:s d-m-Y') : '' }}</td>
 {#                            <td>{{ loop.index0 == 0 ? 'publicada' : '' }}</td>#}
