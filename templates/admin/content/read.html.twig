@@ -35,8 +35,17 @@
 
         </div>
         <div class="row mt-4 border-bottom border-dark">
-{#            <div class="col-12 col-md-4">#}
-{#                <h2 class="h5">Translations</h2>#}
+            <div class="col-12 col-md-4">
+                <h2 class="h5">Translations</h2>
+                <p class="d-flex mb-2">
+                    <span class="pe-2">Default language</span>
+                    <strong>{{ entity.defaultLocale }}</strong>
+                </p>
+                <p class="d-flex mb-2">
+                    <span class="pe-2">Languages</span>
+                    <strong>{{ entity.locales|join(', ') }}</strong>
+                </p>
+
 {#                    {% set stats = sfs_trans_stats(content, entity.site.languages) %}#}
 {#                    {% for locale,localeStats in stats %}#}
 {#                        <p class="d-flex">#}
@@ -49,7 +58,7 @@
 {#                            </span>#}
 {#                         </p>#}
 {#                    {% endfor %}#}
-{#            </div>#}
+            </div>
             <div class="col-12 col-md-4">
                 <h2 class="h5">SEO</h2>
                     <p class="d-flex mb-2">

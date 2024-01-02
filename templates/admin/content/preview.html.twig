@@ -10,16 +10,16 @@
             <div class="container-fluid">
                 <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                     <a href="#" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-                        {{ ('admin_'~content_type~'.preview.title')|trans({'%name%':entity.name}) }}
+                        {{ ('admin_'~content_type~'.preview.title')|trans({'%name%':entity.name, '%versionNumber%': version.versionNumber}) }}
                     </a>
 
                     <div class="col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"></div>
 
                     <div class="text-end me-3">
                         <form class="d-flex" action="{{ url('sfs_cms_admin_content_'~content_type~'_version_preview', {'content':entity, 'version':version}) }}" method="GET" target="previewFrame">
-                            {% if enabledLocales|length > 1 %}
+                            {% if content_entity.locales|length > 1 %}
                                 <select class="form-select mx-1" name="_locale" onchange="this.form.submit()">
-                                    {% for locale in enabledLocales %}
+                                    {% for locale in content_entity.locales %}
                                         <option value="{{ locale|lower }}">{{ locale|upper }}</option>
                                     {% endfor %}
                                 </select>

@@ -3,10 +3,11 @@ admin_page:
 
     tabs_menu:
         details: "General"
-        update: "Edit"
+        update: "Configure"
         seo: "SEO"
-        content: "Content (last version)"
-        preview: "Preview (last version)"
+        content: "Content"
+        preview: "Preview"
+        translations: "Translations"
         versions: "Versions"
 
     create:
@@ -73,6 +74,7 @@ admin_page:
             1: "edited"
             2: "fixture"
             3: "imported"
+            4: "translated"
         actions:
             edit.link: "Edit"
             preview.link: "Preview"
@@ -80,11 +82,12 @@ admin_page:
             publish.link: "Publish version"
             import_version.link: "Import version"
             cleanup_versions.link: "Cleanup versions"
+            translations.link: "Translations"
             keep.link: "Keep version, click to no keep"
             nokeep.link: "Do not keep version, click to keep"
     preview:
         meta.title: "Preview page"
-        title: "%name%"
+        title: "%name% (v%versionNumber%)"
         breadcrumb: "Preview page"
         actions:
             open.button: "Open"
@@ -95,13 +98,18 @@ admin_page:
 
     translations:
         meta.title: "Page translations"
-        title: "%name%"
+        title: "%name% (v%versionNumber%)"
         breadcrumb: "Page translations"
+        actions:
+            cancel.button: "Cancel"
+            save.button: "Save new version"
+            import_translations.link: "Import translations"
+            export_translations.link: "Export translations"
 
     update:
-        meta.title: "Edit page"
+        meta.title: "Configure page"
         title: "%name%"
-        breadcrumb: "Edit page"
+        breadcrumb: "Configure page"
         actions:
             update.button: "Save changes"
             cancel.button: "Cancel"
@@ -144,7 +152,7 @@ admin_page:
 
     content:
         meta.title: "Edit content"
-        title: "%name%"
+        title: "%name% (new version from v%versionNumber%)"
         breadcrumb: "Edit content"
         render_error: "An error has been produced during the page compilation, check the configuration."
         validation_error: "Changes has not been saved, this page has some errors, check the configuration."
@@ -178,6 +186,9 @@ admin_page:
 
     form:
         name.label: "Name"
+        defaultLocale.label: "Default language"
+        locales.label: "Languages"
+        addLocale.label: "Add language"
         sites.label: "Sites"
         routes:
             0.label: ""

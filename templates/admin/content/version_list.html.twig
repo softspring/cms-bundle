@@ -70,6 +70,10 @@
                                     <a href="{{ url('sfs_cms_admin_content_'~content_type~'_content_from_version', {'content':entity, 'prevVersion':version}) }}" class="ms-2 text-nowrap">{{ ('admin_'~content_type~'.versions.actions.edit.link')|trans }} <span class="bi bi-pencil"></span></a>
                                 {% endif %}
 
+                                {% if not content_config.admin.version_translations.is_granted or is_granted(content_config.admin.version_translations.is_granted, version) %}
+                                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_translations', {'content':entity, 'version':version}) }}" class="ms-2 text-nowrap">{{ ('admin_'~content_type~'.versions.actions.translations.link')|trans }} <span class="bi bi-translate"></span></a>
+                                {% endif %}
+
                                 {% if not content_config.admin.preview.is_granted or is_granted(content_config.admin.preview.is_granted, version) %}
                                     <a href="{{ url('sfs_cms_admin_content_'~content_type~'_preview', {'content':entity, 'version':version}) }}" class="ms-2 text-nowrap">{{ ('admin_'~content_type~'.versions.actions.preview.link')|trans }} <span class="bi bi-eye"></span></a>
                                 {% endif %}

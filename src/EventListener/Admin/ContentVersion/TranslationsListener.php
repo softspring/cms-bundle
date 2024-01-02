@@ -11,7 +11,12 @@ use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Render\RenderErrorException;
 use Softspring\CmsBundle\Request\FlashNotifier;
 use Softspring\CmsBundle\SfsCmsEvents;
+use Softspring\CmsBundle\Translator\ExtractException;
+use Softspring\CmsBundle\Translator\InvalidTranslationMappingException;
 use Softspring\CmsBundle\Translator\TranslatableContext;
+use Softspring\CmsBundle\Translator\TranslationsTransformer;
+use Softspring\CmsBundle\Translator\TranslatorExtractor;
+use Softspring\Component\CrudlController\Event\ApplyEvent;
 use Softspring\Component\CrudlController\Event\CreateEntityEvent;
 use Softspring\Component\CrudlController\Event\ExceptionEvent;
 use Softspring\Component\CrudlController\Event\FailureEvent;
@@ -24,89 +29,79 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-/**
- * Content action.
- */
-class CreateListener extends AbstractContentVersionListener
+class TranslationsListener extends AbstractContentVersionListener
 {
-    protected const ACTION_NAME = 'version_create';
+    protected const ACTION_NAME = 'version_translations';
 
-    public function __construct(
-        ContentManagerInterface $contentManager,
-        ContentVersionManagerInterface $contentVersionManager,
-        RouteManagerInterface $routeManager,
-        CmsConfig $cmsConfig,
-        RouterInterface $router,
-        FlashNotifier $flashNotifier,
-        AuthorizationCheckerInterface $authorizationChecker,
-        protected TranslatableContext $translatableContext,
-    ) {
+    public function __construct(ContentManagerInterface $contentManager, ContentVersionManagerInterface $contentVersionManager, RouteManagerInterface $routeManager, CmsConfig $cmsConfig, RouterInterface $router, FlashNotifier $flashNotifier, AuthorizationCheckerInterface $authorizationChecker, protected TranslatorExtractor $translatorExtractor, protected TranslatableContext $translatableContext)
+    {
         parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
     }
 
     public static function getSubscribedEvents(): array
     {
         return [
-            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CREATE_INITIALIZE => [
+            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_TRANSLATIONS_INITIALIZE => [
                 ['onInitializeGetConfig', 20],
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onEventLoadContentEntity', 9],
                 ['onInitializeIsGranted', 0],
             ],
-            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CREATE_ENTITY => [
+            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_TRANSLATIONS_ENTITY => [
                 ['onEventDispatchContentTypeEvent', 10],
-                ['onCreateEntity', 1],
-                ['onCreateEntityOverrideLayout', 0],
+                ['onTranslationsEntity', 1],
+                ['onTranslationsEntityOverrideLayout', 0],
             ],
-            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CREATE_FORM_PREPARE => [
+            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_TRANSLATIONS_FORM_PREPARE => [
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onFormPrepareResolve', 0],
             ],
-            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CREATE_FORM_INIT => [
+            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_TRANSLATIONS_FORM_INIT => [
                 ['onEventDispatchContentTypeEvent', 10],
             ],
-            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CREATE_FORM_VALID => [
+            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_TRANSLATIONS_FORM_VALID => [
                 ['onEventDispatchContentTypeEvent', 10],
             ],
-            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CREATE_APPLY => [
+            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_TRANSLATIONS_APPLY => [
                 ['onEventDispatchContentTypeEvent', 10],
+                ['onApply', 0],
             ],
-            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CREATE_SUCCESS => [
+            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_TRANSLATIONS_SUCCESS => [
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onSuccess', 0],
             ],
-            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CREATE_FAILURE => [
+            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_TRANSLATIONS_FAILURE => [
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onFailureShowAlert', 0],
             ],
-            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CREATE_FORM_INVALID => [
+            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_TRANSLATIONS_FORM_INVALID => [
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onFormInvalidShowAlert', 0],
             ],
-            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CREATE_VIEW => [
+            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_TRANSLATIONS_VIEW => [
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onView', 0],
             ],
-            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CREATE_EXCEPTION => [
+            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_TRANSLATIONS_EXCEPTION => [
                 ['onEventDispatchContentTypeEvent', 10],
             ],
         ];
     }
 
-    public function onCreateEntity(CreateEntityEvent $event): void
+    public function onTranslationsEntity(CreateEntityEvent $event): void
     {
         $request = $event->getRequest();
 
         /** @var ContentInterface $content */
         $content = $request->attributes->get('content');
-        $prevVersion = $request->attributes->get('prevVersion');
+        $prevVersion = $request->query->get('version');
 
         if ($prevVersion) {
             $prevVersion = $content->getVersions()->filter(fn (ContentVersionInterface $version) => $version->getId() == $prevVersion)->first();
         }
 
         $request->attributes->set('prevVersion', $prevVersion ?: $content->getLastVersion());
-        $version = $this->contentManager->createVersion($content, $prevVersion, ContentVersionInterface::ORIGIN_EDIT);
+        $version = $this->contentManager->createVersion($content, $prevVersion, ContentVersionInterface::ORIGIN_TRANSLATIONS);
         $prevVersion && $version->setOriginDescription('v'.$prevVersion->getVersionNumber());
 
         $request->attributes->set('version', $version);
@@ -114,33 +109,54 @@ class CreateListener extends AbstractContentVersionListener
         $event->setEntity($version);
     }
 
-    public function onCreateEntityOverrideLayout(CreateEntityEvent $event): void
+    public function onTranslationsEntityOverrideLayout(CreateEntityEvent $event): void
     {
         $request = $event->getRequest();
         $version = $event->getEntity();
 
         // override layout from request
-        if ($request->request->has('version_create_form')) {
-            $version->setLayout($request->request->all()['version_create_form']['layout']);
+        if ($request->request->has('version_translations_form')) {
+            $version->setLayout($request->request->all()['version_translations_form']['layout']);
         }
     }
 
+    /**
+     * @throws ExtractException
+     */
     public function onFormPrepareResolve(FormPrepareEvent $event): void
     {
-        $this->translatableContext->setLocales($event->getEntity()->getContent()->getLocales());
-
+        /** @var ContentVersionInterface $version */
         $version = $event->getEntity();
 
         $contentConfig = $event->getRequest()->attributes->get('_content_config');
 
+        $this->translatableContext->setLocales($version->getContent()->getLocales());
+        $flattenTranslations = TranslationsTransformer::flatten($this->translatorExtractor->extract($version));
+
         $event->setType($this->getOption($event->getRequest(), 'type'));
         $event->setFormOptions([
             'content' => $event->getRequest()->attributes->get('content'),
-            'layout' => $version->getLayout(),
             'method' => 'POST',
             'content_type' => $contentConfig['_id'],
             'content_config' => $contentConfig,
+            'flatten_translations' => $flattenTranslations,
         ]);
+
+        // set data for form
+        $event->setData($flattenTranslations);
+    }
+
+    /**
+     * @throws InvalidTranslationMappingException
+     */
+    public function onApply(ApplyEvent $event): void
+    {
+        $version = $event->getEntity();
+        $flattenTranslations = $event->getForm()->getData();
+
+        $version->setData(TranslationsTransformer::applyFlatten($version->getData(), $flattenTranslations));
+
+        $event->setApplied(false); // do save entity
     }
 
     /**
@@ -209,25 +225,8 @@ class CreateListener extends AbstractContentVersionListener
         /** @var ContentVersionInterface $version */
         $version = $request->attributes->get('version');
 
-        // preview mode
-        $request->attributes->set('_cms_preview', true);
-
-        // show alert if exists
-        $event->getData()['alert'] = $request->attributes->get('_content_version_alert');
-
-        //        // add enabled locales
-        //        $sitesLocales = $content->getSites()->map(fn (SiteInterface $site) => $site->getConfig()['locales'])->toArray();
-        //        $enabledLocales = call_user_func_array('array_merge', $sitesLocales);
-        //        $enabledLocales = array_unique($enabledLocales);
-        /* @deprecated */
-        $event->getData()['enabledLocales'] = $content->getLocales();
-
-        // add max_input_vars to prevent errors
-        // @see https://www.php.net/manual/en/info.configuration.php#ini.max-input-vars
-        $event->getData()['maxInputVars'] = ini_get('max_input_vars');
-
-        // add layout config
-        $event->getData()['layout_config'] = $this->cmsConfig->getLayout($version->getLayout());
+        $event->getData()['content_entity'] = $content;
+        $event->getData()['version_entity'] = $version;
 
         // add prev version
         $event->getData()['prev_version'] = $request->attributes->get('prevVersion');
@@ -241,10 +240,24 @@ class CreateListener extends AbstractContentVersionListener
         $contentConfig = $event->getRequest()->attributes->get('_content_config');
 
         if ($event->getException() instanceof MissingFormTypeException) {
-            $this->flashNotifier->addTrans('error', "admin_{$contentConfig['_id']}.version_create.module_not_configured_flash", ['%module%' => $event->getException()->getDiscriminator()], 'sfs_cms_contents');
+            $this->flashNotifier->addTrans('error', "admin_{$contentConfig['_id']}.version_translations.module_not_configured_flash", ['%module%' => $event->getException()->getDiscriminator()], 'sfs_cms_contents');
 
             $url = $this->router->generate("sfs_cms_admin_content_{$event->getRequest()->attributes->get('_content_config')['_id']}_details", ['content' => $event->getRequest()->attributes->get('content')]);
             $event->setResponse(new RedirectResponse($url));
+
+            return;
+        }
+
+        if ($event->getException() instanceof InvalidTranslationMappingException) {
+            // TODO manage this
+
+            return;
+        }
+
+        if ($event->getException() instanceof ExtractException) {
+            // TODO manage this
+
+            return;
         }
     }
 }

@@ -104,7 +104,11 @@ services:
         tags: ['twig.extension']
 
     Softspring\CmsBundle\Sitemap\SitemapGenerator: ~
-    
+
+    Softspring\CmsBundle\Translator\TranslatableContext: ~
+
+    Softspring\CmsBundle\Translator\TranslatorExtractor: ~
+
     Softspring\CmsBundle\Twig\Extension\:
         resource: '../../src/Twig/Extension/*'
         tags: ['twig.extension']

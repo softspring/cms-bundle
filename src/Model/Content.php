@@ -33,6 +33,10 @@ abstract class Content implements ContentInterface
 
     protected ?ContentVersionInterface $lastVersion = null;
 
+    protected ?string $defaultLocale = null;
+
+    protected ?array $locales = null;
+
     public function __construct()
     {
         $this->sites = new ArrayCollection();
@@ -183,5 +187,32 @@ abstract class Content implements ContentInterface
     public function setLastVersion(?ContentVersionInterface $lastVersion): void
     {
         $this->lastVersion = $lastVersion;
+    }
+
+    public function getDefaultLocale(): ?string
+    {
+        return $this->defaultLocale;
+    }
+
+    public function setDefaultLocale(?string $defaultLocale): void
+    {
+        $this->defaultLocale = $defaultLocale;
+        $this->addLocale($defaultLocale);
+    }
+
+    public function getLocales(): ?array
+    {
+        return $this->locales;
+    }
+
+    public function setLocales(?array $locales): void
+    {
+        $this->locales = $locales;
+        $this->defaultLocale && $this->addLocale($this->defaultLocale);
+    }
+
+    public function addLocale(string $locale): void
+    {
+        $this->locales = array_unique(array_merge($this->locales ?? [], [$locale]));
     }
 }

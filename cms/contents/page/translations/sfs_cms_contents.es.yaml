@@ -3,10 +3,11 @@ admin_page:
 
     tabs_menu:
         details: "General"
-        update: "Editar"
+        update: "Configurar"
         seo: "SEO"
-        content: "Contenido (ultima versión)"
-        preview: "Previsualizar (ultima versión)"
+        content: "Contenido"
+        preview: "Previsualizar"
+        translations: "Traducciones"
         versions: "Versiones"
 
     create:
@@ -73,6 +74,7 @@ admin_page:
             1: "editado"
             2: "fixture"
             3: "cargada"
+            4: "traducida"
         actions:
             edit.link: "Editar"
             preview.link: "Previsualizar"
@@ -80,11 +82,12 @@ admin_page:
             publish.link: "Publicar versión"
             import_version.link: "Importar versión"
             cleanup_versions.link: "Limpiar versiones"
+            translations.link: "Traducciones"
             keep.link: "Mantener versión, pinchar para desmarcar"
             nokeep.link: "No mantener esta versión, pinchar para mantener"
     preview:
         meta.title: "Previsualizar página"
-        title: "%name%"
+        title: "%name% (v%versionNumber%)"
         breadcrumb: "Previsualizar página"
         actions:
             open.button: "Abrir"
@@ -95,13 +98,18 @@ admin_page:
 
     translations:
         meta.title: "Traducciones de la página"
-        title: "%name%"
+        title: "%name% (v%versionNumber%)"
         breadcrumb: "Traducciones de la página"
+        actions:
+            cancel.button: "Cancelar"
+            save.button: "Guardar nueva versión"
+            import_translations.link: "Importar traducciones"
+            export_translations.link: "Exportar traducciones"
 
     update:
-        meta.title: "Editar página"
+        meta.title: "Configuración de la página"
         title: "%name%"
-        breadcrumb: "Editar página"
+        breadcrumb: "Configuración de la página"
         actions:
             update.button: "Guardar cambios"
             cancel.button: "Cancelar"
@@ -144,7 +152,7 @@ admin_page:
 
     content:
         meta.title: "Editar contenido"
-        title: "%name%"
+        title: "%name% (nueva versión desde v%versionNumber%)"
         breadcrumb: "Editar contenido"
         render_error: "Se ha producido un error al compilar la página, revisa la configuración."
         validation_error: "Los cambios no se han guardado, la página tiene algunos errores, revisa la configuración."
@@ -178,6 +186,9 @@ admin_page:
 
     form:
         name.label: "Nombre"
+        defaultLocale.label: "Idioma por defecto"
+        locales.label: "Idiomas"
+        addLocale.label: "Añadir idioma"
         sites.label: "Sites"
         routes:
             0.label: ""

@@ -26,7 +26,7 @@
             <div class="container-fluid">
                 <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                     <a href="#" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-                        {{ ('admin_'~content_type~'.content.title')|trans({'%name%':entity.name}) }}
+                        {{ ('admin_'~content_type~'.content.title')|trans({'%name%':entity.name, '%versionNumber%': prev_version.versionNumber|default('0')}) }}
                     </a>
 
                     <div class="col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"></div>
@@ -36,9 +36,9 @@
                     </div>
 
                     <div class="text-end me-3">
-                        {% if enabledLocales|length > 1 %}
+                        {% if content_entity.locales|length > 1 %}
                             <select class="form-select" id="contentEditionLanguageSelection">
-                                {% for locale in enabledLocales %}
+                                {% for locale in content_entity.locales %}
                                     <option value="{{ locale|lower }}">{{ locale|upper }}</option>
                                 {% endfor %}
                             </select>
