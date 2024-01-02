@@ -6,6 +6,9 @@ use Softspring\CmsBundle\Data\Exception\InvalidElementException;
 use Softspring\CmsBundle\Data\Exception\RunPreloadBeforeImportException;
 use Softspring\CmsBundle\Data\ReferencesRepository;
 
+/**
+ * @deprecated this class is deprecated, and will be removed on 6.0 version, when fixtures will be refactored to use serializer
+ */
 interface EntityTransformerInterface
 {
     public static function getPriority(): int;

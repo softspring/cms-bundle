@@ -8,6 +8,9 @@ use Softspring\CmsBundle\Manager\BlockManagerInterface;
 use Softspring\CmsBundle\Model\BlockInterface;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @deprecated since CmsBundle 5.2, will be removed in CmsBundle 6.0
+ */
 class BlockParamConverter implements ParamConverterInterface
 {
     protected BlockManagerInterface $manager;

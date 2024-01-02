@@ -5,7 +5,7 @@ namespace Softspring\CmsBundle\Utils;
 use Softspring\CmsBundle\Config\CmsConfig;
 
 /**
- * @deprecated renamed to DataMigrator, will be removed in 5.2
+ * @deprecated renamed to DataMigrator, will be removed in 6.0
  */
 class ModuleMigrator
 {

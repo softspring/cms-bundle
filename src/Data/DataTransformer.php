@@ -4,6 +4,9 @@ namespace Softspring\CmsBundle\Data;
 
 use Softspring\CmsBundle\Data\FieldTransformer\FieldTransformerInterface;
 
+/**
+ * @deprecated this class is deprecated, and will be removed on 6.0 version, when fixtures will be refactored to use serializer
+ */
 class DataTransformer
 {
     /**

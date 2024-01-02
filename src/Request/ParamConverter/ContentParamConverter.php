@@ -8,6 +8,9 @@ use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @deprecated since CmsBundle 5.2, will be removed in CmsBundle 6.0
+ */
 class ContentParamConverter implements ParamConverterInterface
 {
     protected ContentManagerInterface $manager;

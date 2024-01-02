@@ -8,6 +8,9 @@ use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @deprecated since CmsBundle 5.2, will be removed in CmsBundle 6.0
+ */
 class ContentVersionParamConverter implements ParamConverterInterface
 {
     protected ContentVersionManagerInterface $manager;

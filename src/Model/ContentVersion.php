@@ -156,7 +156,7 @@ abstract class ContentVersion implements ContentVersionInterface
     {
         foreach ($this->getCompiled() ?? [] as $siteCompiled) {
             if (is_array($siteCompiled)) {
-                /* @deprecated: to be removed in next versions */
+                /* @deprecated: TODO to be removed in next versions */
                 foreach ($siteCompiled as $localeCompiled) {
                     if (str_contains($localeCompiled, 'MODULE_RENDER_ERROR')) {
                         return true;

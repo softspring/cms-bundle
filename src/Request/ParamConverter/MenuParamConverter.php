@@ -8,6 +8,9 @@ use Softspring\CmsBundle\Manager\MenuManagerInterface;
 use Softspring\CmsBundle\Model\MenuInterface;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @deprecated since CmsBundle 5.2, will be removed in CmsBundle 6.0
+ */
 class MenuParamConverter implements ParamConverterInterface
 {
     protected MenuManagerInterface $manager;

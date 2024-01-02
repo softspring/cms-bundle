@@ -10,6 +10,9 @@ use Softspring\MediaBundle\EntityManager\MediaVersionManagerInterface;
 use Softspring\MediaBundle\Model\MediaInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
+/**
+ * @deprecated this class is deprecated, and will be removed on 6.0 version, when fixtures will be refactored to use serializer
+ */
 class MediaEntityTransformer implements EntityTransformerInterface
 {
     protected MediaManagerInterface $mediaManager;

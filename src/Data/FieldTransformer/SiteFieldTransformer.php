@@ -6,6 +6,9 @@ use Softspring\CmsBundle\Data\ReferencesRepository;
 use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\Utils\Slugger;
 
+/**
+ * @deprecated this class is deprecated, and will be removed on 6.0 version, when fixtures will be refactored to use serializer
+ */
 class SiteFieldTransformer implements FieldTransformerInterface
 {
     public static function getPriority(): int
