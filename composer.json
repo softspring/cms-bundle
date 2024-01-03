@@ -42,8 +42,8 @@
         "phpstan/phpstan": "^1.10.49",
         "phpunit/phpunit": "^10.2.0",
         "softspring/user-bundle": "^5.2",
-        "symfony/css-selector": "^7.0",
-        "symfony/dom-crawler": "^7.0",
+        "symfony/css-selector": "^5.4|^6.0|^7.0",
+        "symfony/dom-crawler": "^5.4|^6.0|^7.0",
         "symfony/maker-bundle": "^1.38",
         "symfony/web-profiler-bundle": "^5.4|^6.0|^7.0"
     },
