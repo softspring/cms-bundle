@@ -6,24 +6,19 @@ use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Model\RoutePathInterface;
-use Softspring\CmsBundle\Render\ContentRender;
+use Softspring\CmsBundle\Render\ContentVersionRenderer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ContentController extends AbstractController
 {
-    protected ContentRender $contentRender;
-    protected ContentManagerInterface $contentManager;
-    protected ContentVersionManagerInterface $contentVersionManager;
-    protected string $prefixCompiled;
-
-    public function __construct(ContentRender $contentRender, ContentManagerInterface $contentManager, ContentVersionManagerInterface $contentVersionManager, string $prefixCompiled)
-    {
-        $this->contentRender = $contentRender;
-        $this->contentManager = $contentManager;
-        $this->contentVersionManager = $contentVersionManager;
-        $this->prefixCompiled = $prefixCompiled;
+    public function __construct(
+        protected ContentVersionRenderer $contentRender,
+        protected ContentManagerInterface $contentManager,
+        protected ContentVersionManagerInterface $contentVersionManager,
+        protected string $prefixCompiled,
+    ) {
     }
 
     public function renderRoutePath(RoutePathInterface $routePath, Request $request): Response

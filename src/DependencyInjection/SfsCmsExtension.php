@@ -21,8 +21,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
-
-        /** @deprecated will be removed on 6.0 version, when fixtures will be refactored to use serializer */
+        /* @deprecated will be removed on 6.0 version, when fixtures will be refactored to use serializer */
         $container->registerForAutoconfiguration(EntityTransformerInterface::class)->addTag('sfs_cms.data.entity_transformer');
         $container->registerForAutoconfiguration(FieldTransformerInterface::class)->addTag('sfs_cms.data.field_transformer');
 

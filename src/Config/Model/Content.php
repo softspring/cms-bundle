@@ -220,7 +220,6 @@ class Content implements ConfigurationInterface
                         ->scalarNode('publish_version_is_granted')->setDeprecated('softspring/cms-bundle', '5.2')->end()
                         ->scalarNode('unpublish_is_granted')->setDeprecated('softspring/cms-bundle', '5.2')->end()
 
-
                         ->arrayNode('list')
                             ->addDefaultsIfNotSet()
                             ->children()

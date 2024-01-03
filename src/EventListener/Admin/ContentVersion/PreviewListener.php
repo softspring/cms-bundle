@@ -8,7 +8,7 @@ use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Manager\SiteManagerInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
-use Softspring\CmsBundle\Render\ContentRender;
+use Softspring\CmsBundle\Render\ContentVersionRenderer;
 use Softspring\CmsBundle\Request\FlashNotifier;
 use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\Component\CrudlController\Event\EntityFoundEvent;
@@ -30,7 +30,7 @@ class PreviewListener extends AbstractContentVersionListener
         FlashNotifier $flashNotifier,
         AuthorizationCheckerInterface $authorizationChecker,
         protected SiteManagerInterface $siteManager,
-        protected ContentRender $contentRender,
+        protected ContentVersionRenderer $contentRender,
         protected ?WebDebugToolbarListener $webDebugToolbarListener = null,
     ) {
         parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
