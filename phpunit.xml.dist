@@ -7,10 +7,14 @@
          displayDetailsOnTestsThatTriggerWarnings="true"
 >
   <testsuites>
-    <testsuite name="Test suite">
-      <directory suffix="Test.php">./tests</directory>
+    <testsuite name="unit">
+      <directory suffix="Test.php">./tests/Unit</directory>
+    </testsuite>
+    <testsuite name="cms">
+      <directory suffix="Test.php">./tests/Cms</directory>
     </testsuite>
   </testsuites>
+
   <coverage>
     <report>
       <clover outputFile="clover.xml"/>
@@ -18,6 +22,7 @@
       <text outputFile=".phpunit.cache/coverage.txt" showUncoveredFiles="false" showOnlySummary="true"/>
     </report>
   </coverage>
+
   <source>
     <include>
       <directory suffix=".php">src</directory>
