@@ -55,6 +55,21 @@ admin_page:
             unpublish:
                 confirm: "are you sure to unpublish this page?"
                 link: "Unpublish"
+        name: "Name"
+        sites: "Sites"
+        published: "Published"
+        seo:
+            title: "SEO"
+            index: "Index"
+            links: "Links"
+            sitemap: "Sitemap"
+            sitemap.no: "no"
+        routes:
+            title: "Routes"
+            cache: "(cache %ttl% seconds)"
+        versions:
+            title: "Last versions"
+            published: "Published"
 
     versions:
         meta.title: "Versions"

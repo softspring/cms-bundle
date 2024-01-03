@@ -55,6 +55,21 @@ admin_page:
             unpublish:
                 confirm: "¿estás seguro de despublicar esta página?"
                 link: "Despublicar"
+        name: "Nombre"
+        sites: "Sitios"
+        published: "Publicada"
+        seo:
+            title: "SEO"
+            index: "Indexar"
+            links: "Enlaces"
+            sitemap: "Mapa de sitio"
+            sitemap.no: "no"
+        routes:
+            title: "Rutas"
+            cache: "(cache %ttl% segundos)"
+        versions:
+            title: "Últimas versiones"
+            published: "publicada"
 
     versions:
         meta.title: "Versiones"
