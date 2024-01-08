@@ -6,129 +6,35 @@
 
 {% block breadcrums_content %}
     {{ parent() }}
-    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content_type~'_list') }}">{{ ('admin_'~content_type~'.list.breadcrumb')|trans }}</a></li>
-    <li class="breadcrumb-item active" aria-current="content">{{ ('admin_'~content_type~'.read.breadcrumb')|trans({'%name%':entity.name}) }}</li>
+    <li class="breadcrumb-item"><a
+                href="{{ url('sfs_cms_admin_content_'~content_type~'_list') }}">{{ ('admin_'~content_type~'.list.breadcrumb')|trans }}</a>
+    </li>
+    <li class="breadcrumb-item active"
+        aria-current="content">{{ ('admin_'~content_type~'.read.breadcrumb')|trans({'%name%':entity.name}) }}</li>
 {% endblock breadcrums_content %}
 
 {% block content %}
-    <h1 class="h2">{{ ('admin_'~content_type~'.read.title')|trans({'%name%':entity.name}) }}</h1>
+    <h1 class="h3">{{ ('admin_'~content_type~'.read.title')|trans({'%name%':entity.name}) }}</h1>
 
     {% include '@SfsCms/admin/content/_content_tabs.html.twig' with {'current':'read', 'content':content, 'entity':entity} %}
 
-    <div class="container-fluid p-3 bg-white">
-        <div class="row align-items-center border-bottom border-dark">
-            <div class="col-12 col-md-3 col-lg-2 text-md-end mb-md-2">{{ ('admin_'~content_type~'.read.name')|trans }}</div>
-            <div class="col-12 col-md-9 col-lg-10 mb-2 h4"><strong>{{ entity.name }}</strong></div>
-            <div class="col-12 col-md-3 col-lg-2 text-md-end mb-md-2">{{ ('admin_'~content_type~'.read.sites')|trans }}</div>
-            <div class="col-12 col-md-9 col-lg-10 mb-2">{{ entity.sites|map((site) => site|sfs_cms_site_name)|join(', ') }}</div>
-            <div class="col-12 col-md-3 col-lg-2 text-md-end mb-md-2">{{ ('admin_'~content_type~'.read.published')|trans }}</div>
-            <div class="col-12 col-md-9 col-lg-10 mb-2">
-                {{ entity.publishedVersion ? entity.publishedVersion.createdAt|date('H:i d-m-Y') : (('admin_'~content_type~'.read.unpublished')|trans) }}
-
-                {% if not content_config.admin.unpublish.is_granted or is_granted(content_config.admin.unpublish.is_granted, entity) %}
-                    {% if entity.publishedVersion %}
-                        <a href="{{ url('sfs_cms_admin_content_'~content_type~'_unpublish', {'content':entity}) }}"
-                           onclick="return confirm('{{ ('admin_'~content_type~'.read.actions.unpublish.confirm')|trans({'%name%':entity.name}) }}')">{{ ('admin_'~content_type~'.read.actions.unpublish.link')|trans({'%name%':entity.name})|lower }}</a>
-                    {% endif %}
-                {% endif %}
-            </div>
-
-        </div>
-        <div class="row mt-4 border-bottom border-dark">
-{#            <div class="col-12 col-md-4">#}
-{#                <h2 class="h5">Translations</h2>#}
-{#                    {% set stats = sfs_trans_stats(content, entity.site.languages) %}#}
-{#                    {% for locale,localeStats in stats %}#}
-{#                        <p class="d-flex">#}
-{#                            <strong>{{ locale }}</strong>#}
-{#                            <span class="col-10">#}
-{#                                {% if localeStats.total %}#}
-{#                                    {{ (localeStats.translated/localeStats.total*100)|round }}%#}
-{#                                   <span class="text-tertiary">({{ localeStats.translated }}/{{ localeStats.total }})</span>#}
-{#                                {% endif %}#}
-{#                            </span>#}
-{#                         </p>#}
-{#                    {% endfor %}#}
-{#            </div>#}
-            <div class="col-12 col-md-4">
-                <h2 class="h5">{{ ('admin_'~content_type~'.read.seo.title')|trans }}</h2>
-                    <p class="d-flex mb-2">
-                        <span class="pe-2">{{ ('admin_'~content_type~'.read.seo.index')|trans }}</span>
-                        <strong>{{ entity.seo.noIndex|default(false)?'noindex':'index' }}</strong>
-                    </p>
-                    <p class="d-flex mb-2">
-                        <span class="pe-2">{{ ('admin_'~content_type~'.read.seo.links')|trans }}</span>
-                        <strong>{{ entity.seo.noFollow|default(false)?'nofollow':'follow' }}</strong>
-                    </p>
-                    <p class="d-flex mb-2">
-                        <span class="pe-2">{{ ('admin_'~content_type~'.read.seo.sitemap')|trans }}</span>
-                        <strong>{{ entity.seo.sitemap|default(false)?(('admin_'~content_type~'.read.seo.sitemap.yes')|trans):(('admin_'~content_type~'.read.seo.sitemap.no')|trans) }}</strong>
-                    </p>
-            </div>
-            <div class="col-12 col-md-4">
-
-                <h2 class="h5">{{ ('admin_'~content_type~'.read.routes.title')|trans }}</h2>
-                <ul class="list-unstyled">
-                {% for route in entity.routes %}
-                    {% for site in route.sites %}
-                        {% for path in route.paths %}
-                        <li>
-                            {{ site|sfs_cms_site_name }}: <a href="{{ sfs_cms_route_path_url(path, site) }}" target="_blank">{{ sfs_cms_route_path_path(path, site) }} <span class="mdi mdi-18px mdi-open-in-new"></span></a>
-                            {% if path.cacheTtl %}{{ ('admin_'~content_type~'.read.routes.cache')|trans({'%ttl%': path.cacheTtl}) }}{% endif %}
-                        </li>
-                        {% endfor %}
-                    {% endfor %}
-                {% endfor %}
-                </ul>
-            </div>
-        </div>
-
-        <div class="row mt-4">
+    <div class="container-fluid">
+        <div class="row">
             <div class="col">
-                <h2 class="h5">{{ ('admin_'~content_type~'.read.versions.title')|trans }}</h2>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>{{ ('admin_'~content_type~'.versions.fields.id.header')|trans }}</th>
-                        <th>{{ ('admin_'~content_type~'.versions.fields.origin.header')|trans }}</th>
-                        <th>{{ ('admin_'~content_type~'.versions.fields.created.header')|trans }}</th>
-                        <th>{{ ('admin_'~content_type~'.versions.fields.publish_status.header')|trans }}</th>
-                        <th>&nbsp;</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for version in entityLatestVersions %}
-                        <tr>
-                            <td>v{{ version.versionNumber }} {% if version.hasCompileErrors %}<i class="bi bi-exclamation-triangle text-danger" title="This version has some compilation error"></i>{% endif %}</td>
-                            <td>{{ ('admin_'~content_type~'.versions.origin.'~(version.origin|default('null')))|trans }}</td>
-                            <td>{{ version.createdAt ? version.createdAt|date('H:i:s d-m-Y') : '' }}</td>
-{#                            <td>{{ loop.index0 == 0 ? 'publicada' : '' }}</td>#}
-                            <td>{{ version.published ? ('admin_'~content_type~'.read.versions.published')|trans : '' }}</td>
-                            <td>
-                                {% if not content_config.admin.version_create.is_granted or is_granted(content_config.admin.version_create.is_granted, version) %}
-                                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_content_from_version', {'content':entity, 'prevVersion':version}) }}" class="ms-2 text-nowrap">{{ ('admin_'~content_type~'.versions.actions.edit.link')|trans }} <span class="bi bi-pencil"></span></a>
-                                {% endif %}
+                {% include '@SfsCms/admin/content/_read_general.html.twig' %}
+            </div>
+            <div class="col">
+                {% include '@SfsCms/admin/content/_read_seo.html.twig' %}
+            </div>
+            <div class="col">
+                {% include '@SfsCms/admin/content/_read_routes.html.twig' %}
+            </div>
+        </div>
 
-                                {% if not content_config.admin.preview.is_granted or is_granted(content_config.admin.preview.is_granted, version) %}
-                                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_preview', {'content':entity, 'version':version}) }}" class="ms-2 text-nowrap">{{ ('admin_'~content_type~'.versions.actions.preview.link')|trans }} <span class="bi bi-eye"></span></a>
-                                {% endif %}
-
-                                {% if not content_config.admin.export_version.is_granted or is_granted(content_config.admin.export_version.is_granted, version) %}
-                                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_export_version', {'content':entity, 'version':version}) }}" class="ms-2 text-nowrap">{{ ('admin_'~content_type~'.versions.actions.export.link')|trans }} <span class="bi bi-box-arrow-down"></span></a>
-                                {% endif %}
-
-                                {% if not content_config.admin.publish_version.is_granted or is_granted(content_config.admin.publish_version.is_granted, version) %}
-                                    {% if not version.published %}
-                                        <a href="{{ url('sfs_cms_admin_content_'~content_type~'_publish_version', {'content':entity, 'version':version}) }}" class="ms-2 text-nowrap">{{ ('admin_'~content_type~'.versions.actions.publish.link')|trans }} <span class="bi bi-file-earmark-arrow-up"></span></a>
-                                    {% endif %}
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+        <div class="row">
+            <div class="col">
+                {% include '@SfsCms/admin/content/_read_versions.html.twig' %}
             </div>
         </div>
     </div>
-
 {% endblock content %}

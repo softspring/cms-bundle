@@ -209,3 +209,20 @@ admin_menus:
                 label: "Route"
                 route_name.label: "Route name"
                 route_params.label: "Route params (JSON)"
+
+admin_sites:
+    list:
+        meta.title: "Sites"
+        title: "Sites"
+        breadcrumb: "Sites"
+        fields:
+            id.header: "Site id"
+            name.header: "Site name"
+            locales.header: "Locales"
+            canonical_domain.header: "Main domain"
+        actions:
+            details.link: "View"
+    read:
+        meta.title: "%name%"
+        title: "%name%"
+        breadcrumb: "%name%"

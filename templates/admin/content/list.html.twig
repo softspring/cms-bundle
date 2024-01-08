@@ -66,20 +66,16 @@
                 {% block empty_message %}
                     <p class="text-center text-muted">
                         {% if not content_config.admin.create.is_granted or is_granted(content_config.admin.create.is_granted) %}
-                            <a href="{{ url('sfs_cms_admin_content_'~content_type~'_create') }}">Create</a>
+                            {{ ('admin_'~content_type~'.list.empty.create_first_content_raw')|trans({
+                                '%create_link%': url('sfs_cms_admin_content_'~content_type~'_create'),
+                                '%import_link%': url('sfs_cms_admin_content_'~content_type~'_import'),
+                            })|raw }}
                         {% else %}
-                            Create
+                            {{ ('admin_'~content_type~'.list.empty.can_not_create_content')|trans }}
                         {% endif %}
-                        or
-                        {% if not content_config.admin.create.is_granted or is_granted(content_config.admin.create.is_granted) %}
-                            <a href="{{ url('sfs_cms_admin_content_'~content_type~'_import') }}">import</a>
-                        {% else %}
-                            import
-                        {% endif %}
-                        your first page!
                     </p>
                     <p class="text-center text-muted">
-                        If you need help go to <a href="https://github.com/softspring/cms-bundle" target="_blank">documentation</a>
+                        {{ ('admin_'~content_type~'.list.empty.go_to_doc_raw')|trans|raw }}
                     </p>
                 {% endblock empty_message %}
             {% endembed %}

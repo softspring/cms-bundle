@@ -1,0 +1,38 @@
+parameters:
+    sfs_cms.admin.sites.list_view: '@@SfsCms/admin/site/list.html.twig'
+    sfs_cms.admin.sites.list_content_view: '@@SfsCms/admin/site/list-content.html.twig'
+    sfs_cms.admin.sites.read_view: '@@SfsCms/admin/site/read.html.twig'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+        bind:
+            $em: '@sfs_cms.entity_manager'
+
+    Softspring\CmsBundle\Form\Admin\Site\:
+        resource: '../../../src/Form/Admin/Site/Site*'
+
+    Softspring\CmsBundle\Manager\SiteManagerInterface:
+        class: Softspring\CmsBundle\Manager\SiteManager
+
+
+    sfs_cms.admin.site.controller:
+        class: Softspring\Component\CrudlController\Controller\CrudlController
+        public: true
+        tags: [ 'controller.service_arguments' ]
+        arguments:
+            $manager: '@Softspring\CmsBundle\Manager\SiteManagerInterface'
+            $eventDispatcher: '@event_dispatcher'
+            $configs:
+                entity_attribute: 'site'
+                list:
+                    is_granted: 'PERMISSION_SFS_CMS_ADMIN_SITES_LIST'
+                    view: '%sfs_cms.admin.sites.list_view%'
+                    view_page: '%sfs_cms.admin.sites.list_content_view%'
+                    filter_form: '@Softspring\CmsBundle\Form\Admin\Site\SiteListFilterFormInterface'
+                read:
+                    is_granted: 'PERMISSION_SFS_CMS_ADMIN_SITES_DETAILS'
+                    param_converter_key: 'id'
+                    view: '%sfs_cms.admin.sites.read_view%'

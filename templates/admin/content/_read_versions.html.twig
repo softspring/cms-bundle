@@ -1,0 +1,18 @@
+{% trans_default_domain 'sfs_cms_contents' %}
+
+{% embed '@SfsCms/admin/_embeds/_card.html.twig' with {'title': ('admin_'~content_type~'.read.versions.title')|trans} %}
+    {% trans_default_domain 'sfs_cms_contents' %}
+
+    {% block title %}
+        {% if not content_config.admin.version_list.is_granted or is_granted(content_config.admin.version_list.is_granted, entity) %}
+            <a class="btn btn-sm btn-outline-secondary float-end"  href="{{ url('sfs_cms_admin_content_'~content_type~'_versions', {'content':entity}) }}">{{ ('admin_'~content_type~'.read.versions.more.link')|trans }}</a>
+        {% else %}
+            <a class="btn btn-sm btn-outline-secondary float-end disabled">{{ ('admin_'~content_type~'.read.versions.more.link')|trans }}</a>
+        {% endif %}
+        {{ parent() }}
+    {% endblock %}
+
+    {% block content %}
+        {% include '@SfsCms/admin/content/_version_list_table.html.twig' with {'versions': entityLatestVersions} %}
+    {% endblock %}
+{% endembed %}

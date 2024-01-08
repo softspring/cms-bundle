@@ -1,3 +1,6 @@
+page:
+    name: "Page"
+
 admin_page:
     entity_not_found_flash: "Page not found"
 
@@ -59,6 +62,7 @@ admin_page:
         name: "Name"
         sites: "Sites"
         published: "Published"
+        unpublished: "Unpublished"
         seo:
             title: "SEO"
             index: "Index"
@@ -70,9 +74,11 @@ admin_page:
         routes:
             title: "Routes"
             cache: "(cache %ttl% seconds)"
+            not_published_warning: "This content is not published, so the following routes will return a 404 error"
         versions:
             title: "Last versions"
             published: "Published"
+            more.link: "More versions"
 
     versions:
         meta.title: "Versions"
@@ -197,6 +203,10 @@ admin_page:
         filter_form:
             name.label: "Name"
             sites.label: "Sites"
+        empty:
+            create_first_content_raw: '<a href="%create_link%">Create</a> or <a href="%import_link%">import</a> your first page!'
+            can_not_create_content: "You can not create a new page"
+            go_to_doc_raw: 'If you need help go to <a href="https://github.com/softspring/cms-bundle" target="_blank">documentation</a>'
 
     form:
         name.label: "Name"

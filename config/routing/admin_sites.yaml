@@ -1,0 +1,7 @@
+sfs_cms_admin_sites_list:
+    controller: sfs_cms.admin.site.controller::list
+    path: /
+
+sfs_cms_admin_sites_read:
+    controller: sfs_cms.admin.site.controller::read
+    path: /{site}
