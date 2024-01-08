@@ -8,11 +8,17 @@ use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\Component\CrudlController\Event\ApplyEvent;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Security\Core\Security as SecurityOld;
 
 class BlameListener implements EventSubscriberInterface
 {
-    public function __construct(protected ?Security $security)
+    /** @phpstan-ignore-next-line  */
+    protected SecurityOld|Security|null $security;
+
+    /** @phpstan-ignore-next-line  */
+    public function __construct(?SecurityOld $securityOld, ?Security $security)
     {
+        $this->security = $securityOld ?? $security;
     }
 
     public static function getSubscribedEvents(): array
@@ -29,10 +35,12 @@ class BlameListener implements EventSubscriberInterface
 
     public function onCreateVersion(ApplyEvent $event): void
     {
-        if (!$this->security->getUser()) {
+        /** @phpstan-ignore-next-line  */
+        if (!$this->security || !$this->security->getUser()) {
             return;
         }
 
+        /** @phpstan-ignore-next-line  */
         $user = $this->security->getUser();
         $version = $event->getEntity();
         $userData = [
@@ -48,10 +56,12 @@ class BlameListener implements EventSubscriberInterface
 
     public function onPublishVersion(ApplyEvent $event): void
     {
-        if (!$this->security->getUser()) {
+        /** @phpstan-ignore-next-line  */
+        if (!$this->security || !$this->security->getUser()) {
             return;
         }
 
+        /** @phpstan-ignore-next-line  */
         $user = $this->security->getUser();
 
         /** @var ContentVersionInterface $version */
