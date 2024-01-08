@@ -77,7 +77,7 @@ class LockListener extends AbstractContentVersionListener
 
         $content = $event->getRequest()->attributes->get('content');
 
-        $event->setResponse($this->redirectBack($contentConfig['_id'], $content, $event->getRequest()));
+        $event->setResponse($this->redirectBack($contentConfig['_id'], $content, $event->getRequest(), $version));
     }
 
     public function onFailure(FailureEvent $event): void

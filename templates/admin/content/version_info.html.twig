@@ -1,0 +1,214 @@
+{% trans_default_domain 'sfs_cms_contents' %}
+
+{% extends '@SfsCms/admin_layout.html.twig' %}
+
+{% block title %}{{ ('admin_'~content_type~'.version_info.meta.title')|trans({'%name%':entity.name, '%versionNumber%': version_entity.versionNumber}) }}{% endblock %}
+
+{% block breadcrums_content %}
+    {{ parent() }}
+    <li class="breadcrumb-item"><a
+                href="{{ url('sfs_cms_admin_content_'~content_type~'_list') }}">{{ ('admin_'~content_type~'.list.breadcrumb')|trans }}</a>
+    </li>
+    <li class="breadcrumb-item"><a
+                href="{{ url('sfs_cms_admin_content_'~content_type~'_versions', {'content':entity}) }}">{{ ('admin_'~content_type~'.versions.breadcrumb')|trans({'%name%':entity.name}) }}</a>
+    </li>
+    <li class="breadcrumb-item active"
+        aria-current="content">{{ ('admin_'~content_type~'.version_info.breadcrumb')|trans({'%name%':entity.name, '%versionNumber%': version_entity.versionNumber}) }}</li>
+{% endblock breadcrums_content %}
+
+{% block content %}
+    <h1 class="h3">{{ ('admin_'~content_type~'.versions.title')|trans({'%name%':entity.name}) }}</h1>
+
+    {% include '@SfsCms/admin/content/_content_tabs.html.twig' with {'current':'versions', 'entity':entity} %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-4">
+                <a class="float-start me-3" href="{{ url('sfs_cms_admin_content_'~content_type~'_versions', {'content':entity}) }}"><i class="bi bi-arrow-return-left"></i></a>
+                <h2 class="h4">{{ ('admin_'~content_type~'.version_info.title')|trans({'%name%':entity.name, '%versionNumber%': version_entity.versionNumber}) }}</h2>
+            </div>
+            <div class="col">
+                <div class="float-end">
+                    {% if not content_config.admin.version_create.is_granted or is_granted(content_config.admin.version_create.is_granted, version) %}
+                        <a class="btn btn-outline-secondary"
+                           href="{{ url('sfs_cms_admin_content_'~content_type~'_content_from_version', {'content':entity, 'prevVersion':version}) }}">{{ ('admin_'~content_type~'.versions.actions.edit.link')|trans }}
+                            <span class="bi bi-pencil"></span></a>
+                    {% endif %}
+
+                    {% if not content_config.admin.preview.is_granted or is_granted(content_config.admin.preview.is_granted, version) %}
+                        <a class="btn btn-outline-secondary"
+                           href="{{ url('sfs_cms_admin_content_'~content_type~'_preview', {'content':entity, 'version':version}) }}">{{ ('admin_'~content_type~'.versions.actions.preview.link')|trans }}
+                            <span class="bi bi-eye"></span></a>
+                    {% endif %}
+
+                    {% if not content_config.admin.export_version.is_granted or is_granted(content_config.admin.export_version.is_granted, version) %}
+                        <a class="btn btn-outline-secondary"
+                           href="{{ url('sfs_cms_admin_content_'~content_type~'_export_version', {'content':entity, 'version':version}) }}">{{ ('admin_'~content_type~'.versions.actions.export.link')|trans }}
+                            <span class="bi bi-box-arrow-down"></span></a>
+                    {% endif %}
+
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-outline-secondary dropdown-toggle"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                            More
+                        </button>
+                        <ul class="dropdown-menu">
+                            {% if not content_config.admin.publish_version.is_granted or is_granted(content_config.admin.publish_version.is_granted, version) %}
+                                {% if not version.published %}
+                                    <li><a class="dropdown-item"
+                                           href="{{ url('sfs_cms_admin_content_'~content_type~'_publish_version', {'content':entity, 'version':version}) }}">{{ ('admin_'~content_type~'.versions.actions.publish.link')|trans }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endif %}
+                            {#                            <li><a class="dropdown-item" href="#">Unpublish</a></li> #}
+                            <li><a class="dropdown-item disabled" href="#">Recompile</a></li>
+                            <li><a class="dropdown-item disabled" href="#">Translate</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item text-danger disabled" href="#">Delete</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-3">
+                <div class="bg-white p-3 mb-3">
+                    {{ form_start(form) }}
+                    <dl>
+                        <dt>{{ ('admin_'~content_type~'.version_info.info.version.title')|trans }}</dt>
+                        <dd>v{{ version_entity.versionNumber }}</dd>
+                        <dt>{{ ('admin_'~content_type~'.version_info.info.origin.title')|trans }}</dt>
+                        <dd>{{ ('admin_'~content_type~'.versions.origin.'~(version_entity.origin|default('null')))|trans }} {{ version_entity.originDescription ? '('~version_entity.originDescription~')' : '' }}</dd>
+                        <dt>{{ ('admin_'~content_type~'.version_info.info.created.title')|trans }}</dt>
+                        <dd>
+                            {{ version_entity.createdAt ? version_entity.createdAt|date('H:i:s d-m-Y') : '' }}
+                            {% set creator = version_entity.metaField('creator') %}
+                            {% if creator %}
+                                {{ creator.name|default(creator.id)|default('') }}
+                            {% endif %}
+                        </dd>
+
+                        <dt>{{ ('admin_'~content_type~'.version_info.info.publish_status.title')|trans }}</dt>
+                        <dd>{{ version_entity.published ? ('admin_'~content_type~'.versions.publish_status.published')|trans : ('admin_'~content_type~'.versions.publish_status.unpublished')|trans }}</dd>
+                        <dt>{{ ('admin_'~content_type~'.version_info.info.keep.title')|trans }}</dt>
+                        <dd>
+                            {% if not content_config.admin.version_lock.is_granted or is_granted(content_config.admin.version_lock.is_granted, version) %}
+                                {% if version.keep %}
+                                    <a class=""
+                                       href="{{ url('sfs_cms_admin_content_'~content_type~'_unkeep_version', {'content':entity, 'version':version, 'back': 'version_info'}) }}"><i
+                                                class="bi bi-pin-angle-fill"></i> {{ ('admin_'~content_type~'.versions.actions.keep.link')|trans }}
+                                    </a>
+                                {% else %}
+                                    <a class=""
+                                       href="{{ url('sfs_cms_admin_content_'~content_type~'_keep_version', {'content':entity, 'version':version, 'back': 'version_info'}) }}"><i
+                                                class="bi bi-pin-angle"></i> {{ ('admin_'~content_type~'.versions.actions.nokeep.link')|trans }}
+                                    </a>
+                                {% endif %}
+                            {% else %}
+                                {% if version.keep %}
+                                    <span><i class="bi bi-pin-angle-fill"></i> {{ ('admin_'~content_type~'.versions.actions.keep.link')|trans }}</span>
+                                {% else %}
+                                    <span><i class="bi bi-pin-angle"></i> {{ ('admin_'~content_type~'.versions.actions.nokeep.link')|trans }}</span>
+                                {% endif %}
+                            {% endif %}
+                        </dd>
+
+                        <dt>{{ form_label(form.note) }}</dt>
+                        <dd>
+                            <div class="input-group mb-3">
+                                {{ form_widget(form.note) }}
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary p-2 px-3 rounded-0"
+                                            type="submit"
+                                            title="{{ ('admin_'~content_type~'.version_info.actions.save.button')|trans }}">
+                                        <i class="bi bi-check"></i></button>
+                                </div>
+                            </div>
+                        </dd>
+                    </dl>
+                    {{ form_rest(form) }}
+                    {{ form_end(form) }}
+                </div>
+            </div>
+            <div class="col-9">
+                <div class="bg-white p-3 mb-3">
+                    <a class="btn btn-sm btn-outline-secondary float-end disabled">Recompile</a>
+                    <h4 class="border-bottom border-1 border-light pb-2 mb-3">{{ ('admin_'~content_type~'.version_info.compiled.title')|trans }}</h4>
+                    {% if version.hasCompileErrors %}
+                        <div class="alert alert-danger" role="alert">
+                            <i class="bi bi-exclamation-triangle text-danger"
+                               title="This version has some compilation error"></i>
+                            {{ ('admin_'~content_type~'.version_info.compiled.error')|trans }}
+                        </div>
+                    {% endif %}
+                    <pre class="overflow-auto"
+                         style="max-height: 300px"><code>{{ version_entity.compiled|json_encode(constant('JSON_PRETTY_PRINT')) }}</code></pre>
+                </div>
+
+                <div class="bg-white p-3 mb-3">
+                    <h4 class="border-bottom border-1 border-light pb-2 mb-3">{{ ('admin_'~content_type~'.version_info.data.title')|trans }}</h4>
+                    <code>
+                        <pre class="overflow-auto"
+                             style="max-height: 300px">{{ version_entity.data|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+                    </code>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="bg-white p-3 mb-3">
+                            <h4>{{ ('admin_'~content_type~'.version_info.linked_routes.title')|trans }}</h4>
+                            <ul>
+                                {% for route in version_entity.routes %}
+                                    <li>{{ route.id }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="bg-white p-3 mb-3">
+                            <h4>{{ ('admin_'~content_type~'.version_info.linked_medias.title')|trans }}</h4>
+                            <ul>
+                                {% for media in version_entity.medias %}
+                                    <li>{{ media.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr/>
+
+        <h5>{{ ('admin_'~content_type~'.version_info.history.title')|trans }}</h5>
+        <ul>
+            {% set created = version_entity.metaField('creator') %}
+            <li>
+                Created
+                {% if creator %}by {{ creator.name|default(creator.id)|default('') }}{% endif %}
+                at {{ version_entity.createdAt ? version_entity.createdAt|date('H:i:s d-m-Y') : '' }}
+            </li>
+
+            {% for publishInfo in version_entity.metaField('published', []) %}
+                <li>
+                    {{ ('admin_'~content_type~'.version_info.history.action.'~(publishInfo.action|default('publish')))|trans }}
+                    {% if publishInfo.user %} by {{ publishInfo.user.name|default(publishInfo.user.id)|default('') }}{% endif %}
+                    at {{ publishInfo.date ? publishInfo.date.date|date('H:i:s d-m-Y') : '' }}
+                    {% if publishInfo.new_version|default(false) %}
+                        (new version {{ publishInfo.new_version }})
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+
+        {#        <h5>{{ ('admin_'~content_type~'.version_info.metadata.title')|trans }}</h5> #}
+        {#        <code> #}
+        {#            <pre class="overflow-auto" #}
+        {#                 style="max-height: 300px">{{ version_entity.meta|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre> #}
+        {#        </code> #}
+    </div>
+
+{% endblock content %}

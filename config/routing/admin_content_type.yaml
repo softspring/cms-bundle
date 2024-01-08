@@ -92,6 +92,12 @@ export_version:
     defaults:
         configKey: 'version_export'
 
+version_info:
+    controller: sfs_cms.admin.content_version.controller::update
+    path: /{content}/{version}/info
+    defaults:
+        configKey: 'version_info'
+
 import_version:
     controller: sfs_cms.admin.content_version.controller::create
     path: /{content}/import

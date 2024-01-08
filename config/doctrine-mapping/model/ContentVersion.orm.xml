@@ -8,6 +8,8 @@
         <field name="layout" column="layout" type="string" nullable="true"/>
         <field name="data" column="data" type="json" nullable="true"/>
 
+        <field name="meta" column="meta" type="json" nullable="true"/>
+
         <field name="origin" column="origin" type="smallint" nullable="true">
             <options>
                 <option name="unsigned">true</option>

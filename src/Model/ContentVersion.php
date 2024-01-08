@@ -23,6 +23,8 @@ abstract class ContentVersion implements ContentVersionInterface
 
     protected ?array $data = null;
 
+    protected ?array $meta = null;
+
     protected ?array $compiledModules = null;
 
     protected ?array $compiled = null;
@@ -123,6 +125,28 @@ abstract class ContentVersion implements ContentVersionInterface
     public function setData(?array $data): void
     {
         $this->data = $data;
+    }
+
+    public function getMeta(): ?array
+    {
+        return $this->meta;
+    }
+
+    public function setMeta(?array $meta): void
+    {
+        $this->meta = $meta;
+    }
+
+    public function setMetaField(string $field, mixed $value): void
+    {
+        $meta = $this->getMeta() ?? [];
+        $meta[$field] = $value;
+        $this->setMeta($meta);
+    }
+
+    public function getMetaField(string $field, mixed $default = null): mixed
+    {
+        return $this->getMeta()[$field] ?? $default;
     }
 
     protected mixed $_getDataCallback = null;
