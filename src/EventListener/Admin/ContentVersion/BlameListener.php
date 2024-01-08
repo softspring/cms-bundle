@@ -43,7 +43,7 @@ class BlameListener implements EventSubscriberInterface
         /** @phpstan-ignore-next-line  */
         $user = $this->security->getUser();
         $version = $event->getEntity();
-        $userData = [
+        $userData =
             'id' => $user->getUserIdentifier(),
         ];
 
