@@ -1,3 +1,6 @@
+page:
+    name: "Page"
+
 admin_page:
     entity_not_found_flash: "Page not found"
 

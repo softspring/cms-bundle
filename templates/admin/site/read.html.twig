@@ -1,13 +1,128 @@
 {% trans_default_domain 'sfs_cms_admin' %}
 {% extends '@SfsCms/admin_layout.html.twig' %}
-{% block title %}{{ 'admin_sites.read.meta.title'|trans }}{% endblock %}
+{% block title %}{{ 'admin_sites.read.meta.title'|trans({'%name%': site|sfs_cms_site_name }) }}{% endblock %}
 
 {% block breadcrums_content %}
     {{ parent() }}
-    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_sites_list') }}">{{ 'admin_sites.list.breadcrumb'|trans }}</a></li>
-    <li class="breadcrumb-item active" aria-current="content">{{ 'admin_sites.read.breadcrumb'|trans({'%name%': site.name|default(site.id) }) }}</li>
+    <li class="breadcrumb-item"><a
+                href="{{ url('sfs_cms_admin_sites_list') }}">{{ 'admin_sites.list.breadcrumb'|trans }}</a></li>
+    <li class="breadcrumb-item active"
+        aria-current="content">{{ 'admin_sites.read.breadcrumb'|trans({'%name%': site|sfs_cms_site_name }) }}</li>
 {% endblock breadcrums_content %}
 
 {% block content %}
-    <h1 class="h3 mb-4">{{ site.name }}</h1>
+    {% set site_base_url = site.canonicalScheme ~ '://' ~ site.canonicalHost %}
+
+    <h1 class="h3">{{ 'admin_sites.read.title'|trans({'%name%': site|sfs_cms_site_name }) }}</h1>
+
+    <div class="row">
+        <div class="col-3 p-2">
+            <div class="bg-white p-3 mb-3">
+                <h4 class="border-bottom border-1 border-light pb-2 mb-3">General</h4>
+                <dl>
+                    <dt>Id</dt>
+                    <dd>{{ site }}</dd>
+                    <dt>Name</dt>
+                    <dd>{{ site|sfs_cms_site_name }}</dd>
+                    <dt>Locales</dt>
+                    <dd>{{ site.config.locales|join(', ') }}</dd>
+                    <dt>Default locale</dt>
+                    <dd>{{ site.config.default_locale }}</dd>
+                    <dt>Allowed content types</dt>
+                    <dd>{{ site.config.allowed_content_types|map((content_type) => (content_type~'.name')|trans({}, 'sfs_cms_contents'))|join(', ') }}</dd>
+                </dl>
+            </div>
+        </div>
+
+        {# TODO include https_redirect info #}
+        {# TODO include locale_path_redirect_if_empty info #}
+        {# TODO include extra info #}
+        {# TODO include slash_route info #}
+        {# TODO include error_pages info #}
+
+        <div class="col-9 p-2">
+            {% if site.config.hosts is not empty %}
+            <div class="bg-white p-3 mb-3">
+                <h4 class="border-bottom border-1 border-light pb-2 mb-3">Domains</h4>
+
+                <table class="table">
+                    <tr>
+                        <th>Scheme</th>
+                        <th>Domain</th>
+                        <th>Locale</th>
+                        <th>Canonical</th>
+                    </tr>
+
+                    {% for host in site.config.hosts %}
+                        <tr>
+                            <td>{{ host.scheme }}</td>
+                            <td>
+                                <a href="{{ host.scheme ~ '://' ~ host.domain }}"
+                                   target="_blank">{{ host.domain }} <span class="mdi mdi-18px mdi-open-in-new"></span></a>
+                            </td>
+                            <td>{{ host.locale|default('--') }}</td>
+                            <td>{{ host.canonical ? 'Yes' : host.redirect_to_canonical ? 'Redirect' : 'No' }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            {% endif %}
+
+            {% if site.config.paths is not empty %}
+            <div class="bg-white p-3 mb-3">
+                <h4 class="border-bottom border-1 border-light pb-2 mb-3">Paths</h4>
+
+                <table class="table">
+                    <tr>
+                        <th>Path</th>
+                        <th>Locale</th>
+                        <th>&nbsp;</th>
+                    </tr>
+
+                    {% for path in site.config.paths %}
+                        <tr>
+                            <td>
+                                <a href="{{ site_base_url }}/{{ path.path|trim('/') }}"
+                                   target="_blank">{{ path.path }} <span
+                                            class="mdi mdi-18px mdi-open-in-new"></span></a>
+                            </td>
+                            <td>{{ path.locale|default('--') }}</td>
+                            <td>{{ path.trailing_slash_on_root ? 'forces trailing slash' : '' }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            {% endif %}
+
+            {% if site.config.sitemaps is not empty %}
+                <div class="bg-white p-3 mb-3">
+                    <h4 class="border-bottom border-1 border-light pb-2 mb-3">Sitemaps</h4>
+                    <table class="table">
+                        <tr>
+                            <th>Id</th>
+                            <th>Url</th>
+                            <th>Cache</th>
+                            <th>Defaults</th>
+                            <th>Include alternates</th>
+                        </tr>
+
+                        {# TODO include sitemaps_index #}
+                        {% for sitemap_id,sitemap in site.config.sitemaps %}
+                            <tr>
+                                <td>{{ sitemap_id }}</td>
+                                <td>
+                                    <a href="{{ site_base_url }}/{{ sitemap.url }}"
+                                       target="_blank">{{ sitemap.url }} <span
+                                                class="mdi mdi-18px mdi-open-in-new"></span></a>
+                                </td>
+                                <td>{{ sitemap.cache_ttl ? sitemap.cache_ttl : 'no' }}</td>
+                                <td>{{ sitemap.default_changefreq }} {{ sitemap.default_priority }}</td>
+                                <td>{{ sitemap.alternates_locales ? 'locales' : '' }} {{ sitemap.alternates_sites ? 'sites' : '' }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+    </div>
 {% endblock content %}
