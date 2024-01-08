@@ -184,6 +184,8 @@ admin_menus:
         actions:
             create.button: "Crear menú"
             cancel.button: "Cancelar"
+        invalid_block_type_flash: "No se ha encontrado la configuración del menú"
+        existing_singleton_instance_flash: "Ya hay una instancia de este menú"
 
     update:
         meta.title: "Editar menú"
@@ -192,6 +194,9 @@ admin_menus:
         actions:
             update.button: "Guardar cambios"
             cancel.button: "Cancelar"
+        invalid_block_type_flash: "No menu configuration found"
+        success_flash: "El menú se ha actualizado correctamente"
+        success_ttl_flash: "El menú se ha actualizado. Por cuestiones de rendimiento, el menú está cacheado durante %cacheTtl% segundos, por lo que puede que tardes en visualizar los cambios"
 
     form:
         name.label: "Nombre"
@@ -204,3 +209,20 @@ admin_menus:
                 label: "Ruta"
                 route_name.label: "Nombre de ruta"
                 route_params.label: "Parámetros (JSON)"
+
+admin_sites:
+    list:
+        meta.title: "Sitios"
+        title: "Sitios"
+        breadcrumb: "Sitios"
+        fields:
+            id.header: "Id"
+            name.header: "Nombre"
+            locales.header: "Idiomas"
+            canonical_domain.header: "Dominio principal"
+        actions:
+            details.link: "Ver"
+    read:
+        meta.title: "%name%"
+        title: "%name%"
+        breadcrumb: "%name%"
