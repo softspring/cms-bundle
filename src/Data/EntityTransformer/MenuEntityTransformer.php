@@ -12,6 +12,9 @@ use Softspring\CmsBundle\Model\MenuInterface;
 use Softspring\CmsBundle\Model\MenuItemInterface;
 use Softspring\CmsBundle\Utils\Slugger;
 
+/**
+ * @deprecated this class is deprecated, and will be removed on 6.0 version, when fixtures will be refactored to use serializer
+ */
 class MenuEntityTransformer implements EntityTransformerInterface
 {
     protected MenuManagerInterface $menuManager;

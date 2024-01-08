@@ -5,15 +5,18 @@ namespace Softspring\CmsBundle\Twig\Extension;
 use Softspring\CmsBundle\Config\Exception\DisabledModuleException;
 use Softspring\CmsBundle\Config\Exception\InvalidModuleException;
 use Softspring\CmsBundle\Config\Exception\InvalidSiteException;
-use Softspring\CmsBundle\Render\ContentRender;
+use Softspring\CmsBundle\Render\ContentVersionRenderer;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
+/**
+ * @deprecated this is not used anymore, will be removed in next major version
+ */
 class ModuleExtension extends AbstractExtension
 {
-    protected ContentRender $contentRender;
+    protected ContentVersionRenderer $contentRender;
 
-    public function __construct(ContentRender $contentRender)
+    public function __construct(ContentVersionRenderer $contentRender)
     {
         $this->contentRender = $contentRender;
     }

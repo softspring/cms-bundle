@@ -3,6 +3,8 @@
 namespace Softspring\CmsBundle\Tests;
 
 use Doctrine\ORM\EntityRepository;
+use PHPUnit\Framework\MockObject\Exception;
+use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Model\Module;
 use Softspring\CmsBundle\Entity\Page;
 use Softspring\CmsBundle\Form\Extension\DefaultValueExtension;
@@ -14,17 +16,23 @@ use Softspring\CmsBundle\Form\Type\SymfonyRouteType;
 use Softspring\CmsBundle\Form\Type\TranslatableType;
 use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
+use Softspring\CmsBundle\Render\ModuleRenderer;
+use Softspring\CmsBundle\Render\RenderErrorList;
 use Softspring\CmsBundle\Utils\DataMigrator;
 use Softspring\Component\DynamicFormType\Form\Extension\DynamicFormExtension;
 use Softspring\Component\DynamicFormType\Form\Resolver\ConstraintResolver;
 use Symfony\Component\Config\Definition\Processor;
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Yaml\Yaml;
+use Twig\Environment;
+use Twig\Loader\ArrayLoader;
 
 abstract class ModuleTestCase extends TypeTestCase
 {
@@ -35,6 +43,10 @@ abstract class ModuleTestCase extends TypeTestCase
     protected string $defaultLocale = 'en';
     protected array $enabledLocales = ['es', 'en'];
 
+    /**
+     * @throws \Exception
+     * @throws Exception
+     */
     protected function getExtensions(): array
     {
         $cmsTypeResolver = new TypeResolver();
@@ -73,15 +85,22 @@ abstract class ModuleTestCase extends TypeTestCase
 
     protected function assertMigrateTest(array $originData, array $expectedData): void
     {
-        $migratedData = DataMigrator::migrate(["{$this->modulePath}/migrate.php"], $originData, $expectedData['_revision']);
+        $migratedData = DataMigrator::migrate(["$this->modulePath/migrate.php"], $originData, $expectedData['_revision']);
         $this->assertEquals($expectedData, $migratedData);
     }
 
-    abstract protected function provideDataForMigrations(): array;
+    protected function provideDataForMigrations(): array
+    {
+        return [];
+    }
 
     public function testMigrations(): void
     {
         $revisions = $this->provideDataForMigrations();
+
+        if (empty($revisions)) {
+            $this->markTestSkipped('No migrations to test');
+        }
 
         foreach ($revisions as $originRevision) {
             foreach ($revisions as $targetRevision) {
@@ -94,7 +113,7 @@ abstract class ModuleTestCase extends TypeTestCase
 
     protected function readModuleConfiguration(): array
     {
-        $moduleConfig = Yaml::parseFile("{$this->modulePath}/config.yaml");
+        $moduleConfig = Yaml::parseFile("$this->modulePath/config.yaml");
 
         $processor = new Processor();
 
@@ -109,20 +128,20 @@ abstract class ModuleTestCase extends TypeTestCase
 
         if (isset($config['edit_template'])) {
             $editTemplate = $config['edit_template'];
-            $editTemplate = str_replace("@module/{$this->moduleName}/", '', $editTemplate);
-            $this->assertFileExists("{$this->modulePath}/$editTemplate");
+            $editTemplate = str_replace("@module/$this->moduleName/", '', $editTemplate);
+            $this->assertFileExists("$this->modulePath/$editTemplate");
         }
 
         if (isset($config['form_template'])) {
             $formTemplate = $config['form_template'];
-            $formTemplate = str_replace("@module/{$this->moduleName}/", '', $formTemplate);
-            $this->assertFileExists("{$this->modulePath}/$formTemplate");
+            $formTemplate = str_replace("@module/$this->moduleName/", '', $formTemplate);
+            $this->assertFileExists("$this->modulePath/$formTemplate");
         }
 
         if (isset($config['render_template'])) {
             $renderTemplate = $config['render_template'];
-            $renderTemplate = str_replace("@module/{$this->moduleName}/", '', $renderTemplate);
-            $this->assertFileExists("{$this->modulePath}/$renderTemplate");
+            $renderTemplate = str_replace("@module/$this->moduleName/", '', $renderTemplate);
+            $this->assertFileExists("$this->modulePath/$renderTemplate");
         }
     }
 
@@ -147,5 +166,74 @@ abstract class ModuleTestCase extends TypeTestCase
         $form = $this->getModuleForm($config);
         $view = $form->createView();
         $this->assertArrayHasKey('module_errors', $view->vars);
+    }
+
+    abstract public static function provideModuleRender(): array;
+
+    /**
+     * @dataProvider provideModuleRender
+     * @throws Exception
+     */
+    public function testRender(array $data, string|callable $expected, array $templatesSource = []): void
+    {
+        $requestStack = $this->createMock(RequestStack::class);
+
+        $moduleConfiguration = $this->readModuleConfiguration();
+        $moduleConfiguration['revision_migration_scripts'] = [];
+        $moduleConfiguration['revision'] = $data['_revision'] ?? 1;
+
+        $cmsConfig = $this->createMock(CmsConfig::class);
+        $cmsConfig->method('getModule')->willReturn($moduleConfiguration);
+
+        if (!isset($templatesSource[$moduleConfiguration['render_template']])) {
+            $templatesSource[$moduleConfiguration['render_template']] = file_get_contents(str_replace("@module/$this->moduleName", "$this->modulePath", $moduleConfiguration['render_template']));
+        }
+
+        $templatesSource['@SfsCms/macros/modules_render.html.twig'] = file_get_contents(__DIR__.'/../../templates/macros/modules_render.html.twig');
+
+        $templateLoader = new ArrayLoader($templatesSource);
+        $twig = new Environment($templateLoader, [
+            'strict_variables' => true,
+        ]);
+
+        $moduleRenderer = new ModuleRenderer($cmsConfig, $requestStack, null, $twig);
+
+        $renderError = new RenderErrorList();
+
+        $debugCollectorData = [];
+        $data['_module'] = $this->moduleName;
+        $render = $moduleRenderer->render($data, null, $debugCollectorData, $renderError);
+
+        if ($renderError->getErrors()) {
+            $this->fail($renderError->getErrors()[0]['exception']->getMessage());
+        }
+
+        if (is_callable($expected)) {
+            $this->assertIsString($render);
+            $expected($render);
+        } else {
+            $this->assertEquals($expected, $render);
+        }
+    }
+
+    public static function assertRenderCrawler(callable $expected, string $render): void
+    {
+        $crawler = new Crawler($render);
+        $expected($crawler);
+    }
+
+    public static function assertRenderText(string $expected, string $render, string $cssSelector = null, string $xpathSelector = null): void
+    {
+        ModuleTestCase::assertRenderCrawler(function (Crawler $crawler) use ($expected, $cssSelector, $xpathSelector) {
+            if ($cssSelector) {
+                $crawler = $crawler->filter($cssSelector);
+            } elseif ($xpathSelector) {
+                $crawler = $crawler->filterXPath($xpathSelector);
+            }
+
+            self::assertTrue((bool) $crawler->count(), 'No node found for selector in node render');
+
+            self::assertEquals($expected, $crawler->text());
+        }, $render);
     }
 }

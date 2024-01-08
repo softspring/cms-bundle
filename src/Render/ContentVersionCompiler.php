@@ -8,17 +8,12 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class ContentVersionCompiler
 {
-    protected ContentRender $contentRender;
-    protected RequestStack $requestStack;
-    protected array $enabledLocales;
-    protected ?LoggerInterface $cmsLogger;
-
-    public function __construct(ContentRender $contentRender, RequestStack $requestStack, array $enabledLocales, ?LoggerInterface $cmsLogger)
-    {
-        $this->contentRender = $contentRender;
-        $this->enabledLocales = $enabledLocales;
-        $this->requestStack = $requestStack;
-        $this->cmsLogger = $cmsLogger;
+    public function __construct(
+        protected ContentVersionRenderer $contentRender,
+        protected RequestStack $requestStack,
+        protected array $enabledLocales,
+        protected ?LoggerInterface $cmsLogger
+    ) {
     }
 
     /**

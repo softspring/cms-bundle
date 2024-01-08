@@ -14,6 +14,9 @@ use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\MediaBundle\EntityManager\MediaManagerInterface;
 
+/**
+ * @deprecated this class is deprecated, and will be removed on 6.0 version, when fixtures will be refactored to use serializer
+ */
 class DataImporter extends AbstractDataImportExport
 {
     protected EntityManagerInterface $em;

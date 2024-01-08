@@ -13,6 +13,9 @@ use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Utils\Slugger;
 use Softspring\CmsBundle\Utils\YamlContent;
 
+/**
+ * @deprecated this class is deprecated, and will be removed on 6.0 version, when fixtures will be refactored to use serializer
+ */
 class DataExporter extends AbstractDataImportExport
 {
     protected ReferencesRepository $referenceRepository;

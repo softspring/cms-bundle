@@ -7,7 +7,7 @@ use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Model\RoutePathInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\Render\BlockRenderer;
-use Softspring\CmsBundle\Render\ContentRender;
+use Softspring\CmsBundle\Render\ContentVersionRenderer;
 use Softspring\CmsBundle\Render\MenuRenderer;
 use Symfony\Bundle\FrameworkBundle\HttpCache\HttpCache;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,14 +22,14 @@ class ContentDataCollector extends DataCollector
 {
     protected BlockRenderer $blockRenderer;
     protected MenuRenderer $menuRenderer;
-    protected ContentRender $contentRender;
+    protected ContentVersionRenderer $contentRender;
     protected ?TranslatorInterface $translator;
     protected bool $profilerEnabled = false;
     protected bool $esiEnabled = false;
     protected bool $fragmentsEnabled = false;
     protected bool $httpCacheEnabled = false;
 
-    public function __construct(BlockRenderer $blockRenderer, MenuRenderer $menuRenderer, ContentRender $contentRender, ?TranslatorInterface $translator, ?Profiler $profiler, ?Esi $esi, ?FragmentListener $fragmentListener, ?HttpCache $httpCache)
+    public function __construct(BlockRenderer $blockRenderer, MenuRenderer $menuRenderer, ContentVersionRenderer $contentRender, ?TranslatorInterface $translator, ?Profiler $profiler, ?Esi $esi, ?FragmentListener $fragmentListener, ?HttpCache $httpCache)
     {
         $this->blockRenderer = $blockRenderer;
         $this->menuRenderer = $menuRenderer;

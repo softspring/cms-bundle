@@ -13,6 +13,9 @@ use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\Utils\Slugger;
 
+/**
+ * @deprecated this class is deprecated, and will be removed on 6.0 version, when fixtures will be refactored to use serializer
+ */
 class RouteEntityTransformer implements EntityTransformerInterface
 {
     protected RouteManagerInterface $routeManager;
