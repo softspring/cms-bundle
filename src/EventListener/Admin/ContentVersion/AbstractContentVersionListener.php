@@ -84,6 +84,7 @@ abstract class AbstractContentVersionListener implements EventSubscriberInterfac
         $content = $event->getRequest()->attributes->get('content');
 
         $version = $content->getVersions()->filter(fn (ContentVersionInterface $versionI) => $versionI->getId() === $versionId)->first();
+        $event->getRequest()->attributes->set('version', $version);
 
         $event->setEntity($version);
         $event->setNotFound(!$version);

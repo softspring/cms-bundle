@@ -49,6 +49,14 @@ interface ContentVersionInterface
 
     public function setData(?array $data): void;
 
+    public function getMeta(): ?array;
+
+    public function setMeta(?array $meta): void;
+
+    public function setMetaField(string $field, mixed $value): void;
+
+    public function getMetaField(string $field, mixed $default = null): mixed;
+
     public function getCompiledModules(): ?array;
 
     public function setCompiledModules(?array $compiledModules): void;

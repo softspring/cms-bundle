@@ -260,4 +260,18 @@ class SfsCmsEvents
     public const ADMIN_CONTENT_VERSIONS_TRANSLATIONS_FORM_INVALID = 'sfs_cms.admin.content_versions.translations_form_invalid';
     public const ADMIN_CONTENT_VERSIONS_TRANSLATIONS_VIEW = 'sfs_cms.admin.content_versions.translations_view';
     public const ADMIN_CONTENT_VERSIONS_TRANSLATIONS_EXCEPTION = 'sfs_cms.admin.content_versions.translations_exception';
+    // CONTENT VERSION INFO EVENTS, ALL OF THEM ARE INTERNAL
+    public const ADMIN_CONTENT_VERSIONS_INFO_INITIALIZE = 'sfs_cms.admin.content_versions.info_initialize';
+    public const ADMIN_CONTENT_VERSIONS_INFO_LOAD_ENTITY = 'sfs_cms.admin.content_versions.info_load_entity';
+    public const ADMIN_CONTENT_VERSIONS_INFO_NOT_FOUND = 'sfs_cms.admin.content_versions.info_not_found';
+    public const ADMIN_CONTENT_VERSIONS_INFO_FOUND = 'sfs_cms.admin.content_versions.info_found';
+    public const ADMIN_CONTENT_VERSIONS_INFO_FORM_PREPARE = 'sfs_cms.admin.content_versions.info_form_prepare';
+    public const ADMIN_CONTENT_VERSIONS_INFO_FORM_INIT = 'sfs_cms.admin.content_versions.info_form_init';
+    public const ADMIN_CONTENT_VERSIONS_INFO_FORM_VALID = 'sfs_cms.admin.content_versions.info_form_valid';
+    public const ADMIN_CONTENT_VERSIONS_INFO_APPLY = 'sfs_cms.admin.content_versions.info_apply';
+    public const ADMIN_CONTENT_VERSIONS_INFO_SUCCESS = 'sfs_cms.admin.content_versions.info_success';
+    public const ADMIN_CONTENT_VERSIONS_INFO_FAILURE = 'sfs_cms.admin.content_versions.info_failure';
+    public const ADMIN_CONTENT_VERSIONS_INFO_FORM_INVALID = 'sfs_cms.admin.content_versions.info_form_invalid';
+    public const ADMIN_CONTENT_VERSIONS_INFO_VIEW = 'sfs_cms.admin.content_versions.info_view';
+    public const ADMIN_CONTENT_VERSIONS_INFO_EXCEPTION = 'sfs_cms.admin.content_versions.info_exception';
 }

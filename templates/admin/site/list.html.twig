@@ -1,5 +1,8 @@
 {% trans_default_domain 'sfs_cms_admin' %}
 {% extends '@SfsCms/admin_layout.html.twig' %}
+
+{% form_theme filterForm 'bootstrap_5_horizontal_layout.html.twig' %}
+
 {% block title %}{{ 'admin_sites.list.meta.title'|trans }}{% endblock %}
 
 {% block breadcrums_content %}
@@ -8,53 +11,55 @@
 {% endblock breadcrums_content %}
 
 {% block content %}
-
     <div class="d-flex align-items-center justify-content-between mb-4">
         <h1 class="h3">{{ 'admin_sites.list.title'|trans }}</h1>
-
-        {% if is_granted('ROLE_SFS_CMS_ADMIN_SITES_CREATE') %}
-            <a href="{{ url('sfs_cms_admin_sites_create') }}" class="btn btn-primary mb-3">{{ 'admin_sites.list.actions.create.button'|trans }}</a>
-        {% endif %}
     </div>
 
+    <div class="container-fluid bg-white p-4">
+{#        {% if filterForm.vars.submitted or entities|length %}#}
+{#            <div class="mb-4">#}
+{#                {{ form_start(filterForm) }}#}
+{#                <div class="row">#}
+{#                    {% if filterForm.id is defined %}<div class="col">{{ form_row(filterForm.id, {'row_class':'form-floating'}) }}</div>{% endif %}#}
+{#                    {% if filterForm.site is defined %}<div class="col">{{ form_row(filterForm.site, {'row_class':'form-floating'}) }}</div>{% endif %}#}
 
-    {{ form_start(filterForm) }}
-    {{ form_widget(filterForm) }}
-    {{ form_rest(filterForm) }}
-    {{ form_end(filterForm) }}
+{#                    <div class="col">#}
+{#                        <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>#}
+{#                    </div>#}
+{#                </div>#}
+{#                {{ form_widget(filterForm) }}#}
+{#                {{ form_rest(filterForm) }}#}
+{#                {{ form_end(filterForm) }}#}
+{#            </div>#}
+{#        {% endif %}#}
 
-    <table class="table table-striped table-hover">
-        <thead>
-        <tr>
-            <th scope="col">{{ 'admin_sites.list.fields.id.header'|trans }}</th>
-            <th scope="col">{{ 'admin_sites.list.fields.name.header'|trans }}</th>
-            <th scope="col">{{ 'admin_sites.list.fields.enabled.header'|trans }}</th>
-            {% if sfs_cms_site_has_languages() %}<th scope="col">{{ 'admin_sites.list.fields.languages.header'|trans }}</th>{% endif %}
-            {% if sfs_cms_site_has_countries() %}<th scope="col">{{ 'admin_sites.list.fields.countries.header'|trans }}</th>{% endif %}
+        {% embed '@SfsComponents/paginator/table.html.twig' with {'collection':entities, 'pagination_site': 'sfs_cms_admin_sites_list'} %}
+            {% trans_default_domain 'sfs_cms_admin' %}
+            {% block ths %}
+                <th class="p-3" scope="col">
+                    <a href="{{ entities.sortToggleUrl(app.request, 'id') }}" class="text-dark">
+                        {{ 'admin_sites.list.fields.id.header'|trans }}
+                        {% if entities.sortedBy('id', 'asc') %}<i class="bi bi-caret-up-fill"></i>{% elseif entities.sortedBy('id', 'desc') %}<i class="bi bi-caret-down-fill"></i>{% endif %}
+                    </a>
+                </th>
+                <th class="p-3" scope="col">{{ 'admin_sites.list.fields.name.header'|trans }}</th>
+                <th class="p-3" scope="col">{{ 'admin_sites.list.fields.locales.header'|trans }}</th>
+                <th class="p-3" scope="col">{{ 'admin_sites.list.fields.canonical_domain.header'|trans }}</th>
+                <th class="p-3">&nbsp;</th>
+            {% endblock ths %}
 
-            <th scope="col">&nbsp;{#{{ 'admin_sites.list.actions.header'|trans }}#}</th>
-{#            <th>&nbsp;</th>#}
-        </tr>
-        </thead>
+            {% block tbody %}
+                {% include '@SfsCms/admin/site/list-page.html.twig' %}
+            {% endblock tbody %}
 
-        <tbody>
-        {% include '@SfsCms/admin/site/list-content.html.twig' %}
-        </tbody>
-
-        {% if entities.contents|default(false) %}
-            <tfoot>
-            <tr>
-                <td colspan="20">
-                    {% if entities.prevContent %}
-                        <a href="{{ url('sfs_cms_admin_sites_list', app.request.query.all|merge({ content: entities.prevContent })) }}" title="Prev content"><span class="mdi mdi-24px mdi-chevron-left"></span></a>
-                    {% endif %}
-
-                    {% if entities.nextContent %}
-                        <a class="float-end" href="{{ url('sfs_cms_admin_sites_list', app.request.query.all|merge({ content: entities.nextContent })) }}" title="Next content"><span class="mdi mdi-24px mdi-chevron-right"></span></a>
-                    {% endif %}
-                </td>
-            </tr>
-            </tfoot>
-        {% endif %}
-    </table>
+            {% block empty_message %}
+                <p class="text-center text-muted">
+                    There are no sites configurated yet.
+                </p>
+                <p class="text-center text-muted">
+                    If you need help go to <a href="https://github.com/softspring/cms-bundle" target="_blank">documentation</a>
+                </p>
+            {% endblock empty_message %}
+        {% endembed %}
+    </div>
 {% endblock content %}

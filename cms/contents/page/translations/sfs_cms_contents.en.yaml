@@ -1,14 +1,18 @@
+page:
+    name: "Page"
+
 admin_page:
     entity_not_found_flash: "Page not found"
 
     tabs_menu:
         details: "General"
-        update: "Configure"
+        update: "Properties"
         seo: "SEO"
         content: "Content"
         preview: "Preview"
-        translations: "Translations"
         versions: "Versions"
+        translations: "Translations"
+        delete: "Delete"
 
     create:
         meta.title: "New page"
@@ -59,18 +63,23 @@ admin_page:
         name: "Name"
         sites: "Sites"
         published: "Published"
+        unpublished: "Unpublished"
         seo:
             title: "SEO"
             index: "Index"
             links: "Links"
             sitemap: "Sitemap"
             sitemap.no: "no"
+            sitemap.yes: "yes"
+            edit.link: "Edit"
         routes:
             title: "Routes"
             cache: "(cache %ttl% seconds)"
+            not_published_warning: "This content is not published, so the following routes will return a 404 error"
         versions:
             title: "Last versions"
             published: "Published"
+            more.link: "More versions"
 
     versions:
         meta.title: "Versions"
@@ -81,6 +90,7 @@ admin_page:
             origin.header: "Origin"
             created.header: "Created"
             publish_status.header: "Publish status"
+            note.header: "Note"
         publish_status:
             published: "published"
             unpublished: ""
@@ -100,6 +110,9 @@ admin_page:
             translations.link: "Translations"
             keep.link: "Keep version, click to no keep"
             nokeep.link: "Do not keep version, click to keep"
+            info.link: "Info"
+            add_note.link: "Add note"
+
     preview:
         meta.title: "Preview page"
         title: "%name% (v%versionNumber%)"
@@ -198,6 +211,10 @@ admin_page:
         filter_form:
             name.label: "Name"
             sites.label: "Sites"
+        empty:
+            create_first_content_raw: '<a href="%create_link%">Create</a> or <a href="%import_link%">import</a> your first page!'
+            can_not_create_content: "You can not create a new page"
+            go_to_doc_raw: 'If you need help go to <a href="https://github.com/softspring/cms-bundle" target="_blank">documentation</a>'
 
     form:
         name.label: "Name"
@@ -236,6 +253,9 @@ admin_page:
                     never: "never"
             sitemapPriority.label: "URL priority for sitemap"
 
+    version_form:
+        note.label: "Note"
+
     version_lock:
         success_locked_flash: "Version has been locked"
         success_unlocked_flash: "Version has been unlocked"
@@ -250,3 +270,32 @@ admin_page:
 
     version_cleanup:
         success_flash: "Versions cleanup has been done correctly"
+
+    version_info:
+        meta.title: "Version info (v%versionNumber%)"
+        title: "Version info (v%versionNumber%)"
+        breadcrumb: "Version info (v%versionNumber%)"
+        info:
+            version.title: "Version"
+            origin.title: "Origin"
+            created.title: "Created"
+            publish_status.title: "Published"
+            keep.title: "Keep"
+        actions:
+            save.button: "Save changes"
+            cancel.button: "Cancel"
+        compiled:
+            title: "Compiled content"
+        data:
+            title: "Data"
+        linked_routes:
+            title: "Linked routes"
+        linked_medias:
+            title: "Linked medias"
+        history:
+            title: "History"
+            action:
+                publish: "Published"
+                unpublish: "Unpublished"
+        metadata:
+            title: "Metadata"

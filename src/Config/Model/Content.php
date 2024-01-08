@@ -11,6 +11,7 @@ use Softspring\CmsBundle\Form\Admin\Content\ContentUpdateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionCreateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionImportForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionListFilterForm;
+use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionUpdateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionTranslateForm;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -345,6 +346,16 @@ class Content implements ConfigurationInterface
                                 ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_CONTENT')->end()
                                 ->scalarNode('view')->defaultValue('@SfsCms/admin/content/version_create.html.twig')->end()
                                 ->scalarNode('type')->defaultValue(VersionCreateForm::class)->end()
+                                ->scalarNode('success_redirect_to')->defaultValue('')->end()
+                            ->end()
+                        ->end()
+
+                        ->arrayNode('version_info')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSION_INFO')->end()
+                                ->scalarNode('view')->defaultValue('@SfsCms/admin/content/version_info.html.twig')->end()
+                                ->scalarNode('type')->defaultValue(VersionUpdateForm::class)->end()
                                 ->scalarNode('success_redirect_to')->defaultValue('')->end()
                             ->end()
                         ->end()

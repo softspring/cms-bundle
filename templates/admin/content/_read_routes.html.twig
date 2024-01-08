@@ -1,0 +1,27 @@
+{% trans_default_domain 'sfs_cms_contents' %}
+
+{% embed '@SfsCms/admin/_embeds/_card.html.twig' with {'title': ('admin_'~content_type~'.read.routes.title')|trans} %}
+    {% trans_default_domain 'sfs_cms_contents' %}
+    {% block content %}
+        {% if not entity.publishedVersion %}
+            <div class="alert alert-warning" role="alert">
+                {{ ('admin_'~content_type~'.read.routes.not_published_warning')|trans }}
+            </div>
+        {% endif %}
+
+        <ul class="list-unstyled">
+            {% for route in entity.routes %}
+                {% for site in route.sites %}
+                    {% for path in route.paths %}
+                        <li>
+                            {{ site|sfs_cms_site_name }}: <a href="{{ sfs_cms_route_path_url(path, site) }}"
+                                                             target="_blank">{{ sfs_cms_route_path_path(path, site) }}
+                                <span class="mdi mdi-18px mdi-open-in-new"></span></a>
+                            {% if path.cacheTtl %}{{ ('admin_'~content_type~'.read.routes.cache')|trans({'%ttl%': path.cacheTtl}) }}{% endif %}
+                        </li>
+                    {% endfor %}
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    {% endblock %}
+{% endembed %}
