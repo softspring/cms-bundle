@@ -84,6 +84,7 @@ class TranslationsListener extends AbstractContentVersionListener
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_TRANSLATIONS_EXCEPTION => [
                 ['onEventDispatchContentTypeEvent', 10],
+                ['onException', 0],
             ],
         ];
     }

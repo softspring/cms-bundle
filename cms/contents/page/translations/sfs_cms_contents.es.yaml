@@ -80,6 +80,9 @@ admin_page:
             title: "Últimas versiones"
             published: "publicada"
             more.link: "Ver más versiones"
+        translations:
+            title: "Traducciones"
+            edit.link: "Editar"
 
     versions:
         meta.title: "Versiones"
