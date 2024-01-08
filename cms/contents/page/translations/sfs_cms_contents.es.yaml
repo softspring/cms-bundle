@@ -3,11 +3,12 @@ admin_page:
 
     tabs_menu:
         details: "General"
-        update: "Editar"
+        update: "Propiedades"
         seo: "SEO"
-        content: "Contenido (ultima versión)"
-        preview: "Previsualizar (ultima versión)"
+        content: "Contenido"
+        preview: "Previsualizar"
         versions: "Versiones"
+        delete: "Eliminar"
 
     create:
         meta.title: "Nueva página"
@@ -64,6 +65,8 @@ admin_page:
             links: "Enlaces"
             sitemap: "Mapa de sitio"
             sitemap.no: "no"
+            sitemap.yes: "sí"
+            edit.link: "Editar"
         routes:
             title: "Rutas"
             cache: "(cache %ttl% segundos)"
@@ -80,6 +83,7 @@ admin_page:
             origin.header: "Origen"
             created.header: "Creación"
             publish_status.header: "Publicación"
+            note.header: "Nota"
         publish_status:
             published: "publicada"
             unpublished: ""
@@ -97,6 +101,9 @@ admin_page:
             cleanup_versions.link: "Limpiar versiones"
             keep.link: "Mantener versión, pinchar para desmarcar"
             nokeep.link: "No mantener esta versión, pinchar para mantener"
+            info.link: "Info"
+            add_note.link: "Añadir nota"
+
     preview:
         meta.title: "Previsualizar página"
         title: "%name%"
@@ -225,6 +232,9 @@ admin_page:
                     never: "nunca"
             sitemapPriority.label: "Prioridad de URL en el sitemap"
 
+    version_form:
+        note.label: "Nota"
+
     version_lock:
         success_locked_flash: "La versión se ha bloqueado"
         success_unlocked_flash: "La versión se ha desbloqueado"
@@ -239,3 +249,32 @@ admin_page:
 
     version_cleanup:
         success_flash: "Se ha realizado la limpieza de versiones correctamente"
+
+    version_info:
+        meta.title: "Información de la versión (v%versionNumber%)"
+        title: "Información de la versión (v%versionNumber%)"
+        breadcrumb: "Información de la versión (v%versionNumber%)"
+        info:
+            version.title: "Version"
+            origin.title: "Origen"
+            created.title: "Creada"
+            publish_status.title: "Publicada"
+            keep.title: "Keep"
+        actions:
+            save.button: "Guardar cambios"
+            cancel.button: "Cancelar"
+        compiled:
+            title: "Contenido compilado"
+        data:
+            title: "Datos"
+        linked_routes:
+            title: "Rutas vinculadas"
+        linked_medias:
+            title: "Medios vinculados"
+        history:
+            title: "Histórico"
+            action:
+                publish: "Publicada"
+                unpublish: "Despublicada"
+        metadata:
+            title: "Metadatos"

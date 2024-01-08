@@ -5,6 +5,7 @@ namespace Softspring\CmsBundle\EntityTransformer;
 use Doctrine\ORM\Mapping\MappingException as ORMMappingException;
 use Doctrine\Persistence\Mapping\MappingException as PersistenceMappingException;
 use Doctrine\Persistence\ObjectManager;
+use Softspring\CmsBundle\Model\RouteInterface;
 
 trait TransformEntityValuesTrait
 {
@@ -13,6 +14,13 @@ trait TransformEntityValuesTrait
         if (is_array($value) || is_iterable($value)) {
             foreach ($value as $key => $value2) {
                 $value[$key] = $this->transformEntityValues($value2, $objectManager, $entities);
+            }
+
+            if (($value['type'] ?? false) == 'route' && !empty($value['route_name'])) {
+                $route = $objectManager->getRepository(RouteInterface::class)->findOneBy(['id' => $value['route_name']]);
+                if ($route) {
+                    $entities[] = $route;
+                }
             }
         } elseif (is_object($value)) {
             try {
