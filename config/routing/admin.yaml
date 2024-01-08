@@ -1,0 +1,23 @@
+_sfs_cms_pages_:
+    resource: "@SfsCmsBundle/config/routing/admin_pages.yaml"
+    prefix: "/pages"
+
+_sfs_cms_routes_:
+    resource: "@SfsCmsBundle/config/routing/admin_routes.yaml"
+    prefix: "/routes"
+
+_sfs_cms_menus_:
+    resource: "@SfsCmsBundle/config/routing/admin_menus.yaml"
+    prefix: "/menus"
+
+_sfs_cms_blocks_:
+    resource: "@SfsCmsBundle/config/routing/admin_blocks.yaml"
+    prefix: "/blocks"
+
+_sfs_media_admin_types_:
+    resource: "@SfsMediaBundle/config/routing/admin_media.yaml"
+    prefix: "/media"
+
+_sfs_cms_sites_:
+    resource: "@SfsCmsBundle/config/routing/admin_sites.yaml"
+    prefix: "/sites"
