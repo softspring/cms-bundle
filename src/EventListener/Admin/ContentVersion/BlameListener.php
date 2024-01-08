@@ -35,7 +35,7 @@ class BlameListener implements EventSubscriberInterface
 
     public function onCreateVersion(ApplyEvent $event): void
     {
-        /** @phpstan-ignore-next-line  */
+        /* @phpstan-ignore-next-line */
         if (!$this->security || !$this->security->getUser()) {
             return;
         }
@@ -56,7 +56,7 @@ class BlameListener implements EventSubscriberInterface
 
     public function onPublishVersion(ApplyEvent $event): void
     {
-        /** @phpstan-ignore-next-line  */
+        /* @phpstan-ignore-next-line */
         if (!$this->security || !$this->security->getUser()) {
             return;
         }
