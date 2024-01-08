@@ -58,6 +58,7 @@ admin_page:
         name: "Nombre"
         sites: "Sitios"
         published: "Publicada"
+        unpublished: "Despublicada"
         seo:
             title: "SEO"
             index: "Indexar"
@@ -67,9 +68,11 @@ admin_page:
         routes:
             title: "Rutas"
             cache: "(cache %ttl% segundos)"
+            not_published_warning: "Este contenido no está publicado, por lo tanto las siguientes rutas devolverán un error 404"
         versions:
             title: "Últimas versiones"
             published: "publicada"
+            more.link: "Ver más versiones"
 
     versions:
         meta.title: "Versiones"
@@ -190,6 +193,10 @@ admin_page:
         filter_form:
             name.label: "Nombre"
             sites.label: "Sitios"
+        empty:
+            create_first_content_raw: '<a href="%create_link%">Crea</a> o <a href="%import_link%">importa</a> tu primera página!'
+            can_not_create_content: "No puedes crear páginas"
+            go_to_doc_raw: 'Si necesitas ayuda visita la <a href="https://github.com/softspring/cms-bundle" target="_blank">documentación</a>'
 
     form:
         name.label: "Nombre"

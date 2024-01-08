@@ -1,0 +1,93 @@
+{% trans_default_domain 'sfs_cms_contents' %}
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>{{ ('admin_'~content_type~'.versions.fields.id.header')|trans }}</th>
+        <th>{{ ('admin_'~content_type~'.versions.fields.origin.header')|trans }}</th>
+        <th>{{ ('admin_'~content_type~'.versions.fields.note.header')|trans }}</th>
+        <th>{{ ('admin_'~content_type~'.versions.fields.created.header')|trans }}</th>
+        <th>{{ ('admin_'~content_type~'.versions.fields.publish_status.header')|trans }}</th>
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for version in versions %}
+        <tr>
+            <td>v{{ version.versionNumber }} {% if version.hasCompileErrors %}<i
+                        class="bi bi-exclamation-triangle text-danger"
+                        title="This version has some compilation error"></i>{% endif %}</td>
+            <td>{{ ('admin_'~content_type~'.versions.origin.'~(version.origin|default('null')))|trans }} {{ version.originDescription ? '('~version.originDescription~')' : '' }}</td>
+            <td>
+                {% if version.note %}
+                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_version_info', {'content':entity, 'version':version}) }}"><i class="bi bi-tag"></i> {{ version.note }}</a>
+                {% else %}
+                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_version_info', {'content':entity, 'version':version}) }}" class="text-muted"><i class="bi bi-tag"></i> {{ ('admin_'~content_type~'.versions.actions.add_note.link')|trans }}</a>
+                {% endif %}
+            </td>
+            <td>{{ version.createdAt ? version.createdAt|date('H:i:s d-m-Y') : '' }}</td>
+            <td>{{ version.published ? ('admin_'~content_type~'.versions.publish_status.published')|trans : ('admin_'~content_type~'.versions.publish_status.unpublished')|trans }}</td>
+            <td>
+                {% if not content_config.admin.version_lock.is_granted or is_granted(content_config.admin.version_lock.is_granted, version) %}
+                    {% if version.keep %}
+                        <a class=""
+                           href="{{ url('sfs_cms_admin_content_'~content_type~'_unkeep_version', {'content':entity, 'version':version, 'back': 'versions'}) }}"
+                           title="{{ ('admin_'~content_type~'.versions.actions.keep.link')|trans }}"><i
+                                    class="bi bi-pin-angle-fill"></i></a>
+                    {% else %}
+                        <a class=""
+                           href="{{ url('sfs_cms_admin_content_'~content_type~'_keep_version', {'content':entity, 'version':version, 'back': 'versions'}) }}"
+                           title="{{ ('admin_'~content_type~'.versions.actions.nokeep.link')|trans }}"><i
+                                    class="bi bi-pin-angle"></i></a>
+                    {% endif %}
+                {% else %}
+                    {% if version.keep %}
+                        <span title="{{ ('admin_'~content_type~'.versions.actions.keep.link')|trans }}"><i
+                                    class="bi bi-pin-angle-fill"></i></span>
+                    {% else %}
+                        <span title="{{ ('admin_'~content_type~'.versions.actions.nokeep.link')|trans }}"><i
+                                    class="bi bi-pin-angle"></i></span>
+                    {% endif %}
+                {% endif %}
+            </td>
+            <td>
+                {% if not content_config.admin.version_info.is_granted or is_granted(content_config.admin.version_info.is_granted, version) %}
+                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_version_info', {'content':entity, 'version':version}) }}"
+                       class="ms-2 text-nowrap">{{ ('admin_'~content_type~'.versions.actions.info.link')|trans }} <span
+                                class="bi bi-eye"></span></a>
+                {% endif %}
+
+                {% if not content_config.admin.version_create.is_granted or is_granted(content_config.admin.version_create.is_granted, version) %}
+                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_content_from_version', {'content':entity, 'prevVersion':version}) }}"
+                       class="ms-2 text-nowrap">{{ ('admin_'~content_type~'.versions.actions.edit.link')|trans }} <span
+                                class="bi bi-pencil"></span></a>
+                {% endif %}
+
+                {% if not content_config.admin.preview.is_granted or is_granted(content_config.admin.preview.is_granted, version) %}
+                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_preview', {'content':entity, 'version':version}) }}"
+                       class="ms-2 text-nowrap">{{ ('admin_'~content_type~'.versions.actions.preview.link')|trans }}
+                        <span class="bi bi-eye"></span></a>
+                {% endif %}
+
+                {% if not content_config.admin.export_version.is_granted or is_granted(content_config.admin.export_version.is_granted, version) %}
+                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_export_version', {'content':entity, 'version':version}) }}"
+                       class="ms-2 text-nowrap">{{ ('admin_'~content_type~'.versions.actions.export.link')|trans }}
+                        <span class="bi bi-box-arrow-down"></span></a>
+                {% endif %}
+
+                {% if not content_config.admin.publish_version.is_granted or is_granted(content_config.admin.publish_version.is_granted, version) %}
+                    {% if not version.published %}
+                        <a href="{{ url('sfs_cms_admin_content_'~content_type~'_publish_version', {'content':entity, 'version':version}) }}"
+                           class="ms-2 text-nowrap">{{ ('admin_'~content_type~'.versions.actions.publish.link')|trans }}
+                            <span class="bi bi-file-earmark-arrow-up"></span></a>
+                    {% endif %}
+                {% endif %}
+            </td>
+            <td>{% if version.deleteOnCleanup %}<i class="bi bi-trash text-secondary"
+                                                   title="This version will be removed on versions cleanup"></i>{% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
