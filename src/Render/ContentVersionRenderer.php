@@ -12,6 +12,7 @@ use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
+use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -29,9 +30,10 @@ class ContentVersionRenderer extends AbstractRenderer
         protected RequestStack $requestStack,
         protected ModuleRenderer $moduleRenderer,
         protected ?LoggerInterface $cmsLogger,
-        ?Profiler $profiler
+        ?Profiler $profiler,
+        protected ?EntrypointLookupInterface $entrypointLookup,
     ) {
-        parent::__construct($requestStack);
+        parent::__construct($requestStack, $this->entrypointLookup);
         $this->profilerEnabled = (bool) $profiler;
     }
 

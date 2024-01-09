@@ -6,21 +6,25 @@ use Softspring\CmsBundle\Config\CmsConfig;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\HttpCache\Esi;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
+use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface;
 use Twig\Environment;
 
 class MenuRenderer extends AbstractRenderer
 {
-    protected CmsConfig $cmsConfig;
-    protected Environment $twig;
     protected bool $profilerEnabled;
     protected bool $esiEnabled;
     protected array $profilerDebugCollectorData = [];
+    protected ?EntrypointLookupInterface $entrypointLookup;
 
-    public function __construct(RequestStack $requestStack, CmsConfig $cmsConfig, Environment $twig, ?Profiler $profiler, ?Esi $esi)
-    {
-        parent::__construct($requestStack);
-        $this->cmsConfig = $cmsConfig;
-        $this->twig = $twig;
+    public function __construct(
+        RequestStack $requestStack,
+        protected CmsConfig $cmsConfig,
+        protected Environment $twig,
+        ?EntrypointLookupInterface $entrypointLookup,
+        ?Profiler $profiler,
+        ?Esi $esi
+    ) {
+        parent::__construct($requestStack, $entrypointLookup);
         $this->profilerEnabled = (bool) $profiler;
         $this->esiEnabled = (bool) $esi;
     }

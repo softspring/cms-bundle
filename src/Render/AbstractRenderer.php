@@ -7,14 +7,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface;
 
 abstract class AbstractRenderer
 {
-    protected RequestStack $requestStack;
-
-    public function __construct(RequestStack $requestStack)
-    {
-        $this->requestStack = $requestStack;
+    public function __construct(
+        protected RequestStack $requestStack,
+        protected ?EntrypointLookupInterface $entrypointLookup
+    ) {
     }
 
     protected function isPreview(): bool
@@ -41,6 +41,7 @@ abstract class AbstractRenderer
 
     protected function encapsulateRequestRender(Request $request, callable $renderFunction)
     {
+        $this->entrypointLookup && $this->entrypointLookup->reset();
         $this->requestStack->push($request);
         $result = $renderFunction($request);
         $this->requestStack->pop();

@@ -43,6 +43,11 @@ class ContentVersionCompiler
                 $this->cmsLogger && $this->cmsLogger->debug(sprintf('Compiling "%s" content version for "%s" in "%s"', $contentVersion->getContent()->getName(), "$site", $locale));
 
                 $request = ContentVersionRenderer::generateRequest($locale, $site);
+
+                if ($routePath = $contentVersion->getContent()->getCanonicalRoutePath($locale)) {
+                    $request->attributes->set('routePath', $routePath);
+                }
+
                 $compileKey = $this->getCompileKeyFromRequest($contentVersion, $request);
 
                 $compiledModules[$compileKey] = $this->compileModulesRequest($contentVersion, $request);
