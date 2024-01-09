@@ -215,6 +215,15 @@ class SfsCmsEvents
     public const ADMIN_CONTENT_VERSIONS_LOCK_SUCCESS = 'sfs_cms.admin.content_versions.lock_success';
     public const ADMIN_CONTENT_VERSIONS_LOCK_FAILURE = 'sfs_cms.admin.content_versions.lock_failure';
     public const ADMIN_CONTENT_VERSIONS_LOCK_EXCEPTION = 'sfs_cms.admin.content_versions.lock_exception';
+    // CONTENT_VERSION RECOMPILE EVENTS, ALL OF THEM ARE INTERNAL
+    public const ADMIN_CONTENT_VERSIONS_RECOMPILE_INITIALIZE = 'sfs_cms.admin.content_versions.recompile_initialize';
+    public const ADMIN_CONTENT_VERSIONS_RECOMPILE_LOAD_ENTITY = 'sfs_cms.admin.content_versions.recompile_load_entity';
+    public const ADMIN_CONTENT_VERSIONS_RECOMPILE_NOT_FOUND = 'sfs_cms.admin.content_versions.recompile_not_found';
+    public const ADMIN_CONTENT_VERSIONS_RECOMPILE_FOUND = 'sfs_cms.admin.content_versions.recompile_found';
+    public const ADMIN_CONTENT_VERSIONS_RECOMPILE_APPLY = 'sfs_cms.admin.content_versions.recompile_apply';
+    public const ADMIN_CONTENT_VERSIONS_RECOMPILE_SUCCESS = 'sfs_cms.admin.content_versions.recompile_success';
+    public const ADMIN_CONTENT_VERSIONS_RECOMPILE_FAILURE = 'sfs_cms.admin.content_versions.recompile_failure';
+    public const ADMIN_CONTENT_VERSIONS_RECOMPILE_EXCEPTION = 'sfs_cms.admin.content_versions.recompile_exception';
     // CONTENT_VERSION PREVIEW EVENTS, ALL OF THEM ARE INTERNAL
     public const ADMIN_CONTENT_VERSIONS_PREVIEW_INITIALIZE = 'sfs_cms.admin.content_versions.preview_initialize';
     public const ADMIN_CONTENT_VERSIONS_PREVIEW_LOAD_ENTITY = 'sfs_cms.admin.content_versions.preview_load_entity';

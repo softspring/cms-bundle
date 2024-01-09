@@ -8,7 +8,8 @@ use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Manager\SiteManagerInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
-use Softspring\CmsBundle\Render\ContentVersionRenderer;
+use Softspring\CmsBundle\Render\CompileException;
+use Softspring\CmsBundle\Render\ContentVersionCompiler;
 use Softspring\CmsBundle\Request\FlashNotifier;
 use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\Component\CrudlController\Event\EntityFoundEvent;
@@ -30,7 +31,7 @@ class PreviewListener extends AbstractContentVersionListener
         FlashNotifier $flashNotifier,
         AuthorizationCheckerInterface $authorizationChecker,
         protected SiteManagerInterface $siteManager,
-        protected ContentVersionRenderer $contentRender,
+        protected ContentVersionCompiler $contentVersionCompiler,
         protected ?WebDebugToolbarListener $webDebugToolbarListener = null,
     ) {
         parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
@@ -63,6 +64,9 @@ class PreviewListener extends AbstractContentVersionListener
         ];
     }
 
+    /**
+     * @throws CompileException
+     */
     public function onFoundShowContent(EntityFoundEvent $event): void
     {
         $this->webDebugToolbarListener && $this->webDebugToolbarListener->setMode(WebDebugToolbarListener::DISABLED);
@@ -81,6 +85,6 @@ class PreviewListener extends AbstractContentVersionListener
 
         $request->attributes->set('_cms_preview', true);
 
-        $event->setResponse(new Response($this->contentRender->render($version)));
+        $event->setResponse(new Response($this->contentVersionCompiler->compileRequest($version, $request)));
     }
 }

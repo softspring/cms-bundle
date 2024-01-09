@@ -60,6 +60,16 @@ services:
                     success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_LOCK_SUCCESS
                     failure_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_LOCK_FAILURE
                     exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_LOCK_EXCEPTION
+                version_recompile:
+                    param_converter_key: 'id'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_RECOMPILE_INITIALIZE
+                    load_entity_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_RECOMPILE_LOAD_ENTITY
+                    not_found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_RECOMPILE_NOT_FOUND
+                    found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_RECOMPILE_FOUND
+                    apply_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_RECOMPILE_APPLY
+                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_RECOMPILE_SUCCESS
+                    failure_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_RECOMPILE_FAILURE
+                    exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_RECOMPILE_EXCEPTION
                 version_publish:
                     param_converter_key: 'id'
                     initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_PUBLISH_INITIALIZE
