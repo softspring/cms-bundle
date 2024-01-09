@@ -9,7 +9,7 @@ use Softspring\CmsBundle\Config\Exception\InvalidLayoutException;
 use Softspring\CmsBundle\Config\Exception\InvalidModuleException;
 use Softspring\CmsBundle\Config\Exception\InvalidSiteException;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
-use Softspring\CmsBundle\Model\SiteInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Twig\Environment;
@@ -44,29 +44,28 @@ class ContentVersionRenderer extends AbstractRenderer
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function render(ContentVersionInterface $version, RenderErrorList $renderErrorList = null): string
+    public function render(ContentVersionInterface $version, Request $request, RenderErrorList $renderErrorList = null, array $compiledModules = null): string
     {
-        $this->cmsLogger && $this->cmsLogger->debug(sprintf('Rendering %s page version', $version->getContent()->getName()));
+        return $this->encapsulateRequestRender($request, function () use ($version, $renderErrorList, $compiledModules): string {
+            $this->cmsLogger && $this->cmsLogger->debug(sprintf('Rendering %s content version', $version->getContent()->getName()));
 
-        // preload all medias
-        $version->getMedias();
-        // preload all routes
-        $version->getRoutes();
+            // preload all medias
+            $version->getMedias();
+            // preload all routes
+            $version->getRoutes();
 
-        $layout = $this->cmsConfig->getLayout($version->getLayout());
+            $layout = $this->cmsConfig->getLayout($version->getLayout());
 
-        $request = $this->requestStack->getCurrentRequest();
+            $request = $this->requestStack->getCurrentRequest();
 
-        $site = $request->attributes->get('_sfs_cms_site');
-        $locale = $request->getLocale();
+            $containers = $compiledModules ?? $this->renderModules($version, $request, $renderErrorList);
 
-        $containers = $version->getCompiledModules()["$site"][$locale] ?? $this->renderModules($version, $site, $locale, $renderErrorList);
-
-        return $this->twig->render($layout['render_template'], [
-            'containers' => $containers,
-            'version' => $version,
-            'content' => $version->getContent(),
-        ]);
+            return $this->twig->render($layout['render_template'], [
+                'containers' => $containers,
+                'version' => $version,
+                'content' => $version->getContent(),
+            ]);
+        });
     }
 
     /**
@@ -75,9 +74,9 @@ class ContentVersionRenderer extends AbstractRenderer
      * @throws InvalidSiteException
      * @throws InvalidLayoutException
      */
-    public function renderModules(ContentVersionInterface $version, SiteInterface $site, string $locale, RenderErrorList $renderErrorList = null): array
+    public function renderModules(ContentVersionInterface $version, Request $request, RenderErrorList $renderErrorList = null): array
     {
-        return $this->encapsulateRequestRender($site, $locale, function () use ($version, $renderErrorList): array {
+        return $this->encapsulateRequestRender($request, function () use ($version, $renderErrorList): array {
             // preload all medias
             $version->getMedias();
             // preload all routes
@@ -108,11 +107,11 @@ class ContentVersionRenderer extends AbstractRenderer
     }
 
     /**
-     * @deprecated this is not used anymore, will be removed in next major version
-     *
      * @throws InvalidSiteException
      * @throws DisabledModuleException
      * @throws InvalidModuleException
+     *
+     * @deprecated this is not used anymore, will be removed in next major version
      */
     public function renderModuleById(string $moduleId, array $data, RenderErrorList $renderErrorList = null): string
     {

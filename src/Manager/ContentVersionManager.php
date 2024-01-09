@@ -8,21 +8,20 @@ use Doctrine\ORM\EntityManagerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
+use Softspring\CmsBundle\Render\CompileException;
+use Softspring\CmsBundle\Render\ContentVersionCompiler;
 use Softspring\Component\CrudlController\Manager\CrudlEntityManagerTrait;
+use Symfony\Component\HttpFoundation\Request;
 
 class ContentVersionManager implements ContentVersionManagerInterface
 {
     use CrudlEntityManagerTrait;
 
-    protected EntityManagerInterface $em;
-    protected CmsConfig $cmsConfig;
-    protected bool $saveCompiled;
-
-    public function __construct(EntityManagerInterface $em, CmsConfig $cmsConfig, bool $saveCompiled)
-    {
-        $this->em = $em;
-        $this->cmsConfig = $cmsConfig;
-        $this->saveCompiled = $saveCompiled;
+    public function __construct(
+        protected EntityManagerInterface $em,
+        protected CmsConfig $cmsConfig,
+        protected ContentVersionCompiler $contentCompiler,
+    ) {
     }
 
     public function getTargetClass(): string
@@ -41,24 +40,21 @@ class ContentVersionManager implements ContentVersionManagerInterface
             ->getResult());
     }
 
-    public function canSaveCompiled(ContentVersionInterface $version): bool
+    /**
+     * @throws CompileException
+     */
+    public function getCompiledContent(ContentVersionInterface $contentVersion, Request $request): string
     {
-        if (false === $this->saveCompiled) {
-            return false;
+        $compiledKey = $this->contentCompiler->getCompileKeyFromRequest($contentVersion, $request);
+
+        $compiled = $contentVersion->getCompiled();
+
+        if (isset($compiled[$compiledKey])) {
+            return $compiled[$compiledKey];
         }
 
-        $contentConfig = $this->cmsConfig->getContent($version->getContent());
+        $compiledModules = $contentVersion->getCompiledModules()[$compiledKey] ?? null;
 
-        if (false === $contentConfig['save_compiled']) {
-            return false;
-        }
-
-        $layoutConfig = $this->cmsConfig->getLayout($version->getLayout());
-
-        if (false === $layoutConfig['save_compiled']) {
-            return false;
-        }
-
-        return true;
+        return $this->contentCompiler->compileRequest($contentVersion, $request, $compiledModules);
     }
 }

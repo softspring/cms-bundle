@@ -270,11 +270,16 @@ admin_page:
             created.title: "Created"
             publish_status.title: "Published"
             keep.title: "Keep"
+            layout.title: "Layout"
         actions:
             save.button: "Save changes"
             cancel.button: "Cancel"
+            recompile.link: "Recompile"
         compiled:
             title: "Compiled content"
+            error: "This content has some compilation errors, try to edit it to solve them or try to recompile"
+            pre_compile_content_disabled: "Content pre-compilation is disabled for this version"
+            pre_compile_modules_disabled: "Module pre-compilation is disabled for this version"
         data:
             title: "Data"
         linked_routes:
@@ -284,7 +289,15 @@ admin_page:
         history:
             title: "History"
             action:
-                publish: "Published"
-                unpublish: "Unpublished"
+                publish: "Published by %userName% at %date%"
+                unpublish: "Unpublished by %userName% at %date% (new version: %new_version%)"
+                lock: "Version protected by %userName% at %date%"
+                unlock: "Version unprotected by %userName% at %date%"
+                recompile: "Version recompiled by %userName% at %date%"
+                create: "Created by %userName% at %date%"
         metadata:
             title: "Metadata"
+
+    version_recompile:
+        success_flash: "Version has been recompiled"
+        failed_flash: "An error has been produced during the version recompilation"

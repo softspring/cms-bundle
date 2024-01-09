@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\Collection;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\Component\CrudlController\Manager\CrudlEntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 interface ContentVersionManagerInterface extends CrudlEntityManagerInterface
 {
@@ -24,7 +25,7 @@ interface ContentVersionManagerInterface extends CrudlEntityManagerInterface
      */
     public function deleteEntity(object $entity): void;
 
-    public function canSaveCompiled(ContentVersionInterface $version): bool;
-
     public function getLatestVersions(ContentInterface $content, int $limit = 3): Collection;
+
+    public function getCompiledContent(ContentVersionInterface $contentVersion, Request $request): string;
 }

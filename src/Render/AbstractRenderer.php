@@ -19,9 +19,7 @@ abstract class AbstractRenderer
 
     protected function isPreview(): bool
     {
-        $request = $this->requestStack->getCurrentRequest();
-
-        return $request->attributes->has('_cms_preview');
+        return $this->requestStack->getCurrentRequest()?->attributes->has('_cms_preview') ?: false;
     }
 
     protected function encapsulateEsiCapableRender(callable $renderFunction)
@@ -41,16 +39,16 @@ abstract class AbstractRenderer
         return $result;
     }
 
-    protected function encapsulateRequestRender(SiteInterface $site, string $locale, callable $renderFunction)
+    protected function encapsulateRequestRender(Request $request, callable $renderFunction)
     {
-        $this->requestStack->push($request = $this->generateRequest($locale, $site));
+        $this->requestStack->push($request);
         $result = $renderFunction($request);
         $this->requestStack->pop();
 
         return $result;
     }
 
-    protected function generateRequest(string $locale, SiteInterface $site): Request
+    public static function generateRequest(string $locale, SiteInterface $site, bool $preview = false): Request
     {
         $parameters = [];
         $cookies = [];
@@ -69,6 +67,10 @@ abstract class AbstractRenderer
         $request->setLocale($locale);
         $request->attributes->set('_sfs_cms_site', $site);
         $request->setSession(new Session(new MockArraySessionStorage()));
+
+        if ($preview) {
+            $request->attributes->set('_cms_preview', true);
+        }
 
         return $request;
     }

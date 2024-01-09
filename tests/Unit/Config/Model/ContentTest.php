@@ -173,6 +173,9 @@ class ContentTest extends TestCase
                     'type' => VersionUpdateForm::class,
                     'success_redirect_to' => '',
                 ],
+                'version_recompile' => [
+                    'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_RECOMPILE_VERSION',
+                ],
             ],
         ], $config);
     }
