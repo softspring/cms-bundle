@@ -37,7 +37,8 @@ import {contentEditableUpdateInputsFromElement} from './contenteditable';
  * @private
  */
 function _createWysiwygTinyMCE(element) {
-    const predeterminatedDefaultToolbar = 'bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor removeformat | link anchor code | ltr rtl | fontsize blocks | charmap emoticons';
+    const predeterminatedDefaultToolbar = ['bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | link anchor code |  numlist bullist | codesample',
+                                                   'outdent indent | forecolor removeformat | ltr rtl | fontsize blocks | charmap emoticons'];
     const defaultToolbar = window.sfs_cms_tinymce_default_toolbar !== undefined ? window.sfs_cms_tinymce_default_toolbar : predeterminatedDefaultToolbar;
     const toolbar = element.dataset.editContentWysiwygToolbar ? element.dataset.editContentWysiwygToolbar : defaultToolbar;
 
