@@ -22,16 +22,15 @@ class SeoListener extends AbstractContentListener
     protected const ACTION_NAME = 'seo';
 
     public function __construct(
-        ContentManagerInterface        $contentManager,
+        ContentManagerInterface $contentManager,
         ContentVersionManagerInterface $contentVersionManager,
-        RouteManagerInterface          $routeManager,
-        CmsConfig                      $cmsConfig,
-        RouterInterface                $router,
-        FlashNotifier                  $flashNotifier,
-        AuthorizationCheckerInterface  $authorizationChecker,
-        protected TranslatableContext  $translatableContext
-    )
-    {
+        RouteManagerInterface $routeManager,
+        CmsConfig $cmsConfig,
+        RouterInterface $router,
+        FlashNotifier $flashNotifier,
+        AuthorizationCheckerInterface $authorizationChecker,
+        protected TranslatableContext $translatableContext
+    ) {
         parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
     }
 

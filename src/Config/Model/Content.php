@@ -11,8 +11,8 @@ use Softspring\CmsBundle\Form\Admin\Content\ContentUpdateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionCreateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionImportForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionListFilterForm;
-use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionUpdateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionTranslateForm;
+use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionUpdateForm;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 

@@ -62,7 +62,7 @@ class TranslatorExtractor
                     $translations['modules'][$module] = $this->extractModule($fields);
                 }
             } else {
-                foreach ($moduleConfig['module_options']['form_fields']??[] as $field => $fieldConfig) {
+                foreach ($moduleConfig['module_options']['form_fields'] ?? [] as $field => $fieldConfig) {
                     $translations[$field] = $this->extractFieldTranslations($fieldConfig, $moduleData[$field]);
                 }
             }

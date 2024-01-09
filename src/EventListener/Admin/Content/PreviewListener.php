@@ -3,7 +3,6 @@
 namespace Softspring\CmsBundle\EventListener\Admin\Content;
 
 use Softspring\CmsBundle\Model\ContentVersionInterface;
-use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\Component\CrudlController\Event\LoadEntityEvent;
 use Softspring\Component\CrudlController\Event\NotFoundEvent;
@@ -69,7 +68,7 @@ class PreviewListener extends AbstractContentListener
 
         parent::onView($event);
 
-        /** @deprecated  */
+        /* @deprecated */
         $event->getData()['enabledLocales'] = $content->getLocales();
         $event->getData()['content_entity'] = $content;
 

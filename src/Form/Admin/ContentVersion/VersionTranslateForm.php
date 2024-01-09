@@ -64,8 +64,8 @@ class VersionTranslateForm extends AbstractType
                     'data-module-field' => $fieldName,
                 ],
                 'children_attr' => [
-                    'style' => in_array($fieldOptions['type']??'', ['textarea','html','wysiwyg']) ? 'height:300px' : '',
-                ]
+                    'style' => in_array($fieldOptions['type'] ?? '', ['textarea', 'html', 'wysiwyg']) ? 'height:300px' : '',
+                ],
             ]);
         }
     }
