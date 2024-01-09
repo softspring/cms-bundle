@@ -30,78 +30,103 @@ class BlameListener implements EventSubscriberInterface
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_PUBLISH_APPLY => [
                 ['onPublishVersion', 5],
             ],
+            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_LOCK_APPLY => [
+                ['onLockVersion', 5],
+            ],
+            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_RECOMPILE_APPLY => [
+                ['onRecompileVersion', 5],
+            ],
         ];
     }
 
     public function onCreateVersion(ApplyEvent $event): void
     {
-        /* @phpstan-ignore-next-line */
-        if (!$this->security || !$this->security->getUser()) {
+        if (!$this->canBlame()) {
             return;
         }
 
-        /** @phpstan-ignore-next-line  */
-        $user = $this->security->getUser();
+        /** @var ContentVersionInterface $version */
         $version = $event->getEntity();
-        $userData = [
-            'id' => $user->getUserIdentifier(),
-        ];
+        $version->setMetaField('creator', $this->getUser());
+        $this->addHistory($version, 'create');
+    }
 
-        if (method_exists($user, 'getDisplayName')) {
-            $userData['name'] = $user->getDisplayName();
+    public function onLockVersion(ApplyEvent $event): void
+    {
+        if (!$this->canBlame()) {
+            return;
         }
 
-        $version->setMetaField('creator', $userData);
+        /** @var ContentVersionInterface $version */
+        $version = $event->getEntity();
+
+        // this runs before the version is updated, so we check the value inverted
+        !$version->isKeep() && $this->addHistory($version, 'lock');
+        $version->isKeep() && $this->addHistory($version, 'unlock');
+    }
+
+    public function onRecompileVersion(ApplyEvent $event): void
+    {
+        if (!$this->canBlame()) {
+            return;
+        }
+
+        /** @var ContentVersionInterface $version */
+        $version = $event->getEntity();
+        $this->addHistory($version, 'recompile');
     }
 
     public function onPublishVersion(ApplyEvent $event): void
     {
-        /* @phpstan-ignore-next-line */
-        if (!$this->security || !$this->security->getUser()) {
+        if (!$this->canBlame()) {
             return;
         }
-
-        /** @phpstan-ignore-next-line  */
-        $user = $this->security->getUser();
 
         /** @var ContentVersionInterface $version */
         $version = $event->getEntity();
         /** @var ContentInterface $content */
         $content = $event->getRequest()->attributes->get('content');
 
-        $published = $version->getMetaField('published', []);
+        $this->addHistory($version, 'publish');
+
+        if ($content->getPublishedVersion()) {
+            $this->addHistory($content->getPublishedVersion(), 'unpublish', [
+                'new_version' => 'v'.$version->getVersionNumber(),
+            ]);
+        }
+    }
+
+    protected function canBlame(): bool
+    {
+        /* @phpstan-ignore-next-line */
+        return $this->security && $this->security->getUser();
+    }
+
+    protected function getUser(): array
+    {
+        /** @phpstan-ignore-next-line  */
+        $user = $this->security->getUser();
+
         $userData = [
             'id' => $user->getUserIdentifier(),
         ];
+
         if (method_exists($user, 'getDisplayName')) {
             $userData['name'] = $user->getDisplayName();
         }
-        $published[] = [
-            'action' => 'publish',
+
+        return $userData;
+    }
+
+    protected function addHistory(ContentVersionInterface $contentVersion, string $action, array $extra = []): void
+    {
+        $history = $contentVersion->getMetaField('history', []);
+        $history[] = [
+            'action' => $action,
             'date' => new \DateTime(),
-            'user' => $userData,
+            'user' => $this->getUser(),
+            'extra' => $extra,
         ];
-        $version->setMetaField('published', $published);
-
-        if ($content->getPublishedVersion()) {
-            $published = $content->getPublishedVersion()->getMetaField('published', []);
-
-            $userData = [
-                'id' => $user->getUserIdentifier(),
-            ];
-
-            if (method_exists($user, 'getDisplayName')) {
-                $userData['name'] = $user->getDisplayName();
-            }
-
-            $published[] = [
-                'action' => 'unpublish',
-                'date' => new \DateTime(),
-                'user' => $userData,
-                'new_version' => 'v'.$version->getVersionNumber(),
-            ];
-
-            $content->getPublishedVersion()->setMetaField('published', $published);
-        }
+        $contentVersion->setMetaField('history', $history);
     }
 }

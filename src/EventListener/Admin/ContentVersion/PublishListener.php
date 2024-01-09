@@ -47,6 +47,7 @@ class PublishListener extends AbstractContentVersionListener
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_PUBLISH_EXCEPTION => [
                 ['onEventDispatchContentTypeEvent', 10],
+                ['onException', 0],
             ],
         ];
     }
@@ -77,6 +78,17 @@ class PublishListener extends AbstractContentVersionListener
     }
 
     public function onFailure(FailureEvent $event): void
+    {
+        $contentConfig = $event->getRequest()->attributes->get('_content_config');
+
+        $this->flashNotifier->addTrans('error', "admin_{$contentConfig['_id']}.version_publish.failed_flash", ['%exception%' => $event->getException()->getMessage()], 'sfs_cms_contents');
+
+        $content = $event->getRequest()->attributes->get('content');
+
+        $event->setResponse($this->redirectBack($contentConfig['_id'], $content, $event->getRequest()));
+    }
+
+    public function onException(FailureEvent $event): void
     {
         $contentConfig = $event->getRequest()->attributes->get('_content_config');
 

@@ -284,11 +284,16 @@ admin_page:
             created.title: "Creada"
             publish_status.title: "Publicada"
             keep.title: "Keep"
+            layout.title: "Diseño"
         actions:
             save.button: "Guardar cambios"
             cancel.button: "Cancelar"
+            recompile.link: "Recompilar"
         compiled:
             title: "Contenido compilado"
+            error: "Este contenido tiene errores en la compilación, trata de editarlo para resolverlos o de republicar"
+            pre_compile_content_disabled: "La pre-compilación de contenido está desactivada para esta versión"
+            pre_compile_modules_disabled: "La pre-compilación de módulos está desactivada para esta versión"
         data:
             title: "Datos"
         linked_routes:
@@ -298,7 +303,15 @@ admin_page:
         history:
             title: "Histórico"
             action:
-                publish: "Publicada"
-                unpublish: "Despublicada"
+                publish: "Publicada por %userName% el %date%"
+                unpublish: "Despublicada por %userName% el %date% (nueva versión: %new_version%)"
+                lock: "Versión marcada para mantener por %userName% el %date%"
+                unlock: "Versión marcada para no mantener por %userName% el %date%"
+                recompile: "Versión recompilada por %userName% el %date%"
+                create: "Creada por %userName% el %date%"
         metadata:
             title: "Metadatos"
+
+    version_recompile:
+        success_flash: "La versión se ha recompilado"
+        failed_flash: "Se ha producido un error al recompilar la versión<br/><small>%exception%</small>"

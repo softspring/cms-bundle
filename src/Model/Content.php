@@ -149,6 +149,24 @@ abstract class Content implements ContentInterface
         }
     }
 
+    public function getCanonicalRoutePath(string $locale = null): ?RoutePathInterface
+    {
+        // TODO, by now there is not a canonical mark in route paths, so we return the first one
+        foreach ($this->getRoutes() as $route) {
+            foreach ($route->getPaths() as $path) {
+                if (!$locale) {
+                    return $path;
+                }
+
+                if ($path->getLocale() === $locale) {
+                    return $path;
+                }
+            }
+        }
+
+        return null;
+    }
+
     public function getExtraData(): ?array
     {
         return $this->extraData;

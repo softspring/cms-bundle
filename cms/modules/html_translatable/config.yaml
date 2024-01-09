@@ -1,5 +1,5 @@
 module:
-    revision: 1
+    revision: 2
     group: 'html'
     edit_template: '@module/html_translatable/edit.html.twig'
     render_template: '@module/html_translatable/render.html.twig'

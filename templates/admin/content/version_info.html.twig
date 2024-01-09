@@ -16,6 +16,23 @@
         aria-current="content">{{ ('admin_'~content_type~'.version_info.breadcrumb')|trans({'%name%':entity.name, '%versionNumber%': version_entity.versionNumber}) }}</li>
 {% endblock breadcrums_content %}
 
+
+{% macro drawEsiCalls(content) %}
+<div>
+    {% for esiCall in sfs_cms_search_content_esi_calls(content) %}
+    <p><code class="text-success">ESI:
+        {% if esiCall.processed.type|default(false) == 'block' %}
+            Block {{ esiCall.processed.block_type }}
+        {% elseif esiCall.processed.type|default(false) == 'menu' %}
+            Menu {{ esiCall.processed.menu_type }}
+        {% else %}
+            {{ esiCall.url }}
+        {% endif %}
+        </code></p>
+    {% endfor %}
+</div>
+{% endmacro %}
+
 {% block content %}
     <h1 class="h3">{{ ('admin_'~content_type~'.versions.title')|trans({'%name%':entity.name}) }}</h1>
 
@@ -80,6 +97,8 @@
                     <dl>
                         <dt>{{ ('admin_'~content_type~'.version_info.info.version.title')|trans }}</dt>
                         <dd>v{{ version_entity.versionNumber }}</dd>
+                        <dt>{{ ('admin_'~content_type~'.version_info.info.layout.title')|trans }}</dt>
+                        <dd>{{ (version_entity.layout~'.title')|trans({}, 'sfs_cms_layouts') }}</dd>
                         <dt>{{ ('admin_'~content_type~'.version_info.info.origin.title')|trans }}</dt>
                         <dd>{{ ('admin_'~content_type~'.versions.origin.'~(version_entity.origin|default('null')))|trans }} {{ version_entity.originDescription ? '('~version_entity.originDescription~')' : '' }}</dd>
                         <dt>{{ ('admin_'~content_type~'.version_info.info.created.title')|trans }}</dt>
@@ -135,7 +154,12 @@
             </div>
             <div class="col-9">
                 <div class="bg-white p-3 mb-3">
-                    <a class="btn btn-sm btn-outline-secondary float-end disabled">Recompile</a>
+                    {% if not content_config.admin.version_recompile.is_granted or is_granted(content_config.admin.version_recompile.is_granted, entity) %}
+                        <a class="btn btn-sm btn-outline-secondary float-end"  href="{{ url('sfs_cms_admin_content_'~content_type~'_recompile_version', {'content':entity, 'version': version_entity, 'back': 'version_info'}) }}">{{ ('admin_'~content_type~'.version_info.actions.recompile.link')|trans }}</a>
+                    {% else %}
+                        <a class="btn btn-sm btn-outline-secondary float-end disabled">{{ ('admin_'~content_type~'.version_info.actions.recompile.link')|trans }}</a>
+                    {% endif %}
+
                     <h4 class="border-bottom border-1 border-light pb-2 mb-3">{{ ('admin_'~content_type~'.version_info.compiled.title')|trans }}</h4>
                     {% if version.hasCompileErrors %}
                         <div class="alert alert-danger" role="alert">
@@ -143,14 +167,66 @@
                                title="This version has some compilation error"></i>
                             {{ ('admin_'~content_type~'.version_info.compiled.error')|trans }}
                         </div>
+                    {% else %}
+                        {% if version_entity.compiled is empty %}
+                            <div class="alert alert-warning" role="alert">
+                                {{ ('admin_'~content_type~'.version_info.compiled.pre_compile_content_disabled')|trans }}
+                            </div>
+                        {% endif %}
+                        {% if version_entity.compiledModules is empty %}
+                            <div class="alert alert-warning" role="alert">
+                                {{ ('admin_'~content_type~'.version_info.compiled.pre_compile_modules_disabled')|trans }}
+                            </div>
+                        {% endif %}
                     {% endif %}
-                    <pre class="overflow-auto"
-                         style="max-height: 300px"><code>{{ version_entity.compiled|json_encode(constant('JSON_PRETTY_PRINT')) }}</code></pre>
+
+                    <div class="accordion" id="accordionCompiled">
+                        <div class="accordion-item">
+                            {% set first = false %}
+                            {% for key,compiled in version_entity.compiled %}
+                                {% set keyCleaned = key|replace({'/': '', ' ': ''}) %}
+                                <h2 class="accordion-header" id="heading{{ keyCleaned }}">
+                                    <button class="accordion-button {{ first?'':'collapsed' }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ keyCleaned }}" aria-expanded="{{ first?'true':'false' }}" aria-controls="collapse{{ keyCleaned }}">
+                                        Pre-compiled content {{ key }}
+                                    </button>
+                                </h2>
+                                <div id="collapse{{ keyCleaned }}" class="accordion-collapse collapse {{ first?'show':'' }}" aria-labelledby="heading{{ keyCleaned }}" data-bs-parent="#accordionCompiled">
+                                    <div class="accordion-body">
+                                        {% if compiled is not iterable %}
+                                            {{ _self.drawEsiCalls(compiled) }}
+                                            <pre class="overflow-auto"
+                                                 style="max-height: 600px"><code class="text-muted">{{ compiled }}</code></pre>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% set first = false %}
+                            {% endfor %}
+                            {% for key,compiled in version_entity.compiledModules %}
+                                {% set keyCleaned = ('modules'~key)|replace({'/': '', ' ': ''}) %}
+                                <h2 class="accordion-header" id="heading{{ keyCleaned }}">
+                                    <button class="accordion-button {{ first?'':'collapsed' }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ keyCleaned }}" aria-expanded="{{ first?'true':'false' }}" aria-controls="collapse{{ keyCleaned }}">
+                                        Pre-compiled modules {{ key }}
+                                    </button>
+                                </h2>
+                                <div id="collapse{{ keyCleaned }}" class="accordion-collapse collapse {{ first?'show':'' }}" aria-labelledby="heading{{ keyCleaned }}" data-bs-parent="#accordionCompiled">
+                                    <div class="accordion-body">
+                                        {% for container, content in compiled|filter((content) => content is not iterable) %}
+                                            <strong>{{ container }}</strong>
+                                            {{ _self.drawEsiCalls(content) }}
+                                            <pre class="overflow-auto"
+                                                 style="max-height: 300px"><code class="text-muted">{{ content }}</code></pre>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% set first = false %}
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
 
                 <div class="bg-white p-3 mb-3">
                     <h4 class="border-bottom border-1 border-light pb-2 mb-3">{{ ('admin_'~content_type~'.version_info.data.title')|trans }}</h4>
-                    <code>
+                    <code class="text-muted">
                         <pre class="overflow-auto"
                              style="max-height: 300px">{{ version_entity.data|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
                     </code>
@@ -185,27 +261,23 @@
 
         <h5>{{ ('admin_'~content_type~'.version_info.history.title')|trans }}</h5>
         <ul>
-            {% set created = version_entity.metaField('creator') %}
-            <li>
-                Created
-                {% if creator %}by {{ creator.name|default(creator.id)|default('') }}{% endif %}
-                at {{ version_entity.createdAt ? version_entity.createdAt|date('H:i:s d-m-Y') : '' }}
-            </li>
-
-            {% for publishInfo in version_entity.metaField('published', []) %}
+            {% for history in version_entity.metaField('history', []) %}
                 <li>
-                    {{ ('admin_'~content_type~'.version_info.history.action.'~(publishInfo.action|default('publish')))|trans }}
-                    {% if publishInfo.user %} by {{ publishInfo.user.name|default(publishInfo.user.id)|default('') }}{% endif %}
-                    at {{ publishInfo.date ? publishInfo.date.date|date('H:i:s d-m-Y') : '' }}
-                    {% if publishInfo.new_version|default(false) %}
-                        (new version {{ publishInfo.new_version }})
-                    {% endif %}
+                    {% set transAttributes = {
+                        '%userName%': history.user ? history.user.name|default(history.user.id)|default('') : '',
+                        '%date%': history.date ? history.date.date|date('H:i:s d-m-Y') : '',
+                    } %}
+                    {% for key,value in history.extra %}
+                        {% set transAttributes = transAttributes|merge({('%'~key~'%'): value}) %}
+                    {% endfor %}
+
+                    {{ ('admin_'~content_type~'.version_info.history.action.'~(history.action))|trans(transAttributes) }}
                 </li>
             {% endfor %}
         </ul>
 
         {#        <h5>{{ ('admin_'~content_type~'.version_info.metadata.title')|trans }}</h5> #}
-        {#        <code> #}
+        {#        <code class="text-muted"> #}
         {#            <pre class="overflow-auto" #}
         {#                 style="max-height: 300px">{{ version_entity.meta|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre> #}
         {#        </code> #}
