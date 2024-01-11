@@ -14,6 +14,7 @@ use Softspring\CmsBundle\Form\Admin\Content\ContentUpdateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionCreateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionImportForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionListFilterForm;
+use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionTranslateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionUpdateForm;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
@@ -175,6 +176,12 @@ class ContentTest extends TestCase
                 ],
                 'version_recompile' => [
                     'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_RECOMPILE_VERSION',
+                ],
+                'version_translations' => [
+                    'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_TRANSLATIONS',
+                    'view' => '@SfsCms/admin/content/version_translations.html.twig',
+                    'type' => VersionTranslateForm::class,
+                    'success_redirect_to' => '',
                 ],
             ],
         ], $config);
