@@ -1,6 +1,6 @@
 {% block translatable_widget %}
     {% if form|length > 1 %}
-        {% for field in form %}
+        {% for field in form|filter((f, locale) => not (locale starts with '_')) %}
             <div class="input-group mb-3 flex-nowrap">
                 <div class="input-group-prepend">
                     <span class="input-group-text">
@@ -11,6 +11,8 @@
                 {{ form_widget(field) }}
             </div>
         {% endfor %}
+        {{ form_widget(form._trans_id) }}
+        {{ form_widget(form._default) }}
     {% else %}
         {{ form_widget(form|first) }}
     {% endif %}

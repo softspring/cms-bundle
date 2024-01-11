@@ -11,6 +11,7 @@ interface ContentVersionInterface
     public const ORIGIN_EDIT = 1;
     public const ORIGIN_FIXTURE = 2;
     public const ORIGIN_IMPORT = 3;
+    public const ORIGIN_TRANSLATIONS = 4;
 
     public function getId();
 

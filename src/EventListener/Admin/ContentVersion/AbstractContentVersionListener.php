@@ -108,7 +108,9 @@ abstract class AbstractContentVersionListener implements EventSubscriberInterfac
 
         $event->getData()['content_type'] = $contentConfig['_id'];
         $event->getData()['content_config'] = $contentConfig;
+        /* @deprecated */
         $event->getData()['entity'] = $event->getRequest()->attributes->get('content');
+        $event->getData()['content_entity'] = $event->getRequest()->attributes->get('content');
 
         $event->setTemplate($this->getOption($event->getRequest(), 'view'));
     }

@@ -3,7 +3,6 @@
 namespace Softspring\CmsBundle\EventListener\Admin\Content;
 
 use Softspring\CmsBundle\Model\ContentVersionInterface;
-use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\Component\CrudlController\Event\LoadEntityEvent;
 use Softspring\Component\CrudlController\Event\NotFoundEvent;
@@ -69,14 +68,12 @@ class PreviewListener extends AbstractContentListener
 
         parent::onView($event);
 
-        // add enabled locales
-        $sitesLocales = $content->getSites()->map(fn (SiteInterface $site) => $site->getConfig()['locales'])->toArray();
-        $enabledLocales = call_user_func_array('array_merge', $sitesLocales);
-        $enabledLocales = array_unique($enabledLocales);
-        $event->getData()['enabledLocales'] = $enabledLocales;
+        /* @deprecated */
+        $event->getData()['enabledLocales'] = $content->getLocales();
+        $event->getData()['content_entity'] = $content;
 
-        if ($event->getRequest()->attributes->get('version')) {
-            $version = $content->getVersions()->filter(fn (ContentVersionInterface $version) => $version->getId() == $event->getRequest()->attributes->get('version'))->first();
+        if ($event->getRequest()->query->get('version')) {
+            $version = $content->getVersions()->filter(fn (ContentVersionInterface $version) => $version->getId() == $event->getRequest()->query->get('version'))->first();
         }
 
         $event->getData()['version'] = $version ?? $content->getVersions()->first();

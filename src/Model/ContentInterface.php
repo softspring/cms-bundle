@@ -60,4 +60,14 @@ interface ContentInterface
     public function getLastVersion(): ?ContentVersionInterface;
 
     public function setLastVersion(?ContentVersionInterface $lastVersion): void;
+
+    public function getDefaultLocale(): ?string;
+
+    public function setDefaultLocale(?string $defaultLocale): void;
+
+    public function getLocales(): ?array;
+
+    public function setLocales(?array $locales): void;
+
+    public function addLocale(string $locale): void;
 }

@@ -1,0 +1,38 @@
+{% trans_default_domain 'sfs_cms_contents' %}
+
+{% embed '@SfsCms/admin/_embeds/_card.html.twig' with {'title': ('admin_'~content_type~'.read.translations.title')|trans} %}
+    {% trans_default_domain 'sfs_cms_contents' %}
+
+    {% block title %}
+        {% if not content_config.admin.version_translations.is_granted or is_granted(content_config.admin.version_translations.is_granted, entity) %}
+            <a class="btn btn-sm btn-outline-secondary float-end"  href="{{ url('sfs_cms_admin_content_'~content_type~'_translations', {'content':entity}) }}">{{ ('admin_'~content_type~'.read.translations.edit.link')|trans }}</a>
+        {% else %}
+            <a class="btn btn-sm btn-outline-secondary float-end disabled">{{ ('admin_'~content_type~'.read.translations.edit.link')|trans }}</a>
+        {% endif %}
+        {{ parent() }}
+    {% endblock %}
+
+    {% block content %}
+        <p class="d-flex mb-2">
+            <span class="pe-2">Default language</span>
+            <strong>{{ entity.defaultLocale }}</strong>
+        </p>
+        <p class="d-flex mb-2">
+            <span class="pe-2">Languages</span>
+            <strong>{{ entity.locales|join(', ') }}</strong>
+        </p>
+
+{#        {% set stats = sfs_trans_stats(content, entity.site.languages) %}#}
+{#        {% for locale,localeStats in stats %}#}
+{#            <p class="d-flex">#}
+{#                <strong>{{ locale }}</strong>#}
+{#                <span class="col-10">#}
+{#                                                {% if localeStats.total %}#}
+{#                                                    {{ (localeStats.translated/localeStats.total*100)|round }}%#}
+{#                                                    <span class="text-tertiary">({{ localeStats.translated }}/{{ localeStats.total }})</span>#}
+{#                                                {% endif %}#}
+{#                                            </span>#}
+{#            </p>#}
+{#        {% endfor %}#}
+    {% endblock %}
+{% endembed %}

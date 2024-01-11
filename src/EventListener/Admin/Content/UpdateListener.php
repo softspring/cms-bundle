@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\EventListener\Admin\Content;
 
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\SfsCmsEvents;
+use Softspring\Component\CrudlController\Event\ApplyEvent;
 use Softspring\Component\CrudlController\Event\FormPrepareEvent;
 use Softspring\Component\CrudlController\Event\SuccessEvent;
 use Softspring\Component\CrudlController\Event\ViewEvent;
@@ -44,6 +45,7 @@ class UpdateListener extends AbstractContentListener
             ],
             SfsCmsEvents::ADMIN_CONTENTS_UPDATE_APPLY => [
                 ['onEventDispatchContentTypeEvent', 10],
+                ['onApply', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENTS_UPDATE_SUCCESS => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -73,7 +75,22 @@ class UpdateListener extends AbstractContentListener
         $event->setFormOptions([
             'method' => 'POST',
             'content_config' => $contentConfig,
+            'content' => $event->getEntity(),
         ]);
+    }
+
+    public function onApply(ApplyEvent $event): void
+    {
+        if (!$event->getForm()->has('addLocale')) {
+            return;
+        }
+
+        /** @var ContentInterface $content */
+        $content = $event->getEntity();
+
+        foreach ($event->getForm()->get('addLocale')->getData() ?? [] as $locale) {
+            $content->addLocale($locale);
+        }
     }
 
     public function onSuccess(SuccessEvent $event): void

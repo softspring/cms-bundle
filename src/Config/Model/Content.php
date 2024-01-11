@@ -11,6 +11,7 @@ use Softspring\CmsBundle\Form\Admin\Content\ContentUpdateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionCreateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionImportForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionListFilterForm;
+use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionTranslateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionUpdateForm;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -161,15 +162,12 @@ class Content implements ConfigurationInterface
                             ];
 
                             foreach ($deprecatedOptions as $deprecatedOption => $newOption) {
-                                [$group, $attribute] = explode('.', $newOption);
                                 if (isset($data[$deprecatedOption])) {
                                     trigger_deprecation('softspring/cms-bundle', '5.2', 'The "%s" option is deprecated, use "%s" instead.', $deprecatedOption, $newOption);
+                                    [$group, $attribute] = explode('.', $newOption);
                                     $data[$group][$attribute] = $data[$group][$attribute] ?? $data[$deprecatedOption];
                                     unset($data[$deprecatedOption]);
                                 }
-
-                                /* @deprecated allow old options to prevent errors on existing templates */
-                                $data[$deprecatedOption] = $data[$group][$attribute] ?? null;
                             }
 
                             return $data;
@@ -364,6 +362,16 @@ class Content implements ConfigurationInterface
                                 ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSION_INFO')->end()
                                 ->scalarNode('view')->defaultValue('@SfsCms/admin/content/version_info.html.twig')->end()
                                 ->scalarNode('type')->defaultValue(VersionUpdateForm::class)->end()
+                                ->scalarNode('success_redirect_to')->defaultValue('')->end()
+                            ->end()
+                        ->end()
+
+                        ->arrayNode('version_translations')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_TRANSLATIONS')->end()
+                                ->scalarNode('view')->defaultValue('@SfsCms/admin/content/version_translations.html.twig')->end()
+                                ->scalarNode('type')->defaultValue(VersionTranslateForm::class)->end()
                                 ->scalarNode('success_redirect_to')->defaultValue('')->end()
                             ->end()
                         ->end()

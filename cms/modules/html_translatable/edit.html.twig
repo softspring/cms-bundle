@@ -2,7 +2,7 @@
 {% import '@SfsCms/macros/modules_edit.html.twig' as module %}
 
 {% set defaultDivClass = 'text-break content-escape' %}
-{% for locale,localeField in form.code %}
+{% for locale,localeField in form.code|filter((f, locale) => not (locale starts with '_')) %}
     <div {{ module.link_id(form.id) }} {{ module.link_class(form.class) }}
         {{ module.link_content(localeField, locale, false, 'html_translatable.form.code.preview.placeholder') }}
          data-edit-content-validate="html"

@@ -28,6 +28,7 @@
             <div class="container-fluid bg-white p-3">
                 {% block form_fields %}
                     {{ form_row(form.name) }}
+                    {% if form.addLocale is defined %}{{ form_row(form.addLocale) }}{% endif %}
                     {% if form.extraData is defined %}{{ form_widget(form.extraData) }}{% endif %}
                     {{ form_label(form.routes) }}
                     {{ form_widget(form.routes.0) }}

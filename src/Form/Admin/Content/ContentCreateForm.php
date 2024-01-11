@@ -6,7 +6,9 @@ use Softspring\CmsBundle\Form\Admin\Route\RouteCollectionType;
 use Softspring\CmsBundle\Form\Admin\SiteChoiceType;
 use Softspring\CmsBundle\Form\Type\DynamicFormType;
 use Softspring\CmsBundle\Model\ContentInterface;
+use Softspring\CmsBundle\Translator\TranslatableContext;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\Options;
@@ -14,6 +16,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ContentCreateForm extends AbstractType implements ContentCreateFormInterface
 {
+    public function __construct(protected TranslatableContext $translatableContext)
+    {
+    }
+
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -27,6 +33,14 @@ class ContentCreateForm extends AbstractType implements ContentCreateFormInterfa
         $resolver->setNormalizer('label_format', function (Options $options, $value) {
             return "admin_{$options['content_config']['_id']}.form.%name%.label";
         });
+
+        $resolver->setDefault('default_locale', $this->translatableContext->getDefaultLocale());
+        $resolver->setRequired('default_locale');
+        $resolver->setAllowedTypes('default_locale', ['string']);
+
+        $resolver->setDefault('locales', $this->translatableContext->getEnabledLocales());
+        $resolver->setRequired('locales');
+        $resolver->setAllowedTypes('locales', ['array']);
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -36,6 +50,16 @@ class ContentCreateForm extends AbstractType implements ContentCreateFormInterfa
                 'data-generate-underscore' => 'data-route-id',
                 'data-generate-slug' => 'data-route-path',
             ],
+        ]);
+
+        $builder->add('defaultLocale', ChoiceType::class, [
+            'choices' => array_combine($options['locales'], $options['locales']),
+        ]);
+
+        $builder->add('locales', ChoiceType::class, [
+            'multiple' => true,
+            'expanded' => true,
+            'choices' => array_combine($options['locales'], $options['locales']),
         ]);
 
         $builder->add('sites', SiteChoiceType::class, [
