@@ -79,7 +79,14 @@
                             {% endif %}
                             {#                            <li><a class="dropdown-item" href="#">Unpublish</a></li> #}
                             <li><a class="dropdown-item disabled" href="#">Recompile</a></li>
-                            <li><a class="dropdown-item disabled" href="#">Translate</a></li>
+                            <li>
+                                {% if not content_config.admin.version_translations.is_granted or is_granted(content_config.admin.version_translations.is_granted, content_entity) %}
+                                    <a class="dropdown-item" href="{{ url('sfs_cms_admin_content_'~content_type~'_translations', {'content':content_entity, 'version': version_entity}) }}">{{ ('admin_'~content_type~'.tabs_menu.translations')|trans }}</a>
+                                {% else %}
+                                    <a class="dropdown-item disabled">{{ ('admin_'~content_type~'.tabs_menu.translations')|trans }}</a>
+                                {% endif %}
+                            </li>
+
                             <li>
                                 <hr class="dropdown-divider">
                             </li>

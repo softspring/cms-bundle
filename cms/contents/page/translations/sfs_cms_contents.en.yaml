@@ -129,7 +129,7 @@ admin_page:
 
     translations:
         meta.title: "Page translations"
-        title: "%name% (v%versionNumber%)"
+        title: "Page translations (v%versionNumber%)"
         breadcrumb: "Page translations"
         actions:
             cancel.button: "Cancel"
