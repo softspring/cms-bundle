@@ -3,6 +3,7 @@
 namespace Softspring\CmsBundle\Helper;
 
 use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
 
 class LocaleHelper
@@ -24,7 +25,7 @@ class LocaleHelper
     /**
      * @param SiteInterface[]|null $availableSites
      */
-    public function normalizeFormAvailableLocales(?array $value, ?array $availableSites): array
+    public function normalizeFormAvailableLocalesForSites(?array $value, ?array $availableSites): array
     {
         if (is_array($value)) {
             $availableLocales = $value;
@@ -35,6 +36,22 @@ class LocaleHelper
             }
         } else {
             $availableLocales = $this->enabledLocales;
+        }
+
+        $availableLocales = array_values($availableLocales);
+        $availableLocales = array_unique($availableLocales);
+
+        sort($availableLocales);
+
+        return $availableLocales;
+    }
+
+    public function normalizeFormAvailableLocalesForContent(?array $value, ContentInterface $content): array
+    {
+        if (is_array($value)) {
+            $availableLocales = $value;
+        } else {
+            $availableLocales = $content->getLocales();
         }
 
         $availableLocales = array_values($availableLocales);
