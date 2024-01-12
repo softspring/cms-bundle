@@ -36,13 +36,11 @@
                     </div>
 
                     <div class="text-end me-3">
-                        {% if content_entity.locales|length > 1 %}
-                            <select class="form-select" id="contentEditionLanguageSelection">
-                                {% for locale in content_entity.locales %}
-                                    <option value="{{ locale|lower }}">{{ locale|upper }}</option>
-                                {% endfor %}
-                            </select>
-                        {% endif %}
+                        <select class="form-select {#{{ content_entity.locales|length <= 1 ? 'd-none' : '' }}#}" id="contentEditionLanguageSelection">
+                            {% for locale in content_entity.locales %}
+                                <option value="{{ locale|lower }}">{{ locale|upper }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                     <div class="text-end me-3">
                         {% if entity.sites|length > 1 %}
