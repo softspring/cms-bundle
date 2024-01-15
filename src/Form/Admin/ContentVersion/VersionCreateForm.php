@@ -3,9 +3,11 @@
 namespace Softspring\CmsBundle\Form\Admin\ContentVersion;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Softspring\CmsBundle\Config\Exception\InvalidContentException;
 use Softspring\CmsBundle\Form\Admin\LayoutContentType;
 use Softspring\CmsBundle\Form\Module\ModuleCollectionType;
 use Softspring\CmsBundle\Form\Type\LayoutType;
+use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Symfony\Component\Form\AbstractType;
@@ -17,11 +19,8 @@ use Symfony\Component\Validator\Constraints\NotEqualTo;
 
 class VersionCreateForm extends AbstractType implements VersionCreateFormInterface
 {
-    protected EntityManagerInterface $em;
-
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(protected EntityManagerInterface $em, protected CmsHelper $cmsHelper)
     {
-        $this->em = $em;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -51,9 +50,15 @@ class VersionCreateForm extends AbstractType implements VersionCreateFormInterfa
         });
     }
 
+    /**
+     * @throws InvalidContentException
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('layout', LayoutType::class);
+        $builder->add('layout', LayoutType::class, [
+            'choices' => $this->cmsHelper->layout()->getAvailableLayouts($options['content']),
+        ]);
+
         $builder->add('data', LayoutContentType::class, [
             'layout' => $options['layout'],
             'content_type' => $options['content_type'],

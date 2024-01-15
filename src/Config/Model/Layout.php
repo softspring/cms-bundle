@@ -27,6 +27,10 @@ class Layout implements ConfigurationInterface
                 ->scalarNode('render_template')->defaultValue("@layout/{$this->layoutName}/render.html.twig")->end()
                 ->scalarNode('edit_template')->defaultValue("@layout/{$this->layoutName}/edit.html.twig")->end()
 
+                ->arrayNode('compatible_contents')
+                    ->scalarPrototype()->end()
+                ->end()
+
                 ->arrayNode('containers')
                     ->useAttributeAsKey('key')
                     ->arrayPrototype()

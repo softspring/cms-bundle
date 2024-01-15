@@ -37,6 +37,9 @@ class Content implements ConfigurationInterface
 
                 ->scalarNode('entity_class')->isRequired()->end()
                 ->scalarNode('default_layout')->defaultValue('default')->end()
+                ->arrayNode('allowed_layouts')
+                    ->scalarPrototype()->end()
+                ->end()
 
                 ->arrayNode('containers')
                     ->defaultValue([])

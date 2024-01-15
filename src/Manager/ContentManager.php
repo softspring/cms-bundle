@@ -4,7 +4,9 @@ namespace Softspring\CmsBundle\Manager;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Config\Exception\InvalidContentException;
+use Softspring\CmsBundle\Config\Exception\InvalidLayoutException;
+use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\Component\CrudlController\Manager\CrudlEntityManagerTrait;
@@ -13,15 +15,11 @@ class ContentManager implements ContentManagerInterface
 {
     use CrudlEntityManagerTrait;
 
-    protected EntityManagerInterface $em;
-    protected ContentVersionManagerInterface $contentVersionManager;
-    protected CmsConfig $cmsConfig;
-
-    public function __construct(EntityManagerInterface $em, ContentVersionManagerInterface $contentVersionManager, CmsConfig $cmsConfig)
-    {
-        $this->em = $em;
-        $this->contentVersionManager = $contentVersionManager;
-        $this->cmsConfig = $cmsConfig;
+    public function __construct(
+        protected EntityManagerInterface $em,
+        protected ContentVersionManagerInterface $contentVersionManager,
+        protected CmsHelper $cmsHelper,
+    ) {
     }
 
     public function getTargetClass(): string
@@ -51,10 +49,14 @@ class ContentManager implements ContentManagerInterface
         return $repo;
     }
 
+    /**
+     * @throws InvalidLayoutException
+     * @throws InvalidContentException
+     */
     public function createVersion(ContentInterface $content, ContentVersionInterface $prevVersion = null, ?int $origin = ContentVersionInterface::ORIGIN_UNKNOWN): ContentVersionInterface
     {
         $version = $this->contentVersionManager->createEntity();
-        $version->setLayout('default');
+        $version->setLayout($this->cmsHelper->layout()->getDefaultLayout($content));
 
         if (!$prevVersion && $content->getLastVersion()) {
             $prevVersion = $content->getLastVersion();
@@ -84,7 +86,7 @@ class ContentManager implements ContentManagerInterface
     {
         $className = is_object($objectOrClassName) ? get_class($objectOrClassName) : $objectOrClassName;
 
-        foreach ($this->cmsConfig->getContents() as $type => $config) {
+        foreach ($this->cmsHelper->config()->getContents() as $type => $config) {
             if ($config['entity_class'] === $className) {
                 return $type;
             }
@@ -104,6 +106,6 @@ class ContentManager implements ContentManagerInterface
             throw new \Exception('type is required');
         }
 
-        return $this->cmsConfig->getContent($type, true);
+        return $this->cmsHelper->config()->getContent($type, true);
     }
 }

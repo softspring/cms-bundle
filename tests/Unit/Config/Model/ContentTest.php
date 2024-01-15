@@ -184,6 +184,7 @@ class ContentTest extends TestCase
                     'success_redirect_to' => '',
                 ],
             ],
+            'allowed_layouts' => [],
         ], $config);
     }
 }

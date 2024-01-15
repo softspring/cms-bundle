@@ -6,15 +6,12 @@ use Softspring\CmsBundle\Config\CmsConfig;
 
 class CmsHelper
 {
-    protected CmsConfig $cmsConfig;
-    protected SiteHelper $siteHelper;
-    protected LocaleHelper $localeHelper;
-
-    public function __construct(CmsConfig $cmsConfig, SiteHelper $siteHelper, LocaleHelper $localeHelper)
-    {
-        $this->cmsConfig = $cmsConfig;
-        $this->siteHelper = $siteHelper;
-        $this->localeHelper = $localeHelper;
+    public function __construct(
+        protected CmsConfig $cmsConfig,
+        protected SiteHelper $siteHelper,
+        protected LocaleHelper $localeHelper,
+        protected LayoutHelper $layoutHelper
+    ) {
     }
 
     public function config(): CmsConfig
@@ -30,5 +27,10 @@ class CmsHelper
     public function locale(): LocaleHelper
     {
         return $this->localeHelper;
+    }
+
+    public function layout(): LayoutHelper
+    {
+        return $this->layoutHelper;
     }
 }
