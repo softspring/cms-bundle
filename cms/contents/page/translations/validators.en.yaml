@@ -1,0 +1,3 @@
+admin_page:
+    content:
+        change_layout: "Layout has changed. Maybe some modules has been lost. If you save this page, changes will be performed."

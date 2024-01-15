@@ -66,7 +66,9 @@ class VersionCreateForm extends AbstractType implements VersionCreateFormInterfa
         ]);
         $builder->add('_ok', HiddenType::class, [
             'mapped' => false,
-            'constraints' => new NotEqualTo(1),
+            'constraints' => new NotEqualTo(1, null, 'admin_'.$options['content_type'].'.content.change_layout', null, [
+                'severity' => 'warning',
+            ]),
         ]);
 
         $builder->add('module_prototypes_collection', ModuleCollectionType::class, [

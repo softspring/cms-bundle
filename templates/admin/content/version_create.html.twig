@@ -109,13 +109,15 @@
         document.getElementById("version_create_form__ok").value = 0;
     </script>
 
-    {% if alert|default(false) or app.request.query.has('saved') %}
+    {% if alert|default(false) and alert[0] is defined and alert[1] is defined %}
         <div class="fixed-top w-50 float-right m-5">
-            <div class="alert alert-{{ alert[0]|default('success')|replace({'error':'danger'}) }} alert-dismissible fade show" role="alert">
-                {{ alert[1]|default('admin_'~content_type~'.content.success_saved')|trans|raw }}
+            <div class="alert alert-{{ alert[0]|replace({'error':'danger'}) }} alert-dismissible fade show" role="alert">
+                {{ alert[1]|trans|raw }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         </div>
+    {% else %}
+        {% include '@SfsComponents/flash-messages/alerts.html.twig' %}
     {% endif %}
 
     {% include '@SfsMedia/forms/media_type_modal.html.twig' %}

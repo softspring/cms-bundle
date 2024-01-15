@@ -153,9 +153,11 @@ class CreateListener extends AbstractContentVersionListener
         $version = $event->getEntity();
         $content = $version->getContent();
 
+        $this->flashNotifier->addTrans('success', "admin_{$contentConfig['_id']}.content.success_saved", [], 'sfs_cms_contents');
+
         switch ($request->request->get('goto')) {
             case 'content':
-                $url = $this->router->generate("sfs_cms_admin_content_{$contentConfig['_id']}_content", ['content' => $content, 'saved' => 1]);
+                $url = $this->router->generate("sfs_cms_admin_content_{$contentConfig['_id']}_content", ['content' => $content]);
                 $event->setResponse(new RedirectResponse($url));
                 break;
 
@@ -194,6 +196,11 @@ class CreateListener extends AbstractContentVersionListener
     public function onFormInvalidShowAlert(FormInvalidEvent $event): void
     {
         $request = $event->getRequest();
+
+        if (1 == $event->getForm()->getErrors()->count() && '_ok' == $event->getForm()->getErrors()[0]->getOrigin()->getName()) {
+            return;
+        }
+
         $contentConfig = $request->attributes->get('_content_config');
 
         $request->attributes->set('_content_version_alert', ['warning', 'admin_'.$contentConfig['_id'].'.content.validation_error']);
