@@ -197,6 +197,15 @@ abstract class Content implements ContentInterface
         $this->publishedVersion = $publishedVersion;
     }
 
+    public function getStatus(): string
+    {
+        if ($this->getPublishedVersion()) {
+            return 'published';
+        }
+
+        return 'draft';
+    }
+
     public function getLastVersion(): ?ContentVersionInterface
     {
         return $this->lastVersion;

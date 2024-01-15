@@ -57,6 +57,8 @@ interface ContentInterface
 
     public function setPublishedVersion(?ContentVersionInterface $publishedVersion): void;
 
+    public function getStatus(): string;
+
     public function getLastVersion(): ?ContentVersionInterface;
 
     public function setLastVersion(?ContentVersionInterface $lastVersion): void;

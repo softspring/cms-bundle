@@ -1,5 +1,8 @@
 page:
     name: "Page"
+    status:
+        published: "Published"
+        draft: "Draft"
 
 admin_page:
     entity_not_found_flash: "Page not found"
@@ -211,6 +214,8 @@ admin_page:
             id.header: "Identifier"
             site.header: "Site"
             name.header: "Name"
+            status.header: "Status"
+            publishedAt.header: "Published at"
         filter_form:
             name.label: "Name"
             sites.label: "Sites"

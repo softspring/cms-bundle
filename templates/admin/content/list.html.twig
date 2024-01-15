@@ -54,8 +54,9 @@
                             {% if entities.sortedBy('name', 'asc') %}<i class="bi bi-caret-up-fill"></i>{% elseif entities.sortedBy('name', 'desc') %}<i class="bi bi-caret-down-fill"></i>{% endif %}
                         </a>
                     </th>
-                    <th class="">Site</th>
-                    <th class="">Publicado</th>
+                    <th class="">{{ ('admin_'~content_type~'.list.fields.site.header')|trans }}</th>
+                    <th class="">{{ ('admin_'~content_type~'.list.fields.status.header')|trans }}</th>
+                    <th class="">{{ ('admin_'~content_type~'.list.fields.publishedAt.header')|trans }}</th>
                     <th class="">&nbsp;</th>
                 {% endblock ths %}
 
