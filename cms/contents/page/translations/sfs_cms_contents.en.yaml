@@ -67,6 +67,9 @@ admin_page:
         sites: "Sites"
         published: "Published"
         unpublished: "Unpublished"
+        general:
+            status: "Status"
+            publishDate: "Publish date"
         seo:
             title: "SEO"
             index: "Index"
@@ -79,6 +82,7 @@ admin_page:
             title: "Routes"
             cache: "(cache %ttl% seconds)"
             not_published_warning: "This content is not published, so the following routes will return a 404 error"
+            missing_locale: "This content has not a route path for %missingLocale% language"
         versions:
             title: "Last versions"
             published: "Published"
@@ -95,11 +99,12 @@ admin_page:
             id.header: "Version"
             origin.header: "Origin"
             created.header: "Created"
+            creator.header: "Creator"
             publish_status.header: "Publish status"
             note.header: "Note"
         publish_status:
             published: "published"
-            unpublished: ""
+            unpublished: "not published"
         origin:
             "null": ""
             1: "edited"
@@ -110,7 +115,7 @@ admin_page:
             edit.link: "Edit"
             preview.link: "Preview"
             export.link: "Export"
-            publish.link: "Publish version"
+            publish.link: "Publish"
             import_version.link: "Import version"
             cleanup_versions.link: "Cleanup versions"
             translations.link: "Translations"
@@ -287,6 +292,7 @@ admin_page:
             version.title: "Version"
             origin.title: "Origin"
             created.title: "Created"
+            creator.title: "Creator"
             publish_status.title: "Published"
             keep.title: "Keep"
             layout.title: "Layout"

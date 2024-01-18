@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Twig\Extension;
 
+use Softspring\CmsBundle\Model\ContentInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -11,6 +12,7 @@ class UtilsExtension extends AbstractExtension
     {
         return [
             new TwigFunction('sfs_cms_search_content_esi_calls', [$this, 'searchContentEsiCalls']),
+            new TwigFunction('sfs_cms_check_content_locales_and_routes', [$this, 'checkContentLocalesAndRoutes']),
         ];
     }
 
@@ -57,5 +59,27 @@ class UtilsExtension extends AbstractExtension
         }
 
         return $esiCalls;
+    }
+
+    public function checkContentLocalesAndRoutes(ContentInterface $content): array
+    {
+        $locales = $content->getLocales();
+
+        $routesLocales = [];
+        foreach ($content->getRoutes() as $route) {
+            foreach ($route->getPaths() as $path) {
+                if (!$path->getLocale() || in_array($path->getLocale(), $routesLocales)) {
+                    continue;
+                }
+                $routesLocales[] = $path->getLocale();
+            }
+        }
+        $routesLocales = array_unique($routesLocales);
+
+        return [
+            'locales' => $locales,
+            'routes_locales' => $routesLocales,
+            'missing_route_locales' => array_diff($locales, $routesLocales),
+        ];
     }
 }

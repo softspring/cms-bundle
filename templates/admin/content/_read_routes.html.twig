@@ -9,6 +9,13 @@
             </div>
         {% endif %}
 
+        {% set routeLocales = sfs_cms_check_content_locales_and_routes(entity) %}
+        {% for missingLocale in routeLocales.missing_route_locales %}
+            <div class="alert alert-warning" role="alert">
+                {{ ('admin_'~content_type~'.read.routes.missing_locale')|trans({'%missingLocale%': missingLocale}) }}
+            </div>
+        {% endfor %}
+
         <ul class="list-unstyled">
             {% for route in entity.routes %}
                 {% for site in route.sites %}

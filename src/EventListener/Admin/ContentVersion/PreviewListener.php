@@ -77,7 +77,7 @@ class PreviewListener extends AbstractContentVersionListener
         $version = $event->getEntity();
         $entity = $version->getContent();
 
-        $request->setLocale($request->query->get('_locale', 'en'));
+        $request->setLocale($request->query->get('_locale', $request->getLocale()));
 
         $site = $request->query->has('_site') ? $this->siteManager->getRepository()->findOneById($request->query->get('_site')) : $entity->getSites()->first();
         $request->attributes->set('_site', "$site");
