@@ -32,7 +32,7 @@
                     {% endif %}
                 </div>
 
-                {% include ['@content/'~content_type~'/admin/_read_versions.html.twig', '@SfsCms/admin/content/_read_versions.html.twig'] with {'versions': entity.versions} %}
+                {% include ['@content/'~content_type~'/admin/_version_list_table.html.twig', '@SfsCms/admin/content/_version_list_table.html.twig'] with {'versions': entity.versions} %}
             </div>
         </div>
     </div>
