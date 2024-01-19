@@ -13,7 +13,7 @@
 {% block content %}
     <h1 class="h3">{{ ('admin_'~content_type~'.versions.title')|trans({'%name%':entity.name}) }}</h1>
 
-    {% include '@SfsCms/admin/content/_content_tabs.html.twig' with {'current':'versions', 'content_type':content_type, 'entity':entity} %}
+    {% include ['@content/'~content_type~'/admin/_content_tabs.html.twig', '@SfsCms/admin/content/_content_tabs.html.twig']  with {'current':'versions', 'content_type':content_type, 'entity':entity} %}
 
     <div class="container-fluid p-3 bg-white">
         <div class="row mt-4">
@@ -32,7 +32,7 @@
                     {% endif %}
                 </div>
 
-                {% include '@SfsCms/admin/content/_version_list_table.html.twig' with {'versions': entity.versions} %}
+                {% include ['@content/'~content_type~'/admin/_read_versions.html.twig', '@SfsCms/admin/content/_read_versions.html.twig'] with {'versions': entity.versions} %}
             </div>
         </div>
     </div>

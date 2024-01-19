@@ -19,7 +19,7 @@
 {% block content %}
     <h1 class="h3">{{ ('admin_'~content_type~'.seo.title')|trans({'%name%':entity.name}) }}</h1>
 
-    {% include '@SfsCms/admin/content/_content_tabs.html.twig' with {'current':'seo', 'content':content, 'entity':entity} %}
+    {% include ['@content/'~content_type~'/admin/_content_tabs.html.twig', '@SfsCms/admin/content/_content_tabs.html.twig']  with {'current':'seo', 'content':content, 'entity':entity} %}
 
     {{ form_start(form) }}
 

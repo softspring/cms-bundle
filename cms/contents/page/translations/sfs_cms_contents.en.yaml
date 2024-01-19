@@ -224,10 +224,12 @@ admin_page:
         filter_form:
             name.label: "Name"
             sites.label: "Sites"
+            status.label: "Status"
         empty:
             create_first_content_raw: '<a href="%create_link%">Create</a> or <a href="%import_link%">import</a> your first page!'
             can_not_create_content: "You can not create a new page"
             go_to_doc_raw: 'If you need help go to <a href="https://github.com/softspring/cms-bundle" target="_blank">documentation</a>'
+            clean_filters: 'Your query has no results, try to <a href="%url%">clean filters</a>'
 
     form:
         name.label: "Name"

@@ -31,10 +31,11 @@
             <div class="mb-4">
                 {{ form_start(filterForm) }}
                 <div class="row">
-                    {% if filterForm.name is defined %}<div class="col">{{ form_row(filterForm.name, {'row_class':'form-floating'}) }}</div>{% endif %}
-                    {% if filterForm.sites is defined %}<div class="col">{{ form_row(filterForm.sites, {'row_class':'form-floating'}) }}</div>{% endif %}
-
-                    <div class="col">
+                    <div class="col-1 py-2"><i class="bi bi-filter h4 text-muted"></i></div>
+                    {% if filterForm.name is defined %}<div class="col">{{ form_row(filterForm.name) }}</div>{% endif %}
+                    {% if filterForm.sites is defined %}<div class="col">{{ form_row(filterForm.sites, {'attr':{'onchange':'submit()'}}) }}</div>{% endif %}
+                    {% if filterForm.status is defined %}<div class="col">{{ form_row(filterForm.status, {'attr':{'onchange':'submit()'}}) }}</div>{% endif %}
+                    <div class="col-1">
                         <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
                     </div>
                 </div>
@@ -65,19 +66,25 @@
                 {% endblock tbody %}
 
                 {% block empty_message %}
-                    <p class="text-center text-muted">
-                        {% if not content_config.admin.create.is_granted or is_granted(content_config.admin.create.is_granted) %}
-                            {{ ('admin_'~content_type~'.list.empty.create_first_content_raw')|trans({
-                                '%create_link%': url('sfs_cms_admin_content_'~content_type~'_create'),
-                                '%import_link%': url('sfs_cms_admin_content_'~content_type~'_import'),
-                            })|raw }}
-                        {% else %}
-                            {{ ('admin_'~content_type~'.list.empty.can_not_create_content')|trans }}
-                        {% endif %}
-                    </p>
-                    <p class="text-center text-muted">
-                        {{ ('admin_'~content_type~'.list.empty.go_to_doc_raw')|trans|raw }}
-                    </p>
+                    {% if filterForm.vars.submitted %}
+                        <p class="text-center text-muted">
+                            {{ ('admin_'~content_type~'.list.empty.clean_filters')|trans({'%url%': url('sfs_cms_admin_content_'~content_type~'_list')})|raw }}
+                        </p>
+                    {% else %}
+                        <p class="text-center text-muted">
+                            {% if not content_config.admin.create.is_granted or is_granted(content_config.admin.create.is_granted) %}
+                                {{ ('admin_'~content_type~'.list.empty.create_first_content_raw')|trans({
+                                    '%create_link%': url('sfs_cms_admin_content_'~content_type~'_create'),
+                                    '%import_link%': url('sfs_cms_admin_content_'~content_type~'_import'),
+                                })|raw }}
+                            {% else %}
+                                {{ ('admin_'~content_type~'.list.empty.can_not_create_content')|trans }}
+                            {% endif %}
+                        </p>
+                        <p class="text-center text-muted">
+                            {{ ('admin_'~content_type~'.list.empty.go_to_doc_raw')|trans|raw }}
+                        </p>
+                    {% endif %}
                 {% endblock empty_message %}
             {% endembed %}
         {% endblock table %}

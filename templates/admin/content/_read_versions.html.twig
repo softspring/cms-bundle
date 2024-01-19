@@ -13,6 +13,6 @@
     {% endblock %}
 
     {% block content %}
-        {% include '@SfsCms/admin/content/_version_list_table.html.twig' with {'versions': entityLatestVersions} %}
+        {% include ['@content/'~content_type~'/admin/_version_list_table.html.twig', '@SfsCms/admin/content/_version_list_table.html.twig'] with {'versions': entityLatestVersions} %}
     {% endblock %}
 {% endembed %}
