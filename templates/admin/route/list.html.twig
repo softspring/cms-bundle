@@ -25,10 +25,12 @@
             <div class="mb-4">
                 {{ form_start(filterForm) }}
                 <div class="row">
-                    {% if filterForm.id is defined %}<div class="col">{{ form_row(filterForm.id, {'row_class':'form-floating'}) }}</div>{% endif %}
-                    {% if filterForm.site is defined %}<div class="col">{{ form_row(filterForm.site, {'row_class':'form-floating'}) }}</div>{% endif %}
-
-                    <div class="col">
+                    <div class="col-1 py-2"><i class="bi bi-filter h4 text-muted"></i></div>
+                    {% if filterForm.id is defined %}<div class="col">{{ form_row(filterForm.id) }}</div>{% endif %}
+                    {% if filterForm.path is defined %}<div class="col">{{ form_row(filterForm.path) }}</div>{% endif %}
+                    {% if filterForm.sites is defined %}<div class="col">{{ form_row(filterForm.sites, {'attr':{'onchange':'submit()'}}) }}</div>{% endif %}
+                    {% if filterForm.type is defined %}<div class="col">{{ form_row(filterForm.type, {'attr':{'onchange':'submit()'}}) }}</div>{% endif %}
+                    <div class="col-1">
                         <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
                     </div>
                 </div>
@@ -58,12 +60,24 @@
             {% endblock tbody %}
 
             {% block empty_message %}
-                <p class="text-center text-muted">
-                    <a href="{{ url('sfs_cms_admin_routes_create') }}">Create</a> your first route!
-                </p>
-                <p class="text-center text-muted">
-                    If you need help go to <a href="https://github.com/softspring/cms-bundle" target="_blank">documentation</a>
-                </p>
+                {% if filterForm.vars.submitted %}
+                    <p class="text-center text-muted">
+                        {{ ('admin_routes.list.empty.clean_filters')|trans({'%url%': url('sfs_cms_admin_routes_list')})|raw }}
+                    </p>
+                {% else %}
+                    <p class="text-center text-muted">
+{#                        {% if is_granted() %}#}
+                            {{ ('admin_routes.list.empty.create_first_content_raw')|trans({
+                                '%create_link%': url('sfs_cms_admin_routes_create'),
+                            })|raw }}
+{#                        {% else %}#}
+{#                            {{ ('admin_routes.list.empty.can_not_create_routes')|trans }}#}
+{#                        {% endif %}#}
+                    </p>
+                    <p class="text-center text-muted">
+                        {{ ('admin_routes.list.empty.go_to_doc_raw')|trans|raw }}
+                    </p>
+                {% endif %}
             {% endblock empty_message %}
         {% endembed %}
     </div>

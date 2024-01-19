@@ -5,41 +5,58 @@
 {% block breadcrums_content %}
     {{ parent() }}
     <li class="breadcrumb-item"><a
-            href="{{ url('sfs_cms_admin_routes_list') }}">{{ 'admin_routes.list.breadcrumb'|trans }}</a></li>
+                href="{{ url('sfs_cms_admin_routes_list') }}">{{ 'admin_routes.list.breadcrumb'|trans }}</a></li>
     <li class="breadcrumb-item active"
         aria-current="content">{{ 'admin_routes.read.breadcrumb'|trans({'%name%': route.name|default(route.id) }) }}</li>
 {% endblock breadcrums_content %}
 
 {% block content %}
-    <h1 class="h3">{{ 'admin_routes.read.title'|trans }}</h1>
+    <h1 class="h3">{{ 'admin_routes.read.title'|trans({'%name%': route.name|default(route.id) }) }}</h1>
 
-    <div class="container-fluid bg-white p-4">
-        <div>
-            <span>Route </span><span>{{ route.id }}</span>
-        </div>
-        <div>
-            <span>Sites </span><span>{{ route.sites|map((site) => site|sfs_cms_site_name)|join(', ') }}</span>
-        </div>
-        <div>
-            <span>Type</span><span>{{ ('admin_routes.types.'~route.type~'.name')|trans }}</span>
-        </div>
-        <div>
-            <span>Page</span><span>{{ route.content.name|default('') }}</span>
-        </div>
+    {% include '@SfsCms/admin/route/_route_tabs.html.twig' with {'current':'read', 'route':route} %}
 
-        <div>
-            <h3>Routes by sites</h3>
-            <ul>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                {% embed '@SfsCms/admin/_embeds/_card.html.twig' with {'title': 'Route'} %}
+                    {% trans_default_domain 'sfs_cms_admin' %}
+
+                    {% block content %}
+                        <dl>
+                            <dt>{{ ('admin_routes.read.id')|trans }}</dt>
+                            <dd>{{ route.id }}</dd>
+{#                            <dt>{{ ('admin_routes.read.sites')|trans }}</dt>#}
+{#                            <dd>{{ route.sites|map((site) => site|sfs_cms_site_name)|join(', ') }}</dd>#}
+                            <dt>{{ ('admin_routes.read.type')|trans }}</dt>
+                            <dd>{{ ('admin_routes.types.'~route.type~'.name')|trans({'%redirectType%': route.redirectType}) }}</dd>
+                            {% if route.content %}
+                                <dt>{{ ('admin_routes.read.content')|trans }}</dt>
+                                <dd><a href={{ route.content|sfs_cms_admin_content_url }}>{{ route.content.name|default('') }}</a></dd>
+                            {% endif %}
+                        </dl>
+                    {% endblock %}
+                {% endembed %}
+            </div>
+
+            <div class="col-9">
                 {% for site in route.sites %}
-                    {% for path in route.paths %}
-                        <li>
-                            <a href="{{ sfs_cms_route_path_url(path, site) }}" target="_blank">
-                                {{ site|sfs_cms_site_name }}: {{ sfs_cms_route_path_url(path, site) }}
-                            </a>
-                        </li>
-                    {% endfor %}
+                    {% embed '@SfsCms/admin/_embeds/_card.html.twig' with {'title': site|sfs_cms_site_name} %}
+                        {% block content %}
+                            {% for path in route.paths %}
+                                <li>
+                                    <a href="{{ sfs_cms_route_path_url(path, site) }}" target="_blank">
+                                        {{ sfs_cms_route_path_url(path, site) }}
+                                    </a>
+
+                                    {% if path.cacheTtl %}
+                                        cache {{ path.cacheTtl }} segundos
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        {% endblock %}
+                    {% endembed %}
                 {% endfor %}
-            </ul>
+            </div>
         </div>
     </div>
 {% endblock content %}

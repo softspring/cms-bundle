@@ -90,6 +90,9 @@ admin_blocks:
 #        versionLayout.label: "Diseño"
 
 admin_routes:
+    tabs_menu:
+        details: "Details"
+        update: "Update"
     create:
         meta.title: "New route"
         title: "New route"
@@ -106,8 +109,12 @@ admin_routes:
             cancel.button: "Cancel"
     read:
         meta.title: "Route details"
-        title: "Route details"
+        title: "%name%"
         breadcrumb: "Route details"
+        id: "Route"
+        sites: "Sites"
+        content: "Content"
+        type: "Type"
     list:
         meta.title: "Routes"
         title: "Routes"
@@ -127,6 +134,13 @@ admin_routes:
         filter_form:
             id.label: "Route"
             sites.label: "Sites"
+            path.label: "Path"
+            type.label: "Type"
+        empty:
+            create_first_route_raw: '<a href="%create_link%">Create</a> your first route!'
+            can_not_create_routes: "You can not create a new route"
+            go_to_doc_raw: 'If you need help go to <a href="https://github.com/softspring/cms-bundle" target="_blank">documentation</a>'
+            clean_filters: 'Your query has no results, try to <a href="%url%">clean filters</a>'
     form:
         paths:
             add.button: "Add URL paths"

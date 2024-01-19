@@ -59,7 +59,7 @@ services:
                     view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_CREATE_VIEW
                     success_redirect_to: 'sfs_cms_admin_routes_list'
                     view: '%sfs_cms.admin.routes.create_view%'
-                    form: 'Softspring\CmsBundle\Form\Admin\Route\RouteForm'
+                    form: 'Softspring\CmsBundle\Form\Admin\Route\RouteCreateForm'
                 update:
                     is_granted: 'PERMISSION_SFS_CMS_ADMIN_ROUTES_UPDATE'
                     param_converter_key: 'id'
@@ -70,9 +70,9 @@ services:
                     form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_UPDATE_FORM_INVALID
                     failure_event_name: null
                     view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_UPDATE_VIEW
-                    success_redirect_to: 'sfs_cms_admin_routes_list'
+                    success_redirect_to: 'sfs_cms_admin_routes_read'
                     view: '%sfs_cms.admin.routes.update_view%'
-                    form: 'Softspring\CmsBundle\Form\Admin\Route\RouteForm'
+                    form: 'Softspring\CmsBundle\Form\Admin\Route\RouteUpdateForm'
                 delete:
                     is_granted: 'PERMISSION_SFS_CMS_ADMIN_ROUTES_DELETE'
                     param_converter_key: 'id'

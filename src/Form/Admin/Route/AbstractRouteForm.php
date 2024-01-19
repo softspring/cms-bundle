@@ -17,10 +17,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
-class RouteForm extends AbstractType
+abstract class AbstractRouteForm extends AbstractType
 {
     protected EntityManagerInterface $em;
     protected RouterInterface $router;
@@ -29,6 +30,11 @@ class RouteForm extends AbstractType
     {
         $this->em = $em;
         $this->router = $router;
+    }
+
+    public function getBlockPrefix(): string
+    {
+        return 'route_form';
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -83,6 +89,8 @@ class RouteForm extends AbstractType
         if (!$options['content_relative']) {
             $builder->add('sites', SiteChoiceType::class, [
                 'by_reference' => false,
+                'expanded' => true,
+                'constraints' => new Length(['min' => 1]),
             ]);
 
             $builder->add('type', ChoiceType::class, [

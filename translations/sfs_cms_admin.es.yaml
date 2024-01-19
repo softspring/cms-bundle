@@ -90,6 +90,9 @@ admin_blocks:
 #        versionLayout.label: "Diseño"
 
 admin_routes:
+    tabs_menu:
+        details: "Detalles"
+        update: "Editar"
     create:
         meta.title: "Nueva ruta"
         title: "Nueva ruta"
@@ -106,8 +109,12 @@ admin_routes:
             cancel.button: "Cancelar"
     read:
         meta.title: "Detalles de la ruta"
-        title: "Detalles de la ruta"
+        title: "%name%"
         breadcrumb: "Detalles de la ruta"
+        id: "Ruta"
+        sites: "Sitios"
+        content: "Contenido"
+        type: "Tipo"
     list:
         meta.title: "Rutas"
         title: "Rutas"
@@ -127,6 +134,13 @@ admin_routes:
         filter_form:
             id.label: "Ruta"
             sites.label: "Sites"
+            path.label: "URL"
+            type.label: "Tipo"
+        empty:
+            create_first_route_raw: '<a href="%create_link%">Crea</a> tu primera ruta!'
+            can_not_create_routes: "No puedes crear rutas"
+            go_to_doc_raw: 'Si necesitas ayuda visita la <a href="https://github.com/softspring/cms-bundle" target="_blank">documentación</a>'
+            clean_filters: 'No se han encontrado rutas con tu búsqueda, <a href="%url%">limpia los filtros</a> para ver todas las rutas'
     form:
         paths:
             add.button: "Añadir segmento de URL"
