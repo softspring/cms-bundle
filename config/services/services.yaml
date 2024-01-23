@@ -100,3 +100,7 @@ services:
 
     Softspring\CmsBundle\EntityListener\ContentDiscriminatorMapListener:
         tags: ['doctrine.event_subscriber']
+
+    Softspring\CmsBundle\Security\Voter\DeprecatedPermissionVoter:
+        tags:
+            - { name: security.voter, priority: 1000 }

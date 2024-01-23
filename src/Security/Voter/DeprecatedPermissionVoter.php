@@ -1,0 +1,45 @@
+<?php
+
+namespace Softspring\CmsBundle\Security\Voter;
+
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
+
+/**
+ * @deprecated since 5.1, will be removed in 6.0
+ */
+class DeprecatedPermissionVoter implements VoterInterface
+{
+    const DEPRECATIONS = [
+        'ROLE_SFS_CMS_ADMIN_BLOCKS_LIST' => 'PERMISSION_SFS_CMS_ADMIN_BLOCKS_LIST',
+        'ROLE_SFS_CMS_ADMIN_BLOCKS_DETAILS' => 'PERMISSION_SFS_CMS_ADMIN_BLOCKS_DETAILS',
+        'ROLE_SFS_CMS_ADMIN_BLOCKS_CREATE' => 'PERMISSION_SFS_CMS_ADMIN_BLOCKS_CREATE',
+        'ROLE_SFS_CMS_ADMIN_BLOCKS_DELETE' => 'PERMISSION_SFS_CMS_ADMIN_BLOCKS_DELETE',
+        'ROLE_SFS_CMS_ADMIN_BLOCKS_UPDATE' => 'PERMISSION_SFS_CMS_ADMIN_BLOCKS_UPDATE',
+        'ROLE_SFS_CMS_ADMIN_ROUTES_LIST' => 'PERMISSION_SFS_CMS_ADMIN_ROUTES_LIST',
+        'ROLE_SFS_CMS_ADMIN_ROUTES_DETAILS' => 'PERMISSION_SFS_CMS_ADMIN_ROUTES_DETAILS',
+        'ROLE_SFS_CMS_ADMIN_ROUTES_CREATE' => 'PERMISSION_SFS_CMS_ADMIN_ROUTES_CREATE',
+        'ROLE_SFS_CMS_ADMIN_ROUTES_DELETE' => 'PERMISSION_SFS_CMS_ADMIN_ROUTES_DELETE',
+        'ROLE_SFS_CMS_ADMIN_ROUTES_UPDATE' => 'PERMISSION_SFS_CMS_ADMIN_ROUTES_UPDATE',
+        'ROLE_SFS_CMS_ADMIN_MENUS_LIST' => 'PERMISSION_SFS_CMS_ADMIN_MENUS_LIST',
+        'ROLE_SFS_CMS_ADMIN_MENUS_CREATE' => 'PERMISSION_SFS_CMS_ADMIN_MENUS_CREATE',
+        'ROLE_SFS_CMS_ADMIN_MENUS_DELETE' => 'PERMISSION_SFS_CMS_ADMIN_MENUS_DELETE',
+        'ROLE_SFS_CMS_ADMIN_MENUS_UPDATE' => 'PERMISSION_SFS_CMS_ADMIN_MENUS_UPDATE',
+        'ROLE_SFS_CMS_ADMIN_PAGES_LIST' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_LIST',
+        'ROLE_SFS_CMS_ADMIN_PAGES_DETAILS' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_DETAILS',
+        'ROLE_SFS_CMS_ADMIN_PAGES_CREATE' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_CREATE',
+        'ROLE_SFS_CMS_ADMIN_PAGES_DELETE' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_DELETE',
+        'ROLE_SFS_CMS_ADMIN_PAGES_UPDATE' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_UPDATE',
+        'ROLE_SFS_CMS_ADMIN_PAGES_RO' => 'ROLE_SFS_CMS_ADMIN_CONTENTS_RO',
+        'ROLE_SFS_CMS_ADMIN_PAGES_RW' => 'ROLE_SFS_CMS_ADMIN_CONTENTS_RW',
+    ];
+
+    public function vote(TokenInterface $token, mixed $subject, array $attributes): int
+    {
+        if (isset(self::DEPRECATIONS[$attributes[0]??''])) {
+            trigger_deprecation('softspring/cms-bundle', '5.1', sprintf('The role "%s" is deprecated, use "%s" instead. Will be removed in 6.0', $attributes[0], self::DEPRECATIONS[$attributes[0]]));
+        }
+
+        return self::ACCESS_ABSTAIN;
+    }
+}
