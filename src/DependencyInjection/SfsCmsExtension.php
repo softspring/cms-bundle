@@ -61,7 +61,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         // configure block classes
         $container->setParameter('sfs_cms.block.class', $config['block']['class'] ?? null);
         $container->setParameter('sfs_cms.block.find_field_name', $config['block']['find_field_name'] ?? null);
-//        $container->setParameter('sfs_cms.block.types', $config['block']['types'] ?? []);
+        //        $container->setParameter('sfs_cms.block.types', $config['block']['types'] ?? []);
 
         // load services
         $loader->load('services.yaml');

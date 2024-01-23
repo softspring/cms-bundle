@@ -37,12 +37,12 @@ class RouterExtension extends AbstractExtension
         ];
     }
 
-    public function generatePath($route, ?string $locale = null): string
+    public function generatePath($route, string $locale = null): string
     {
         return $this->generateUrl($route, $locale, UrlGeneratorInterface::ABSOLUTE_PATH);
     }
 
-    public function generateUrl($route, ?string $locale = null, int $referenceType = UrlGeneratorInterface::ABSOLUTE_URL): string
+    public function generateUrl($route, string $locale = null, int $referenceType = UrlGeneratorInterface::ABSOLUTE_URL): string
     {
         if (is_null($route)) {
             return '#';

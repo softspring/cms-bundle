@@ -13,7 +13,7 @@ class ContainerModuleType extends DynamicFormModuleType
         return 'container_module';
     }
 
-    public function configureChildOptions(OptionsResolver $resolver)
+    public function configureChildOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'compatible_contents' => [],
@@ -29,7 +29,7 @@ class ContainerModuleType extends DynamicFormModuleType
         $resolver->setAllowedTypes('allowed_container_modules', ['array', 'null']);
     }
 
-    public function buildChildForm(FormBuilderInterface $builder, array $options)
+    public function buildChildForm(FormBuilderInterface $builder, array $options): void
     {
         parent::buildChildForm($builder, $options);
 

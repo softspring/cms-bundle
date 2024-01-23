@@ -12,10 +12,17 @@ parameters:
             message: "#Parameter \\#2 $array of function implode expects array<string>, array<int|string, array<int, string>|string> given.#"
             count: 1
             path: src/Routing/UrlGenerator.php
+            reportUnmatched: false
         -
             message: "#Empty array passed to foreach.#"
             count: 1
             path: src/Form/Module/ModuleCollectionType.php
+            reportUnmatched: false
+        -
+            message: "#Result of && is always true.#"
+            count: 1
+            path: src/Routing/UrlGenerator.php
+            reportUnmatched: false
         -
             message: "#Call to an undefined method .*::method\\(\\)#"
             path: tests

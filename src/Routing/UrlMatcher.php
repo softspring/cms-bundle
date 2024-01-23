@@ -159,7 +159,7 @@ class UrlMatcher
         ];
     }
 
-    protected function searchRoutePath(string $site, string $path, ?string $locale = null): ?RoutePathInterface
+    protected function searchRoutePath(string $site, string $path, string $locale = null): ?RoutePathInterface
     {
         try {
             $qb = $this->em->getRepository(RoutePathInterface::class)->createQueryBuilder('rp');

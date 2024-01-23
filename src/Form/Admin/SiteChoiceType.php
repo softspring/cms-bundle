@@ -22,7 +22,7 @@ class SiteChoiceType extends AbstractType
         return ChoiceType::class;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'choice_translation_domain' => 'sfs_cms_sites',

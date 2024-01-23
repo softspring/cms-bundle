@@ -25,7 +25,7 @@ class ContentDeleteForm extends AbstractType implements ContentUpdateFormInterfa
         $this->em = $em;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => ContentInterface::class,
@@ -42,7 +42,7 @@ class ContentDeleteForm extends AbstractType implements ContentUpdateFormInterfa
         });
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('action', ChoiceType::class, [
             'mapped' => false,

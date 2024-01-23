@@ -35,7 +35,7 @@ abstract class AbstractDataTransformer implements DataTransformerInterface
         }
 
         if ($data instanceof MediaInterface) {
-//            !is_dir('/srv/cms/fixtures/media') && mkdir('/srv/cms/fixtures/media', 0755, true);
+            //            !is_dir('/srv/cms/fixtures/media') && mkdir('/srv/cms/fixtures/media', 0755, true);
 
             $versionFiles = [];
 

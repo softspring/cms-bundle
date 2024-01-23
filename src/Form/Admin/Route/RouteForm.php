@@ -30,7 +30,7 @@ class RouteForm extends AbstractType
         $this->router = $router;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => RouteInterface::class,
@@ -48,7 +48,7 @@ class RouteForm extends AbstractType
         ]);
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('id', TextType::class, [
             'constraints' => new Regex('/^[a-z][a-z0-9_]{3,}$/i'),

@@ -8,7 +8,7 @@ use Softspring\CmsBundle\Model\SiteReferenceInterface;
 
 class Route extends RouteModel // implements SiteReferenceInterface
 {
-//    use SiteReferenceTrait;
+    //    use SiteReferenceTrait;
 
     protected ?string $id;
 }

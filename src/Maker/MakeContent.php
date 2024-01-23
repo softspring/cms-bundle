@@ -78,10 +78,10 @@ class MakeContent extends AbstractMaker
 
     public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator)
     {
-//        $entityClassDetails = $generator->createClassNameDetails(
-//            Validator::entityExists($input->getArgument('entity-class'), $this->doctrineHelper->getEntitiesForAutocomplete()),
-//            'Entity\\'
-//        );
+        //        $entityClassDetails = $generator->createClassNameDetails(
+        //            Validator::entityExists($input->getArgument('entity-class'), $this->doctrineHelper->getEntitiesForAutocomplete()),
+        //            'Entity\\'
+        //        );
 
         $name = $input->getArgument('content-name');
         $createType = sprintf('App\Form\Admin\%sContentCreateForm', Str::asClassName($name));

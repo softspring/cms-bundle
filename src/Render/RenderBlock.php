@@ -24,25 +24,25 @@ class RenderBlock
 
     public function render(BlockInterface $block): string
     {
-//        if (!isset($this->blockTypes[$block->getKey()])) {
-//            // TODO LOG ERROR
-//            return '';
-//        }
-//
-//        $template = $this->blockTypes[$block->getKey()]['render_template'];
-//
-//        try {
-//            return $this->twig->render($template, $block->getContent());
-//        } catch (LoaderError $e) {
-//            // TODO LOG ERROR
-//            return '';
-//        } catch (RuntimeError $e) {
-//            // TODO LOG ERROR
-//            return '';
-//        } catch (SyntaxError $e) {
-//            // TODO LOG ERROR
-//            return '';
-//        }
+        //        if (!isset($this->blockTypes[$block->getKey()])) {
+        //            // TODO LOG ERROR
+        //            return '';
+        //        }
+        //
+        //        $template = $this->blockTypes[$block->getKey()]['render_template'];
+        //
+        //        try {
+        //            return $this->twig->render($template, $block->getContent());
+        //        } catch (LoaderError $e) {
+        //            // TODO LOG ERROR
+        //            return '';
+        //        } catch (RuntimeError $e) {
+        //            // TODO LOG ERROR
+        //            return '';
+        //        } catch (SyntaxError $e) {
+        //            // TODO LOG ERROR
+        //            return '';
+        //        }
         return '';
     }
 }

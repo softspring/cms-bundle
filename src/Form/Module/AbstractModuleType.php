@@ -21,7 +21,7 @@ abstract class AbstractModuleType extends AbstractNodeType
         $this->enabledLocales = $enabledLocales;
     }
 
-    public function configureChildOptions(OptionsResolver $resolver)
+    public function configureChildOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'module_id' => null,
@@ -55,7 +55,7 @@ abstract class AbstractModuleType extends AbstractNodeType
         $resolver->setAllowedTypes('deprecated', ['bool', 'string']);
     }
 
-    public function buildChildView(FormView $view, FormInterface $form, array $options)
+    public function buildChildView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['module_id'] = $options['module_id'];
         $view->vars['form_template'] = $options['form_template'];
@@ -65,7 +65,7 @@ abstract class AbstractModuleType extends AbstractNodeType
         $view->vars['attr']['data-module-id'] = $options['module_id'];
     }
 
-    protected function buildChildForm(FormBuilderInterface $builder, array $options)
+    protected function buildChildForm(FormBuilderInterface $builder, array $options): void
     {
         if ($options['locale_filter'] && sizeof($this->enabledLocales) > 1) {
             $builder->add('locale_filter', ChoiceType::class, [

@@ -11,7 +11,7 @@ class EmptyModuleType extends AbstractModuleType
         return 'empty_module';
     }
 
-    final protected function buildChildForm(FormBuilderInterface $builder, array $options)
+    final protected function buildChildForm(FormBuilderInterface $builder, array $options): void
     {
         parent::buildChildForm($builder, $options);
         // nothing to include

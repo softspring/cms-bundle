@@ -24,7 +24,7 @@ class UserType extends AbstractType
         return EntityType::class;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'required' => false,
@@ -36,19 +36,19 @@ class UserType extends AbstractType
         ]);
     }
 
-//    public function buildForm(FormBuilderInterface $builder, array $options)
-//    {
-//        /** @var EntityManagerInterface $em */
-//        $em = $options['em'];
-//
-//        $builder->addModelTransformer(new CallbackTransformer(function ($userId) use ($em) {
-//            return $userId ? $em->getRepository(UserInterface::class)->findOneById($userId['id']) : null;
-//        }, function ($user) {
-//            return $user instanceof UserInterface ? [
-//                'id' => $user->getId(),
-//                'type' => UserInterface::class,
-//                'displayName' => $user->getDisplayName(),
-//            ] : null;
-//        }));
-//    }
+    //    public function buildForm(FormBuilderInterface $builder, array $options)
+    //    {
+    //        /** @var EntityManagerInterface $em */
+    //        $em = $options['em'];
+    //
+    //        $builder->addModelTransformer(new CallbackTransformer(function ($userId) use ($em) {
+    //            return $userId ? $em->getRepository(UserInterface::class)->findOneById($userId['id']) : null;
+    //        }, function ($user) {
+    //            return $user instanceof UserInterface ? [
+    //                'id' => $user->getId(),
+    //                'type' => UserInterface::class,
+    //                'displayName' => $user->getDisplayName(),
+    //            ] : null;
+    //        }));
+    //    }
 }

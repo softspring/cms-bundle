@@ -26,7 +26,7 @@ class TranslatableTextType extends AbstractType
         return 'translatable_text';
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'required' => false,
@@ -41,7 +41,7 @@ class TranslatableTextType extends AbstractType
         $resolver->setAllowedTypes('default_language', 'string');
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         foreach ($options['languages'] as $lang) {
             $builder->add($lang, TextType::class, [

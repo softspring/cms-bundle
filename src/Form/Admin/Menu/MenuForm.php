@@ -18,7 +18,7 @@ class MenuForm extends AbstractType
         $this->em = $em;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => MenuInterface::class,
@@ -28,7 +28,7 @@ class MenuForm extends AbstractType
         ]);
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('name', TextType::class);
         $builder->add('items', MenuItemCollectionType::class);
