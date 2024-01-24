@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Controller\Admin;
 
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\InvalidMenuException;
+use Softspring\CmsBundle\Controller\ControllerServicesTrait;
 use Softspring\CmsBundle\Form\Admin\Menu\MenuForm;
 use Softspring\CmsBundle\Form\Admin\Menu\MenuListFilterFormInterface;
 use Softspring\CmsBundle\Manager\MenuManagerInterface;
@@ -16,38 +17,24 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Twig\Environment;
 
 class MenuController extends AbstractController
 {
     use DispatchGetResponseTrait;
+    use ControllerServicesTrait;
 
-    protected FormFactoryInterface $formFactory;
-    protected Environment $twig;
-    protected MenuManagerInterface $menuManager;
-    protected CmsConfig $cmsConfig;
-    protected EventDispatcherInterface $eventDispatcher;
-    protected array $enabledLocales;
-
-    public function __construct(FormFactoryInterface $formFactory, Environment $twig, MenuManagerInterface $menuManager, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, array $enabledLocales)
-    {
-        $this->formFactory = $formFactory;
-        $this->twig = $twig;
-        $this->menuManager = $menuManager;
-        $this->cmsConfig = $cmsConfig;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->enabledLocales = $enabledLocales;
-    }
-
-    protected function createForm(string $type, mixed $data = null, array $options = []): FormInterface
-    {
-        return $this->formFactory->create($type, $data, $options);
-    }
-
-    protected function renderView(string $view, array $parameters = []): string
-    {
-        return $this->twig->render($view, $parameters);
+    public function __construct(
+        protected AuthorizationCheckerInterface $authorizationChecker,
+        protected FormFactoryInterface $formFactory,
+        protected Environment $twig,
+        protected MenuManagerInterface $menuManager,
+        protected CmsConfig $cmsConfig,
+        protected EventDispatcherInterface $eventDispatcher,
+        protected array $enabledLocales,
+    ) {
     }
 
     public function create(string $menuType, Request $request): Response

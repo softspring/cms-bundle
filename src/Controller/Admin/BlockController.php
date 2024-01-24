@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Controller\Admin;
 
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\InvalidBlockException;
+use Softspring\CmsBundle\Controller\ControllerServicesTrait;
 use Softspring\CmsBundle\Form\Admin\Block\BlockCreateFormInterface;
 use Softspring\CmsBundle\Form\Admin\Block\BlockListFilterForm;
 use Softspring\CmsBundle\Form\Admin\Block\BlockUpdateFormInterface;
@@ -18,38 +19,24 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Twig\Environment;
 
 class BlockController extends AbstractController
 {
     use DispatchGetResponseTrait;
+    use ControllerServicesTrait;
 
-    protected FormFactoryInterface $formFactory;
-    protected Environment $twig;
-    protected BlockManagerInterface $blockManager;
-    protected CmsConfig $cmsConfig;
-    protected EventDispatcherInterface $eventDispatcher;
-    protected array $enabledLocales;
-
-    public function __construct(FormFactoryInterface $formFactory, Environment $twig, BlockManagerInterface $blockManager, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, array $enabledLocales)
-    {
-        $this->formFactory = $formFactory;
-        $this->twig = $twig;
-        $this->blockManager = $blockManager;
-        $this->cmsConfig = $cmsConfig;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->enabledLocales = $enabledLocales;
-    }
-
-    protected function createForm(string $type, mixed $data = null, array $options = []): FormInterface
-    {
-        return $this->formFactory->create($type, $data, $options);
-    }
-
-    protected function renderView(string $view, array $parameters = []): string
-    {
-        return $this->twig->render($view, $parameters);
+    public function __construct(
+        protected AuthorizationCheckerInterface $authorizationChecker,
+        protected FormFactoryInterface $formFactory,
+        protected Environment $twig,
+        protected BlockManagerInterface $blockManager,
+        protected CmsConfig $cmsConfig,
+        protected EventDispatcherInterface $eventDispatcher,
+        protected array $enabledLocales,
+    ) {
     }
 
     public function create(string $blockType, Request $request, BlockCreateFormInterface $createForm): Response
