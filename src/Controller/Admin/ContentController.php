@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Controller\Admin;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Controller\ControllerServicesTrait;
 use Softspring\CmsBundle\Data\DataExporter;
 use Softspring\CmsBundle\Data\DataImporter;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
@@ -25,7 +26,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\WebProfilerBundle\EventListener\WebDebugToolbarListener;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,56 +38,25 @@ use Twig\Environment;
 class ContentController extends AbstractController
 {
     use DispatchGetResponseTrait;
+    use ControllerServicesTrait;
 
-    protected EntityManagerInterface $em;
-
-    protected AuthorizationCheckerInterface $authorizationChecker;
-    protected FormFactoryInterface $formFactory;
-    protected Environment $twig;
-    protected ContentManagerInterface $contentManager;
-    protected ContentVersionManagerInterface $contentVersionManager;
-    protected TranslatorInterface $translator;
-    protected RouteManagerInterface $routeManager;
-    protected ContentRender $contentRender;
-    protected CmsConfig $cmsConfig;
-    protected EventDispatcherInterface $eventDispatcher;
-    protected array $enabledLocales;
-    protected DataImporter $dataImporter;
-    protected DataExporter $dataExporter;
-    protected ?WebDebugToolbarListener $webDebugToolbarListener;
-
-    public function __construct(AuthorizationCheckerInterface $authorizationChecker, FormFactoryInterface $formFactory, Environment $twig, EntityManagerInterface $em, ContentManagerInterface $contentManager, ContentVersionManagerInterface $contentVersionManager, TranslatorInterface $translator, RouteManagerInterface $routeManager, ContentRender $contentRender, CmsConfig $cmsConfig, EventDispatcherInterface $eventDispatcher, array $enabledLocales, DataImporter $dataImporter, DataExporter $dataExporter, ?WebDebugToolbarListener $webDebugToolbarListener)
-    {
-        $this->authorizationChecker = $authorizationChecker;
-        $this->formFactory = $formFactory;
-        $this->twig = $twig;
-        $this->em = $em;
-        $this->contentManager = $contentManager;
-        $this->contentVersionManager = $contentVersionManager;
-        $this->routeManager = $routeManager;
-        $this->translator = $translator;
-        $this->contentRender = $contentRender;
-        $this->cmsConfig = $cmsConfig;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->enabledLocales = $enabledLocales;
-        $this->dataImporter = $dataImporter;
-        $this->dataExporter = $dataExporter;
-        $this->webDebugToolbarListener = $webDebugToolbarListener;
-    }
-
-    protected function createForm(string $type, mixed $data = null, array $options = []): FormInterface
-    {
-        return $this->formFactory->create($type, $data, $options);
-    }
-
-    protected function renderView(string $view, array $parameters = []): string
-    {
-        return $this->twig->render($view, $parameters);
-    }
-
-    protected function isGranted(mixed $attribute, mixed $subject = null): bool
-    {
-        return $this->authorizationChecker->isGranted($attribute, $subject);
+    public function __construct(
+        protected AuthorizationCheckerInterface $authorizationChecker,
+        protected FormFactoryInterface $formFactory,
+        protected Environment $twig,
+        protected EntityManagerInterface $em,
+        protected ContentManagerInterface $contentManager,
+        protected ContentVersionManagerInterface $contentVersionManager,
+        protected TranslatorInterface $translator,
+        protected RouteManagerInterface $routeManager,
+        protected ContentRender $contentRender,
+        protected CmsConfig $cmsConfig,
+        protected EventDispatcherInterface $eventDispatcher,
+        protected array $enabledLocales,
+        protected DataImporter $dataImporter,
+        protected DataExporter $dataExporter,
+        protected ?WebDebugToolbarListener $webDebugToolbarListener,
+    ) {
     }
 
     public function create(Request $request): Response
