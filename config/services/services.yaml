@@ -95,10 +95,6 @@ services:
     Softspring\CmsBundle\Request\:
         resource: '../../src/Request/*'
 
-    Softspring\CmsBundle\Request\ParamConverter\:
-        resource: '../../src/Request/ParamConverter/*'
-        tags: ['request.param_converter']
-
     sfs_cms.twig.extension.loader:
         class: Twig\Extension\StringLoaderExtension
         tags: ['twig.extension']
