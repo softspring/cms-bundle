@@ -40,7 +40,7 @@
                 </div>
                 <div class="sf-toolbar-info-piece">
                     <b>Route cache</b>
-                    <span>{{ collector.routePath.cacheTtl|default('none') }}</span>
+                    <span>{{ collector.route.currentPath.cacheTtl|default('none') }}</span>
                 </div>
                 <div class="sf-toolbar-info-piece">
                     <b>Content</b>
@@ -166,8 +166,8 @@
         </div>
         <div class="metric">
             <span class="value">
-                {% if collector.routePath.cacheTtl %}
-                    {{ collector.routePath.cacheTtl }}
+                {% if collector.route.currentPath.cacheTtl %}
+                    {{ collector.route.currentPath.cacheTtl }}
                     <span class="unit">sg</span>
                 {% else %}
                     none
@@ -361,7 +361,6 @@
 
                 <h3>Route</h3>
                 {{ dump(collector.route) }}
-                {{ dump(collector.routePath) }}
             </div>
         </div>
 
