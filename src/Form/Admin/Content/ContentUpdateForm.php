@@ -3,6 +3,7 @@
 namespace Softspring\CmsBundle\Form\Admin\Content;
 
 use Softspring\CmsBundle\Form\Admin\Route\RouteCollectionType;
+use Softspring\CmsBundle\Form\Admin\Route\RouteUpdateForm;
 use Softspring\CmsBundle\Form\Type\DynamicFormType;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Translator\TranslatableContext;
@@ -66,6 +67,7 @@ class ContentUpdateForm extends AbstractType implements ContentUpdateFormInterfa
         $builder->add('routes', RouteCollectionType::class, [
             'allow_add' => false,
             'allow_delete' => false,
+            'entry_type' => RouteUpdateForm::class,
             'entry_options' => [
                 'content_relative' => true,
                 'translation_domain' => 'sfs_cms_contents',
