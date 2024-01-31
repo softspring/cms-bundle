@@ -193,7 +193,7 @@ admin_page:
         meta.title: "Editar contenido"
         title: "%name% (nueva versión desde v%versionNumber%)"
         breadcrumb: "Editar contenido"
-        render_error: "Se ha producido un error al compilar la página, revisa la configuración."
+        render_error: "Se ha producido un error al compilar la página, revisa la configuración.<br/><small>%exception%</small>"
         validation_error: "Los cambios no se han guardado, la página tiene algunos errores, revisa la configuración."
         success_saved: "Los cambios se han guardado."
         actions:
@@ -306,7 +306,9 @@ admin_page:
             title: "Contenido compilado"
             error: "Este contenido tiene errores en la compilación, trata de editarlo para resolverlos o de republicar"
             pre_compile_content_disabled: "La pre-compilación de contenido está desactivada para esta versión"
+            pre_compile_content_missing: "Esta versión no tiene contenido pre-compilado, quizas se haya producido un error, prueba a recompilarla"
             pre_compile_modules_disabled: "La pre-compilación de módulos está desactivada para esta versión"
+            pre_compile_modules_missing: "Esta versión no tiene módulos pre-compilados, quizas se haya producido un error, prueba a recompilarla"
         data:
             title: "Datos"
         linked_routes:

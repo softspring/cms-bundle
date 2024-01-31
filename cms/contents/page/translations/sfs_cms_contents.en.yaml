@@ -193,7 +193,7 @@ admin_page:
         meta.title: "Edit content"
         title: "%name% (new version from v%versionNumber%)"
         breadcrumb: "Edit content"
-        render_error: "An error has been produced during the page compilation, check the configuration."
+        render_error: "An error has been produced during the page compilation, check the configuration.<br/><small>%exception%</small>"
         validation_error: "Changes has not been saved, this page has some errors, check the configuration."
         success_saved: "Changes has been saved."
         actions:
@@ -306,7 +306,9 @@ admin_page:
             title: "Compiled content"
             error: "This content has some compilation errors, try to edit it to solve them or try to recompile"
             pre_compile_content_disabled: "Content pre-compilation is disabled for this version"
+            pre_compile_content_missing: "This version has not compiled content, maybe it's an error, try to recompile it."
             pre_compile_modules_disabled: "Module pre-compilation is disabled for this version"
+            pre_compile_modules_missing: "This version has not compiled modules, maybe it's an error, try to recompile it."
         data:
             title: "Data"
         linked_routes:

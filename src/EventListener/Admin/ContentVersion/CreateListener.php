@@ -8,6 +8,7 @@ use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
+use Softspring\CmsBundle\Render\CompileException;
 use Softspring\CmsBundle\Render\RenderErrorException;
 use Softspring\CmsBundle\Request\FlashNotifier;
 use Softspring\CmsBundle\SfsCmsEvents;
@@ -188,8 +189,12 @@ class CreateListener extends AbstractContentVersionListener
 
         if ($exception instanceof RenderErrorException) {
             $exception->getRenderErrorList()->formMapErrors($event->getForm());
-
-            $request->attributes->set('_content_version_alert', ['error', 'admin_'.$contentConfig['_id'].'.content.render_error']);
+            $request->attributes->set('_content_version_alert', ['error', 'admin_'.$contentConfig['_id'].'.content.render_error', ['%exception%'=>$exception->getMessage()]]);
+        } else if ($exception->getPrevious() instanceof RenderErrorException) {
+            $exception->getPrevious()->getRenderErrorList()->formMapErrors($event->getForm());
+            $request->attributes->set('_content_version_alert', ['error', 'admin_'.$contentConfig['_id'].'.content.render_error', ['%exception%'=>$exception->getMessage()]]);
+        } else if ($exception instanceof CompileException) {
+            $request->attributes->set('_content_version_alert', ['error', 'admin_'.$contentConfig['_id'].'.content.render_error', ['%exception%'=>$exception->getMessage()]]);
         }
     }
 
