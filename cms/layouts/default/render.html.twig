@@ -39,6 +39,7 @@
                 </ul>
 
                 <ul class="nav col-12 col-lg-auto mb-2 justify-content-center mb-md-0">
+                    {% if route_defined('home') %}
                     {% for locale, path in sfs_cms_locale_paths('home') %}
                         {% if locale == app.request.locale %}
                             <li><a href="" class="nav-link px-3"><strong>{{ locale }}</strong></a></li>
@@ -46,6 +47,7 @@
                             <li><a href="{{ path }}" class="nav-link px-3">{{ locale }}</a></li>
                         {% endif %}
                     {% endfor %}
+                    {% endif %}
                 </ul>
 
                 <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
