@@ -8,6 +8,7 @@ class TranslatableContext
 
     public function __construct(protected string $defaultLocale, protected array $enabledLocales)
     {
+        $this->enabledLocales = $this->enabledLocales ?: [$this->defaultLocale];
         $this->locales = $this->enabledLocales;
     }
 
