@@ -179,14 +179,23 @@
                             {{ ('admin_'~content_type~'.version_info.compiled.error')|trans }}
                         </div>
                     {% else %}
-                        {% if version_entity.compiled is empty %}
+                        {% if not content_can_be_compiled %}
                             <div class="alert alert-warning" role="alert">
                                 {{ ('admin_'~content_type~'.version_info.compiled.pre_compile_content_disabled')|trans }}
                             </div>
+                        {% elseif version_entity.compiled is empty %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ ('admin_'~content_type~'.version_info.compiled.pre_compile_content_missing')|trans }}
+                            </div>
                         {% endif %}
-                        {% if version_entity.compiledModules is empty %}
+
+                        {% if not content_can_compile_modules %}
                             <div class="alert alert-warning" role="alert">
                                 {{ ('admin_'~content_type~'.version_info.compiled.pre_compile_modules_disabled')|trans }}
+                            </div>
+                        {% elseif version_entity.compiledModules is empty %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ ('admin_'~content_type~'.version_info.compiled.pre_compile_modules_missing')|trans }}
                             </div>
                         {% endif %}
                     {% endif %}
