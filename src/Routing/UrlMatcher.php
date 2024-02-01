@@ -138,8 +138,8 @@ class UrlMatcher
                 case RouteInterface::TYPE_REDIRECT_TO_URL:
                     return $this->generateRedirect($route->getRedirectUrl(), $route->getRedirectType() ?? Response::HTTP_FOUND);
 
-                    case RouteInterface::TYPE_REDIRECT_TO_ROUTE:
-                        return $this->generateRedirectToRoute($route->getSymfonyRoute(), $route->getRedirectType() ?? Response::HTTP_FOUND);
+                case RouteInterface::TYPE_REDIRECT_TO_ROUTE:
+                    return $this->generateRedirectToRoute($route->getSymfonyRoute(), $route->getRedirectType() ?? Response::HTTP_FOUND);
 
                 default:
                     throw new \Exception(sprintf('Route type %u not yet implemented', $route->getType()));

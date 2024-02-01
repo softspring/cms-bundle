@@ -2,7 +2,6 @@
 
 namespace Softspring\CmsBundle\DataCollector;
 
-use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Model\RoutePathInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
@@ -102,7 +101,7 @@ class ContentDataCollector extends DataCollector
             'publishedVersion' => [
                 'createdAt' => $content->getPublishedVersion()?->getCreatedAt(),
                 'layout' => $content->getPublishedVersion()?->getLayout(),
-            ]
+            ],
         ];
 
         $this->data['cache'] = array_intersect_key($response->headers->all(), array_flip(['cache-control', 'date']));
