@@ -16,6 +16,8 @@
 
 import {getSelectedLanguage} from './filter-preview';
 
+let cssCodeNotValidatedWarningShown;
+
 export {
     contentEditableUpdateElementsFromInput,
     contentEditableUpdateInputsFromElement
@@ -31,7 +33,11 @@ function contentEditableUpdateInputsFromElement(previewElement) {
     let inputElements = moduleForm.querySelectorAll("[data-edit-content-input='" + previewElement.dataset.editContentTarget + "']");
     if (inputElements.length) {
         inputElements.forEach(function (inputElement) {
-            inputElement.value = previewElement.innerHTML;
+            if (previewElement.dataset.editContentEscape) {
+                inputElement.value = previewElement.innerText;
+            } else {
+                inputElement.value = previewElement.innerHTML;
+            }
             inputElement.setAttribute('value', previewElement.innerHTML);//Fixed empty value when element is new and is moved
         });
     }
@@ -52,13 +58,13 @@ function contentEditableUpdateInputsFromElement(previewElement) {
 function contentEditableUpdateElementsFromInput(inputElement) {
     let modulePreview = inputElement.closest('.cms-module-edit').querySelector('.module-preview');
 
-    let targetElements = modulePreview.querySelectorAll("[data-edit-content-target='" + inputElement.dataset.editContentInput + "']");
-    if (targetElements.length) {
-        targetElements.forEach(function (targetElement) {
+    let previewElements = modulePreview.querySelectorAll("[data-edit-content-target='" + inputElement.dataset.editContentInput + "']");
+    if (previewElements.length) {
+        previewElements.forEach(function (previewElement) {
             let value = inputElement.value;
 
-            if (targetElement.dataset.editContentValidate) {
-                switch (targetElement.dataset.editContentValidate) {
+            if (previewElement.dataset.editContentValidate) {
+                switch (previewElement.dataset.editContentValidate) {
                     case 'html':
                         let valueToParse = '<body>' + value + '</body>';
                         valueToParse = valueToParse.replace(new RegExp('\n', 'g'), '');
@@ -67,13 +73,13 @@ function contentEditableUpdateElementsFromInput(inputElement) {
                         let errorNode = doc.querySelector('parsererror');
                         if (errorNode) {
                             value = errorNode.innerText;
-                            targetElement.classList.add('text-error');
-                            targetElement.classList.add('border');
-                            targetElement.classList.add('border-danger');
+                            previewElement.classList.add('text-error');
+                            previewElement.classList.add('border');
+                            previewElement.classList.add('border-danger');
                         } else {
-                            targetElement.classList.remove('text-error');
-                            targetElement.classList.remove('border');
-                            targetElement.classList.remove('border-danger');
+                            previewElement.classList.remove('text-error');
+                            previewElement.classList.remove('border');
+                            previewElement.classList.remove('border-danger');
                         }
                         break;
 
@@ -86,18 +92,18 @@ function contentEditableUpdateElementsFromInput(inputElement) {
                 }
             }
 
-            if (targetElement.dataset.editContentEscape) {
-                targetElement.innerText = value;
+            if (previewElement.dataset.editContentEscape) {
+                previewElement.innerText = value;
             } else {
                 value = value.replace(new RegExp('href', 'g'), 'href-invalidate');
-                targetElement.innerHTML = value;
+                previewElement.innerHTML = value;
             }
 
-            if (targetElement.dataset.editContentHideIfEmpty) {
-                if (targetElement.innerHTML === '') {
-                    targetElement.style.setProperty('display', 'none');
-                } else if (targetElement.matches('[data-lang=' + getSelectedLanguage() + ']')) {
-                    targetElement.style.setProperty('display', '');
+            if (previewElement.dataset.editContentHideIfEmpty) {
+                if (previewElement.innerHTML === '') {
+                    previewElement.style.setProperty('display', 'none');
+                } else if (previewElement.matches('[data-lang=' + getSelectedLanguage() + ']')) {
+                    previewElement.style.setProperty('display', '');
                 }
             }
         });
@@ -109,7 +115,7 @@ function contentEditableUpdateElementsFromInput(inputElement) {
  * @private
  */
 function _init() {
-    let cssCodeNotValidatedWarningShown = false;
+    cssCodeNotValidatedWarningShown = false;
 
     // dispatch custom events on input event over data-edit-content-input and data-edit-content-target elements
     document.addEventListener('input', function (event) {
