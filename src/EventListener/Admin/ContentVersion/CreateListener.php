@@ -189,12 +189,12 @@ class CreateListener extends AbstractContentVersionListener
 
         if ($exception instanceof RenderErrorException) {
             $exception->getRenderErrorList()->formMapErrors($event->getForm());
-            $request->attributes->set('_content_version_alert', ['error', 'admin_'.$contentConfig['_id'].'.content.render_error', ['%exception%'=>$exception->getMessage()]]);
-        } else if ($exception->getPrevious() instanceof RenderErrorException) {
+            $request->attributes->set('_content_version_alert', ['error', 'admin_'.$contentConfig['_id'].'.content.render_error', ['%exception%' => $exception->getMessage()]]);
+        } elseif ($exception->getPrevious() instanceof RenderErrorException) {
             $exception->getPrevious()->getRenderErrorList()->formMapErrors($event->getForm());
-            $request->attributes->set('_content_version_alert', ['error', 'admin_'.$contentConfig['_id'].'.content.render_error', ['%exception%'=>$exception->getMessage()]]);
-        } else if ($exception instanceof CompileException) {
-            $request->attributes->set('_content_version_alert', ['error', 'admin_'.$contentConfig['_id'].'.content.render_error', ['%exception%'=>$exception->getMessage()]]);
+            $request->attributes->set('_content_version_alert', ['error', 'admin_'.$contentConfig['_id'].'.content.render_error', ['%exception%' => $exception->getMessage()]]);
+        } elseif ($exception instanceof CompileException) {
+            $request->attributes->set('_content_version_alert', ['error', 'admin_'.$contentConfig['_id'].'.content.render_error', ['%exception%' => $exception->getMessage()]]);
         }
     }
 
