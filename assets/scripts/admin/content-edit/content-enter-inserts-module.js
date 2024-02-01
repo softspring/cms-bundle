@@ -1,7 +1,3 @@
-import {
-    getPolymorphicCollectionLastIndex
-} from '@softspring/polymorphic-form-type/scripts/polymorphic-form-type';
-
 window.addEventListener('load', (event) => {
     document.addEventListener('keydown', function (event) {
         if (event.key !== 'Enter') return;
