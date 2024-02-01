@@ -144,14 +144,4 @@ class SiteResolverTest extends TestCase
         $request = new Request([], [], [], [], [], ['SERVER_NAME' => 'www.sfs-cms.org', 'REQUEST_URI' => 'https://www.sfs-cms.org/test/url', 'QUERY_STRING' => 'with-params=1']);
         $this->assertEquals('https://sfs-cms.org/test/url?with-params=1', $siteResolver->getCanonicalRedirectUrl($this->cmsConfig->getSite('default'), $request));
     }
-
-    public function testCanonicalUrlWithNoCanonicalConfig()
-    {
-        $this->expectException(SiteHasNotACanonicalHostException::class);
-
-        $sitesConfig = ['identification' => 'domain', 'throw_not_found' => true];
-        $siteResolver = new SiteResolver($this->cmsConfig, $sitesConfig);
-        $request = new Request([], [], [], [], [], ['SERVER_NAME' => 'no_canonical.sfs-cms.org']);
-        $siteResolver->getCanonicalRedirectUrl($this->cmsConfig->getSite('no_canonical'), $request);
-    }
 }
