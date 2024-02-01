@@ -67,6 +67,9 @@ admin_page:
         sites: "Sites"
         published: "Published"
         unpublished: "Unpublished"
+        general:
+            status: "Status"
+            publishDate: "Publish date"
         seo:
             title: "SEO"
             index: "Index"
@@ -79,6 +82,7 @@ admin_page:
             title: "Routes"
             cache: "(cache %ttl% seconds)"
             not_published_warning: "This content is not published, so the following routes will return a 404 error"
+            missing_locale: "This content has not a route path for %missingLocale% language"
         versions:
             title: "Last versions"
             published: "Published"
@@ -95,11 +99,12 @@ admin_page:
             id.header: "Version"
             origin.header: "Origin"
             created.header: "Created"
+            creator.header: "Creator"
             publish_status.header: "Publish status"
             note.header: "Note"
         publish_status:
             published: "published"
-            unpublished: ""
+            unpublished: "not published"
         origin:
             "null": ""
             1: "edited"
@@ -110,7 +115,7 @@ admin_page:
             edit.link: "Edit"
             preview.link: "Preview"
             export.link: "Export"
-            publish.link: "Publish version"
+            publish.link: "Publish"
             import_version.link: "Import version"
             cleanup_versions.link: "Cleanup versions"
             translations.link: "Translations"
@@ -188,7 +193,7 @@ admin_page:
         meta.title: "Edit content"
         title: "%name% (new version from v%versionNumber%)"
         breadcrumb: "Edit content"
-        render_error: "An error has been produced during the page compilation, check the configuration."
+        render_error: "An error has been produced during the page compilation, check the configuration.<br/><small>%exception%</small>"
         validation_error: "Changes has not been saved, this page has some errors, check the configuration."
         success_saved: "Changes has been saved."
         actions:
@@ -219,10 +224,12 @@ admin_page:
         filter_form:
             name.label: "Name"
             sites.label: "Sites"
+            status.label: "Status"
         empty:
             create_first_content_raw: '<a href="%create_link%">Create</a> or <a href="%import_link%">import</a> your first page!'
             can_not_create_content: "You can not create a new page"
             go_to_doc_raw: 'If you need help go to <a href="https://github.com/softspring/cms-bundle" target="_blank">documentation</a>'
+            clean_filters: 'Your query has no results, try to <a href="%url%">clean filters</a>'
 
     form:
         name.label: "Name"
@@ -287,6 +294,7 @@ admin_page:
             version.title: "Version"
             origin.title: "Origin"
             created.title: "Created"
+            creator.title: "Creator"
             publish_status.title: "Published"
             keep.title: "Keep"
             layout.title: "Layout"
@@ -298,7 +306,9 @@ admin_page:
             title: "Compiled content"
             error: "This content has some compilation errors, try to edit it to solve them or try to recompile"
             pre_compile_content_disabled: "Content pre-compilation is disabled for this version"
+            pre_compile_content_missing: "This version has not compiled content, maybe it's an error, try to recompile it."
             pre_compile_modules_disabled: "Module pre-compilation is disabled for this version"
+            pre_compile_modules_missing: "This version has not compiled modules, maybe it's an error, try to recompile it."
         data:
             title: "Data"
         linked_routes:

@@ -67,6 +67,9 @@ admin_page:
         sites: "Sitios"
         published: "Publicada"
         unpublished: "Despublicada"
+        general:
+            status: "Estado"
+            publishDate: "Fecha de publicación"
         seo:
             title: "SEO"
             index: "Indexar"
@@ -79,6 +82,7 @@ admin_page:
             title: "Rutas"
             cache: "(cache %ttl% segundos)"
             not_published_warning: "Este contenido no está publicado, por lo tanto las siguientes rutas devolverán un error 404"
+            missing_locale: "No hay segmento de URL configurador para el idioma %missingLocale%"
         versions:
             title: "Últimas versiones"
             published: "publicada"
@@ -95,11 +99,12 @@ admin_page:
             id.header: "Versión"
             origin.header: "Origen"
             created.header: "Creación"
+            creator.header: "Creador"
             publish_status.header: "Publicación"
             note.header: "Nota"
         publish_status:
             published: "publicada"
-            unpublished: ""
+            unpublished: "no publicada"
         origin:
             "null": ""
             1: "editado"
@@ -110,7 +115,7 @@ admin_page:
             edit.link: "Editar"
             preview.link: "Previsualizar"
             export.link: "Exportar"
-            publish.link: "Publicar versión"
+            publish.link: "Publicar"
             import_version.link: "Importar versión"
             cleanup_versions.link: "Limpiar versiones"
             translations.link: "Traducciones"
@@ -188,7 +193,7 @@ admin_page:
         meta.title: "Editar contenido"
         title: "%name% (nueva versión desde v%versionNumber%)"
         breadcrumb: "Editar contenido"
-        render_error: "Se ha producido un error al compilar la página, revisa la configuración."
+        render_error: "Se ha producido un error al compilar la página, revisa la configuración.<br/><small>%exception%</small>"
         validation_error: "Los cambios no se han guardado, la página tiene algunos errores, revisa la configuración."
         success_saved: "Los cambios se han guardado."
         actions:
@@ -219,10 +224,12 @@ admin_page:
         filter_form:
             name.label: "Nombre"
             sites.label: "Sitios"
+            status.label: "Estado"
         empty:
             create_first_content_raw: '<a href="%create_link%">Crea</a> o <a href="%import_link%">importa</a> tu primera página!'
             can_not_create_content: "No puedes crear páginas"
             go_to_doc_raw: 'Si necesitas ayuda visita la <a href="https://github.com/softspring/cms-bundle" target="_blank">documentación</a>'
+            clean_filters: 'No se han encontrado páginas con tu búsqueda, <a href="%url%">limpia los filtros</a> para ver todas las páginas'
 
     form:
         name.label: "Nombre"
@@ -287,6 +294,7 @@ admin_page:
             version.title: "Version"
             origin.title: "Origen"
             created.title: "Creada"
+            creator.title: "Creador"
             publish_status.title: "Publicada"
             keep.title: "Keep"
             layout.title: "Diseño"
@@ -298,7 +306,9 @@ admin_page:
             title: "Contenido compilado"
             error: "Este contenido tiene errores en la compilación, trata de editarlo para resolverlos o de republicar"
             pre_compile_content_disabled: "La pre-compilación de contenido está desactivada para esta versión"
+            pre_compile_content_missing: "Esta versión no tiene contenido pre-compilado, quizas se haya producido un error, prueba a recompilarla"
             pre_compile_modules_disabled: "La pre-compilación de módulos está desactivada para esta versión"
+            pre_compile_modules_missing: "Esta versión no tiene módulos pre-compilados, quizas se haya producido un error, prueba a recompilarla"
         data:
             title: "Datos"
         linked_routes:

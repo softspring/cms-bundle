@@ -2,27 +2,39 @@
 
 {% embed '@SfsCms/admin/_embeds/_card.html.twig' with {'title': 'General'} %}
     {% trans_default_domain 'sfs_cms_contents' %}
+
+    {% block title %}
+        {% if entity.publishedVersion %}
+            {% if not content_config.admin.unpublish.is_granted or is_granted(content_config.admin.unpublish.is_granted, entity) %}
+                <a class="btn btn-sm btn-outline-secondary float-end"  href="{{ url('sfs_cms_admin_content_'~content_type~'_unpublish', {'content':entity}) }}"
+                   onclick="return confirm('{{ ('admin_'~content_type~'.read.actions.unpublish.confirm')|trans({'%name%':entity.name}) }}')"
+                    >{{ ('admin_'~content_type~'.read.actions.unpublish.link')|trans }}</a>
+            {% else %}
+                <a class="btn btn-sm btn-outline-secondary float-end disabled">{{ ('admin_'~content_type~'.read.actions.unpublish.link')|trans }}</a>
+            {% endif %}
+        {% endif %}
+        {{ parent() }}
+    {% endblock %}
+
     {% block content %}
         <dl>
             <dt>{{ ('admin_'~content_type~'.read.name')|trans }}</dt>
             <dd>{{ entity.name }}</dd>
             <dt>{{ ('admin_'~content_type~'.read.sites')|trans }}</dt>
             <dd>{{ entity.sites|map((site) => site|sfs_cms_site_name)|join(', ') }}</dd>
-            <dt>{{ ('admin_'~content_type~'.read.published')|trans }}</dt>
+            <dt>{{ ('admin_'~content_type~'.read.general.status')|trans }}</dt>
             <dd>
+                {{ (content_type~'.status.'~entity.status)|trans }}
                 {% if entity.publishedVersion %}
-                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_version_info', {'content':entity, 'version':entity.publishedVersion}) }}">v{{ entity.publishedVersion.versionNumber }}</a>
-                {% endif %}
-
-                {{ entity.publishedVersion ? entity.publishedVersion.createdAt|date('H:i d-m-Y') : (('admin_'~content_type~'.read.unpublished')|trans) }}
-
-                {% if not content_config.admin.unpublish.is_granted or is_granted(content_config.admin.unpublish.is_granted, entity) %}
-                    {% if entity.publishedVersion %}
-                        <a href="{{ url('sfs_cms_admin_content_'~content_type~'_unpublish', {'content':entity}) }}"
-                           onclick="return confirm('{{ ('admin_'~content_type~'.read.actions.unpublish.confirm')|trans({'%name%':entity.name}) }}')">{{ ('admin_'~content_type~'.read.actions.unpublish.link')|trans({'%name%':entity.name})|lower }}</a>
-                    {% endif %}
+                    (<a href="{{ url('sfs_cms_admin_content_'~content_type~'_version_info', {'content':entity, 'version':entity.publishedVersion}) }}">v{{ entity.publishedVersion.versionNumber }}</a>)
                 {% endif %}
             </dd>
+            {% if entity.publishedVersion %}
+            <dt>{{ ('admin_'~content_type~'.read.general.publishDate')|trans }}</dt>
+            <dd>
+                {{ entity.publishedVersion.createdAt|date('H:i d-m-Y') }}
+            </dd>
+            {% endif %}
         </dl>
     {% endblock %}
 {% endembed %}

@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Form\Admin\SiteChoiceType;
 use Softspring\Component\DoctrinePaginator\Form\PaginatorForm;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\Options;
@@ -56,5 +57,14 @@ class ContentListFilterForm extends PaginatorForm
                 'content' => $options['content_config'],
             ]);
         }
+
+        $builder->add('status', ChoiceType::class, [
+            'required' => false,
+            'property_path' => '[publishedVersion__is]',
+            'choices' => [
+                "{$options['content_config']['_id']}.status.draft" => 'null',
+                "{$options['content_config']['_id']}.status.published" => 'not_null',
+            ],
+        ]);
     }
 }

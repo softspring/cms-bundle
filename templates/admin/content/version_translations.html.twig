@@ -16,7 +16,7 @@
 {% block content %}
     <h1 class="h3">{{ ('admin_'~content_type~'.translations.title')|trans({'%name%':content_entity.name, '%versionNumber%': prev_version.versionNumber|default('0')}) }}</h1>
 
-    {% include '@SfsCms/admin/content/_content_tabs.html.twig' with {'current':'version_translations', 'content':content_entity, 'entity':version_entity} %}
+    {% include ['@content/'~content_type~'/admin/_content_tabs.html.twig', '@SfsCms/admin/content/_content_tabs.html.twig']  with {'current':'version_translations', 'content':content_entity, 'entity':version_entity} %}
 
     <div class="container-fluid mb-3">
         <div class="row">

@@ -51,14 +51,59 @@ class ContentDataCollector extends DataCollector
             return;
         }
 
-        $this->data['_sfs_cms_site'] = $request->attributes->get('_sfs_cms_site');
-        $this->data['site_name'] = $this->translator->trans($this->data['_sfs_cms_site']->getId().'.name', [], 'sfs_cms_sites');
-        $this->data['_sfs_cms_locale'] = $request->attributes->get('_sfs_cms_locale');
-        $this->data['_sfs_cms_locale_path'] = $request->attributes->get('_sfs_cms_locale_path');
-        $this->data['_route'] = $request->attributes->get('_route');
-        $this->data['_route_params'] = $request->attributes->get('_route_params');
-        $this->data['_controller'] = $request->attributes->get('_controller');
-        $this->data['routePath'] = $request->attributes->get('routePath');
+        $this->data['site'] = $request->attributes->get('_sfs_cms_site');
+        $this->data['site_name'] = $this->translator->trans($this->data['site']->getId().'.name', [], 'sfs_cms_sites');
+        $this->data['locale'] = $request->attributes->get('_sfs_cms_locale');
+
+        /** @var RoutePathInterface $routePath */
+        $routePath = $request->attributes->get('routePath');
+        /** @var RouteInterface $route */
+        $route = $routePath->getRoute();
+        $this->data['route'] = [
+            'id' => $route->getId(),
+            'type' => $route->getType(),
+            'parent' => $route->getParent()?->getId(),
+            'content' => $route->getContent()?->getId(),
+            'symfonyRoute' => $route->getSymfonyRoute(),
+            'redirectUrl' => $route->getRedirectUrl(),
+            'redirectType' => $route->getRedirectType(),
+            'currentPath' => [
+                'path' => $routePath->getPath(),
+                'locale' => $routePath->getLocale(),
+                'cacheTtl' => $routePath->getCacheTtl(),
+                'compiledPath' => $routePath->getCompiledPath(),
+            ],
+            'paths' => array_map(function (RoutePathInterface $routePath) {
+                return [
+                    'path' => $routePath->getPath(),
+                    'locale' => $routePath->getLocale(),
+                    'cacheTtl' => $routePath->getCacheTtl(),
+                    'compiledPath' => $routePath->getCompiledPath(),
+                ];
+            }, $route->getPaths()->toArray()),
+        ];
+
+        $content = $route->getContent();
+        $this->data['content'] = [
+            'id' => $content->getId(),
+            'locales' => $content->getLocales(),
+            'defaultLocale' => $content->getDefaultLocale(),
+            'sites' => array_map(function (SiteInterface $site) {
+                return [
+                    'id' => $site->getId(),
+                    'name' => $this->translator->trans($site->getId().'.name', [], 'sfs_cms_sites'),
+                ];
+            }, $content->getSites()->toArray()),
+            'seo' => $content->getSeo(),
+            'name' => $content->getName(),
+            'lastVersionNumber' => $content->getLastVersionNumber(),
+            'status' => $content->getStatus(),
+            'extra' => $content->getExtraData(),
+            'publishedVersion' => [
+                'createdAt' => $content->getPublishedVersion()?->getCreatedAt(),
+                'layout' => $content->getPublishedVersion()?->getLayout(),
+            ]
+        ];
 
         $this->data['cache'] = array_intersect_key($response->headers->all(), array_flip(['cache-control', 'date']));
 
@@ -107,12 +152,12 @@ class ContentDataCollector extends DataCollector
 
     public function getSite(): ?SiteInterface
     {
-        return $this->data['_sfs_cms_site'] ?? null;
+        return $this->data['site'] ?? null;
     }
 
     public function getLocale(): string
     {
-        return $this->data['_sfs_cms_locale'] ?? '';
+        return $this->data['locale'] ?? '';
     }
 
     public function isCmsRequest(): bool
@@ -120,29 +165,14 @@ class ContentDataCollector extends DataCollector
         return isset($this->data['site_name']);
     }
 
-    public function getRoutePath(): ?RoutePathInterface
+    public function getRoute(): array
     {
-        if (empty($this->data['routePath']) || !$this->data['routePath'] instanceof RoutePathInterface) {
-            return null;
-        }
-
-        return $this->data['routePath'];
+        return $this->data['route'];
     }
 
-    public function getRoute(): ?RouteInterface
+    public function getContent(): array
     {
-        return $this->getRoutePath()->getRoute() ?? null;
-    }
-
-    public function getContent(): ?ContentInterface
-    {
-        $route = $this->getRoute();
-
-        if (!$route || RouteInterface::TYPE_CONTENT !== $route->getType()) {
-            return null;
-        }
-
-        return $route->getContent();
+        return $this->data['content'];
     }
 
     public function getTitle(): ?string
@@ -153,9 +183,9 @@ class ContentDataCollector extends DataCollector
             return null;
         }
 
-        switch ($route->getType()) {
+        switch ($route['type']) {
             case RouteInterface::TYPE_CONTENT:
-                return $route->getContent()->getName();
+                return $this->data['content']['name'];
 
             default:
                 return 'no yet implemented';

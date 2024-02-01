@@ -21,22 +21,22 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                {% include '@SfsCms/admin/content/_read_general.html.twig' %}
+                {% include ['@content/'~content_type~'/admin/_read_general.html.twig', '@SfsCms/admin/content/_read_general.html.twig'] %}
             </div>
             <div class="col">
-                {% include '@SfsCms/admin/content/_read_seo.html.twig' %}
+                {% include ['@content/'~content_type~'/admin/_read_seo.html.twig', '@SfsCms/admin/content/_read_seo.html.twig'] %}
             </div>
             <div class="col">
-                {% include '@SfsCms/admin/content/_read_routes.html.twig' %}
+                {% include ['@content/'~content_type~'/admin/_read_routes.html.twig', '@SfsCms/admin/content/_read_routes.html.twig'] %}
             </div>
             <div class="col">
-                {% include '@SfsCms/admin/content/_read_translations.html.twig' %}
+                {% include ['@content/'~content_type~'/admin/_read_translations.html.twig', '@SfsCms/admin/content/_read_translations.html.twig'] %}
             </div>
         </div>
 
         <div class="row">
             <div class="col">
-                {% include '@SfsCms/admin/content/_read_versions.html.twig' %}
+                {% include ['@content/'~content_type~'/admin/_read_versions.html.twig', '@SfsCms/admin/content/_read_versions.html.twig'] %}
             </div>
         </div>
     </div>

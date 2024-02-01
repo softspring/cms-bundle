@@ -6,6 +6,7 @@
         <th>{{ ('admin_'~content_type~'.versions.fields.id.header')|trans }}</th>
         <th>{{ ('admin_'~content_type~'.versions.fields.origin.header')|trans }}</th>
         <th>{{ ('admin_'~content_type~'.versions.fields.note.header')|trans }}</th>
+        <th>{{ ('admin_'~content_type~'.versions.fields.creator.header')|trans }}</th>
         <th>{{ ('admin_'~content_type~'.versions.fields.created.header')|trans }}</th>
         <th>{{ ('admin_'~content_type~'.versions.fields.publish_status.header')|trans }}</th>
         <th>&nbsp;</th>
@@ -26,7 +27,13 @@
                     <a href="{{ url('sfs_cms_admin_content_'~content_type~'_version_info', {'content':entity, 'version':version}) }}" class="text-muted"><i class="bi bi-tag"></i> {{ ('admin_'~content_type~'.versions.actions.add_note.link')|trans }}</a>
                 {% endif %}
             </td>
-            <td>{{ version.createdAt ? version.createdAt|date('H:i:s d-m-Y') : '' }}</td>
+            <td>
+                {% set creator = version.metaField('creator') %}
+                {% if creator %}
+                    {{ creator.name|default(creator.id)|default('') }}
+                {% endif %}
+            </td>
+            <td>{{ version.createdAt|date('H:i:s d-m-Y') }}</td>
             <td>{{ version.published ? ('admin_'~content_type~'.versions.publish_status.published')|trans : ('admin_'~content_type~'.versions.publish_status.unpublished')|trans }}</td>
             <td>
                 {% if not content_config.admin.version_lock.is_granted or is_granted(content_config.admin.version_lock.is_granted, version) %}

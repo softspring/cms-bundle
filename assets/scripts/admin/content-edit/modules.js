@@ -183,16 +183,14 @@ window.addEventListener('load', (event) => {
         }
     });
 
-    /**
-     * max_input_vars is defined in templates/admin/content/content.html.twig and is get from php options
-     */
     function checkMaxInputVars()
     {
         let currentInputVars = document.querySelectorAll('input, textarea, select').length;
         const buttons = document.querySelectorAll('#submitBtnGroupDrop1,#defaultSubmitBtn');
         const maxInputVarsMessage = document.getElementById('maxInputVarsMessage');
+        const maxInputVars = maxInputVarsMessage.dataset.maxInputVars;
 
-        if (currentInputVars > max_input_vars) {
+        if (currentInputVars > maxInputVars) {
             [...buttons].forEach((button) => button.classList.add('disabled'));
             maxInputVarsMessage.classList.remove('d-none');
         } else {

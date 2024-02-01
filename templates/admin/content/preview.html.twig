@@ -20,7 +20,7 @@
                             {% if content_entity.locales|length > 1 %}
                                 <select class="form-select mx-1" name="_locale" onchange="this.form.submit()">
                                     {% for locale in content_entity.locales %}
-                                        <option value="{{ locale|lower }}">{{ locale|upper }}</option>
+                                        <option value="{{ locale|lower }}" {% if locale == content_entity.defaultLocale %}selected{% endif %}>{{ locale|upper }}</option>
                                     {% endfor %}
                                 </select>
                             {% endif %}
@@ -64,7 +64,7 @@
         </header>
         <main class="flex-fill d-flex flex-row align-items-stretch bg-light  min-vh-100">
             <div class="pt-4 h-100 w-100">
-                <iframe name="previewFrame" id="preview" src="{{ url('sfs_cms_admin_content_'~content_type~'_version_preview', {'content':entity, 'version':version, '_site': entity.sitesSorted.first, '_locale': app.request.query.get('_locale', enabledLocales[0]|default(app.request.defaultLocale))}) }}" width="100%" height="100%"></iframe>
+                <iframe name="previewFrame" id="preview" src="{{ url('sfs_cms_admin_content_'~content_type~'_version_preview', {'content':entity, 'version':version, '_site': entity.sitesSorted.first, '_locale': entity.defaultLocale}) }}" width="100%" height="100%"></iframe>
             </div>
         </main>
     </div>

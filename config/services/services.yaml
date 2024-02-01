@@ -95,10 +95,6 @@ services:
     Softspring\CmsBundle\Request\:
         resource: '../../src/Request/*'
 
-    Softspring\CmsBundle\Request\ParamConverter\:
-        resource: '../../src/Request/ParamConverter/*'
-        tags: ['request.param_converter']
-
     sfs_cms.twig.extension.loader:
         class: Twig\Extension\StringLoaderExtension
         tags: ['twig.extension']
@@ -126,3 +122,7 @@ services:
             $superclassList: '%sfs_cms.convert_superclass_list%'
         tags:
             - { name: doctrine.event_listener, event: loadClassMetadata, priority: 500 }
+
+    Softspring\CmsBundle\Security\Voter\DeprecatedPermissionVoter:
+        tags:
+            - { name: security.voter, priority: 1000 }

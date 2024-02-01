@@ -36,7 +36,7 @@
 {% block content %}
     <h1 class="h3">{{ ('admin_'~content_type~'.versions.title')|trans({'%name%':entity.name}) }}</h1>
 
-    {% include '@SfsCms/admin/content/_content_tabs.html.twig' with {'current':'versions', 'entity':entity} %}
+    {% include ['@content/'~content_type~'/admin/_content_tabs.html.twig', '@SfsCms/admin/content/_content_tabs.html.twig']  with {'current':'versions', 'entity':entity} %}
 
     <div class="container-fluid">
         <div class="row">
@@ -104,21 +104,25 @@
                     <dl>
                         <dt>{{ ('admin_'~content_type~'.version_info.info.version.title')|trans }}</dt>
                         <dd>v{{ version_entity.versionNumber }}</dd>
+
                         <dt>{{ ('admin_'~content_type~'.version_info.info.layout.title')|trans }}</dt>
                         <dd>{{ (version_entity.layout~'.title')|trans({}, 'sfs_cms_layouts') }}</dd>
+
                         <dt>{{ ('admin_'~content_type~'.version_info.info.origin.title')|trans }}</dt>
                         <dd>{{ ('admin_'~content_type~'.versions.origin.'~(version_entity.origin|default('null')))|trans }} {{ version_entity.originDescription ? '('~version_entity.originDescription~')' : '' }}</dd>
+
+                        {% set creator = version_entity.metaField('creator') %}
+                        {% if creator %}
+                            <dt>{{ ('admin_'~content_type~'.version_info.info.creator.title')|trans }}</dt>
+                            <dd>{{ creator.name|default(creator.id)|default('') }}</dd>
+                        {% endif %}
+
                         <dt>{{ ('admin_'~content_type~'.version_info.info.created.title')|trans }}</dt>
-                        <dd>
-                            {{ version_entity.createdAt ? version_entity.createdAt|date('H:i:s d-m-Y') : '' }}
-                            {% set creator = version_entity.metaField('creator') %}
-                            {% if creator %}
-                                {{ creator.name|default(creator.id)|default('') }}
-                            {% endif %}
-                        </dd>
+                        <dd>{{ version_entity.createdAt ? version_entity.createdAt|date('H:i:s d-m-Y') : '' }}</dd>
 
                         <dt>{{ ('admin_'~content_type~'.version_info.info.publish_status.title')|trans }}</dt>
                         <dd>{{ version_entity.published ? ('admin_'~content_type~'.versions.publish_status.published')|trans : ('admin_'~content_type~'.versions.publish_status.unpublished')|trans }}</dd>
+
                         <dt>{{ ('admin_'~content_type~'.version_info.info.keep.title')|trans }}</dt>
                         <dd>
                             {% if not content_config.admin.version_lock.is_granted or is_granted(content_config.admin.version_lock.is_granted, version) %}
@@ -175,14 +179,23 @@
                             {{ ('admin_'~content_type~'.version_info.compiled.error')|trans }}
                         </div>
                     {% else %}
-                        {% if version_entity.compiled is empty %}
+                        {% if not content_can_be_compiled %}
                             <div class="alert alert-warning" role="alert">
                                 {{ ('admin_'~content_type~'.version_info.compiled.pre_compile_content_disabled')|trans }}
                             </div>
+                        {% elseif version_entity.compiled is empty %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ ('admin_'~content_type~'.version_info.compiled.pre_compile_content_missing')|trans }}
+                            </div>
                         {% endif %}
-                        {% if version_entity.compiledModules is empty %}
+
+                        {% if not content_can_compile_modules %}
                             <div class="alert alert-warning" role="alert">
                                 {{ ('admin_'~content_type~'.version_info.compiled.pre_compile_modules_disabled')|trans }}
+                            </div>
+                        {% elseif version_entity.compiledModules is empty %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ ('admin_'~content_type~'.version_info.compiled.pre_compile_modules_missing')|trans }}
                             </div>
                         {% endif %}
                     {% endif %}

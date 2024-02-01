@@ -133,12 +133,15 @@ class TranslateExtension extends AbstractExtension
                 }
             } else {
                 $routeName = $request->attributes->get('_route');
-                $routeParams = $request->attributes->get('_route_params');
+                $routeParams = $request->attributes->get('_route_params', []);
                 $routeParams['_locale'] = $locale;
                 unset($routeParams['_sfs_cms_locale']);
                 unset($routeParams['_sfs_cms_locale_path']);
 
-                $localePaths[$locale] = $this->symfonyUrlGenerator->generate($routeName, $routeParams, UrlGeneratorInterface::ABSOLUTE_PATH);
+                // prevent null route name
+                if ($routeName) {
+                    $localePaths[$locale] = $this->symfonyUrlGenerator->generate($routeName, $routeParams, UrlGeneratorInterface::ABSOLUTE_PATH);
+                }
             }
         }
 

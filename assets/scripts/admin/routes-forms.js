@@ -47,32 +47,32 @@ window.addEventListener('load', (event) => {
         const routeFormTypeSelect = document.getElementById('route_form_type');
         const selectedOption = routeFormTypeSelect.options[routeFormTypeSelect.selectedIndex];
 
-        if (selectedOption.dataset.contentVisible == 'visible') {
-            document.getElementById('route_form_content').closest('div').classList.remove('d-none');
+        if (selectedOption.dataset.contentVisible === 'visible') {
+            document.getElementById('route_form_content').closest('[data-route-field-container]').classList.remove('d-none');
         } else {
-            document.getElementById('route_form_content').closest('div').classList.add('d-none');
+            document.getElementById('route_form_content').closest('[data-route-field-container]').classList.add('d-none');
             document.getElementById('route_form_content').value = '';
         }
 
-        if (selectedOption.dataset.redirectUrlVisible == 'visible') {
-            document.getElementById('route_form_redirectUrl').closest('div').classList.remove('d-none');
+        if (selectedOption.dataset.redirectUrlVisible === 'visible') {
+            document.getElementById('route_form_redirectUrl').closest('[data-route-field-container]').classList.remove('d-none');
         } else {
-            document.getElementById('route_form_redirectUrl').closest('div').classList.add('d-none');
+            document.getElementById('route_form_redirectUrl').closest('[data-route-field-container]').classList.add('d-none');
             document.getElementById('route_form_redirectUrl').value = '';
         }
 
-        if (selectedOption.dataset.symfonyRouteVisible == 'visible') {
-            document.getElementById('route_form_symfonyRoute').closest('div').classList.remove('d-none');
+        if (selectedOption.dataset.symfonyRouteVisible === 'visible') {
+            document.getElementById('route_form_symfonyRoute').closest('[data-route-field-container]').classList.remove('d-none');
         } else {
-            document.getElementById('route_form_symfonyRoute').closest('div').classList.add('d-none');
+            document.getElementById('route_form_symfonyRoute').closest('[data-route-field-container]').classList.add('d-none');
             document.getElementById('route_form_symfonyRoute').querySelector('#route_form_symfonyRoute_route_name').value = '';
             document.getElementById('route_form_symfonyRoute').querySelector('#route_form_symfonyRoute_route_params').value = '';
         }
 
-        if (selectedOption.dataset.redirectTypeVisible == 'visible') {
-            document.getElementById('route_form_redirectType').closest('div').classList.remove('d-none');
+        if (selectedOption.dataset.redirectTypeVisible === 'visible') {
+            document.getElementById('route_form_redirectType').closest('[data-route-field-container]').classList.remove('d-none');
         } else {
-            document.getElementById('route_form_redirectType').closest('div').classList.add('d-none');
+            document.getElementById('route_form_redirectType').closest('[data-route-field-container]').classList.add('d-none');
             document.getElementById('route_form_redirectType').value = '';
         }
     }

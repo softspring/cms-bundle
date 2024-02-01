@@ -7,6 +7,7 @@ use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Form\Admin\SiteChoiceType;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\Component\DoctrinePaginator\Form\PaginatorForm;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -51,5 +52,21 @@ class RouteListFilterForm extends PaginatorForm implements RouteListFilterFormIn
                 'multiple' => false,
             ]);
         }
+
+        $builder->add('path', TextType::class, [
+            'required' => false,
+            'property_path' => '[paths.path__like]',
+        ]);
+
+        $builder->add('type', ChoiceType::class, [
+            'required' => false,
+            'property_path' => '[type]',
+            'choices' => [
+                'admin_routes.form.type.values.content' => RouteInterface::TYPE_CONTENT,
+                'admin_routes.form.type.values.redirect_to_route' => RouteInterface::TYPE_REDIRECT_TO_ROUTE,
+                'admin_routes.form.type.values.redirect_to_url' => RouteInterface::TYPE_REDIRECT_TO_URL,
+                'admin_routes.form.type.values.parent_route' => RouteInterface::TYPE_PARENT_ROUTE,
+            ],
+        ]);
     }
 }

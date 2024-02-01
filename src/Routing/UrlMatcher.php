@@ -126,25 +126,25 @@ class UrlMatcher
                 return $this->generateRedirect($this->urlGenerator->getUrl($route->getId(), $routePath->getLocale()), $siteConfig['slash_route']['redirect_code'] ?: Response::HTTP_TEMPORARY_REDIRECT);
             }
 
-            if ($attributes['_sfs_cms_locale_path']) {
-                switch ($route->getType()) {
-                    case RouteInterface::TYPE_CONTENT:
-                        $attributes['_route'] = $routePath->getRoute()->getId();
-                        $attributes['_route_params'] = [];
-                        $attributes['_controller'] = 'Softspring\CmsBundle\Controller\ContentController::renderRoutePath';
-                        $attributes['routePath'] = $routePath;
-                        break;
+            //            if ($attributes['_sfs_cms_locale_path']) {
+            switch ($route->getType()) {
+                case RouteInterface::TYPE_CONTENT:
+                    $attributes['_route'] = $routePath->getRoute()->getId();
+                    $attributes['_route_params'] = [];
+                    $attributes['_controller'] = 'Softspring\CmsBundle\Controller\ContentController::renderRoutePath';
+                    $attributes['routePath'] = $routePath;
+                    break;
 
-                    case RouteInterface::TYPE_REDIRECT_TO_URL:
-                        return $this->generateRedirect($route->getRedirectUrl(), $route->getRedirectType() ?? Response::HTTP_FOUND);
+                case RouteInterface::TYPE_REDIRECT_TO_URL:
+                    return $this->generateRedirect($route->getRedirectUrl(), $route->getRedirectType() ?? Response::HTTP_FOUND);
 
                     case RouteInterface::TYPE_REDIRECT_TO_ROUTE:
                         return $this->generateRedirectToRoute($route->getSymfonyRoute(), $route->getRedirectType() ?? Response::HTTP_FOUND);
 
-                    default:
-                        throw new \Exception(sprintf('Route type %u not yet implemented', $route->getType()));
-                }
+                default:
+                    throw new \Exception(sprintf('Route type %u not yet implemented', $route->getType()));
             }
+            //            }
         }
 
         if (isset($attributes['_sfs_cms_locale'])) {

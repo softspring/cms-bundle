@@ -9,7 +9,7 @@
 {% block breadcrums_content %}
     {{ parent() }}
     <li class="breadcrumb-item"><a
-            href="{{ url('sfs_cms_admin_routes_list') }}">{{ 'admin_routes.list.breadcrumb'|trans }}</a></li>
+                href="{{ url('sfs_cms_admin_routes_list') }}">{{ 'admin_routes.list.breadcrumb'|trans }}</a></li>
     <li class="breadcrumb-item active"
         aria-current="content">{{ 'admin_routes.update.breadcrumb'|trans({'%name%': route.name|default(route.id) }) }}</li>
 {% endblock breadcrums_content %}
@@ -17,38 +17,52 @@
 {% block content %}
     <h1 class="h3">{{ 'admin_routes.update.title'|trans }}</h1>
 
+    {% include '@SfsCms/admin/route/_route_tabs.html.twig' with {'current':'update', 'route':route} %}
+
     <div class="container-fluid bg-white p-4">
         {{ form_start(form) }}
-        <div class="row">
-            <div class="col">{{ form_row(form.id) }}</div>
-            <div class="col">{{ form_row(form.parent) }}</div>
-            <div class="col">{{ form_row(form.type) }}</div>
-        </div>
-
-        <div class="row">
-            <div class="col">
-                {{ form_row(form.content) }}
-                {{ form_widget(form.symfonyRoute) }}
-                {{ form_label(form.redirectUrl) }}
-                {{ form_widget(form.redirectUrl) }}
-                {{ form_errors(form.redirectUrl) }}
+            <div class="row">
+                <div class="col">{{ form_row(form.id) }}</div>
+                <div class="col">{{ form_row(form.parent) }}</div>
+                <div class="col">{{ form_row(form.sites) }}</div>
             </div>
-            <div class="col">
-                {{ form_row(form.redirectType) }}
+
+            <div class="row">
+                <div class="col">{{ form_row(form.type) }}</div>
+
+                <div class="col-6" data-route-field-container>
+                    {{ form_label(form.content) }}
+                    {{ form_widget(form.content) }}
+                    {{ form_errors(form.content) }}
+                </div>
+
+                <div class="col-6" data-route-field-container>
+                    {{ form_widget(form.symfonyRoute) }}
+                </div>
+
+                <div class="col-6" data-route-field-container>
+                    {{ form_label(form.redirectUrl) }}
+                    {{ form_widget(form.redirectUrl) }}
+                    {{ form_errors(form.redirectUrl) }}
+                </div>
+
+                <div class="col-2" data-route-field-container>
+                    {{ form_label(form.redirectType) }}
+                    {{ form_widget(form.redirectType) }}
+                    {{ form_errors(form.redirectType) }}
+                </div>
             </div>
-        </div>
 
-        {{ form_row(form.sites) }}
-        {{ form_row(form.paths) }}
+            {{ form_row(form.paths) }}
 
-        {{ form_rest(form) }}
+            {{ form_rest(form) }}
 
-        <div class="d-flex justify-content-end align-items-center pt-4">
-            <a href="{{ url('sfs_cms_admin_routes_list') }}"
-               class="btn btn-outline-secondary">{{ 'admin_routes.update.actions.cancel.button'|trans }}</a>
-            <button type="submit"
-                    class="btn btn-primary ms-3">{{ 'admin_routes.update.actions.update.button'|trans }}</button>
-        </div>
+            <div class="d-flex justify-content-end align-items-center pt-4">
+                <a href="{{ url('sfs_cms_admin_routes_list') }}"
+                   class="btn btn-outline-secondary">{{ 'admin_routes.update.actions.cancel.button'|trans }}</a>
+                <button type="submit"
+                        class="btn btn-primary ms-3">{{ 'admin_routes.update.actions.update.button'|trans }}</button>
+            </div>
         {{ form_end(form) }}
     </div>
 {% endblock content %}

@@ -12,15 +12,12 @@
     '@SfsMedia/forms/media_type_theme.html.twig' %}
 
 {% block body %}
-    <script type="text/javascript">
-        const max_input_vars = {{ maxInputVars }};
-    </script>
-
-    <div id="maxInputVarsMessage" class="container-fluid bg-warning fixed-top px-5 py-3 text-center text-dark d-none" style="z-index: 10000">
+    <div id="maxInputVarsMessage" data-max-input-vars="{{ maxInputVars }}" class="container-fluid bg-warning fixed-top px-5 py-3 text-center text-dark d-none" style="z-index: 10000">
         {{ 'admin_content.content.max_input_vars_raw'|trans({'%maxInputVars%': maxInputVars}, 'sfs_cms_admin')|raw }}
     </div>
 
-    {{ form_start(form, {'attr': {'novalidate':''}}) }}
+    {# disable turbo for content edit #}
+    {{ form_start(form, {'attr': {'novalidate':'', 'data-turbo': 'false'}}) }}
     <div class="d-flex flex-col align-items-stretch min-vh-100 pt-5">
         <header class="cms-content-header flex-fill p-3 bg-dark fixed-top border-bottom">
             <div class="container-fluid">
@@ -112,7 +109,7 @@
     {% if alert|default(false) and alert[0] is defined and alert[1] is defined %}
         <div class="fixed-top w-50 float-right m-5">
             <div class="alert alert-{{ alert[0]|replace({'error':'danger'}) }} alert-dismissible fade show" role="alert">
-                {{ alert[1]|trans|raw }}
+                {{ alert[1]|trans(alert[2]|default([]), alert[3]|default('sfs_cms_contents'))|raw }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         </div>

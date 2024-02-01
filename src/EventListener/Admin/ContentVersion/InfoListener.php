@@ -2,15 +2,36 @@
 
 namespace Softspring\CmsBundle\EventListener\Admin\ContentVersion;
 
+use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Manager\ContentManagerInterface;
+use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
+use Softspring\CmsBundle\Manager\RouteManagerInterface;
+use Softspring\CmsBundle\Render\ContentVersionCompiler;
+use Softspring\CmsBundle\Request\FlashNotifier;
 use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\Component\CrudlController\Event\FormPrepareEvent;
 use Softspring\Component\CrudlController\Event\SuccessEvent;
 use Softspring\Component\CrudlController\Event\ViewEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class InfoListener extends AbstractContentVersionListener
 {
     protected const ACTION_NAME = 'version_info';
+
+    public function __construct(
+        ContentManagerInterface $contentManager,
+        ContentVersionManagerInterface $contentVersionManager,
+        RouteManagerInterface $routeManager,
+        CmsConfig $cmsConfig,
+        RouterInterface $router,
+        FlashNotifier $flashNotifier,
+        AuthorizationCheckerInterface $authorizationChecker,
+        protected ContentVersionCompiler $contentVersionCompiler
+    ) {
+        parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
+    }
 
     public static function getSubscribedEvents(): array
     {
@@ -82,8 +103,11 @@ class InfoListener extends AbstractContentVersionListener
 
     public function onView(ViewEvent $event): void
     {
+        $version = $event->getRequest()->attributes->get('version');
         parent::onView($event);
-        $event->getData()['version_entity'] = $event->getRequest()->attributes->get('version');
+        $event->getData()['version_entity'] = $version;
+        $event->getData()['content_can_be_compiled'] = $this->contentVersionCompiler->canSaveCompiled($version);
+        $event->getData()['content_can_compile_modules'] = $this->contentVersionCompiler->canSaveCompiledModules($version);
     }
 
     public function onSuccess(SuccessEvent $event): void

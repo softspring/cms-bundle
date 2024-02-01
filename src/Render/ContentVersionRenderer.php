@@ -59,6 +59,7 @@ class ContentVersionRenderer extends AbstractRenderer
             $layout = $this->cmsConfig->getLayout($version->getLayout());
 
             $request = $this->requestStack->getCurrentRequest();
+            $request->attributes->set('_route', $version->getContent()->getRoutes()->first()?->getId());
 
             $containers = $compiledModules ?? $this->renderModules($version, $request, $renderErrorList);
 

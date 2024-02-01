@@ -88,6 +88,10 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $adminEnabled && $loader->load('controller/admin_routes.yaml');
         $adminEnabled && $loader->load('controller/admin_sites.yaml');
 
+        if (class_exists('Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle')) {
+            $loader->load('deprecated_param_converters.yaml');
+        }
+
         $loader->load('data_collector.yaml');
 
         $version = InstalledVersions::getVersion('symfony/twig-bridge');

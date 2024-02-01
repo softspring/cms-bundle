@@ -1,0 +1,27 @@
+{% trans_default_domain 'sfs_cms_admin' %}
+
+<ul class="nav nav-tabs mt-3" id="myTab" role="tablist">
+    {% block tabs %}
+        <li class="nav-item" role="presentation">
+            <a class="nav-link {{ current == 'read' ? 'active' : '' }}"
+               href="{{ url('sfs_cms_admin_routes_read', {'route':route}) }}" role="tab"
+               aria-controls="edit" aria-selected="true">{{ ('admin_routes.tabs_menu.details')|trans }}</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link {{ current == 'update' ? 'active' : '' }}"
+               href="{{ url('sfs_cms_admin_routes_update', {'route':route}) }}"
+               role="tab" aria-controls="edit"
+               aria-selected="true">{{ ('admin_routes.tabs_menu.update')|trans }}</a>
+        </li>
+{#        <li class="nav-item">#}
+{#            {% if not content_config.admin.delete.is_granted or is_granted(content_config.admin.delete.is_granted, entity) %}#}
+{#                <a class="nav-link {{ current == 'delete' ? 'active-danger' : '' }}"#}
+{#                   href=route_delete', {'route':route}) }}"#}
+{#                   role="tab" aria-controls="edit"#}
+{#                   aria-selected="true">{{ ('admin_routes.tabs_menu.delete')|trans }}</a>#}
+{#            {% else %}#}
+{#                <a class="nav-link disabled">{{ ('admin_routes.tabs_menu.delete')|trans }}</a>#}
+{#            {% endif %}#}
+{#        </li>#}
+    {% endblock tabs %}
+</ul>
