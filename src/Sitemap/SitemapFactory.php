@@ -43,7 +43,7 @@ class SitemapFactory
         /** @deprecated will only use alternates_locales */
         $localeAlternates = $sitemapConfig['alternates'] || $sitemapConfig['alternates_locales'];
         /* @deprecated will only use alternates_sites */
-        $siteAlternates = !$sitemapConfig['alternates'] || !$sitemapConfig['alternates_sites'];
+        $siteAlternates = $sitemapConfig['alternates'] || $sitemapConfig['alternates_sites'];
 
         foreach ($content->getRoutes() as $route) {
             foreach ($route->getPaths() as $path) {
