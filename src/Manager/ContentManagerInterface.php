@@ -12,7 +12,7 @@ interface ContentManagerInterface extends CrudlEntityManagerInterface
     /**
      * @return ContentInterface
      */
-    public function createEntity(string $type = null): object;
+    public function createEntity(?string $type = null): object;
 
     /**
      * @psalm-param ContentInterface $entity
@@ -24,9 +24,9 @@ interface ContentManagerInterface extends CrudlEntityManagerInterface
      */
     public function deleteEntity(object $entity): void;
 
-    public function createVersion(ContentInterface $content, ContentVersionInterface $prevVersion = null, ?int $origin = ContentVersionInterface::ORIGIN_UNKNOWN): ContentVersionInterface;
+    public function createVersion(ContentInterface $content, ?ContentVersionInterface $prevVersion = null, ?int $origin = ContentVersionInterface::ORIGIN_UNKNOWN): ContentVersionInterface;
 
-    public function getRepository(string $type = null): EntityRepository;
+    public function getRepository(?string $type = null): EntityRepository;
 
-    public function getTypeClass(string $type = null): string;
+    public function getTypeClass(?string $type = null): string;
 }

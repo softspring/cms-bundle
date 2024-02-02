@@ -17,7 +17,7 @@ class MenuManager implements MenuManagerInterface
         $this->em = $em;
     }
 
-    public function createEntity(string $menuType = null): object
+    public function createEntity(?string $menuType = null): object
     {
         $class = $this->getEntityClass();
         /** @var MenuInterface $menu */

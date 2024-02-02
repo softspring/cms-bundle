@@ -49,7 +49,7 @@ class BlockInstanceType extends AbstractType
             'choice_label' => function (BlockInterface $block) {
                 return $block->getName();
             },
-            'choice_filter' => function (BlockInterface $block = null) {
+            'choice_filter' => function (?BlockInterface $block = null) {
                 return true;
             },
             'choice_attr' => function (?BlockInterface $block) {

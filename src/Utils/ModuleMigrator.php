@@ -9,7 +9,7 @@ use Softspring\CmsBundle\Config\CmsConfig;
  */
 class ModuleMigrator
 {
-    public static function migrate(array $migrationScripts, $moduleData, $toRevision, CmsConfig $cmsConfig = null): array
+    public static function migrate(array $migrationScripts, $moduleData, $toRevision, ?CmsConfig $cmsConfig = null): array
     {
         trigger_deprecation('softspring/cms-bundle', '5.1', 'ModuleMigrator is deprecated, use DataMigrator instead.');
 

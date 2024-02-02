@@ -6,7 +6,7 @@ use Softspring\CmsBundle\Config\CmsConfig;
 
 class DataMigrator
 {
-    public static function migrate(array $migrationScripts, $moduleData, $toRevision, CmsConfig $cmsConfig = null): array
+    public static function migrate(array $migrationScripts, $moduleData, $toRevision, ?CmsConfig $cmsConfig = null): array
     {
         foreach ($migrationScripts as $migrationScript) {
             $moduleData = (include $migrationScript)($moduleData, (int) ($moduleData['_revision'] ?? 1), $toRevision, $cmsConfig);

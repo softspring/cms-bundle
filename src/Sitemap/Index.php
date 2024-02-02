@@ -2,18 +2,13 @@
 
 namespace Softspring\CmsBundle\Sitemap;
 
-use Softspring\CmsBundle\Model\SiteInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
 class Index implements XmlInterface
 {
-    protected array $siteConfig;
-
-    public function __construct(
-        protected SiteInterface $site,
-    ) {
-        $this->siteConfig = $this->site->getConfig() ?? [];
+    public function __construct(protected array $sitemapsUrls, protected ?int $responseCacheTtl = null)
+    {
     }
 
     public function getResponse(): Response
@@ -30,7 +25,7 @@ class Index implements XmlInterface
 
     public function getCacheTtl(): ?int
     {
-        return $this->siteConfig['sitemaps_index']['cache_ttl'] ?? null;
+        return $this->responseCacheTtl;
     }
 
     public function xml(): string
@@ -39,30 +34,12 @@ class Index implements XmlInterface
 
         return $xmlEncoder->encode([
             '@xmlns' => 'http://www.sitemaps.org/schemas/sitemap/0.9',
-            'sitemap' => $this->sitemaps(),
+            'sitemap' => $this->sitemapsUrls,
         ], 'xml', [
             'xml_encoding' => 'UTF-8',
             'xml_format_output' => true,
             'remove_empty_tags' => true,
             'xml_root_node_name' => 'sitemapindex',
         ]);
-    }
-
-    /**
-     * Generates the sitemaps urls for this site.
-     */
-    public function sitemaps(): array
-    {
-        $hostAndProtocol = ($this->site->getCanonicalScheme() ?? 'https').'://'.$this->site->getCanonicalHost();
-
-        $sitemaps = [];
-
-        foreach ($this->siteConfig['sitemaps'] as $sitemapName => $sitemapConfig) {
-            $sitemaps[] = [
-                'loc' => "$hostAndProtocol/{$sitemapConfig['url']}",
-            ];
-        }
-
-        return $sitemaps;
     }
 }

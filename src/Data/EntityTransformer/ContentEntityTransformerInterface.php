@@ -12,7 +12,7 @@ interface ContentEntityTransformerInterface extends EntityTransformerInterface
     /**
      * @throws InvalidElementException
      */
-    public function export(object $element, &$files = [], object $contentVersion = null, string $contentType = null): array;
+    public function export(object $element, &$files = [], ?object $contentVersion = null, ?string $contentType = null): array;
 
     public function import(array $data, ReferencesRepository $referencesRepository, array $options = []): ContentInterface;
 
