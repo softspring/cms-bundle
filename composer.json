@@ -35,7 +35,7 @@
     "require-dev": {
         "doctrine/data-fixtures": "^1.6",
         "doctrine/doctrine-fixtures-bundle": "^3.4",
-        "friendsofphp/php-cs-fixer": "^3.40",
+        "friendsofphp/php-cs-fixer": "3.48.*",
         "google/cloud-storage": "^1.30",
         "javihgil/doctrine-pagination-bundle": "^2.0",
         "phpstan/phpstan": "^1.10.49",
