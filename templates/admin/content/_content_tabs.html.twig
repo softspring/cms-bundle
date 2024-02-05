@@ -3,82 +3,60 @@
 
 <ul class="nav nav-tabs mt-3" id="myTab" role="tablist">
     {% block tabs %}
-        <li class="nav-item" role="presentation">
-            <a class="nav-link {{ current == 'read' ? 'active' : '' }}"
-               href="{{ url('sfs_cms_admin_content_'~content_type~'_details', {'content':content_entity}) }}" role="tab"
-               aria-controls="edit" aria-selected="true">{{ ('admin_'~content_type~'.tabs_menu.details')|trans }}</a>
+        <li class="nav-item">
+            <a class="nav-link {{ current == 'read' ? 'active' : '' }}" href="{{ url('sfs_cms_admin_content_'~content_type~'_details', {'content':content_entity}) }}">{{ ('admin_'~content_type~'.tabs_menu.details')|trans }}</a>
         </li>
-        <li class="nav-item" role="presentation">
+        <li class="nav-item">
             {% if not content_config.admin.version_create.is_granted or is_granted(content_config.admin.version_create.is_granted, entity) %}
-                <a class="nav-link {{ current == 'content' ? 'active' : '' }}"
-                   href="{{ url('sfs_cms_admin_content_'~content_type~'_content', {'content':content_entity}) }}"
-                   role="tab" aria-controls="edit"
-                   aria-selected="true">{{ ('admin_'~content_type~'.tabs_menu.content')|trans }}</a>
+                <a class="nav-link {{ current == 'content' ? 'active' : '' }}" href="{{ url('sfs_cms_admin_content_'~content_type~'_content', {'content':content_entity}) }}">{{ ('admin_'~content_type~'.tabs_menu.content')|trans }}</a>
             {% else %}
                 <a class="nav-link disabled">{{ ('admin_'~content_type~'.tabs_menu.content')|trans }}</a>
             {% endif %}
         </li>
-        <li class="nav-item" role="presentation">
+        <li class="nav-item">
             {% if not content_config.admin.preview.is_granted or is_granted(content_config.admin.preview.is_granted, entity) %}
-                <a class="nav-link {{ current == 'preview' ? 'active' : '' }}"
-                   href="{{ url('sfs_cms_admin_content_'~content_type~'_preview', {'content':content_entity}) }}"
-                   role="tab" aria-controls="edit"
-                   aria-selected="true">{{ ('admin_'~content_type~'.tabs_menu.preview')|trans }}</a>
+                <a class="nav-link {{ current == 'preview' ? 'active' : '' }}" href="{{ url('sfs_cms_admin_content_'~content_type~'_preview', {'content':content_entity}) }}">{{ ('admin_'~content_type~'.tabs_menu.preview')|trans }}</a>
             {% else %}
                 <a class="nav-link disabled">{{ ('admin_'~content_type~'.tabs_menu.preview')|trans }}</a>
             {% endif %}
         </li>
-        <li class="nav-item" role="presentation">
+        <li class="nav-item">
             {% if not content_config.admin.seo.is_granted or is_granted(content_config.admin.seo.is_granted, content_entity) %}
-                <a class="nav-link {{ current == 'seo' ? 'active' : '' }}"
-                   href="{{ url('sfs_cms_admin_content_'~content_type~'_seo', {'content':content_entity}) }}" role="tab"
-                   aria-controls="edit" aria-selected="true">{{ ('admin_'~content_type~'.tabs_menu.seo')|trans }}</a>
+                <a class="nav-link {{ current == 'seo' ? 'active' : '' }}" href="{{ url('sfs_cms_admin_content_'~content_type~'_seo', {'content':content_entity}) }}">{{ ('admin_'~content_type~'.tabs_menu.seo')|trans }}</a>
             {% else %}
                 <a class="nav-link disabled">{{ ('admin_'~content_type~'.tabs_menu.seo')|trans }}</a>
             {% endif %}
         </li>
         <li class="nav-item">
-            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Rutas</a>
+            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">{{ ('admin_'~content_type~'.tabs_menu.routes')|trans }}</a>
         </li>
         <li class="nav-item">
             {% if not content_config.admin.version_translations.is_granted or is_granted(content_config.admin.version_translations.is_granted, content_entity) %}
-                <a class="nav-link {{ current == 'version_translations' ? 'active' : '' }}"
-                   href="{{ url('sfs_cms_admin_content_'~content_type~'_translations', {'content':content_entity}) }}"
-                   role="tab" aria-controls="edit"
-                   aria-selected="true">{{ ('admin_'~content_type~'.tabs_menu.translations')|trans }}</a>
+                <a class="nav-link {{ current == 'version_translations' ? 'active' : '' }}" href="{{ url('sfs_cms_admin_content_'~content_type~'_translations', {'content':content_entity}) }}">{{ ('admin_'~content_type~'.tabs_menu.translations')|trans }}</a>
             {% else %}
                 <a class="nav-link disabled">{{ ('admin_'~content_type~'.tabs_menu.translations')|trans }}</a>
             {% endif %}
         </li>
-        <li class="nav-item" role="presentation">
+        <li class="nav-item">
             {% if not content_config.admin.version_list.is_granted or is_granted(content_config.admin.version_list.is_granted, entity) %}
-                <a class="nav-link {{ current == 'versions' ? 'active' : '' }}"
-                   href="{{ url('sfs_cms_admin_content_'~content_type~'_versions', {'content':content_entity}) }}"
-                   role="tab" aria-controls="edit"
-                   aria-selected="true">{{ ('admin_'~content_type~'.tabs_menu.versions')|trans }}</a>
+                <a class="nav-link {{ current == 'versions' ? 'active' : '' }}" href="{{ url('sfs_cms_admin_content_'~content_type~'_versions', {'content':content_entity}) }}">{{ ('admin_'~content_type~'.tabs_menu.versions')|trans }}</a>
             {% else %}
                 <a class="nav-link disabled">{{ ('admin_'~content_type~'.tabs_menu.versions')|trans }}</a>
             {% endif %}
         </li>
-        <li class="nav-item" role="presentation">
+        <li class="nav-item">
             {% if not content_config.admin.update.is_granted or is_granted(content_config.admin.update.is_granted, entity) %}
-                <a class="nav-link {{ current == 'update' ? 'active' : '' }}"
-                   href="{{ url('sfs_cms_admin_content_'~content_type~'_update', {'content':content_entity}) }}"
-                   role="tab" aria-controls="edit"
-                   aria-selected="true">{{ ('admin_'~content_type~'.tabs_menu.update')|trans }}</a>
+                <a class="nav-link {{ current == 'update' ? 'active' : '' }}" href="{{ url('sfs_cms_admin_content_'~content_type~'_update', {'content':content_entity}) }}">{{ ('admin_'~content_type~'.tabs_menu.update')|trans }}</a>
             {% else %}
                 <a class="nav-link disabled">{{ ('admin_'~content_type~'.tabs_menu.update')|trans }}</a>
             {% endif %}
         </li>
         <li class="nav-item">
-            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Permisos</a>
+            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">{{ ('admin_'~content_type~'.tabs_menu.permissions')|trans }}</a>
         </li>
         <li class="nav-item">
             {% if not content_config.admin.delete.is_granted or is_granted(content_config.admin.delete.is_granted, entity) %}
-                <a class="nav-link {{ current == 'delete' ? 'active-danger' : '' }}"
-                   href="{{ url('sfs_cms_admin_content_'~content_type~'_delete', {'content':content_entity}) }}"
-                   role="tab" aria-controls="edit"
-                   aria-selected="true">{{ ('admin_'~content_type~'.tabs_menu.delete')|trans }}</a>
+                <a class="nav-link {{ current == 'delete' ? 'active-danger' : '' }}" href="{{ url('sfs_cms_admin_content_'~content_type~'_delete', {'content':content_entity}) }}">{{ ('admin_'~content_type~'.tabs_menu.delete')|trans }}</a>
             {% else %}
                 <a class="nav-link disabled">{{ ('admin_'~content_type~'.tabs_menu.delete')|trans }}</a>
             {% endif %}

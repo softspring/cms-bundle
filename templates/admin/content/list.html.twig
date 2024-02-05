@@ -14,7 +14,6 @@
     <div class="d-flex align-items-center justify-content-between mb-4">
         <h1 class="h3">{{ ('admin_'~content_type~'.list.title')|trans }}</h1>
 
-        {# TODO restrict by permission #}
         <div class="float-end">
             {% if not content_config.admin.create.is_granted or is_granted(content_config.admin.create.is_granted) %}
                 <a class="btn btn-outline-primary" href="{{ url('sfs_cms_admin_content_'~content_type~'_create') }}">{{ ('admin_'~content_type~'.list.actions.create.link')|trans }}</a>

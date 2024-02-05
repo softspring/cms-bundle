@@ -16,6 +16,8 @@ admin_page:
         versions: "Versions"
         translations: "Translations"
         delete: "Delete"
+        routes: "Routes"
+        permissions: "Permissions"
 
     create:
         meta.title: "New page"
