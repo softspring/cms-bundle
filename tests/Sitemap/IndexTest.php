@@ -11,17 +11,7 @@ class IndexTest extends TestCase
 {
     public function testGetResponse(): void
     {
-        $site = new Site();
-        $site->setConfig([
-            'sitemaps_index' => [
-                'cache_ttl' => 3600,
-            ]
-        ]);
-
-        $index = $this->getMockBuilder(Index::class,)
-            ->setConstructorArgs([$site])
-            ->onlyMethods(['xml'])
-            ->getMock();
+        $index = new Index([], 3600);
 
         $response = $index->getResponse();
 
@@ -31,25 +21,14 @@ class IndexTest extends TestCase
 
     public function testGetCacheTtlNull(): void
     {
-        $site = new Site();
-        $site->setConfig([
-            'sitemaps_index' => [
-            ]
-        ]);
-        $index = new Index($site);
+        $index = new Index([]);
 
         $this->assertNull($index->getCacheTtl());
     }
 
     public function testGetCacheTtl(): void
     {
-        $site = new Site();
-        $site->setConfig([
-            'sitemaps_index' => [
-                'cache_ttl' => 3600,
-            ]
-        ]);
-        $index = new Index($site);
+        $index = new Index([], 3600);
 
         $this->assertEquals(3600, $index->getCacheTtl());
     }
@@ -57,21 +36,8 @@ class IndexTest extends TestCase
 
     public function testXml(): void
     {
-        $site = new Site();
-        $site->setConfig([
-            'sitemaps' => [
-                'test' => []
-            ]
-        ]);
-
-        $index = $this->getMockBuilder(Index::class,)
-            ->setConstructorArgs([$site])
-            ->onlyMethods(['sitemaps'])
-            ->getMock();
-        $index->method('sitemaps')->willReturn([
-            [
-                'loc' => 'https://example.com/sitemap.xml',
-            ]
+        $index = new Index([
+            'loc' => 'https://example.com/sitemap.xml',
         ]);
 
         $xml = $index->xml();
@@ -88,29 +54,13 @@ class IndexTest extends TestCase
 
     public function testSitemaps(): void
     {
-        $site = new Site();
-        $site->setConfig([
-            'hosts' => [
-                [
-                    'domain' => 'example.com',
-                    'scheme' => 'https',
-                    'canonical' => true,
-                ]
-            ],
-            'sitemaps' => [
-                'sitemap1' => [
-                    'url' => 'sitemap1.xml',
-                ],
-                'sitemap2' => [
-                    'url' => 'sitemap2.xml',
-                ],
-            ]
+        $index = new Index([
+            ['loc' => 'https://example.com/sitemap1.xml'],
+            ['loc' => 'https://example.com/sitemap2.xml'],
         ]);
+        $sitemapsXml = $index->xml();
 
-        $index = new Index($site);
-        $sitemaps = $index->sitemaps();
-
-        $this->assertEquals('https://example.com/sitemap1.xml', $sitemaps[0]['loc']);
-        $this->assertEquals('https://example.com/sitemap2.xml', $sitemaps[1]['loc']);
+        $this->assertStringContainsString('https://example.com/sitemap1.xml', $sitemapsXml);
+        $this->assertStringContainsString('https://example.com/sitemap2.xml', $sitemapsXml);
     }
 }
