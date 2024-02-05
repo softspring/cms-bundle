@@ -1,0 +1,99 @@
+{% trans_default_domain 'sfs_cms_contents' %}
+
+{% embed '@SfsCms/admin/_embeds/_card.html.twig' with {'title': ('admin_'~content_type~'.version_info.compiled.title')|trans} %}
+    {% trans_default_domain 'sfs_cms_contents' %}
+
+    {% block content %}
+        {% import '@SfsCms/admin/content/_macros.html.twig' as tools %}
+
+        {% if not content_config.admin.version_recompile.is_granted or is_granted(content_config.admin.version_recompile.is_granted, entity) %}
+            <a class="btn btn-sm btn-outline-secondary float-end"
+               href="{{ url('sfs_cms_admin_content_'~content_type~'_recompile_version', {'content':entity, 'version': version_entity, 'back': 'version_info'}) }}">{{ ('admin_'~content_type~'.version_info.actions.recompile.link')|trans }}</a>
+        {% else %}
+            <a class="btn btn-sm btn-outline-secondary float-end disabled">{{ ('admin_'~content_type~'.version_info.actions.recompile.link')|trans }}</a>
+        {% endif %}
+
+        <h4 class="border-bottom border-1 border-light pb-2 mb-3">{{ ('admin_'~content_type~'.version_info.compiled.title')|trans }}</h4>
+        {% if version.hasCompileErrors %}
+            <div class="alert alert-danger" role="alert">
+                <i class="bi bi-exclamation-triangle text-danger"
+                   title="This version has some compilation error"></i>
+                {{ ('admin_'~content_type~'.version_info.compiled.error')|trans }}
+            </div>
+        {% else %}
+            {% if not content_can_be_compiled %}
+                <div class="alert alert-warning" role="alert">
+                    {{ ('admin_'~content_type~'.version_info.compiled.pre_compile_content_disabled')|trans }}
+                </div>
+            {% elseif version_entity.compiled is empty %}
+                <div class="alert alert-danger" role="alert">
+                    {{ ('admin_'~content_type~'.version_info.compiled.pre_compile_content_missing')|trans }}
+                </div>
+            {% endif %}
+
+            {% if not content_can_compile_modules %}
+                <div class="alert alert-warning" role="alert">
+                    {{ ('admin_'~content_type~'.version_info.compiled.pre_compile_modules_disabled')|trans }}
+                </div>
+            {% elseif version_entity.compiledModules is empty %}
+                <div class="alert alert-danger" role="alert">
+                    {{ ('admin_'~content_type~'.version_info.compiled.pre_compile_modules_missing')|trans }}
+                </div>
+            {% endif %}
+        {% endif %}
+
+        <div class="accordion" id="accordionCompiled">
+            <div class="accordion-item">
+                {% set first = false %}
+                {% for key,compiled in version_entity.compiled %}
+                    {% set keyCleaned = key|replace({'/': '', ' ': '', '.' : ''}) %}
+                    <h2 class="accordion-header" id="heading{{ keyCleaned }}">
+                        <button class="accordion-button {{ first?'':'collapsed' }}" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#collapse{{ keyCleaned }}"
+                                aria-expanded="{{ first?'true':'false' }}"
+                                aria-controls="collapse{{ keyCleaned }}">
+                            Pre-compiled content {{ key }}
+                        </button>
+                    </h2>
+                    <div id="collapse{{ keyCleaned }}"
+                         class="accordion-collapse collapse {{ first?'show':'' }}"
+                         aria-labelledby="heading{{ keyCleaned }}" data-bs-parent="#accordionCompiled">
+                        <div class="accordion-body">
+                            {% if compiled is not iterable %}
+                                {{ tools.drawEsiCalls(compiled) }}
+                                <pre class="overflow-auto"
+                                     style="max-height: 600px"><code
+                                        class="text-muted">{{ compiled }}</code></pre>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% set first = false %}
+                {% endfor %}
+                {% for key,compiled in version_entity.compiledModules %}
+                    {% set keyCleaned = ('modules'~key)|replace({'/': '', ' ': '', '.': ''}) %}
+                    <h2 class="accordion-header" id="heading{{ keyCleaned }}">
+                        <button class="accordion-button {{ first?'':'collapsed' }}" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#collapse{{ keyCleaned }}"
+                                aria-expanded="{{ first?'true':'false' }}"
+                                aria-controls="collapse{{ keyCleaned }}">
+                            Pre-compiled modules {{ key }}
+                        </button>
+                    </h2>
+                    <div id="collapse{{ keyCleaned }}"
+                         class="accordion-collapse collapse {{ first?'show':'' }}"
+                         aria-labelledby="heading{{ keyCleaned }}" data-bs-parent="#accordionCompiled">
+                        <div class="accordion-body">
+                            {% for container, content in compiled|filter((content) => content is not iterable) %}
+                                <strong>{{ container }}</strong>
+                                {{ tools.drawEsiCalls(content) }}
+                                <pre class="overflow-auto"
+                                     style="max-height: 300px"><code class="text-muted">{{ content }}</code></pre>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% set first = false %}
+                {% endfor %}
+            </div>
+        </div>
+    {% endblock %}
+{% endembed %}

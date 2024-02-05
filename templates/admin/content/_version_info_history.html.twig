@@ -1,0 +1,26 @@
+{% trans_default_domain 'sfs_cms_contents' %}
+
+<hr/>
+
+<h5>{{ ('admin_'~content_type~'.version_info.history.title')|trans }}</h5>
+<ul>
+    {% for history in version_entity.metaField('history', []) %}
+        <li>
+            {% set transAttributes = {
+                '%userName%': history.user ? history.user.name|default(history.user.id)|default('') : '',
+                '%date%': history.date is not empty ? history.date|date('H:i:s d-m-Y') : '',
+            } %}
+            {% for key,value in history.extra %}
+                {% set transAttributes = transAttributes|merge({('%'~key~'%'): value}) %}
+            {% endfor %}
+
+            {{ ('admin_'~content_type~'.version_info.history.action.'~(history.action))|trans(transAttributes) }}
+        </li>
+    {% endfor %}
+</ul>
+
+{#        <h5>{{ ('admin_'~content_type~'.version_info.metadata.title')|trans }}</h5> #}
+{#        <code class="text-muted"> #}
+{#            <pre class="overflow-auto" #}
+{#                 style="max-height: 300px">{{ version_entity.meta|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre> #}
+{#        </code> #}

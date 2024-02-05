@@ -1,0 +1,14 @@
+{% trans_default_domain 'sfs_cms_contents' %}
+
+{% embed '@SfsCms/admin/_embeds/_card.html.twig' with {'title': ('admin_'~content_type~'.version_info.linked_routes.title')|trans} %}
+    {% trans_default_domain 'sfs_cms_contents' %}
+
+    {% block content %}
+        <ul>
+            {% for route in version_entity.routes %}
+                <li>{{ route.id }}</li>
+            {% endfor %}
+        </ul>
+    {% endblock content %}
+{% endembed %}
+

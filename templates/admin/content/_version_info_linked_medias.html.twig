@@ -1,0 +1,14 @@
+{% trans_default_domain 'sfs_cms_contents' %}
+
+{% embed '@SfsCms/admin/_embeds/_card.html.twig' with {'title': ('admin_'~content_type~'.version_info.linked_medias.title')|trans} %}
+    {% trans_default_domain 'sfs_cms_contents' %}
+
+    {% block content %}
+        <ul>
+            {% for media in version_entity.medias %}
+                <li>{{ media.name }}</li>
+            {% endfor %}
+        </ul>
+    {% endblock content %}
+{% endembed %}
+
