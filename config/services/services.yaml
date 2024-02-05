@@ -99,7 +99,8 @@ services:
         class: Twig\Extension\StringLoaderExtension
         tags: ['twig.extension']
 
-    Softspring\CmsBundle\Sitemap\SitemapGenerator: ~
+    Softspring\CmsBundle\Sitemap\SitemapFactory: ~
+    Softspring\CmsBundle\Sitemap\IndexFactory: ~
 
     Softspring\CmsBundle\Translator\TranslatableContext: ~
 
