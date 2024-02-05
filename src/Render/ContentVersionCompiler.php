@@ -64,7 +64,7 @@ class ContentVersionCompiler
     /**
      * @throws CompileException
      */
-    public function compileRequest(ContentVersionInterface $contentVersion, Request $request, array $compiledModules = null): string
+    public function compileRequest(ContentVersionInterface $contentVersion, Request $request, ?array $compiledModules = null): string
     {
         try {
             $renderErrors = new RenderErrorList();

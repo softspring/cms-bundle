@@ -109,7 +109,7 @@ class TranslateExtension extends AbstractExtension
         return $alternates;
     }
 
-    public function getLocalePaths(string $defaultRoute = null): array
+    public function getLocalePaths(?string $defaultRoute = null): array
     {
         $request = $this->requestStack->getCurrentRequest();
 

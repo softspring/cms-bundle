@@ -22,7 +22,7 @@ class AccordionExtension extends AbstractExtension
         ];
     }
 
-    public function accordionStart(FormView $formView, string $accordionId, string $name = null, bool $open = false, string $title = null, bool $row = true): string
+    public function accordionStart(FormView $formView, string $accordionId, ?string $name = null, bool $open = false, ?string $title = null, bool $row = true): string
     {
         $id = uniqid('accordion-');
         $collapsed = $open ? '' : 'collapsed';

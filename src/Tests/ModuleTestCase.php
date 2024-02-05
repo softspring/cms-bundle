@@ -225,7 +225,7 @@ abstract class ModuleTestCase extends TypeTestCase
         $expected($crawler);
     }
 
-    public static function assertRenderText(string $expected, string $render, string $cssSelector = null, string $xpathSelector = null): void
+    public static function assertRenderText(string $expected, string $render, ?string $cssSelector = null, ?string $xpathSelector = null): void
     {
         ModuleTestCase::assertRenderCrawler(function (Crawler $crawler) use ($expected, $cssSelector, $xpathSelector) {
             if ($cssSelector) {

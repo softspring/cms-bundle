@@ -29,7 +29,7 @@ class BlockExtension extends AbstractExtension
         ];
     }
 
-    public function renderBlockById($id, string $locale = null): string
+    public function renderBlockById($id, ?string $locale = null): string
     {
         $block = $this->findOneBy($id);
 

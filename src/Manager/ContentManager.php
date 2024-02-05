@@ -27,7 +27,7 @@ class ContentManager implements ContentManagerInterface
         return ContentInterface::class;
     }
 
-    public function createEntity(string $type = null): object
+    public function createEntity(?string $type = null): object
     {
         $class = $this->getTypeClass($type);
 
@@ -41,7 +41,7 @@ class ContentManager implements ContentManagerInterface
         return $content;
     }
 
-    public function getRepository(string $type = null): EntityRepository
+    public function getRepository(?string $type = null): EntityRepository
     {
         /** @var EntityRepository $repo */
         $repo = $this->em->getRepository($this->getTypeClass($type));
@@ -53,7 +53,7 @@ class ContentManager implements ContentManagerInterface
      * @throws InvalidLayoutException
      * @throws InvalidContentException
      */
-    public function createVersion(ContentInterface $content, ContentVersionInterface $prevVersion = null, ?int $origin = ContentVersionInterface::ORIGIN_UNKNOWN): ContentVersionInterface
+    public function createVersion(ContentInterface $content, ?ContentVersionInterface $prevVersion = null, ?int $origin = ContentVersionInterface::ORIGIN_UNKNOWN): ContentVersionInterface
     {
         $version = $this->contentVersionManager->createEntity();
         $version->setLayout($this->cmsHelper->layout()->getDefaultLayout($content));
@@ -77,7 +77,7 @@ class ContentManager implements ContentManagerInterface
         return $version;
     }
 
-    public function getTypeClass(string $type = null): string
+    public function getTypeClass(?string $type = null): string
     {
         return $this->getTypeConfig($type)['entity_class'];
     }
@@ -95,12 +95,12 @@ class ContentManager implements ContentManagerInterface
         throw new \Exception(sprintf('Content type not found for class "%s"', $className));
     }
 
-    protected function getTypeDefaultLayout(string $type = null): string
+    protected function getTypeDefaultLayout(?string $type = null): string
     {
         return $this->getTypeConfig($type)['default_layout'];
     }
 
-    protected function getTypeConfig(string $type = null): array
+    protected function getTypeConfig(?string $type = null): array
     {
         if (!$type) {
             throw new \Exception('type is required');

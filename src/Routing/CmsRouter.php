@@ -107,7 +107,7 @@ class CmsRouter implements RouterInterface, RequestMatcherInterface, WarmableInt
         return Router::getSubscribedServices();
     }
 
-    public function warmUp(string $cacheDir, string $buildDir = null): array
+    public function warmUp(string $cacheDir, ?string $buildDir = null): array
     {
         /* @phpstan-ignore-next-line */
         return $this->staticRouter->warmUp($cacheDir, $buildDir);

@@ -34,7 +34,7 @@ class UrlGenerator
      *
      * @throws \Exception
      */
-    public function getUrl($routeOrName, string $locale = null, $site = null, array $routeParams = [], bool $onlyChecking = false): string
+    public function getUrl($routeOrName, ?string $locale = null, $site = null, array $routeParams = [], bool $onlyChecking = false): string
     {
         if ($this->isPreview()) {
             return 'javascript:confirm(\'Esto es una previsualización!\')';
@@ -60,7 +60,7 @@ class UrlGenerator
      *
      * @throws \Exception
      */
-    public function getPath($routeOrName, string $locale = null, $site = null, array $routeParams = [], bool $onlyChecking = false): string
+    public function getPath($routeOrName, ?string $locale = null, $site = null, array $routeParams = [], bool $onlyChecking = false): string
     {
         if ($this->isPreview()) {
             return 'javascript:confirm(\'Esto es una previsualización!\')';
@@ -149,7 +149,7 @@ class UrlGenerator
         return implode(' ', $attrs);
     }
 
-    protected function getRoutePath(RouteInterface $route, string $locale = null, $site = null): string
+    protected function getRoutePath(RouteInterface $route, ?string $locale = null, $site = null): string
     {
         $locale = $locale ?: $this->requestStack->getCurrentRequest()->getLocale();
 

@@ -40,7 +40,7 @@ class ContentDataCollector extends DataCollector
         $this->httpCacheEnabled = (bool) $httpCache;
     }
 
-    public function collect(Request $request, Response $response, \Throwable $exception = null): void
+    public function collect(Request $request, Response $response, ?\Throwable $exception = null): void
     {
         if (!$this->profilerEnabled) {
             return; // DO NOT COLLECT DATA IF PROFILER IS NOT ENABLED

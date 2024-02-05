@@ -46,7 +46,7 @@ class ContentVersionRenderer extends AbstractRenderer
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function render(ContentVersionInterface $version, Request $request, RenderErrorList $renderErrorList = null, array $compiledModules = null): string
+    public function render(ContentVersionInterface $version, Request $request, ?RenderErrorList $renderErrorList = null, ?array $compiledModules = null): string
     {
         return $this->encapsulateRequestRender($request, function () use ($version, $renderErrorList, $compiledModules): string {
             $this->cmsLogger && $this->cmsLogger->debug(sprintf('Rendering %s content version', $version->getContent()->getName()));
@@ -77,7 +77,7 @@ class ContentVersionRenderer extends AbstractRenderer
      * @throws InvalidSiteException
      * @throws InvalidLayoutException
      */
-    public function renderModules(ContentVersionInterface $version, Request $request, RenderErrorList $renderErrorList = null): array
+    public function renderModules(ContentVersionInterface $version, Request $request, ?RenderErrorList $renderErrorList = null): array
     {
         return $this->encapsulateRequestRender($request, function () use ($version, $renderErrorList): array {
             // preload all medias
@@ -116,7 +116,7 @@ class ContentVersionRenderer extends AbstractRenderer
      *
      * @deprecated this is not used anymore, will be removed in next major version
      */
-    public function renderModuleById(string $moduleId, array $data, RenderErrorList $renderErrorList = null): string
+    public function renderModuleById(string $moduleId, array $data, ?RenderErrorList $renderErrorList = null): string
     {
         $moduleConfig = $this->cmsConfig->getModule($moduleId);
 

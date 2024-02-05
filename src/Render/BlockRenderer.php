@@ -45,7 +45,7 @@ class BlockRenderer extends AbstractRenderer
         return implode(',', $params);
     }
 
-    public function renderBlockByType(string $type, array $params = [], string $locale = null): string
+    public function renderBlockByType(string $type, array $params = [], ?string $locale = null): string
     {
         $blockConfig = $this->cmsConfig->getBlock($type);
 
@@ -94,7 +94,7 @@ class BlockRenderer extends AbstractRenderer
         });
     }
 
-    public function renderBlock(BlockInterface $block, string $locale = null): string
+    public function renderBlock(BlockInterface $block, ?string $locale = null): string
     {
         $type = $block->getType();
         $blockId = $block->getId();

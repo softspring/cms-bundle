@@ -43,7 +43,7 @@ interface ContentInterface
 
     public function removeRoute(RouteInterface $route): void;
 
-    public function getCanonicalRoutePath(string $locale = null): ?RoutePathInterface;
+    public function getCanonicalRoutePath(?string $locale = null): ?RoutePathInterface;
 
     public function getExtraData(): ?array;
 

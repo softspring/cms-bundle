@@ -31,7 +31,7 @@ class ModuleRenderer
      * @throws DisabledModuleException
      * @throws InvalidModuleException
      */
-    public function render(array $module, ?ContentVersionInterface $version, array &$profilerDebugCollectorData, RenderErrorList $renderErrorList = null): string
+    public function render(array $module, ?ContentVersionInterface $version, array &$profilerDebugCollectorData, ?RenderErrorList $renderErrorList = null): string
     {
         if (isset($module['site_filter'])) {
             $currentSite = $this->requestStack->getCurrentRequest()->get('_sfs_cms_site');
