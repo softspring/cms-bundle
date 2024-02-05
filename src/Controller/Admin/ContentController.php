@@ -466,7 +466,7 @@ class ContentController extends AbstractController
         }
     }
 
-    public function content(string $content, Request $request, string $prevVersion = null): Response
+    public function content(string $content, Request $request, ?string $prevVersion = null): Response
     {
         $contentConfig = $this->getContentConfig($request);
         $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']] + ['extra_fields' => $contentConfig['extra_fields']];
@@ -620,7 +620,7 @@ class ContentController extends AbstractController
         return $this->render($config['seo_view'], $viewData->getArrayCopy());
     }
 
-    public function preview(string $content, Request $request, ContentVersionInterface $version = null): Response
+    public function preview(string $content, Request $request, ?ContentVersionInterface $version = null): Response
     {
         $contentConfig = $this->getContentConfig($request);
         $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']] + ['extra_fields' => $contentConfig['extra_fields']];
@@ -711,7 +711,7 @@ class ContentController extends AbstractController
         return $this->redirectBack($config['_id'], $entity, $request);
     }
 
-    public function previewContent(string $content, Request $request, string $version = null): Response
+    public function previewContent(string $content, Request $request, ?string $version = null): Response
     {
         $contentConfig = $this->getContentConfig($request);
         $config = $contentConfig['admin'] + ['_id' => $contentConfig['_id']] + ['extra_fields' => $contentConfig['extra_fields']];
@@ -861,7 +861,7 @@ class ContentController extends AbstractController
         return $this->redirectToRoute($route, $routeParams);
     }
 
-    protected function redirectBack(string $configId, ContentInterface $entity, Request $request, ContentVersionInterface $version = null): RedirectResponse
+    protected function redirectBack(string $configId, ContentInterface $entity, Request $request, ?ContentVersionInterface $version = null): RedirectResponse
     {
         switch ($request->query->get('back')) {
             case 'versions':

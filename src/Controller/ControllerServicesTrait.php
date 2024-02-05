@@ -14,7 +14,7 @@ trait ControllerServicesTrait
     protected FormFactoryInterface $formFactory;
     protected Environment $twig;
 
-    protected function render(string $view, array $parameters = [], Response $response = null): Response
+    protected function render(string $view, array $parameters = [], ?Response $response = null): Response
     {
         $content = $this->renderView($view, $parameters);
         $response ??= new Response();

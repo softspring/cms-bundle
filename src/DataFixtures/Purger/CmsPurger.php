@@ -41,7 +41,7 @@ class CmsPurger implements PurgerInterface, ORMPurgerInterface
     /**
      * @param string[] $excluded array of table/view names to be excluded from purge
      */
-    public function __construct(EntityManagerInterface $em = null, array $excluded = [])
+    public function __construct(?EntityManagerInterface $em = null, array $excluded = [])
     {
         $this->em = $em;
         $this->excluded = $excluded;

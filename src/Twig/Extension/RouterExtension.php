@@ -38,7 +38,7 @@ class RouterExtension extends AbstractExtension
         ];
     }
 
-    public function generateLinkAttributes(array $linkData, string $locale = null, $site = null): string
+    public function generateLinkAttributes(array $linkData, ?string $locale = null, $site = null): string
     {
         $attributes = [];
         $attributesString = '';
@@ -76,12 +76,12 @@ class RouterExtension extends AbstractExtension
         return implode(' ', $attributes);
     }
 
-    public function generatePath($route, string $locale = null, $site = null): string
+    public function generatePath($route, ?string $locale = null, $site = null): string
     {
         return $this->generateUrl($route, $locale, $site, UrlGeneratorInterface::ABSOLUTE_PATH);
     }
 
-    public function generateUrl($route, string $locale = null, $site = null, int $referenceType = UrlGeneratorInterface::ABSOLUTE_URL): string
+    public function generateUrl($route, ?string $locale = null, $site = null, int $referenceType = UrlGeneratorInterface::ABSOLUTE_URL): string
     {
         if (is_null($route)) {
             return '#';

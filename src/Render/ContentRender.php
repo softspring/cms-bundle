@@ -56,7 +56,7 @@ class ContentRender extends AbstractRenderer
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function render(ContentVersionInterface $version, RenderErrorList $renderErrorList = null): string
+    public function render(ContentVersionInterface $version, ?RenderErrorList $renderErrorList = null): string
     {
         $this->cmsLogger && $this->cmsLogger->debug(sprintf('Rendering %s page version', $version->getContent()->getName()));
 
@@ -87,7 +87,7 @@ class ContentRender extends AbstractRenderer
      * @throws InvalidSiteException
      * @throws InvalidLayoutException
      */
-    public function renderModules(ContentVersionInterface $version, SiteInterface $site, string $locale, RenderErrorList $renderErrorList = null): array
+    public function renderModules(ContentVersionInterface $version, SiteInterface $site, string $locale, ?RenderErrorList $renderErrorList = null): array
     {
         return $this->encapsulateRequestRender($site, $locale, function () use ($version, $renderErrorList): array {
             // preload all medias
@@ -124,7 +124,7 @@ class ContentRender extends AbstractRenderer
      * @throws DisabledModuleException
      * @throws InvalidModuleException
      */
-    public function renderModuleById(string $moduleId, array $data, RenderErrorList $renderErrorList = null): string
+    public function renderModuleById(string $moduleId, array $data, ?RenderErrorList $renderErrorList = null): string
     {
         $moduleConfig = $this->cmsConfig->getModule($moduleId);
 
@@ -143,7 +143,7 @@ class ContentRender extends AbstractRenderer
      * @throws DisabledModuleException
      * @throws InvalidModuleException
      */
-    protected function renderModule(array $module, ?ContentVersionInterface $version, array &$profilerDebugCollectorData, RenderErrorList $renderErrorList = null): string
+    protected function renderModule(array $module, ?ContentVersionInterface $version, array &$profilerDebugCollectorData, ?RenderErrorList $renderErrorList = null): string
     {
         if (isset($module['site_filter'])) {
             $currentSite = $this->requestStack->getCurrentRequest()->get('_sfs_cms_site');
