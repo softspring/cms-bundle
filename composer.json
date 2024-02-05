@@ -18,7 +18,7 @@
         "softspring/doctrine-migrations-version-comparator": "^5.2",
         "softspring/doctrine-target-entity-resolver": "^5.2",
         "softspring/dynamic-form-type": "^5.2",
-        "softspring/events": "^5.2",
+        "softspring/events": "^5.1",
         "softspring/media-bundle": "^5.2",
         "softspring/permissions-bundle": "^5.2",
         "softspring/polymorphic-form-type": "^5.2",
