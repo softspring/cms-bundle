@@ -347,7 +347,7 @@ body {
     flex-shrink: 0;
 }
 
-[data-edit-content-placeholder]:empty::after {
+[data-edit-content-placeholder]:empty:not(:focus)::after {
     content: attr(data-edit-content-placeholder);
     opacity: 0.5;
     font-style: italic;
