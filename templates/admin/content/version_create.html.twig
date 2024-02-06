@@ -2,14 +2,15 @@
 
 {% extends '@SfsCms/admin_layout.html.twig' %}
 
-{% block title %}{{ ('admin_'~content_type~'.content.meta.title')|trans({'%name%':entity.name}) }}{% endblock %}
-
 {% form_theme form
     'bootstrap_5_layout.html.twig'
     '@SfsPolymorphicFormType/polymorphic-form-theme.html.twig'
     '@SfsCms/forms/modules_theme.html.twig'
     '@SfsCms/forms/types_theme.html.twig'
-    '@SfsMedia/forms/media_type_theme.html.twig' %}
+    '@SfsMedia/forms/media_type_theme.html.twig'
+%}
+
+{% block title %}{{ ('admin_'~content_type~'.content.meta.title')|trans({'%name%':entity.name}) }}{% endblock %}
 
 {% block body %}
     <div id="maxInputVarsMessage" data-max-input-vars="{{ maxInputVars }}" class="container-fluid bg-warning fixed-top px-5 py-3 text-center text-dark d-none" style="z-index: 10000">

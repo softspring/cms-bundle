@@ -2,6 +2,12 @@
 
 {% extends '@SfsCms/admin_layout.html.twig' %}
 
+{% form_theme form
+    'bootstrap_5_layout.html.twig'
+    '@SfsCms/forms/routes_theme.html.twig'
+    '@SfsCms/forms/types_theme.html.twig'
+%}
+
 {% block title %}{{ ('admin_'~content_type~'.translations.meta.title')|trans({'%name%':content_entity.name}) }}{% endblock %}
 
 {% block breadcrums_content %}
@@ -16,7 +22,7 @@
 {% block content %}
     <h1 class="h3">{{ ('admin_'~content_type~'.translations.title')|trans({'%name%':content_entity.name, '%versionNumber%': prev_version.versionNumber|default('0')}) }}</h1>
 
-    {% include ['@content/'~content_type~'/admin/_content_tabs.html.twig', '@SfsCms/admin/content/_content_tabs.html.twig']  with {'current':'version_translations', 'content':content_entity, 'entity':version_entity} %}
+    {% include ['@content/'~content_type~'/admin/_content_tabs.html.twig', '@SfsCms/admin/content/_content_tabs.html.twig']  with {'current':'translations', 'content':content_entity, 'entity':version_entity} %}
 
     <div class="container-fluid mb-3">
         <div class="row">
@@ -71,7 +77,7 @@
                         {% endif %}
 
                         <tr>
-                            {#                    <td>{{ field.vars.name }}</td> #}
+                            {#<td>{{ field.vars.name }}</td>#}
                             <td>
                                 {{ (module_type~'.form.'~field.vars.attr['data-module-field']~'.label')|trans({}, 'sfs_cms_modules') }}
                                 {{ form_widget(field._trans_id) }}
