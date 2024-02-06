@@ -12,13 +12,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ContentMenu
 {
     public function __construct(
-        protected CmsConfig                     $cmsConfig,
-        protected ContentManagerInterface       $contentManager,
-        protected RouterInterface               $router,
-        protected TranslatorInterface           $translator,
+        protected CmsConfig $cmsConfig,
+        protected ContentManagerInterface $contentManager,
+        protected RouterInterface $router,
+        protected TranslatorInterface $translator,
         protected AuthorizationCheckerInterface $authorizationChecker,
-    )
-    {
+    ) {
     }
 
     public function getAdminContentMenu(string $current, ContentInterface $content): array
