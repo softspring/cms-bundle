@@ -25,7 +25,7 @@ window.addEventListener('load', (event) => {
                 if ('_original' === version) {
                     previewMedia = event.target.dataset['mediaImage-_original'];
                 } else {
-                    previewMedia = event.target.dataset['mediaImage'+version.charAt(0).toUpperCase() + version.slice(1)];
+                    previewMedia = event.target.dataset['mediaImage-'+version.charAt(0).toUpperCase() + version.slice(1)];
                 }
             } else if (config[event.target.dataset.mediaType].video) {
                 version = config[event.target.dataset.mediaType].video[0];

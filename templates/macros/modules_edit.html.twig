@@ -135,10 +135,20 @@
     {%- endapply -%}
 {%- endmacro -%}
 
-{%- macro link_media_preview (formField) -%}
+{%- macro link_media_preview (formField, locale = null) -%}
 {%- apply spaceless -%}
     {{ _self._update_link_value(formField, 'data-media-preview-input') }}
-    data-media-preview-target="{{ formField.vars.attr['data-media-preview-input'] }}"
+
+    {% if locale == null and formField.vars.attr['data-input-lang']|default(false) %}
+        {% set locale = formField.vars.attr['data-input-lang'] %}
+    {% endif %}
+
+    {% if locale %}
+        {{ _self.locale(locale) }}
+        data-media-preview-target="{{ formField.vars.attr['data-media-preview-input'] }}.{{ locale }}"
+    {% else %}
+        data-media-preview-target="{{ formField.vars.attr['data-media-preview-input'] }}"
+    {% endif %}
 {%- endapply -%}
 {%- endmacro -%}
 
