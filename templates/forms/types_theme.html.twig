@@ -141,3 +141,43 @@
     {{ form_row(form.target) }}
     {{ form_row(form.custom_target) }}
 {% endblock link_widget %}
+
+{% block spacing_widget %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col bg-warning">&nbsp;</div>
+            <div class="col bg-warning">&nbsp;</div>
+            <div class="col bg-warning border-bottom border-primary text-center">{{ form_widget(form.marginTop, {'attr': {'style': 'width: 40px; padding: 0; display: inline-block'}}) }}</div>
+            <div class="col bg-warning border-bottom border-primary">&nbsp;</div>
+            <div class="col bg-warning">&nbsp;</div>
+        </div>
+        <div class="row">
+            <div class="col bg-warning border-end border-primary">&nbsp;</div>
+            <div class="col bg-info border-top border-primary">&nbsp;</div>
+            <div class="col bg-info text-center">{{ form_widget(form.paddingTop, {'attr': {'style': 'width: 40px; padding: 0; display: inline-block'}}) }}</div>
+            <div class="col bg-info">&nbsp;</div>
+            <div class="col bg-warning border-start border-primary">&nbsp;</div>
+        </div>
+        <div class="row">
+            <div class="col bg-warning border-end border-primary text-end">{{ form_widget(form.marginStart, {'attr': {'style': 'width: 40px; padding: 0; display: inline-block'}}) }}</div>
+            <div class="col bg-info text-start">{{ form_widget(form.paddingStart, {'attr': {'style': 'width: 40px; padding: 0; display: inline-block'}}) }}</div>
+            <div class="col">&nbsp;</div>
+            <div class="col bg-info text-end">{{ form_widget(form.paddingEnd, {'attr': {'style': 'width: 40px; padding: 0; display: inline-block'}}) }}</div>
+            <div class="col bg-warning border-start border-primary text-start">{{ form_widget(form.marginEnd, {'attr': {'style': 'width: 40px; padding: 0; display: inline-block'}}) }}</div>
+        </div>
+        <div class="row">
+            <div class="col bg-warning border-end border-primary">&nbsp;</div>
+            <div class="col bg-info">&nbsp;</div>
+            <div class="col bg-info text-center">{{ form_widget(form.paddingBottom, {'attr': {'style': 'width: 40px; padding: 0; display: inline-block'}}) }}</div>
+            <div class="col bg-info">&nbsp;</div>
+            <div class="col bg-warning border-start border-primary">&nbsp;</div>
+        </div>
+        <div class="row">
+            <div class="col bg-warning">&nbsp;</div>
+            <div class="col bg-warning border-top border-primary">&nbsp;</div>
+            <div class="col bg-warning border-top border-primary text-center">{{ form_widget(form.marginBottom, {'attr': {'style': 'width: 40px; padding: 0; display: inline-block'}}) }}</div>
+            <div class="col bg-warning border-top border-primary">&nbsp;</div>
+            <div class="col bg-warning">&nbsp;</div>
+        </div>
+    </div>
+{% endblock spacing_widget %}

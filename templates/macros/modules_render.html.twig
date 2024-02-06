@@ -4,9 +4,18 @@
 {% endapply %}
 {%- endmacro -%}
 
-{%- macro class (classesValue, defaultClasses = '') -%}
+{%- macro class (classesValues, defaultClasses = '') -%}
 {% apply spaceless %}
-    {% if classesValue|default or defaultClasses|default %}class="{{ (defaultClasses~' '~classesValue|default(''))|trim }}"{% endif %}
+    {% set classes = defaultClasses %}
+    {% if classesValues is not iterable %}
+        {% set classesValues = [classesValues] %}
+    {% endif %}
+
+    {% for classesValue in classesValues %}
+        {% set classes = ((classes is empty ? '' : classes~' ') ~ classesValue)|trim %}
+    {% endfor %}
+
+    {% if classes|default %}class="{{ classes|trim }}"{% endif %}
 {% endapply %}
 {%- endmacro -%}
 
