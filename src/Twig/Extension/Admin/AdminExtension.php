@@ -1,7 +1,8 @@
 <?php
 
-namespace Softspring\CmsBundle\Twig\Extension;
+namespace Softspring\CmsBundle\Twig\Extension\Admin;
 
+use Softspring\CmsBundle\Admin\ContentMenu;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -11,7 +12,7 @@ use Twig\TwigFunction;
 
 class AdminExtension extends AbstractExtension
 {
-    public function __construct(protected RouterInterface $router, protected ContentManagerInterface $contentManager)
+    public function __construct(protected RouterInterface $router, protected ContentManagerInterface $contentManager, protected ContentMenu $contentMenu)
     {
     }
 
@@ -26,6 +27,7 @@ class AdminExtension extends AbstractExtension
     {
         return [
             new TwigFunction('sfs_cms_admin_content_url', [$this, 'getContentUrl']),
+            new TwigFunction('sfs_cms_admin_content_menu', [$this->contentMenu, 'getAdminContentMenu']),
         ];
     }
 

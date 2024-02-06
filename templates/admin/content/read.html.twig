@@ -16,7 +16,7 @@
 {% block content %}
     <h1 class="h3">{{ ('admin_'~content_type~'.read.title')|trans({'%name%':entity.name}) }}</h1>
 
-    {% include '@SfsCms/admin/content/_content_tabs.html.twig' with {'current':'read', 'content':content, 'entity':entity} %}
+    {% include '@SfsCms/admin/content/_content_tabs.html.twig' with {'current':'details', 'content':content, 'entity':entity} %}
 
     <div class="container-fluid">
         <div class="row">
