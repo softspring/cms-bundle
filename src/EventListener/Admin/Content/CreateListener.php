@@ -6,9 +6,11 @@ use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\Component\CrudlController\Event\CreateEntityEvent;
+use Softspring\Component\CrudlController\Event\FailureEvent;
 use Softspring\Component\CrudlController\Event\FormPrepareEvent;
 use Softspring\Component\CrudlController\Event\FormValidEvent;
 use Softspring\Component\CrudlController\Event\SuccessEvent;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class CreateListener extends AbstractContentListener
@@ -47,6 +49,7 @@ class CreateListener extends AbstractContentListener
             ],
             SfsCmsEvents::ADMIN_CONTENTS_CREATE_FAILURE => [
                 ['onEventDispatchContentTypeEvent', 10],
+                ['onFailureShowAlert', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENTS_CREATE_FORM_INVALID => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -105,5 +108,14 @@ class CreateListener extends AbstractContentListener
         $redirectUrl = $this->router->generate($contentConfig['admin']['create']['success_redirect_to'], ['content' => $event->getEntity()]);
 
         $event->setResponse(new RedirectResponse($redirectUrl));
+    }
+
+    public function onFailureShowAlert(FailureEvent $event): void
+    {
+        $request = $event->getRequest();
+        $exception = $event->getException();
+        $contentConfig = $request->attributes->get('_content_config');
+
+        $event->getForm()->addError(new FormError($exception->getMessage()));
     }
 }

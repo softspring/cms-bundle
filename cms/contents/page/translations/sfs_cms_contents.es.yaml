@@ -83,7 +83,7 @@ admin_page:
             title: "Rutas"
             cache: "(cache %ttl% segundos)"
             not_published_warning: "Este contenido no está publicado, por lo tanto las siguientes rutas devolverán un error 404"
-            missing_locale: "No hay segmento de URL configurador para el idioma %missingLocale%"
+            missing_locale: "No hay segmento de URL configurado para el idioma %missingLocale%"
         versions:
             title: "Últimas versiones"
             published: "publicada"
