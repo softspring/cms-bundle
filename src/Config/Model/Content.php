@@ -11,18 +11,17 @@ use Softspring\CmsBundle\Form\Admin\Content\ContentUpdateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionCreateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionImportForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionListFilterForm;
-use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionTranslateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionUpdateForm;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Content implements ConfigurationInterface
 {
-    protected string $contentName;
-
-    public function __construct(string $contentName)
+    /**
+     * @param iterable<ConfigExtensionInterface> $configExtensions
+     */
+    public function __construct(protected string $contentName, protected iterable $configExtensions = [])
     {
-        $this->contentName = $contentName;
     }
 
     public function getConfigTreeBuilder(): TreeBuilder
@@ -369,16 +368,6 @@ class Content implements ConfigurationInterface
                             ->end()
                         ->end()
 
-                        ->arrayNode('version_translations')
-                            ->addDefaultsIfNotSet()
-                            ->children()
-                                ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_TRANSLATIONS')->end()
-                                ->scalarNode('view')->defaultValue('@SfsCms/admin/content/version_translations.html.twig')->end()
-                                ->scalarNode('type')->defaultValue(VersionTranslateForm::class)->end()
-                                ->scalarNode('success_redirect_to')->defaultValue('')->end()
-                            ->end()
-                        ->end()
-
                         ->arrayNode('publish_version')
                             ->addDefaultsIfNotSet()
                             ->children()
@@ -395,6 +384,10 @@ class Content implements ConfigurationInterface
                 ->end()
             ->end()
         ;
+
+        foreach ($this->configExtensions as $configExtension) {
+            $configExtension->extend($rootNode);
+        }
 
         return $treeBuilder;
     }

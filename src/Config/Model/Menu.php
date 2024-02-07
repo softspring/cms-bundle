@@ -7,11 +7,11 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Menu implements ConfigurationInterface
 {
-    protected string $menuName;
-
-    public function __construct(string $menuName)
+    /**
+     * @param iterable<ConfigExtensionInterface> $configExtensions
+     */
+    public function __construct(protected string $menuName, protected iterable $configExtensions = [])
     {
-        $this->menuName = $menuName;
     }
 
     public function getConfigTreeBuilder(): TreeBuilder
@@ -28,6 +28,10 @@ class Menu implements ConfigurationInterface
                 ->booleanNode('singleton')->defaultTrue()->end()
             ->end()
         ;
+
+        foreach ($this->configExtensions as $configExtension) {
+            $configExtension->extend($rootNode);
+        }
 
         return $treeBuilder;
     }

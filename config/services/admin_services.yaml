@@ -3,10 +3,22 @@ services:
         autowire: true
         autoconfigure: true
         public: false
+
+    _instanceof:
+        Softspring\CmsBundle\Admin\Menu\ContentMenuProviderInterface:
+            tags: [ 'sfs_cms.admin_menu.content_menu_provider' ]
     
-    Softspring\CmsBundle\Admin\:
-        resource: '../../src/Admin/*'
-        
+    Softspring\CmsBundle\Admin\Menu\MenuProvider:
+        arguments:
+            $contentMenuProviders: !tagged_iterator { tag: sfs_cms.admin_menu.content_menu_provider, default_priority_method: getPriority }
+
+    Softspring\CmsBundle\Admin\Menu\ContentMenuProvider: ~
+
     Softspring\CmsBundle\Twig\Extension\Admin\:
         resource: '../../src/Twig/Extension/Admin/*'
         tags: [ 'twig.extension' ]
+
+    Softspring\CmsBundle\Admin\Routing\AdminRoutingLoader:
+        arguments:
+            $adminRoutingProviders: !tagged_iterator { tag: sfs_cms.admin_routing_provider }
+        tags: [ 'routing.loader' ]

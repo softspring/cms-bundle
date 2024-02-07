@@ -29,8 +29,15 @@ class SfsCmsPlugin extends Bundle
         return [];
     }
 
+    protected function getConfigExtensionClasses(): array
+    {
+        return [];
+    }
+
     public function build(ContainerBuilder $container): void
     {
+        $container->setParameter('sfs_cms.config_extensions', $this->getConfigExtensionClasses());
+
         parent::build($container);
 
         foreach ($this->getTargetEntitiesMappings() as $path => $namespace) {

@@ -64,9 +64,6 @@ services:
         resource: '../../src/Form/Extension/*'
         tags: ['form.extension']
 
-#    Softspring\CmsBundle\EventListener\:
-#        resource: '../../src/EventListener/*'
-
     Softspring\CmsBundle\EventListener\SiteResolverListener: ~
 
     Softspring\CmsBundle\EventListener\ErrorPageListener: ~
@@ -103,8 +100,6 @@ services:
     Softspring\CmsBundle\Sitemap\IndexFactory: ~
 
     Softspring\CmsBundle\Translator\TranslatableContext: ~
-
-    Softspring\CmsBundle\Translator\TranslatorExtractor: ~
 
     Softspring\CmsBundle\Twig\Extension\:
         resource: '../../src/Twig/Extension/*'

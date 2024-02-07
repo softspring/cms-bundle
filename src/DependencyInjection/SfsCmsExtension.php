@@ -36,7 +36,10 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         array_push($config['collections'], 'cms');
         $container->setParameter('sfs_cms.collections', $config['collections']);
 
-        $configLoader = new ConfigLoader($container, $config['collections']);
+        if ($container->hasParameter('sfs_cms.config_extensions')) {
+            $configExtensions = $container->getParameter('sfs_cms.config_extensions');
+        }
+        $configLoader = new ConfigLoader($container, $config['collections'], $configExtensions ?? []);
         $container->setParameter('sfs_cms.modules', $configLoader->getModules($container));
         $container->setParameter('sfs_cms.layouts', $configLoader->getLayouts($container));
         $container->setParameter('sfs_cms.contents', $configLoader->getContents($container));

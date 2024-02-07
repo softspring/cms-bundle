@@ -13,7 +13,6 @@ admin_page:
         seo: "SEO"
         content: "Contenido"
         preview: "Previsualizar"
-        translations: "Traducciones"
         versions: "Versiones"
         delete: "Eliminar"
         routes: "Rutas"
@@ -91,7 +90,6 @@ admin_page:
             more.link: "Ver más versiones"
         translations:
             title: "Traducciones"
-            edit.link: "Editar"
 
     versions:
         meta.title: "Versiones"
@@ -120,7 +118,6 @@ admin_page:
             publish.link: "Publicar"
             import_version.link: "Importar versión"
             cleanup_versions.link: "Limpiar versiones"
-            translations.link: "Traducciones"
             keep.link: "Mantener versión, pinchar para desmarcar"
             nokeep.link: "No mantener esta versión, pinchar para mantener"
             info.link: "Info"
@@ -136,16 +133,6 @@ admin_page:
             content.button: "Editar versión"
             publish.button: "Publicar versión"
             published.button: "Publicada"
-
-    translations:
-        meta.title: "Traducciones de la página"
-        title: "Traducciones de la página (v%versionNumber%)"
-        breadcrumb: "Traducciones de la página"
-        actions:
-            cancel.button: "Cancelar"
-            save.button: "Guardar nueva versión"
-            import_translations.link: "Importar traducciones"
-            export_translations.link: "Exportar traducciones"
 
     update:
         meta.title: "Configuración de la página"

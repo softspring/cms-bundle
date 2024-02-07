@@ -54,12 +54,6 @@ content_from_version:
     defaults:
         configKey: 'version_create'
 
-translations:
-    controller: sfs_cms.admin.content_version.controller::create
-    path: /{content}/translations
-    defaults:
-        configKey: 'version_translations'
-
 versions:
     controller: sfs_cms.admin.content_version.controller::list
     path: /{content}/versions
@@ -121,3 +115,7 @@ cleanup_versions:
     path: /{content}/versions-cleanup
     defaults:
         configKey: 'version_cleanup'
+
+_plugin_routes:
+    resource: '.'
+    type: sfs_cms_plugin_admin_content_type

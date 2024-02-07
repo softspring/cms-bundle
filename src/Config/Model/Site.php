@@ -7,11 +7,11 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Site implements ConfigurationInterface
 {
-    protected string $siteName;
-
-    public function __construct(string $siteName)
+    /**
+     * @param iterable<ConfigExtensionInterface> $configExtensions
+     */
+    public function __construct(protected string $siteName, protected iterable $configExtensions = [])
     {
-        $this->siteName = $siteName;
     }
 
     public function getConfigTreeBuilder(): TreeBuilder
@@ -132,6 +132,10 @@ class Site implements ConfigurationInterface
                 ->end()
             ->end()
         ;
+
+        foreach ($this->configExtensions as $configExtension) {
+            $configExtension->extend($rootNode);
+        }
 
         return $treeBuilder;
     }

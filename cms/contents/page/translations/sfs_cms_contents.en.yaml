@@ -14,7 +14,6 @@ admin_page:
         content: "Content"
         preview: "Preview"
         versions: "Versions"
-        translations: "Translations"
         delete: "Delete"
         routes: "Routes"
         permissions: "Permissions"
@@ -91,7 +90,6 @@ admin_page:
             more.link: "More versions"
         translations:
             title: "Translations"
-            edit.link: "Edit"
 
     versions:
         meta.title: "Versions"
@@ -120,7 +118,6 @@ admin_page:
             publish.link: "Publish"
             import_version.link: "Import version"
             cleanup_versions.link: "Cleanup versions"
-            translations.link: "Translations"
             keep.link: "Keep version, click to no keep"
             nokeep.link: "Do not keep version, click to keep"
             info.link: "Info"
@@ -136,16 +133,6 @@ admin_page:
             content.button: "Edit version"
             publish.button: "Publish version"
             published.button: "Published"
-
-    translations:
-        meta.title: "Page translations"
-        title: "Page translations (v%versionNumber%)"
-        breadcrumb: "Page translations"
-        actions:
-            cancel.button: "Cancel"
-            save.button: "Save new version"
-            import_translations.link: "Import translations"
-            export_translations.link: "Export translations"
 
     update:
         meta.title: "Configure page"

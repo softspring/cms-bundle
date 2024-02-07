@@ -52,11 +52,11 @@ trait ContentInitializeEventTrait
     {
         $config = $event->getRequest()->attributes->get('_content_config');
 
-        if (empty($config[self::ACTION_NAME]['is_granted'])) {
+        if (empty($config['admin'][get_called_class()::ACTION_NAME]['is_granted'])) {
             return;
         }
 
-        $this->checkIsGranted($config[self::ACTION_NAME]['is_granted']);
+        $this->checkIsGranted($config['admin'][get_called_class()::ACTION_NAME]['is_granted']);
     }
 
     /**

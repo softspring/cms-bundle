@@ -7,11 +7,11 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Layout implements ConfigurationInterface
 {
-    protected string $layoutName;
-
-    public function __construct(string $layoutName)
+    /**
+     * @param iterable<ConfigExtensionInterface> $configExtensions
+     */
+    public function __construct(protected string $layoutName, protected iterable $configExtensions = [])
     {
-        $this->layoutName = $layoutName;
     }
 
     public function getConfigTreeBuilder(): TreeBuilder
@@ -44,6 +44,10 @@ class Layout implements ConfigurationInterface
 
             ->end()
         ;
+
+        foreach ($this->configExtensions as $configExtension) {
+            $configExtension->extend($rootNode);
+        }
 
         return $treeBuilder;
     }

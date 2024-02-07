@@ -27,9 +27,6 @@ class BlameListener implements EventSubscriberInterface
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CREATE_APPLY => [
                 ['onCreateVersion', 5],
             ],
-            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_TRANSLATIONS_APPLY => [
-                ['onCreateVersion', 5],
-            ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_PUBLISH_APPLY => [
                 ['onPublishVersion', 5],
             ],

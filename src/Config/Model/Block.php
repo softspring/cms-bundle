@@ -7,11 +7,11 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Block implements ConfigurationInterface
 {
-    protected string $blockName;
-
-    public function __construct(string $blockName)
+    /**
+     * @param iterable<ConfigExtensionInterface> $configExtensions
+     */
+    public function __construct(protected string $blockName, protected iterable $configExtensions = [])
     {
-        $this->blockName = $blockName;
     }
 
     public function getConfigTreeBuilder(): TreeBuilder
@@ -88,6 +88,10 @@ class Block implements ConfigurationInterface
                 ->end()
             ->end()
         ;
+
+        foreach ($this->configExtensions as $configExtension) {
+            $configExtension->extend($rootNode);
+        }
 
         return $treeBuilder;
     }

@@ -8,11 +8,11 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Module implements ConfigurationInterface
 {
-    protected string $moduleName;
-
-    public function __construct(string $moduleName)
+    /**
+     * @param iterable<ConfigExtensionInterface> $configExtensions
+     */
+    public function __construct(protected string $moduleName, protected iterable $configExtensions = [])
     {
-        $this->moduleName = $moduleName;
     }
 
     public function getConfigTreeBuilder(): TreeBuilder
@@ -42,6 +42,10 @@ class Module implements ConfigurationInterface
                 ->end()
             ->end()
         ;
+
+        foreach ($this->configExtensions as $configExtension) {
+            $configExtension->extend($rootNode);
+        }
 
         return $treeBuilder;
     }

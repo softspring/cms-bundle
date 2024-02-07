@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Config;
 
 use Softspring\CmsBundle\Config\Exception\MissingLayoutsException;
 use Softspring\CmsBundle\Config\Model\Block;
+use Softspring\CmsBundle\Config\Model\ConfigExtensionInterface;
 use Softspring\CmsBundle\Config\Model\Content;
 use Softspring\CmsBundle\Config\Model\Layout;
 use Softspring\CmsBundle\Config\Model\Menu;
@@ -19,13 +20,11 @@ use Symfony\Component\Yaml\Yaml;
 
 class ConfigLoader
 {
-    protected ContainerInterface $container;
-    protected array $collectionPaths;
-
-    public function __construct(ContainerInterface $container, array $collectionPaths = [])
+    /**
+     * @param iterable<ConfigExtensionInterface> $configExtensionsClasses
+     */
+    public function __construct(protected ContainerInterface $container, protected array $collectionPaths = [], protected iterable $configExtensionsClasses = [])
     {
-        $this->container = $container;
-        $this->collectionPaths = $collectionPaths;
         $this->initDirectories();
     }
 
@@ -77,7 +76,7 @@ class ConfigLoader
         $configurations = $this->readConfigurations($containerBuilder, 'modules', 'module');
 
         foreach ($configurations as $moduleName => $moduleConfigs) {
-            $modules[$moduleName] = $processor->processConfiguration(new Module($moduleName), $moduleConfigs);
+            $modules[$moduleName] = $processor->processConfiguration(new Module($moduleName, $this->getConfigExtensions(Module::class)), $moduleConfigs);
             $modules[$moduleName]['_id'] = $moduleName;
             $modules[$moduleName]['revision_migration_scripts'] = [];
 
@@ -103,7 +102,7 @@ class ConfigLoader
         $configurations = $this->readConfigurations($containerBuilder, 'layouts', 'layout');
 
         foreach ($configurations as $layoutName => $layoutConfigs) {
-            $layouts[$layoutName] = $processor->processConfiguration(new Layout($layoutName), $layoutConfigs);
+            $layouts[$layoutName] = $processor->processConfiguration(new Layout($layoutName, $this->getConfigExtensions(Layout::class)), $layoutConfigs);
             $layouts[$layoutName]['_id'] = $layoutName;
         }
 
@@ -122,7 +121,7 @@ class ConfigLoader
         $configurations = $this->readConfigurations($containerBuilder, 'contents', 'content');
 
         foreach ($configurations as $contentName => $contentConfigs) {
-            $contents[$contentName] = $processor->processConfiguration(new Content($contentName), $contentConfigs);
+            $contents[$contentName] = $processor->processConfiguration(new Content($contentName, $this->getConfigExtensions(Content::class)), $contentConfigs);
             $contents[$contentName]['_id'] = $contentName;
         }
 
@@ -137,7 +136,7 @@ class ConfigLoader
         $configurations = $this->readConfigurations($containerBuilder, 'menus', 'menu');
 
         foreach ($configurations as $menuName => $menuConfigs) {
-            $menus[$menuName] = $processor->processConfiguration(new Menu($menuName), $menuConfigs);
+            $menus[$menuName] = $processor->processConfiguration(new Menu($menuName, $this->getConfigExtensions(Menu::class)), $menuConfigs);
             $menus[$menuName]['_id'] = $menuName;
         }
 
@@ -152,7 +151,7 @@ class ConfigLoader
         $configurations = $this->readConfigurations($containerBuilder, 'blocks', 'block');
 
         foreach ($configurations as $blockName => $blockConfigs) {
-            $blocks[$blockName] = $processor->processConfiguration(new Block($blockName), $blockConfigs);
+            $blocks[$blockName] = $processor->processConfiguration(new Block($blockName, $this->getConfigExtensions(Block::class)), $blockConfigs);
             $blocks[$blockName]['_id'] = $blockName;
             $blocks[$blockName]['revision_migration_scripts'] = [];
 
@@ -175,7 +174,7 @@ class ConfigLoader
         $configurations = $this->readConfigurations($containerBuilder, 'sites', 'site');
 
         foreach ($configurations as $siteName => $siteConfigs) {
-            $sites[$siteName] = $processor->processConfiguration(new Site($siteName), $siteConfigs);
+            $sites[$siteName] = $processor->processConfiguration(new Site($siteName, $this->getConfigExtensions(Site::class)), $siteConfigs);
             $sites[$siteName]['_id'] = $siteName;
         }
 
@@ -199,5 +198,18 @@ class ConfigLoader
         }
 
         return $configurations;
+    }
+
+    protected function getConfigExtensions(string $configClass): array
+    {
+        $extensions = [];
+        foreach ($this->configExtensionsClasses as $configExtensionClass) {
+            $extension = new $configExtensionClass();
+            if ($extension->supports($configClass)) {
+                $extensions[] = $extension;
+            }
+        }
+
+        return $extensions;
     }
 }
