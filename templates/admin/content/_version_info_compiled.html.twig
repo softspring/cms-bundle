@@ -3,17 +3,19 @@
 {% embed '@SfsCms/admin/_embeds/_card.html.twig' with {'title': ('admin_'~content_type~'.version_info.compiled.title')|trans} %}
     {% trans_default_domain 'sfs_cms_contents' %}
 
-    {% block content %}
-        {% import '@SfsCms/admin/content/_macros.html.twig' as tools %}
-
+    {% block title %}
         {% if not content_config.admin.version_recompile.is_granted or is_granted(content_config.admin.version_recompile.is_granted, entity) %}
             <a class="btn btn-sm btn-outline-secondary float-end"
                href="{{ url('sfs_cms_admin_content_'~content_type~'_recompile_version', {'content':entity, 'version': version_entity, 'back': 'version_info'}) }}">{{ ('admin_'~content_type~'.version_info.actions.recompile.link')|trans }}</a>
         {% else %}
             <a class="btn btn-sm btn-outline-secondary float-end disabled">{{ ('admin_'~content_type~'.version_info.actions.recompile.link')|trans }}</a>
         {% endif %}
+        {{ parent() }}
+    {% endblock %}
 
-        <h4 class="border-bottom border-1 border-light pb-2 mb-3">{{ ('admin_'~content_type~'.version_info.compiled.title')|trans }}</h4>
+    {% block content %}
+        {% import '@SfsCms/admin/content/_macros.html.twig' as tools %}
+
         {% if version.hasCompileErrors %}
             <div class="alert alert-danger" role="alert">
                 <i class="bi bi-exclamation-triangle text-danger"
