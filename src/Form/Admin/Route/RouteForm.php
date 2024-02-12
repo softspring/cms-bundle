@@ -127,8 +127,8 @@ class RouteForm extends AbstractType
             $builder->add('redirectType', ChoiceType::class, [
                 'required' => false,
                 'choices' => [
-                    'admin_routes.form.redirectType.values.temporary' => Response::HTTP_MOVED_PERMANENTLY,
-                    'admin_routes.form.redirectType.values.permanent' => Response::HTTP_FOUND,
+                    'admin_routes.form.redirectType.values.temporary' => Response::HTTP_FOUND,
+                    'admin_routes.form.redirectType.values.permanent' => Response::HTTP_MOVED_PERMANENTLY,
                 ],
             ]);
 
