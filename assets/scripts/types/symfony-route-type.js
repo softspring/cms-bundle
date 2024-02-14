@@ -1,11 +1,11 @@
 
 HTMLElement.prototype.show = function () {
-    this.classList.remove('d-none');
+    this.classList.remove('d-none', 'hidden');
     return this;
 };
 
 HTMLElement.prototype.hide = function () {
-    this.classList.add('d-none');
+    this.classList.add('d-none', 'hidden');
     return this;
 }
 
@@ -120,9 +120,6 @@ window.addEventListener('load', (event) => {
             routeParamsField.closest('div').hide();
             routeParamsLabel.closest('div').hide();
         }
-
-        // dispatch the select update
-        const routeSelector = document.querySelector('[data-route-params=' + paramsFieldId + ']');
     });
 
     document.addEventListener('change', function (event) {
