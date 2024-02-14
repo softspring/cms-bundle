@@ -26,13 +26,14 @@
 {%- endapply -%}
 {%- endmacro -%}
 
-{%- macro link_class (formFields, defaultClasses = '') -%}
+{%- macro link_class (formFields, defaultClasses = []) -%}
 {%- apply spaceless -%}
     {# convert to array of form fields #}
     {% set formFields = formFields.vars is not defined ? formFields : [formFields] %}
     {% set module_name = _self._module_name(formFields|first) %}
 
-    {% set value = [defaultClasses] %}
+    {% set defaultClasses = defaultClasses is iterable ? defaultClasses : [defaultClasses] %}
+    {% set value = defaultClasses %}
     {% set classTarget = false %}
     {% for classFormField in formFields %}
         {% if classTarget and not classFormField.vars.attr['data-edit-class-input']|default(false) %}
@@ -52,11 +53,12 @@
     {% endfor %}
 
     class="{{ value|join(' ') }}"
-    data-edit-class-default="{{ defaultClasses }}"
+    data-edit-class-default="{{ defaultClasses|join(' ') }}"
     {% if classTarget %}data-edit-class-target="{{ classTarget }}"{% endif %}
 {%- endapply -%}
 {%- endmacro -%}
 
+{% deprecated 'wysiwyg function is deprecated, use link_content' %}
 {%- macro wysiwyg(type = 'tinymce') -%}
 {%- apply spaceless -%}
     contenteditable="true"
@@ -64,7 +66,7 @@
 {%- endapply -%}
 {%- endmacro -%}
 
-{%- macro link_content (formField, locale = null, contentEditable = true, placeholderTransKey = null, hideIfEmpty = false, fill = false) -%}
+{%- macro link_content (formField, locale = null, contentEditable = true, placeholderTransKey = null, hideIfEmpty = false, fill = false, wysiwyg = null) -%}
 {%- apply spaceless -%}
     {% set module_name = _self._module_name(formField) %}
     {{ _self._update_link_value(formField, 'data-edit-content-input') }}
@@ -105,6 +107,10 @@
         data-edit-content-hide-if-empty="true"
     {% endif %}
 
+    {% if wysiwyg|default(false) %}
+        data-edit-content-wysiwyg="{{ wysiwyg is same as true ? 'tinymce' : wysiwyg }}"
+    {% endif %}
+
     {% if fill %}
         {{ _self.fill(fill) }}
     {% endif %}
@@ -124,7 +130,7 @@
 
 {%- macro bg_color_style(formField) -%}
 {%- apply spaceless -%}
-    {{ formField.vars.data ? 'background-color:'~formField.vars.data : '' }}
+    {{ formField.vars.data ? 'background-color:'~formField.vars.data~';' : '' }}
 {%- endapply -%}
 {%- endmacro -%}
 
@@ -135,7 +141,7 @@
     {%- endapply -%}
 {%- endmacro -%}
 
-{%- macro link_media_preview (formField, locale = null) -%}
+{%- macro link_media_preview (formField, locale = null, placeholder = null) -%}
 {%- apply spaceless -%}
     {{ _self._update_link_value(formField, 'data-media-preview-input') }}
 
@@ -149,6 +155,11 @@
     {% else %}
         data-media-preview-target="{{ formField.vars.attr['data-media-preview-input'] }}"
     {% endif %}
+
+    {% if placeholder %}
+        data-media-preview-placeholder="{{ placeholder }}"
+    {% endif %}
+
 {%- endapply -%}
 {%- endmacro -%}
 
@@ -171,6 +182,13 @@
 
 {%- macro fill (id) -%}
 {%- apply spaceless -%}
+    data-edit-fill-target-{{ id }}
+{%- endapply -%}
+{%- endmacro -%}
+
+{%- macro link_fill (formField, id, value = '') -%}
+{%- apply spaceless -%}
+    {{ _self._update_link_value(formField, 'data-edit-fill-input-'~id, value) }}
     data-edit-fill-target-{{ id }}
 {%- endapply -%}
 {%- endmacro -%}
@@ -198,7 +216,7 @@
 {%- macro _update_link_value (formField, dataField, value = false) -%}
 {%- apply spaceless -%}
     {% if not formField.vars.attr[dataField]|default(false) %}
-        {{ sfs_cms_form_view_set_attr(formField, dataField, value|default((formField.vars.name~'_'~random())|sfs_cms_sha1|slice(0,8))) }}
+        {{ sfs_cms_form_view_set_attr(formField, dataField, value == false ? (formField.vars.name~'_'~random())|sfs_cms_sha1|slice(0,8) : value) }}
     {% endif %}
 {%- endapply -%}
 {%- endmacro _update_link_value -%}
