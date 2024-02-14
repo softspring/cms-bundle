@@ -62,7 +62,7 @@ module:
 ```
 
 ```twig
-{% for locale,localeField in form.title|filter((f, locale) => not (locale starts with '_')) %}
+{% for locale,localeField in form.title.vars.localeFields %}
     <h1 data-lang="{{ locale }}" contenteditable="true" data-edit-content-target="title.{{ locale }}">{{ localeField.vars.data|default('') }}</h1>
 {% endfor %}
 ```
