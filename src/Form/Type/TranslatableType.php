@@ -79,7 +79,7 @@ class TranslatableType extends AbstractType
     public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['localeFields'] = array_filter($view->children, function (FormView $child, string $locale) {
-            return str_starts_with($locale, '_') === false;
+            return false === str_starts_with($locale, '_');
         }, ARRAY_FILTER_USE_BOTH);
     }
 
