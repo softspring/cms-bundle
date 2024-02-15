@@ -128,10 +128,16 @@ abstract class AbstractRouteForm extends AbstractType
                     ];
                 },
                 // 'constraints' => new NotBlank(),
+                'attr' => [
+                    'data-route-form-content' => '',
+                ],
             ]);
 
             $builder->add('redirectUrl', TextType::class, [
                 'required' => false,
+                'attr' => [
+                    'data-route-form-redirect-url' => '',
+                ],
             ]);
 
             $builder->add('redirectType', ChoiceType::class, [
@@ -139,6 +145,10 @@ abstract class AbstractRouteForm extends AbstractType
                 'choices' => [
                     'admin_routes.form.redirectType.values.temporary' => Response::HTTP_FOUND,
                     'admin_routes.form.redirectType.values.permanent' => Response::HTTP_MOVED_PERMANENTLY,
+                ],
+                // 'constraints' => new NotBlank(),
+                'attr' => [
+                    'data-route-form-redirect-type' => '',
                 ],
             ]);
 
