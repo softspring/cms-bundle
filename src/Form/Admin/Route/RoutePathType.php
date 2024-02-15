@@ -24,6 +24,11 @@ class RoutePathType extends AbstractType
         $this->enabledLocales = $enabledLocales;
     }
 
+    public function getBlockPrefix(): string
+    {
+        return 'route_path';
+    }
+
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

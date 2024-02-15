@@ -130,45 +130,20 @@
 
 {% block route_widget %}
 <div class="row">
-    <div class="col">{{ form_row(form.id) }}</div>
-    <div class="col">{{ form_row(form.parent) }}</div>
-    {% if form.sites is defined %}<div class="col">{{ form_row(form.sites) }}</div>{% endif %}
+    {{ form_row(form.id, {'row_attr': {'class': 'col'}}) }}
+    {{ form_row(form.parent, {'row_attr': {'class': 'col'}}) }}
+    {% if form.sites is defined %}{{ form_row(form.sites, {'row_attr': {'class': 'col'}}) }}{% endif %}
 </div>
 
 <div class="row">
-    {% if form.type is defined %}<div class="col">{{ form_row(form.type) }}</div>{% endif %}
-
-    {% if form.content is defined %}
-    <div class="col-6" data-route-field-container>
-        {{ form_label(form.content) }}
-        {{ form_widget(form.content) }}
-        {{ form_errors(form.content) }}
-    </div>
-    {% endif %}
-
-    {% if form.symfonyRoute is defined %}
-    <div class="col-6" data-route-field-container>
-        {{ form_widget(form.symfonyRoute) }}
-    </div>
-    {% endif %}
-
-    {% if form.redirectUrl is defined %}
-    <div class="col-6" data-route-field-container>
-        {{ form_label(form.redirectUrl) }}
-        {{ form_widget(form.redirectUrl) }}
-        {{ form_errors(form.redirectUrl) }}
-    </div>
-    {% endif %}
-
-    {% if form.redirectType is defined %}
-    <div class="col-2" data-route-field-container>
-        {{ form_label(form.redirectType) }}
-        {{ form_widget(form.redirectType) }}
-        {{ form_errors(form.redirectType) }}
-    </div>
-    {% endif %}
+    {% if form.type is defined %}{{ form_row(form.type, {'row_attr': {'class': 'col'}}) }}{% endif %}
+    {% if form.content is defined %}{{ form_row(form.content, {'row_attr': {'class': 'col-6'}}) }}{% endif %}
+    {% if form.symfonyRoute is defined %}{{ form_row(form.symfonyRoute, {'row_attr': {'class': 'col-6'}, 'label': false}) }}{% endif %}
+    {% if form.redirectUrl is defined %}{{ form_row(form.redirectUrl, {'row_attr': {'class': 'col-6'}}) }}{% endif %}
+    {% if form.redirectType is defined %}{{ form_row(form.redirectType, {'row_attr': {'class': 'col-2'}}) }}{% endif %}
 </div>
+
 <div class="row">
-    {{ form_row(form.paths) }}
+    {{ form_row(form.paths, {'row_attr': {'class': 'col'}}) }}
 </div>
 {% endblock %}

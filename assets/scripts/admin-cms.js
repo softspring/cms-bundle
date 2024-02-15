@@ -1,3 +1,5 @@
+import './tools';
+
 import './admin/content-edit/config-errors';
 import './admin/content-edit/content-enter-inserts-module';
 import './admin/content-edit/content-tab-contenteditable';
@@ -21,8 +23,8 @@ import './admin/content-edit/wysiwyg';
 
 import './admin/routes-forms';
 import './admin/form-collections';
+import './admin/fields-visibility';
 
 import './types/block-type';
 import './types/color-type';
-import './types/link-type';
 import './types/symfony-route-type';
