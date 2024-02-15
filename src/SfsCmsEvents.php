@@ -130,6 +130,20 @@ class SfsCmsEvents
     public const ADMIN_CONTENTS_UPDATE_FORM_INVALID = 'sfs_cms.admin.contents.update_form_invalid';
     public const ADMIN_CONTENTS_UPDATE_VIEW = 'sfs_cms.admin.contents.update_view';
     public const ADMIN_CONTENTS_UPDATE_EXCEPTION = 'sfs_cms.admin.contents.update_exception';
+    // CONTENT ROUTES EVENTS, ALL OF THEM ARE INTERNAL
+    public const ADMIN_CONTENTS_ROUTES_INITIALIZE = 'sfs_cms.admin.contents.routes_initialize';
+    public const ADMIN_CONTENTS_ROUTES_LOAD_ENTITY = 'sfs_cms.admin.contents.routes_load_entity';
+    public const ADMIN_CONTENTS_ROUTES_NOT_FOUND = 'sfs_cms.admin.contents.routes_not_found';
+    public const ADMIN_CONTENTS_ROUTES_FOUND = 'sfs_cms.admin.contents.routes_found';
+    public const ADMIN_CONTENTS_ROUTES_FORM_PREPARE = 'sfs_cms.admin.contents.routes_form_prepare';
+    public const ADMIN_CONTENTS_ROUTES_FORM_INIT = 'sfs_cms.admin.contents.routes_form_init';
+    public const ADMIN_CONTENTS_ROUTES_FORM_VALID = 'sfs_cms.admin.contents.routes_form_valid';
+    public const ADMIN_CONTENTS_ROUTES_APPLY = 'sfs_cms.admin.contents.routes_apply';
+    public const ADMIN_CONTENTS_ROUTES_SUCCESS = 'sfs_cms.admin.contents.routes_success';
+    public const ADMIN_CONTENTS_ROUTES_FAILURE = 'sfs_cms.admin.contents.routes_failure';
+    public const ADMIN_CONTENTS_ROUTES_FORM_INVALID = 'sfs_cms.admin.contents.routes_form_invalid';
+    public const ADMIN_CONTENTS_ROUTES_VIEW = 'sfs_cms.admin.contents.routes_view';
+    public const ADMIN_CONTENTS_ROUTES_EXCEPTION = 'sfs_cms.admin.contents.routes_exception';
     // CONTENT DELETE EVENTS, ALL OF THEM ARE INTERNAL
     public const ADMIN_CONTENTS_DELETE_INITIALIZE = 'sfs_cms.admin.contents.delete_initialize';
     public const ADMIN_CONTENTS_DELETE_LOAD_ENTITY = 'sfs_cms.admin.contents.delete_load_entity';

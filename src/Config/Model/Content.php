@@ -6,6 +6,7 @@ use Softspring\CmsBundle\Form\Admin\Content\ContentCreateForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentDeleteForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentImportForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentListFilterForm;
+use Softspring\CmsBundle\Form\Admin\Content\ContentRoutesForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentSeoForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentUpdateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionCreateForm;
@@ -324,6 +325,16 @@ class Content implements ConfigurationInterface
                                 ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_UPDATE')->end()
                                 ->scalarNode('view')->defaultValue('@SfsCms/admin/content/update.html.twig')->end()
                                 ->scalarNode('type')->defaultValue(ContentUpdateForm::class)->end()
+                                ->scalarNode('success_redirect_to')->defaultValue('')->end()
+                            ->end()
+                        ->end()
+
+                        ->arrayNode('routes')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_ROUTES')->end()
+                                ->scalarNode('view')->defaultValue('@SfsCms/admin/content/routes.html.twig')->end()
+                                ->scalarNode('type')->defaultValue(ContentRoutesForm::class)->end()
                                 ->scalarNode('success_redirect_to')->defaultValue('')->end()
                             ->end()
                         ->end()

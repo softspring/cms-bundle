@@ -8,6 +8,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TranslatableType extends AbstractType
@@ -59,7 +61,7 @@ class TranslatableType extends AbstractType
 
             $childrenOptions = array_merge($childrenOptions, $options['type_options']);
 
-            $childrenOptions['attr'] = array_merge($childrenOptions['attr'], $options['type_options']['attr'] ?? [], [
+            $childrenOptions['attr'] = array_merge($childrenOptions['attr'] ?? [], $options['type_options']['attr'] ?? [], [
                 'data-input-lang' => $lang,
             ]);
 
@@ -72,6 +74,13 @@ class TranslatableType extends AbstractType
 
         $callback = function ($value) use ($options) { return $this->transform($value, $options); };
         $builder->addModelTransformer(new CallbackTransformer($callback, $callback));
+    }
+
+    public function finishView(FormView $view, FormInterface $form, array $options): void
+    {
+        $view->vars['localeFields'] = array_filter($view->children, function (FormView $child, string $locale) {
+            return false === str_starts_with($locale, '_');
+        }, ARRAY_FILTER_USE_BOTH);
     }
 
     protected function transform(?array $data, array $options): array

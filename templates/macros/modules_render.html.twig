@@ -6,7 +6,10 @@
 
 {%- macro class (classesValue, defaultClasses = '') -%}
 {% apply spaceless %}
-    {% if classesValue|default or defaultClasses|default %}class="{{ (defaultClasses~' '~classesValue|default(''))|trim }}"{% endif %}
+    {% set classes = defaultClasses is iterable ? defaultClasses : [defaultClasses] %}
+    {% set classes = classes | merge(classesValue is not iterable ? [classesValue] : classesValue) %}
+    {% set classes = classes|filter((v) => v is not empty) %}
+    {% if classes %}class="{{ classes|join(' ')|trim }}"{% endif %}
 {% endapply %}
 {%- endmacro -%}
 
@@ -20,4 +23,18 @@
 {% apply spaceless %}
     {{ bg_color|default ? 'background-color:'~bg_color : '' }}
 {% endapply %}
+{%- endmacro -%}
+
+{%- macro start_tag_type (tagType, attributes = [], drawOpeningAngles = true) -%}
+    {%- apply spaceless -%}
+        {% if drawOpeningAngles %}<{% endif %}{{ tagType }}
+        {% if attributes is not empty %}{{ attributes|join(' ')|raw }}{% endif %}
+        {% if drawOpeningAngles %}>{% endif %}
+    {%- endapply -%}
+{%- endmacro -%}
+
+{%- macro end_tag_type (tagType, drawClosingAngles = true) -%}
+    {%- apply spaceless -%}
+        {% if drawClosingAngles %}</{% endif %}{{ tagType }}{% if drawClosingAngles %}>{% endif %}
+    {%- endapply -%}
 {%- endmacro -%}

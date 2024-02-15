@@ -2,14 +2,13 @@
 
 namespace Softspring\CmsBundle\Form\Admin\Route;
 
-use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RouteUpdateForm extends AbstractRouteForm
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        parent::buildForm($builder, $options);
-
-        $builder->get('id')->setDisabled(true);
+        parent::configureOptions($resolver);
+        $resolver->setDefault('disabled_id', true);
     }
 }

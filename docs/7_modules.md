@@ -338,7 +338,7 @@ rating:
         style="{{ form.bg_color.vars.data ? 'background-color:'~form.bg_color.vars.data : '' }}"
 >
     <div class="sfs-rating__content">
-        {% for locale,localeField in form.media|filter((f, locale) => not (locale starts with '_')) %}
+        {% for locale,localeField in form.media.vars.localeFields %}
             <div class="sfs-rating__media" data-media-preview-target="media.{{ locale }}" data-lang="{{ locale }}">
                 {% if localeField.media.vars.data %}
                     {{ localeField.media.vars.data|sfs_media_render(localeField.version.vars.data, localeField.media.vars.image_attr) }}
@@ -346,7 +346,7 @@ rating:
             </div>
         {% endfor %}
 
-        {% for locale,localeField in form.title|filter((f, locale) => not (locale starts with '_')) %}
+        {% for locale,localeField in form.title.vars.localeFields %}
             {% set titleClassDefault = 'sfs-rating__title' %}
             <{{ titleType }}
             class="{{ titleClassDefault }} {{ form.title_class.vars.data|default('') }}"
@@ -375,7 +375,7 @@ rating:
                 {% endfor %}
         </span>
 
-        {% for locale,localeField in form.description|filter((f, locale) => not (locale starts with '_')) %}
+        {% for locale,localeField in form.description.vars.localeFields %}
             <div class="sfs-rating__desc mb-4 wysiwyg-preview"
 
                  data-lang="{{ locale }}"
@@ -388,7 +388,7 @@ rating:
         {% endfor %}
 
         <div class="sfs-rating__cta">
-            {% for locale,localeField in form.read_more_button_text|filter((f, locale) => not (locale starts with '_')) %}
+            {% for locale,localeField in form.read_more_button_text.vars.localeFields %}
                 {% set defaultReadMoreButtonClass = 'btn btn-primary' %}
 
                 <a href="#" data-edit-content-hide-if-empty="true"
@@ -409,7 +409,7 @@ rating:
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    {% for locale,localeField in form.description|filter((f, locale) => not (locale starts with '_')) %}
+                    {% for locale,localeField in form.description.vars.localeFields %}
                         <div data-edit-content-target="description.{{ locale }}" data-lang="{{ locale }}">
                             {{ form_row(localeField,{'attr':{'data-initial-value' : form.description.children[locale].vars.value }}) }}
                         </div>
