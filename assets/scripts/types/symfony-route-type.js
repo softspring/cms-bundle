@@ -78,15 +78,17 @@ window.addEventListener('load', (event) => {
             routeParamsField.value = '{}';
         }
 
-        if (requiredRouteParamsCount) {
-            routeShowParamsLink.hide();
-            routeHideParamsLink.hide();
-        } else if (Object.keys(routeParams).length) {
-            routeShowParamsLink.hide();
-            routeHideParamsLink.show();
-        } else {
-            routeShowParamsLink.show();
-            routeHideParamsLink.hide();
+        if(routeShowParamsLink !== null && routeHideParamsLink !== null) {
+            if (requiredRouteParamsCount) {
+                routeShowParamsLink.hide();
+                routeHideParamsLink.hide();
+            } else if (Object.keys(routeParams).length) {
+                routeShowParamsLink.hide();
+                routeHideParamsLink.show();
+            } else {
+                routeShowParamsLink.show();
+                routeHideParamsLink.hide();
+            }
         }
     }
 

@@ -43,43 +43,66 @@ window.addEventListener('load', (event) => {
      * FIELDS VISIBILITY DEPENDING ON ROUTE TYPE
      * ****************************************************************************************************** */
 
-    function routeFormFieldsVisiblity() {
-        const routeFormTypeSelect = document.getElementById('route_form_type');
+    function routeFormFieldsVisiblityBySelect() {
+        const routeFormTypeSelect = document.getElementById('route_type');
         const selectedOption = routeFormTypeSelect.options[routeFormTypeSelect.selectedIndex];
-
-        if (selectedOption.dataset.contentVisible === 'visible') {
-            document.getElementById('route_form_content').closest('[data-route-field-container]').classList.remove('d-none');
-        } else {
-            document.getElementById('route_form_content').closest('[data-route-field-container]').classList.add('d-none');
-            document.getElementById('route_form_content').value = '';
+        routeFormFieldsVisiblity(selectedOption);
+    }
+    function routeFormFieldsVisiblityByRadio() {
+        const selectedOption = document.querySelector('input[data-route-form-radio]:checked');
+        routeFormFieldsVisiblity(selectedOption);
+    }
+    function routeFormFieldsVisiblity(selectedOption) {
+        if(document.querySelector('[data-route-form-content]') !== null) {
+            if (selectedOption.dataset.contentVisible === 'visible') {
+                document.querySelector('[data-route-form-content]').closest('[data-route-field-container]').classList.remove('d-none');
+            } else {
+                document.querySelector('[data-route-form-content]').closest('[data-route-field-container]').classList.add('d-none');
+                document.querySelector('[data-route-form-content]').value = '';
+            }
         }
 
-        if (selectedOption.dataset.redirectUrlVisible === 'visible') {
-            document.getElementById('route_form_redirectUrl').closest('[data-route-field-container]').classList.remove('d-none');
-        } else {
-            document.getElementById('route_form_redirectUrl').closest('[data-route-field-container]').classList.add('d-none');
-            document.getElementById('route_form_redirectUrl').value = '';
+        if(document.querySelector('[data-route-form-redirect-url]') !== null) {
+            if (selectedOption.dataset.redirectUrlVisible === 'visible') {
+                document.querySelector('[data-route-form-redirect-url]').closest('[data-route-field-container]').classList.remove('d-none');
+            } else {
+                document.querySelector('[data-route-form-redirect-url]').closest('[data-route-field-container]').classList.add('d-none');
+                document.querySelector('[data-route-form-redirect-url]').value = '';
+            }
         }
 
-        if (selectedOption.dataset.symfonyRouteVisible === 'visible') {
-            document.getElementById('route_form_symfonyRoute').closest('[data-route-field-container]').classList.remove('d-none');
-        } else {
-            document.getElementById('route_form_symfonyRoute').closest('[data-route-field-container]').classList.add('d-none');
-            document.getElementById('route_form_symfonyRoute').querySelector('#route_form_symfonyRoute_route_name').value = '';
-            document.getElementById('route_form_symfonyRoute').querySelector('#route_form_symfonyRoute_route_params').value = '';
+        if(document.getElementById('route_form_symfonyRoute') !== null) {
+            if (selectedOption.dataset.symfonyRouteVisible === 'visible') {
+                document.getElementById('route_form_symfonyRoute').closest('[data-route-field-container]').classList.remove('d-none');
+            } else {
+                document.getElementById('route_form_symfonyRoute').closest('[data-route-field-container]').classList.add('d-none');
+                document.getElementById('route_form_symfonyRoute').querySelector('#route_form_symfonyRoute_route_name').value = '';
+                document.getElementById('route_form_symfonyRoute').querySelector('#route_form_symfonyRoute_route_params').value = '';
+            }
         }
 
-        if (selectedOption.dataset.redirectTypeVisible === 'visible') {
-            document.getElementById('route_form_redirectType').closest('[data-route-field-container]').classList.remove('d-none');
-        } else {
-            document.getElementById('route_form_redirectType').closest('[data-route-field-container]').classList.add('d-none');
-            document.getElementById('route_form_redirectType').value = '';
+        if(document.querySelector('[data-route-form-redirect-type]') !== null) {
+
+            if (selectedOption.dataset.redirectTypeVisible === 'visible') {
+                document.querySelector('[data-route-form-redirect-type]').closest('[data-route-field-container]').classList.remove('d-none');
+            } else {
+                document.querySelector('[data-route-form-redirect-type]').closest('[data-route-field-container]').classList.add('d-none');
+                document.querySelector('[data-route-form-redirect-type]').value = '';
+            }
         }
     }
 
-    const routeFormType = document.getElementById('route_form_type');
+    const routeFormType = document.getElementById('route_type');
     if (routeFormType) {
-        routeFormFieldsVisiblity();
-        routeFormType.addEventListener('change', routeFormFieldsVisiblity);
+        routeFormFieldsVisiblityBySelect();
+        routeFormType.addEventListener('change', routeFormFieldsVisiblityBySelect);
+    } else {
+        const routeFormTypeRadio = document.querySelectorAll('[data-route-form-radio]');
+        if (routeFormTypeRadio) {
+            routeFormFieldsVisiblityByRadio();
+            routeFormTypeRadio.forEach((routeTypeRadio) =>
+                routeTypeRadio.addEventListener('change', routeFormFieldsVisiblityByRadio)
+            );
+        }
     }
 });

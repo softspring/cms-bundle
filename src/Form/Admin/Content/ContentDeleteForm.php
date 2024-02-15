@@ -59,8 +59,10 @@ class ContentDeleteForm extends AbstractType implements ContentUpdateFormInterfa
                 return [
                     'data-content-visible' => in_array($value, ['change']) ? 'visible' : 'hidden',
                     'data-symfony-route-visible' => in_array($value, ['redirect']) ? 'visible' : 'hidden',
+                    'data-route-form-radio' => '',
                 ];
             },
+            'default_value' => 'delete',
         ]);
 
         $builder->add('content', EntityType::class, [
@@ -83,6 +85,9 @@ class ContentDeleteForm extends AbstractType implements ContentUpdateFormInterfa
                 return $qb;
             },
             'constraints' => new When('this.getParent().get("action").getData() == "change"', [new NotBlank()]),
+            'attr' => [
+                'data-route-form-content' => '',
+            ],
         ]);
 
         $restrictPatterns = [
@@ -102,6 +107,9 @@ class ContentDeleteForm extends AbstractType implements ContentUpdateFormInterfa
             'required' => false,
             'restrict_patterns' => $restrictPatterns,
             'route_name_constraints' => new When('this.getParent().getParent().get("action").getData() == "redirect"', [new NotBlank()]),
+            'attr' => [
+                'data-route-form-symfony-route' => '',
+            ],
         ]);
     }
 }
