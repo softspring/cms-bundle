@@ -71,13 +71,13 @@ window.addEventListener('load', (event) => {
             }
         }
 
-        if(document.getElementById('route_form_symfonyRoute') !== null) {
+        if(document.querySelector('[data-route-form-symfony-route]') !== null) {
             if (selectedOption.dataset.symfonyRouteVisible === 'visible') {
-                document.getElementById('route_form_symfonyRoute').closest('[data-route-field-container]').classList.remove('d-none');
+                document.querySelector('[data-route-form-symfony-route]').closest('[data-route-field-container]').classList.remove('d-none');
             } else {
-                document.getElementById('route_form_symfonyRoute').closest('[data-route-field-container]').classList.add('d-none');
-                document.getElementById('route_form_symfonyRoute').querySelector('#route_form_symfonyRoute_route_name').value = '';
-                document.getElementById('route_form_symfonyRoute').querySelector('#route_form_symfonyRoute_route_params').value = '';
+                document.querySelector('[data-route-form-symfony-route]').closest('[data-route-field-container]').classList.add('d-none');
+                document.querySelector('[data-route-form-symfony-route]').querySelector('#route_form_symfonyRoute_route_name').value = '';
+                document.querySelector('[data-route-form-symfony-route]').querySelector('#route_form_symfonyRoute_route_params').value = '';
             }
         }
 
