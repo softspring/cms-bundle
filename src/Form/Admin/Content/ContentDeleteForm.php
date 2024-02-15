@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Form\Admin\Content;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Softspring\CmsBundle\Form\DataVisibilityFieldsTrait;
 use Softspring\CmsBundle\Form\Type\SymfonyRouteType;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
@@ -12,6 +13,8 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -19,11 +22,10 @@ use Symfony\Component\Validator\Constraints\When;
 
 class ContentDeleteForm extends AbstractType implements ContentUpdateFormInterface
 {
-    protected EntityManagerInterface $em;
+    use DataVisibilityFieldsTrait;
 
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(protected EntityManagerInterface $em)
     {
-        $this->em = $em;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -57,9 +59,24 @@ class ContentDeleteForm extends AbstractType implements ContentUpdateFormInterfa
             ],
             'choice_attr' => function ($value) {
                 return [
-                    'data-content-visible' => in_array($value, ['change']) ? 'visible' : 'hidden',
-                    'data-symfony-route-visible' => in_array($value, ['redirect']) ? 'visible' : 'hidden',
-                    'data-route-form-radio' => '',
+                    'data-show-fields' => match ($value) {
+                        'delete' => '',
+                        'change' => 'content',
+                        'redirect' => 'symfonyRoute',
+                        default => '',
+                    },
+                    'data-hide-fields' => match ($value) {
+                        'delete' => 'content,symfonyRoute',
+                        'change' => 'symfonyRoute',
+                        'redirect' => 'content',
+                        default => '',
+                    },
+                    'data-empty-fields' => match ($value) {
+                        'delete' => 'content,symfonyRoute',
+                        'change' => 'symfonyRoute',
+                        'redirect' => 'content',
+                        default => '',
+                    },
                 ];
             },
             'default_value' => 'delete',
@@ -75,7 +92,7 @@ class ContentDeleteForm extends AbstractType implements ContentUpdateFormInterfa
             },
             'choice_attr' => function (ContentInterface $content) {
                 return [
-                    'data-site' => $content->getSites()->map(fn (SiteInterface $site) => $site->getId()),
+                    'data-site' => implode(',', $content->getSites()->map(fn (SiteInterface $site) => $site->getId())->toArray()),
                 ];
             },
             'query_builder' => function (EntityRepository $entityRepository) use ($options) {
@@ -85,9 +102,6 @@ class ContentDeleteForm extends AbstractType implements ContentUpdateFormInterfa
                 return $qb;
             },
             'constraints' => new When('this.getParent().get("action").getData() == "change"', [new NotBlank()]),
-            'attr' => [
-                'data-route-form-content' => '',
-            ],
         ]);
 
         $restrictPatterns = [
@@ -107,9 +121,12 @@ class ContentDeleteForm extends AbstractType implements ContentUpdateFormInterfa
             'required' => false,
             'restrict_patterns' => $restrictPatterns,
             'route_name_constraints' => new When('this.getParent().getParent().get("action").getData() == "redirect"', [new NotBlank()]),
-            'attr' => [
-                'data-route-form-symfony-route' => '',
-            ],
         ]);
+    }
+
+    public function finishView(FormView $view, FormInterface $form, array $options): void
+    {
+        parent::finishView($view, $form, $options);
+        $this->transformDataFieldsFinishView($view, 'action');
     }
 }

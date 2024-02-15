@@ -3,7 +3,7 @@
 {% block title %}{{ 'admin_routes.update.meta.title'|trans }}{% endblock %}
 
 {% form_theme form
-    'bootstrap_5_layout.html.twig'
+    '@SfsCms/forms/cms_theme.html.twig'
     '@SfsCms/forms/routes_theme.html.twig' %}
 
 {% block breadcrums_content %}
@@ -21,40 +21,7 @@
 
     <div class="container-fluid bg-white p-4">
         {{ form_start(form) }}
-            <div class="row">
-                <div class="col">{{ form_row(form.id) }}</div>
-                <div class="col">{{ form_row(form.parent) }}</div>
-                <div class="col">{{ form_row(form.sites) }}</div>
-            </div>
-
-            <div class="row">
-                <div class="col">{{ form_row(form.type) }}</div>
-
-                <div class="col-6" data-route-field-container>
-                    {{ form_label(form.content) }}
-                    {{ form_widget(form.content) }}
-                    {{ form_errors(form.content) }}
-                </div>
-
-                <div class="col-6" data-route-field-container>
-                    {{ form_widget(form.symfonyRoute) }}
-                </div>
-
-                <div class="col-6" data-route-field-container>
-                    {{ form_label(form.redirectUrl) }}
-                    {{ form_widget(form.redirectUrl) }}
-                    {{ form_errors(form.redirectUrl) }}
-                </div>
-
-                <div class="col-2" data-route-field-container>
-                    {{ form_label(form.redirectType) }}
-                    {{ form_widget(form.redirectType) }}
-                    {{ form_errors(form.redirectType) }}
-                </div>
-            </div>
-
-            {{ form_row(form.paths) }}
-
+            {{ form_widget(form) }}
             {{ form_rest(form) }}
 
             <div class="d-flex justify-content-end align-items-center pt-4">

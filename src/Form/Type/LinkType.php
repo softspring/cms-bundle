@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Form\Type;
 
+use Softspring\CmsBundle\Form\DataVisibilityFieldsTrait;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -10,6 +11,8 @@ use Symfony\Component\Form\FormView;
 
 class LinkType extends SymfonyRouteType
 {
+    use DataVisibilityFieldsTrait;
+
     public function getBlockPrefix(): string
     {
         return 'link';
@@ -24,6 +27,28 @@ class LinkType extends SymfonyRouteType
                 'link_type.type.values.anchor' => 'anchor',
                 'link_type.type.values.url' => 'url',
             ],
+            'choice_attr' => function ($value) {
+                return [
+                    'data-show-fields' => match ($value) {
+                        'route' => 'route',
+                        'anchor' => 'anchor',
+                        'url' => 'url',
+                        default => '',
+                    },
+                    'data-hide-fields' => match ($value) {
+                        'route' => 'anchor,url',
+                        'anchor' => 'route,url',
+                        'url' => 'route,anchor',
+                        default => '',
+                    },
+                    'data-empty-fields' => match ($value) {
+                        'route' => 'anchor,url',
+                        'anchor' => 'route,url',
+                        'url' => 'route,anchor',
+                        default => '',
+                    },
+                ];
+            },
         ]);
 
         parent::buildForm($builder, $options);
@@ -40,6 +65,22 @@ class LinkType extends SymfonyRouteType
                 'link_type.target.values._top' => '_top',
                 'link_type.target.values.custom' => 'custom',
             ],
+            'choice_attr' => function ($value) {
+                return [
+                    'data-show-fields' => match ($value) {
+                        'custom' => 'custom_target',
+                        default => '',
+                    },
+                    'data-hide-fields' => match ($value) {
+                        'custom' => '',
+                        default => 'custom_target',
+                    },
+                    'data-empty-fields' => match ($value) {
+                        'custom' => '',
+                        default => 'custom_target',
+                    },
+                ];
+            },
         ]);
 
         $builder->add('custom_target', TextType::class);
@@ -48,11 +89,6 @@ class LinkType extends SymfonyRouteType
     public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         parent::finishView($view, $form, $options);
-        $view->children['type']->vars['attr']['data-field-route-name'] = $view->children['route_name']->vars['id'];
-        $view->children['type']->vars['attr']['data-field-route-params'] = $view->children['route_params']->vars['id'];
-        $view->children['type']->vars['attr']['data-field-anchor'] = $view->children['anchor']->vars['id'];
-        $view->children['type']->vars['attr']['data-field-url'] = $view->children['url']->vars['id'];
-
-        $view->children['target']->vars['attr']['data-field-custom-target'] = $view->children['custom_target']->vars['id'];
+        $this->transformDataFieldsFinishView($view, 'type');
     }
 }
