@@ -114,7 +114,61 @@
 {% endblock route_collection_label %}
 
 {% block route_collection_widget %}
-    <div class="row {{ not form.parent.vars.valid ? 'show-invalid' }}">
-        {{ form_rest(form) }}
+    {% if prototype is defined and not prototype.rendered %}
+        {%- set attr = attr|merge({'data-prototype': form_row(prototype), 'data-prototype-name': prototype.vars.name }) -%}
+    {% endif %}
+    {% set attr = attr | merge({'class':'collection-widget col-12'}) %}
+    <!-- Nodes -->
+    <div {{ block('widget_container_attributes') }}>
+        {%- if form.parent is empty -%}
+            {{ form_errors(form) }}
+        {%- endif -%}
+        {{- block('form_rows') -}}
+        {{- form_rest(form) -}}
     </div>
 {% endblock route_collection_widget %}
+
+{% block route_widget %}
+<div class="row">
+    <div class="col">{{ form_row(form.id) }}</div>
+    <div class="col">{{ form_row(form.parent) }}</div>
+    {% if form.sites is defined %}<div class="col">{{ form_row(form.sites) }}</div>{% endif %}
+</div>
+
+<div class="row">
+    {% if form.type is defined %}<div class="col">{{ form_row(form.type) }}</div>{% endif %}
+
+    {% if form.content is defined %}
+    <div class="col-6" data-route-field-container>
+        {{ form_label(form.content) }}
+        {{ form_widget(form.content) }}
+        {{ form_errors(form.content) }}
+    </div>
+    {% endif %}
+
+    {% if form.symfonyRoute is defined %}
+    <div class="col-6" data-route-field-container>
+        {{ form_widget(form.symfonyRoute) }}
+    </div>
+    {% endif %}
+
+    {% if form.redirectUrl is defined %}
+    <div class="col-6" data-route-field-container>
+        {{ form_label(form.redirectUrl) }}
+        {{ form_widget(form.redirectUrl) }}
+        {{ form_errors(form.redirectUrl) }}
+    </div>
+    {% endif %}
+
+    {% if form.redirectType is defined %}
+    <div class="col-2" data-route-field-container>
+        {{ form_label(form.redirectType) }}
+        {{ form_widget(form.redirectType) }}
+        {{ form_errors(form.redirectType) }}
+    </div>
+    {% endif %}
+</div>
+<div class="row">
+    {{ form_row(form.paths) }}
+</div>
+{% endblock %}

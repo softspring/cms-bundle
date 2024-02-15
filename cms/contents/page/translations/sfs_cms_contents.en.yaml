@@ -144,6 +144,16 @@ admin_page:
             delete.button: "Delete"
         success_flash: "Page has been updated"
 
+    routes:
+        meta.title: "Configure routes"
+        title: "%name%"
+        breadcrumb: "Configure routes"
+        actions:
+            save.button: "Save changes"
+            cancel.button: "Cancel"
+            delete.button: "Delete"
+        success_flash: "Page routes have been updated"
+
     delete:
         meta.title: "Delete page"
         title: "%name%"
@@ -277,7 +287,7 @@ admin_page:
 
     version_info:
         meta.title: "Version info (v%versionNumber%)"
-        title: "Version info (v%versionNumber%)"
+        title: "%name% (v%versionNumber%)"
         breadcrumb: "Version info (v%versionNumber%)"
         info:
             version.title: "Version"

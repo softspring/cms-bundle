@@ -20,6 +20,12 @@ update:
     controller: sfs_cms.admin.content.controller::update
     path: /{content}/update
 
+routes:
+    controller: sfs_cms.admin.content.controller::update
+    path: /{content}/routes
+    defaults:
+        configKey: 'routes'
+
 delete:
     controller: sfs_cms.admin.content.controller::delete
     path: /{content}/delete

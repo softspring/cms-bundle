@@ -9,6 +9,7 @@ use Softspring\CmsBundle\Form\Admin\Content\ContentCreateForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentDeleteForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentImportForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentListFilterForm;
+use Softspring\CmsBundle\Form\Admin\Content\ContentRoutesForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentSeoForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentUpdateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionCreateForm;
@@ -141,6 +142,12 @@ class ContentTest extends TestCase
                     'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_UPDATE',
                     'view' => '@SfsCms/admin/content/update.html.twig',
                     'type' => ContentUpdateForm::class,
+                    'success_redirect_to' => '',
+                ],
+                'routes' => [
+                    'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_ROUTES',
+                    'view' => '@SfsCms/admin/content/routes.html.twig',
+                    'type' => ContentRoutesForm::class,
                     'success_redirect_to' => '',
                 ],
                 'delete' => [

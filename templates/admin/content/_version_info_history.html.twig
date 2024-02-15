@@ -8,7 +8,7 @@
         <li>
             {% set transAttributes = {
                 '%userName%': history.user ? history.user.name|default(history.user.id)|default('') : '',
-                '%date%': history.date is not empty ? history.date|date('H:i:s d-m-Y') : '',
+                '%date%': history.date is not empty ? history.date.date|date('H:i:s d-m-Y') : '',
             } %}
             {% for key,value in history.extra %}
                 {% set transAttributes = transAttributes|merge({('%'~key~'%'): value}) %}

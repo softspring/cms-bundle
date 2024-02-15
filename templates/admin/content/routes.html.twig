@@ -1,0 +1,42 @@
+{% trans_default_domain 'sfs_cms_contents' %}
+
+{% extends '@SfsCms/admin_layout.html.twig' %}
+
+{% form_theme form
+    'bootstrap_5_layout.html.twig'
+    '@SfsCms/forms/routes_theme.html.twig'
+    '@SfsCms/forms/types_theme.html.twig'
+%}
+
+{% block title %}{{ ('admin_'~content_type~'.routes.meta.title')|trans({'%name%':entity.name}) }}{% endblock %}
+
+{% block breadcrums_content %}
+    {{ parent() }}
+    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content_type~'_list') }}">{{ ('admin_'~content_type~'.list.breadcrumb')|trans }}</a></li>
+    <li class="breadcrumb-item active" aria-current="content">{{ ('admin_'~content_type~'.routes.breadcrumb')|trans({'%name%':entity.name}) }}</li>
+{% endblock breadcrums_content %}
+
+{% block content %}
+    <h1 class="h3">{{ ('admin_'~content_type~'.routes.title')|trans({'%name%':entity.name}) }}</h1>
+
+    {% include ['@content/'~content_type~'/admin/_content_tabs.html.twig', '@SfsCms/admin/content/_content_tabs.html.twig']  with {'current':'routes', 'content':content, 'entity':entity} %}
+
+    {{ form_start(form) }}
+
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="edit" role="tabpanel" aria-labelledby="edit-tab">
+            <div class="container-fluid bg-white p-3">
+                {% block form_fields %}
+                    {{ form_row(form.routes) }}
+                    {{ form_rest(form) }}
+                {% endblock %}
+
+                <div class="d-flex justify-content-end align-items-center">
+                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_list') }}" class="btn btn-outline-secondary ms-3">{{ ('admin_'~content_type~'.routes.actions.cancel.button')|trans }}</a>
+                    <input type="submit" value="{{ ('admin_'~content_type~'.routes.actions.save.button')|trans }}" class="btn btn-primary ms-3" />
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock content %}

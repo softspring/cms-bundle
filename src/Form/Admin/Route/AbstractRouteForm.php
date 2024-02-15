@@ -34,7 +34,7 @@ abstract class AbstractRouteForm extends AbstractType
 
     public function getBlockPrefix(): string
     {
-        return 'route_form';
+        return 'route';
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -56,6 +56,7 @@ abstract class AbstractRouteForm extends AbstractType
                     }
                 }
             }),
+            'disabled_id' => false,
         ]);
     }
 
@@ -67,6 +68,7 @@ abstract class AbstractRouteForm extends AbstractType
                 'class' => 'snake-case',
                 'data-route-id' => true,
             ],
+            'disabled' => $options['disabled_id'],
         ]);
 
         $builder->add('parent', EntityType::class, [
