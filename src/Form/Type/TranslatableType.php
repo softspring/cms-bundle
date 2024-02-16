@@ -69,6 +69,10 @@ class TranslatableType extends AbstractType
                 $childrenOptions['attr'][$attr] = $value;
             }
 
+            if ($lang !== $options['default_language']) {
+                $childrenOptions['attr']['data-fallback-language'] = $options['default_language'];
+            }
+
             $builder->add($lang, $this->getFieldType($options['type']), $childrenOptions);
         }
 
