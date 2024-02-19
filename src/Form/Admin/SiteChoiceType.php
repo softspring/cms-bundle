@@ -44,5 +44,13 @@ class SiteChoiceType extends AbstractType
         $resolver->setNormalizer('choices', function (Options $options, $value) {
             return $this->cmsHelper->site()->normalizeFormAvailableSites($value, $options['content']);
         });
+
+        $resolver->setNormalizer('default_value', function (Options $options, $value) {
+            if ($options['multiple']) {
+                return $this->cmsHelper->site()->normalizeFormAvailableSites($value, $options['content']);
+            }
+
+            return null;
+        });
     }
 }

@@ -4,7 +4,6 @@ namespace Softspring\CmsBundle\Form\Admin\Content;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Softspring\CmsBundle\Form\DataVisibilityFieldsTrait;
 use Softspring\CmsBundle\Form\Type\SymfonyRouteType;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
@@ -13,8 +12,6 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -22,8 +19,6 @@ use Symfony\Component\Validator\Constraints\When;
 
 class ContentDeleteForm extends AbstractType implements ContentUpdateFormInterface
 {
-    use DataVisibilityFieldsTrait;
-
     public function __construct(protected EntityManagerInterface $em)
     {
     }
@@ -122,11 +117,5 @@ class ContentDeleteForm extends AbstractType implements ContentUpdateFormInterfa
             'restrict_patterns' => $restrictPatterns,
             'route_name_constraints' => new When('this.getParent().getParent().get("action").getData() == "redirect"', [new NotBlank()]),
         ]);
-    }
-
-    public function finishView(FormView $view, FormInterface $form, array $options): void
-    {
-        parent::finishView($view, $form, $options);
-        $this->transformDataFieldsFinishView($view, 'action');
     }
 }

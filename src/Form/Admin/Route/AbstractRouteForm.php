@@ -4,7 +4,6 @@ namespace Softspring\CmsBundle\Form\Admin\Route;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Softspring\CmsBundle\Form\Admin\SiteChoiceType;
-use Softspring\CmsBundle\Form\DataVisibilityFieldsTrait;
 use Softspring\CmsBundle\Form\Type\SymfonyRouteType;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
@@ -14,8 +13,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\RouterInterface;
@@ -26,8 +23,6 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 abstract class AbstractRouteForm extends AbstractType
 {
-    use DataVisibilityFieldsTrait;
-
     public function __construct(protected EntityManagerInterface $em, protected RouterInterface $router)
     {
     }
@@ -175,11 +170,5 @@ abstract class AbstractRouteForm extends AbstractType
                 'label_format' => $options['label_format'] ? str_replace('%name%.label', 'paths.%name%.label', $options['label_format']) : null,
             ],
         ]);
-    }
-
-    public function finishView(FormView $view, FormInterface $form, array $options): void
-    {
-        parent::finishView($view, $form, $options);
-        $this->transformDataFieldsFinishView($view, 'type');
     }
 }

@@ -2,17 +2,12 @@
 
 namespace Softspring\CmsBundle\Form\Type;
 
-use Softspring\CmsBundle\Form\DataVisibilityFieldsTrait;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
 
 class LinkType extends SymfonyRouteType
 {
-    use DataVisibilityFieldsTrait;
-
     public function getBlockPrefix(): string
     {
         return 'link';
@@ -84,11 +79,5 @@ class LinkType extends SymfonyRouteType
         ]);
 
         $builder->add('custom_target', TextType::class);
-    }
-
-    public function finishView(FormView $view, FormInterface $form, array $options): void
-    {
-        parent::finishView($view, $form, $options);
-        $this->transformDataFieldsFinishView($view, 'type');
     }
 }

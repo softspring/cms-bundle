@@ -41,6 +41,18 @@ function initFields(base) {
         }
     });
 
+    base.querySelectorAll('input[type=checkbox]').forEach((checkbox) => {
+        if (checkbox.checked) {
+            checkbox.dataset.showFieldsIfChecked !== undefined && showFields(checkbox.dataset.showFieldsIfChecked);
+            checkbox.dataset.hideFieldsIfChecked !== undefined && hideFields(checkbox.dataset.hideFieldsIfChecked);
+            checkbox.dataset.emptyFieldsIfChecked !== undefined && emptyFields(checkbox.dataset.emptyFieldsIfChecked);
+        } else {
+            checkbox.dataset.showFieldsIfUnchecked !== undefined && showFields(checkbox.dataset.showFieldsIfUnchecked);
+            checkbox.dataset.hideFieldsIfUnchecked !== undefined && hideFields(checkbox.dataset.hideFieldsIfUnchecked);
+            checkbox.dataset.emptyFieldsIfUnchecked !== undefined && emptyFields(checkbox.dataset.emptyFieldsIfUnchecked);
+        }
+    });
+
     base.querySelectorAll('select').forEach((select) => {
         const selectedOption = select.options[select.selectedIndex];
 
@@ -75,6 +87,35 @@ function _init() {
     document.addEventListener('change', function (event) {
         if (event.target.tagName !== 'INPUT' || event.target.getAttribute('type') !== 'radio' || !event.target.matches('[data-empty-fields]')) return;
         emptyFields(event.target.dataset.emptyFields);
+    });
+
+    // CHECKBOX BUTTONS
+
+    document.addEventListener('change', function (event) {
+        if (event.target.tagName !== 'INPUT' || event.target.getAttribute('type') !== 'checkbox' || !event.target.matches('[data-show-fields-if-checked]')) return;
+        event.target.checked && showFields(event.target.dataset.showFieldsIfChecked);
+    });
+    document.addEventListener('change', function (event) {
+        if (event.target.tagName !== 'INPUT' || event.target.getAttribute('type') !== 'checkbox' || !event.target.matches('[data-show-fields-if-unchecked]')) return;
+        !event.target.checked && showFields(event.target.dataset.showFieldsIfUnchecked);
+    });
+
+    document.addEventListener('change', function (event) {
+        if (event.target.tagName !== 'INPUT' || event.target.getAttribute('type') !== 'checkbox' || !event.target.matches('[data-hide-fields-if-checked]')) return;
+        event.target.checked && hideFields(event.target.dataset.hideFieldsIfChecked);
+    });
+    document.addEventListener('change', function (event) {
+        if (event.target.tagName !== 'INPUT' || event.target.getAttribute('type') !== 'checkbox' || !event.target.matches('[data-hide-fields-if-unchecked]')) return;
+        !event.target.checked && hideFields(event.target.dataset.hideFieldsIfUnchecked);
+    });
+
+    document.addEventListener('change', function (event) {
+        if (event.target.tagName !== 'INPUT' || event.target.getAttribute('type') !== 'checkbox' || !event.target.matches('[data-empty-fields-if-checked]')) return;
+        event.target.checked && emptyFields(event.target.dataset.emptyFieldsIfChecked);
+    });
+    document.addEventListener('change', function (event) {
+        if (event.target.tagName !== 'INPUT' || event.target.getAttribute('type') !== 'checkbox' || !event.target.matches('[data-empty-fields-if-unchecked]')) return;
+        !event.target.checked && emptyFields(event.target.dataset.emptyFieldsIfUnchecked);
     });
 
 
