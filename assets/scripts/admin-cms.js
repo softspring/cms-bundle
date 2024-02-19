@@ -24,6 +24,7 @@ import './admin/content-edit/wysiwyg';
 import './admin/routes-forms';
 import './admin/form-collections';
 import './admin/fields-visibility';
+import './admin/locales-widgets';
 
 import './types/block-type';
 import './types/color-type';

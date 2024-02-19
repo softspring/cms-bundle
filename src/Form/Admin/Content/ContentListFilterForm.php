@@ -54,6 +54,7 @@ class ContentListFilterForm extends PaginatorForm
                 'required' => false,
                 'property_path' => '[sites.id]',
                 'multiple' => false,
+                'expanded' => false,
                 'content' => $options['content_config'],
             ]);
         }

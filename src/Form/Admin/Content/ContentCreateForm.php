@@ -54,12 +54,14 @@ class ContentCreateForm extends AbstractType implements ContentCreateFormInterfa
 
         $builder->add('defaultLocale', ChoiceType::class, [
             'choices' => array_combine($options['locales'], $options['locales']),
+            'default_value' => $options['default_locale'],
         ]);
 
         $builder->add('locales', ChoiceType::class, [
             'multiple' => true,
             'expanded' => true,
             'choices' => array_combine($options['locales'], $options['locales']),
+            'default_value' => [$options['default_locale']],
         ]);
 
         $builder->add('sites', SiteChoiceType::class, [
