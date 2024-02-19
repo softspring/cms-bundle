@@ -36,6 +36,9 @@ class BlameListener implements EventSubscriberInterface
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_RECOMPILE_APPLY => [
                 ['onRecompileVersion', 5],
             ],
+            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_SEO_APPLY => [
+                ['onCreateVersion', 6],
+            ],
         ];
     }
 

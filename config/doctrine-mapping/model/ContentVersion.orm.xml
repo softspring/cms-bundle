@@ -6,6 +6,7 @@
 
     <mapped-superclass name="Softspring\CmsBundle\Model\ContentVersion" table="cms_content_version">
         <field name="layout" column="layout" type="string" nullable="true"/>
+        <field name="seo" column="seo" type="json" nullable="true"/>
         <field name="data" column="data" type="json" nullable="true"/>
 
         <field name="meta" column="meta" type="json" nullable="true"/>

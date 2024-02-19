@@ -9,17 +9,17 @@
     {{ containers.headers|raw }}
 {% endblock %}
 
-{% block title %}{{ content.seo.metaTitle|default([])|sfs_cms_trans }}{% endblock %}
+{% block title %}{{ version.seo.metaTitle|default|sfs_cms_trans }}{% endblock %}
 
 {% block seo %}
     {{ parent() }}
-    <meta name="description" content="{{ content.seo.metaDescription|default([])|sfs_cms_trans }}"/>
-    <meta name="keywords" content="{{ content.seo.metaKeywords|default([])|sfs_cms_trans }}"/>
-    <meta name="robots" content="{{ content.seo.noIndex|default(false) ? 'noindex' : 'index' }}" />
+    <meta name="description" content="{{ version.seo.metaDescription|default|sfs_cms_trans }}"/>
+    <meta name="keywords" content="{{ version.seo.metaKeywords|default|sfs_cms_trans }}"/>
+    <meta name="robots" content="{{ version.seo.noIndex|default|default(false) ? 'noindex' : 'index' }}" />
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="">
-    <meta property="og:title" content="{{ content.seo.metaTitle|default([])|sfs_cms_trans }}">
-    <meta property="og:description" content="{{ content.seo.metaDescription|default([])|sfs_cms_trans }}">
+    <meta property="og:title" content="{{ version.seo.metaTitle|default|sfs_cms_trans }}">
+    <meta property="og:description" content="{{ version.seo.metaDescription|default|sfs_cms_trans }}">
     <meta property="og:locale" content="{{ app.request.locale }}">
     {% for locale, url in sfs_cms_alternate_urls() %}
         <link rel="alternate" hreflang="{{ locale }}" href="{{ url }}" />

@@ -7,11 +7,11 @@ use Softspring\CmsBundle\Form\Admin\Content\ContentDeleteForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentImportForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentListFilterForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentRoutesForm;
-use Softspring\CmsBundle\Form\Admin\Content\ContentSeoForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentUpdateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionCreateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionImportForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionListFilterForm;
+use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionSeoForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionUpdateForm;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -73,24 +73,29 @@ class Content implements ConfigurationInterface
                     ->end()
                 ->end()
 
-                ->arrayNode('seo')
+                ->arrayNode('indexing')
                     ->defaultValue([
-                        'metaTitle' => ['type' => 'translatable'],
-                        'metaDescription' => ['type' => 'translatable'],
-                        'metaKeywords' => ['type' => 'translatable'],
-                        'noIndex' => ['type' => 'checkbox', 'type_options' => ['required' => false]],
-                        'noFollow' => ['type' => 'checkbox', 'type_options' => ['required' => false]],
-                        'sitemap' => ['type' => 'checkbox', 'type_options' => ['required' => false]],
+                        'noIndex' => ['type' => 'checkbox', 'type_options' => ['required' => false, 'default_value' => false]],
+                        'noFollow' => ['type' => 'checkbox', 'type_options' => ['required' => false, 'default_value' => false]],
+                        'sitemap' => ['type' => 'checkbox', 'type_options' => [
+                            'required' => false,
+                            'default_value' => true,
+                            'attr' => [
+                                'data-show-fields-if-checked' => 'sitemapChangefreq,sitemapPriority',
+                                'data-hide-fields-if-unchecked' => 'sitemapChangefreq,sitemapPriority',
+                            ],
+                        ]],
                         'sitemapChangefreq' => ['type' => 'choice', 'type_options' => [
+                            'required' => false,
                             'choices' => [
-                                'admin_page.form.seo.sitemapChangefreq.values.empty' => '',
-                                'admin_page.form.seo.sitemapChangefreq.values.always' => 'always',
-                                'admin_page.form.seo.sitemapChangefreq.values.hourly' => 'hourly',
-                                'admin_page.form.seo.sitemapChangefreq.values.daily' => 'daily',
-                                'admin_page.form.seo.sitemapChangefreq.values.weekly' => 'weekly',
-                                'admin_page.form.seo.sitemapChangefreq.values.monthly' => 'monthly',
-                                'admin_page.form.seo.sitemapChangefreq.values.yearly' => 'yearly',
-                                'admin_page.form.seo.sitemapChangefreq.values.never' => 'never',
+                                'admin_page.form.indexing.sitemapChangefreq.values.empty' => '',
+                                'admin_page.form.indexing.sitemapChangefreq.values.always' => 'always',
+                                'admin_page.form.indexing.sitemapChangefreq.values.hourly' => 'hourly',
+                                'admin_page.form.indexing.sitemapChangefreq.values.daily' => 'daily',
+                                'admin_page.form.indexing.sitemapChangefreq.values.weekly' => 'weekly',
+                                'admin_page.form.indexing.sitemapChangefreq.values.monthly' => 'monthly',
+                                'admin_page.form.indexing.sitemapChangefreq.values.yearly' => 'yearly',
+                                'admin_page.form.indexing.sitemapChangefreq.values.never' => 'never',
                             ],
                         ]],
                         'sitemapPriority' => ['type' => 'number', 'type_options' => [
@@ -100,6 +105,24 @@ class Content implements ConfigurationInterface
                                 ['constraint' => 'range', 'options' => ['min' => 0, 'max' => 1]],
                             ],
                         ]],
+                    ])
+                    ->useAttributeAsKey('key')
+                    ->arrayPrototype()
+                    ->children()
+                        ->scalarNode('type')->isRequired()->end()
+                        ->arrayNode('type_options')
+                            ->useAttributeAsKey('key')
+                            ->prototype('variable')->end()
+                        ->end()
+                    ->end()
+                    ->end()
+                ->end()
+
+                ->arrayNode('version_seo')
+                    ->defaultValue([
+                        'metaTitle' => ['type' => 'translatable'],
+                        'metaDescription' => ['type' => 'translatable'],
+                        'metaKeywords' => ['type' => 'translatable'],
                     ])
                     ->useAttributeAsKey('key')
                     ->arrayPrototype()
@@ -152,10 +175,10 @@ class Content implements ConfigurationInterface
                                 'delete_view' => 'delete.view',
                                 'delete_type' => 'delete.type',
                                 'delete_success_redirect_to' => 'delete.success_redirect_to',
-                                'seo_is_granted' => 'seo.is_granted',
-                                'seo_view' => 'seo.view',
-                                'seo_type' => 'seo.type',
-                                'seo_success_redirect_to' => 'seo.success_redirect_to',
+                                'seo_is_granted' => 'version_seo.is_granted',
+                                'seo_view' => 'version_seo.view',
+                                'seo_type' => 'version_seo.type',
+                                'seo_success_redirect_to' => 'version_seo.success_redirect_to',
                                 'content_is_granted' => 'version_create.is_granted',
                                 'content_view' => 'version_create.view',
                                 'content_type' => 'version_create.type',
@@ -349,12 +372,12 @@ class Content implements ConfigurationInterface
                             ->end()
                         ->end()
 
-                        ->arrayNode('seo')
+                        ->arrayNode('version_seo')
                             ->addDefaultsIfNotSet()
                             ->children()
                                 ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_SEO')->end()
-                                ->scalarNode('view')->defaultValue('@SfsCms/admin/content/seo.html.twig')->end()
-                                ->scalarNode('type')->defaultValue(ContentSeoForm::class)->end()
+                                ->scalarNode('view')->defaultValue('@SfsCms/admin/content/version_seo.html.twig')->end()
+                                ->scalarNode('type')->defaultValue(VersionSeoForm::class)->end()
                                 ->scalarNode('success_redirect_to')->defaultValue('')->end()
                             ->end()
                         ->end()

@@ -103,21 +103,6 @@ services:
                     filter_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_LIST_FILTER
                     view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_LIST_VIEW
                     exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_LIST_EXCEPTION
-                seo:
-                    param_converter_key: 'id'
-                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_SEO_INITIALIZE
-                    load_entity_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_SEO_LOAD_ENTITY
-                    not_found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_SEO_NOT_FOUND
-                    found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_SEO_FOUND
-                    form_prepare_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_SEO_FORM_PREPARE
-                    form_init_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_SEO_FORM_INIT
-                    form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_SEO_FORM_VALID
-                    apply_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_SEO_APPLY
-                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_SEO_SUCCESS
-                    failure_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_SEO_FAILURE
-                    form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_SEO_FORM_INVALID
-                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_SEO_VIEW
-                    exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_SEO_EXCEPTION
                 unpublish:
                     param_converter_key: 'id'
                     initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_UNPUBLISH_INITIALIZE

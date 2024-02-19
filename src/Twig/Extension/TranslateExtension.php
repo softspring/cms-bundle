@@ -47,9 +47,9 @@ class TranslateExtension extends AbstractExtension
         ];
     }
 
-    public function translate(?array $translatableText): string
+    public function translate(mixed $translatableText): string
     {
-        if (null === $translatableText) {
+        if (!is_array($translatableText)) {
             return '';
         }
 

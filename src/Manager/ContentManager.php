@@ -27,6 +27,9 @@ class ContentManager implements ContentManagerInterface
         return ContentInterface::class;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function createEntity(?string $type = null): object
     {
         $class = $this->getTypeClass($type);
@@ -65,6 +68,7 @@ class ContentManager implements ContentManagerInterface
         if ($prevVersion) {
             $prevVersion->getLayout() && $version->setLayout($prevVersion->getLayout());
             $version->setData($prevVersion->getData());
+            $version->setSeo($prevVersion->getSeo());
         }
 
         $content->setLastVersionNumber((int) $content->getLastVersionNumber() + 1);
@@ -77,11 +81,17 @@ class ContentManager implements ContentManagerInterface
         return $version;
     }
 
+    /**
+     * @throws InvalidContentException
+     */
     public function getTypeClass(?string $type = null): string
     {
         return $this->getTypeConfig($type)['entity_class'];
     }
 
+    /**
+     * @throws \Exception
+     */
     public function getType(mixed $objectOrClassName = null): string
     {
         $className = is_object($objectOrClassName) ? get_class($objectOrClassName) : $objectOrClassName;
@@ -95,11 +105,17 @@ class ContentManager implements ContentManagerInterface
         throw new \Exception(sprintf('Content type not found for class "%s"', $className));
     }
 
+    /**
+     * @throws \Exception
+     */
     protected function getTypeDefaultLayout(?string $type = null): string
     {
         return $this->getTypeConfig($type)['default_layout'];
     }
 
+    /**
+     * @throws InvalidContentException
+     */
     protected function getTypeConfig(?string $type = null): array
     {
         if (!$type) {

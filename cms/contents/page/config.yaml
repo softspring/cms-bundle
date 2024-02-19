@@ -3,38 +3,45 @@ content:
     revision: 1
     entity_class: 'Softspring\CmsBundle\Entity\Page'
     default_layout: 'default'
-    seo:
+    version_seo:
         metaTitle:
             type: translatable
         metaDescription:
             type: translatable
         metaKeywords:
             type: translatable
+    indexing:
         noIndex:
             type: checkbox
             type_options:
                 required: false
+                default_value: false
         noFollow:
             type: checkbox
             type_options:
                 required: false
+                default_value: false
         sitemap:
             type: checkbox
             type_options:
                 required: false
+                attr:
+                    data-show-fields-if-checked: 'sitemapChangefreq,sitemapPriority'
+                    data-hide-fields-if-unchecked: 'sitemapChangefreq,sitemapPriority'
+                default_value: true
         sitemapChangefreq:
             type: choice
             type_options:
                 required: false
                 choices:
-                    admin_page.form.seo.sitemapChangefreq.values.empty: ''
-                    admin_page.form.seo.sitemapChangefreq.values.always: always
-                    admin_page.form.seo.sitemapChangefreq.values.hourly: hourly
-                    admin_page.form.seo.sitemapChangefreq.values.daily: daily
-                    admin_page.form.seo.sitemapChangefreq.values.weekly: weekly
-                    admin_page.form.seo.sitemapChangefreq.values.monthly: monthly
-                    admin_page.form.seo.sitemapChangefreq.values.yearly: yearly
-                    admin_page.form.seo.sitemapChangefreq.values.never: never
+                    admin_page.form.indexing.sitemapChangefreq.values.empty: ''
+                    admin_page.form.indexing.sitemapChangefreq.values.always: always
+                    admin_page.form.indexing.sitemapChangefreq.values.hourly: hourly
+                    admin_page.form.indexing.sitemapChangefreq.values.daily: daily
+                    admin_page.form.indexing.sitemapChangefreq.values.weekly: weekly
+                    admin_page.form.indexing.sitemapChangefreq.values.monthly: monthly
+                    admin_page.form.indexing.sitemapChangefreq.values.yearly: yearly
+                    admin_page.form.indexing.sitemapChangefreq.values.never: never
         sitemapPriority:
             type: number
             type_options:

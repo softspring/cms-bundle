@@ -122,3 +122,15 @@ services:
                     form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_INFO_FORM_INVALID
                     view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_INFO_VIEW
                     exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_INFO_EXCEPTION
+                version_seo:
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_SEO_INITIALIZE
+                    create_entity_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_SEO_ENTITY
+                    form_prepare_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_SEO_FORM_PREPARE
+                    form_init_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_SEO_FORM_INIT
+                    form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_SEO_FORM_VALID
+                    apply_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_SEO_APPLY
+                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_SEO_SUCCESS
+                    failure_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_SEO_FAILURE
+                    form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_SEO_FORM_INVALID
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_SEO_VIEW
+                    exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_SEO_EXCEPTION

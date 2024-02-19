@@ -19,11 +19,17 @@ class ContentMenuProvider extends AbstractContentMenuProvider
         [$content, $contentType, $contentConfig] = $this->getContent($context);
 
         $menu[] = $this->getMenuItem('details', $currentSelection, $content, $contentType, $contentConfig, 'read');
+
+        // current version management
         $menu[] = $this->getMenuItem('content', $currentSelection, $content, $contentType, $contentConfig, 'version_create');
         $menu[] = $this->getMenuItem('preview', $currentSelection, $content, $contentType, $contentConfig);
-        $menu[] = $this->getMenuItem('seo', $currentSelection, $content, $contentType, $contentConfig);
-        $menu[] = $this->getMenuItem('routes', $currentSelection, $content, $contentType, $contentConfig);
+        $menu[] = $this->getMenuItem('seo', $currentSelection, $content, $contentType, $contentConfig, 'version_seo');
+
+        // versions
         $menu[] = $this->getMenuItem('versions', $currentSelection, $content, $contentType, $contentConfig, 'version_list');
+
+        // content configuration
+        $menu[] = $this->getMenuItem('routes', $currentSelection, $content, $contentType, $contentConfig);
         $menu[] = $this->getMenuItem('update', $currentSelection, $content, $contentType, $contentConfig);
         // $menu[] = new MenuItem('permissions', $this->translator->trans("admin_{$contentType}.tabs_menu.permissions", [], 'sfs_cms_contents'));
         $menu[] = $this->getMenuItem('delete', $currentSelection, $content, $contentType, $contentConfig);

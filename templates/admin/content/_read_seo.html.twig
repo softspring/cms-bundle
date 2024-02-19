@@ -1,25 +1,2 @@
-{% trans_default_domain 'sfs_cms_contents' %}
-
-{% embed '@SfsCms/admin/_embeds/_card.html.twig' with {'title': ('admin_'~content_type~'.read.seo.title')|trans} %}
-    {% trans_default_domain 'sfs_cms_contents' %}
-
-    {% block title %}
-        {% if not content_config.admin.seo.is_granted or is_granted(content_config.admin.seo.is_granted, entity) %}
-            <a class="btn btn-sm btn-outline-secondary float-end"  href="{{ url('sfs_cms_admin_content_'~content_type~'_seo', {'content':entity}) }}">{{ ('admin_'~content_type~'.read.seo.edit.link')|trans }}</a>
-        {% else %}
-            <a class="btn btn-sm btn-outline-secondary float-end disabled">{{ ('admin_'~content_type~'.read.seo.edit.link')|trans }}</a>
-        {% endif %}
-        {{ parent() }}
-    {% endblock %}
-
-    {% block content %}
-        <dl>
-            <dt>{{ ('admin_'~content_type~'.read.seo.index')|trans }}</dt>
-            <dd>{{ entity.seo.noIndex|default(false)?'noindex':'index' }}</dd>
-            <dt>{{ ('admin_'~content_type~'.read.seo.links')|trans }}</dt>
-            <dd>{{ entity.seo.noFollow|default(false)?'nofollow':'follow' }}</dd>
-            <dt>{{ ('admin_'~content_type~'.read.seo.sitemap')|trans }}</dt>
-            <dd>{{ entity.seo.sitemap|default(false)?(('admin_'~content_type~'.read.seo.sitemap.yes')|trans):(('admin_'~content_type~'.read.seo.sitemap.no')|trans) }}</dd>
-        </dl>
-    {% endblock %}
-{% endembed %}
+{% deprecated 'The _read_seo.html.twig template is deprecated, use _read_indexing.html.twig' %}
+{% extends '@SfsCms/admin/content/_read_indexing.html.twig' %}

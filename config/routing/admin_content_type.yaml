@@ -30,12 +30,6 @@ delete:
     controller: sfs_cms.admin.content.controller::delete
     path: /{content}/delete
 
-seo:
-    controller: sfs_cms.admin.content.controller::update
-    path: /{content}/seo
-    defaults:
-        configKey: 'seo'
-
 unpublish:
     controller: sfs_cms.admin.content.controller::apply
     path: /{content}/unpublish
@@ -121,6 +115,18 @@ cleanup_versions:
     path: /{content}/versions-cleanup
     defaults:
         configKey: 'version_cleanup'
+
+seo:
+    controller: sfs_cms.admin.content_version.controller::create
+    path: /{content}/seo
+    defaults:
+        configKey: 'version_seo'
+
+seo_version:
+    controller: sfs_cms.admin.content_version.controller::create
+    path: /{content}/{version}/seo
+    defaults:
+        configKey: 'version_seo'
 
 _plugin_routes:
     resource: '.'

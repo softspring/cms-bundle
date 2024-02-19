@@ -71,13 +71,20 @@ admin_page:
         general:
             status: "Estado"
             publishDate: "Fecha de publicación"
-        seo:
-            title: "SEO"
-            index: "Indexar"
-            links: "Enlaces"
-            sitemap: "Mapa de sitio"
-            sitemap.no: "no"
-            sitemap.yes: "sí"
+        indexing:
+            title: "Indexado"
+            noIndex:
+                label: "Indexar"
+                yes: "no index"
+                no: "index"
+            noFollow:
+                label: "Seguir enlaces"
+                yes: "no follow"
+                no: "follow"
+            sitemap:
+                label: "Sitemap"
+                no: "no"
+                yes: "sí"
             edit.link: "Editar"
         routes:
             title: "Rutas"
@@ -111,6 +118,7 @@ admin_page:
             2: "fixture"
             3: "cargada"
             4: "traducida"
+            5: "seo"
         actions:
             edit.link: "Editar"
             preview.link: "Previsualizar"
@@ -179,9 +187,9 @@ admin_page:
                 route_params.label: "Parámetros"
         success_flash: "La página se ha eliminado"
 
-    seo:
+    version_seo:
         meta.title: "Editar SEO"
-        title: "%name%"
+        title: "%name% (v%versionNumber%)"
         breadcrumb: "Editar SEO"
         actions:
             save.button: "Guardar cambios"
@@ -247,13 +255,11 @@ admin_page:
                 path.label: "Segmento de URL"
                 cacheTtl.label: "Tiempo de caché"
                 locale.label: "Idioma"
-        seo:
-            metaTitle.label: "Título (título del navegador y etiquetas meta)"
-            metaDescription.label: "Descripción (etiqueta meta)"
-            metaKeywords.label: "Palabras clave (etiqueta meta)"
+        indexing:
+            label: "Indexado"
             noIndex.label: "No indexar"
             noFollow.label: "No seguir enlaces"
-            sitemap.label: "Mapa de sitio"
+            sitemap.label: "Sitemap"
             sitemapChangefreq:
                 label: "Frecuencia de cambio en el sitemap"
                 values:
@@ -265,7 +271,11 @@ admin_page:
                     monthly: "mensualmente"
                     yearly: "anualmente"
                     never: "nunca"
-            sitemapPriority.label: "Prioridad de URL en el sitemap"
+                sitemapPriority.label: "Prioridad de URL en el sitemap"
+        seo:
+            metaTitle.label: "Título (título del navegador y etiquetas meta)"
+            metaDescription.label: "Descripción (etiqueta meta)"
+            metaKeywords.label: "Palabras clave (etiqueta meta)"
 
     version_form:
         note.label: "Nota"
@@ -310,6 +320,8 @@ admin_page:
             pre_compile_modules_missing: "Esta versión no tiene módulos pre-compilados, quizas se haya producido un error, prueba a recompilarla"
         data:
             title: "Datos"
+        seo:
+            title: "SEO"
         linked_routes:
             title: "Rutas vinculadas"
         linked_medias:
@@ -323,6 +335,7 @@ admin_page:
                 unlock: "Versión marcada para no mantener por %userName% el %date%"
                 recompile: "Versión recompilada por %userName% el %date%"
                 create: "Creada por %userName% el %date%"
+                seo: "SEO actualizado por %userName% el %date%"
         metadata:
             title: "Metadatos"
 

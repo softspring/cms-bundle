@@ -71,13 +71,20 @@ admin_page:
         general:
             status: "Status"
             publishDate: "Publish date"
-        seo:
-            title: "SEO"
-            index: "Index"
-            links: "Links"
-            sitemap: "Sitemap"
-            sitemap.no: "no"
-            sitemap.yes: "yes"
+        indexing:
+            title: "Indexing"
+            noIndex:
+                label: "Index"
+                yes: "no index"
+                no: "index"
+            noFollow:
+                label: "Follow links"
+                yes: "no follow"
+                no: "follow"
+            sitemap:
+                label: "Sitemap"
+                no: "no"
+                yes: "yes"
             edit.link: "Edit"
         routes:
             title: "Routes"
@@ -111,6 +118,7 @@ admin_page:
             2: "fixture"
             3: "imported"
             4: "translated"
+            5: "seo"
         actions:
             edit.link: "Edit"
             preview.link: "Preview"
@@ -179,9 +187,9 @@ admin_page:
                 route_params.label: "Parameters"
         success_flash: "Page has been deleted"
 
-    seo:
+    version_seo:
         meta.title: "Edit SEO"
-        title: "%name%"
+        title: "%name% (v%versionNumber%)"
         breadcrumb: "Edit SEO"
         actions:
             save.button: "Save changes"
@@ -247,10 +255,8 @@ admin_page:
                 path.label: "URL segment"
                 cacheTtl.label: "Cache time"
                 locale.label: "Language"
-        seo:
-            metaTitle.label: "Title (browser title and meta tags)"
-            metaDescription.label: "Description (meta tag)"
-            metaKeywords.label: "Keywords (meta tag)"
+        indexing:
+            label: "Indexing"
             noIndex.label: "No index"
             noFollow.label: "No follow"
             sitemap.label: "Sitemap"
@@ -266,6 +272,10 @@ admin_page:
                     yearly: "yearly"
                     never: "never"
             sitemapPriority.label: "URL priority for sitemap"
+        seo:
+            metaTitle.label: "Title (browser title and meta tags)"
+            metaDescription.label: "Description (meta tag)"
+            metaKeywords.label: "Keywords (meta tag)"
 
     version_form:
         note.label: "Note"
@@ -310,6 +320,8 @@ admin_page:
             pre_compile_modules_missing: "This version has not compiled modules, maybe it's an error, try to recompile it."
         data:
             title: "Data"
+        seo:
+            title: "SEO"
         linked_routes:
             title: "Linked routes"
         linked_medias:
@@ -323,6 +335,7 @@ admin_page:
                 unlock: "Version unprotected by %userName% at %date%"
                 recompile: "Version recompiled by %userName% at %date%"
                 create: "Created by %userName% at %date%"
+                seo: "SEO updated by %userName% at %date%"
         metadata:
             title: "Metadata"
 

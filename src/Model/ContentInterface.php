@@ -49,9 +49,19 @@ interface ContentInterface
 
     public function setExtraData(?array $extraData): void;
 
+    /**
+     * @deprecated use getIndexing()
+     */
     public function getSeo(): ?array;
 
+    /**
+     * @deprecated use setIndexing()
+     */
     public function setSeo(?array $seo): void;
+
+    public function getIndexing(): ?array;
+
+    public function setIndexing(?array $indexing): void;
 
     public function getPublishedVersion(): ?ContentVersionInterface;
 

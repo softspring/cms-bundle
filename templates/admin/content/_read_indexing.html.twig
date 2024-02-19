@@ -1,0 +1,43 @@
+{% trans_default_domain 'sfs_cms_contents' %}
+
+{% embed '@SfsCms/admin/_embeds/_card.html.twig' with {'title': ('admin_'~content_type~'.read.indexing.title')|trans} %}
+    {% trans_default_domain 'sfs_cms_contents' %}
+
+    {% block title %}
+        {% if not content_config.admin.update.is_granted or is_granted(content_config.admin.update.is_granted, entity) %}
+            <a class="btn btn-sm btn-outline-secondary float-end"  href="{{ url('sfs_cms_admin_content_'~content_type~'_update', {'content':entity}) }}">{{ ('admin_'~content_type~'.read.indexing.edit.link')|trans }}</a>
+        {% else %}
+            <a class="btn btn-sm btn-outline-secondary float-end disabled">{{ ('admin_'~content_type~'.read.indexing.edit.link')|trans }}</a>
+        {% endif %}
+        {{ parent() }}
+    {% endblock %}
+
+    {% block content %}
+        <dl>
+            <dt>{{ ('admin_'~content_type~'.read.indexing.noIndex.label')|trans }}</dt>
+            <dd>
+                {% if entity.indexing.noIndex|default(false) %}
+                    <span class="badge bg-warning">{{ ('admin_'~content_type~'.read.indexing.noIndex.yes')|trans }}</span>
+                {% else %}
+                    <span class="badge bg-success">{{ ('admin_'~content_type~'.read.indexing.noIndex.no')|trans }}</span>
+                {% endif %}
+            </dd>
+            <dt>{{ ('admin_'~content_type~'.read.indexing.noFollow.label')|trans }}</dt>
+            <dd>
+                {% if entity.indexing.noFollow|default(false) %}
+                    <span class="badge bg-warning">{{ ('admin_'~content_type~'.read.indexing.noFollow.yes')|trans }}</span>
+                {% else %}
+                    <span class="badge bg-success">{{ ('admin_'~content_type~'.read.indexing.noFollow.no')|trans }}</span>
+                {% endif %}
+            </dd>
+            <dt>{{ ('admin_'~content_type~'.read.indexing.sitemap.label')|trans }}</dt>
+            <dd>
+                {% if entity.indexing.sitemap|default(false) %}
+                    <span class="badge bg-success">{{ ('admin_'~content_type~'.read.indexing.sitemap.yes')|trans }}</span>
+                {% else %}
+                    <span class="badge bg-warning">{{ ('admin_'~content_type~'.read.indexing.sitemap.no')|trans }}</span>
+                {% endif %}
+            </dd>
+        </dl>
+    {% endblock %}
+{% endembed %}

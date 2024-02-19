@@ -21,6 +21,8 @@ abstract class ContentVersion implements ContentVersionInterface
 
     protected ?int $versionNumber = null;
 
+    protected ?array $seo = null;
+
     protected ?array $data = null;
 
     protected ?array $meta = null;
@@ -110,6 +112,16 @@ abstract class ContentVersion implements ContentVersionInterface
     public function setVersionNumber(?int $versionNumber): void
     {
         $this->versionNumber = $versionNumber;
+    }
+
+    public function getSeo(): ?array
+    {
+        return $this->seo;
+    }
+
+    public function setSeo(?array $seo): void
+    {
+        $this->seo = $seo;
     }
 
     public function getData(): ?array

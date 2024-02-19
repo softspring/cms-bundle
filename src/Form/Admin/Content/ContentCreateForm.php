@@ -11,6 +11,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Intl\Locales;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -53,14 +54,16 @@ class ContentCreateForm extends AbstractType implements ContentCreateFormInterfa
         ]);
 
         $builder->add('defaultLocale', ChoiceType::class, [
-            'choices' => array_combine($options['locales'], $options['locales']),
+            'choice_translation_domain' => false,
+            'choices' => array_combine(array_map(fn ($lang) => Locales::getName($lang), $options['locales']), $options['locales']),
             'default_value' => $options['default_locale'],
         ]);
 
         $builder->add('locales', ChoiceType::class, [
             'multiple' => true,
             'expanded' => true,
-            'choices' => array_combine($options['locales'], $options['locales']),
+            'choice_translation_domain' => false,
+            'choices' => array_combine(array_map(fn ($lang) => Locales::getName($lang), $options['locales']), $options['locales']),
             'default_value' => [$options['default_locale']],
         ]);
 
@@ -84,6 +87,13 @@ class ContentCreateForm extends AbstractType implements ContentCreateFormInterfa
                 'translation_domain' => 'sfs_cms_contents',
                 'label_format' => "admin_{$options['content_config']['_id']}.form.routes.%name%.label",
             ],
+        ]);
+
+        $builder->add('indexing', DynamicFormType::class, [
+            'form_fields' => $options['content_config']['indexing'] ?? [],
+            'translation_domain' => 'sfs_cms_contents',
+            'label' => "admin_{$options['content_config']['_id']}.form.indexing.label",
+            'label_format' => "admin_{$options['content_config']['_id']}.form.indexing.%name%.label",
         ]);
     }
 }

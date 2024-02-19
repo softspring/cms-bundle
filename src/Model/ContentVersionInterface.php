@@ -12,6 +12,7 @@ interface ContentVersionInterface
     public const ORIGIN_FIXTURE = 2;
     public const ORIGIN_IMPORT = 3;
     public const ORIGIN_TRANSLATIONS = 4;
+    public const ORIGIN_SEO = 5;
 
     public function getId();
 
@@ -22,6 +23,10 @@ interface ContentVersionInterface
     public function getOrigin(): ?int;
 
     public function setOrigin(?int $origin): void;
+
+    public function getSeo(): ?array;
+
+    public function setSeo(?array $seo): void;
 
     public function getOriginDescription(): ?string;
 

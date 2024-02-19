@@ -158,20 +158,6 @@ class SfsCmsEvents
     public const ADMIN_CONTENTS_DELETE_FORM_INVALID = 'sfs_cms.admin.contents.delete_form_invalid';
     public const ADMIN_CONTENTS_DELETE_VIEW = 'sfs_cms.admin.contents.delete_view';
     public const ADMIN_CONTENTS_DELETE_EXCEPTION = 'sfs_cms.admin.contents.delete_exception';
-    // CONTENT SEO EVENTS, ALL OF THEM ARE INTERNAL
-    public const ADMIN_CONTENTS_SEO_INITIALIZE = 'sfs_cms.admin.contents.seo_initialize';
-    public const ADMIN_CONTENTS_SEO_LOAD_ENTITY = 'sfs_cms.admin.contents.seo_load_entity';
-    public const ADMIN_CONTENTS_SEO_NOT_FOUND = 'sfs_cms.admin.contents.seo_not_found';
-    public const ADMIN_CONTENTS_SEO_FOUND = 'sfs_cms.admin.contents.seo_found';
-    public const ADMIN_CONTENTS_SEO_FORM_PREPARE = 'sfs_cms.admin.contents.seo_form_prepare';
-    public const ADMIN_CONTENTS_SEO_FORM_INIT = 'sfs_cms.admin.contents.seo_form_init';
-    public const ADMIN_CONTENTS_SEO_FORM_VALID = 'sfs_cms.admin.contents.seo_form_valid';
-    public const ADMIN_CONTENTS_SEO_APPLY = 'sfs_cms.admin.contents.seo_apply';
-    public const ADMIN_CONTENTS_SEO_SUCCESS = 'sfs_cms.admin.contents.seo_success';
-    public const ADMIN_CONTENTS_SEO_FAILURE = 'sfs_cms.admin.contents.seo_failure';
-    public const ADMIN_CONTENTS_SEO_FORM_INVALID = 'sfs_cms.admin.contents.seo_form_invalid';
-    public const ADMIN_CONTENTS_SEO_VIEW = 'sfs_cms.admin.contents.seo_view';
-    public const ADMIN_CONTENTS_SEO_EXCEPTION = 'sfs_cms.admin.contents.seo_exception';
     // CONTENT UNPUBLISH EVENTS, ALL OF THEM ARE INTERNAL
     public const ADMIN_CONTENTS_UNPUBLISH_INITIALIZE = 'sfs_cms.admin.contents.unpublish_initialize';
     public const ADMIN_CONTENTS_UNPUBLISH_LOAD_ENTITY = 'sfs_cms.admin.contents.unpublish_load_entity';
@@ -285,4 +271,16 @@ class SfsCmsEvents
     public const ADMIN_CONTENT_VERSIONS_INFO_FORM_INVALID = 'sfs_cms.admin.content_versions.info_form_invalid';
     public const ADMIN_CONTENT_VERSIONS_INFO_VIEW = 'sfs_cms.admin.content_versions.info_view';
     public const ADMIN_CONTENT_VERSIONS_INFO_EXCEPTION = 'sfs_cms.admin.content_versions.info_exception';
+    // CONTENT VERSION SEO EVENTS, ALL OF THEM ARE INTERNAL
+    public const ADMIN_CONTENT_VERSIONS_SEO_INITIALIZE = 'sfs_cms.admin.content_versions.seo_initialize';
+    public const ADMIN_CONTENT_VERSIONS_SEO_ENTITY = 'sfs_cms.admin.content_versions.seo_entity';
+    public const ADMIN_CONTENT_VERSIONS_SEO_FORM_PREPARE = 'sfs_cms.admin.content_versions.seo_form_prepare';
+    public const ADMIN_CONTENT_VERSIONS_SEO_FORM_INIT = 'sfs_cms.admin.content_versions.seo_form_init';
+    public const ADMIN_CONTENT_VERSIONS_SEO_FORM_VALID = 'sfs_cms.admin.content_versions.seo_form_valid';
+    public const ADMIN_CONTENT_VERSIONS_SEO_APPLY = 'sfs_cms.admin.content_versions.seo_apply';
+    public const ADMIN_CONTENT_VERSIONS_SEO_SUCCESS = 'sfs_cms.admin.content_versions.seo_success';
+    public const ADMIN_CONTENT_VERSIONS_SEO_FAILURE = 'sfs_cms.admin.content_versions.seo_failure';
+    public const ADMIN_CONTENT_VERSIONS_SEO_FORM_INVALID = 'sfs_cms.admin.content_versions.seo_form_invalid';
+    public const ADMIN_CONTENT_VERSIONS_SEO_VIEW = 'sfs_cms.admin.content_versions.seo_view';
+    public const ADMIN_CONTENT_VERSIONS_SEO_EXCEPTION = 'sfs_cms.admin.content_versions.seo_exception';
 }

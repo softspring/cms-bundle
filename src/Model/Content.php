@@ -27,7 +27,7 @@ abstract class Content implements ContentInterface
 
     protected ?array $extraData = null;
 
-    protected ?array $seo = null;
+    protected ?array $indexing = null;
 
     protected ?ContentVersionInterface $publishedVersion = null;
 
@@ -179,12 +179,29 @@ abstract class Content implements ContentInterface
 
     public function getSeo(): ?array
     {
-        return $this->seo;
+        trigger_deprecation('sfs/cms-bundle', '5.2', 'Method %s is deprecated, use %s instead, and version.getSeo', __METHOD__, 'getIndexing');
+
+        if (null === $this->getIndexing()) {
+            return null;
+        }
+
+        return $this->getIndexing() + ($this->publishedVersion?->getSeo() ?: []);
     }
 
     public function setSeo(?array $seo): void
     {
-        $this->seo = $seo;
+        trigger_deprecation('sfs/cms-bundle', '5.2', 'Method %s is deprecated, use %s instead', __METHOD__, 'setIndexing');
+        $this->setIndexing($seo);
+    }
+
+    public function getIndexing(): ?array
+    {
+        return $this->indexing;
+    }
+
+    public function setIndexing(?array $indexing): void
+    {
+        $this->indexing = $indexing;
     }
 
     public function getPublishedVersion(): ?ContentVersionInterface

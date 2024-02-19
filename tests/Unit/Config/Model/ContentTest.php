@@ -10,11 +10,11 @@ use Softspring\CmsBundle\Form\Admin\Content\ContentDeleteForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentImportForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentListFilterForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentRoutesForm;
-use Softspring\CmsBundle\Form\Admin\Content\ContentSeoForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentUpdateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionCreateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionImportForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionListFilterForm;
+use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionSeoForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionUpdateForm;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
@@ -64,29 +64,39 @@ class ContentTest extends TestCase
             'containers' => [],
             'extra_fields' => [],
             'meta' => [],
-            'seo' => [
-                'metaTitle' => ['type' => 'translatable'],
-                'metaDescription' => ['type' => 'translatable'],
-                'metaKeywords' => ['type' => 'translatable'],
-                'noIndex' => ['type' => 'checkbox', 'type_options' => ['required' => false]],
-                'noFollow' => ['type' => 'checkbox', 'type_options' => ['required' => false]],
-                'sitemap' => ['type' => 'checkbox', 'type_options' => ['required' => false]],
+            'indexing' => [
+                'noIndex' => ['type' => 'checkbox', 'type_options' => ['required' => false, 'default_value' => false]],
+                'noFollow' => ['type' => 'checkbox', 'type_options' => ['required' => false, 'default_value' => false]],
+                'sitemap' => ['type' => 'checkbox', 'type_options' => [
+                    'required' => false,
+                    'default_value' => true,
+                    'attr' => [
+                        'data-show-fields-if-checked' => 'sitemapChangefreq,sitemapPriority',
+                        'data-hide-fields-if-unchecked' => 'sitemapChangefreq,sitemapPriority',
+                    ],
+                ]],
                 'sitemapChangefreq' => ['type' => 'choice', 'type_options' => [
                     'choices' => [
-                        'admin_page.form.seo.sitemapChangefreq.values.empty' => false,
-                        'admin_page.form.seo.sitemapChangefreq.values.always' => 'always',
-                        'admin_page.form.seo.sitemapChangefreq.values.hourly' => 'hourly',
-                        'admin_page.form.seo.sitemapChangefreq.values.daily' => 'daily',
-                        'admin_page.form.seo.sitemapChangefreq.values.weekly' => 'weekly',
-                        'admin_page.form.seo.sitemapChangefreq.values.monthly' => 'monthly',
-                        'admin_page.form.seo.sitemapChangefreq.values.yearly' => 'yearly',
-                        'admin_page.form.seo.sitemapChangefreq.values.never' => 'never',
+                        'admin_page.form.indexing.sitemapChangefreq.values.empty' => false,
+                        'admin_page.form.indexing.sitemapChangefreq.values.always' => 'always',
+                        'admin_page.form.indexing.sitemapChangefreq.values.hourly' => 'hourly',
+                        'admin_page.form.indexing.sitemapChangefreq.values.daily' => 'daily',
+                        'admin_page.form.indexing.sitemapChangefreq.values.weekly' => 'weekly',
+                        'admin_page.form.indexing.sitemapChangefreq.values.monthly' => 'monthly',
+                        'admin_page.form.indexing.sitemapChangefreq.values.yearly' => 'yearly',
+                        'admin_page.form.indexing.sitemapChangefreq.values.never' => 'never',
                     ],
+                    'required' => false,
                 ]],
                 'sitemapPriority' => ['type' => 'number', 'type_options' => ['required' => false, 'scale' => 1, 'constraints' => [[
                     'constraint' => 'range',
                     'options' => ['min' => 0, 'max' => 1],
                 ]]]],
+            ],
+            'version_seo' => [
+                'metaTitle' => ['type' => 'translatable'],
+                'metaDescription' => ['type' => 'translatable'],
+                'metaKeywords' => ['type' => 'translatable'],
             ],
             'admin' => [
                 'list' => [
@@ -156,10 +166,10 @@ class ContentTest extends TestCase
                     'type' => ContentDeleteForm::class,
                     'success_redirect_to' => '',
                 ],
-                'seo' => [
+                'version_seo' => [
                     'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_SEO',
-                    'view' => '@SfsCms/admin/content/seo.html.twig',
-                    'type' => ContentSeoForm::class,
+                    'view' => '@SfsCms/admin/content/version_seo.html.twig',
+                    'type' => VersionSeoForm::class,
                     'success_redirect_to' => '',
                 ],
                 'version_create' => [

@@ -37,6 +37,8 @@
 
                         {% if form.extraData is defined %}{{ form_widget(form.extraData) }}{% endif %}
                         {{ form_row(form.routes) }}
+                        {{ form_row(form.indexing) }}
+
                         {{ form_rest(form) }}
                     {% endblock form_fields %}
                 </div>
