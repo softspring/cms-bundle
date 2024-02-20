@@ -124,9 +124,15 @@ class BlameListener implements EventSubscriberInterface
     protected function addHistory(ContentVersionInterface $contentVersion, string $action, array $extra = []): void
     {
         $history = $contentVersion->getMetaField('history', []);
+
+        $date = new \DateTime();
+
         $history[] = [
             'action' => $action,
-            'date' => new \DateTime(),
+            'date' => [
+                'date' => $date->format('Y-m-d H:i:s'),
+                'timezone' => $date->getTimezone()->getName(),
+            ],
             'user' => $this->getUser(),
             'extra' => $extra,
         ];
