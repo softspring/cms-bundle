@@ -15,11 +15,10 @@ use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface;
 abstract class AbstractRenderer
 {
     public function __construct(
-        protected RequestStack               $requestStack,
+        protected RequestStack $requestStack,
         protected ?EntrypointLookupInterface $entrypointLookup,
-        protected RouterInterface            $router,
-    )
-    {
+        protected RouterInterface $router,
+    ) {
     }
 
     protected function isPreview(): bool

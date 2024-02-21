@@ -21,10 +21,10 @@ class ModuleRenderer
     public const DISABLED_HIDDEN_MODULE = '<!-- disabled module -->';
 
     public function __construct(
-        protected CmsConfig        $cmsConfig,
-        protected RequestStack     $requestStack,
+        protected CmsConfig $cmsConfig,
+        protected RequestStack $requestStack,
         protected ?LoggerInterface $cmsLogger,
-        protected Environment      $twig
+        protected Environment $twig
     ) {
     }
 
@@ -100,7 +100,6 @@ class ModuleRenderer
         return false;
     }
 
-
     /**
      * @throws ModuleRenderException
      */
@@ -130,7 +129,7 @@ class ModuleRenderer
                 throw new ModuleRenderException($module, $exception);
             }
 
-            $renderErrorList && $renderErrorList->add($moduleConfig['render_template'], $exception, [
+            $renderErrorList->add($moduleConfig['render_template'], $exception, [
                 'moduleConfig' => $moduleConfig,
                 'moduleData' => $module,
             ]);
@@ -163,7 +162,7 @@ class ModuleRenderer
                 throw new ModuleRenderException($module, $exception);
             }
 
-            $renderErrorList && $renderErrorList->add($moduleConfig['render_template'], $exception, [
+            $renderErrorList->add($moduleConfig['render_template'], $exception, [
                 'moduleConfig' => $moduleConfig,
                 'moduleData' => $module,
             ]);
