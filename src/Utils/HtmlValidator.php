@@ -24,6 +24,9 @@ class HtmlValidator
             if (23 === $error->code) { // XML_ERR_ENTITYREF_SEMICOL_MISSING
                 return false; // missing semicolon in entity reference (for example A&B expected A&B; that is wrong)
             }
+            if (513 === $error->code) { // XML_DTD_ID_REDEFINED
+                return false; // duplicated id, it's posible when editing the html in the browser
+            }
 
             return true;
         });
