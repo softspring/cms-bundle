@@ -37,6 +37,7 @@ class ContentManager implements ContentManagerInterface
         /** @var ContentInterface $content */
         $content = new $class();
         $content->addVersion($version = $this->contentVersionManager->createEntity());
+        $content->setLastVersion($version);
         $content->setLastVersionNumber(0);
         $version->setVersionNumber(0);
         $version->setLayout($this->getTypeDefaultLayout($type));

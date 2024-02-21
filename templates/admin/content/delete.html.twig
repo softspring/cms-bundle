@@ -28,11 +28,11 @@
             <div class="container-fluid bg-white p-3">
                 {{ ('admin_'~content_type~'.delete.main_warnings_raw')|trans|raw }}
 
-                {% if entity.publishedVersion %}
+                {% if entity.publishedVersion|default(entity.lastVersion) %}
                     <p>{{ ('admin_'~content_type~'.delete.offer_backup')|trans }}</p>
 
                     <div class="mb-4">
-                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_export_version', {'content':entity, 'version':entity.publishedVersion}) }}" class="btn btn-primary">
+                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_export_version', {'content':entity, 'version':entity.publishedVersion|default(entity.lastVersion)}) }}" class="btn btn-primary">
                         {{ ('admin_'~content_type~'.delete.actions.export.button')|trans }}</a>
                     </div>
                 {% endif %}
