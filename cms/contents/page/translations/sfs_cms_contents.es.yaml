@@ -60,7 +60,7 @@ admin_page:
     read:
         meta.title: "General"
         title: "%name%"
-        breadcrumb: "General"
+        breadcrumb: "%name%"
         actions:
             unpublish:
                 confirm: "¿estás seguro de despublicar esta página?"
