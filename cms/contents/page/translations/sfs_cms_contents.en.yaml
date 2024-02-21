@@ -25,6 +25,7 @@ admin_page:
         actions:
             create.button: "Create page"
             cancel.button: "Cancel"
+        success_flash: "Page has been created"
     
     version_publish:
         success_flash: "Version has been published"
@@ -341,4 +342,4 @@ admin_page:
 
     version_recompile:
         success_flash: "Version has been recompiled"
-        failed_flash: "An error has been produced during the version recompilation"
+        failed_flash: "An error has been produced during the version recompilation.<br/><small>%exception%</small>"

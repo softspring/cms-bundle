@@ -105,6 +105,8 @@ class CreateListener extends AbstractContentListener
             $contentConfig['admin']['create']['success_redirect_to'] = "sfs_cms_admin_content_{$contentConfig['_id']}_content";
         }
 
+        $this->flashNotifier->addTrans('success', "admin_{$contentConfig['_id']}.create.success_flash", [], 'sfs_cms_contents');
+
         $redirectUrl = $this->router->generate($contentConfig['admin']['create']['success_redirect_to'], ['content' => $event->getEntity()]);
 
         $event->setResponse(new RedirectResponse($redirectUrl));
