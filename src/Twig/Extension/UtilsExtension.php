@@ -3,6 +3,7 @@
 namespace Softspring\CmsBundle\Twig\Extension;
 
 use Softspring\CmsBundle\Model\ContentInterface;
+use Softspring\CmsBundle\Utils\HtmlValidator;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -13,6 +14,7 @@ class UtilsExtension extends AbstractExtension
         return [
             new TwigFunction('sfs_cms_search_content_esi_calls', [$this, 'searchContentEsiCalls']),
             new TwigFunction('sfs_cms_check_content_locales_and_routes', [$this, 'checkContentLocalesAndRoutes']),
+            new TwigFunction('sfs_cms_validate_module_html', [HtmlValidator::class, 'validateModule']),
         ];
     }
 

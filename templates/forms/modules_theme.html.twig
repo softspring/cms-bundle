@@ -112,7 +112,7 @@
 
 {% block module_edit_form %}
     {% if form.vars.errors|length %}
-        <div class="alert alert-danger mt-3" role="alert">
+        <div class="alert alert-danger m-3" role="alert">
             {%- for error in form.vars.errors -%}
                 <div class="invalid-feedback d-block">{{ error.message }}</div>
 
@@ -131,7 +131,7 @@
     {% endif %}
 
     {% if form.vars.deprecated %}
-        <div class="alert alert-warning mt-3" role="alert">{{ form.vars.deprecated }}</div>
+        <div class="alert alert-warning m-3" role="alert">{{ form.vars.deprecated }}</div>
     {% endif %}
 
     {{ form_widget(form._module) }}
@@ -155,7 +155,38 @@
         {% endif %}
 
         {% if form_template|default(false) %}
-            {% include form_template with {'accordion': 'moduleForm-'~id} %}
+            {% set form_template_render %}{% include form_template with {'accordion': 'moduleForm-'~id} %}{% endset %}
+            {% set form_template_render_analize = sfs_cms_validate_module_html(form_template_render) %}
+            {% if form_template_render_analize.status == 'error' %}
+                <div class="alert alert-danger m-3" role="alert">
+                    <strong>Form template error</strong>
+                    <div>Form template is not valid HTML</div>
+
+                    {% if app.debug %}
+                        <ul>
+                            {% for message in form_template_render_analize.messages %}
+                                <li><strong>{{ message.type }}</strong>: {{ message.message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            {% elseif form_template_render_analize.status == 'warning' %}
+                <div class="alert alert-warning m-3" role="alert">
+                    <strong>Form template warning</strong>
+                    <div>Form template has some issues</div>
+
+                    {% if app.debug %}
+                        <ul>
+                            {% for message in form_template_render_analize.messages %}
+                                <li><strong>{{ message.type }}</strong>: {{ message.message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+                {{ form_template_render|raw }}
+            {% else %}
+                {{ form_template_render|raw }}
+            {% endif %}
         {% endif %}
 
         {% if form|filter(child => not child.rendered)|length %}
@@ -164,6 +195,40 @@
             {{ sfs_cms_admin_module_accordion_block_end() }}
         {% endif %}
     </div>
+{% endblock %}
+
+{% block module_preview_template %}
+    {% set edit_template_render_analize = sfs_cms_validate_module_html(edit_template_render) %}
+    {% if edit_template_render_analize.status == 'error' %}
+        <div class="alert alert-danger m-3" role="alert">
+            <strong>Module edit template error</strong>
+            <div>Module edit template is not valid HTML</div>
+
+            {% if app.debug %}
+                <ul>
+                    {% for message in edit_template_render_analize.messages %}
+                        <li><strong>{{ message.type }}</strong>: {{ message.message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    {% elseif edit_template_render_analize.status == 'warning' %}
+        <div class="alert alert-warning m-3" role="alert">
+            <strong>Module edit template warning</strong>
+            <div>Module edit template has some issues</div>
+
+            {% if app.debug %}
+                <ul>
+                    {% for message in edit_template_render_analize.messages %}
+                        <li><strong>{{ message.type }}</strong>: {{ message.message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        {{ edit_template_render|raw }}
+    {% else %}
+        {{ edit_template_render|raw }}
+    {% endif %}
 {% endblock %}
 
 {% block module_edit_header %}
@@ -200,7 +265,8 @@
     <div class="cms-module-edit">
         {% if edit_template|default(false) %}
             <div class="module-preview">
-                {% include edit_template %}
+                {% set edit_template_render %}{% include edit_template %}{% endset %}
+                {{ block('module_preview_template') }}
             </div>
         {% endif %}
 
@@ -234,7 +300,8 @@
     <div class="cms-module-edit">
         {% if edit_template|default(false) %}
             <div class="module-preview">
-                {% include edit_template %}
+                {% set edit_template_render %}{% include edit_template %}{% endset %}
+                {{ block('module_preview_template') }}
             </div>
         {% endif %}
 
@@ -269,7 +336,8 @@
     <div class="cms-module-edit">
         {% if edit_template|default(false) %}
             <div class="module-preview">
-                {% include edit_template %}
+                {% set edit_template_render %}{% include edit_template %}{% endset %}
+                {{ block('module_preview_template') }}
             </div>
         {% endif %}
 
