@@ -6,6 +6,7 @@ use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\EventListener\Admin\ContentGetOptionTrait;
 use Softspring\CmsBundle\EventListener\Admin\ContentInitializeEventTrait;
 use Softspring\CmsBundle\EventListener\Admin\ContentRedirectBackTrait;
+use Softspring\CmsBundle\EventListener\Admin\ExceptionMessageTrait;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
@@ -24,6 +25,7 @@ abstract class AbstractContentListener implements EventSubscriberInterface
     use ContentGetOptionTrait;
     use ContentInitializeEventTrait;
     use ContentRedirectBackTrait;
+    use ExceptionMessageTrait;
 
     protected const ACTION_NAME = '_abstract_';
 

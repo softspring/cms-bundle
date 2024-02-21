@@ -104,21 +104,27 @@ class RecompileListener extends AbstractContentVersionListener
     {
         $contentConfig = $event->getRequest()->attributes->get('_content_config');
 
-        $this->flashNotifier->addTrans('error', "admin_{$contentConfig['_id']}.version_recompile.failed_flash", ['%exception%' => $event->getException()->getMessage()], 'sfs_cms_contents');
+        /** @var ContentVersionInterface $version */
+        $version = $event->getEntity();
+
+        $this->flashNotifier->addTrans('error', "admin_{$contentConfig['_id']}.version_recompile.failed_flash", ['%exception%' => $this->extractExceptionMessage($event->getException())], 'sfs_cms_contents');
 
         $content = $event->getRequest()->attributes->get('content');
 
-        $event->setResponse($this->redirectBack($contentConfig['_id'], $content, $event->getRequest()));
+        $event->setResponse($this->redirectBack($contentConfig['_id'], $content, $event->getRequest(), $version));
     }
 
     public function onException(FailureEvent $event): void
     {
         $contentConfig = $event->getRequest()->attributes->get('_content_config');
 
-        $this->flashNotifier->addTrans('error', "admin_{$contentConfig['_id']}.version_recompile.failed_flash", ['%exception%' => $event->getException()->getMessage()], 'sfs_cms_contents');
+        /** @var ContentVersionInterface $version */
+        $version = $event->getEntity();
+
+        $this->flashNotifier->addTrans('error', "admin_{$contentConfig['_id']}.version_recompile.failed_flash", ['%exception%' => $this->extractExceptionMessage($event->getException())], 'sfs_cms_contents');
 
         $content = $event->getRequest()->attributes->get('content');
 
-        $event->setResponse($this->redirectBack($contentConfig['_id'], $content, $event->getRequest()));
+        $event->setResponse($this->redirectBack($contentConfig['_id'], $content, $event->getRequest(), $version));
     }
 }

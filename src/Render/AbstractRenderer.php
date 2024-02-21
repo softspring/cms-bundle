@@ -3,18 +3,23 @@
 namespace Softspring\CmsBundle\Render;
 
 use Softspring\CmsBundle\Model\SiteInterface;
+use Softspring\CmsBundle\Render\Exception\RenderException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface;
 
 abstract class AbstractRenderer
 {
     public function __construct(
-        protected RequestStack $requestStack,
-        protected ?EntrypointLookupInterface $entrypointLookup
-    ) {
+        protected RequestStack               $requestStack,
+        protected ?EntrypointLookupInterface $entrypointLookup,
+        protected RouterInterface            $router,
+    )
+    {
     }
 
     protected function isPreview(): bool
@@ -22,6 +27,9 @@ abstract class AbstractRenderer
         return $this->requestStack->getCurrentRequest()?->attributes->has('_cms_preview') ?: false;
     }
 
+    /**
+     * @throws RenderException
+     */
     protected function encapsulateEsiCapableRender(callable $renderFunction)
     {
         $currentRequest = $this->requestStack->getCurrentRequest();
@@ -32,19 +40,43 @@ abstract class AbstractRenderer
 
         $currentRequest->headers->set('Surrogate-Capability', 'ESI/1.0');
 
-        $result = $renderFunction($currentRequest);
+        $result = $this->encapsulateRequestRender($currentRequest, $renderFunction);
 
         isset($originalSurrogateCapability) ? $currentRequest->headers->set('Surrogate-Capability', $originalSurrogateCapability) : $currentRequest->headers->remove('Surrogate-Capability');
 
         return $result;
     }
 
+    /**
+     * @throws RenderException
+     */
     protected function encapsulateRequestRender(Request $request, callable $renderFunction)
     {
         $this->entrypointLookup && $this->entrypointLookup->reset();
         $this->requestStack->push($request);
-        $result = $renderFunction($request);
-        $this->requestStack->pop();
+
+        if ($request->attributes->has('_sfs_cms_site')) {
+            $prevRequestContext = $this->router->getContext();
+            $newRequestContext = new RequestContext();
+            $site = $request->attributes->get('_sfs_cms_site');
+            $newRequestContext->setHost($site->getCanonicalHost());
+            $newRequestContext->setScheme($site->getCanonicalScheme());
+            $newRequestContext->setBaseUrl('');
+            $this->router->setContext($newRequestContext);
+            $request->attributes->set('_locale', $request->getLocale());
+        }
+
+        try {
+            $result = $renderFunction($request);
+        } catch (\Exception $e) {
+            if ($e instanceof RenderException) {
+                throw $e;
+            }
+            throw new RenderException('Error rendering request', 0, $e);
+        } finally {
+            isset($prevRequestContext) && $this->router->setContext($prevRequestContext);
+            $this->requestStack->pop();
+        }
 
         return $result;
     }

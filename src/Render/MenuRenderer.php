@@ -3,9 +3,12 @@
 namespace Softspring\CmsBundle\Render;
 
 use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Config\Exception\InvalidMenuException;
+use Softspring\CmsBundle\Render\Exception\RenderException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\HttpCache\Esi;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface;
 use Twig\Environment;
 
@@ -20,15 +23,20 @@ class MenuRenderer extends AbstractRenderer
         RequestStack $requestStack,
         protected CmsConfig $cmsConfig,
         protected Environment $twig,
+        RouterInterface $router,
         ?EntrypointLookupInterface $entrypointLookup,
         ?Profiler $profiler,
         ?Esi $esi
     ) {
-        parent::__construct($requestStack, $entrypointLookup);
+        parent::__construct($requestStack, $entrypointLookup, $router);
         $this->profilerEnabled = (bool) $profiler;
         $this->esiEnabled = (bool) $esi;
     }
 
+    /**
+     * @throws RenderException
+     * @throws InvalidMenuException
+     */
     public function renderMenuByType(string $type): string
     {
         $menuConfig = $this->cmsConfig->getMenu($type);

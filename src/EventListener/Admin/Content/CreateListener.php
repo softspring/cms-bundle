@@ -118,6 +118,6 @@ class CreateListener extends AbstractContentListener
         $exception = $event->getException();
         $contentConfig = $request->attributes->get('_content_config');
 
-        $event->getForm()->addError(new FormError($exception->getMessage()));
+        $event->getForm()->addError(new FormError($this->extractExceptionMessage($exception)));
     }
 }

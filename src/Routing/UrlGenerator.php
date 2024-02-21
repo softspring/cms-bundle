@@ -198,6 +198,7 @@ class UrlGenerator
             $site = $route->getSites()->first();
         }
 
+        // todo, could we use SiteInterface::getCanonicalHost() and SiteInterface::getCanonicalScheme()?
         foreach ($site->getConfig()['hosts'] as $hostConfig) {
             if ($hostConfig['canonical'] && (!$hostConfig['locale'] || $hostConfig['locale'] === $locale)) {
                 $scheme = $hostConfig['scheme'] ?: $this->requestStack->getCurrentRequest()->getScheme();

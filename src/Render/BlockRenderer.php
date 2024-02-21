@@ -3,7 +3,9 @@
 namespace Softspring\CmsBundle\Render;
 
 use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Config\Exception\InvalidBlockException;
 use Softspring\CmsBundle\Model\BlockInterface;
+use Softspring\CmsBundle\Render\Exception\RenderException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\HttpCache\Esi;
@@ -27,7 +29,7 @@ class BlockRenderer extends AbstractRenderer
         ?Profiler $profiler,
         ?Esi $esi
     ) {
-        parent::__construct($requestStack, $entrypointLookup);
+        parent::__construct($requestStack, $entrypointLookup, $router);
         $this->profilerEnabled = (bool) $profiler;
         $this->esiEnabled = (bool) $esi;
     }
@@ -45,7 +47,11 @@ class BlockRenderer extends AbstractRenderer
         return implode(',', $params);
     }
 
-    public function renderBlockByType(string $type, array $params = [], ?string $locale = null): string
+    /**
+     * @throws RenderException
+     * @throws InvalidBlockException
+     */
+    public function renderBlockByType(string $type, array $params = [], ?string $locale = null, mixed $site = null): string
     {
         $blockConfig = $this->cmsConfig->getBlock($type);
 
@@ -60,7 +66,8 @@ class BlockRenderer extends AbstractRenderer
             $renderFunction = 'render';
         }
 
-        $locale && $params['_locale'] = $locale;
+        $params['_locale'] = $locale ?? $this->requestStack->getCurrentRequest()?->getLocale();
+        $site && $params['_site'] = $site;
         if (!empty($blockConfig['render_url'])) {
             $params_string = $this->paramsAsString($params);
             $twigCode = "{{ $renderFunction(url('{$blockConfig['render_url']}', {{$params_string}})) }}";

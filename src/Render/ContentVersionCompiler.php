@@ -50,11 +50,19 @@ class ContentVersionCompiler
 
                 $compileKey = $this->getCompileKeyFromRequest($contentVersion, $request);
 
-                $compiledModules[$compileKey] = $this->compileModulesRequest($contentVersion, $request);
-                $this->canSaveCompiledModules($contentVersion) && $contentVersion->setCompiledModules($compiledModules);
+                try {
+                    $compiledModules[$compileKey] = $this->compileModulesRequest($contentVersion, $request);
+                    $this->canSaveCompiledModules($contentVersion) && $contentVersion->setCompiledModules($compiledModules);
 
-                $compiled[$compileKey] = $this->compileRequest($contentVersion, $request, $compiledModules[$compileKey]);
-                $this->canSaveCompiled($contentVersion) && $contentVersion->setCompiled($compiled);
+                    $compiled[$compileKey] = $this->compileRequest($contentVersion, $request, $compiledModules[$compileKey]);
+                    $this->canSaveCompiled($contentVersion) && $contentVersion->setCompiled($compiled);
+                } catch (\Exception $exception) {
+                    if ($exception instanceof CompileException) {
+                        throw new CompileException(sprintf('Error compiling content version for %s in %s', $site, $locale), 0, $exception->getPrevious());
+                    }
+
+                    throw new CompileException(sprintf('Error compiling content version for %s in %s', $site, $locale), 0, $exception);
+                }
             }
         }
 
@@ -77,7 +85,7 @@ class ContentVersionCompiler
                 'exception' => $exception,
             ]);
 
-            throw new CompileException($exception->getMessage(), $exception->getCode(), $exception);
+            throw new CompileException('Error compiling content version request', 0, $exception);
         }
     }
 
@@ -97,7 +105,7 @@ class ContentVersionCompiler
                 'exception' => $exception,
             ]);
 
-            throw new CompileException($exception->getMessage(), $exception->getCode(), $exception);
+            throw new CompileException('Error compiling content version modules', 0, $exception);
         }
     }
 

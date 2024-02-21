@@ -9,14 +9,14 @@ use Softspring\CmsBundle\Config\Exception\InvalidLayoutException;
 use Softspring\CmsBundle\Config\Exception\InvalidModuleException;
 use Softspring\CmsBundle\Config\Exception\InvalidSiteException;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
+use Softspring\CmsBundle\Render\Exception\ModuleRenderException;
+use Softspring\CmsBundle\Render\Exception\RenderException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface;
 use Twig\Environment;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
 
 class ContentVersionRenderer extends AbstractRenderer
 {
@@ -29,53 +29,49 @@ class ContentVersionRenderer extends AbstractRenderer
         protected CmsConfig $cmsConfig,
         protected RequestStack $requestStack,
         protected ModuleRenderer $moduleRenderer,
+        RouterInterface $router,
         protected ?LoggerInterface $cmsLogger,
         ?Profiler $profiler,
         protected ?EntrypointLookupInterface $entrypointLookup,
     ) {
-        parent::__construct($requestStack, $this->entrypointLookup);
+        parent::__construct($requestStack, $this->entrypointLookup, $router);
         $this->profilerEnabled = (bool) $profiler;
     }
 
     /**
-     * @throws DisabledModuleException
-     * @throws InvalidLayoutException
-     * @throws InvalidModuleException
-     * @throws InvalidSiteException
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
+     * @throws RenderException
      */
     public function render(ContentVersionInterface $version, Request $request, ?RenderErrorList $renderErrorList = null, ?array $compiledModules = null): string
     {
         return $this->encapsulateRequestRender($request, function () use ($version, $renderErrorList, $compiledModules): string {
-            $this->cmsLogger && $this->cmsLogger->debug(sprintf('Rendering %s content version', $version->getContent()->getName()));
+            try {
+                $this->cmsLogger && $this->cmsLogger->debug(sprintf('Rendering %s content version', $version->getContent()->getName()));
 
-            // preload all medias
-            $version->getMedias();
-            // preload all routes
-            $version->getRoutes();
+                // preload all medias
+                $version->getMedias();
+                // preload all routes
+                $version->getRoutes();
 
-            $layout = $this->cmsConfig->getLayout($version->getLayout());
+                $layout = $this->cmsConfig->getLayout($version->getLayout());
 
-            $request = $this->requestStack->getCurrentRequest();
-            $request->attributes->set('_route', $version->getContent()->getRoutes()->first()?->getId());
+                $request = $this->requestStack->getCurrentRequest();
+                $request->attributes->set('_route', $version->getContent()->getRoutes()->first()?->getId());
 
-            $containers = $compiledModules ?? $this->renderModules($version, $request, $renderErrorList);
+                $containers = $compiledModules ?? $this->renderModules($version, $request, $renderErrorList);
 
-            return $this->twig->render($layout['render_template'], [
-                'containers' => $containers,
-                'version' => $version,
-                'content' => $version->getContent(),
-            ]);
+                return $this->twig->render($layout['render_template'], [
+                    'containers' => $containers,
+                    'version' => $version,
+                    'content' => $version->getContent(),
+                ]);
+            } catch (\Exception $e) {
+                throw new RenderException(sprintf('Error rendering content version v%s', $version->getVersionNumber()), 0, $e);
+            }
         });
     }
 
     /**
-     * @throws DisabledModuleException
-     * @throws InvalidModuleException
-     * @throws InvalidSiteException
-     * @throws InvalidLayoutException
+     * @throws RenderException
      */
     public function renderModules(ContentVersionInterface $version, Request $request, ?RenderErrorList $renderErrorList = null): array
     {
@@ -110,9 +106,9 @@ class ContentVersionRenderer extends AbstractRenderer
     }
 
     /**
-     * @throws InvalidSiteException
      * @throws DisabledModuleException
      * @throws InvalidModuleException
+     * @throws ModuleRenderException
      *
      * @deprecated this is not used anymore, will be removed in next major version
      */
