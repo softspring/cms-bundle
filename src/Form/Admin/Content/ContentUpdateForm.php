@@ -52,7 +52,7 @@ class ContentUpdateForm extends AbstractType implements ContentUpdateFormInterfa
                 'expanded' => true,
                 'multiple' => true,
                 'choice_translation_domain' => false,
-                'choices' => array_combine(array_map(fn ($lang) => Locales::getName($lang), $options['locales']), $options['locales']),
+                'choices' => array_combine(array_map(fn ($lang) => Locales::getName($lang), $addLocales), $addLocales),
                 'mapped' => false,
             ]);
         }
