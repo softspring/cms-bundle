@@ -53,6 +53,7 @@ class Site implements SiteInterface
             }
         }
 
-        return null;
+        // return first host as default
+        return $this->getConfig()['hosts'][0]['scheme'] ?? null;
     }
 }
