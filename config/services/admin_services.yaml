@@ -22,3 +22,6 @@ services:
         arguments:
             $adminRoutingProviders: !tagged_iterator { tag: sfs_cms.admin_routing_provider }
         tags: [ 'routing.loader' ]
+
+    Softspring\CmsBundle\EventListener\Admin\Media\:
+        resource: '../../src/EventListener/Admin/Media/*'

@@ -6,7 +6,9 @@
     {% block content %}
         <ul>
             {% for media in version_entity.medias %}
-                <li>{{ media.name }}</li>
+                <li>
+                    <a href="{{ url('sfs_media_admin_medias_read', {'media': media}) }}">{{ media.name }}</a>
+                </li>
             {% endfor %}
         </ul>
     {% endblock content %}
