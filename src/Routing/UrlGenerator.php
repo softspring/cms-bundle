@@ -198,13 +198,15 @@ class UrlGenerator
             $site = $route->getSites()->first();
         }
 
-        // todo, could we use SiteInterface::getCanonicalHost() and SiteInterface::getCanonicalScheme()?
-        foreach ($site->getConfig()['hosts'] as $hostConfig) {
-            if ($hostConfig['canonical'] && (!$hostConfig['locale'] || $hostConfig['locale'] === $locale)) {
-                $scheme = $hostConfig['scheme'] ?: $this->requestStack->getCurrentRequest()->getScheme();
-                $host = $hostConfig['domain'];
+        if ($site instanceof SiteInterface) {
+            // todo, could we use SiteInterface::getCanonicalHost() and SiteInterface::getCanonicalScheme()?
+            foreach ($site->getConfig()['hosts'] as $hostConfig) {
+                if ($hostConfig['canonical'] && (!$hostConfig['locale'] || $hostConfig['locale'] === $locale)) {
+                    $scheme = $hostConfig['scheme'] ?: $this->requestStack->getCurrentRequest()->getScheme();
+                    $host = $hostConfig['domain'];
 
-                return "$scheme://$host";
+                    return "$scheme://$host";
+                }
             }
         }
 
@@ -224,9 +226,11 @@ class UrlGenerator
             throw new \Exception('Not yet implemented');
         }
 
-        foreach ($site->getConfig()['paths'] as $pathConfig) {
-            if (!empty($pathConfig['locale']) && $pathConfig['locale'] === $locale) {
-                return '/'.trim($pathConfig['path'], '/');
+        if ($site instanceof SiteInterface) {
+            foreach ($site->getConfig()['paths'] as $pathConfig) {
+                if (!empty($pathConfig['locale']) && $pathConfig['locale'] === $locale) {
+                    return '/'.trim($pathConfig['path'], '/');
+                }
             }
         }
 

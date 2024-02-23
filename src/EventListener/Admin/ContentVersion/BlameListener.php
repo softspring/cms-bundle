@@ -39,6 +39,9 @@ class BlameListener implements EventSubscriberInterface
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_SEO_APPLY => [
                 ['onCreateVersion', 6],
             ],
+            SfsCmsEvents::ADMIN_CONTENTS_DUPLICATE_APPLY => [
+                ['onDuplicateVersion', 6],
+            ],
         ];
     }
 
@@ -52,6 +55,19 @@ class BlameListener implements EventSubscriberInterface
         $version = $event->getEntity();
         $version->setMetaField('creator', $this->getUser());
         $this->addHistory($version, 'create');
+    }
+
+    public function onDuplicateVersion(ApplyEvent $event): void
+    {
+        if (!$this->canBlame()) {
+            return;
+        }
+
+        /** @var ContentInterface $content */
+        $content = $event->getEntity();
+        $version = $content->getVersions()->first();
+        $version->setMetaField('creator', $this->getUser());
+        $this->addHistory($version, 'duplicate');
     }
 
     public function onLockVersion(ApplyEvent $event): void

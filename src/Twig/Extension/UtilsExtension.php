@@ -16,7 +16,6 @@ class UtilsExtension extends AbstractExtension
 
     public function getFunctions(): array
     {
-
         return [
             new TwigFunction('sfs_cms_search_content_esi_calls', [$this, 'searchContentEsiCalls']),
             new TwigFunction('sfs_cms_check_content_locales_and_routes', [$this, 'checkContentLocalesAndRoutes']),

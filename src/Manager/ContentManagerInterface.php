@@ -24,6 +24,8 @@ interface ContentManagerInterface extends CrudlEntityManagerInterface
      */
     public function deleteEntity(object $entity): void;
 
+    public function duplicateEntity(ContentInterface $content): ContentInterface;
+
     public function createVersion(ContentInterface $content, ?ContentVersionInterface $prevVersion = null, ?int $origin = ContentVersionInterface::ORIGIN_UNKNOWN): ContentVersionInterface;
 
     public function getRepository(?string $type = null): EntityRepository;
