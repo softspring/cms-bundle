@@ -6,6 +6,13 @@ class HtmlValidator
 {
     public static function validateModule(string $html): array
     {
+        if (empty(trim($html))) {
+            return [
+                'status' => 'success',
+                'messages' => [],
+            ];
+        }
+
         libxml_use_internal_errors(true);
         $doc = new \DOMDocument();
         $doc->loadHTML($html);
