@@ -128,6 +128,12 @@ seo_version:
     defaults:
         configKey: 'version_seo'
 
+delete_version:
+    controller: sfs_cms.admin.content_version.controller::delete
+    path: /{content}/{version}/delete
+    defaults:
+        configKey: 'version_delete'
+
 _plugin_routes:
     resource: '.'
     type: sfs_cms_plugin_admin_content_type

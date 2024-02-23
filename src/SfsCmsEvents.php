@@ -283,4 +283,18 @@ class SfsCmsEvents
     public const ADMIN_CONTENT_VERSIONS_SEO_FORM_INVALID = 'sfs_cms.admin.content_versions.seo_form_invalid';
     public const ADMIN_CONTENT_VERSIONS_SEO_VIEW = 'sfs_cms.admin.content_versions.seo_view';
     public const ADMIN_CONTENT_VERSIONS_SEO_EXCEPTION = 'sfs_cms.admin.content_versions.seo_exception';
+    // CONTENT VERSION DELETE EVENTS, ALL OF THEM ARE INTERNAL
+    public const ADMIN_CONTENT_VERSIONS_DELETE_INITIALIZE = 'sfs_cms.admin.content_versions.delete_initialize';
+    public const ADMIN_CONTENT_VERSIONS_DELETE_LOAD_ENTITY = 'sfs_cms.admin.content_versions.delete_load_entity';
+    public const ADMIN_CONTENT_VERSIONS_DELETE_NOT_FOUND = 'sfs_cms.admin.content_versions.delete_not_found';
+    public const ADMIN_CONTENT_VERSIONS_DELETE_FOUND = 'sfs_cms.admin.content_versions.delete_found';
+    public const ADMIN_CONTENT_VERSIONS_DELETE_FORM_PREPARE = 'sfs_cms.admin.content_versions.delete_form_prepare';
+    public const ADMIN_CONTENT_VERSIONS_DELETE_FORM_INIT = 'sfs_cms.admin.content_versions.delete_form_init';
+    public const ADMIN_CONTENT_VERSIONS_DELETE_FORM_VALID = 'sfs_cms.admin.content_versions.delete_form_valid';
+    public const ADMIN_CONTENT_VERSIONS_DELETE_APPLY = 'sfs_cms.admin.content_versions.delete_apply';
+    public const ADMIN_CONTENT_VERSIONS_DELETE_SUCCESS = 'sfs_cms.admin.content_versions.delete_success';
+    public const ADMIN_CONTENT_VERSIONS_DELETE_FAILURE = 'sfs_cms.admin.content_versions.delete_failure';
+    public const ADMIN_CONTENT_VERSIONS_DELETE_FORM_INVALID = 'sfs_cms.admin.content_versions.delete_form_invalid';
+    public const ADMIN_CONTENT_VERSIONS_DELETE_VIEW = 'sfs_cms.admin.content_versions.delete_view';
+    public const ADMIN_CONTENT_VERSIONS_DELETE_EXCEPTION = 'sfs_cms.admin.content_versions.delete_exception';
 }

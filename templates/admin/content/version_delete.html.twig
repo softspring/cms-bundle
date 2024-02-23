@@ -1,0 +1,48 @@
+{% trans_default_domain 'sfs_cms_contents' %}
+
+{% extends '@SfsCms/admin_layout.html.twig' %}
+
+{% block title %}{{ ('admin_'~content_type~'.version_delete.meta.title')|trans({'%name%':entity.name, '%versionNumber%': version_entity.versionNumber}) }}{% endblock %}
+
+{% block breadcrums_content %}
+    {{ parent() }}
+    <li class="breadcrumb-item"><a
+            href="{{ url('sfs_cms_admin_content_'~content_type~'_list') }}">{{ ('admin_'~content_type~'.list.breadcrumb')|trans }}</a>
+    </li>
+    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content_type~'_details', {'content':entity}) }}">{{ ('admin_'~content_type~'.read.breadcrumb')|trans({'%name%': entity.name}) }}</a></li>
+    <li class="breadcrumb-item"><a
+            href="{{ url('sfs_cms_admin_content_'~content_type~'_versions', {'content':entity}) }}">{{ ('admin_'~content_type~'.versions.breadcrumb')|trans({'%name%':entity.name}) }}</a>
+    </li>
+    <li class="breadcrumb-item active"
+        aria-current="content">{{ ('admin_'~content_type~'.version_delete.breadcrumb')|trans({'%name%':entity.name, '%versionNumber%': version_entity.versionNumber}) }}</li>
+{% endblock breadcrums_content %}
+
+{% block content %}
+    <h1 class="h3">{{ ('admin_'~content_type~'.version_delete.title')|trans({'%name%':entity.name, '%versionNumber%': version_entity.versionNumber}) }}</h1>
+
+    {% include ['@content/'~content_type~'/admin/_content_tabs.html.twig', '@SfsCms/admin/content/_content_tabs.html.twig']  with {'current':'versions', 'entity':entity} %}
+
+    {{ form_start(form) }}
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="edit" role="tabpanel" aria-labelledby="edit-tab">
+            <div class="container-fluid bg-white p-3">
+                {{ ('admin_'~content_type~'.version_delete.main_warnings_raw')|trans({'%versionNumber%': version_entity.versionNumber})|raw }}
+
+                <p>{{ ('admin_'~content_type~'.version_delete.offer_backup')|trans }}</p>
+
+                <div class="mb-4">
+                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_export_version', {'content':content_entity, 'version':version_entity}) }}" class="btn btn-primary">
+                        {{ ('admin_'~content_type~'.version_delete.actions.export.button')|trans }}</a>
+                </div>
+
+                {{ form_rest(form) }}
+
+                <div class="d-flex justify-content-end align-items-center">
+                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_version_info', {'content':content_entity, 'version':version_entity}) }}" class="btn btn-outline-secondary">{{ ('admin_'~content_type~'.version_delete.actions.cancel.button')|trans }}</a>
+                    <input type="submit" value="{{ ('admin_'~content_type~'.version_delete.actions.delete.button')|trans }}" class="btn btn-danger ms-3" />
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock content %}

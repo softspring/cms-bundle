@@ -131,6 +131,7 @@ admin_page:
             nokeep.link: "No mantener esta versión, pinchar para mantener"
             info.link: "Info"
             add_note.link: "Añadir nota"
+            delete.link: "Eliminar versión"
 
     preview:
         meta.title: "Previsualizar página"
@@ -272,7 +273,7 @@ admin_page:
                     monthly: "mensualmente"
                     yearly: "anualmente"
                     never: "nunca"
-                sitemapPriority.label: "Prioridad de URL en el sitemap"
+            sitemapPriority.label: "Prioridad de URL en el sitemap"
         seo:
             metaTitle.label: "Título (título del navegador y etiquetas meta)"
             metaDescription.label: "Descripción (etiqueta meta)"
@@ -343,3 +344,15 @@ admin_page:
     version_recompile:
         success_flash: "La versión se ha recompilado"
         failed_flash: "Se ha producido un error al recompilar la versión.<br/><small>%exception%</small>"
+
+    version_delete:
+        meta.title: "Eliminar versión"
+        title: "%name% (v%versionNumber%)"
+        breadcrumb: "Eliminar versión"
+        main_warnings_raw: '<p>¿Estás seguro de eliminar esta versión v%versionNumber%?</p><p>Esta acción no se podrá deshacer.</p>'
+        offer_backup: 'Si quieres puedes hacer un backup de la versión antes de eliminarla'
+        actions:
+            export.button: "Exportar"
+            delete.button: "Eliminar definitivamente"
+            cancel.button: "Cancelar"
+        success_flash: "La versión se ha eliminado"

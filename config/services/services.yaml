@@ -119,6 +119,9 @@ services:
         tags:
             - { name: doctrine.event_listener, event: loadClassMetadata, priority: 500 }
 
+    Softspring\CmsBundle\Security\Voter\ContentVersionDeleteVoter:
+        tags: ['security.voter']
+
     Softspring\CmsBundle\Security\Voter\DeprecatedPermissionVoter:
         tags:
             - { name: security.voter, priority: 1000 }
