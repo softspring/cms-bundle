@@ -15,6 +15,8 @@ interface ContentVersionManagerInterface extends CrudlEntityManagerInterface
      */
     public function createEntity(): object;
 
+    public function duplicateEntity(ContentVersionInterface $contentVersion, ?ContentInterface $content = null, ?string $originDescription = null): ContentVersionInterface;
+
     /**
      * @psalm-param ContentVersionInterface $entity
      */

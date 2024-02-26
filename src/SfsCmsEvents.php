@@ -130,6 +130,20 @@ class SfsCmsEvents
     public const ADMIN_CONTENTS_UPDATE_FORM_INVALID = 'sfs_cms.admin.contents.update_form_invalid';
     public const ADMIN_CONTENTS_UPDATE_VIEW = 'sfs_cms.admin.contents.update_view';
     public const ADMIN_CONTENTS_UPDATE_EXCEPTION = 'sfs_cms.admin.contents.update_exception';
+    // CONTENT DUPLICATE EVENTS, ALL OF THEM ARE INTERNAL
+    public const ADMIN_CONTENTS_DUPLICATE_INITIALIZE = 'sfs_cms.admin.contents.duplicate_initialize';
+    public const ADMIN_CONTENTS_DUPLICATE_LOAD_ENTITY = 'sfs_cms.admin.contents.duplicate_load_entity';
+    public const ADMIN_CONTENTS_DUPLICATE_NOT_FOUND = 'sfs_cms.admin.contents.duplicate_not_found';
+    public const ADMIN_CONTENTS_DUPLICATE_FOUND = 'sfs_cms.admin.contents.duplicate_found';
+    public const ADMIN_CONTENTS_DUPLICATE_FORM_PREPARE = 'sfs_cms.admin.contents.duplicate_form_prepare';
+    public const ADMIN_CONTENTS_DUPLICATE_FORM_INIT = 'sfs_cms.admin.contents.duplicate_form_init';
+    public const ADMIN_CONTENTS_DUPLICATE_FORM_VALID = 'sfs_cms.admin.contents.duplicate_form_valid';
+    public const ADMIN_CONTENTS_DUPLICATE_APPLY = 'sfs_cms.admin.contents.duplicate_apply';
+    public const ADMIN_CONTENTS_DUPLICATE_SUCCESS = 'sfs_cms.admin.contents.duplicate_success';
+    public const ADMIN_CONTENTS_DUPLICATE_FAILURE = 'sfs_cms.admin.contents.duplicate_failure';
+    public const ADMIN_CONTENTS_DUPLICATE_FORM_INVALID = 'sfs_cms.admin.contents.duplicate_form_invalid';
+    public const ADMIN_CONTENTS_DUPLICATE_VIEW = 'sfs_cms.admin.contents.duplicate_view';
+    public const ADMIN_CONTENTS_DUPLICATE_EXCEPTION = 'sfs_cms.admin.contents.duplicate_exception';
     // CONTENT ROUTES EVENTS, ALL OF THEM ARE INTERNAL
     public const ADMIN_CONTENTS_ROUTES_INITIALIZE = 'sfs_cms.admin.contents.routes_initialize';
     public const ADMIN_CONTENTS_ROUTES_LOAD_ENTITY = 'sfs_cms.admin.contents.routes_load_entity';

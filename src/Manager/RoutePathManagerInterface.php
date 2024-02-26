@@ -12,6 +12,8 @@ interface RoutePathManagerInterface extends CrudlEntityManagerInterface
      */
     public function createEntity(): object;
 
+    public function duplicateEntity(RoutePathInterface $path, string $suffix = ''): RoutePathInterface;
+
     /**
      * @psalm-param RoutePathInterface $entity
      */

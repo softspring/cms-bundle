@@ -19,6 +19,8 @@ class ContentManager implements ContentManagerInterface
         protected EntityManagerInterface $em,
         protected ContentVersionManagerInterface $contentVersionManager,
         protected CmsHelper $cmsHelper,
+        protected RouteManagerInterface $routeManager,
+        protected iterable $entityDuplicators,
     ) {
     }
 
@@ -28,23 +30,55 @@ class ContentManager implements ContentManagerInterface
     }
 
     /**
-     * @throws \Exception
+     * @throws InvalidContentException
      */
-    public function createEntity(?string $type = null): object
+    public function duplicateEntity(ContentInterface $content): ContentInterface
+    {
+        $newContent = $this->createEntity($this->getType($content), false);
+        $newContent->setName($content->getName().' (copy)');
+        $newContent->setExtraData($content->getExtraData());
+        $newContent->setIndexing($content->getIndexing());
+        $newContent->setDefaultLocale($content->getDefaultLocale());
+        $newContent->setLocales($content->getLocales());
+        foreach ($content->getSites() as $site) {
+            $newContent->addSite($site);
+        }
+        foreach ($content->getRoutes() as $route) {
+            $newContent->addRoute($this->routeManager->duplicateEntity($route, $newContent, 'copy'));
+        }
+
+        foreach ($this->entityDuplicators as $duplicator) {
+            if ($duplicator->supports($content)) {
+                $duplicator->duplicateData($content, $newContent);
+            }
+        }
+
+        return $newContent;
+    }
+
+    /**
+     * @throws InvalidContentException
+     */
+    public function createEntity(?string $type = null, bool $addEmptyVersion = true): object
     {
         $class = $this->getTypeClass($type);
 
         /** @var ContentInterface $content */
         $content = new $class();
-        $content->addVersion($version = $this->contentVersionManager->createEntity());
-        $content->setLastVersion($version);
-        $content->setLastVersionNumber(0);
-        $version->setVersionNumber(0);
-        $version->setLayout($this->getTypeDefaultLayout($type));
+        if ($addEmptyVersion) {
+            $content->addVersion($version = $this->contentVersionManager->createEntity());
+            $content->setLastVersion($version);
+            $content->setLastVersionNumber(0);
+            $version->setVersionNumber(0);
+            $version->setLayout($this->getTypeDefaultLayout($type));
+        }
 
         return $content;
     }
 
+    /**
+     * @throws InvalidContentException
+     */
     public function getRepository(?string $type = null): EntityRepository
     {
         /** @var EntityRepository $repo */
@@ -107,7 +141,7 @@ class ContentManager implements ContentManagerInterface
     }
 
     /**
-     * @throws \Exception
+     * @throws InvalidContentException
      */
     protected function getTypeDefaultLayout(?string $type = null): string
     {

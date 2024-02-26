@@ -11,11 +11,13 @@ use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Request\FlashNotifier;
+use Softspring\Component\CrudlController\Event\FailureEvent;
 use Softspring\Component\CrudlController\Event\LoadEntityEvent;
 use Softspring\Component\CrudlController\Event\NotFoundEvent;
 use Softspring\Component\CrudlController\Event\ViewEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -56,6 +58,8 @@ abstract class AbstractContentListener implements EventSubscriberInterface
         $entity = $this->contentManager->getRepository($contentConfig['_id'])->findOneBy(['id' => $contentId]);
         $event->setEntity($entity);
         $event->setNotFound(!$entity);
+
+        $event->getRequest()->attributes->set('content', $entity);
     }
 
     /**
@@ -78,5 +82,10 @@ abstract class AbstractContentListener implements EventSubscriberInterface
         $event->getData()['content_config'] = $contentConfig;
 
         $event->setTemplate($contentConfig['admin'][get_called_class()::ACTION_NAME]['view']);
+    }
+
+    public function onFailureAddFormError(FailureEvent $event): void
+    {
+        $event->getForm()->addError(new FormError($event->getException()->getMessage()));
     }
 }

@@ -1,0 +1,57 @@
+{% trans_default_domain 'sfs_cms_contents' %}
+
+{% extends '@SfsCms/admin_layout.html.twig' %}
+
+{% form_theme form
+    '@SfsCms/forms/cms_theme.html.twig'
+    '@SfsCms/forms/routes_theme.html.twig'
+    '@SfsCms/forms/types_theme.html.twig'
+%}
+
+{% block title %}{{ ('admin_'~content_type~'.duplicate.meta.title')|trans({'%name%':origin_entity.name}) }}{% endblock %}
+
+{% block breadcrums_content %}
+    {{ parent() }}
+    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content_type~'_list') }}">{{ ('admin_'~content_type~'.list.breadcrumb')|trans }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content_type~'_details', {'content':origin_entity}) }}">{{ ('admin_'~content_type~'.read.breadcrumb')|trans({'%name%': origin_entity.name}) }}</a></li>
+    <li class="breadcrumb-item active" aria-current="content">{{ ('admin_'~content_type~'.duplicate.breadcrumb')|trans({'%name%':entity.name}) }}</li>
+{% endblock breadcrums_content %}
+
+{% block content %}
+    <h1 class="h3">{{ ('admin_'~content_type~'.duplicate.title')|trans({'%name%':origin_entity.name}) }}</h1>
+
+{#    {% include ['@content/'~content_type~'/admin/_content_tabs.html.twig', '@SfsCms/admin/content/_content_tabs.html.twig']  with {'current':'duplicate', 'content':content, 'entity':entity} %}#}
+
+    {{ form_start(form) }}
+
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="edit" role="tabpanel" aria-labelledby="edit-tab">
+            <div class="container-fluid bg-white p-3">
+                {% block form_fields %}
+                    {{ form_errors(form) }}
+
+                    <div class="row">
+                        <div class="col">{{ form_row(form.name) }}</div>
+                        <div class="col">{{ form_row(form.sites, {'label_attr': {'class': 'checkbox-inline checkbox-switch'}}) }}</div>
+                        <div class="col">{{ form_row(form.defaultLocale, {'attr': {'data-locale-disables-choice': form.locales.vars.id}}) }}</div>
+                        <div class="col">{{ form_row(form.locales, {'label_attr': {'class': 'checkbox-inline checkbox-switch'}}) }}</div>
+                    </div>
+
+                    {{ form_row(form.duplicateVersion) }}
+
+                    {% if form.extraData is defined %}{{ form_widget(form.extraData) }}{% endif %}
+                    {{ form_row(form.routes) }}
+                    {{ form_row(form.indexing) }}
+
+                    {{ form_rest(form) }}
+                {% endblock form_fields %}
+
+                <div class="d-flex justify-content-end align-items-center">
+                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_details', {'content':origin_entity}) }}" class="btn btn-outline-secondary ms-3">{{ ('admin_'~content_type~'.duplicate.actions.cancel.button')|trans }}</a>
+                    <input type="submit" value="{{ ('admin_'~content_type~'.duplicate.actions.duplicate.button')|trans }}" class="btn btn-primary ms-3" />
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock content %}

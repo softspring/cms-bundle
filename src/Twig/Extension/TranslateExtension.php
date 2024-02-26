@@ -12,17 +12,12 @@ use Twig\TwigFunction;
 
 class TranslateExtension extends AbstractExtension
 {
-    protected RequestStack $requestStack;
-    protected array $enabledLocales;
-    protected UrlGenerator $cmsUrlGenerator;
-    protected UrlGeneratorInterface $symfonyUrlGenerator;
-
-    public function __construct(RequestStack $requestStack, array $enabledLocales, UrlGenerator $cmsUrlGenerator, UrlGeneratorInterface $symfonyUrlGenerator)
-    {
-        $this->requestStack = $requestStack;
-        $this->enabledLocales = $enabledLocales;
-        $this->cmsUrlGenerator = $cmsUrlGenerator;
-        $this->symfonyUrlGenerator = $symfonyUrlGenerator;
+    public function __construct(
+        protected RequestStack $requestStack,
+        protected array $enabledLocales,
+        protected UrlGenerator $cmsUrlGenerator,
+        protected UrlGeneratorInterface $symfonyUrlGenerator
+    ) {
     }
 
     /**
@@ -66,6 +61,9 @@ class TranslateExtension extends AbstractExtension
         return '';
     }
 
+    /**
+     * @deprecated should not be used, locales depends on site
+     */
     public function getAvailableLocales(): array
     {
         return $this->enabledLocales;
@@ -77,6 +75,8 @@ class TranslateExtension extends AbstractExtension
 
         /** @var ?RoutePathInterface $routePath */
         $routePath = $request->attributes->get('routePath');
+
+        $site = $request->attributes->get('_sfs_cms_site');
 
         $alternates = [];
 

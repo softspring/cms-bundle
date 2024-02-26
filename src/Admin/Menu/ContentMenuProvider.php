@@ -33,6 +33,7 @@ class ContentMenuProvider extends AbstractContentMenuProvider
         $menu[] = $this->getMenuItem('update', $currentSelection, $content, $contentType, $contentConfig);
         // $menu[] = new MenuItem('permissions', $this->translator->trans("admin_{$contentType}.tabs_menu.permissions", [], 'sfs_cms_contents'));
         $menu[] = $this->getMenuItem('delete', $currentSelection, $content, $contentType, $contentConfig);
+        $menu[] = $this->getMenuItem('duplicate', $currentSelection, $content, $contentType, $contentConfig);
 
         return $menu;
     }

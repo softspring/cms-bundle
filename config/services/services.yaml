@@ -22,6 +22,7 @@ services:
             $defaultRestrictPatterns: '%sfs_cms.form_type.symfony_route.default_restrict_patterns%'
             $saveCompiled: '%sfs_cms.content.save_compiled%'
             $prefixCompiled: '%sfs_cms.content.prefix_compiled%'
+            $entityDuplicators: !tagged_iterator { tag: sfs_cms.content_entity_duplicator }
 
     Softspring\CmsBundle\Config\CmsConfig:
         arguments:
