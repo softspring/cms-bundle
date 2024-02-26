@@ -31,4 +31,9 @@ class TranslatableContext
     {
         $this->locales = $locales;
     }
+
+    public function setDefaultLocale(string $defaultLocale): void
+    {
+        $this->defaultLocale = $defaultLocale;
+    }
 }
