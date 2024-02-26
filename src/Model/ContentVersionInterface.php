@@ -13,6 +13,7 @@ interface ContentVersionInterface
     public const ORIGIN_IMPORT = 3;
     public const ORIGIN_TRANSLATIONS = 4;
     public const ORIGIN_SEO = 5;
+    public const ORIGIN_DUPLICATE = 6;
 
     public function getId();
 

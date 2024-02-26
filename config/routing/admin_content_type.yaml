@@ -20,6 +20,12 @@ update:
     controller: sfs_cms.admin.content.controller::update
     path: /{content}/update
 
+duplicate:
+    controller: sfs_cms.admin.content.controller::update
+    path: /{content}/duplicate
+    defaults:
+        configKey: 'duplicate'
+
 routes:
     controller: sfs_cms.admin.content.controller::update
     path: /{content}/routes

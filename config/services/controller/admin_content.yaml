@@ -66,6 +66,21 @@ services:
                     form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_UPDATE_FORM_INVALID
                     view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_UPDATE_VIEW
                     exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_UPDATE_EXCEPTION
+                duplicate:
+                    param_converter_key: 'id'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_DUPLICATE_INITIALIZE
+                    load_entity_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_DUPLICATE_LOAD_ENTITY
+                    not_found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_DUPLICATE_NOT_FOUND
+                    found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_DUPLICATE_FOUND
+                    form_prepare_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_DUPLICATE_FORM_PREPARE
+                    form_init_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_DUPLICATE_FORM_INIT
+                    form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_DUPLICATE_FORM_VALID
+                    apply_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_DUPLICATE_APPLY
+                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_DUPLICATE_SUCCESS
+                    failure_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_DUPLICATE_FAILURE
+                    form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_DUPLICATE_FORM_INVALID
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_DUPLICATE_VIEW
+                    exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_DUPLICATE_EXCEPTION
                 routes:
                     param_converter_key: 'id'
                     initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_ROUTES_INITIALIZE

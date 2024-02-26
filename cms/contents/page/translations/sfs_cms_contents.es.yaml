@@ -17,6 +17,7 @@ admin_page:
         delete: "Eliminar"
         routes: "Rutas"
         permissions: "Permisos"
+        duplicate: "Duplicar"
 
     create:
         meta.title: "Nueva página"
@@ -26,7 +27,16 @@ admin_page:
             create.button: "Crear página"
             cancel.button: "Cancelar"
         success_flash: "La página se ha creado"
-    
+
+    duplicate:
+        meta.title: "Duplicar página"
+        title: "Duplicar página (%name%)"
+        breadcrumb: "Duplicar página"
+        actions:
+            duplicate.button: "Crear página"
+            cancel.button: "Cancelar"
+        success_flash: "La página se ha duplicado"
+
     version_publish:
         success_flash: "La versión se ha publicado"
         failed_flash: "Se ha producido un error al publicar la versión<br/><small>%exception%</small>"
@@ -120,6 +130,7 @@ admin_page:
             3: "cargada"
             4: "traducida"
             5: "seo"
+            6: "duplicada"
         actions:
             edit.link: "Editar"
             preview.link: "Previsualizar"
@@ -336,6 +347,7 @@ admin_page:
                 lock: "Versión marcada para mantener por %userName% el %date%"
                 unlock: "Versión marcada para no mantener por %userName% el %date%"
                 recompile: "Versión recompilada por %userName% el %date%"
+                duplicate: "Página duplicada por %userName% el %date%"
                 create: "Creada por %userName% el %date%"
                 seo: "SEO actualizado por %userName% el %date%"
         metadata:

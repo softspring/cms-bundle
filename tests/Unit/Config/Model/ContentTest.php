@@ -7,6 +7,7 @@ use Softspring\CmsBundle\Config\Model\Content;
 use Softspring\CmsBundle\Entity\Page;
 use Softspring\CmsBundle\Form\Admin\Content\ContentCreateForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentDeleteForm;
+use Softspring\CmsBundle\Form\Admin\Content\ContentDuplicateForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentImportForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentListFilterForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentRoutesForm;
@@ -153,6 +154,12 @@ class ContentTest extends TestCase
                     'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_UPDATE',
                     'view' => '@SfsCms/admin/content/update.html.twig',
                     'type' => ContentUpdateForm::class,
+                    'success_redirect_to' => '',
+                ],
+                'duplicate' => [
+                    'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_DUPLICATE',
+                    'view' => '@SfsCms/admin/content/duplicate.html.twig',
+                    'type' => ContentDuplicateForm::class,
                     'success_redirect_to' => '',
                 ],
                 'routes' => [

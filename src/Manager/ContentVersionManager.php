@@ -29,6 +29,20 @@ class ContentVersionManager implements ContentVersionManagerInterface
         return ContentVersionInterface::class;
     }
 
+    public function duplicateEntity(ContentVersionInterface $contentVersion, ?ContentInterface $content = null, ?string $originDescription = null): ContentVersionInterface
+    {
+        /** @var ContentVersionInterface $newContentVersion */
+        $newContentVersion = $this->createEntity();
+        $newContentVersion->setContent($content ?? $contentVersion->getContent());
+        $newContentVersion->setData($contentVersion->getData());
+        $newContentVersion->setSeo($contentVersion->getSeo());
+        $newContentVersion->setOrigin(ContentVersionInterface::ORIGIN_DUPLICATE);
+        $newContentVersion->setOriginDescription($originDescription);
+        $newContentVersion->setLayout($contentVersion->getLayout());
+
+        return $newContentVersion;
+    }
+
     public function getLatestVersions(ContentInterface $content, int $limit = 3): Collection
     {
         return new ArrayCollection($this->getRepository()->createQueryBuilder('cv')

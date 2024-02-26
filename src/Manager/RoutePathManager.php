@@ -21,4 +21,15 @@ class RoutePathManager implements RoutePathManagerInterface
     {
         return RoutePathInterface::class;
     }
+
+    public function duplicateEntity(RoutePathInterface $path, string $suffix = ''): RoutePathInterface
+    {
+        /** @var RoutePathInterface $newPath */
+        $newPath = $this->createEntity();
+        $newPath->setPath($path->getPath().($suffix ? '-'.$suffix : ''));
+        $newPath->setLocale($path->getLocale());
+        $newPath->setCacheTtl($path->getCacheTtl());
+
+        return $newPath;
+    }
 }
