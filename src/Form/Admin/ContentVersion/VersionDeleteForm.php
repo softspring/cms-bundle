@@ -37,6 +37,5 @@ class VersionDeleteForm extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-
     }
 }

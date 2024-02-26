@@ -12,6 +12,7 @@ use Softspring\CmsBundle\Form\Admin\Content\ContentListFilterForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentRoutesForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentUpdateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionCreateForm;
+use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionDeleteForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionImportForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionListFilterForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionSeoForm;
@@ -192,6 +193,12 @@ class ContentTest extends TestCase
                 ],
                 'version_recompile' => [
                     'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_RECOMPILE_VERSION',
+                ],
+                'version_delete' => [
+                    'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_DELETE_VERSION',
+                    'view' => '@SfsCms/admin/content/version_delete.html.twig',
+                    'type' => VersionDeleteForm::class,
+                    'success_redirect_to' => '',
                 ],
             ],
             'allowed_layouts' => [],
