@@ -142,6 +142,7 @@ admin_page:
             nokeep.link: "Do not keep version, click to keep"
             info.link: "Info"
             add_note.link: "Add note"
+            delete.link: "Delete version"
 
     preview:
         meta.title: "Preview page"
@@ -355,3 +356,15 @@ admin_page:
     version_recompile:
         success_flash: "Version has been recompiled"
         failed_flash: "An error has been produced during the version recompilation.<br/><small>%exception%</small>"
+
+    version_delete:
+        meta.title: "Delete version"
+        title: "%name% (v%versionNumber%)"
+        breadcrumb: "Delete version"
+        main_warnings_raw: '<p>Are you sure to delete this v%versionNumber% version?</p><p>This action can not be undone</p>'
+        offer_backup: 'If you want, you can backup this content version before deleting'
+        actions:
+            export.button: Export
+            delete.button: "Delete definitely"
+            cancel.button: "Cancel"
+        success_flash: "Version has been deleted"

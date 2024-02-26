@@ -37,7 +37,7 @@ class DeleteListener extends AbstractContentListener
             ],
             SfsCmsEvents::ADMIN_CONTENTS_DELETE_FORM_PREPARE => [
                 ['onEventDispatchContentTypeEvent', 10],
-                ['onFilterFormPrepareResolve', 0],
+                ['onFormPrepareResolve', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENTS_DELETE_FORM_INIT => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -69,7 +69,7 @@ class DeleteListener extends AbstractContentListener
         ];
     }
 
-    public function onFilterFormPrepareResolve(FormPrepareEvent $event): void
+    public function onFormPrepareResolve(FormPrepareEvent $event): void
     {
         $contentConfig = $event->getRequest()->attributes->get('_content_config');
 

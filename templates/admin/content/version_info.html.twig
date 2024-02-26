@@ -80,7 +80,15 @@
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item text-danger disabled" href="#">Delete</a></li>
+                                <li>
+                                    {% if not content_config.admin.version_delete.is_granted or is_granted(content_config.admin.version_delete.is_granted, version) %}
+                                        <a class="dropdown-item text-danger"
+                                           href="{{ url('sfs_cms_admin_content_'~content_type~'_delete_version', {'content':entity, 'version':version, 'back': 'versions'}) }}">{{ ('admin_'~content_type~'.versions.actions.delete.link')|trans }}
+                                        </a>
+                                    {% else %}
+                                        <a class="dropdown-item text-danger disabled" href="#">{{ ('admin_'~content_type~'.versions.actions.delete.link')|trans }}</a>
+                                    {% endif %}
+                                </li>
                             </ul>
                         </div>
                     {% endblock actions %}

@@ -10,6 +10,7 @@ use Softspring\CmsBundle\Form\Admin\Content\ContentListFilterForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentRoutesForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentUpdateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionCreateForm;
+use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionDeleteForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionImportForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionListFilterForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionSeoForm;
@@ -425,6 +426,17 @@ class Content implements ConfigurationInterface
                                 ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_UNPUBLISH')->end()
                             ->end()
                         ->end()
+
+                        ->arrayNode('version_delete')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_DELETE_VERSION')->end()
+                                ->scalarNode('view')->defaultValue('@SfsCms/admin/content/version_delete.html.twig')->end()
+                                ->scalarNode('type')->defaultValue(VersionDeleteForm::class)->end()
+                                ->scalarNode('success_redirect_to')->defaultValue('')->end()
+                            ->end()
+                        ->end()
+
                     ->end()
                 ->end()
             ->end()
