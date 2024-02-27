@@ -6,6 +6,8 @@ admin_content:
         max_input_vars_raw: "Has alcanzado el número máximo de campos soportados (%maxInputVars%). Por favor, elimina algunos módulos para continuar. <br/>Si es necesario incrementar este límite habla con tu proveedor."
         modules_modal:
             label: "Selecciona el módulo"
+    header_buttons:
+        duplicate: "Duplicar"
 
 admin_blocks:
     list:
