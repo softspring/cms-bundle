@@ -6,8 +6,6 @@ admin_content:
         max_input_vars_raw: "You have reached the max_input_vars (%maxInputVars%). Please remove some fields to continue. <br/>If you need to increase this limit, please contact your provider."
         modules_modal:
             label: "Select module"
-    header_buttons:
-        duplicate: "Duplicate"
 
 admin_blocks:
     list:

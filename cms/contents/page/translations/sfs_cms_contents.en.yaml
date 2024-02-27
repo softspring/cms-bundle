@@ -6,6 +6,8 @@ page:
 
 admin_page:
     entity_not_found_flash: "Page not found"
+    header_buttons:
+        duplicate: "Duplicate"
 
     tabs_menu:
         details: "General"
