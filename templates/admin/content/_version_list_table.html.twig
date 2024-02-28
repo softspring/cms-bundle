@@ -62,7 +62,7 @@
                 {% if not content_config.admin.version_info.is_granted or is_granted(content_config.admin.version_info.is_granted, version) %}
                     <a href="{{ url('sfs_cms_admin_content_'~content_type~'_version_info', {'content':entity, 'version':version}) }}"
                        class="ms-2 text-nowrap">{{ ('admin_'~content_type~'.versions.actions.info.link')|trans }} <span
-                                class="bi bi-eye"></span></a>
+                                class="bi bi-info"></span></a>
                 {% endif %}
 
                 {% if not content_config.admin.version_create.is_granted or is_granted(content_config.admin.version_create.is_granted, version) %}
