@@ -22,13 +22,13 @@
         <div class="alert alert-warning" role="alert">
             {% if content.publishedVersion %}
                 {{ 'admin_content.read.published_cache_alert_raw'|trans({
-                    '%publishedDateTime%': cache_alert.publishedDatetime|date('H:i'),
+                    '%publishedDateTime%': cache_alert.publishedDatetime|date('H:i d-m-Y'),
                     '%maxRouteTtl%': cache_alert.maxRouteTtl,
                     '%waitSeconds%': cache_alert.waitTime,
                 }, 'sfs_cms_admin')|raw }}
             {% else %}
                 {{ 'admin_content.read.unpublished_cache_alert_raw'|trans({
-                    '%publishedDateTime%': cache_alert.publishedDatetime|date('H:i'),
+                    '%publishedDateTime%': cache_alert.publishedDatetime|date('H:i d-m-Y'),
                     '%maxRouteTtl%': cache_alert.maxRouteTtl,
                     '%waitSeconds%': cache_alert.waitTime,
                 }, 'sfs_cms_admin')|raw }}
