@@ -67,5 +67,11 @@ class ContentListFilterForm extends PaginatorForm
                 "{$options['content_config']['_id']}.status.published" => 'not_null',
             ],
         ]);
+
+        $builder->add('publishedVersionContent', TextType::class, [
+            'required' => false,
+            // 'property_path' => '[versions->data__like]',
+            'property_path' => '[publishedVersion.data__like]',
+        ]);
     }
 }
