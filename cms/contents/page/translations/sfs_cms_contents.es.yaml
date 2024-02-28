@@ -235,7 +235,7 @@ admin_page:
             create.link: "Nueva página"
             import.link: "Importar página"
             details.link: "Ver"
-            update.link: "Editar"
+            content.link: "Contenido"
             preview.link: "Previsualizar"
         fields:
             id.header: "Identificador"
