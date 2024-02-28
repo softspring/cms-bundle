@@ -27,7 +27,7 @@ class DefaultValueExtension extends AbstractTypeExtension
         }
 
         // TODO this only works on required fields, on other fields it wont allow them to be empty
-        $builder->addModelTransformer(new CallbackTransformer(function ($value) use ($options, $builder) {
+        $builder->addModelTransformer(new CallbackTransformer(function ($value) use ($options) {
             if (is_countable($value) && !sizeof($value)) {
                 return $options['default_value'];
             }
