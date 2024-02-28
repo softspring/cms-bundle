@@ -247,6 +247,7 @@ admin_page:
             name.label: "Nombre"
             sites.label: "Sitios"
             status.label: "Estado"
+            publishedVersionContent.label: "Contenido publicado (distingue mayúsculas y minúsculas)"
         empty:
             create_first_content_raw: '<a href="%create_link%">Crea</a> o <a href="%import_link%">importa</a> tu primera página!'
             can_not_create_content: "No puedes crear páginas"

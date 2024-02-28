@@ -247,6 +247,7 @@ admin_page:
             name.label: "Name"
             sites.label: "Sites"
             status.label: "Status"
+            publishedVersionContent.label: "Published version content (case sensitive)"
         empty:
             create_first_content_raw: '<a href="%create_link%">Create</a> or <a href="%import_link%">import</a> your first page!'
             can_not_create_content: "You can not create a new page"
