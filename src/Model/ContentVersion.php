@@ -156,27 +156,6 @@ abstract class ContentVersion implements ContentVersionInterface
         $this->setMeta($meta);
     }
 
-    //    /**
-    //     * @throws \Exception
-    //     */
-    //    public function getPublishedAt(): ?\DateTime
-    //    {
-    //        if ($this->getContent()->getPublishedVersion() !== $this) {
-    //            return null;
-    //        }
-    //
-    //        $history = $this->getMetaField('history', []);
-    //        $history = array_reverse($history);
-    //
-    //        foreach ($history as $historyItem) {
-    //            if ($historyItem['action'] === 'publish') {
-    //                return new \DateTime($historyItem['date']['date']);
-    //            }
-    //        }
-    //
-    //        return $this->getCreatedAt();
-    //    }
-
     public function getMetaField(string $field, mixed $default = null): mixed
     {
         return $this->getMeta()[$field] ?? $default;
