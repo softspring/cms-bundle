@@ -11,13 +11,25 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ContentController extends AbstractController
 {
-    public function __construct(protected ContentVersionManagerInterface $contentVersionManager)
+    public function __construct(protected ContentVersionManagerInterface $contentVersionManager, protected bool $contentCacheLastModified)
     {
     }
 
     public function renderRoutePath(RoutePathInterface $routePath, Request $request): Response
     {
         $content = $routePath->getRoute()->getContent();
+
+        $response = new Response();
+
+        if ($this->contentCacheLastModified) {
+            $response->setLastModified($content->getLastModified());
+            // Set response as public. Otherwise it will be private by default.
+            $response->setPublic();
+            if ($response->isNotModified($request)) {
+                return $response;
+            }
+        }
+
         /** @var ?ContentVersionInterface $publishedVersion */
         $publishedVersion = $content->getPublishedVersion();
 
@@ -28,7 +40,7 @@ class ContentController extends AbstractController
         $pageContent = $this->contentVersionManager->getCompiledContent($publishedVersion, $request);
 
         // create response
-        $response = new Response($pageContent);
+        $response->setContent($pageContent);
 
         if ($routePath->getCacheTtl()) {
             $response->setPublic();

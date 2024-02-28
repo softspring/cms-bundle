@@ -97,7 +97,7 @@ abstract class ContentVersion implements ContentVersionInterface
         $this->createdAt = $createdAt ? (int) $createdAt->format('U') : null;
     }
 
-    public function autoSetCreatedAt()
+    public function autoSetCreatedAt(): void
     {
         if (!$this->createdAt) {
             $this->createdAt = time();
@@ -155,6 +155,27 @@ abstract class ContentVersion implements ContentVersionInterface
         $meta[$field] = $value;
         $this->setMeta($meta);
     }
+
+    //    /**
+    //     * @throws \Exception
+    //     */
+    //    public function getPublishedAt(): ?\DateTime
+    //    {
+    //        if ($this->getContent()->getPublishedVersion() !== $this) {
+    //            return null;
+    //        }
+    //
+    //        $history = $this->getMetaField('history', []);
+    //        $history = array_reverse($history);
+    //
+    //        foreach ($history as $historyItem) {
+    //            if ($historyItem['action'] === 'publish') {
+    //                return new \DateTime($historyItem['date']['date']);
+    //            }
+    //        }
+    //
+    //        return $this->getCreatedAt();
+    //    }
 
     public function getMetaField(string $field, mixed $default = null): mixed
     {

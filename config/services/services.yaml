@@ -23,6 +23,7 @@ services:
             $saveCompiled: '%sfs_cms.content.save_compiled%'
             $prefixCompiled: '%sfs_cms.content.prefix_compiled%'
             $entityDuplicators: !tagged_iterator { tag: sfs_cms.content_entity_duplicator }
+            $contentCacheLastModified: '%sfs_cms.content.cache_last_modified%'
 
     Softspring\CmsBundle\Config\CmsConfig:
         arguments:

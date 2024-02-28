@@ -18,6 +18,24 @@
 
     {% include '@SfsCms/admin/content/_content_tabs.html.twig' with {'current':'details', 'content':content, 'entity':entity} %}
 
+    {% if cache_alert is defined %}
+        <div class="alert alert-warning" role="alert">
+            {% if content.publishedVersion %}
+                {{ 'admin_content.read.published_cache_alert_raw'|trans({
+                    '%publishedDateTime%': cache_alert.publishedDatetime|date('H:i'),
+                    '%maxRouteTtl%': cache_alert.maxRouteTtl,
+                    '%waitSeconds%': cache_alert.waitTime,
+                }, 'sfs_cms_admin')|raw }}
+            {% else %}
+                {{ 'admin_content.read.unpublished_cache_alert_raw'|trans({
+                    '%publishedDateTime%': cache_alert.publishedDatetime|date('H:i'),
+                    '%maxRouteTtl%': cache_alert.maxRouteTtl,
+                    '%waitSeconds%': cache_alert.waitTime,
+                }, 'sfs_cms_admin')|raw }}
+            {% endif %}
+        </div>
+    {% endif %}
+
     <div class="container-fluid">
         <div class="row">
             <div class="col">

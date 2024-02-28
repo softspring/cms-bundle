@@ -45,7 +45,7 @@ interface ContentVersionInterface
 
     public function setCreatedAt(?\DateTime $createdAt): void;
 
-    public function autoSetCreatedAt();
+    public function autoSetCreatedAt(): void;
 
     public function getVersionNumber(): ?int;
 
@@ -60,6 +60,8 @@ interface ContentVersionInterface
     public function setMeta(?array $meta): void;
 
     public function setMetaField(string $field, mixed $value): void;
+
+    //    public function getPublishedAt(): ?\DateTime;
 
     public function getMetaField(string $field, mixed $default = null): mixed;
 
