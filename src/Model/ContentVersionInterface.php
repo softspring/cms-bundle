@@ -61,8 +61,6 @@ interface ContentVersionInterface
 
     public function setMetaField(string $field, mixed $value): void;
 
-    //    public function getPublishedAt(): ?\DateTime;
-
     public function getMetaField(string $field, mixed $default = null): mixed;
 
     public function getCompiledModules(): ?array;
