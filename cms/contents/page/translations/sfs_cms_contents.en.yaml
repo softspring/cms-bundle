@@ -259,8 +259,8 @@ admin_page:
         locales.label: "Languages"
         addLocale.label: "Add language"
         sites.label: "Sites"
+        duplicateVersion.label: "Duplicate version"
         routes:
-            0.label: ""
             label: "Routes"
             id.label: "Route id"
             sites.label: "Sites"
