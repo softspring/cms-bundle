@@ -17,7 +17,7 @@
         {% endfor %}
         <li class="nav-item">
             {% if not content_config.admin.duplicate.is_granted or is_granted(content_config.admin.duplicate.is_granted, entity) %}
-                <a class="btn btn-sm btn-primary button" href="{{ url('sfs_cms_admin_content_'~content_type~'_duplicate', {'content':entity}) }}">
+                <a class="btn btn-sm btn-primary button" href="{{ url('sfs_cms_admin_content_'~content_type~'_duplicate', {'content':content_entity}) }}">
                    <span class="bi bi-copy"></span>{{ ('admin_page.tabs_menu.duplicate')|trans }}</a>
             {% else %}
                 <a class="btn btn-sm btn-primary disabled">
