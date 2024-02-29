@@ -50,6 +50,7 @@ class RouteListFilterForm extends PaginatorForm implements RouteListFilterFormIn
                 'required' => false,
                 'property_path' => '[sites.id]',
                 'multiple' => false,
+                'expanded' => false,
             ]);
         }
 
