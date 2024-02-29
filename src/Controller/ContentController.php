@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ContentController extends AbstractController
 {
-    public function __construct(protected ContentVersionManagerInterface $contentVersionManager, protected bool $contentCacheLastModified)
+    public function __construct(protected ContentVersionManagerInterface $contentVersionManager, protected bool $contentCacheLastModifiedEnabled)
     {
     }
 
@@ -21,7 +21,7 @@ class ContentController extends AbstractController
 
         $response = new Response();
 
-        if ($this->contentCacheLastModified) {
+        if ($this->contentCacheLastModifiedEnabled) {
             $response->setLastModified($content->getLastModified());
             // Set response as public. Otherwise it will be private by default.
             $response->setPublic();
@@ -42,7 +42,7 @@ class ContentController extends AbstractController
         // create response
         $response->setContent($pageContent);
 
-        if ($routePath->getCacheTtl()) {
+        if (!$this->contentCacheLastModifiedEnabled && $routePath->getCacheTtl()) {
             $response->setPublic();
             $response->setMaxAge($routePath->getCacheTtl());
         }

@@ -30,7 +30,7 @@ class ReadListener extends AbstractContentListener
         RouterInterface $router,
         FlashNotifier $flashNotifier,
         AuthorizationCheckerInterface $authorizationChecker,
-        protected bool $contentCacheLastModified,
+        protected bool $contentCacheLastModifiedEnabled,
     ) {
         parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
     }
@@ -95,7 +95,7 @@ class ReadListener extends AbstractContentListener
         /** @var ContentInterface $content */
         $content = $event->getData()['content'];
 
-        if ($this->contentCacheLastModified) {
+        if ($this->contentCacheLastModifiedEnabled) {
             // if cache lastModified is enabled, no need to check cache alert
             return;
         }

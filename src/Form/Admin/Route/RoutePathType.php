@@ -13,15 +13,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RoutePathType extends AbstractType
 {
-    protected RoutePathManagerInterface $routePathManager;
-    protected string $defaultLocale;
-    protected array $enabledLocales;
-
-    public function __construct(RoutePathManagerInterface $routePathManager, string $defaultLocale, array $enabledLocales)
-    {
-        $this->routePathManager = $routePathManager;
-        $this->defaultLocale = $defaultLocale;
-        $this->enabledLocales = $enabledLocales;
+    public function __construct(
+        protected RoutePathManagerInterface $routePathManager,
+        protected string $defaultLocale,
+        protected array $enabledLocales,
+        protected bool $contentCacheLastModifiedEnabled,
+    ) {
     }
 
     public function getBlockPrefix(): string
