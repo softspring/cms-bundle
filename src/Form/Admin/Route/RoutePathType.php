@@ -50,7 +50,11 @@ class RoutePathType extends AbstractType
                 'class' => 'sluggize',
             ],
         ]);
-        $builder->add('cacheTtl', IntegerType::class);
+
+        if (!$this->contentCacheLastModifiedEnabled) {
+            $builder->add('cacheTtl', IntegerType::class);
+        }
+
         $builder->add('locale', ChoiceType::class, [
             'required' => sizeof($options['languages']) > 1,
             'choices' => array_combine(array_map(fn ($lang) => Locales::getName($lang), $options['languages']), $options['languages']),
