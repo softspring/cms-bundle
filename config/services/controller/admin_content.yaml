@@ -5,6 +5,7 @@ services:
         public: false
         bind:
             $em: '@sfs_cms.entity_manager'
+            $contentCacheLastModifiedEnabled: '%sfs_cms.content.cache_last_modified_enabled%'
 
     Softspring\CmsBundle\EventListener\Admin\Content\:
         resource: '../../src/EventListener/Admin/Content/*'

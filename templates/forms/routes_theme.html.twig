@@ -63,12 +63,14 @@
 
 {% block route_path_widget %}
     <div class="row {{ not form.parent.vars.valid ? 'show-invalid' }}">
-        <div class="col-sm-2">{{ form_label(form.path) }}</div>
-        <div class="col-sm-2">{{ form_widget(form.path) }}{{ form_errors(form.path) }}</div>
-        <div class="col-sm-2">{{ form_label(form.locale) }}</div>
-        <div class="col-sm-2">{{ form_widget(form.locale) }}{{ form_errors(form.locale) }}</div>
-        <div class="col-sm-2">{{ form_label(form.cacheTtl) }}</div>
-        <div class="col-sm-2">{{ form_widget(form.cacheTtl) }}{{ form_errors(form.cacheTtl) }}</div>
+        <div class="col">{{ form_label(form.path) }}</div>
+        <div class="col">{{ form_widget(form.path) }}{{ form_errors(form.path) }}</div>
+        <div class="col">{{ form_label(form.locale) }}</div>
+        <div class="col">{{ form_widget(form.locale) }}{{ form_errors(form.locale) }}</div>
+        {% if form.cacheTtl is defined %}
+            <div class="col">{{ form_label(form.cacheTtl) }}</div>
+            <div class="col">{{ form_widget(form.cacheTtl) }}{{ form_errors(form.cacheTtl) }}</div>
+        {% endif %}
         {{ form_rest(form) }}
     </div>
 {% endblock route_path_widget %}
@@ -127,6 +129,10 @@
         {{- form_rest(form) -}}
     </div>
 {% endblock route_collection_widget %}
+
+{% block route_label %}
+    {# none #}
+{% endblock %}
 
 {% block route_widget %}
 <div class="row">

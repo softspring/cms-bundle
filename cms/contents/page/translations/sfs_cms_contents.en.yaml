@@ -6,6 +6,8 @@ page:
 
 admin_page:
     entity_not_found_flash: "Page not found"
+    header_buttons:
+        duplicate: "Duplicate"
 
     tabs_menu:
         details: "General"
@@ -233,7 +235,7 @@ admin_page:
             create.link: "New page"
             import.link: "Import page"
             details.link: "View"
-            update.link: "Edit"
+            content.link: "Content"
             preview.link: "Preview"
         fields:
             id.header: "Identifier"
@@ -245,6 +247,7 @@ admin_page:
             name.label: "Name"
             sites.label: "Sites"
             status.label: "Status"
+            publishedVersionContent.label: "Published version content (case sensitive)"
         empty:
             create_first_content_raw: '<a href="%create_link%">Create</a> or <a href="%import_link%">import</a> your first page!'
             can_not_create_content: "You can not create a new page"
@@ -257,8 +260,8 @@ admin_page:
         locales.label: "Languages"
         addLocale.label: "Add language"
         sites.label: "Sites"
+        duplicateVersion.label: "Duplicate version"
         routes:
-            0.label: ""
             label: "Routes"
             id.label: "Route id"
             sites.label: "Sites"

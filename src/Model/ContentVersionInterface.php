@@ -45,7 +45,7 @@ interface ContentVersionInterface
 
     public function setCreatedAt(?\DateTime $createdAt): void;
 
-    public function autoSetCreatedAt();
+    public function autoSetCreatedAt(): void;
 
     public function getVersionNumber(): ?int;
 
