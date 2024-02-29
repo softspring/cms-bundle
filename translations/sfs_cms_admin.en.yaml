@@ -2,6 +2,9 @@ admin:
     global_breadcrumb: "CMS"
 
 admin_content:
+    read:
+        published_cache_alert_raw: "This content was last published at %publishedDateTime%. Some content URLs are cached for %maxRouteTtl% seconds. So you may have to wait %waitSeconds% seconds before the new content is available."
+        unpublished_cache_alert_raw: "This content was last unpublished at %publishedDateTime%. Some content URLs are cached for %maxRouteTtl% seconds. So you may have to wait %waitSeconds% seconds before the URLs show a 404 error."
     content:
         max_input_vars_raw: "You have reached the max_input_vars (%maxInputVars%). Please remove some fields to continue. <br/>If you need to increase this limit, please contact your provider."
         modules_modal:

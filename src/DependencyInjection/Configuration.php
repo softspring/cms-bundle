@@ -75,6 +75,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('find_field_name')->defaultValue('id')->end()
                         ->booleanNode('save_compiled')->defaultTrue()->end()
                         ->scalarNode('prefix_compiled')->defaultValue('')->end()
+                        ->booleanNode('cache_last_modified')->defaultFalse()->end()
                     ->end()
                 ->end()
 

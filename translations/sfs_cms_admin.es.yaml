@@ -2,6 +2,9 @@ admin:
     global_breadcrumb: "CMS"
 
 admin_content:
+    read:
+        published_cache_alert_raw: "Este contenido fue publicado por última vez el %publishedDateTime%. Algunas URLs de contenido están cacheadas durante %maxRouteTtl% segundos.<br/>Por lo que puede que tengas que esperar %waitSeconds% segundos antes de que el nuevo contenido esté disponible."
+        unpublished_cache_alert_raw: "Este contenido fue despublicado por última vez el %publishedDateTime%. Algunas URLs de contenido están cacheadas durante %maxRouteTtl% segundos.<br/>Por lo que puede que tengas que esperar %waitSeconds% segundos antes de que las URLs muestren un error 404."
     content:
         max_input_vars_raw: "Has alcanzado el número máximo de campos soportados (%maxInputVars%). Por favor, elimina algunos módulos para continuar. <br/>Si es necesario incrementar este límite habla con tu proveedor."
         modules_modal:

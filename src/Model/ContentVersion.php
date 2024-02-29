@@ -97,7 +97,7 @@ abstract class ContentVersion implements ContentVersionInterface
         $this->createdAt = $createdAt ? (int) $createdAt->format('U') : null;
     }
 
-    public function autoSetCreatedAt()
+    public function autoSetCreatedAt(): void
     {
         if (!$this->createdAt) {
             $this->createdAt = time();

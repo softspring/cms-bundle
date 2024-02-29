@@ -82,4 +82,8 @@ interface ContentInterface
     public function setLocales(?array $locales): void;
 
     public function addLocale(string $locale): void;
+
+    public function getLastModified(): ?\DateTime;
+
+    public function setLastModified(?\DateTime $lastModified): void;
 }

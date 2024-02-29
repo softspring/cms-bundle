@@ -13,15 +13,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RoutePathType extends AbstractType
 {
-    protected RoutePathManagerInterface $routePathManager;
-    protected string $defaultLocale;
-    protected array $enabledLocales;
-
-    public function __construct(RoutePathManagerInterface $routePathManager, string $defaultLocale, array $enabledLocales)
-    {
-        $this->routePathManager = $routePathManager;
-        $this->defaultLocale = $defaultLocale;
-        $this->enabledLocales = $enabledLocales;
+    public function __construct(
+        protected RoutePathManagerInterface $routePathManager,
+        protected string $defaultLocale,
+        protected array $enabledLocales,
+        protected bool $contentCacheLastModifiedEnabled,
+    ) {
     }
 
     public function getBlockPrefix(): string
@@ -53,7 +50,11 @@ class RoutePathType extends AbstractType
                 'class' => 'sluggize',
             ],
         ]);
-        $builder->add('cacheTtl', IntegerType::class);
+
+        if (!$this->contentCacheLastModifiedEnabled) {
+            $builder->add('cacheTtl', IntegerType::class);
+        }
+
         $builder->add('locale', ChoiceType::class, [
             'required' => sizeof($options['languages']) > 1,
             'choices' => array_combine(array_map(fn ($lang) => Locales::getName($lang), $options['languages']), $options['languages']),

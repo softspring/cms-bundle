@@ -37,6 +37,8 @@ abstract class Content implements ContentInterface
 
     protected ?array $locales = null;
 
+    protected ?int $lastModified = null;
+
     public function __construct()
     {
         $this->sites = new ArrayCollection();
@@ -212,6 +214,7 @@ abstract class Content implements ContentInterface
     public function setPublishedVersion(?ContentVersionInterface $publishedVersion): void
     {
         $this->publishedVersion = $publishedVersion;
+        $this->setLastModified(new \DateTime());
     }
 
     public function getStatus(): string
@@ -258,5 +261,15 @@ abstract class Content implements ContentInterface
     public function addLocale(string $locale): void
     {
         $this->locales = array_unique(array_merge($this->locales ?? [], [$locale]));
+    }
+
+    public function getLastModified(): ?\DateTime
+    {
+        return $this->lastModified ? \DateTime::createFromFormat('U', "{$this->lastModified}") : null;
+    }
+
+    public function setLastModified(?\DateTime $lastModified): void
+    {
+        $this->lastModified = $lastModified ? (int) $lastModified->format('U') : null;
     }
 }
