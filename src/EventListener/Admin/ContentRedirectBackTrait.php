@@ -35,6 +35,7 @@ trait ContentRedirectBackTrait
 
                 return new RedirectResponse($this->router->generate("sfs_cms_admin_content_{$configId}_preview", ['content' => $entity]));
 
+            case 'details':
             default:
                 return new RedirectResponse($this->router->generate("sfs_cms_admin_content_{$configId}_details", ['content' => $entity]));
         }

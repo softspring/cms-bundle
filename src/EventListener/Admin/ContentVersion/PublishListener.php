@@ -74,7 +74,7 @@ class PublishListener extends AbstractContentVersionListener
 
         $this->flashNotifier->addTrans('success', "admin_{$contentConfig['_id']}.version_publish.success_flash", [], 'sfs_cms_contents');
 
-        $event->setResponse($this->redirectBack($contentConfig['_id'], $content, $event->getRequest()));
+        $event->setResponse($this->redirectBack($contentConfig['_id'], $content, $event->getRequest(), $event->getEntity()));
     }
 
     public function onFailure(FailureEvent $event): void
