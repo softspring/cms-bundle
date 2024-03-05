@@ -6,12 +6,21 @@ use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Utils\HtmlValidator;
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 class UtilsExtension extends AbstractExtension
 {
     public function __construct(protected ContentManagerInterface $contentManager)
     {
+    }
+
+    public function getFilters(): array
+    {
+        return [
+            new TwigFilter('base64_encode', 'base64_encode'),
+            new TwigFilter('base64_decode', 'base64_decode'),
+        ];
     }
 
     public function getFunctions(): array

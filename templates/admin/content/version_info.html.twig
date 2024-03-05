@@ -60,7 +60,9 @@
                                 {% if not content_config.admin.publish_version.is_granted or is_granted(content_config.admin.publish_version.is_granted, version) %}
                                     {% if not version.published %}
                                         <li><a class="dropdown-item"
-                                               href="{{ url('sfs_cms_admin_content_'~content_type~'_publish_version', {'content':entity, 'version':version}) }}">{{ ('admin_'~content_type~'.versions.actions.publish.link')|trans }}</a>
+                                               data-confirm-modal="{{ ('admin_'~content_type~'.version_publish.confirm_message_raw')|trans|base64_encode }}"
+                                               data-confirm-modal-title="{{ ('admin_'~content_type~'.version_publish.confirm_message_title')|trans }}"
+                                               href="{{ url('sfs_cms_admin_content_'~content_type~'_publish_version', {'content':entity, 'version':version, 'back': 'version_info'}) }}">{{ ('admin_'~content_type~'.versions.actions.publish.link')|trans }}</a>
                                         </li>
                                     {% endif %}
                                 {% endif %}

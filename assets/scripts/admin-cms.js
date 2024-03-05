@@ -21,6 +21,7 @@ import './admin/content-edit/preview-tag-type';
 import './admin/content-edit/preview-toggle';
 import './admin/content-edit/wysiwyg';
 
+import './admin/confirm-modal';
 import './admin/routes-forms';
 import './admin/form-collections';
 import './admin/fields-visibility';

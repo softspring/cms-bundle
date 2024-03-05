@@ -42,9 +42,13 @@ admin_page:
     version_publish:
         success_flash: "Version has been published"
         failed_flash: "An error has been produced during the version publication"
+        confirm_message_title: "Publish version"
+        confirm_message_raw: "<p>Are you sure to publish this version?</p>"
 
     unpublish:
         has_been_unpublished_flash: "The page has been unpublished"
+        confirm_message_title: "Unpublish page"
+        confirm_message_raw: "<p>Are you sure to unpublish this page?</p><p>It will show a 404 error to the users</p>"
 
     import:
         meta.title: "Import page"
@@ -224,6 +228,7 @@ admin_page:
             save_and_preview.button: "Save and preview"
             save_and_publish.button: "Save and publish"
             cancel.button: "Cancel"
+
     version_create:
         module_not_configured: "Can not edit this page version because of %module% module is not configured. Maybe the version has been imported from another project or this module has been removed. Please talk to developers."
 
