@@ -104,7 +104,7 @@ class ContentDataCollector extends DataCollector
             ],
         ];
 
-        $this->data['cache'] = array_intersect_key($response->headers->all(), array_flip(['cache-control', 'date']));
+        $this->data['cache'] = array_intersect_key($response->headers->all(), array_flip(['cache-control', 'date', 'last-modified']));
 
         $this->data['modules'] = $this->contentRender->getDebugCollectorData();
         $this->data['blocks'] = $this->blockRenderer->getDebugCollectorData();

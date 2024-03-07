@@ -65,7 +65,9 @@ class ContentVersionManager implements ContentVersionManagerInterface
 
         if (!isset($compiled[$compiledKey])) {
             $compiledModules = $contentVersion->getCompiledModules()[$compiledKey] ?? null;
+            $contentVersion->setCompiledModules($compiledModules);
             $compiled[$compiledKey] = $this->contentCompiler->compileRequest($contentVersion, $request, $compiledModules);
+            $contentVersion->setCompiled($compiled);
             $this->saveEntity($contentVersion);
         }
 

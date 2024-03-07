@@ -16,7 +16,13 @@
 
 {% block toolbar %}
     {% if collector.cmsRequest %}
-        {% set cached = 'no-cache' not in (collector.cache['cache-control'][0]|default('no-cache')) %}
+        {% if collector.cache['last-modified']|default(false) %}
+            {% set cached = collector.cache['date'][0]|date('U') < 'now'|date('U') %}
+            {% set status = cached ? 'green' : 'yellow' %}
+        {% else %}
+            {% set cached = 'no-cache' not in (collector.cache['cache-control'][0]|default('no-cache')) %}
+            {% set status = cached ? 'yellow' : '' %}
+        {% endif %}
 
         {% set icon %}
             <svg height="24" width="24" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 135 103"><defs><style>.cls-1{fill:url(#linear-gradient);}.cls-2{fill:url(#linear-gradient-2);}.cls-3{fill:url(#linear-gradient-3);}.cls-4{fill:#fbbc33;}.cls-5{fill:#38b6ab;}.cls-6{fill:#94c11f;}</style><linearGradient id="linear-gradient" x1="3.11" y1="78.11" x2="47.65" y2="78.11" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#407f4d"/><stop offset="1" stop-color="#366637"/></linearGradient><linearGradient id="linear-gradient-2" x1="3.11" y1="65.22" x2="73.45" y2="65.22" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#408456"/><stop offset="1" stop-color="#336233"/></linearGradient><linearGradient id="linear-gradient-3" x1="3.11" y1="52.32" x2="99.25" y2="52.32" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#3e895d"/><stop offset="1" stop-color="#336237"/></linearGradient></defs><path class="cls-1" d="M47.65,100.39H36.15a33.08,33.08,0,0,0-33-33V55.84A44.59,44.59,0,0,1,47.65,100.39Z"/><path class="cls-2" d="M73.45,100.39H62A58.91,58.91,0,0,0,3.11,41.55V30A70.42,70.42,0,0,1,73.45,100.39Z"/><path class="cls-3" d="M99.25,100.39H87.74A84.73,84.73,0,0,0,3.11,15.75V4.24A96.25,96.25,0,0,1,99.25,100.39Z"/><path class="cls-4" d="M99.26,100.39H87.75A44.59,44.59,0,0,1,132.3,55.84V67.35A33.08,33.08,0,0,0,99.26,100.39Z"/><path class="cls-5" d="M73.46,100.39H62A70.43,70.43,0,0,1,132.3,30V41.55A58.9,58.9,0,0,0,73.46,100.39Z"/><path class="cls-6" d="M47.66,100.39H36.15A96.26,96.26,0,0,1,132.3,4.24V15.75A84.74,84.74,0,0,0,47.66,100.39Z"/></svg>
@@ -38,10 +44,12 @@
                     <b>Route</b>
                     <span>{{ collector.route.id|default('') }}</span>
                 </div>
+                {% if collector.route.currentPath.cacheTtl %}
                 <div class="sf-toolbar-info-piece">
                     <b>Route cache</b>
                     <span>{{ collector.route.currentPath.cacheTtl|default('none') }}</span>
                 </div>
+                {% endif %}
                 <div class="sf-toolbar-info-piece">
                     <b>Content</b>
                     <span>{{ collector.content.name|default('') }}</span>
@@ -62,14 +70,29 @@
                         <b>Cache-control</b>
                         <span class="sf-toolbar-status">{{ collector.cache['cache-control'][0] }}</span>
                     </div>
-                    <div class="sf-toolbar-info-piece">
-                        <b>Date</b>
-                        <span class="sf-toolbar-status">{{ collector.cache['date'][0] }}</span>
-                    </div>
-                    <div class="sf-toolbar-info-piece">
-                        <b>Age</b>
-                        <span class="sf-toolbar-status {{ cached?'sf-toolbar-status-yellow':'' }}" id="sfs-cache-age">none</span>
-                    </div>
+                    {% if collector.cache['last-modified']|default(false) %}
+                        <div class="sf-toolbar-info-piece">
+                            <b>Date</b>
+                            <span class="sf-toolbar-status {{ cached ? 'sf-toolbar-status-green' : '' }}">{{ collector.cache['date'][0] }}</span>
+                        </div>
+                        <div class="sf-toolbar-info-piece">
+                            <b>Last-modified</b>
+                            <span class="sf-toolbar-status {{ cached ? 'sf-toolbar-status-green' : '' }}">{{ collector.cache['last-modified'][0] }}</span>
+                        </div>
+                        {#<div class="sf-toolbar-info-piece">
+                            <b>Current date</b>
+                            <span class="sf-toolbar-status">{{ 'now'|date('r') }}</span>
+                        </div>#}
+                    {% else %}
+                        <div class="sf-toolbar-info-piece">
+                            <b>Date</b>
+                            <span class="sf-toolbar-status">{{ collector.cache['date'][0] }}</span>
+                        </div>
+                        <div class="sf-toolbar-info-piece">
+                            <b>Age</b>
+                            <span class="sf-toolbar-status {{ cached?'sf-toolbar-status-yellow':'' }}" id="sfs-cache-age">none</span>
+                        </div>
+                    {% endif %}
                 </div>
             {% endif %}
 
@@ -99,32 +122,32 @@
             </div>
         {% endset %}
 
-        {% set status = cached ? 'yellow' : '' %}
-
         {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', { link: true }) }}
 
-        {% if cached %}
+        {% if not collector.cache['last-modified']|default(false) and cached %}
             <script type="text/javascript">
-                var pageTimestamp = {{ collector.cache['date']|first|date('U') }};
-                var currentTimestamp = Math.floor(Date.now() / 1000);
-                var currentTimestampDelayed = Math.floor(Date.now() / 1000) - 1; // allowed delay
-                var cachedSeconds = currentTimestamp - pageTimestamp;
-                var cachedSecondsDelayed = currentTimestampDelayed - pageTimestamp;
+                const pageTimestamp = {{ collector.cache['date']|first|date('U') }};
+                const currentTimestamp = Math.floor(Date.now() / 1000);
+                const currentTimestampDelayed = Math.floor(Date.now() / 1000) - 1; // allowed delay
+                const cachedSeconds = currentTimestamp - pageTimestamp;
+                const cachedSecondsDelayed = currentTimestampDelayed - pageTimestamp;
 
-                // var cacheSpan = document.getElementById('sfs-content-cache');
-                var ageSpan = document.getElementById('sfs-cache-age');
-                var containerBlock = document.getElementsByClassName('sf-toolbar-block-cms')[0];
+                // const cacheSpan = document.getElementById('sfs-content-cache');
+                const ageSpan = document.getElementById('sfs-cache-age');
+                const containerBlock = document.getElementsByClassName('sf-toolbar-block-cms')[0];
 
-                if (cachedSecondsDelayed > 0) {
-                    // cacheSpan.innerHTML = '<span class="sf-toolbar-value">' + cachedSeconds + '</span> <span class="sf-toolbar-label">sg</span>';
-                    ageSpan.innerHTML = cachedSeconds + ' sg';
+                if (ageSpan) {
+                    if (cachedSecondsDelayed > 0) {
+                        // cacheSpan.innerHTML = '<span class="sf-toolbar-value">' + cachedSeconds + '</span> <span class="sf-toolbar-label">sg</span>';
+                        ageSpan.innerHTML = cachedSeconds + ' sg';
 
-                    containerBlock.classList.remove('sf-toolbar-status-yellow');
-                    containerBlock.classList.add('sf-toolbar-status-green');
-                    ageSpan.classList.remove('sf-toolbar-status-yellow');
-                    ageSpan.classList.add('sf-toolbar-status-green');
-                } else {
-                    ageSpan.innerHTML = cachedSeconds + ' sg';
+                        containerBlock.classList.remove('sf-toolbar-status-yellow');
+                        containerBlock.classList.add('sf-toolbar-status-green');
+                        ageSpan.classList.remove('sf-toolbar-status-yellow');
+                        ageSpan.classList.add('sf-toolbar-status-green');
+                    } else {
+                        ageSpan.innerHTML = cachedSeconds + ' sg';
+                    }
                 }
             </script>
         {% endif %}

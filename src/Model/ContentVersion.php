@@ -185,6 +185,10 @@ abstract class ContentVersion implements ContentVersionInterface
 
     public function setCompiled(?array $compiled): void
     {
+        if ($this->isPublished() && $this->compiled !== $compiled) {
+            $this->getContent()->setLastModified(new \DateTime());
+        }
+
         $this->compiled = $compiled;
     }
 
