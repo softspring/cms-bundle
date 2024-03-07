@@ -30,6 +30,13 @@ class RenderErrorList
         return $this->errors;
     }
 
+    public function getErrorsAsString(): array
+    {
+        return array_map(function ($error) {
+            return sprintf('%s (%s): %s', $error['location'], $error['template'], $error['exception']->getMessage());
+        }, $this->getErrors());
+    }
+
     public function pushLocation($location): void
     {
         $this->location = array_merge($this->location, is_array($location) ? $location : [$location]);

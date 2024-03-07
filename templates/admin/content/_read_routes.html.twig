@@ -24,7 +24,7 @@
                             {{ site|sfs_cms_site_name }}: <a href="{{ sfs_cms_route_path_url(path, site) }}"
                                                              target="_blank">{{ sfs_cms_route_path_path(path, site) }}
                                 <span class="mdi mdi-18px mdi-open-in-new"></span></a>
-                            {% if path.cacheTtl %}{{ ('admin_'~content_type~'.read.routes.cache')|trans({'%ttl%': path.cacheTtl}) }}{% endif %}
+                            {% if path.cacheTtl and not (contentCacheLastModifiedEnabled|default(false)) %}{{ ('admin_'~content_type~'.read.routes.cache')|trans({'%ttl%': path.cacheTtl}) }}{% endif %}
                         </li>
                     {% endfor %}
                 {% endfor %}

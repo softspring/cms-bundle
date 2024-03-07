@@ -88,6 +88,7 @@ class ReadListener extends AbstractContentListener
         $event->getData()['entity'] = $event->getData()['content'];
         $event->getData()['entityLatestVersions'] = $this->contentVersionManager->getLatestVersions($event->getData()['content'], 3);
         parent::onView($event);
+        $event->getData()['contentCacheLastModifiedEnabled'] = $this->contentCacheLastModifiedEnabled;
     }
 
     public function onViewAddCacheAlert(ViewEvent $event): void
@@ -120,7 +121,8 @@ class ReadListener extends AbstractContentListener
             })->toArray();
         })->toArray());
 
-        $maxRouteTtl = max($routeTtls);
+        $maxRouteTtl = count($routeTtls) ? max($routeTtls) : null;
+        $minRouteTtl = count($routeTtls) ? min($routeTtls) : null;
 
         if ($currentTimestamp - $publishedTimestamp > $maxRouteTtl) {
             // published version is too old, no cache
@@ -129,7 +131,7 @@ class ReadListener extends AbstractContentListener
 
         $event->getData()['cache_alert'] = [
             'maxRouteTtl' => $maxRouteTtl,
-            'minRouteTtl' => min($routeTtls),
+            'minRouteTtl' => $minRouteTtl,
             'currentDatetime' => $current,
             'publishedDatetime' => $publishedAt,
             'waitTime' => $maxRouteTtl - ($currentTimestamp - $publishedTimestamp),

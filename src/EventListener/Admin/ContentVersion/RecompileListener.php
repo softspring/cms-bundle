@@ -11,6 +11,7 @@ use Softspring\CmsBundle\Render\ContentVersionCompiler;
 use Softspring\CmsBundle\Request\FlashNotifier;
 use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\Component\CrudlController\Event\ApplyEvent;
+use Softspring\Component\CrudlController\Event\ExceptionEvent;
 use Softspring\Component\CrudlController\Event\FailureEvent;
 use Softspring\Component\CrudlController\Event\SuccessEvent;
 use Symfony\Component\Routing\RouterInterface;
@@ -114,12 +115,12 @@ class RecompileListener extends AbstractContentVersionListener
         $event->setResponse($this->redirectBack($contentConfig['_id'], $content, $event->getRequest(), $version));
     }
 
-    public function onException(FailureEvent $event): void
+    public function onException(ExceptionEvent $event): void
     {
         $contentConfig = $event->getRequest()->attributes->get('_content_config');
 
-        /** @var ContentVersionInterface $version */
-        $version = $event->getEntity();
+        /** @var ?ContentVersionInterface $version */
+        $version = $event->getRequest()->attributes->get('version');
 
         $this->flashNotifier->addTrans('error', "admin_{$contentConfig['_id']}.version_recompile.failed_flash", ['%exception%' => $this->extractExceptionMessage($event->getException())], 'sfs_cms_contents');
 
