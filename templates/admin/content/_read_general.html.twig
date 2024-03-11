@@ -7,8 +7,10 @@
         {% if entity.publishedVersion %}
             {% if not content_config.admin.unpublish.is_granted or is_granted(content_config.admin.unpublish.is_granted, entity) %}
                 <a class="btn btn-sm btn-outline-secondary float-end"  href="{{ url('sfs_cms_admin_content_'~content_type~'_unpublish', {'content':entity}) }}"
-                   onclick="return confirm('{{ ('admin_'~content_type~'.read.actions.unpublish.confirm')|trans({'%name%':entity.name}) }}')"
-                    >{{ ('admin_'~content_type~'.read.actions.unpublish.link')|trans }}</a>
+                   data-confirm-modal="{{ ('admin_'~content_type~'.unpublish.confirm_message_raw')|trans|base64_encode }}"
+                   data-confirm-modal-title="{{ ('admin_'~content_type~'.unpublish.confirm_message_title')|trans }}"
+                   data-confirm-modal-confirm-button-type="danger"
+                >{{ ('admin_'~content_type~'.read.actions.unpublish.link')|trans }}</a>
             {% else %}
                 <a class="btn btn-sm btn-outline-secondary float-end disabled">{{ ('admin_'~content_type~'.read.actions.unpublish.link')|trans }}</a>
             {% endif %}

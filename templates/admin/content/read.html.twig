@@ -54,7 +54,7 @@
 
         <div class="row">
             <div class="col">
-                {% include ['@content/'~content_type~'/admin/_read_versions.html.twig', '@SfsCms/admin/content/_read_versions.html.twig'] %}
+                {% include ['@content/'~content_type~'/admin/_read_versions.html.twig', '@SfsCms/admin/content/_read_versions.html.twig'] with {'backSection': 'details'} %}
             </div>
         </div>
     </div>
