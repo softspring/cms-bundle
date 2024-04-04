@@ -44,6 +44,7 @@ class SymfonyRouteType extends AbstractType
         $resolver->setDefaults([
             'required' => false,
             'route_name_constraints' => [],
+            'include_parent_routes' => false,
         ]);
 
         $resolver->setDefault('restrict_default_attribute', null);
@@ -129,7 +130,7 @@ class SymfonyRouteType extends AbstractType
 
         /** @var RouteRepository $repo */
         $repo = $this->routeManager->getRepository();
-        foreach ($repo->getAllRouteIds() as $routeId) {
+        foreach ($repo->getAllRouteIds($options['include_parent_routes']) as $routeId) {
             $allRoutes[$routeId] = new Route('', ['_sfs_cms_reference' => true]);
         }
 
