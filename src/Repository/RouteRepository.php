@@ -11,7 +11,7 @@ class RouteRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('r')
             ->select('r.id')
-            ;
+        ;
 
         if (!$includeParents) {
             $qb->andWhere('r.type != :parentType')
