@@ -2,6 +2,16 @@
 
 {% embed '@SfsCms/admin/_embeds/_card.html.twig' with {'title': ('admin_'~content_type~'.read.routes.title')|trans} %}
     {% trans_default_domain 'sfs_cms_contents' %}
+
+    {% block title %}
+        {% if not content_config.admin.routes.is_granted or is_granted(content_config.admin.routes.is_granted, entity) %}
+            <a class="btn btn-sm btn-outline-secondary float-end"  href="{{ url('sfs_cms_admin_content_'~content_type~'_routes', {'content':entity}) }}">{{ ('admin_'~content_type~'.read.routes.edit.link')|trans }}</a>
+        {% else %}
+            <a class="btn btn-sm btn-outline-secondary float-end disabled">{{ ('admin_'~content_type~'.read.routes.edit.link')|trans }}</a>
+        {% endif %}
+        {{ parent() }}
+    {% endblock %}
+
     {% block content %}
         {% if not entity.publishedVersion %}
             <div class="alert alert-warning" role="alert">

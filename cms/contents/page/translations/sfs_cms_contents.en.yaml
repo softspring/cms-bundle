@@ -108,6 +108,7 @@ admin_page:
             cache: "(cache %ttl% seconds)"
             not_published_warning: "This content is not published, so the following routes will return a 404 error"
             missing_locale: "This content has not a route path for %missingLocale% language"
+            edit.link: "Edit"
         versions:
             title: "Last versions"
             published: "Published"

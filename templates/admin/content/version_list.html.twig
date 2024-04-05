@@ -16,8 +16,8 @@
 
     {% include ['@content/'~content_type~'/admin/_content_tabs.html.twig', '@SfsCms/admin/content/_content_tabs.html.twig']  with {'current':'versions', 'content_type':content_type, 'entity':entity} %}
 
-    <div class="container-fluid p-3 bg-white">
-        <div class="row mt-4">
+    <div class="container-fluid mb-3">
+        <div class="row">
             <div class="col">
                 <div class="float-end">
                     {% if not content_config.admin.version_import.is_granted or is_granted(content_config.admin.version_import.is_granted, entity) %}
@@ -32,7 +32,13 @@
                         <a class="btn btn-outline-secondary disabled">{{ ('admin_'~content_type~'.versions.actions.cleanup_versions.link')|trans }}</a>
                     {% endif %}
                 </div>
+            </div>
+        </div>
+    </div>
 
+    <div class="container-fluid p-3 bg-white">
+        <div class="row mt-4">
+            <div class="col">
                 {% include ['@content/'~content_type~'/admin/_version_list_table.html.twig', '@SfsCms/admin/content/_version_list_table.html.twig'] with {'versions': entity.versions} %}
             </div>
         </div>
