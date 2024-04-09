@@ -1,6 +1,4 @@
 {
   "build/admin.dist.css": "/build/admin.dist.css",
-  "build/admin.dist.js": "/build/admin.dist.js",
-  "build/runtime.js": "/build/runtime.js",
-  "build/896.js": "/build/896.js"
+  "build/admin.dist.js": "/build/admin.dist.js"
 }
