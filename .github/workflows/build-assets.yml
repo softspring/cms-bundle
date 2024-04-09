@@ -59,4 +59,4 @@ jobs:
                     git config --global user.email "username@users.noreply.github.com"
                     git add public
                     git commit -m "${{ env.CI_COMMIT_MESSAGE }}"
-                    git push
+                    git push origin ${{ github.ref }}
