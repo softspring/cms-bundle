@@ -19,6 +19,8 @@ jobs:
 
         steps:
             -   uses: actions/checkout@v4
+                with:
+                    ref: ${{ env.BRANCH_NAME }}
 
             -   name: Install PHP
                 uses: shivammathur/setup-php@v2
