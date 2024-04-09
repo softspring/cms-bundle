@@ -1,0 +1,56 @@
+name: Build assets
+
+on:
+    push:
+        branches: [ 5.2 ]
+    pull_request:
+        branches: [ 5.2 ]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+
+        steps:
+            -   uses: actions/checkout@v4
+
+            -   name: Install PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 8.3
+
+            -   name: Cache Composer packages
+                id: composer-cache
+                uses: actions/cache@v4
+                with:
+                    path: vendor
+                    key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: |
+                        ${{ runner.os }}-php-
+
+            -   name: Install dependencies
+                run: composer update --prefer-dist --no-interaction --no-progress
+
+            -   name: Install npm deps
+                uses: actions/setup-node@v2
+                with:
+                    node-version: '18'
+
+            -   name: Install npm deps
+                run: npm install --install-links
+
+            -   name: Build deps
+                run: npm run build
+
+            # Commit and push all changed files.
+            # Must only affect files that are listed in "paths-ignore".
+            -   name: GIT Commit Assets Build Artifacts
+                # Only run on main branch push (e.g. pull request merge).
+                if: github.event_name == 'push'
+                run: |
+                    git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
+                    git config --global user.email "username@users.noreply.github.com"
+                    git add public
+                    git commit -m "${{ env.CI_COMMIT_MESSAGE }}"
+                    git push
