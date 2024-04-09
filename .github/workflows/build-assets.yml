@@ -12,6 +12,10 @@ jobs:
         permissions:
             contents: write
 
+        env:
+            CI_COMMIT_MESSAGE: Continuous Integration Assets Build Artifacts
+            CI_COMMIT_AUTHOR: Continuous Integration
+
         steps:
             -   uses: actions/checkout@v4
 
@@ -38,9 +42,11 @@ jobs:
                     node-version: '18'
 
             -   name: Install npm deps
+                working-directory: assets
                 run: npm install --install-links
 
             -   name: Build deps
+                working-directory: assets
                 run: npm run build
 
             # Commit and push all changed files.
