@@ -1,0 +1,14 @@
+{
+  "entrypoints": {
+    "admin.dist": {
+      "js": [
+        "/build/runtime.js",
+        "/build/896.js",
+        "/build/admin.dist.js"
+      ],
+      "css": [
+        "/build/admin.dist.css"
+      ]
+    }
+  }
+}
