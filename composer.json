@@ -17,7 +17,7 @@
         "softspring/components": "^5.2",
         "softspring/crudl-controller": "^5.2",
         "softspring/doctrine-migrations-version-comparator": "^5.1",
-        "softspring/doctrine-target-entity-resolver": "^5.1",
+        "softspring/doctrine-target-entity-resolver": "^5.2",
         "softspring/dynamic-form-type": "^5.1",
         "softspring/events": "^5.1",
         "softspring/media-bundle": "^5.2",
