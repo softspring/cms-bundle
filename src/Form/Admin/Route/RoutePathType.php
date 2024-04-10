@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Form\Admin\Route;
 
+use Softspring\CmsBundle\Helper\LocaleHelper;
 use Softspring\CmsBundle\Manager\RoutePathManagerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -15,8 +16,7 @@ class RoutePathType extends AbstractType
 {
     public function __construct(
         protected RoutePathManagerInterface $routePathManager,
-        protected string $defaultLocale,
-        protected array $enabledLocales,
+        protected LocaleHelper $localeHelper,
         protected bool $contentCacheLastModifiedEnabled,
     ) {
     }
@@ -30,8 +30,8 @@ class RoutePathType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => $this->routePathManager->getEntityClass(),
-            'languages' => $this->enabledLocales,
-            'default_language' => $this->defaultLocale,
+            'languages' => $this->localeHelper->getEnabledLocales(),
+            'default_language' => $this->localeHelper->getDefaultLocale(),
         ]);
 
         $resolver->setRequired('languages');

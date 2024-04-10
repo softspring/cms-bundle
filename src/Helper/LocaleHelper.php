@@ -8,18 +8,21 @@ use Softspring\CmsBundle\Model\SiteInterface;
 
 class LocaleHelper
 {
-    protected CmsConfig $cmsConfig;
-    protected array $enabledLocales;
-
-    public function __construct(CmsConfig $cmsConfig, array $enabledLocales)
+    public function __construct(protected CmsConfig $cmsConfig, protected array $enabledLocales, protected ?string $defaultLocale)
     {
-        $this->cmsConfig = $cmsConfig;
-        $this->enabledLocales = $enabledLocales;
+        if ($defaultLocale) {
+            $this->enabledLocales = array_unique(array_merge($this->enabledLocales, [$defaultLocale]));
+        }
     }
 
     public function getEnabledLocales(): array
     {
         return $this->enabledLocales;
+    }
+
+    public function getDefaultLocale(): string
+    {
+        return $this->defaultLocale ?? $this->enabledLocales[0] ?? 'en';
     }
 
     /**
