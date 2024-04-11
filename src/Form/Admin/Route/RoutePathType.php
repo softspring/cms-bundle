@@ -56,7 +56,8 @@ class RoutePathType extends AbstractType
         }
 
         $builder->add('locale', ChoiceType::class, [
-            'required' => sizeof($options['languages']) > 1,
+            // 'required' => sizeof($options['languages']) > 1,
+            'required' => true,
             'choices' => array_combine(array_map(fn ($lang) => Locales::getName($lang), $options['languages']), $options['languages']),
             'choice_translation_domain' => false,
         ]);
