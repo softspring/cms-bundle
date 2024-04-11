@@ -13,8 +13,6 @@ services:
         public: false
         bind:
             $em: '@sfs_cms.entity_manager'
-            $enabledLocales: '%kernel.enabled_locales%'
-            $defaultLocale: '%kernel.default_locale%'
             $contentCacheLastModifiedEnabled: '%sfs_cms.content.cache_last_modified_enabled%'
 
     Softspring\CmsBundle\Form\Admin\Route\:
