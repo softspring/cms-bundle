@@ -14,9 +14,8 @@
 {% endblock breadcrums_content %}
 
 {% block content %}
-    <h1 class="h3">{{ ('admin_'~content_type~'.read.title')|trans({'%name%':entity.name}) }}</h1>
-
-    {% include '@SfsCms/admin/content/_content_tabs.html.twig' with {'current':'details', 'content':content, 'entity':entity} %}
+    {% include ['@content/'~content_type~'/admin/_content_title.html.twig', '@SfsCms/admin/content/_content_title.html.twig']  with {'current':'read', 'content_type':content_type, 'content_entity':entity} %}
+    {% include ['@content/'~content_type~'/admin/_content_tabs.html.twig', '@SfsCms/admin/content/_content_tabs.html.twig']  with {'current':'details', 'content':content, 'entity':entity} %}
 
     {% if cache_alert is defined %}
         <div class="alert alert-warning" role="alert">

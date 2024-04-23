@@ -18,8 +18,7 @@
 {% endblock breadcrums_content %}
 
 {% block content %}
-    <h1 class="h3">{{ ('admin_'~content_type~'.version_seo.title')|trans({'%name%':entity.name, '%versionNumber%': prev_version.versionNumber|default('0')}) }}</h1>
-
+    {% include ['@content/'~content_type~'/admin/_content_title.html.twig', '@SfsCms/admin/content/_content_title.html.twig']  with {'current':'version_seo', 'content_type':content_type, 'content_entity':entity, 'version_entity': version_entity} %}
     {% include ['@content/'~content_type~'/admin/_content_tabs.html.twig', '@SfsCms/admin/content/_content_tabs.html.twig']  with {'current':'seo', 'content':content_entity, 'entity':entity} %}
 
     {{ form_start(form) }}

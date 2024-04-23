@@ -1,0 +1,27 @@
+{% trans_default_domain 'sfs_cms_contents' %}
+
+<div class="row">
+    <div class="col">
+        <h1 class="h3">{{ ("admin_#{content_type}.#{current}.title")|trans({'%name%':content_entity.name, '%versionNumber%': version_entity.versionNumber|default('')}) }}</h1>
+    </div>
+    <div class="col text-end">
+        <div class="dropdown">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                More
+            </button>
+            {#<i class="bi bi-three-dots-vertical" data-bs-toggle="dropdown" aria-expanded="false"></i>#}
+
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                    {% if not content_config.admin.duplicate.is_granted or is_granted(content_config.admin.duplicate.is_granted, content_entity) %}
+                        <a class="dropdown-item" href="{{ url('sfs_cms_admin_content_'~content_type~'_duplicate', {'content':content_entity}) }}">
+                            <span class="bi bi-copy"></span>{{ ('admin_page.tabs_menu.duplicate')|trans }}</a>
+                    {% else %}
+                        <a class="dropdown-item disabled">
+                            <span class="bi bi-copy"></span>{{ ('admin_page.tabs_menu.duplicate')|trans }}</a>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -19,8 +19,7 @@
 {% endblock breadcrums_content %}
 
 {% block content %}
-    <h1 class="h3">{{ ('admin_'~content_type~'.versions.title')|trans({'%name%':entity.name}) }}</h1>
-
+    {% include ['@content/'~content_type~'/admin/_content_title.html.twig', '@SfsCms/admin/content/_content_title.html.twig']  with {'current':'versions', 'content_type':content_type, 'content_entity':entity} %}
     {% include ['@content/'~content_type~'/admin/_content_tabs.html.twig', '@SfsCms/admin/content/_content_tabs.html.twig']  with {'current':'versions', 'entity':entity} %}
 
     <div class="container-fluid p-3 bg-white">
