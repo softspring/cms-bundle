@@ -29,7 +29,12 @@ class UrlMatcherTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->query = $this->createMock(Query::class);
+        // compatible with ORM 2 and 3
+        if ((new \ReflectionClass(Query::class))->isFinal()) {
+            $this->query = $this->createMock(AbstractQuery::class);
+        } else {
+            $this->query = $this->createMock(Query::class);
+        }
 
         $this->qb = $this->createMock(QueryBuilder::class);
         $this->qb->method('getQuery')->willReturn($this->query);
