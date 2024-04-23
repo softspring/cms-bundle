@@ -3,6 +3,7 @@
 namespace Softspring\CmsBundle\Tests;
 
 use Doctrine\ORM\EntityRepository;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Model\Module;
@@ -177,6 +178,7 @@ abstract class ModuleTestCase extends TypeTestCase
      * @dataProvider provideModuleRender
      * @throws Exception
      */
+    #[DataProvider('provideModuleRender')]
     public function testRender(array $data, string|callable $expected, array $templatesSource = []): void
     {
         $requestStack = $this->createMock(RequestStack::class);

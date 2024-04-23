@@ -5,6 +5,7 @@ namespace Softspring\CmsBundle\Test\Unit\Config\Router;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\TestCase;
 use Softspring\CmsBundle\Entity\Page;
@@ -28,7 +29,7 @@ class UrlMatcherTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->query = $this->createMock(AbstractQuery::class);
+        $this->query = $this->createMock(Query::class);
 
         $this->qb = $this->createMock(QueryBuilder::class);
         $this->qb->method('getQuery')->willReturn($this->query);
