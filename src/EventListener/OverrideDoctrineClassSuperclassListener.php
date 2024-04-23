@@ -3,7 +3,7 @@
 namespace Softspring\CmsBundle\EventListener;
 
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 
 class OverrideDoctrineClassSuperclassListener
 {
@@ -20,7 +20,7 @@ class OverrideDoctrineClassSuperclassListener
             return;
         }
 
-        /** @var ClassMetadataInfo $metadata */
+        /** @var ClassMetadata $metadata */
         $metadata = $eventArgs->getClassMetadata();
         $class = $metadata->getReflectionClass();
 

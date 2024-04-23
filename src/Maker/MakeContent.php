@@ -91,16 +91,16 @@ class MakeContent extends AbstractMaker
         $config = [
             'content' => [
                 'revision' => 1,
-//                'render_template' => "@type/$name/render.html.twig",
-//                'edit_template' => "@type/$name/edit.html.twig",
+                // 'render_template' => "@type/$name/render.html.twig",
+                // 'edit_template' => "@type/$name/edit.html.twig",
                 'entity_class' => $this->entityClassName,
                 'admin' => [
                     'create_type' => $createType,
                     'update_type' => $updateType,
-//                    'create_view' => "@content/$name/admin/create.html.twig",
-//                    'update_view' => "@content/$name/admin/update.html.twig",
-//                    'list_view' => "@content/$name/admin/list.html.twig",
-//                    'list_page_view' => "@content/$name/admin/list-page.html.twig",
+                    // 'create_view' => "@content/$name/admin/create.html.twig",
+                    // 'update_view' => "@content/$name/admin/update.html.twig",
+                    // 'list_view' => "@content/$name/admin/list.html.twig",
+                    // 'list_page_view' => "@content/$name/admin/list-page.html.twig",
                 ],
                 'containers' => null,
             ],

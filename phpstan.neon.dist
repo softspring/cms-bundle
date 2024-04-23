@@ -13,4 +13,4 @@ parameters:
         - '#Call to an undefined method Symfony\\Component\\HttpFoundation\\Session\\SessionInterface::getFlashBag\(\).#'
         - '#Call to an undefined method Doctrine\\ORM\\EntityRepository::findOneBy#'
         - '#Call to an undefined method Doctrine\\ORM\\EntityRepository::findBy#'
-        - '#Function twig_template_from_string not found.#'
+

@@ -28,12 +28,12 @@ class MediaFieldTransformer implements FieldTransformerInterface
         $originalVersion = $data->getVersion('_original');
         $parts = explode('/', $originalVersion->getUrl(), 4);
         $mediaFileName = 'media/'.$data->getId().([
-                'image/jpeg' => '.jpeg',
-                'image/png' => '.png',
-                'image/gif' => '.gif',
-                'image/webp' => '.webp',
-                'video/webm' => '.webm',
-            ][$originalVersion->getFileMimeType()] ?? '');
+            'image/jpeg' => '.jpeg',
+            'image/png' => '.png',
+            'image/gif' => '.gif',
+            'image/webp' => '.webp',
+            'video/webm' => '.webm',
+        ][$originalVersion->getFileMimeType()] ?? '');
         $versionFiles['_original'] = $mediaFileName;
 
         $files[$mediaFileName] = [

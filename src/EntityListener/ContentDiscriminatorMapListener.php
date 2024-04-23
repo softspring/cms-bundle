@@ -3,7 +3,7 @@
 namespace Softspring\CmsBundle\EntityListener;
 
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\MappingException;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Entity\Content;
@@ -22,7 +22,7 @@ class ContentDiscriminatorMapListener
      */
     public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs): void
     {
-        /** @var ClassMetadataInfo $metadata */
+        /** @var ClassMetadata $metadata */
         $metadata = $eventArgs->getClassMetadata();
         $class = $metadata->getReflectionClass();
 
