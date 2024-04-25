@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Model;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -214,7 +215,7 @@ abstract class Content implements ContentInterface
     public function setPublishedVersion(?ContentVersionInterface $publishedVersion): void
     {
         $this->publishedVersion = $publishedVersion;
-        $this->setLastModified(new \DateTime());
+        $this->setLastModified(new DateTime());
     }
 
     public function getStatus(): string
@@ -263,12 +264,12 @@ abstract class Content implements ContentInterface
         $this->locales = array_unique(array_merge($this->locales ?? [], [$locale]));
     }
 
-    public function getLastModified(): ?\DateTime
+    public function getLastModified(): ?DateTime
     {
-        return $this->lastModified ? \DateTime::createFromFormat('U', "{$this->lastModified}") : null;
+        return $this->lastModified ? DateTime::createFromFormat('U', "{$this->lastModified}") : null;
     }
 
-    public function setLastModified(?\DateTime $lastModified): void
+    public function setLastModified(?DateTime $lastModified): void
     {
         $this->lastModified = $lastModified ? (int) $lastModified->format('U') : null;
     }

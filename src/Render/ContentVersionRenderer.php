@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Render;
 
+use Exception;
 use Psr\Log\LoggerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\DisabledModuleException;
@@ -62,7 +63,7 @@ class ContentVersionRenderer extends AbstractRenderer
                     'version' => $version,
                     'content' => $version->getContent(),
                 ]);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 throw new RenderException(sprintf('Error rendering content version v%s', $version->getVersionNumber()), 0, $e);
             }
         });

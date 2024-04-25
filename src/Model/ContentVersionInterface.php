@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Model;
 
+use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Softspring\MediaBundle\Model\MediaInterface;
 
@@ -41,9 +42,9 @@ interface ContentVersionInterface
 
     public function setLayout(?string $layout): void;
 
-    public function getCreatedAt(): ?\DateTime;
+    public function getCreatedAt(): ?DateTime;
 
-    public function setCreatedAt(?\DateTime $createdAt): void;
+    public function setCreatedAt(?DateTime $createdAt): void;
 
     public function autoSetCreatedAt(): void;
 

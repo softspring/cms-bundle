@@ -2,6 +2,8 @@
 
 namespace Softspring\CmsBundle\Exception;
 
-class NotYetImplementedException extends \Exception
+use Exception;
+
+class NotYetImplementedException extends Exception
 {
 }

@@ -2,7 +2,9 @@
 
 namespace Softspring\CmsBundle\Config\Exception;
 
-class InvalidBlockException extends \Exception
+use Exception;
+
+class InvalidBlockException extends Exception
 {
     public function __construct(string $block, array $blocksConfig)
     {

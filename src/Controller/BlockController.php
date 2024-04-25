@@ -3,6 +3,7 @@
 namespace Softspring\CmsBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Psr\Log\LoggerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Manager\BlockManagerInterface;
@@ -62,7 +63,7 @@ class BlockController extends AbstractController
             }
 
             return $response;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->renderBlockException("An exception has occurred rendering a block by type '$type'", $e);
         }
     }
@@ -97,12 +98,12 @@ class BlockController extends AbstractController
             }
 
             return $response;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->renderBlockException("An exception has occurred rendering a block with id '$id'", $e);
         }
     }
 
-    protected function renderBlockException(string $message, \Exception $exception): Response
+    protected function renderBlockException(string $message, Exception $exception): Response
     {
         $this->cmsLogger && $this->cmsLogger->critical(sprintf('%s: %s', $message, $exception->getMessage()));
 

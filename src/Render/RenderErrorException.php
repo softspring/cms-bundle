@@ -2,7 +2,9 @@
 
 namespace Softspring\CmsBundle\Render;
 
-class RenderErrorException extends \Exception
+use Exception;
+
+class RenderErrorException extends Exception
 {
     protected RenderErrorList $renderErrorList;
 

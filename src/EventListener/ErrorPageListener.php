@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\EventListener;
 
+use Exception;
 use Psr\Log\LoggerInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -93,7 +94,7 @@ class ErrorPageListener implements EventSubscriberInterface
                 } else {
                     return file_get_contents($template);
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // do not throw any exception, try render next template
                 $this->logger && $this->logger->error(sprintf('ERROR RENDERING ERROR PAGE (%s): %s', $template, $e->getMessage()));
             }

@@ -2,7 +2,9 @@
 
 namespace Softspring\CmsBundle\Config\Exception;
 
-class InvalidModuleException extends \Exception
+use Exception;
+
+class InvalidModuleException extends Exception
 {
     public function __construct(string $module, array $modulesConfig)
     {

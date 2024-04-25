@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Controller;
 
+use Exception;
 use Psr\Log\LoggerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Manager\MenuManagerInterface;
@@ -48,7 +49,7 @@ class MenuController extends AbstractController
             }
 
             return $response;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->cmsLogger && $this->cmsLogger->critical(sprintf('Error rendering menu %s: %s', $type, $e->getMessage()));
 
             return new Response('<!-- error rendering menu, see logs -->');

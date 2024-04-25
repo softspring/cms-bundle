@@ -5,6 +5,7 @@ namespace Softspring\CmsBundle\Routing;
 use Doctrine\DBAL\Exception\TableNotFoundException;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Softspring\CmsBundle\Exception\SiteHasNotACanonicalHostException;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Model\RoutePathInterface;
@@ -27,7 +28,7 @@ class UrlMatcher
 
     /**
      * @throws SiteHasNotACanonicalHostException
-     * @throws \Exception
+     * @throws Exception
      */
     public function matchRequest(Request $request): ?array
     {
@@ -59,7 +60,7 @@ class UrlMatcher
                     return $this->generateRedirect($this->urlGenerator->getUrl($siteConfig['slash_route']['route'], $userLocale), $siteConfig['slash_route']['redirect_code'] ?: Response::HTTP_TEMPORARY_REDIRECT);
 
                 default:
-                    throw new \Exception('Not yet implemented');
+                    throw new Exception('Not yet implemented');
             }
         }
 
@@ -142,7 +143,7 @@ class UrlMatcher
                     return $this->generateRedirectToRoute($route->getSymfonyRoute(), $route->getRedirectType() ?? Response::HTTP_FOUND);
 
                 default:
-                    throw new \Exception(sprintf('Route type %u not yet implemented', $route->getType()));
+                    throw new Exception(sprintf('Route type %u not yet implemented', $route->getType()));
             }
             //            }
         }

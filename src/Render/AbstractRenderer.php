@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Render;
 
+use Exception;
 use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\Render\Exception\RenderException;
 use Symfony\Component\HttpFoundation\Request;
@@ -67,7 +68,7 @@ abstract class AbstractRenderer
 
         try {
             $result = $renderFunction($request);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             if ($e instanceof RenderException) {
                 throw $e;
             }

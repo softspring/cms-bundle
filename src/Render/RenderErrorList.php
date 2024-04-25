@@ -4,13 +4,14 @@ namespace Softspring\CmsBundle\Render;
 
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
+use Throwable;
 
 class RenderErrorList
 {
     protected array $errors = [];
     protected array $location = [];
 
-    public function add(string $template, \Throwable $exception, array $contextData): void
+    public function add(string $template, Throwable $exception, array $contextData): void
     {
         $this->errors[] = [
             'location' => $this->currentLocation(),

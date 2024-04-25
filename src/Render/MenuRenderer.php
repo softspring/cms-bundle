@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Render;
 
+use Exception;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\InvalidMenuException;
 use Softspring\CmsBundle\Render\Exception\RenderException;
@@ -43,7 +44,7 @@ class MenuRenderer extends AbstractRenderer
 
         if ($menuConfig['esi'] && !$this->isPreview()) {
             if (!$this->esiEnabled) {
-                throw new \Exception('You must enable esi with framework.esi configuration to use it in CMS');
+                throw new Exception('You must enable esi with framework.esi configuration to use it in CMS');
             }
 
             $renderFunction = 'render_esi';

@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\DependencyInjection\Compiler;
 
+use SplFileInfo;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
@@ -24,7 +25,7 @@ class AddCollectionTranslationsPass implements CompilerPassInterface
                 $finder = Finder::create()
                     ->followLinks()
                     ->files()
-                    ->filter(function (\SplFileInfo $file) {
+                    ->filter(function (SplFileInfo $file) {
                         return 2 <= substr_count($file->getBasename(), '.') && preg_match('/\.\w+$/', $file->getBasename());
                     })
                     ->in($translationsPath)

@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Render;
 
+use Exception;
 use Psr\Log\LoggerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\InvalidContentException;
@@ -56,7 +57,7 @@ class ContentVersionCompiler
 
                     $compiled[$compileKey] = $this->compileRequest($contentVersion, $request, $compiledModules[$compileKey]);
                     $this->canSaveCompiled($contentVersion) && $contentVersion->setCompiled($compiled);
-                } catch (\Exception $exception) {
+                } catch (Exception $exception) {
                     if ($exception instanceof CompileException) {
                         throw new CompileException(sprintf('Error compiling content version for %s in %s', $site, $locale), 0, $exception->getPrevious());
                     }
@@ -80,7 +81,7 @@ class ContentVersionCompiler
             $renderErrors->buildExceptionOnErrors();
 
             return $compiled;
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->cmsLogger && $this->cmsLogger->error(sprintf('Error compiling "%s" content version for "%s" in "%s"', $contentVersion->getContent()->getName(), $request->attributes->get('_sfs_cms_site'), $request->getLocale()), [
                 'exception' => $exception,
             ]);
@@ -100,7 +101,7 @@ class ContentVersionCompiler
             $renderErrors->buildExceptionOnErrors();
 
             return $compiled;
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->cmsLogger && $this->cmsLogger->error(sprintf('Error compiling "%s" content version for "%s" in "%s"', $contentVersion->getContent()->getName(), $request->attributes->get('_sfs_cms_site'), $request->getLocale()), [
                 'exception' => $exception,
             ]);

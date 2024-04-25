@@ -2,7 +2,9 @@
 
 namespace Softspring\CmsBundle\Config\Exception;
 
-class InvalidContentException extends \Exception
+use Exception;
+
+class InvalidContentException extends Exception
 {
     public function __construct(protected string $contentType, array $contentsConfig)
     {

@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Form\Traits;
 
+use DateTimeInterface;
 use Softspring\CmsBundle\Utils\DataMigrator;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\FormInterface;
@@ -53,7 +54,7 @@ trait DataMapperTrait
                 $propertyValue = $form->getData();
                 // If the field is of type DateTimeInterface and the data is the same skip the update to
                 // keep the original object hash
-                if ($propertyValue instanceof \DateTimeInterface && $propertyValue == $this->getPropertyValue($data, $propertyPath, $form)) {
+                if ($propertyValue instanceof DateTimeInterface && $propertyValue == $this->getPropertyValue($data, $propertyPath, $form)) {
                     continue;
                 }
 

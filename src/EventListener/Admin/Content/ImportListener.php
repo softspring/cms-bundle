@@ -20,6 +20,7 @@ use Softspring\Component\CrudlController\Event\FormPrepareEvent;
 use Softspring\Component\CrudlController\Event\SuccessEvent;
 use Softspring\Component\CrudlController\Event\ViewEvent;
 use Softspring\Component\PolymorphicFormType\Form\Exception\MissingFormTypeException;
+use stdClass;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\RouterInterface;
@@ -92,7 +93,7 @@ class ImportListener extends AbstractContentListener
     public function onCreateEntity(CreateEntityEvent $event): void
     {
         // set dummy version
-        $version = new \stdClass();
+        $version = new stdClass();
         $version->file = null;
         $event->setEntity($version);
     }

@@ -2,6 +2,8 @@
 
 namespace Softspring\CmsBundle\Config\Exception;
 
-class MissingLayoutsException extends \Exception
+use Exception;
+
+class MissingLayoutsException extends Exception
 {
 }

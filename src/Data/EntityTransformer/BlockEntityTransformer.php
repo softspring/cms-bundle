@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Data\EntityTransformer;
 
+use DateTime;
 use Softspring\CmsBundle\Data\DataTransformer;
 use Softspring\CmsBundle\Data\Exception\InvalidElementException;
 use Softspring\CmsBundle\Data\Exception\ReferenceNotFoundException;
@@ -76,8 +77,8 @@ class BlockEntityTransformer implements EntityTransformerInterface
 
         $block->setName($data['block']['name']);
         $block->setData($data['block']['data']);
-        $block->setPublishStartDate($data['block']['publish_start_date'] ? new \DateTime($data['block']['publish_start_date']) : null);
-        $block->setPublishEndDate($data['block']['publish_end_date'] ? new \DateTime($data['block']['publish_end_date']) : null);
+        $block->setPublishStartDate($data['block']['publish_start_date'] ? new DateTime($data['block']['publish_start_date']) : null);
+        $block->setPublishEndDate($data['block']['publish_end_date'] ? new DateTime($data['block']['publish_end_date']) : null);
 
         return $block;
     }

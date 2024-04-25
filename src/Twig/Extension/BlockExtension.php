@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Twig\Extension;
 
+use Exception;
 use Softspring\CmsBundle\Manager\BlockManagerInterface;
 use Softspring\CmsBundle\Model\BlockInterface;
 use Softspring\CmsBundle\Render\BlockRenderer;
@@ -43,7 +44,7 @@ class BlockExtension extends AbstractExtension
         }
 
         if (!is_array($criteria)) {
-            throw new \Exception('Invalid criteria');
+            throw new Exception('Invalid criteria');
         }
 
         return $this->blockManager->getRepository()->findOneBy($criteria, $orderBy);

@@ -2,7 +2,9 @@
 
 namespace Softspring\CmsBundle\Config\Exception;
 
-class InvalidSiteException extends \Exception
+use Exception;
+
+class InvalidSiteException extends Exception
 {
     public function __construct(string $site, array $sitesConfig)
     {

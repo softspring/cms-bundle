@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Data\EntityTransformer;
 
+use Exception;
 use Softspring\CmsBundle\Data\Exception\InvalidElementException;
 use Softspring\CmsBundle\Data\Exception\ReferenceNotFoundException;
 use Softspring\CmsBundle\Data\Exception\RunPreloadBeforeImportException;
@@ -129,7 +130,7 @@ class RouteEntityTransformer implements EntityTransformerInterface
                 break;
 
             default:
-                throw new \Exception(sprintf('Route type %u not yet implemented', $routeData['type']));
+                throw new Exception(sprintf('Route type %u not yet implemented', $routeData['type']));
         }
 
         // store valid type

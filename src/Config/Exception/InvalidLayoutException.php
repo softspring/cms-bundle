@@ -2,7 +2,9 @@
 
 namespace Softspring\CmsBundle\Config\Exception;
 
-class InvalidLayoutException extends \Exception
+use Exception;
+
+class InvalidLayoutException extends Exception
 {
     public function __construct(string $layout, array $layoutsConfig)
     {

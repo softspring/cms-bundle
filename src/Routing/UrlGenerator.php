@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Routing;
 
+use Exception;
 use Psr\Log\LoggerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
@@ -32,7 +33,7 @@ class UrlGenerator
     /**
      * @param string|RouteInterface $routeOrName
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getUrl($routeOrName, ?string $locale = null, $site = null, array $routeParams = [], bool $onlyChecking = false): string
     {
@@ -58,7 +59,7 @@ class UrlGenerator
     /**
      * @param string|RouteInterface $routeOrName
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getPath($routeOrName, ?string $locale = null, $site = null, array $routeParams = [], bool $onlyChecking = false): string
     {
@@ -82,7 +83,7 @@ class UrlGenerator
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function getUrlFixed(RoutePathInterface $routePath, $site = null): string
     {
@@ -97,7 +98,7 @@ class UrlGenerator
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function getPathFixed(RoutePathInterface $routePath, $site = null): string
     {
@@ -114,7 +115,7 @@ class UrlGenerator
     /**
      * @param string|RouteInterface|array $routeOrName
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getRouteAttributes($routeOrName): string
     {
@@ -223,7 +224,7 @@ class UrlGenerator
         }
 
         if ('path' == $this->siteConfig['identification']) {
-            throw new \Exception('Not yet implemented');
+            throw new Exception('Not yet implemented');
         }
 
         if ($site instanceof SiteInterface) {

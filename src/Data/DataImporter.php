@@ -3,6 +3,7 @@
 namespace Softspring\CmsBundle\Data;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Psr\Log\LoggerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Data\EntityTransformer\ContentEntityTransformerInterface;
@@ -107,7 +108,7 @@ class DataImporter extends AbstractDataImportExport
         $transformer = $this->getDataTransformer($type);
 
         if (!$transformer instanceof ContentEntityTransformerInterface) {
-            throw new \Exception('Invalid entity transformer, check configuration');
+            throw new Exception('Invalid entity transformer, check configuration');
         }
 
         foreach ($zipData['media'] as $id => $mediaData) {

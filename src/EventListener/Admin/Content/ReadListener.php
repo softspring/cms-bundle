@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\EventListener\Admin\Content;
 
+use DateTime;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
@@ -106,7 +107,7 @@ class ReadListener extends AbstractContentListener
             return;
         }
 
-        $current = new \DateTime();
+        $current = new DateTime();
         //        $publishedAt = $content->getPublishedVersion()->getPublishedAt();
         $publishedAt = $content->getLastModified();
 

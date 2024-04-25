@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Admin\Menu;
 
+use RuntimeException;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\InvalidContentException;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
@@ -34,12 +35,12 @@ abstract class AbstractContentMenuProvider implements ContentMenuProviderInterfa
 
     /**
      * @throws InvalidContentException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     protected function getContent(array $context): array
     {
         if (!isset($context['content']) || !$context['content'] instanceof ContentInterface) {
-            throw new \RuntimeException('ContentMenuProvider requires a content instance in context');
+            throw new RuntimeException('ContentMenuProvider requires a content instance in context');
         }
 
         $content = $context['content'];

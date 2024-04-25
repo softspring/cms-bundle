@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Plugin\Compiler;
 
+use InvalidArgumentException;
 use Softspring\Component\DoctrineTargetEntityResolver\DependencyInjection\Compiler\AbstractResolveDoctrineTargetEntityPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -21,11 +22,11 @@ class ResolvePluginDoctrineTargetEntityPass extends AbstractResolveDoctrineTarge
     {
         foreach ($this->targetEntities as $targetEntity) {
             if (!isset($targetEntity['parameterName'])) {
-                throw new \InvalidArgumentException('Target entity configuration must have a parameterName');
+                throw new InvalidArgumentException('Target entity configuration must have a parameterName');
             }
 
             if (!isset($targetEntity['interface'])) {
-                throw new \InvalidArgumentException('Target entity configuration must have a interface');
+                throw new InvalidArgumentException('Target entity configuration must have a interface');
             }
 
             $required = isset($targetEntity['required']) ? $targetEntity['required'] : false;

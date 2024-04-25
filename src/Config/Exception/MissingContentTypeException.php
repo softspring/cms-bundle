@@ -2,6 +2,8 @@
 
 namespace Softspring\CmsBundle\Config\Exception;
 
-class MissingContentTypeException extends \Exception
+use Exception;
+
+class MissingContentTypeException extends Exception
 {
 }

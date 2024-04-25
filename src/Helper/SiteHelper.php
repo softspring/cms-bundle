@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Helper;
 
+use Exception;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
@@ -19,7 +20,7 @@ class SiteHelper
      * @param  SiteInterface[]|null        $value
      * @param  ContentInterface|array|null $content
      * @return SiteInterface[]
-     * @throws \Exception
+     * @throws Exception
      */
     public function normalizeFormAvailableSites(?array $value, mixed $content): array
     {
@@ -32,7 +33,7 @@ class SiteHelper
         } elseif (isset($content['_id'])) {
             $availableSites = $this->cmsConfig->getSitesForContent($content['_id']);
         } else {
-            throw new \Exception('Can not get available sites');
+            throw new Exception('Can not get available sites');
         }
 
         $availableSites = array_values($availableSites);

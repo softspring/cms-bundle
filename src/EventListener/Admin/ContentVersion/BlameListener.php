@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\EventListener\Admin\ContentVersion;
 
+use DateTime;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\SfsCmsEvents;
@@ -141,7 +142,7 @@ class BlameListener implements EventSubscriberInterface
     {
         $history = $contentVersion->getMetaField('history', []);
 
-        $date = new \DateTime();
+        $date = new DateTime();
 
         $history[] = [
             'action' => $action,

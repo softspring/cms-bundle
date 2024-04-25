@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Routing;
 
+use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\HttpFoundation\Request;
@@ -74,7 +75,7 @@ class CmsRouter implements RouterInterface, RequestMatcherInterface, WarmableInt
                     break;
 
                 default:
-                    throw new \Exception('Invalid $referenceType');
+                    throw new Exception('Invalid $referenceType');
             }
 
             return $url;
@@ -90,7 +91,7 @@ class CmsRouter implements RouterInterface, RequestMatcherInterface, WarmableInt
     {
         try {
             $attributes = $this->urlMatcher->matchRequest($request);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $attributes = [];
             $this->logger && $this->logger->warning(sprintf('Caught exception in CmsRouter->matchRequest: %s', $e->getMessage()));
         }

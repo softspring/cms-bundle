@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Model;
 
+use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Softspring\MediaBundle\Model\MediaInterface;
 
@@ -87,12 +88,12 @@ abstract class ContentVersion implements ContentVersionInterface
         $this->layout = $layout;
     }
 
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): ?DateTime
     {
-        return $this->createdAt ? \DateTime::createFromFormat('U', "{$this->createdAt}") : null;
+        return $this->createdAt ? DateTime::createFromFormat('U', "{$this->createdAt}") : null;
     }
 
-    public function setCreatedAt(?\DateTime $createdAt): void
+    public function setCreatedAt(?DateTime $createdAt): void
     {
         $this->createdAt = $createdAt ? (int) $createdAt->format('U') : null;
     }
@@ -186,7 +187,7 @@ abstract class ContentVersion implements ContentVersionInterface
     public function setCompiled(?array $compiled): void
     {
         if ($this->isPublished() && $this->compiled !== $compiled) {
-            $this->getContent()->setLastModified(new \DateTime());
+            $this->getContent()->setLastModified(new DateTime());
         }
 
         $this->compiled = $compiled;

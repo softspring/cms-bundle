@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Model;
 
+use DateTime;
 use Doctrine\Common\Collections\Collection;
 
 interface ContentInterface
@@ -83,7 +84,7 @@ interface ContentInterface
 
     public function addLocale(string $locale): void;
 
-    public function getLastModified(): ?\DateTime;
+    public function getLastModified(): ?DateTime;
 
-    public function setLastModified(?\DateTime $lastModified): void;
+    public function setLastModified(?DateTime $lastModified): void;
 }

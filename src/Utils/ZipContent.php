@@ -6,6 +6,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Yaml\Yaml;
+use ZipArchive;
 
 class ZipContent
 {
@@ -14,7 +15,7 @@ class ZipContent
      */
     public static function read(string $path, string $zipName)
     {
-        $zip = new \ZipArchive();
+        $zip = new ZipArchive();
         if (true !== $zip->open("$path/$zipName")) {
             return false;
         }
@@ -69,14 +70,14 @@ class ZipContent
     public static function dump(string $path, string $zipName): string
     {
         // new zip
-        $zip = new \ZipArchive();
+        $zip = new ZipArchive();
 
         // get files
         $finder = new Finder();
         $finder->files()->in($path);
 
         // open zip
-        if (true !== $zip->open($zipName, \ZipArchive::CREATE)) {
+        if (true !== $zip->open($zipName, ZipArchive::CREATE)) {
             throw new FileException('Zip file could not be created/opened.');
         }
 

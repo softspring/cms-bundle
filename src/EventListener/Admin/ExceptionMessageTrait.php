@@ -3,15 +3,16 @@
 namespace Softspring\CmsBundle\EventListener\Admin;
 
 use Softspring\CmsBundle\Render\RenderErrorException;
+use Throwable;
 
 trait ExceptionMessageTrait
 {
-    protected function extractExceptionMessage(\Throwable $exception): string
+    protected function extractExceptionMessage(Throwable $exception): string
     {
         return '<ul>'.implode('', $this->extractExceptionMessageEntries($exception)).'</ul>';
     }
 
-    private function extractExceptionMessageEntries(\Throwable $exception): array
+    private function extractExceptionMessageEntries(Throwable $exception): array
     {
         $messages[] = sprintf('<li><strong>%s</strong>: %s</li>', get_class($exception), $exception->getMessage());
 

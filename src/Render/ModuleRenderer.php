@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Render;
 
+use Exception;
 use Psr\Log\LoggerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\DisabledModuleException;
@@ -122,7 +123,7 @@ class ModuleRenderer
 
         try {
             return $this->twig->render($moduleConfig['render_template'], $module);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->cmsLogger && $this->cmsLogger->error(sprintf('Error rendering %s template: %s', $moduleConfig['render_template'], $exception->getMessage()));
 
             if (!$renderErrorList) {
@@ -155,7 +156,7 @@ class ModuleRenderer
 
         try {
             return $this->twig->render($moduleConfig['render_template'], $module);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->cmsLogger && $this->cmsLogger->error(sprintf('Error rendering %s template: %s %s', $moduleConfig['render_template'], $exception->getMessage(), $renderErrorList ? $renderErrorList->currentLocation() : ''));
 
             if (!$renderErrorList) {

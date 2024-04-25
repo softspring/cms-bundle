@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Manager;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Exception;
 use Softspring\CmsBundle\Config\Exception\InvalidContentException;
 use Softspring\CmsBundle\Config\Exception\InvalidLayoutException;
 use Softspring\CmsBundle\Helper\CmsHelper;
@@ -125,7 +126,7 @@ class ContentManager implements ContentManagerInterface
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function getType(mixed $objectOrClassName = null): string
     {
@@ -137,7 +138,7 @@ class ContentManager implements ContentManagerInterface
             }
         }
 
-        throw new \Exception(sprintf('Content type not found for class "%s"', $className));
+        throw new Exception(sprintf('Content type not found for class "%s"', $className));
     }
 
     /**
@@ -154,7 +155,7 @@ class ContentManager implements ContentManagerInterface
     protected function getTypeConfig(?string $type = null): array
     {
         if (!$type) {
-            throw new \Exception('type is required');
+            throw new Exception('type is required');
         }
 
         return $this->cmsHelper->config()->getContent($type, true);

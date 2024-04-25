@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Data;
 
+use Exception;
 use Google\Cloud\Storage\StorageClient;
 use Softspring\CmsBundle\Data\EntityTransformer\ContentEntityTransformerInterface;
 use Softspring\CmsBundle\Data\EntityTransformer\EntityTransformerInterface;
@@ -101,12 +102,12 @@ class DataExporter extends AbstractDataImportExport
                             break;
 
                         default:
-                            throw new \Exception('Not yet implemented');
+                            throw new Exception('Not yet implemented');
                     }
                     break;
 
                 default:
-                    throw new \Exception('Not yet implemented');
+                    throw new Exception('Not yet implemented');
             }
         }
 

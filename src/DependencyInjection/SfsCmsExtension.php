@@ -6,7 +6,15 @@ use Composer\InstalledVersions;
 use Softspring\CmsBundle\Config\ConfigLoader;
 use Softspring\CmsBundle\Data\EntityTransformer\EntityTransformerInterface;
 use Softspring\CmsBundle\Data\FieldTransformer\FieldTransformerInterface;
-use Softspring\CmsBundle\Entity;
+use Softspring\CmsBundle\Entity\Block;
+use Softspring\CmsBundle\Entity\Content;
+use Softspring\CmsBundle\Entity\ContentVersion;
+use Softspring\CmsBundle\Entity\Menu;
+use Softspring\CmsBundle\Entity\MenuItem;
+use Softspring\CmsBundle\Entity\Page;
+use Softspring\CmsBundle\Entity\Route;
+use Softspring\CmsBundle\Entity\RoutePath;
+use Softspring\CmsBundle\Entity\Site;
 use Softspring\CmsBundle\Model\BlockInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Symfony\Bundle\MakerBundle\MakerBundle;
@@ -114,15 +122,15 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $superClassList = [];
 
         $defaultClasses = [
-            'sfs_cms.site.class' => Entity\Site::class,
-            'sfs_cms.route.class' => Entity\Route::class,
-            'sfs_cms.route.path_class' => Entity\RoutePath::class,
-            'sfs_cms.content.content_class' => Entity\Content::class,
-            'sfs_cms.content.content_version_class' => Entity\ContentVersion::class,
-            'sfs_cms.content.page_class' => Entity\Page::class,
-            'sfs_cms.menu.class' => Entity\Menu::class,
-            'sfs_cms.menu.item_class' => Entity\MenuItem::class,
-            'sfs_cms.block.class' => Entity\Block::class,
+            'sfs_cms.site.class' => Site::class,
+            'sfs_cms.route.class' => Route::class,
+            'sfs_cms.route.path_class' => RoutePath::class,
+            'sfs_cms.content.content_class' => Content::class,
+            'sfs_cms.content.content_version_class' => ContentVersion::class,
+            'sfs_cms.content.page_class' => Page::class,
+            'sfs_cms.menu.class' => Menu::class,
+            'sfs_cms.menu.item_class' => MenuItem::class,
+            'sfs_cms.block.class' => Block::class,
         ];
 
         foreach ($defaultClasses as $parameter => $defaultEntityClass) {

@@ -3,6 +3,8 @@
 namespace Softspring\CmsBundle\Plugin;
 
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
+use Exception;
+use LogicException;
 use Softspring\CmsBundle\Plugin\Compiler\ResolvePluginDoctrineTargetEntityPass;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -12,11 +14,11 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 class SfsCmsPlugin extends Bundle
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function getPath(): string
     {
-        throw new \Exception('You must override getPath() method in your plugin class.');
+        throw new Exception('You must override getPath() method in your plugin class.');
     }
 
     protected function getTargetEntities(): array
@@ -55,7 +57,7 @@ class SfsCmsPlugin extends Bundle
     /**
      * Returns the bundle's container extension.
      *
-     * @throws \LogicException
+     * @throws LogicException
      */
     public function getContainerExtension(): ?ExtensionInterface
     {
@@ -64,7 +66,7 @@ class SfsCmsPlugin extends Bundle
 
             if (null !== $extension) {
                 if (!$extension instanceof ExtensionInterface) {
-                    throw new \LogicException(sprintf('Extension "%s" must implement Symfony\Component\DependencyInjection\Extension\ExtensionInterface.', get_debug_type($extension)));
+                    throw new LogicException(sprintf('Extension "%s" must implement Symfony\Component\DependencyInjection\Extension\ExtensionInterface.', get_debug_type($extension)));
                 }
 
                 // check naming convention
@@ -72,7 +74,7 @@ class SfsCmsPlugin extends Bundle
                 $expectedAlias = Container::underscore($basename);
 
                 if ($expectedAlias != $extension->getAlias()) {
-                    throw new \LogicException(sprintf('Users will expect the alias of the default extension of a bundle to be the underscored version of the bundle name ("%s"). You can override "Plugin::getContainerExtension()" if you want to use "%s" or another alias.', $expectedAlias, $extension->getAlias()));
+                    throw new LogicException(sprintf('Users will expect the alias of the default extension of a bundle to be the underscored version of the bundle name ("%s"). You can override "Plugin::getContainerExtension()" if you want to use "%s" or another alias.', $expectedAlias, $extension->getAlias()));
                 }
 
                 $this->extension = $extension;

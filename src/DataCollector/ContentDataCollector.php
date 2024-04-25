@@ -16,6 +16,7 @@ use Symfony\Component\HttpKernel\EventListener\FragmentListener;
 use Symfony\Component\HttpKernel\HttpCache\Esi;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
 
 class ContentDataCollector extends DataCollector
 {
@@ -40,7 +41,7 @@ class ContentDataCollector extends DataCollector
         $this->httpCacheEnabled = (bool) $httpCache;
     }
 
-    public function collect(Request $request, Response $response, ?\Throwable $exception = null): void
+    public function collect(Request $request, Response $response, ?Throwable $exception = null): void
     {
         if (!$this->profilerEnabled) {
             return; // DO NOT COLLECT DATA IF PROFILER IS NOT ENABLED

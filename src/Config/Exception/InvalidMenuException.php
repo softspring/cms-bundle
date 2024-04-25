@@ -2,7 +2,9 @@
 
 namespace Softspring\CmsBundle\Config\Exception;
 
-class InvalidMenuException extends \Exception
+use Exception;
+
+class InvalidMenuException extends Exception
 {
     public function __construct(string $menu, array $menusConfig)
     {

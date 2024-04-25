@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Form\Module;
 
+use ReflectionClass;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Form\Traits\DataMapperTrait;
 use Softspring\CmsBundle\Model\ContentInterface;
@@ -74,7 +75,7 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
         $typesMap = [];
 
         foreach ($this->cmsConfig->getModules() as $moduleId => $config) {
-            $typeReflection = new \ReflectionClass($config['module_type']);
+            $typeReflection = new ReflectionClass($config['module_type']);
             if (!$typeReflection->isSubclassOf(AbstractModuleType::class)) {
                 throw new InvalidConfigurationException(sprintf('%s class configured in module\'s module_type option must extends %s', $config['form_type'], AbstractNodeType::class));
             }

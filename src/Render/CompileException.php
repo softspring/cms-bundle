@@ -2,6 +2,8 @@
 
 namespace Softspring\CmsBundle\Render;
 
-class CompileException extends \Exception
+use Exception;
+
+class CompileException extends Exception
 {
 }

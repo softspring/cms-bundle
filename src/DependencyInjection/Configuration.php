@@ -2,7 +2,15 @@
 
 namespace Softspring\CmsBundle\DependencyInjection;
 
-use Softspring\CmsBundle\Entity;
+use Softspring\CmsBundle\Entity\Block;
+use Softspring\CmsBundle\Entity\Content;
+use Softspring\CmsBundle\Entity\ContentVersion;
+use Softspring\CmsBundle\Entity\Menu;
+use Softspring\CmsBundle\Entity\MenuItem;
+use Softspring\CmsBundle\Entity\Page;
+use Softspring\CmsBundle\Entity\Route;
+use Softspring\CmsBundle\Entity\RoutePath;
+use Softspring\CmsBundle\Entity\Site;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -29,7 +37,7 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->enumNode('identification')->values(['domain', 'path'])->defaultValue('domain')->end()
-                        ->scalarNode('class')->defaultValue(Entity\Site::class)->end()
+                        ->scalarNode('class')->defaultValue(Site::class)->end()
                         ->booleanNode('throw_not_found')->defaultTrue()->end()
                     ->end()
                 ->end()
@@ -37,7 +45,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('block')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('class')->defaultValue(Entity\Block::class)->end()
+                        ->scalarNode('class')->defaultValue(Block::class)->end()
                         ->scalarNode('find_field_name')->defaultValue('id')->end()
 
                         ->arrayNode('types')
@@ -60,8 +68,8 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('route')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('class')->defaultValue(Entity\Route::class)->end()
-                        ->scalarNode('path_class')->defaultValue(Entity\RoutePath::class)->end()
+                        ->scalarNode('class')->defaultValue(Route::class)->end()
+                        ->scalarNode('path_class')->defaultValue(RoutePath::class)->end()
                         ->scalarNode('find_field_name')->defaultValue('id')->end()
                     ->end()
                 ->end()
@@ -69,9 +77,9 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('content')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('content_class')->defaultValue(Entity\Content::class)->end()
-                        ->scalarNode('content_version_class')->defaultValue(Entity\ContentVersion::class)->end()
-                        ->scalarNode('page_class')->defaultValue(Entity\Page::class)->end()
+                        ->scalarNode('content_class')->defaultValue(Content::class)->end()
+                        ->scalarNode('content_version_class')->defaultValue(ContentVersion::class)->end()
+                        ->scalarNode('page_class')->defaultValue(Page::class)->end()
                         ->scalarNode('find_field_name')->defaultValue('id')->end()
                         ->booleanNode('save_compiled')->defaultTrue()->end()
                         ->scalarNode('prefix_compiled')->defaultValue('')->end()
@@ -82,8 +90,8 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('menu')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('class')->defaultValue(Entity\Menu::class)->end()
-                        ->scalarNode('item_class')->defaultValue(Entity\MenuItem::class)->end()
+                        ->scalarNode('class')->defaultValue(Menu::class)->end()
+                        ->scalarNode('item_class')->defaultValue(MenuItem::class)->end()
                         ->scalarNode('find_field_name')->defaultValue('id')->end()
                     ->end()
                 ->end()
