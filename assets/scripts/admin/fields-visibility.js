@@ -5,7 +5,7 @@ function showFields(fieldsConcatenated) {
     fields.forEach((field) => {
         const fieldContainer = document.querySelector('[data-field-container="' + field + '"]');
         if (fieldContainer) {
-            fieldContainer.show();
+            fieldContainer.showElement();
         }
     });
 }
@@ -15,7 +15,7 @@ function hideFields(fieldsConcatenated) {
     fields.forEach((field) => {
         const fieldContainer = document.querySelector('[data-field-container="' + field + '"]');
         if (fieldContainer) {
-            fieldContainer.hide();
+            fieldContainer.hideElement();
         }
     });
 }

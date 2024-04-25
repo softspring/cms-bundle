@@ -151,15 +151,15 @@ window.addEventListener('load', (event) => {
     //         var lastIndex = nodeRows.length - 1;
     //
     //         if (index===0) {
-    //             $('#'+id+'_up_node_button').hide();
+    //             $('#'+id+'_up_node_button').hideElement();
     //         } else {
-    //             $('#'+id+'_up_node_button').show();
+    //             $('#'+id+'_up_node_button').showElement();
     //         }
     //
     //         if (index === lastIndex) {
-    //             $('#'+id+'_down_node_button').hide();
+    //             $('#'+id+'_down_node_button').hideElement();
     //         } else {
-    //             $('#'+id+'_down_node_button').show();
+    //             $('#'+id+'_down_node_button').showElement();
     //         }
     //     });
     // }

@@ -58,25 +58,25 @@ window.addEventListener('load', (event) => {
         }
 
         if (Object.keys(routeParams).length) {
-            routeParamsField.closest('div').show();
-            routeParamsLabel && routeParamsLabel.closest('div').show();
+            routeParamsField.closest('div').showElement();
+            routeParamsLabel && routeParamsLabel.closest('div').showElement();
             routeParamsField.value = JSON.stringify(routeParams);
         } else {
-            routeParamsField.closest('div').hide();
-            routeParamsLabel && routeParamsLabel.closest('div').hide();
+            routeParamsField.closest('div').hideElement();
+            routeParamsLabel && routeParamsLabel.closest('div').hideElement();
             routeParamsField.value = '{}';
         }
 
         if(routeShowParamsLink !== null && routeHideParamsLink !== null) {
             if (requiredRouteParamsCount) {
-                routeShowParamsLink.hide();
-                routeHideParamsLink.hide();
+                routeShowParamsLink.hideElement();
+                routeHideParamsLink.hideElement();
             } else if (Object.keys(routeParams).length) {
-                routeShowParamsLink.hide();
-                routeHideParamsLink.show();
+                routeShowParamsLink.hideElement();
+                routeHideParamsLink.showElement();
             } else {
-                routeShowParamsLink.show();
-                routeHideParamsLink.hide();
+                routeShowParamsLink.showElement();
+                routeHideParamsLink.hideElement();
             }
         }
     }
@@ -85,7 +85,7 @@ window.addEventListener('load', (event) => {
         if (!event.target.matches('[data-route-show-params]') && !event.target.matches('[data-route-hide-params]')) return;
 
         // hide this button
-        event.target.hide();
+        event.target.hideElement();
 
         if (event.target.matches('[data-route-show-params]')) {
             // get the params field
@@ -95,9 +95,9 @@ window.addEventListener('load', (event) => {
 
             // show the hide button
             const routeHideParamsLink = document.querySelector('[data-route-hide-params=' + paramsFieldId + ']');
-            routeHideParamsLink.show();
-            routeParamsField.closest('div').show();
-            routeParamsLabel.closest('div').show();
+            routeHideParamsLink.showElement();
+            routeParamsField.closest('div').showElement();
+            routeParamsLabel.closest('div').showElement();
         } else {
             // get the params field
             const paramsFieldId = event.target.dataset.routeHideParams;
@@ -106,10 +106,10 @@ window.addEventListener('load', (event) => {
 
             // show the show button
             const routeShowParamsLink = document.querySelector('[data-route-show-params=' + paramsFieldId + ']');
-            routeShowParamsLink.show();
+            routeShowParamsLink.showElement();
             routeParamsField.value = '{}';
-            routeParamsField.closest('div').hide();
-            routeParamsLabel.closest('div').hide();
+            routeParamsField.closest('div').hideElement();
+            routeParamsLabel.closest('div').hideElement();
         }
     });
 
@@ -130,7 +130,7 @@ window.addEventListener('load', (event) => {
 
     [...document.querySelectorAll('[data-route-params]')].forEach((routeNameField) => {
         if (!routeNameField.value) {
-            document.getElementById(routeNameField.dataset.routeParams).closest('div').hide();
+            document.getElementById(routeNameField.dataset.routeParams).closest('div').hideElement();
         }
     });
 });
