@@ -43,7 +43,7 @@ function getPreviewElementsFromInput(inputElement) {
  */
 function contentEditableUpdateInputsFromElement(previewElement) {
     getInputsFromElement(previewElement).forEach(function (inputElement) {
-        if (previewElement.dataset.editContentEscape) {
+        if (previewElement.dataset.editContentEscape && previewElement.dataset.editContentEscape !== 'false') {
             inputElement.value = previewElement.innerText;
         } else {
             inputElement.value = previewElement.innerHTML;
