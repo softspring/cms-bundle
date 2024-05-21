@@ -102,7 +102,7 @@ class BlockRenderer extends AbstractRenderer
         });
     }
 
-    public function renderBlock(BlockInterface $block, ?string $locale = null): string
+    public function renderBlock(BlockInterface $block, ?string $locale = null, bool $forceEsiRender = false): string
     {
         $type = $block->getType();
         $blockId = $block->getId();
@@ -114,7 +114,7 @@ class BlockRenderer extends AbstractRenderer
                 throw new Exception('You must enable esi with framework.esi configuration to use it in CMS');
             }
 
-            $renderFunction = 'render_esi';
+            $renderFunction = $forceEsiRender ? 'render' : 'render_esi';
         } else {
             $renderFunction = 'render';
         }
