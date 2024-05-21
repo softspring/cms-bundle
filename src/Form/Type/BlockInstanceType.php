@@ -54,7 +54,7 @@ class BlockInstanceType extends AbstractType
             },
             'choice_attr' => function (?BlockInterface $block) {
                 $attr = [
-                    'data-block-preview' => $block ? $this->blockRenderer->renderBlock($block) : '',
+                    'data-block-preview' => '',
                 ];
 
                 if ($block) {
@@ -63,6 +63,12 @@ class BlockInstanceType extends AbstractType
                     $blockConfig['singleton'] && $attr['data-block-singleton'] = '';
                     $blockConfig['schedulable'] && $attr['data-block-schedulable'] = '';
                     $blockConfig['cache_ttl'] && $attr['data-block-cache-ttl'] = '';
+
+                    if ($blockConfig['esi']) {
+                        $attr['data-block-preview'] = $this->blockRenderer->renderBlock($block, null, true);
+                    } else {
+                        $attr['data-block-preview'] = $this->blockRenderer->renderBlock($block);
+                    }
                 }
 
                 return $attr;
