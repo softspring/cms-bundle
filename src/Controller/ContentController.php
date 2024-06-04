@@ -23,7 +23,7 @@ class ContentController extends AbstractController
         $response = new Response();
 
         if ($this->contentCacheLastModifiedEnabled) {
-            $response->setEtag(md5($content->getId().$content->getLastModified()->getTimestamp().$this->contentVersionCompiler->getCompileKeyFromRequest($content->getPublishedVersion(), $request)));
+            $response->setEtag(md5($content->getId().$content->getLastModified()?->getTimestamp().$this->contentVersionCompiler->getCompileKeyFromRequest($content->getPublishedVersion(), $request)));
             $response->setLastModified($content->getLastModified());
             // Set response as public. Otherwise it will be private by default.
             $response->setPublic();
