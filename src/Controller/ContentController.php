@@ -5,13 +5,14 @@ namespace Softspring\CmsBundle\Controller;
 use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Model\RoutePathInterface;
+use Softspring\CmsBundle\Render\ContentVersionCompiler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ContentController extends AbstractController
 {
-    public function __construct(protected ContentVersionManagerInterface $contentVersionManager, protected bool $contentCacheLastModifiedEnabled)
+    public function __construct(protected ContentVersionManagerInterface $contentVersionManager, protected ContentVersionCompiler $contentVersionCompiler, protected bool $contentCacheLastModifiedEnabled)
     {
     }
 
@@ -22,6 +23,7 @@ class ContentController extends AbstractController
         $response = new Response();
 
         if ($this->contentCacheLastModifiedEnabled) {
+            $response->setEtag(md5($content->getId().$content->getLastModified()->getTimestamp().$this->contentVersionCompiler->getCompileKeyFromRequest($content->getPublishedVersion(), $request)));
             $response->setLastModified($content->getLastModified());
             // Set response as public. Otherwise it will be private by default.
             $response->setPublic();
