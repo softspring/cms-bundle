@@ -22,21 +22,21 @@ class ContentController extends AbstractController
 
         $response = new Response();
 
+        /** @var ?ContentVersionInterface $publishedVersion */
+        $publishedVersion = $content->getPublishedVersion();
+
+        if (!$publishedVersion) {
+            throw $this->createNotFoundException();
+        }
+
         if ($this->contentCacheLastModifiedEnabled) {
-            $response->setEtag(md5($content->getId().$content->getLastModified()?->getTimestamp().$this->contentVersionCompiler->getCompileKeyFromRequest($content->getPublishedVersion(), $request)));
+            $response->setEtag(md5($content->getId().$content->getLastModified()?->getTimestamp().$this->contentVersionCompiler->getCompileKeyFromRequest($publishedVersion, $request)));
             $response->setLastModified($content->getLastModified());
             // Set response as public. Otherwise it will be private by default.
             $response->setPublic();
             if ($response->isNotModified($request)) {
                 return $response;
             }
-        }
-
-        /** @var ?ContentVersionInterface $publishedVersion */
-        $publishedVersion = $content->getPublishedVersion();
-
-        if (!$publishedVersion) {
-            throw $this->createNotFoundException();
         }
 
         $pageContent = $this->contentVersionManager->getCompiledContent($publishedVersion, $request);
