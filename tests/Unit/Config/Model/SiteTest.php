@@ -23,14 +23,14 @@ class SiteTest extends TestCase
         $processor = new Processor();
         $configuration = new Site('site_name');
         $config = $processor->processConfiguration($configuration, ['site' => [
-                'allowed_content_types' => ['page', 'post'],
-                'locales' => ['es', 'en'],
-                'default_locale' => 'en',
-                'https_redirect' => false,
-                'hosts' => [
-                    ['domain' => 'example.org'],
-                ],
+            'allowed_content_types' => ['page', 'post'],
+            'locales' => ['es', 'en'],
+            'default_locale' => 'en',
+            'https_redirect' => false,
+            'hosts' => [
+                ['domain' => 'example.org'],
             ],
+        ],
         ]);
 
         $this->assertEquals([
@@ -57,6 +57,10 @@ class SiteTest extends TestCase
             'error_pages' => [],
             'sitemaps' => [],
             'sitemaps_index' => ['enabled' => false, 'url' => false, 'cache_ttl' => false],
+            'robots' => [
+                'mode' => false,
+                'static_file' => '@site/default/robots.txt.twig',
+            ],
         ], $config);
     }
 }
