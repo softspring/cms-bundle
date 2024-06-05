@@ -108,6 +108,15 @@ class Site implements ConfigurationInterface
                     ->prototype('variable')->end()
                 ->end()
 
+                ->arrayNode('robots')
+                    ->addDefaultsIfNotSet()
+                    ->performNoDeepMerging()
+                    ->children()
+                        ->enumNode('mode')->defaultFalse()->values([false, 'static', 'dynamic'])->end()
+                        ->scalarNode('static_file')->defaultValue('@site/default/robots.txt.twig')->end()
+                    ->end()
+                ->end()
+
                 ->arrayNode('sitemaps')
                     ->performNoDeepMerging()
                     ->arrayPrototype()

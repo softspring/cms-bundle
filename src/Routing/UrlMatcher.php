@@ -6,6 +6,7 @@ use Doctrine\DBAL\Exception\TableNotFoundException;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Softspring\CmsBundle\Exception\NotYetImplementedException;
 use Softspring\CmsBundle\Exception\SiteHasNotACanonicalHostException;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Model\RoutePathInterface;
@@ -80,6 +81,25 @@ class UrlMatcher
                 'site' => $site,
             ];
         }
+
+        if ('/robots.txt' === $pathInfo) {
+            switch ($siteConfig['robots']['mode']) {
+                case 'static':
+                    return [
+                        '_controller' => 'Softspring\CmsBundle\Controller\SiteController::staticRobotsTxt',
+                        'site' => $site,
+                    ];
+
+                case 'dynamic':
+                    throw new NotYetImplementedException('Dynamic robots.txt not yet implemented');
+                    // TODO store in database
+                    // return [
+                    //     '_controller' => 'Softspring\CmsBundle\Controller\SiteController::dynamicRobotsTxt',
+                    //     'site' => $site,
+                    // ];
+            }
+        }
+
 
         $attributes = [];
 
