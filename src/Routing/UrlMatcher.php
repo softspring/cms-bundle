@@ -100,7 +100,6 @@ class UrlMatcher
             }
         }
 
-
         $attributes = [];
 
         if (!empty($siteHostConfig['locale'])) {
