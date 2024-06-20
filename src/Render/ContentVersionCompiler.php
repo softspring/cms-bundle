@@ -39,8 +39,7 @@ class ContentVersionCompiler
         $compiled = [];
         $compiledModules = [];
         foreach ($contentVersion->getContent()->getSites() as $site) {
-            // TODO REFACTOR ON TRANSLATIONS MERGE
-            foreach ($this->enabledLocales as $locale) {
+            foreach ($contentVersion->getContent()->getLocales() as $locale) {
                 $this->cmsLogger && $this->cmsLogger->debug(sprintf('Compiling "%s" content version for "%s" in "%s"', $contentVersion->getContent()->getName(), "$site", $locale));
 
                 $request = ContentVersionRenderer::generateRequest($locale, $site);
