@@ -73,3 +73,18 @@ sfs_cms:
     content:
         prefix_compiled: '%env(APP_VERSION)%/'
 ```
+
+## Some site or locale content render has not styles or scripts
+
+When a content is saved or republished, the content is compiled and stored in database. This content includes styles and scripts references.
+
+If you use webpack encore, when an asset reference is rendered in a request, it won't be rendered again in the same request. 
+
+SfsCms manage the _default webpack entrypoint, and automatically reset the entrypoint when a content is rendered.
+
+If you use a custom entrypoint, you need to reset the entry for the site or locale to force the assets to be recompiled before using it.
+
+```twig
+{{ sfs_cms_encore_entry_reset('blog') }}
+{{ encore_entry_link_tags('blog-styles', null, 'blog') }}
+```
