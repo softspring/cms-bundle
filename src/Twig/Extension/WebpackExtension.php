@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Twig\Extension;
 
+use RuntimeException;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupCollectionInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -22,7 +23,7 @@ class WebpackExtension extends AbstractExtension
     public function webpackResetEntrypoint(string $entrypointName = '_default'): void
     {
         if (!$this->entrypointLookupCollection) {
-            throw new \RuntimeException('Webpack encore entrypoint lookup collection is not available');
+            throw new RuntimeException('Webpack encore entrypoint lookup collection is not available');
         }
 
         $this->entrypointLookupCollection->getEntrypointLookup($entrypointName)->reset();
