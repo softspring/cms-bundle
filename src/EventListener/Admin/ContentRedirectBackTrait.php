@@ -30,7 +30,7 @@ trait ContentRedirectBackTrait
 
             case 'preview':
                 if ($version) {
-                    return new RedirectResponse($this->router->generate("sfs_cms_admin_content_{$configId}_preview_version", ['content' => $entity, 'version' => $version]));
+                    return new RedirectResponse($this->router->generate("sfs_cms_admin_content_{$configId}_preview", ['content' => $entity, 'version' => $version]));
                 }
 
                 return new RedirectResponse($this->router->generate("sfs_cms_admin_content_{$configId}_preview", ['content' => $entity]));
