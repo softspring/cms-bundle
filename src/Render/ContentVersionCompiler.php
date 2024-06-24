@@ -25,6 +25,12 @@ class ContentVersionCompiler
     ) {
     }
 
+    public function clearCompiled(ContentVersionInterface $contentVersion): void
+    {
+        $contentVersion->setCompiled([]);
+        $contentVersion->setCompiledModules([]);
+    }
+
     /**
      * @throws InvalidLayoutException
      * @throws CompileException
@@ -42,11 +48,7 @@ class ContentVersionCompiler
             foreach ($contentVersion->getContent()->getLocales() as $locale) {
                 $this->cmsLogger && $this->cmsLogger->debug(sprintf('Compiling "%s" content version for "%s" in "%s"', $contentVersion->getContent()->getName(), "$site", $locale));
 
-                $request = ContentVersionRenderer::generateRequest($locale, $site);
-
-                if ($routePath = $contentVersion->getContent()->getCanonicalRoutePath($locale)) {
-                    $request->attributes->set('routePath', $routePath);
-                }
+                $request = ContentVersionRenderer::generateRequestForContent($contentVersion->getContent(), $locale, $site);
 
                 $compileKey = $this->getCompileKeyFromRequest($contentVersion, $request);
 

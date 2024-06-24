@@ -66,7 +66,6 @@
                                     {% endif %}
                                 {% endif %}
                                 {#                            <li><a class="dropdown-item" href="#">Unpublish</a></li> #}
-                                <li><a class="dropdown-item disabled" href="#">Recompile</a></li>
                                 {% if content_config.admin.version_translations is defined %}
                                 <li>
                                     {% if not content_config.admin.version_translations.is_granted or is_granted(content_config.admin.version_translations.is_granted, content_entity) %}

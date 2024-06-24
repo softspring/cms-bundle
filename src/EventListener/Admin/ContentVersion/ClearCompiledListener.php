@@ -13,15 +13,13 @@ use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\Component\CrudlController\Event\ApplyEvent;
 use Softspring\Component\CrudlController\Event\ExceptionEvent;
 use Softspring\Component\CrudlController\Event\FailureEvent;
-use Softspring\Component\CrudlController\Event\InitializeEvent;
 use Softspring\Component\CrudlController\Event\SuccessEvent;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-class RecompileListener extends AbstractContentVersionListener
+class ClearCompiledListener extends AbstractContentVersionListener
 {
-    protected const ACTION_NAME = 'version_recompile';
+    protected const ACTION_NAME = 'version_clear_compiled';
 
     public function __construct(
         ContentManagerInterface $contentManager,
@@ -32,7 +30,6 @@ class RecompileListener extends AbstractContentVersionListener
         FlashNotifier $flashNotifier,
         AuthorizationCheckerInterface $authorizationChecker,
         protected ContentVersionCompiler $contentVersionCompiler,
-        protected bool $recompileEnabled,
     ) {
         parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
     }
@@ -40,48 +37,40 @@ class RecompileListener extends AbstractContentVersionListener
     public static function getSubscribedEvents(): array
     {
         return [
-            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_RECOMPILE_INITIALIZE => [
-                ['onInitializeCheckEnabled', 20],
+            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEAR_COMPILED_INITIALIZE => [
                 ['onInitializeGetConfig', 20],
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onEventLoadContentEntity', 9],
                 ['onInitializeIsGranted', 0],
             ],
-            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_RECOMPILE_LOAD_ENTITY => [
+            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEAR_COMPILED_LOAD_ENTITY => [
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onLoadEntity', 0],
             ],
-            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_RECOMPILE_NOT_FOUND => [
+            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEAR_COMPILED_NOT_FOUND => [
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onNotFound', 0],
             ],
-            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_RECOMPILE_FOUND => [
+            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEAR_COMPILED_FOUND => [
                 ['onEventDispatchContentTypeEvent', 10],
             ],
-            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_RECOMPILE_APPLY => [
+            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEAR_COMPILED_APPLY => [
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onApply', 0],
             ],
-            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_RECOMPILE_SUCCESS => [
+            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEAR_COMPILED_SUCCESS => [
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onSuccess', 0],
             ],
-            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_RECOMPILE_FAILURE => [
+            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEAR_COMPILED_FAILURE => [
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onFailure', 0],
             ],
-            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_RECOMPILE_EXCEPTION => [
+            SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEAR_COMPILED_EXCEPTION => [
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onException', 0],
             ],
         ];
-    }
-
-    public function onInitializeCheckEnabled(InitializeEvent $event): void
-    {
-        if (!$this->recompileEnabled) {
-            throw new NotFoundHttpException('Recompile is disabled');
-        }
     }
 
     public function onApply(ApplyEvent $event): void
@@ -91,7 +80,7 @@ class RecompileListener extends AbstractContentVersionListener
 
         $entity->setKeep($event->getRequest()->attributes->get('recompile') ?: false);
 
-        $this->contentVersionCompiler->compileAll($entity);
+        $this->contentVersionCompiler->clearCompiled($entity);
 
         $this->contentVersionManager->saveEntity($entity);
 
@@ -105,7 +94,7 @@ class RecompileListener extends AbstractContentVersionListener
         /** @var ContentVersionInterface $version */
         $version = $event->getEntity();
 
-        $this->flashNotifier->addTrans('success', "admin_{$contentConfig['_id']}.version_recompile.success_flash", [], 'sfs_cms_contents');
+        $this->flashNotifier->addTrans('success', "admin_{$contentConfig['_id']}.version_clear_compiled.success_flash", [], 'sfs_cms_contents');
 
         $content = $event->getRequest()->attributes->get('content');
 
@@ -119,7 +108,7 @@ class RecompileListener extends AbstractContentVersionListener
         /** @var ContentVersionInterface $version */
         $version = $event->getEntity();
 
-        $this->flashNotifier->addTrans('error', "admin_{$contentConfig['_id']}.version_recompile.failed_flash", ['%exception%' => $this->extractExceptionMessage($event->getException())], 'sfs_cms_contents');
+        $this->flashNotifier->addTrans('error', "admin_{$contentConfig['_id']}.version_clear_compiled.failed_flash", ['%exception%' => $this->extractExceptionMessage($event->getException())], 'sfs_cms_contents');
 
         $content = $event->getRequest()->attributes->get('content');
 
@@ -133,7 +122,7 @@ class RecompileListener extends AbstractContentVersionListener
         /** @var ?ContentVersionInterface $version */
         $version = $event->getRequest()->attributes->get('version');
 
-        $this->flashNotifier->addTrans('error', "admin_{$contentConfig['_id']}.version_recompile.failed_flash", ['%exception%' => $this->extractExceptionMessage($event->getException())], 'sfs_cms_contents');
+        $this->flashNotifier->addTrans('error', "admin_{$contentConfig['_id']}.version_clear_compiled.failed_flash", ['%exception%' => $this->extractExceptionMessage($event->getException())], 'sfs_cms_contents');
 
         $content = $event->getRequest()->attributes->get('content');
 
