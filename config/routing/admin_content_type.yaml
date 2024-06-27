@@ -86,6 +86,12 @@ recompile_version:
     defaults:
         configKey: 'version_recompile'
 
+clear_compiled_version:
+    controller: sfs_cms.admin.content_version.controller::apply
+    path: /{content}/{version}/clear-compiled
+    defaults:
+        configKey: 'version_clear_compiled'
+
 version_preview:
     controller: sfs_cms.admin.content_version.controller::read
     path: /{content}/{version}/preview

@@ -17,6 +17,8 @@ services:
     Softspring\CmsBundle\Twig\Extension\Admin\:
         resource: '../../src/Twig/Extension/Admin/*'
         tags: [ 'twig.extension' ]
+        bind:
+            $recompileEnabled: '%sfs_cms.content.recompile_enabled%'
 
     Softspring\CmsBundle\Admin\Routing\AdminRoutingLoader:
         arguments:

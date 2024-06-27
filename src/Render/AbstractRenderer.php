@@ -3,6 +3,7 @@
 namespace Softspring\CmsBundle\Render;
 
 use Exception;
+use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\Render\Exception\RenderException;
 use Symfony\Component\HttpFoundation\Request;
@@ -79,6 +80,18 @@ abstract class AbstractRenderer
         }
 
         return $result;
+    }
+
+    public static function generateRequestForContent(ContentInterface $content, string $locale, SiteInterface $site, bool $preview = false): Request
+    {
+        $request = self::generateRequest($locale, $site, $preview);
+
+        if ($routePath = $content->getCanonicalRoutePath($locale)) {
+            $request->attributes->set('routePath', $routePath);
+            $request->attributes->set('_route', $routePath->getRoute()->getId());
+        }
+
+        return $request;
     }
 
     public static function generateRequest(string $locale, SiteInterface $site, bool $preview = false): Request

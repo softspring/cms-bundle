@@ -333,6 +333,7 @@ admin_page:
             save.button: "Save changes"
             cancel.button: "Cancel"
             recompile.link: "Recompile"
+            clear_compiled.link: "Clear compiled content"
         compiled:
             title: "Compiled content"
             error: "This content has some compilation errors, try to edit it to solve them or try to recompile"
@@ -365,6 +366,10 @@ admin_page:
     version_recompile:
         success_flash: "Version has been recompiled"
         failed_flash: "An error has been produced during the version recompilation.<br/><small>%exception%</small>"
+
+    version_clear_compiled:
+        success_flash: "Version compiled content has been cleared"
+        failed_flash: "An error has been produced during the version content clearing.<br/><small>%exception%</small>"
 
     version_delete:
         meta.title: "Delete version"

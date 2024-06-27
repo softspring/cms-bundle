@@ -7,13 +7,25 @@ use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Extension\AbstractExtension;
+use Twig\Extension\GlobalsInterface;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
-class AdminExtension extends AbstractExtension
+class AdminExtension extends AbstractExtension implements GlobalsInterface
 {
-    public function __construct(protected RouterInterface $router, protected ContentManagerInterface $contentManager, protected MenuProvider $menuProvider)
+    public function __construct(
+        protected RouterInterface $router,
+        protected ContentManagerInterface $contentManager,
+        protected MenuProvider $menuProvider,
+        protected bool $recompileEnabled,
+    ) {
+    }
+
+    public function getGlobals(): array
     {
+        return [
+            'sfs_cms_admin_content_recompile_enabled' => $this->recompileEnabled,
+        ];
     }
 
     public function getFilters(): array
