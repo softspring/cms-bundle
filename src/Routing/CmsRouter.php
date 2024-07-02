@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Routing;
 
+use Doctrine\Persistence\Proxy;
 use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
@@ -47,6 +48,9 @@ class CmsRouter implements RouterInterface, RequestMatcherInterface, WarmableInt
 
     public function generate(string $name, array $parameters = [], int $referenceType = self::ABSOLUTE_PATH): string
     {
+        // prevent error with symfony/router >= 5.4 and doctrine proxies
+        $parameters = array_map(fn ($value) => $value instanceof Proxy && method_exists($value, '__toString') ? $value->__toString() : $value, $parameters);
+
         try {
             $cleanParams = array_filter($parameters, fn ($key) => !in_array($key, ['_sfs_cms_locale', '_sfs_cms_locale_path']), ARRAY_FILTER_USE_KEY);
 
