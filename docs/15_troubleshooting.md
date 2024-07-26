@@ -8,7 +8,7 @@ In some situations, Doctrine can dispatch a "Doctrine\DBAL\Exception\DriverExcep
 
 This is a common error if database instance has a low value for [sort_buffer_size](https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_sort_buffer_size) variable.
 
-The solution is easy: increase this value, for example to 512k.
+The solution is easy: increase this value, for example to 5.3k.
 
 ## Silent fail using a lot of ESI blocks or menus and http cache
 
