@@ -5,7 +5,6 @@ namespace Softspring\CmsBundle\Form\Admin\Menu;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Count;
 use Symfony\Component\Validator\Constraints\Valid;
 
 class MenuItemCollectionType extends AbstractType
