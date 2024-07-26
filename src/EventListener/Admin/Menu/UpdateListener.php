@@ -18,6 +18,7 @@ class UpdateListener extends AbstractMenuListener
             SfsCmsEvents::ADMIN_MENUS_UPDATE_FOUND => 'onFound',
             SfsCmsEvents::ADMIN_MENUS_UPDATE_FORM_PREPARE => 'onFormPrepare',
             SfsCmsEvents::ADMIN_MENUS_UPDATE_SUCCESS => 'onSuccess',
+            SfsCmsEvents::ADMIN_MENUS_UPDATE_VIEW => 'onViewAddConfig',
         ];
     }
 

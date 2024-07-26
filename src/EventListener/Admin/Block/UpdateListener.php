@@ -17,6 +17,7 @@ class UpdateListener extends AbstractBlockListener
         return [
             SfsCmsEvents::ADMIN_BLOCKS_UPDATE_FOUND => 'onFound',
             SfsCmsEvents::ADMIN_BLOCKS_UPDATE_FORM_PREPARE => 'onFormPrepare',
+            SfsCmsEvents::ADMIN_BLOCKS_UPDATE_VIEW => 'onViewAddConfig',
             SfsCmsEvents::ADMIN_BLOCKS_UPDATE_SUCCESS => 'onSuccess',
         ];
     }

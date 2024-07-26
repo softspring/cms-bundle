@@ -26,6 +26,21 @@ class Menu implements ConfigurationInterface
                 ->booleanNode('esi')->defaultTrue()->end()
                 ->integerNode('cache_ttl')->defaultFalse()->end()
                 ->booleanNode('singleton')->defaultTrue()->end()
+                ->booleanNode('items')->defaultTrue()->end()
+
+                ->scalarNode('form_template')->end()
+
+                ->arrayNode('form_fields')
+                    ->useAttributeAsKey('key')
+                    ->arrayPrototype()
+                    ->children()
+                        ->scalarNode('type')->isRequired()->end()
+                        ->arrayNode('type_options')
+                            ->useAttributeAsKey('key')
+                            ->prototype('variable')->end()
+                        ->end()
+                    ->end()
+                ->end()
             ->end()
         ;
 

@@ -16,6 +16,8 @@ class Menu implements MenuInterface
     /** @psalm-var Collection|MenuItemInterface[]|null */
     protected ?Collection $items = null;
 
+    protected ?array $data = null;
+
     public function __construct()
     {
         $this->items = new ArrayCollection();
@@ -70,5 +72,15 @@ class Menu implements MenuInterface
             $this->items->removeElement($item);
             $item->setMenu(null);
         }
+    }
+
+    public function getData(): ?array
+    {
+        return $this->data;
+    }
+
+    public function setData(?array $data): void
+    {
+        $this->data = $data;
     }
 }
