@@ -207,6 +207,9 @@ class ContentTest extends TestCase
                     'type' => VersionDeleteForm::class,
                     'success_redirect_to' => '',
                 ],
+                'version_clear_compiled' => [
+                    'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_CLEAR_COMPILED_VERSION',
+                ],
             ],
             'allowed_layouts' => [],
         ], $config);

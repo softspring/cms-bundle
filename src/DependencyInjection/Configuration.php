@@ -84,6 +84,7 @@ class Configuration implements ConfigurationInterface
                         ->booleanNode('save_compiled')->defaultTrue()->end()
                         ->scalarNode('prefix_compiled')->defaultValue('')->end()
                         ->booleanNode('cache_last_modified')->defaultFalse()->end()
+                        ->booleanNode('recompile')->defaultTrue()->end()
                     ->end()
                 ->end()
 

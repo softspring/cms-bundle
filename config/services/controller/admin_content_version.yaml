@@ -8,6 +8,8 @@ services:
 
     Softspring\CmsBundle\EventListener\Admin\ContentVersion\:
         resource: '../../src/EventListener/Admin/ContentVersion/*'
+        bind:
+            $recompileEnabled: '%sfs_cms.content.recompile_enabled%'
 
     Softspring\CmsBundle\Form\Admin\ContentVersion\:
         resource: '../../../src/Form/Admin/ContentVersion/*'
@@ -107,6 +109,16 @@ services:
                     success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEANUP_SUCCESS
                     failure_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEANUP_FAILURE
                     exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEANUP_EXCEPTION
+                version_clear_compiled:
+                    param_converter_key: 'id'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEAR_COMPILED_INITIALIZE
+                    load_entity_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEAR_COMPILED_LOAD_ENTITY
+                    not_found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEAR_COMPILED_NOT_FOUND
+                    found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEAR_COMPILED_FOUND
+                    apply_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEAR_COMPILED_APPLY
+                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEAR_COMPILED_SUCCESS
+                    failure_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEAR_COMPILED_FAILURE
+                    exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEAR_COMPILED_EXCEPTION
                 version_info:
                     param_converter_key: 'id'
                     initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENT_VERSIONS_INFO_INITIALIZE

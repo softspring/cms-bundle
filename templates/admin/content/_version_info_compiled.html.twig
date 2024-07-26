@@ -4,12 +4,22 @@
     {% trans_default_domain 'sfs_cms_contents' %}
 
     {% block title %}
-        {% if not content_config.admin.version_recompile.is_granted or is_granted(content_config.admin.version_recompile.is_granted, entity) %}
-            <a class="btn btn-sm btn-outline-secondary float-end"
-               href="{{ url('sfs_cms_admin_content_'~content_type~'_recompile_version', {'content':entity, 'version': version_entity, 'back': 'version_info'}) }}">{{ ('admin_'~content_type~'.version_info.actions.recompile.link')|trans }}</a>
-        {% else %}
-            <a class="btn btn-sm btn-outline-secondary float-end disabled">{{ ('admin_'~content_type~'.version_info.actions.recompile.link')|trans }}</a>
+        {% if sfs_cms_admin_content_recompile_enabled %}
+            {% if not content_config.admin.version_recompile.is_granted or is_granted(content_config.admin.version_recompile.is_granted, version_entity) %}
+                <a class="btn btn-sm btn-outline-secondary float-end"
+                   href="{{ url('sfs_cms_admin_content_'~content_type~'_recompile_version', {'content':entity, 'version': version_entity, 'back': 'version_info'}) }}">{{ ('admin_'~content_type~'.version_info.actions.recompile.link')|trans }}</a>
+            {% else %}
+                <a class="btn btn-sm btn-outline-secondary float-end disabled">{{ ('admin_'~content_type~'.version_info.actions.recompile.link')|trans }}</a>
+            {% endif %}
         {% endif %}
+
+        {% if not content_config.admin.version_clear_compiled.is_granted or is_granted(content_config.admin.version_clear_compiled.is_granted, version_entity) %}
+            <a class="btn btn-sm btn-outline-secondary float-end"
+               href="{{ url('sfs_cms_admin_content_'~content_type~'_clear_compiled_version', {'content':entity, 'version': version_entity, 'back': 'version_info'}) }}">{{ ('admin_'~content_type~'.version_info.actions.clear_compiled.link')|trans }}</a>
+        {% else %}
+            <a class="btn btn-sm btn-outline-secondary float-end disabled">{{ ('admin_'~content_type~'.version_info.actions.clear_compiled.link')|trans }}</a>
+        {% endif %}
+
         {{ parent() }}
     {% endblock %}
 
@@ -27,7 +37,7 @@
                 <div class="alert alert-warning" role="alert">
                     {{ ('admin_'~content_type~'.version_info.compiled.pre_compile_content_disabled')|trans }}
                 </div>
-            {% elseif version_entity.compiled is empty %}
+            {% elseif version_entity.compiled is empty and sfs_cms_admin_content_recompile_enabled %}
                 <div class="alert alert-danger" role="alert">
                     {{ ('admin_'~content_type~'.version_info.compiled.pre_compile_content_missing')|trans }}
                 </div>
@@ -37,7 +47,7 @@
                 <div class="alert alert-warning" role="alert">
                     {{ ('admin_'~content_type~'.version_info.compiled.pre_compile_modules_disabled')|trans }}
                 </div>
-            {% elseif version_entity.compiledModules is empty %}
+            {% elseif version_entity.compiledModules is empty and sfs_cms_admin_content_recompile_enabled %}
                 <div class="alert alert-danger" role="alert">
                     {{ ('admin_'~content_type~'.version_info.compiled.pre_compile_modules_missing')|trans }}
                 </div>
