@@ -1,4 +1,6 @@
 window.addEventListener('load', (event) => {
+    console.log('form-collections.js is deprecated since 5.3, will be removed in 6.0. Please use softspring/collection-type-form scripts.')
+
     /* ************************************************************************************************************* *
      * EVENT LISTENERS
      * ************************************************************************************************************* */
@@ -6,6 +8,8 @@ window.addEventListener('load', (event) => {
     // CLICK ADD BUTTON
     document.addEventListener('click', function (event) {
         if (!event.target || !event.target.classList.contains('collection-add-button')) return;
+
+        console.log('collection-add-button is deprecated since 5.3, will be removed in 6.0. Please use softspring/collection-type-form scripts.');
 
         const addNodeLink = event.target;
         const collection = document.getElementById(addNodeLink.dataset.collection);
@@ -18,6 +22,8 @@ window.addEventListener('load', (event) => {
     // CLICK REMOVE BUTTON
     document.addEventListener('click', function (event) {
         if (!event.target || !event.target.classList.contains('collection-remove-button')) return;
+
+        console.log('collection-remove-button is deprecated since 5.3, will be removed in 6.0. Please use softspring/collection-type-form scripts.');
 
         event.preventDefault();
 

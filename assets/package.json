@@ -1,7 +1,7 @@
 {
     "name": "@softspring/cms-bundle",
     "license": "MIT",
-    "version": "5.2.0-dev",
+    "version": "5.3.0-dev",
     "dependencies": {
         "underscore.string": "^3.3.6",
         "bootstrap-icons": "^1.11.2",
@@ -9,6 +9,7 @@
         "tinymce": "^6.8.1"
     },
     "peerDependencies": {
+        "@softspring/collection-form-type": "*",
         "@softspring/media-bundle": "*",
         "@softspring/polymorphic-form-type": "*"
     }
