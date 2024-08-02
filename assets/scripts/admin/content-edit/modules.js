@@ -1,5 +1,5 @@
 import { filterCurrentFilterElements } from './filter-preview';
-import { getPolymorphicCollectionLastIndex } from '@softspring/polymorphic-form-type/scripts/polymorphic-form-type';
+import { CollectionEvent,getCollectionLastIndex } from '@softspring/collection-form-type/scripts/collection-form-type';
 import { Modal } from 'bootstrap';
 
 window.addEventListener('load', (event) => {
@@ -10,14 +10,14 @@ window.addEventListener('load', (event) => {
         document.getElementById('content-form').classList.remove('d-none');
         // If has form to show
         if(module.closest('div').querySelector('.active >.cms-module-body > .cms-module-edit > .cms-module-form')) {
-            document.querySelectorAll('[data-polymorphic=collection]').forEach((element) => element.classList.add('has-form'));
+            document.querySelectorAll('[data-collection=collection]').forEach((element) => element.classList.add('has-form'));
         }
     }
 
     function allLostFocus() {
         document.getElementById('content-form').classList.add('d-none');
         document.querySelectorAll('.cms-module').forEach((element) => element.classList.remove('active'));
-        document.querySelectorAll('[data-polymorphic=collection]').forEach((element) => element.classList.remove('has-form'));
+        document.querySelectorAll('[data-collection=collection]').forEach((element) => element.classList.remove('has-form'));
     }
 
     // close module edit form
@@ -31,8 +31,8 @@ window.addEventListener('load', (event) => {
     // on module focus get focus
     document.addEventListener('click', function (event) {
         // prevent focus on close button
-        if (event.target && (event.target.hasAttribute('data-cms-module-form-close') || event.target.matches('[data-polymorphic-action=delete]'))) {
-            if (event.target.matches('[data-polymorphic-action=delete]')) {
+        if (event.target && (event.target.hasAttribute('data-cms-module-form-close') || event.target.matches('[data-collection-action=delete]'))) {
+            if (event.target.matches('[data-collection-action=delete]')) {
                 allLostFocus();
             }
             return;
@@ -46,7 +46,7 @@ window.addEventListener('load', (event) => {
         }
     });
 
-    document.addEventListener("polymorphic.node.insert.after", function (event) { // (1)
+    document.addEventListener("collection.node.insert.after", function (event) { // (1)
         var module = event.target.querySelector('.cms-module');
         if (module) {
             moduleFocus(module);
@@ -54,7 +54,7 @@ window.addEventListener('load', (event) => {
         filterCurrentFilterElements();
     });
 
-    document.addEventListener("polymorphic.node.add.after", function (event) { // (1)
+    document.addEventListener("collection.node.add.after", function (event) { // (1)
         var module = event.target.querySelector('.cms-module');
         if (module) {
             moduleFocus(module);
@@ -62,7 +62,7 @@ window.addEventListener('load', (event) => {
         filterCurrentFilterElements();
     });
 
-    document.addEventListener("polymorphic.node.duplicate.after", function (event) { // (1)
+    document.addEventListener("collection.node.duplicate.after", function (event) { // (1)
         var module = event.target.querySelector('.cms-module');
         if (module) {
             moduleFocus(module);
@@ -80,22 +80,22 @@ window.addEventListener('load', (event) => {
 
         insertElement.classList.add('selected');
 
-        if (insertElement.dataset.polymorphicCollection !== undefined) {
-            modulesCollection = document.getElementById(insertElement.dataset.polymorphicCollection);
+        if (insertElement.dataset.collectionTarget !== undefined) {
+            modulesCollection = document.getElementById(insertElement.dataset.collectionTarget);
         } else {
-            modulesCollection = insertElement.closest('[data-polymorphic=collection]');
+            modulesCollection = insertElement.closest('[data-collection=collection]');
         }
 
         // get collection elements
-        const nodeRow = insertElement.closest('[data-polymorphic=node]');
+        const nodeRow = insertElement.closest('[data-collection=node]');
         const modulesAllowed = modulesCollection.dataset.modulesAllowed.split(',');
 
         let action = 'Add';
         modulesCollectionInsertIndex = null;
-        if (insertElement.matches('[data-polymorphic-position=after]')) {
+        if (insertElement.matches('[data-collection-position=after]')) {
             action = 'Insert after';
             modulesCollectionInsertIndex = nodeRow ? nodeRow.dataset.index : null;
-        } else if (insertElement.matches('[data-polymorphic-position=before]')) {
+        } else if (insertElement.matches('[data-collection-position=before]')) {
             action = 'Insert before';
             modulesCollectionInsertIndex = nodeRow ? nodeRow.dataset.index : null;
         }
@@ -118,18 +118,20 @@ window.addEventListener('load', (event) => {
     });
 
     /**
-     * @param {PolymorphicEvent} event
+     * @param {CollectionEvent} event
      */
-    document.addEventListener("polymorphic.node.insert.before", function (event) {
+    document.addEventListener("collection.node.insert.before", function (event) {
         if (modulesCollection) {
             event.collection(modulesCollection);
-            event.position(modulesCollectionInsertIndex !== null ? modulesCollectionInsertIndex : getPolymorphicCollectionLastIndex(modulesCollection) + 1);
+            event.position(modulesCollectionInsertIndex !== null ? modulesCollectionInsertIndex : getCollectionLastIndex(modulesCollection) + 1);
+        } else if (event.target && event.target.dataset.collectionTarget !== undefined) {
+            modulesCollection = document.getElementById(event.target.dataset.collectionTarget);
         } else {
-            modulesCollection = document.getElementById(event.target.dataset.polymorphicCollection);
+            throw new Error('No collection target found for module');
         }
 
         const moduleThumbnail = event._originEvent.target;
-        let prototype = moduleThumbnail.dataset.polymorphicPrototype;
+        let prototype = moduleThumbnail.dataset.prototype ?? moduleThumbnail.dataset.collectionPrototype;
         // COLLECTION
         // version_create_form_data_main_1_modules_0
         // version_create_form[data][main][1][modules][0]
@@ -152,9 +154,9 @@ window.addEventListener('load', (event) => {
     });
 
     /**
-     * @param {PolymorphicEvent} event
+     * @param {CollectionEvent} event
      */
-    document.addEventListener("polymorphic.node.insert.after", function (event) {
+    document.addEventListener("collection.node.insert.after", function (event) {
         if (!event.collection() || !event.node() || event.collection().dataset.moduleRowClass === undefined) {
             return;
         }
@@ -163,10 +165,10 @@ window.addEventListener('load', (event) => {
         event.node().classList.add(event.collection().dataset.moduleRowClass);
 
         if (event.collection().dataset.moduleRowClass == 'col') {
-            const down = event.node().querySelector(':scope > .cms-module > .cms-module-header > .cms-module-buttons > [data-polymorphic-action=down] .bi-chevron-down');
+            const down = event.node().querySelector(':scope > .cms-module > .cms-module-header > .cms-module-buttons > [data-collection-action=down] .bi-chevron-down');
             down.classList.remove('bi-chevron-down');
             down.classList.add('bi-chevron-right');
-            const up = event.node().querySelector(':scope > .cms-module > .cms-module-header > .cms-module-buttons > [data-polymorphic-action=up] .bi-chevron-up');
+            const up = event.node().querySelector(':scope > .cms-module > .cms-module-header > .cms-module-buttons > [data-collection-action=up] .bi-chevron-up');
             up.classList.remove('bi-chevron-up');
             up.classList.add('bi-chevron-left');
         }
@@ -199,8 +201,8 @@ window.addEventListener('load', (event) => {
         }
     }
 
-    document.addEventListener("polymorphic.node.delete.after", checkMaxInputVars);
-    document.addEventListener("polymorphic.node.insert.after", checkMaxInputVars);
-    document.addEventListener("polymorphic.node.add.after", checkMaxInputVars);
-    document.addEventListener("polymorphic.node.duplicate.after", checkMaxInputVars);
+    document.addEventListener("collection.node.delete.after", checkMaxInputVars);
+    document.addEventListener("collection.node.insert.after", checkMaxInputVars);
+    document.addEventListener("collection.node.add.after", checkMaxInputVars);
+    document.addEventListener("collection.node.duplicate.after", checkMaxInputVars);
 });

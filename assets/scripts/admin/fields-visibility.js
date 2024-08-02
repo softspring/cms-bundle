@@ -68,7 +68,7 @@ function _init() {
 
     initFields(document);
 
-    document.addEventListener("polymorphic.node.insert.after", function (event) {
+    document.addEventListener("collection.node.insert.after", function (event) {
         initFields(event.target);
     });
 

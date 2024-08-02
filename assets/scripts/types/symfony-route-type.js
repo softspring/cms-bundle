@@ -122,7 +122,7 @@ window.addEventListener('load', (event) => {
         updateRouteParamsField(routeParamsField, 'init');
     });
 
-    document.addEventListener("polymorphic.node.insert.after", function (event) {
+    document.addEventListener("collection.node.insert.after", function (event) {
         [...event.node().querySelectorAll('[data-route-params]')].forEach((routeParamsField) => {
             updateRouteParamsField(routeParamsField);
         });

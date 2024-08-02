@@ -21,11 +21,11 @@ window.addEventListener('load', (event) => {
             nodeClass = customClassInput.value;
         }
 
-        let collectionTargetElements = modulePreview.querySelectorAll("[data-edit-collection-node-class-target='" + event.target.dataset.editCollectionNodeClass + "'] > [data-polymorphic=collection]");
+        let collectionTargetElements = modulePreview.querySelectorAll("[data-edit-collection-node-class-target='" + event.target.dataset.editCollectionNodeClass + "'] > [data-collection=collection]");
         if (collectionTargetElements.length) {
             collectionTargetElements.forEach(function (collectionTargetElement) {
                 collectionTargetElement.setAttribute('data-module-row-class', nodeClass);
-                [...collectionTargetElement.querySelectorAll(':scope > [data-polymorphic=node]')].forEach((node) => node.setAttribute('class', nodeClass));
+                [...collectionTargetElement.querySelectorAll(':scope > [data-collection=node]')].forEach((node) => node.setAttribute('class', nodeClass));
                 [...collectionTargetElement.querySelectorAll(':scope > .insert-module-at-the-end')].forEach((node) => node.setAttribute('class', 'insert-module-at-the-end '+nodeClass));
             });
         }

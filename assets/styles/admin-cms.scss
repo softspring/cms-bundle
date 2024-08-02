@@ -64,7 +64,7 @@ body {
     }
 }
 
-[data-polymorphic=collection]:hover > .row {
+[data-collection=collection]:hover > .row {
     & > .insert-module {
         display: block;
         margin-top: -4px;
@@ -107,15 +107,15 @@ body {
     }
 }
 
-[data-polymorphic=collection] {
+[data-collection=collection] {
     min-height: 50px;
 }
-[data-polymorphic=collection]:hover > .col,
-[data-polymorphic=collection]:hover > [class*=" col-"],
-[data-polymorphic=collection]:hover > [class^="col-"],
-[data-polymorphic=collection]:hover + .insert-module-at-the-end.col
-[data-polymorphic=collection]:hover + [class*="insert-module-at-the-end col-"],
-[data-polymorphic=collection]:hover + .insert-module-at-the-end[class^="col-"] {
+[data-collection=collection]:hover > .col,
+[data-collection=collection]:hover > [class*=" col-"],
+[data-collection=collection]:hover > [class^="col-"],
+[data-collection=collection]:hover + .insert-module-at-the-end.col
+[data-collection=collection]:hover + [class*="insert-module-at-the-end col-"],
+[data-collection=collection]:hover + .insert-module-at-the-end[class^="col-"] {
     position: relative;
 
     & > .insert-module {
