@@ -106,8 +106,9 @@ class UrlMatcher
             $attributes['_sfs_cms_locale'] = $siteHostConfig['locale'];
         }
 
+        $pathInfo = explode('/', ltrim($pathInfo, '/'));
         foreach ($siteConfig['paths'] as $path) {
-            if (str_starts_with($pathInfo, $path['path'])) {
+            if (isset($pathInfo[0]) && "/$pathInfo[0]" === $path['path']) {
                 if ($path['locale']) {
                     if (!empty($attributes['_sfs_cms_locale'])) {
                         // TODO resolve conflict
@@ -115,9 +116,10 @@ class UrlMatcher
                     $attributes['_sfs_cms_locale'] = $path['locale'];
                     $attributes['_sfs_cms_locale_path'] = $path['path'];
 
-                    $pathInfo = substr($pathInfo, strlen($path['path']));
+                    // $pathInfo = substr($pathInfo, strlen($path['path']));
+                    array_shift($pathInfo);
 
-                    if ($path['trailing_slash_on_root'] && '' === $pathInfo && !$pathInfoHasTrailingSlash) {
+                    if ($path['trailing_slash_on_root'] && empty($pathInfo) && !$pathInfoHasTrailingSlash) {
                         $url = parse_url($request->getUri());
                         $url = sprintf('%s://%s%s', $url['scheme'], $url['host'], $url['path'].'/');
 
@@ -126,6 +128,7 @@ class UrlMatcher
                 }
             }
         }
+        $pathInfo = '/'.implode('/', $pathInfo);
 
         // search in database or redis-cache (TODO) ;)
         if ($routePath = $this->searchRoutePath($site, $pathInfo, $attributes['_sfs_cms_locale'] ?? null)) {
