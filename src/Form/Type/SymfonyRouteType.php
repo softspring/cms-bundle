@@ -79,6 +79,7 @@ class SymfonyRouteType extends AbstractType
                 $path = $route->getPath();
                 preg_match_all('/(\{(.*)\})/U', $path, $parameters);
 
+                /* @phpstan-ignore-next-line */
                 foreach ($parameters[2] ?? [] as $parameter) {
                     $attr["data-route-parameter-$parameter"] = $route->getRequirement($parameter);
                 }
