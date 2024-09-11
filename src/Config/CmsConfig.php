@@ -156,42 +156,22 @@ class CmsConfig
         $this->siteEntities = null;
     }
 
-    private ?bool $sitesTableExists = null;
-
-    private function sitesTableExists(): bool
-    {
-        if (null === $this->sitesTableExists) {
-            $connection = $this->siteManager->getEntityManager()->getConnection();
-            $result = $connection->executeQuery('SHOW tables');
-            $this->sitesTableExists = false;
-            foreach ($result->fetchAllAssociative() as $value) {
-                if ('cms_site' == current($value)) {
-                    $this->sitesTableExists = true;
-                }
-            }
-        }
-
-        return $this->sitesTableExists;
-    }
-
     public function getSites(): array
     {
         if (null === $this->siteEntities) {
             $this->siteEntities = [];
 
-            if ($this->sitesTableExists()) {
-                foreach ($this->siteManager->getRepository()->findAll() as $siteEntity) {
-                    if (!isset($this->siteConfigs["$siteEntity"])) {
-                        $this->siteManager->deleteEntity($siteEntity);
-                    } else {
-                        $entityConfig = $siteEntity->getConfig();
-                        $cmsConfig = $this->siteConfigs["$siteEntity"];
-                        if ($entityConfig != $cmsConfig) {
-                            $siteEntity->setConfig($cmsConfig);
-                            $this->siteManager->saveEntity($siteEntity);
-                        }
-                        $this->siteEntities["$siteEntity"] = $siteEntity;
+            foreach ($this->siteManager->getRepository()->findAll() as $siteEntity) {
+                if (!isset($this->siteConfigs["$siteEntity"])) {
+                    $this->siteManager->deleteEntity($siteEntity);
+                } else {
+                    $entityConfig = $siteEntity->getConfig();
+                    $cmsConfig = $this->siteConfigs["$siteEntity"];
+                    if ($entityConfig != $cmsConfig) {
+                        $siteEntity->setConfig($cmsConfig);
+                        $this->siteManager->saveEntity($siteEntity);
                     }
+                    $this->siteEntities["$siteEntity"] = $siteEntity;
                 }
             }
 
@@ -200,9 +180,7 @@ class CmsConfig
                     $siteEntity = $this->siteManager->createEntity();
                     $siteEntity->setId($siteId);
                     $siteEntity->setConfig($config);
-                    if ($this->sitesTableExists()) {
-                        $this->siteManager->saveEntity($siteEntity);
-                    }
+                    $this->siteManager->saveEntity($siteEntity);
                     $this->siteEntities["$siteEntity"] = $siteEntity;
                 }
             }
