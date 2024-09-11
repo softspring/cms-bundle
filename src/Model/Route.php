@@ -26,6 +26,7 @@ abstract class Route implements RouteInterface
     protected ?string $redirectUrl = null;
     protected ?array $symfonyRoute = null;
     protected ?int $redirectType = null;
+    protected ?string $linkAttrs = null;
 
     public function __construct()
     {
@@ -158,6 +159,16 @@ abstract class Route implements RouteInterface
     public function setRedirectType(?int $redirectType): void
     {
         $this->redirectType = $redirectType;
+    }
+
+    public function getLinkAttrs(): string
+    {
+        return "$this->linkAttrs";
+    }
+
+    public function setLinkAttrs(?string $linkAttrs): void
+    {
+        $this->linkAttrs = $linkAttrs;
     }
 
     public function getParent(): ?RouteInterface

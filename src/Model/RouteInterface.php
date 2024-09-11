@@ -69,6 +69,10 @@ interface RouteInterface
 
     public function setRedirectType(?int $redirectType): void;
 
+    public function getLinkAttrs(): string;
+
+    public function setLinkAttrs(?string $linkAttrs): void;
+
     public function compilePaths(): void;
 
     public function compileChildrenPaths(): void;
