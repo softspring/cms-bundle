@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                      https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <mapped-superclass name="Softspring\CmsBundle\Model\CompiledData" table="cms_compiled_data">
+        <indexes>
+            <index name="key_idx" columns="compiled_key"/>
+        </indexes>
+
+        <field name="key" column="compiled_key" type="string" length="50" nullable="true"/>
+
+        <field name="createdAt" column="created_at" type="integer" nullable="true">
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+
+        <field name="expiresAt" column="expires_at" type="integer" nullable="true">
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+
+        <field name="data" column="data" type="json" nullable="true"/>
+
+        <lifecycle-callbacks>
+            <lifecycle-callback type="prePersist" method="autoSetCreatedAt"/>
+        </lifecycle-callbacks>
+    </mapped-superclass>
+
+</doctrine-mapping>

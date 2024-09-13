@@ -28,9 +28,7 @@ abstract class ContentVersion implements ContentVersionInterface
 
     protected ?array $meta = null;
 
-    protected ?array $compiledModules = null;
-
-    protected ?array $compiled = null;
+    protected ?Collection $compiled = null;
 
     protected bool $keep = false;
 
@@ -169,22 +167,15 @@ abstract class ContentVersion implements ContentVersionInterface
         $this->_getDataCallback = $getDataCallback;
     }
 
-    public function getCompiledModules(): ?array
-    {
-        return $this->compiledModules;
-    }
-
-    public function setCompiledModules(?array $compiledModules): void
-    {
-        $this->compiledModules = $compiledModules;
-    }
-
-    public function getCompiled(): ?array
+    /**
+     * @return Collection<CompiledDataInterface>
+     */
+    public function getCompiled(): Collection
     {
         return $this->compiled;
     }
 
-    public function setCompiled(?array $compiled): void
+    public function setCompiled(Collection $compiled): void
     {
         if ($this->isPublished() && $this->compiled !== $compiled) {
             $this->getContent()->setLastModified(new DateTime());
@@ -193,22 +184,41 @@ abstract class ContentVersion implements ContentVersionInterface
         $this->compiled = $compiled;
     }
 
+    public function addCompiled(CompiledDataInterface $compiled): void
+    {
+        if (!$this->compiled->contains($compiled)) {
+            if ($this->isPublished()) {
+                $this->getContent()->setLastModified(new DateTime());
+            }
+            $compiled->setContentVersion($this);
+            $this->compiled->add($compiled);
+        }
+    }
+
+    public function removeCompiled(CompiledDataInterface $compiled): void
+    {
+        if ($this->compiled->contains($compiled)) {
+            $this->compiled->removeElement($compiled);
+            $compiled->setContentVersion(null);
+        }
+    }
+
     public function hasCompileErrors(): bool
     {
-        foreach ($this->getCompiled() ?? [] as $siteCompiled) {
-            if (is_array($siteCompiled)) {
-                /* @deprecated: TODO to be removed in next versions */
-                foreach ($siteCompiled as $localeCompiled) {
-                    if (str_contains($localeCompiled, 'MODULE_RENDER_ERROR')) {
-                        return true;
-                    }
-                }
-            } elseif (is_string($siteCompiled)) {
-                if (str_contains($siteCompiled, 'MODULE_RENDER_ERROR')) {
-                    return true;
-                }
-            }
-        }
+        // DISABLED FOR PERFORMANCE REASONS
+        // TODO CHECK IF STILL NEEDED, MAYBE STORING A FLAG WOULD BE MORE EFFICIENT
+        // ALSO PROVIDE COMPILATION ERROR TO REPORT DEVELOPER
+        //        foreach ($this->getCompiled() as $siteCompiled) {
+        //            foreach ($siteCompiled->getData() as $data) {
+        //                if (is_string($data) && str_contains($data, 'MODULE_RENDER_ERROR')) {
+        //                    return true;
+        //                }
+        //
+        //                if (is_array($data) && str_contains(json_encode($data), 'MODULE_RENDER_ERROR')) {
+        //                    return true;
+        //                }
+        //            }
+        //        }
 
         return false;
     }

@@ -38,6 +38,13 @@
                 </inverse-join-columns>
             </join-table>
         </many-to-many>
+
+        <one-to-many field="compiled" target-entity="Softspring\CmsBundle\Model\CompiledDataInterface" mapped-by="contentVersion" fetch="EXTRA_LAZY" orphan-removal="true">
+            <cache usage="NONSTRICT_READ_WRITE" />
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </one-to-many>
     </entity>
 
 </doctrine-mapping>

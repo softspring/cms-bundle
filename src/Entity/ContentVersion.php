@@ -13,6 +13,7 @@ class ContentVersion extends ContentVersionModel
     {
         $this->medias = new ArrayCollection();
         $this->routes = new ArrayCollection();
+        $this->compiled = new ArrayCollection();
     }
 
     public function getId(): ?string
