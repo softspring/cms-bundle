@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Model\CompiledDataInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Render\CompileException;
@@ -21,6 +22,7 @@ class ContentVersionManager implements ContentVersionManagerInterface
         protected EntityManagerInterface $em,
         protected CmsConfig $cmsConfig,
         protected ContentVersionCompiler $contentCompiler,
+        protected CompiledDataManagerInterface $compiledDataManager,
     ) {
     }
 
@@ -61,16 +63,25 @@ class ContentVersionManager implements ContentVersionManagerInterface
     {
         $compiledKey = $this->contentCompiler->getCompileKeyFromRequest($contentVersion, $request);
 
-        $compiled = $contentVersion->getCompiled();
+        /** @var ?CompiledDataInterface $compiledData */
+        $compiledData = $this->compiledDataManager->getRepository()->findOneBy([
+            'contentVersion' => $contentVersion,
+            'key' => $compiledKey,
+        ]);
 
-        if (!isset($compiled[$compiledKey])) {
-            $compiledModules = $contentVersion->getCompiledModules()[$compiledKey] ?? null;
-            $contentVersion->setCompiledModules($compiledModules);
-            $compiled[$compiledKey] = $this->contentCompiler->compileRequest($contentVersion, $request, $compiledModules);
-            $contentVersion->setCompiled($compiled);
+        if (!$compiledData || !$compiledData->getDataPart('content')) {
+            if (!$compiledData) {
+                $compiledData = $this->compiledDataManager->createEntity();
+                $compiledData->setKey($compiledKey);
+                $compiledData->setContentVersion($contentVersion);
+                $contentVersion->addCompiled($compiledData);
+            }
+
+            $compiledContent = $this->contentCompiler->compileRequest($contentVersion, $request, $compiledData->getDataPart('modules'));
+            $compiledData->setDataPart('content', $compiledContent);
             $this->saveEntity($contentVersion);
         }
 
-        return $compiled[$compiledKey];
+        return $compiledData->getDataPart('content');
     }
 }

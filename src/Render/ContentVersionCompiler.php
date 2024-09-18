@@ -7,6 +7,8 @@ use Psr\Log\LoggerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\InvalidContentException;
 use Softspring\CmsBundle\Config\Exception\InvalidLayoutException;
+use Softspring\CmsBundle\Manager\CompiledDataManagerInterface;
+use Softspring\CmsBundle\Model\CompiledDataInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,42 +24,42 @@ class ContentVersionCompiler
         protected string $prefixCompiled,
         protected bool $saveCompiled,
         protected CmsConfig $cmsConfig,
+        protected CompiledDataManagerInterface $compiledDataManager,
     ) {
     }
 
     public function clearCompiled(ContentVersionInterface $contentVersion): void
     {
-        $contentVersion->setCompiled([]);
-        $contentVersion->setCompiledModules([]);
+        $contentVersion->getCompiled()->map(function (CompiledDataInterface $compiled) use ($contentVersion) {
+            $contentVersion->removeCompiled($compiled);
+        });
     }
 
     /**
-     * @throws InvalidLayoutException
      * @throws CompileException
-     * @throws InvalidContentException
      */
-    public function compileAll(ContentVersionInterface $contentVersion): array
+    public function compileAll(ContentVersionInterface $contentVersion): void
     {
         if (!$this->requestStack->getCurrentRequest()) {
-            return []; // not yet ready for render in fixtures, TODO improve this to allow render in fixtures
+            return; // not yet ready for render in fixtures, TODO improve this to allow render in fixtures
         }
 
-        $compiled = [];
-        $compiledModules = [];
         foreach ($contentVersion->getContent()->getSites() as $site) {
-            foreach ($contentVersion->getContent()->getLocales() as $locale) {
+            foreach ($contentVersion->getContent()->getLocales() ?? [] as $locale) {
                 $this->cmsLogger && $this->cmsLogger->debug(sprintf('Compiling "%s" content version for "%s" in "%s"', $contentVersion->getContent()->getName(), "$site", $locale));
 
                 $request = ContentVersionRenderer::generateRequestForContent($contentVersion->getContent(), $locale, $site);
 
-                $compileKey = $this->getCompileKeyFromRequest($contentVersion, $request);
+                $compiled = $this->compiledDataManager->createEntity();
+                $compiled->setKey($this->getCompileKeyFromRequest($contentVersion, $request));
+                $contentVersion->addCompiled($compiled);
 
                 try {
-                    $compiledModules[$compileKey] = $this->compileModulesRequest($contentVersion, $request);
-                    $this->canSaveCompiledModules($contentVersion) && $contentVersion->setCompiledModules($compiledModules);
+                    $compiledModules = $this->compileModulesRequest($contentVersion, $request);
+                    $this->canSaveCompiledModules($contentVersion) && $compiled->setDataPart('modules', $compiledModules);
 
-                    $compiled[$compileKey] = $this->compileRequest($contentVersion, $request, $compiledModules[$compileKey]);
-                    $this->canSaveCompiled($contentVersion) && $contentVersion->setCompiled($compiled);
+                    $compiledContent = $this->compileRequest($contentVersion, $request, $compiledModules);
+                    $this->canSaveCompiled($contentVersion) && $compiled->setDataPart('content', $compiledContent);
                 } catch (Exception $exception) {
                     if ($exception instanceof CompileException) {
                         throw new CompileException(sprintf('Error compiling content version for %s in %s', $site, $locale), 0, $exception->getPrevious());
@@ -67,8 +69,6 @@ class ContentVersionCompiler
                 }
             }
         }
-
-        return [$compiled, $compiledModules];
     }
 
     /**
