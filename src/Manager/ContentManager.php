@@ -5,6 +5,7 @@ namespace Softspring\CmsBundle\Manager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Exception;
+use InvalidArgumentException;
 use Softspring\CmsBundle\Config\Exception\InvalidContentException;
 use Softspring\CmsBundle\Config\Exception\InvalidLayoutException;
 use Softspring\CmsBundle\Helper\CmsHelper;
@@ -28,6 +29,49 @@ class ContentManager implements ContentManagerInterface
     public function getTargetClass(): string
     {
         return ContentInterface::class;
+    }
+
+    protected function indexingLinkAttributes(ContentInterface $content): string
+    {
+        $attrs = [];
+
+        $indexing = $content->getIndexing();
+
+        if (isset($indexing['noIndex'])) {
+            $attrs['rel'][] = $indexing['noIndex'] ? 'noindex' : 'index';
+        }
+
+        if (isset($indexing['noFollow'])) {
+            $attrs['rel'][] = $indexing['noFollow'] ? 'nofollow' : 'follow';
+        }
+
+        foreach ($attrs as $attr => $value) {
+            /* @phpstan-ignore-next-line */
+            if ('rel' === $attr && is_array($value)) {
+                $value = implode(',', $value);
+            }
+
+            $attrs[] = $attr.'="'.htmlentities($value).'"';
+            unset($attrs[$attr]);
+        }
+
+        return implode(' ', $attrs);
+    }
+
+    public function saveEntity(object $entity): void
+    {
+        if (!$this->getEntityClassReflection()->isInstance($entity)) {
+            throw new InvalidArgumentException(sprintf('$entity must be an instance of %s', $this->getEntityClass()));
+        }
+
+        /** @var ContentInterface $entity */
+        $attrs = $this->indexingLinkAttributes($entity);
+        foreach ($entity->getRoutes() as $route) {
+            $route->setLinkAttrs($attrs);
+        }
+
+        $this->em->persist($entity);
+        $this->em->flush();
     }
 
     /**

@@ -30,7 +30,7 @@
             </options>
         </field>
 
-        <many-to-one field="route" target-entity="Softspring\CmsBundle\Model\RouteInterface" inversed-by="paths">
+        <many-to-one field="route" target-entity="Softspring\CmsBundle\Model\RouteInterface" inversed-by="paths" fetch="EAGER">
             <cache usage="NONSTRICT_READ_WRITE" />
             <join-column name="route_id" referenced-column-name="id" on-delete="CASCADE" />
         </many-to-one>

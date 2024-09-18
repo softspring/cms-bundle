@@ -34,7 +34,6 @@
         </many-to-many>
 
         <one-to-many field="versions" target-entity="Softspring\CmsBundle\Model\ContentVersionInterface" mapped-by="content" fetch="EXTRA_LAZY">
-            <cache usage="NONSTRICT_READ_WRITE" />
             <cascade>
                 <cascade-persist/>
             </cascade>
@@ -43,13 +42,11 @@
             </order-by>
         </one-to-many>
 
-        <many-to-one field="publishedVersion" target-entity="Softspring\CmsBundle\Model\ContentVersionInterface">
-            <cache usage="NONSTRICT_READ_WRITE" />
+        <many-to-one field="publishedVersion" target-entity="Softspring\CmsBundle\Model\ContentVersionInterface" fetch="LAZY">
             <join-column name="published_version_id" on-delete="SET NULL"/>
         </many-to-one>
 
-        <many-to-one field="lastVersion" target-entity="Softspring\CmsBundle\Model\ContentVersionInterface">
-            <cache usage="NONSTRICT_READ_WRITE" />
+        <many-to-one field="lastVersion" target-entity="Softspring\CmsBundle\Model\ContentVersionInterface" fetch="LAZY">
             <join-column name="last_version_id" on-delete="SET NULL"/>
         </many-to-one>
 
@@ -57,6 +54,7 @@
             <cache usage="NONSTRICT_READ_WRITE" />
             <cascade>
                 <cascade-persist/>
+                <cascade-refresh/>
             </cascade>
         </one-to-many>
     </entity>
