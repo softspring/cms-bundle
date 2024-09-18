@@ -6,6 +6,7 @@ use Exception;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\InvalidBlockException;
 use Softspring\CmsBundle\Model\BlockInterface;
+use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\Render\Exception\RenderException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -68,7 +69,10 @@ class BlockRenderer extends AbstractRenderer
         }
 
         $params['_locale'] = $locale ?? $this->requestStack->getCurrentRequest()?->getLocale();
-        $site && $params['_site'] = $site;
+
+        !$site && $site = $this->requestStack->getCurrentRequest()?->attributes->get('_sfs_cms_site', $this->requestStack->getCurrentRequest()?->attributes->get('_site'));
+        $site && $params['_site'] = $site instanceof SiteInterface ? $site->getId() : $site;
+
         if (!empty($blockConfig['render_url'])) {
             $params_string = $this->paramsAsString($params);
             $twigCode = "{{ $renderFunction(url('{$blockConfig['render_url']}', {{$params_string}})) }}";

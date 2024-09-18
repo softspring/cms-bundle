@@ -2,6 +2,6 @@
 
 {% if block %}
     {% if id|default(false) or class|default(false) %}<div {{ module.id(id) }} {{ module.class(class) }}>{% endif %}
-        {{ sfs_cms_block(block) }}
+        {{ sfs_cms_block(block, app.request.locale, app.request.attributes.get('_sfs_cms_site')) }}
     {% if id|default(false) or class|default(false) %}</div>{% endif %}
 {% endif %}
