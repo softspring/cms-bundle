@@ -40,6 +40,7 @@ class UtilsExtension extends AbstractExtension
 
         $esiCalls = [];
 
+        /* @phpstan-ignore-next-line */
         foreach ($matches[1] ?? [] as $url) {
             $parsed = parse_url($url);
 

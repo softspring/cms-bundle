@@ -125,29 +125,7 @@ class UrlGenerator
             return '';
         }
 
-        $attrs = [];
-
-        if (RouteInterface::TYPE_CONTENT === $route->getType() && $route->getContent()) {
-            $seo = $route->getContent()->getSeo();
-            if (isset($seo['noIndex'])) {
-                $attrs['rel'][] = $seo['noIndex'] ? 'noindex' : 'index';
-            }
-            if (isset($seo['noFollow'])) {
-                $attrs['rel'][] = $seo['noFollow'] ? 'nofollow' : 'follow';
-            }
-        }
-
-        foreach ($attrs as $attr => $value) {
-            /* @phpstan-ignore-next-line */
-            if ('rel' === $attr && is_array($value)) {
-                $value = implode(',', $value);
-            }
-
-            $attrs[] = $attr.'="'.htmlentities($value).'"';
-            unset($attrs[$attr]);
-        }
-
-        return implode(' ', $attrs);
+        return $route->getLinkAttrs();
     }
 
     protected function getRoutePath(RouteInterface $route, ?string $locale = null, $site = null): string
