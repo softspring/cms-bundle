@@ -22,7 +22,7 @@ class AccordionExtension extends AbstractExtension
         ];
     }
 
-    public function accordionStart(FormView $formView, string $accordionId, ?string $name = null, bool $open = false, ?string $title = null, bool $row = true): string
+    public function accordionStart(FormView $formView, string $accordionId, ?string $name = null, bool $open = false, ?string $title = null, bool $row = true, $alwaysopen= true): string
     {
         $id = uniqid('accordion-');
         $collapsed = $open ? '' : 'collapsed';
@@ -30,13 +30,13 @@ class AccordionExtension extends AbstractExtension
         $show = $open ? 'show' : '';
         $title = $title ?? $this->translator->trans($formView->vars['module_id'].'.form._group.'.($name ?? 'default'), [], 'sfs_cms_modules');
         $rowStart = $row ? '<div class="row">' : '';
-        $bsParent = $accordionId ? "data-bs-parent=\"#$accordionId\"" : '';
+        $bsParent = (!$alwaysopen && $accordionId) ? "data-bs-parent=\"#$accordionId\"" : '';
 
         return <<<HTML
 <div class="accordion-item">
     <h2 class="accordion-header" id="$id-heading">
         <button class="accordion-button $collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#$id-collapse"
-                aria-expanded="$expanded" aria-controls="$id-collapse">$title</button>
+                aria-expanded="$expanded" aria-controls="$id-collapse"><strong class="text-uppercase">$title</strong></button>
     </h2>
     <div id="$id-collapse" class="accordion-collapse collapse $show" aria-labelledby="$id-heading" $bsParent>
         <div class="accordion-body">
