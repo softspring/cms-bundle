@@ -15,7 +15,7 @@
         "doctrine/migrations": "^3.2",
         "doctrine/orm": "^2.14 | ^3.0",
         "softspring/components": "^5.2",
-        "softspring/crudl-controller": "^5.2",
+        "softspring/crudl-controller": "^5.3",
         "softspring/doctrine-migrations-version-comparator": "^5.1",
         "softspring/doctrine-target-entity-resolver": "^5.2",
         "softspring/dynamic-form-type": "^5.1",
