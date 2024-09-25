@@ -7,6 +7,7 @@ use Softspring\CmsBundle\Config\ConfigLoader;
 use Softspring\CmsBundle\Data\EntityTransformer\EntityTransformerInterface;
 use Softspring\CmsBundle\Data\FieldTransformer\FieldTransformerInterface;
 use Softspring\CmsBundle\Entity\Block;
+use Softspring\CmsBundle\Entity\CompiledData;
 use Softspring\CmsBundle\Entity\Content;
 use Softspring\CmsBundle\Entity\ContentVersion;
 use Softspring\CmsBundle\Entity\Menu;
@@ -88,6 +89,8 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $container->setParameter('sfs_cms.block.find_field_name', $config['block']['find_field_name'] ?? null);
         //        $container->setParameter('sfs_cms.block.types', $config['block']['types'] ?? []);
 
+        $container->setParameter('sfs_cms.compiled.class', CompiledData::class);
+
         $this->processDataClasses($container);
 
         // load services
@@ -132,6 +135,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
             'sfs_cms.menu.class' => Menu::class,
             'sfs_cms.menu.item_class' => MenuItem::class,
             'sfs_cms.block.class' => Block::class,
+            'sfs_cms.compiled.class' => CompiledData::class,
         ];
 
         foreach ($defaultClasses as $parameter => $defaultEntityClass) {

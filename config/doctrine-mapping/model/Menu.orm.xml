@@ -10,6 +10,8 @@
         <field name="type" column="menu_type" type="string" length="30" nullable="false">
                 <options><option name="fixed">true</option></options>
         </field>
+
+        <field name="data" column="data" type="json" nullable="true" />
     </mapped-superclass>
 
 </doctrine-mapping>

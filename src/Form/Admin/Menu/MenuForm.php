@@ -3,6 +3,7 @@
 namespace Softspring\CmsBundle\Form\Admin\Menu;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Softspring\CmsBundle\Form\Type\DynamicFormType;
 use Softspring\CmsBundle\Model\MenuInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -32,6 +33,14 @@ class MenuForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('name', TextType::class);
-        $builder->add('items', MenuItemCollectionType::class);
+
+        if ($options['menu_config']['items']) {
+            $builder->add('items', MenuItemCollectionType::class);
+        }
+
+        $builder->add('data', DynamicFormType::class, [
+            'form_fields' => $options['menu_config']['form_fields'],
+            'translation_domain' => $options['translation_domain'],
+        ]);
     }
 }

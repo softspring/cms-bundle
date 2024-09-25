@@ -20,6 +20,7 @@ class CreateListener extends AbstractBlockListener
             ],
             SfsCmsEvents::ADMIN_BLOCKS_CREATE_FORM_PREPARE => 'onFormPrepare',
             SfsCmsEvents::ADMIN_BLOCKS_CREATE_ENTITY => 'onCreateEntity',
+            SfsCmsEvents::ADMIN_BLOCKS_CREATE_VIEW => 'onViewAddConfig',
         ];
     }
 
