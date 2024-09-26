@@ -47,7 +47,7 @@ class ListListener extends AbstractContentVersionListener
         $event->setFormOptions([
             'method' => 'GET',
             'content_config' => $contentConfig,
-            'class' => $this->contentManager->getTypeClass($contentConfig['_id']),
+            'content' => $event->getRequest()->attributes->get('content'),
         ]);
     }
 
