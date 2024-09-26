@@ -30,6 +30,8 @@ abstract class ContentVersion implements ContentVersionInterface
 
     protected ?Collection $compiled = null;
 
+    protected bool $compileErrors = false;
+
     protected bool $keep = false;
 
     protected ?Collection $medias = null;
@@ -203,24 +205,21 @@ abstract class ContentVersion implements ContentVersionInterface
         }
     }
 
+    public function cleanCompiled(): void
+    {
+        $this->compiled->map(function (CompiledDataInterface $compiled) {
+            $this->removeCompiled($compiled);
+        });
+    }
+
     public function hasCompileErrors(): bool
     {
-        // DISABLED FOR PERFORMANCE REASONS
-        // TODO CHECK IF STILL NEEDED, MAYBE STORING A FLAG WOULD BE MORE EFFICIENT
-        // ALSO PROVIDE COMPILATION ERROR TO REPORT DEVELOPER
-        //        foreach ($this->getCompiled() as $siteCompiled) {
-        //            foreach ($siteCompiled->getData() as $data) {
-        //                if (is_string($data) && str_contains($data, 'MODULE_RENDER_ERROR')) {
-        //                    return true;
-        //                }
-        //
-        //                if (is_array($data) && str_contains(json_encode($data), 'MODULE_RENDER_ERROR')) {
-        //                    return true;
-        //                }
-        //            }
-        //        }
+        return $this->compileErrors;
+    }
 
-        return false;
+    public function setCompileErrors(bool $compileErrors): void
+    {
+        $this->compileErrors = $compileErrors;
     }
 
     public function isPublished(): bool

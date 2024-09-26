@@ -16,6 +16,8 @@ class CompiledData implements CompiledDataInterface
 
     protected ?ContentVersionInterface $contentVersion;
 
+    protected bool $errors = false;
+
     public function getKey(): ?string
     {
         return $this->key;
@@ -81,5 +83,19 @@ class CompiledData implements CompiledDataInterface
     public function setContentVersion(?ContentVersionInterface $contentVersion): void
     {
         $this->contentVersion = $contentVersion;
+    }
+
+    public function hasErrors(): bool
+    {
+        return $this->errors;
+    }
+
+    public function setErrors(bool $errors): void
+    {
+        $this->errors = $errors;
+
+        if ($this->getContentVersion()) {
+            $this->getContentVersion()->setCompileErrors($errors);
+        }
     }
 }

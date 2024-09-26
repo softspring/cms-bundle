@@ -75,6 +75,12 @@ interface ContentVersionInterface
 
     public function removeCompiled(CompiledDataInterface $compiled): void;
 
+    public function cleanCompiled(): void;
+
+    public function hasCompileErrors(): bool;
+
+    public function setCompileErrors(bool $compiledErrors): void;
+
     public function isPublished(): bool;
 
     public function isLastVersion(): bool;

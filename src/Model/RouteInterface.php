@@ -53,6 +53,8 @@ interface RouteInterface
 
     public function removePath(RoutePathInterface $path): void;
 
+    public function getPathForLocale(string $locale): ?RoutePathInterface;
+
     public function getContent(): ?ContentInterface;
 
     public function setContent(?ContentInterface $content): void;
