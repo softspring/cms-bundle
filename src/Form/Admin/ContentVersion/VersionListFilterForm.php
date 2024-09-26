@@ -32,7 +32,7 @@ class VersionListFilterForm extends PaginatorForm
             'order_valid_fields' => ['versionNumber'],
             'order_default_value' => 'versionNumber',
             'order_direction_default_value' => 'desc',
-            'class' => ContentVersionInterface::class
+            'class' => ContentVersionInterface::class,
         ]);
 
         $resolver->setRequired('content');

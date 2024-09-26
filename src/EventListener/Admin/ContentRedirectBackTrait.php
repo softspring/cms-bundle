@@ -20,6 +20,7 @@ trait ContentRedirectBackTrait
         switch ($request->query->get('back')) {
             case 'versions':
                 $page = $request->query->get('page', 1);
+
                 return new RedirectResponse($this->router->generate(name: "sfs_cms_admin_content_{$configId}_versions", parameters: ['content' => $entity, 'page' => $page]));
 
             case 'version_info':
