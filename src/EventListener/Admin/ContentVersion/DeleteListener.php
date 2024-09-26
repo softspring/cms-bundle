@@ -29,7 +29,7 @@ class DeleteListener extends AbstractContentVersionListener
         RouterInterface $router,
         FlashNotifier $flashNotifier,
         AuthorizationCheckerInterface $authorizationChecker,
-        protected TranslatableContext $translatableContext
+        protected TranslatableContext $translatableContext,
     ) {
         parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
     }

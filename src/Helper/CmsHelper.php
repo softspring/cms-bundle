@@ -10,7 +10,7 @@ class CmsHelper
         protected CmsConfig $cmsConfig,
         protected SiteHelper $siteHelper,
         protected LocaleHelper $localeHelper,
-        protected LayoutHelper $layoutHelper
+        protected LayoutHelper $layoutHelper,
     ) {
     }
 

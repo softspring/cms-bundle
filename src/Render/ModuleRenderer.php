@@ -25,7 +25,7 @@ class ModuleRenderer
         protected CmsConfig $cmsConfig,
         protected RequestStack $requestStack,
         protected ?LoggerInterface $cmsLogger,
-        protected Environment $twig
+        protected Environment $twig,
     ) {
     }
 
