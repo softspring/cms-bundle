@@ -17,9 +17,9 @@ use Twig\Environment;
 
 class ModuleRenderer
 {
-    public const SITE_HIDDEN_MODULE = '<!-- site hidden module -->';
-    public const LOCALE_HIDDEN_MODULE = '<!-- locale hidden module -->';
-    public const DISABLED_HIDDEN_MODULE = '<!-- disabled module -->';
+    public const SITE_HIDDEN_MODULE = '<!-- SITE_HIDDEN_MODULE -->';
+    public const LOCALE_HIDDEN_MODULE = '<!-- LOCALE_HIDDEN_MODULE -->';
+    public const DISABLED_HIDDEN_MODULE = '<!-- DISABLED_HIDDEN_MODULE -->';
 
     public function __construct(
         protected CmsConfig $cmsConfig,
@@ -36,14 +36,14 @@ class ModuleRenderer
     {
         try {
             if ($this->skipModuleRenderBySiteFilter($module)) {
-                return self::SITE_HIDDEN_MODULE;
+                return self::SITE_HIDDEN_MODULE."\n";
             }
         } catch (InvalidSiteException $e) {
             throw new ModuleRenderException($module, $e);
         }
 
         if ($this->skipModuleRenderByLocaleFilter($module)) {
-            return self::LOCALE_HIDDEN_MODULE;
+            return self::LOCALE_HIDDEN_MODULE."\n";
         }
 
         $this->cmsLogger && $this->cmsLogger->debug(sprintf('Rendering %s module', $module['_module']));
@@ -55,7 +55,7 @@ class ModuleRenderer
         } catch (DisabledModuleException) {
             $this->cmsLogger && $this->cmsLogger->warning(sprintf('Module %s is disabled, but it is rendered.', $module['_module']));
 
-            return self::DISABLED_HIDDEN_MODULE;
+            return self::DISABLED_HIDDEN_MODULE."\n";
         }
 
         $module = DataMigrator::migrate($moduleConfig['revision_migration_scripts'], $module, $moduleConfig['revision']);
