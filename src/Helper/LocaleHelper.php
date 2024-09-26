@@ -5,24 +5,22 @@ namespace Softspring\CmsBundle\Helper;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
+use Softspring\CmsBundle\Translator\TranslatableContext;
 
 class LocaleHelper
 {
-    public function __construct(protected CmsConfig $cmsConfig, protected array $enabledLocales, protected ?string $defaultLocale)
+    public function __construct(protected CmsConfig $cmsConfig, protected TranslatableContext $translatableContext)
     {
-        if ($defaultLocale) {
-            $this->enabledLocales = array_unique(array_merge($this->enabledLocales, [$defaultLocale]));
-        }
     }
 
     public function getEnabledLocales(): array
     {
-        return $this->enabledLocales;
+        return $this->translatableContext->getEnabledLocales();
     }
 
     public function getDefaultLocale(): string
     {
-        return $this->defaultLocale ?? $this->enabledLocales[0] ?? 'en';
+        return $this->translatableContext->getDefaultLocale();
     }
 
     /**
@@ -38,7 +36,7 @@ class LocaleHelper
                 $availableLocales = array_merge($availableLocales, $site->getConfig()['locales'] ?? []);
             }
         } else {
-            $availableLocales = $this->enabledLocales;
+            $availableLocales = $this->getEnabledLocales();
         }
 
         $availableLocales = array_values($availableLocales);

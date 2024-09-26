@@ -85,6 +85,8 @@ class PreviewListener extends AbstractContentVersionListener
 
         $request->attributes->set('_cms_preview', true);
 
+        $request->attributes->set('routePath', $version->getContent()->getRoutes()->first()?->getPathForLocale($request->getLocale()));
+
         $event->setResponse(new Response($this->contentVersionCompiler->compileRequest($version, $request)));
     }
 }

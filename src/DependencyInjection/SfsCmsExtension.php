@@ -77,7 +77,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $container->setParameter('sfs_cms.content.prefix_compiled', $config['content']['prefix_compiled'] ?? null);
         $container->setParameter('sfs_cms.content.page_class', $config['content']['page_class'] ?? null);
         $container->setParameter('sfs_cms.content.cache_last_modified_enabled', $config['content']['cache_last_modified'] ?? false);
-        $container->setParameter('sfs_cms.content.recompile_enabled', $config['content']['recompile_enabled'] ?? false);
+        $container->setParameter('sfs_cms.content.recompile_enabled', $config['content']['recompile'] ?? false);
 
         // configure menu classes
         $container->setParameter('sfs_cms.menu.class', $config['menu']['class']);
