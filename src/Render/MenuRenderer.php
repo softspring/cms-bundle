@@ -27,7 +27,7 @@ class MenuRenderer extends AbstractRenderer
         RouterInterface $router,
         ?EntrypointLookupInterface $entrypointLookup,
         ?Profiler $profiler,
-        ?Esi $esi
+        ?Esi $esi,
     ) {
         parent::__construct($requestStack, $entrypointLookup, $router);
         $this->profilerEnabled = (bool) $profiler;

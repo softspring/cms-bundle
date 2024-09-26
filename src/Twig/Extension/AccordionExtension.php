@@ -10,7 +10,7 @@ use Twig\TwigFunction;
 class AccordionExtension extends AbstractExtension
 {
     public function __construct(
-        protected TranslatorInterface $translator
+        protected TranslatorInterface $translator,
     ) {
     }
 

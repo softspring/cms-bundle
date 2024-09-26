@@ -10,7 +10,7 @@ class MenuProvider
      * @param iterable<int, ContentMenuProviderInterface> $contentMenuProviders
      */
     public function __construct(
-        protected iterable $contentMenuProviders
+        protected iterable $contentMenuProviders,
     ) {
     }
 

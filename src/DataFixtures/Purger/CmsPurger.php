@@ -248,7 +248,7 @@ class CmsPurger implements PurgerInterface, ORMPurgerInterface
     private function getJoinTableName(
         array $assoc,
         ClassMetadata $class,
-        AbstractPlatform $platform
+        AbstractPlatform $platform,
     ): string {
         if (isset($assoc['joinTable']['schema']) && !\method_exists($class, 'getSchemaName')) {
             return $assoc['joinTable']['schema'].'.'.
