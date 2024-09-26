@@ -94,10 +94,10 @@ window.addEventListener('load', (event) => {
         modulesCollectionInsertIndex = null;
         if (insertElement.matches('[data-collection-position=after]')) {
             action = 'Insert after';
-            modulesCollectionInsertIndex = nodeRow ? nodeRow.dataset.index : null;
+            modulesCollectionInsertIndex = nodeRow ? nodeRow.dataset.collectionIndex : null;
         } else if (insertElement.matches('[data-collection-position=before]')) {
             action = 'Insert before';
-            modulesCollectionInsertIndex = nodeRow ? nodeRow.dataset.index : null;
+            modulesCollectionInsertIndex = nodeRow ? nodeRow.dataset.collectionIndex : null;
         }
 
         // hide not allowed modules
@@ -190,6 +190,11 @@ window.addEventListener('load', (event) => {
         let currentInputVars = document.querySelectorAll('input, textarea, select').length;
         const buttons = document.querySelectorAll('#submitBtnGroupDrop1,#defaultSubmitBtn');
         const maxInputVarsMessage = document.getElementById('maxInputVarsMessage');
+
+        if (!maxInputVarsMessage) {
+            return;
+        }
+
         const maxInputVars = maxInputVarsMessage.dataset.maxInputVars;
 
         if (currentInputVars > maxInputVars) {

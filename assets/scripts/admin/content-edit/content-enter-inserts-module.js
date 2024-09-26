@@ -20,8 +20,8 @@ window.addEventListener('load', (event) => {
             return;
         }
 
-        moduleButton.dataset.collection = moduleCollection.id;
-        moduleButton.dataset.collectionInsertPosition = '' + (parseInt(module.dataset.index) + 1);
+        moduleButton.dataset.collectionTarget = moduleCollection.id;
+        moduleButton.dataset.collectionInsertPosition = '' + (parseInt(module.dataset.collectionIndex) + 1);
         moduleButton.click();
 
         event.preventDefault();

@@ -7,7 +7,6 @@
 {% endblock route_path_collection_row %}
 
 {% block route_path_collection_label %}
-    {% trans_default_domain 'sfs_cms_admin' %}
     <div class="my-4">
         <div class="d-flex justify-content-between mb-4">
             <div>
@@ -29,18 +28,16 @@
                 {%- endif -%}
             </div>
         </div>
-
-        <button type="button" class="btn btn-outline-primary cursor-pointer collection-add-button" data-collection="{{ id }}">
-            {{ 'admin_routes.form.paths.add.button'|trans }}
-        </button>
     </div>
 {% endblock route_path_collection_label %}
 
 {% block route_path_collection_widget %}
+    {% trans_default_domain 'sfs_cms_admin' %}
+
     {% if prototype is defined and not prototype.rendered %}
         {%- set attr = attr|merge({'data-prototype': form_row(prototype), 'data-prototype-name': prototype.vars.name }) -%}
     {% endif %}
-    {% set attr = attr | merge({'class':'collection-widget col-12'}) %}
+    {% set attr = attr | merge({'class':'col-12', 'data-collection': 'collection'}) %}
     <!-- Nodes -->
     <div {{ block('widget_container_attributes') }}>
         {%- if form.parent is empty -%}
@@ -49,14 +46,22 @@
         {{- block('form_rows') -}}
         {{- form_rest(form) -}}
     </div>
+
+    <button type="button" class="btn btn-outline-primary cursor-pointer" data-collection-action="add" data-collection-target="{{ id }}">
+        {{ 'admin_routes.form.paths.add.button'|trans }}
+    </button>
 {% endblock route_path_collection_widget %}
 
 {% block route_path_row %}
-    <div class="collection-node-row" {{ block('widget_container_attributes') }} data-index="{{ form.vars.name }}" data-full-name="{{ form.vars.full_name }}">
+    <div data-collection="node" {{ block('widget_container_attributes') }} data-collection-index="{{ form.vars.name }}" data-full-name="{{ form.vars.full_name }}">
         <div class="row my-3">
-            <div class="col-sm-1"><span class="collection-node-index">{{ form.vars.name }}</span></div>
+            <div class="col-sm-1"><span data-collection="node-index">{{ form.vars.name }}</span></div>
             <div class="col-sm-10">{{ form_widget(form) }}{{ form_errors(form) }}</div>
-            <div class="col-sm-1"><button type="button" class="btn btn-light rounded-circle collection-remove-button px-3">x</button></div>
+            <div class="col-sm-1">
+                {#<button type="button" class="btn btn-light rounded-circle px-3" data-collection-action="up">up</button>#}
+                {#<button type="button" class="btn btn-light rounded-circle px-3" data-collection-action="down">down</button>#}
+                <button type="button" class="btn btn-light rounded-circle px-3" data-collection-action="delete">x</button>
+            </div>
         </div>
     </div>
 {% endblock route_path_row %}
@@ -108,7 +113,7 @@
         </div>
 
         {% if allow_add %}
-            <button type="button" class="btn btn-outline-primary cursor-pointer collection-add-button" data-collection-target="{{ id }}">
+            <button type="button" class="btn btn-outline-primary cursor-pointer" data-collection-action="add" data-collection-target="{{ id }}">
                 {{ 'admin_routes.form.add.button'|trans }}
             </button>
         {% endif %}
@@ -119,7 +124,7 @@
     {% if prototype is defined and not prototype.rendered %}
         {%- set attr = attr|merge({'data-prototype': form_row(prototype), 'data-prototype-name': prototype.vars.name }) -%}
     {% endif %}
-    {% set attr = attr | merge({'class':'collection-widget col-12'}) %}
+    {% set attr = attr | merge({'class':'col-12', 'data-collection': 'collection'}) %}
     <!-- Nodes -->
     <div {{ block('widget_container_attributes') }}>
         {%- if form.parent is empty -%}
