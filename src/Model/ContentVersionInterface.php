@@ -64,13 +64,22 @@ interface ContentVersionInterface
 
     public function getMetaField(string $field, mixed $default = null): mixed;
 
-    public function getCompiledModules(): ?array;
+    /**
+     * @return Collection<CompiledDataInterface>
+     */
+    public function getCompiled(): Collection;
 
-    public function setCompiledModules(?array $compiledModules): void;
+    public function setCompiled(Collection $compiled): void;
 
-    public function getCompiled(): ?array;
+    public function addCompiled(CompiledDataInterface $compiled): void;
 
-    public function setCompiled(?array $compiled): void;
+    public function removeCompiled(CompiledDataInterface $compiled): void;
+
+    public function cleanCompiled(): void;
+
+    public function hasCompileErrors(): bool;
+
+    public function setCompileErrors(bool $compiledErrors): void;
 
     public function isPublished(): bool;
 

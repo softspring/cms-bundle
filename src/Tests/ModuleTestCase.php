@@ -64,7 +64,7 @@ abstract class ModuleTestCase extends TypeTestCase
 
         $cmsHelper = $this->createMock(CmsHelper::class);
 
-        $trabnslatableContext = new TranslatableContext($this->defaultLocale, $this->enabledLocales);
+        $trabnslatableContext = new TranslatableContext($this->enabledLocales, $this->defaultLocale);
 
         $preloadedFormTypes = [];
         $preloadedFormTypes[] = new DynamicFormModuleType($cmsHelper);

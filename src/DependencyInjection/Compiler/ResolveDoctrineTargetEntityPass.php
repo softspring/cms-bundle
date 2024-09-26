@@ -3,6 +3,7 @@
 namespace Softspring\CmsBundle\DependencyInjection\Compiler;
 
 use Softspring\CmsBundle\Model\BlockInterface;
+use Softspring\CmsBundle\Model\CompiledDataInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Model\MenuInterface;
@@ -30,5 +31,6 @@ class ResolveDoctrineTargetEntityPass extends AbstractResolveDoctrineTargetEntit
         $this->setTargetEntityFromParameter('sfs_cms.menu.class', MenuInterface::class, $container, true);
         $this->setTargetEntityFromParameter('sfs_cms.menu.item_class', MenuItemInterface::class, $container, true);
         $this->setTargetEntityFromParameter('sfs_cms.site.class', SiteInterface::class, $container, true);
+        $this->setTargetEntityFromParameter('sfs_cms.compiled.class', CompiledDataInterface::class, $container, true);
     }
 }

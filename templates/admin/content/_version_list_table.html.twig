@@ -88,8 +88,14 @@
                 {% if not content_config.admin.publish_version.is_granted or is_granted(content_config.admin.publish_version.is_granted, version) %}
                     {% if not version.published %}
                         <a href="{{ url('sfs_cms_admin_content_'~content_type~'_publish_version', {'content':entity, 'version':version.id, 'back': backSection}) }}"
-                           data-confirm-modal="{{ ('admin_'~content_type~'.version_publish.confirm_message_raw')|trans|base64_encode }}"
-                           data-confirm-modal-title="{{ ('admin_'~content_type~'.version_publish.confirm_message_title')|trans }}"
+                           {% if version.compileErrors %}
+                               data-confirm-modal-title="{{ ('admin_'~content_type~'.version_publish.with_errors_confirm_message_title')|trans }}"
+                               data-confirm-modal="{{ ('admin_'~content_type~'.version_publish.with_errors_confirm_message_raw')|trans|base64_encode }}"
+                               data-confirm-modal-confirm-button-type="danger"
+                           {% else %}
+                               data-confirm-modal-title="{{ ('admin_'~content_type~'.version_publish.confirm_message_title')|trans }}"
+                               data-confirm-modal="{{ ('admin_'~content_type~'.version_publish.confirm_message_raw')|trans|base64_encode }}"
+                           {% endif %}
                            class="ms-2 text-nowrap">{{ ('admin_'~content_type~'.versions.actions.publish.link')|trans }}
                             <span class="bi bi-file-earmark-arrow-up"></span></a>
                     {% endif %}

@@ -122,8 +122,13 @@ function contentEditableFocusElement(previewElement) {
     }
 
     inputs[0].classList.add('border', 'border-success');
-    const accordionItem = inputs[0].closest('.accordion-item').querySelector('.accordion-button.collapsed')
+    const accordionItem = inputs[0].closest('.accordion-item').querySelector('.accordion-button.collapsed');
     accordionItem && accordionItem.click();
+    
+    inputs[0].closest('.accordion-item').scrollIntoView({
+        behavior: 'smooth',
+        block: 'end',
+    });
 }
 
 function contentEditableBlurElement(previewElement) {
@@ -232,6 +237,15 @@ function _init() {
     document.addEventListener('sfs_cms.content_edit.content_editable.input.blur', function (event) {
         event.preventDefault();
         contentEditableBlurInput(event.target);
+    });
+    const collapseElementList = [].slice.call(document.querySelectorAll('.collapse'))
+    collapseElementList.map(function (collapseEl) {
+        collapseEl.addEventListener('shown.bs.collapse', function () {
+            this.scrollIntoView({
+                behavior: 'smooth',
+                block: 'end',
+            });
+        })
     });
 
     // hide elements with data-edit-content-hide-if-empty attribute if empty

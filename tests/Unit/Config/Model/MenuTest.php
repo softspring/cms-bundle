@@ -37,6 +37,8 @@ class MenuTest extends TestCase
             'esi' => true,
             'cache_ttl' => false,
             'singleton' => true,
+            'items' => true,
+            'form_fields' => [],
         ], $config);
     }
 
@@ -57,6 +59,8 @@ class MenuTest extends TestCase
             'esi' => true,
             'cache_ttl' => false,
             'singleton' => true,
+            'items' => true,
+            'form_fields' => [],
         ], $config);
     }
 }

@@ -20,6 +20,7 @@ class CreateListener extends AbstractMenuListener
             ],
             SfsCmsEvents::ADMIN_MENUS_CREATE_FORM_PREPARE => 'onFormPrepare',
             SfsCmsEvents::ADMIN_MENUS_CREATE_ENTITY => 'onCreateEntity',
+            SfsCmsEvents::ADMIN_MENUS_CREATE_VIEW => 'onViewAddConfig',
         ];
     }
 

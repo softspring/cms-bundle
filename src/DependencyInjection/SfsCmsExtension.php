@@ -7,6 +7,7 @@ use Softspring\CmsBundle\Config\ConfigLoader;
 use Softspring\CmsBundle\Data\EntityTransformer\EntityTransformerInterface;
 use Softspring\CmsBundle\Data\FieldTransformer\FieldTransformerInterface;
 use Softspring\CmsBundle\Entity\Block;
+use Softspring\CmsBundle\Entity\CompiledData;
 use Softspring\CmsBundle\Entity\Content;
 use Softspring\CmsBundle\Entity\ContentVersion;
 use Softspring\CmsBundle\Entity\Menu;
@@ -76,7 +77,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $container->setParameter('sfs_cms.content.prefix_compiled', $config['content']['prefix_compiled'] ?? null);
         $container->setParameter('sfs_cms.content.page_class', $config['content']['page_class'] ?? null);
         $container->setParameter('sfs_cms.content.cache_last_modified_enabled', $config['content']['cache_last_modified'] ?? false);
-        $container->setParameter('sfs_cms.content.recompile_enabled', $config['content']['recompile_enabled'] ?? false);
+        $container->setParameter('sfs_cms.content.recompile_enabled', $config['content']['recompile'] ?? false);
 
         // configure menu classes
         $container->setParameter('sfs_cms.menu.class', $config['menu']['class']);
@@ -87,6 +88,8 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $container->setParameter('sfs_cms.block.class', $config['block']['class'] ?? null);
         $container->setParameter('sfs_cms.block.find_field_name', $config['block']['find_field_name'] ?? null);
         //        $container->setParameter('sfs_cms.block.types', $config['block']['types'] ?? []);
+
+        $container->setParameter('sfs_cms.compiled.class', CompiledData::class);
 
         $this->processDataClasses($container);
 
@@ -132,6 +135,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
             'sfs_cms.menu.class' => Menu::class,
             'sfs_cms.menu.item_class' => MenuItem::class,
             'sfs_cms.block.class' => Block::class,
+            'sfs_cms.compiled.class' => CompiledData::class,
         ];
 
         foreach ($defaultClasses as $parameter => $defaultEntityClass) {

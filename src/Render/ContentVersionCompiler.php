@@ -7,8 +7,11 @@ use Psr\Log\LoggerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\InvalidContentException;
 use Softspring\CmsBundle\Config\Exception\InvalidLayoutException;
+use Softspring\CmsBundle\Manager\CompiledDataManagerInterface;
+use Softspring\CmsBundle\Model\CompiledDataInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
+use Softspring\CmsBundle\Render\Exception\RenderException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -22,59 +25,63 @@ class ContentVersionCompiler
         protected string $prefixCompiled,
         protected bool $saveCompiled,
         protected CmsConfig $cmsConfig,
+        protected CompiledDataManagerInterface $compiledDataManager,
     ) {
     }
 
     public function clearCompiled(ContentVersionInterface $contentVersion): void
     {
-        $contentVersion->setCompiled([]);
-        $contentVersion->setCompiledModules([]);
+        $contentVersion->getCompiled()->map(function (CompiledDataInterface $compiled) use ($contentVersion) {
+            $contentVersion->removeCompiled($compiled);
+        });
     }
 
     /**
-     * @throws InvalidLayoutException
      * @throws CompileException
-     * @throws InvalidContentException
      */
-    public function compileAll(ContentVersionInterface $contentVersion): array
+    public function compileAll(ContentVersionInterface $contentVersion, bool $failOnException = true): void
     {
         if (!$this->requestStack->getCurrentRequest()) {
-            return []; // not yet ready for render in fixtures, TODO improve this to allow render in fixtures
+            return; // not yet ready for render in fixtures, TODO improve this to allow render in fixtures
         }
 
-        $compiled = [];
-        $compiledModules = [];
         foreach ($contentVersion->getContent()->getSites() as $site) {
-            foreach ($contentVersion->getContent()->getLocales() as $locale) {
+            foreach ($contentVersion->getContent()->getLocales() ?? [] as $locale) {
                 $this->cmsLogger && $this->cmsLogger->debug(sprintf('Compiling "%s" content version for "%s" in "%s"', $contentVersion->getContent()->getName(), "$site", $locale));
 
                 $request = ContentVersionRenderer::generateRequestForContent($contentVersion->getContent(), $locale, $site);
 
-                $compileKey = $this->getCompileKeyFromRequest($contentVersion, $request);
+                $compiled = $this->compiledDataManager->createEntity();
+                $compiled->setKey($this->getCompileKeyFromRequest($contentVersion, $request));
+                $contentVersion->addCompiled($compiled);
 
                 try {
-                    $compiledModules[$compileKey] = $this->compileModulesRequest($contentVersion, $request);
-                    $this->canSaveCompiledModules($contentVersion) && $contentVersion->setCompiledModules($compiledModules);
+                    $compiledModules = $this->compileModulesRequest($contentVersion, $request, $failOnException);
+                    $this->canSaveCompiledModules($contentVersion) && $compiled->setDataPart('modules', $compiledModules);
 
-                    $compiled[$compileKey] = $this->compileRequest($contentVersion, $request, $compiledModules[$compileKey]);
-                    $this->canSaveCompiled($contentVersion) && $contentVersion->setCompiled($compiled);
-                } catch (Exception $exception) {
-                    if ($exception instanceof CompileException) {
+                    $compiledContent = $this->compileRequest($contentVersion, $request, $compiledModules);
+                    $this->canSaveCompiled($contentVersion) && $compiled->setDataPart('content', $compiledContent);
+                } catch (CompileException $exception) {
+                    if ($failOnException) {
                         throw new CompileException(sprintf('Error compiling content version for %s in %s', $site, $locale), 0, $exception->getPrevious());
                     }
 
-                    throw new CompileException(sprintf('Error compiling content version for %s in %s', $site, $locale), 0, $exception);
+                    $compiled->setErrors(true);
+                    $compiled->setDataPart('content', '<!-- CONTENT_VERSION_COMPILE_ERROR -->');
+                    if ($exception->getPrevious() instanceof RenderErrorException) {
+                        $compiled->setDataPart('errors', $exception->getPrevious()->getRenderErrorList()->getErrors());
+                    } else {
+                        $compiled->setDataPart('errors', $exception->getMessage());
+                    }
                 }
             }
         }
-
-        return [$compiled, $compiledModules];
     }
 
     /**
      * @throws CompileException
      */
-    public function compileRequest(ContentVersionInterface $contentVersion, Request $request, ?array $compiledModules = null): string
+    public function compileRequest(ContentVersionInterface $contentVersion, Request $request, ?array $compiledModules = null, bool $failOnException = true): string
     {
         try {
             $renderErrors = new RenderErrorList();
@@ -82,10 +89,10 @@ class ContentVersionCompiler
             $renderErrors->buildExceptionOnErrors();
 
             return $compiled;
-        } catch (Exception $exception) {
-            $this->cmsLogger && $this->cmsLogger->error(sprintf('Error compiling "%s" content version for "%s" in "%s"', $contentVersion->getContent()->getName(), $request->attributes->get('_sfs_cms_site'), $request->getLocale()), [
-                'exception' => $exception,
-            ]);
+        } catch (RenderException|RenderErrorException $exception) {
+            if (!$failOnException) {
+                return '<!-- CONTENT_VERSION_COMPILE_ERROR -->';
+            }
 
             throw new CompileException('Error compiling content version request', 0, $exception);
         }
@@ -94,7 +101,7 @@ class ContentVersionCompiler
     /**
      * @throws CompileException
      */
-    public function compileModulesRequest(ContentVersionInterface $contentVersion, Request $request): array
+    public function compileModulesRequest(ContentVersionInterface $contentVersion, Request $request, bool $failOnException = true): array
     {
         try {
             $renderErrors = new RenderErrorList();
@@ -106,6 +113,10 @@ class ContentVersionCompiler
             $this->cmsLogger && $this->cmsLogger->error(sprintf('Error compiling "%s" content version for "%s" in "%s"', $contentVersion->getContent()->getName(), $request->attributes->get('_sfs_cms_site'), $request->getLocale()), [
                 'exception' => $exception,
             ]);
+
+            //            if (!$failOnException) {
+            //                return [];
+            //            }
 
             throw new CompileException('Error compiling content version modules', 0, $exception);
         }

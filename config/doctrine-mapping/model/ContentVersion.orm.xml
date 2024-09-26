@@ -20,9 +20,6 @@
         <field name="originDescription" column="origin_description" type="string" nullable="true"/>
         <field name="note" column="note" type="string" nullable="true"/>
 
-        <field name="compiledModules" column="compiled_modules" type="json" nullable="true"/>
-        <field name="compiled" column="compiled" type="json" nullable="true"/>
-
         <field name="createdAt" column="created_at" type="integer" nullable="true">
             <options>
                 <option name="unsigned">true</option>
@@ -36,6 +33,12 @@
         </field>
 
         <field name="keep" column="keep" type="boolean">
+            <options>
+                <option name="default">0</option>
+            </options>
+        </field>
+
+        <field name="compileErrors" column="compile_errors" type="boolean">
             <options>
                 <option name="default">0</option>
             </options>

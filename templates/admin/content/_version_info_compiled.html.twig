@@ -6,18 +6,18 @@
     {% block title %}
         {% if sfs_cms_admin_content_recompile_enabled %}
             {% if not content_config.admin.version_recompile.is_granted or is_granted(content_config.admin.version_recompile.is_granted, version_entity) %}
-                <a class="btn btn-sm btn-outline-secondary float-end"
+                <a class="mx-1 btn btn-sm btn-outline-secondary float-end"
                    href="{{ url('sfs_cms_admin_content_'~content_type~'_recompile_version', {'content':entity, 'version': version_entity, 'back': 'version_info'}) }}">{{ ('admin_'~content_type~'.version_info.actions.recompile.link')|trans }}</a>
             {% else %}
-                <a class="btn btn-sm btn-outline-secondary float-end disabled">{{ ('admin_'~content_type~'.version_info.actions.recompile.link')|trans }}</a>
+                <a class="mx-1 btn btn-sm btn-outline-secondary float-end disabled">{{ ('admin_'~content_type~'.version_info.actions.recompile.link')|trans }}</a>
             {% endif %}
         {% endif %}
 
         {% if not content_config.admin.version_clear_compiled.is_granted or is_granted(content_config.admin.version_clear_compiled.is_granted, version_entity) %}
-            <a class="btn btn-sm btn-outline-secondary float-end"
+            <a class="mx-1 btn btn-sm btn-outline-secondary float-end"
                href="{{ url('sfs_cms_admin_content_'~content_type~'_clear_compiled_version', {'content':entity, 'version': version_entity, 'back': 'version_info'}) }}">{{ ('admin_'~content_type~'.version_info.actions.clear_compiled.link')|trans }}</a>
         {% else %}
-            <a class="btn btn-sm btn-outline-secondary float-end disabled">{{ ('admin_'~content_type~'.version_info.actions.clear_compiled.link')|trans }}</a>
+            <a class="mx-1 btn btn-sm btn-outline-secondary float-end disabled">{{ ('admin_'~content_type~'.version_info.actions.clear_compiled.link')|trans }}</a>
         {% endif %}
 
         {{ parent() }}
@@ -43,28 +43,31 @@
                 </div>
             {% endif %}
 
-            {% if not content_can_compile_modules %}
-                <div class="alert alert-warning" role="alert">
-                    {{ ('admin_'~content_type~'.version_info.compiled.pre_compile_modules_disabled')|trans }}
-                </div>
-            {% elseif version_entity.compiledModules is empty and sfs_cms_admin_content_recompile_enabled %}
-                <div class="alert alert-danger" role="alert">
-                    {{ ('admin_'~content_type~'.version_info.compiled.pre_compile_modules_missing')|trans }}
-                </div>
-            {% endif %}
+{#            {% if not content_can_compile_modules %}#}
+{#                <div class="alert alert-warning" role="alert">#}
+{#                    {{ ('admin_'~content_type~'.version_info.compiled.pre_compile_modules_disabled')|trans }}#}
+{#                </div>#}
+{#            {% elseif version_entity.compiled is empty and sfs_cms_admin_content_recompile_enabled %}#}
+{#                <div class="alert alert-danger" role="alert">#}
+{#                    {{ ('admin_'~content_type~'.version_info.compiled.pre_compile_modules_missing')|trans }}#}
+{#                </div>#}
+{#            {% endif %}#}
         {% endif %}
 
         <div class="accordion" id="accordionCompiled">
             <div class="accordion-item">
                 {% set first = false %}
-                {% for key,compiled in version_entity.compiled %}
-                    {% set keyCleaned = key|replace({'/': '', ' ': '', '.' : ''}) %}
+                {% for compiled in version_entity.compiled|filter((compiled)=>compiled.dataPart('content')|default(false)) %}
+                    {% set keyCleaned = compiled.key|replace({'/': '', ' ': '', '.' : ''}) %}
                     <h2 class="accordion-header" id="heading{{ keyCleaned }}">
                         <button class="accordion-button {{ first?'':'collapsed' }}" type="button"
                                 data-bs-toggle="collapse" data-bs-target="#collapse{{ keyCleaned }}"
                                 aria-expanded="{{ first?'true':'false' }}"
                                 aria-controls="collapse{{ keyCleaned }}">
-                            Pre-compiled content {{ key }}
+                            Pre-compiled content {{ compiled.key }}
+                            {% if compiled.hasErrors %}
+                                <i class="ms-2 bi bi-exclamation-circle text-danger" title="{{ ('admin_'~content_type~'.version_info.compiled.pre_compile_content_info')|trans }}"></i>
+                            {% endif %}
                         </button>
                     </h2>
                     <div id="collapse{{ keyCleaned }}"
@@ -72,30 +75,34 @@
                          aria-labelledby="heading{{ keyCleaned }}" data-bs-parent="#accordionCompiled">
                         <div class="accordion-body">
                             {% if compiled is not iterable %}
-                                {{ tools.drawEsiCalls(compiled) }}
+                                {{ tools.drawEsiCalls(compiled.dataPart('content')) }}
                                 <pre class="overflow-auto"
                                      style="max-height: 600px"><code
-                                        class="text-muted">{{ compiled }}</code></pre>
+                                        class="text-muted">{{ compiled.dataPart('content') }}</code>
+<code
+                                            class="text-danger">{{ compiled.dataPart('errors')|default(false) }}</code>
+                                </pre>
                             {% endif %}
                         </div>
                     </div>
                     {% set first = false %}
                 {% endfor %}
-                {% for key,compiled in version_entity.compiledModules %}
-                    {% set keyCleaned = ('modules'~key)|replace({'/': '', ' ': '', '.': ''}) %}
+
+                {% for compiled in version_entity.compiled|filter((compiled)=>compiled.dataPart('modules')|default(false)) %}
+                    {% set keyCleaned = ('modules'~compiled.key)|replace({'/': '', ' ': '', '.': ''}) %}
                     <h2 class="accordion-header" id="heading{{ keyCleaned }}">
                         <button class="accordion-button {{ first?'':'collapsed' }}" type="button"
                                 data-bs-toggle="collapse" data-bs-target="#collapse{{ keyCleaned }}"
                                 aria-expanded="{{ first?'true':'false' }}"
                                 aria-controls="collapse{{ keyCleaned }}">
-                            Pre-compiled modules {{ key }}
+                            Pre-compiled modules {{ compiled.key }}
                         </button>
                     </h2>
                     <div id="collapse{{ keyCleaned }}"
                          class="accordion-collapse collapse {{ first?'show':'' }}"
                          aria-labelledby="heading{{ keyCleaned }}" data-bs-parent="#accordionCompiled">
                         <div class="accordion-body">
-                            {% for container, content in compiled|filter((content) => content is not iterable) %}
+                            {% for container, content in compiled.dataPart('modules') %}
                                 <strong>{{ container }}</strong>
                                 {{ tools.drawEsiCalls(content) }}
                                 <pre class="overflow-auto"
