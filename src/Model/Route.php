@@ -120,6 +120,11 @@ abstract class Route implements RouteInterface
         }
     }
 
+    public function getPathForLocale(string $locale): ?RoutePathInterface
+    {
+        return $this->getPaths()->filter(fn (RoutePathInterface $path) => $path->getLocale() === $locale)->first() ?: null;
+    }
+
     public function getContent(): ?ContentInterface
     {
         return $this->content;
