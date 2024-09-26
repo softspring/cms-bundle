@@ -1,23 +1,25 @@
-{% trans_default_domain 'sfs_cms_contents' %}
-
 {% set backSection = backSection|default('versions') %}
 
-<table class="table">
-    <thead>
-    <tr>
-        <th>{{ ('admin_'~content_type~'.versions.fields.id.header')|trans }}</th>
-        <th>{{ ('admin_'~content_type~'.versions.fields.origin.header')|trans }}</th>
-        <th>{{ ('admin_'~content_type~'.versions.fields.note.header')|trans }}</th>
-        <th>{{ ('admin_'~content_type~'.versions.fields.creator.header')|trans }}</th>
-        <th>{{ ('admin_'~content_type~'.versions.fields.created.header')|trans }}</th>
-        <th>{{ ('admin_'~content_type~'.versions.fields.publish_status.header')|trans }}</th>
-        <th>&nbsp;</th>
-        <th>&nbsp;</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for version in versions %}
-        <tr>
+{% block table %}
+    {% embed '@SfsComponents/paginator/table.html.twig' with {
+        'collection': versions,
+        'pagination_route': 'sfs_cms_admin_content_'~content_type~'_versions',
+        'pagination_route_attributes': {'content':entity},
+    } %}
+        {% trans_default_domain 'sfs_cms_contents' %}
+        {% block ths %}
+            <th>{{ ('admin_'~content_type~'.versions.fields.id.header')|trans }}</th>
+            <th>{{ ('admin_'~content_type~'.versions.fields.origin.header')|trans }}</th>
+            <th>{{ ('admin_'~content_type~'.versions.fields.note.header')|trans }}</th>
+            <th>{{ ('admin_'~content_type~'.versions.fields.creator.header')|trans }}</th>
+            <th>{{ ('admin_'~content_type~'.versions.fields.created.header')|trans }}</th>
+            <th>{{ ('admin_'~content_type~'.versions.fields.publish_status.header')|trans }}</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+        {% endblock ths %}
+
+        {% block tds %}
+            {% set version = element %}
             <td>v{{ version.versionNumber }} {% if version.hasCompileErrors %}<i
                         class="bi bi-exclamation-triangle text-danger"
                         title="This version has some compilation error"></i>{% endif %}</td>
@@ -41,12 +43,12 @@
                 {% if not content_config.admin.version_lock.is_granted or is_granted(content_config.admin.version_lock.is_granted, version) %}
                     {% if version.keep %}
                         <a class=""
-                           href="{{ url('sfs_cms_admin_content_'~content_type~'_unkeep_version', {'content':entity, 'version':version.id, 'back': backSection}) }}"
+                           href="{{ url('sfs_cms_admin_content_'~content_type~'_unkeep_version', {'content':entity, 'version':version.id, 'back': backSection, 'page': entities.page|default}) }}"
                            title="{{ ('admin_'~content_type~'.versions.actions.keep.link')|trans }}"><i
                                     class="bi bi-pin-angle-fill"></i></a>
                     {% else %}
                         <a class=""
-                           href="{{ url('sfs_cms_admin_content_'~content_type~'_keep_version', {'content':entity, 'version':version.id, 'back': backSection}) }}"
+                           href="{{ url('sfs_cms_admin_content_'~content_type~'_keep_version', {'content':entity, 'version':version.id, 'back': backSection, 'page': entities.page|default}) }}"
                            title="{{ ('admin_'~content_type~'.versions.actions.nokeep.link')|trans }}"><i
                                     class="bi bi-pin-angle"></i></a>
                     {% endif %}
@@ -87,9 +89,15 @@
 
                 {% if not content_config.admin.publish_version.is_granted or is_granted(content_config.admin.publish_version.is_granted, version) %}
                     {% if not version.published %}
-                        <a href="{{ url('sfs_cms_admin_content_'~content_type~'_publish_version', {'content':entity, 'version':version.id, 'back': backSection}) }}"
-                           data-confirm-modal="{{ ('admin_'~content_type~'.version_publish.confirm_message_raw')|trans|base64_encode }}"
-                           data-confirm-modal-title="{{ ('admin_'~content_type~'.version_publish.confirm_message_title')|trans }}"
+                        <a href="{{ url('sfs_cms_admin_content_'~content_type~'_publish_version', {'content':entity, 'version':version.id, 'back': backSection, 'page': entities.page|default}) }}"
+                           {% if version.compileErrors %}
+                               data-confirm-modal-title="{{ ('admin_'~content_type~'.version_publish.with_errors_confirm_message_title')|trans }}"
+                               data-confirm-modal="{{ ('admin_'~content_type~'.version_publish.with_errors_confirm_message_raw')|trans|base64_encode }}"
+                               data-confirm-modal-confirm-button-type="danger"
+                           {% else %}
+                               data-confirm-modal-title="{{ ('admin_'~content_type~'.version_publish.confirm_message_title')|trans }}"
+                               data-confirm-modal="{{ ('admin_'~content_type~'.version_publish.confirm_message_raw')|trans|base64_encode }}"
+                           {% endif %}
                            class="ms-2 text-nowrap">{{ ('admin_'~content_type~'.versions.actions.publish.link')|trans }}
                             <span class="bi bi-file-earmark-arrow-up"></span></a>
                     {% endif %}
@@ -98,7 +106,28 @@
             <td>{% if version.deleteOnCleanup %}<i class="bi bi-trash text-secondary"
                                                    title="This version will be removed on versions cleanup"></i>{% endif %}
             </td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+        {% endblock tds %}
+    {% endembed %}
+{% endblock table %}
+
+{#<table class="table">#}
+{#    <thead>#}
+{#    <tr>#}
+{#        <th>{{ ('admin_'~content_type~'.versions.fields.id.header')|trans }}</th>#}
+{#        <th>{{ ('admin_'~content_type~'.versions.fields.origin.header')|trans }}</th>#}
+{#        <th>{{ ('admin_'~content_type~'.versions.fields.note.header')|trans }}</th>#}
+{#        <th>{{ ('admin_'~content_type~'.versions.fields.creator.header')|trans }}</th>#}
+{#        <th>{{ ('admin_'~content_type~'.versions.fields.created.header')|trans }}</th>#}
+{#        <th>{{ ('admin_'~content_type~'.versions.fields.publish_status.header')|trans }}</th>#}
+{#        <th>&nbsp;</th>#}
+{#        <th>&nbsp;</th>#}
+{#    </tr>#}
+{#    </thead>#}
+{#    <tbody>#}
+{#    {% for version in versions %}#}
+{#        <tr>#}
+
+{#        </tr>#}
+{#    {% endfor %}#}
+{#    </tbody>#}
+{#</table>#}

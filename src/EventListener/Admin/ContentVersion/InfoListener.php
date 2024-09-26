@@ -28,7 +28,7 @@ class InfoListener extends AbstractContentVersionListener
         RouterInterface $router,
         FlashNotifier $flashNotifier,
         AuthorizationCheckerInterface $authorizationChecker,
-        protected ContentVersionCompiler $contentVersionCompiler
+        protected ContentVersionCompiler $contentVersionCompiler,
     ) {
         parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
     }

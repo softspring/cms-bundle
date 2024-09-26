@@ -38,7 +38,7 @@
     <div class="container-fluid p-3 bg-white">
         <div class="row mt-4">
             <div class="col">
-                {% include ['@content/'~content_type~'/admin/_version_list_table.html.twig', '@SfsCms/admin/content/_version_list_table.html.twig'] with {'versions': entity.versions} %}
+                {% include ['@content/'~content_type~'/admin/_version_list_table.html.twig', '@SfsCms/admin/content/_version_list_table.html.twig'] with {'versions': entities} %}
             </div>
         </div>
     </div>

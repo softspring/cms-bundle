@@ -16,7 +16,7 @@ class TranslateExtension extends AbstractExtension
         protected RequestStack $requestStack,
         protected array $enabledLocales,
         protected UrlGenerator $cmsUrlGenerator,
-        protected UrlGeneratorInterface $symfonyUrlGenerator
+        protected UrlGeneratorInterface $symfonyUrlGenerator,
     ) {
     }
 

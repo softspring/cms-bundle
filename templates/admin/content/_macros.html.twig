@@ -1,7 +1,7 @@
 {% macro drawEsiCalls(content) %}
     <div>
         {% for esiCall in sfs_cms_search_content_esi_calls(content) %}
-            <p><code class="text-success">ESI:
+            <p class="border-1 border-success border p-1"><code class="text-success">ESI:
                     {% if esiCall.processed.type|default(false) == 'block' %}
                         Block {{ esiCall.processed.block_type }}
                     {% elseif esiCall.processed.type|default(false) == 'menu' %}
