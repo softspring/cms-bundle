@@ -43,7 +43,9 @@ admin_page:
         success_flash: "La versión se ha publicado"
         failed_flash: "Se ha producido un error al publicar la versión<br/><small>%exception%</small>"
         confirm_message_title: "Publicar versión"
+        with_errors_confirm_message_title: "Publicar versión"
         confirm_message_raw: "<p>¿Estás seguro de publicar esta versión?</p>"
+        with_errors_confirm_message_raw: "<p>¿Estás seguro de publicar esta versión?</p><p>La versión tiene errores, puede que no se vea correctamente</p>"
 
     unpublish:
         has_been_unpublished_flash: "La página se ha despublicado"
@@ -215,6 +217,8 @@ admin_page:
             save.button: "Guardar cambios"
             cancel.button: "Cancelar"
         success_flash: "El SEO de la página se ha actualizado"
+        success_saved: "El SEO de la página se ha guardado en una nueva versión."
+        success_saved_with_compile_errors: "El SEO de la página se ha guardado en una nueva versión, pero con algunos errores de compilación. Por favor, revisa la versión."
 
     content:
         meta.title: "Editar contenido"
