@@ -25,4 +25,8 @@ interface CompiledDataInterface
     public function getContentVersion(): ?ContentVersionInterface;
 
     public function setContentVersion(?ContentVersionInterface $contentVersion): void;
+
+    public function hasErrors(): bool;
+
+    public function setErrors(bool $errors): void;
 }
