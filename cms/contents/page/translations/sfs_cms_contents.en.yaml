@@ -43,7 +43,9 @@ admin_page:
         success_flash: "Version has been published"
         failed_flash: "An error has been produced during the version publication"
         confirm_message_title: "Publish version"
+        with_errors_confirm_message_title: "Publish version"
         confirm_message_raw: "<p>Are you sure to publish this version?</p>"
+        with_errors_confirm_message_raw: "<p>Are you sure to publish this version?</p><p>This version has some errors, maybe it will not be published correctly</p>"
 
     unpublish:
         has_been_unpublished_flash: "The page has been unpublished"
@@ -215,6 +217,8 @@ admin_page:
             save.button: "Save changes"
             cancel.button: "Cancel"
         success_flash: "Page SEO has been updated"
+        success_saved: "Page SEO has been saved in a new version."
+        success_saved_with_compile_errors: "Page SEO has been saved in a new version, but with some compile errors. Please check the version."
 
     content:
         meta.title: "Edit content"

@@ -8,10 +8,13 @@ use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
+use Softspring\CmsBundle\Render\CompileException;
+use Softspring\CmsBundle\Render\RenderErrorException;
 use Softspring\CmsBundle\Request\FlashNotifier;
 use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\CmsBundle\Translator\TranslatableContext;
 use Softspring\Component\CrudlController\Event\CreateEntityEvent;
+use Softspring\Component\CrudlController\Event\FailureEvent;
 use Softspring\Component\CrudlController\Event\FormPrepareEvent;
 use Softspring\Component\CrudlController\Event\SuccessEvent;
 use Softspring\Component\CrudlController\Event\ViewEvent;
@@ -68,6 +71,7 @@ class SeoListener extends AbstractContentVersionListener
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_SEO_FAILURE => [
                 ['onEventDispatchContentTypeEvent', 10],
+                ['onFailureShowAlert', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_SEO_FORM_INVALID => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -131,8 +135,15 @@ class SeoListener extends AbstractContentVersionListener
     {
         $request = $event->getRequest();
         $contentConfig = $request->attributes->get('_content_config');
+        /** @var ContentVersionInterface $version */
         $version = $event->getEntity();
         $content = $version->getContent();
+
+        if ($version->hasCompileErrors()) {
+            $this->flashNotifier->addTrans('warning', "admin_{$contentConfig['_id']}.version_seo.success_saved_with_compile_errors", [], 'sfs_cms_contents');
+        } else {
+            $this->flashNotifier->addTrans('success', "admin_{$contentConfig['_id']}.version_seo.success_saved", [], 'sfs_cms_contents');
+        }
 
         switch ($request->request->get('goto')) {
             case 'content':
@@ -159,6 +170,23 @@ class SeoListener extends AbstractContentVersionListener
         }
     }
 
+    public function onFailureShowAlert(FailureEvent $event): void
+    {
+        $request = $event->getRequest();
+        $exception = $event->getException();
+        $contentConfig = $request->attributes->get('_content_config');
+
+        if ($exception instanceof RenderErrorException) {
+            $exception->getRenderErrorList()->formMapErrors($event->getForm());
+            $request->attributes->set('_content_version_alert', ['error', 'admin_'.$contentConfig['_id'].'.version_seo.render_error', ['%exception%' => $exception->getMessage()]]);
+        } elseif ($exception->getPrevious() instanceof RenderErrorException) {
+            $exception->getPrevious()->getRenderErrorList()->formMapErrors($event->getForm());
+            $request->attributes->set('_content_version_alert', ['error', 'admin_'.$contentConfig['_id'].'.version_seo.render_error', ['%exception%' => $exception->getMessage()]]);
+        } elseif ($exception instanceof CompileException) {
+            $request->attributes->set('_content_version_alert', ['error', 'admin_'.$contentConfig['_id'].'.version_seo.render_error', ['%exception%' => $exception->getMessage()]]);
+        }
+    }
+
     public function onView(ViewEvent $event): void
     {
         parent::onView($event);
@@ -174,5 +202,8 @@ class SeoListener extends AbstractContentVersionListener
 
         // add prev version
         $event->getData()['prev_version'] = $request->attributes->get('prevVersion');
+
+        // show alert if exists
+        $event->getData()['alert'] = $request->attributes->get('_content_version_alert');
     }
 }
