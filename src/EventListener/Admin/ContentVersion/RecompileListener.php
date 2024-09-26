@@ -91,7 +91,8 @@ class RecompileListener extends AbstractContentVersionListener
 
         $entity->setKeep($event->getRequest()->attributes->get('recompile') ?: false);
 
-        $this->contentVersionCompiler->compileAll($entity);
+        $entity->cleanCompiled();
+        $this->contentVersionCompiler->compileAll($entity, false);
 
         $this->contentVersionManager->saveEntity($entity);
 

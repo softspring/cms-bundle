@@ -25,6 +25,6 @@ class ContentVersionCompileListener
      */
     public function prePersist(ContentVersionInterface $contentVersion, PrePersistEventArgs $event): void
     {
-        $this->contentVersionCompiler->compileAll($contentVersion);
+        $this->contentVersionCompiler->compileAll($contentVersion, false);
     }
 }
