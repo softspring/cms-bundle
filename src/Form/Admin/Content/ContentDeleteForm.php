@@ -92,6 +92,8 @@ class ContentDeleteForm extends AbstractType
             },
             'query_builder' => function (EntityRepository $entityRepository) use ($options) {
                 $qb = $entityRepository->createQueryBuilder('c');
+                $qb->select('c, s');
+                $qb->leftJoin('c.sites', 's');
                 $qb->andWhere('c.id != :currentContent')->setParameter('currentContent', $options['entity']->getId());
 
                 return $qb;

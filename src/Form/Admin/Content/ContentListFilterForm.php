@@ -3,6 +3,7 @@
 namespace Softspring\CmsBundle\Form\Admin\Content;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Form\Admin\SiteChoiceType;
 use Softspring\Component\DoctrinePaginator\Form\PaginatorForm;
@@ -38,6 +39,15 @@ class ContentListFilterForm extends PaginatorForm
 
         $resolver->setNormalizer('label_format', function (Options $options, $value) {
             return "admin_{$options['content_config']['_id']}.list.filter_form.%name%.label";
+        });
+
+        $resolver->addNormalizer('query_builder', function (Options $options, QueryBuilder $qb) {
+            $alias = $qb->getDQLPart('from')[0]->getAlias();
+            $qb->select("$alias, sites, pv");
+            $qb->leftJoin("{$alias}.sites", 'sites');
+            $qb->leftJoin("{$alias}.publishedVersion", 'pv');
+
+            return $qb;
         });
     }
 

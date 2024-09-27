@@ -3,6 +3,7 @@
 namespace Softspring\CmsBundle\Form\Admin\Route;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Form\Admin\SiteChoiceType;
 use Softspring\CmsBundle\Model\RouteInterface;
@@ -10,6 +11,7 @@ use Softspring\Component\DoctrinePaginator\Form\PaginatorForm;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RouteListFilterForm extends PaginatorForm implements RouteListFilterFormInterface
@@ -35,6 +37,15 @@ class RouteListFilterForm extends PaginatorForm implements RouteListFilterFormIn
             'order_valid_fields' => ['id'],
             'order_default_value' => 'id',
         ]);
+
+        $resolver->addNormalizer('query_builder', function (Options $options, QueryBuilder $qb) {
+            $alias = $qb->getDQLPart('from')[0]->getAlias();
+            $qb->select("$alias, sites, content");
+            $qb->leftJoin("{$alias}.sites", 'sites');
+            $qb->leftJoin("{$alias}.content", 'content');
+
+            return $qb;
+        });
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void

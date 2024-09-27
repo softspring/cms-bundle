@@ -3,6 +3,7 @@
 namespace Softspring\CmsBundle\Form\Admin\Route;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Softspring\CmsBundle\Form\Admin\SiteChoiceType;
 use Softspring\CmsBundle\Form\Type\SymfonyRouteType;
 use Softspring\CmsBundle\Model\ContentInterface;
@@ -81,6 +82,13 @@ abstract class AbstractRouteForm extends AbstractType
                     'data-site' => implode(',', $parent->getSites()->map(fn (SiteInterface $site) => "$site")->toArray()),
                 ];
             },
+            'query_builder' => function (EntityRepository $er) {
+                return $er->createQueryBuilder('r')
+                    ->select('r, s, c')
+                    ->leftJoin('r.content', 'c')
+                    ->leftJoin('r.sites', 's')
+                    ->orderBy('r.id', 'ASC');
+            },
         ]);
 
         if (!$options['content_relative']) {
@@ -130,6 +138,12 @@ abstract class AbstractRouteForm extends AbstractType
                 'class' => ContentInterface::class,
                 'required' => false,
                 'em' => $this->em,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                        ->select('c, s')
+                        ->leftJoin('c.sites', 's')
+                        ->orderBy('c.name', 'ASC');
+                },
                 'choice_label' => function (ContentInterface $content) {
                     return $content->getName();
                 },
