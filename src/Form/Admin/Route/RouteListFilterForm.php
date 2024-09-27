@@ -40,8 +40,7 @@ class RouteListFilterForm extends PaginatorForm implements RouteListFilterFormIn
 
         $resolver->addNormalizer('query_builder', function (Options $options, QueryBuilder $qb) {
             $alias = $qb->getDQLPart('from')[0]->getAlias();
-            $qb->select("$alias, sites, content");
-            $qb->leftJoin("{$alias}.sites", 'sites');
+            $qb->select("$alias, content");
             $qb->leftJoin("{$alias}.content", 'content');
 
             return $qb;

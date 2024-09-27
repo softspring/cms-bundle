@@ -43,8 +43,7 @@ class ContentListFilterForm extends PaginatorForm
 
         $resolver->addNormalizer('query_builder', function (Options $options, QueryBuilder $qb) {
             $alias = $qb->getDQLPart('from')[0]->getAlias();
-            $qb->select("$alias, sites, pv");
-            $qb->leftJoin("{$alias}.sites", 'sites');
+            $qb->select("$alias, pv");
             $qb->leftJoin("{$alias}.publishedVersion", 'pv');
 
             return $qb;
