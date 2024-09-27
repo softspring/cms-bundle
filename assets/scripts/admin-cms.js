@@ -23,7 +23,6 @@ import './admin/content-edit/wysiwyg';
 
 import './admin/confirm-modal';
 import './admin/routes-forms';
-import './admin/form-collections';
 import './admin/fields-visibility';
 import './admin/locales-widgets';
 
