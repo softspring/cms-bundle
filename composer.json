@@ -22,7 +22,7 @@
         "softspring/events": "^5.1",
         "softspring/media-bundle": "^5.2",
         "softspring/permissions-bundle": "^5.2",
-        "softspring/polymorphic-form-type": "^5.2",
+        "softspring/polymorphic-form-type": "^5.3",
         "softspring/twig-extra-bundle": "^5.1",
         "symfony/config": "^5.4|^6.0|^7.0",
         "symfony/intl": "^5.4|^6.0|^7.0",

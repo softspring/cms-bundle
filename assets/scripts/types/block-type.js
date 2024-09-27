@@ -37,12 +37,12 @@ window.addEventListener('load', (event) => {
     [...document.querySelectorAll('[data-block-message-select]')].forEach((select) => blockMessageSelect(select));
 
     // on module add, process messages
-    document.addEventListener("polymorphic.node.add.after", function (event) {
+    document.addEventListener("collection.node.add.after", function (event) {
         [...event.node().querySelectorAll('[data-block-message-select]')].forEach((select) => blockMessageSelect(select));
     });
 
     // on module insert, process messages
-    document.addEventListener("polymorphic.node.insert.after", function (event) {
+    document.addEventListener("collection.node.insert.after", function (event) {
         [...event.node().querySelectorAll('[data-block-message-select]')].forEach((select) => blockMessageSelect(select));
     });
 });

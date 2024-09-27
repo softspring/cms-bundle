@@ -13,7 +13,7 @@ function _addEditEventListener(eventName, listener, moduleName = null, targetMat
             return;
         }
 
-        let node = module.closest('[data-polymorphic=node]');
+        let node = module.closest('[data-collection=node]');
         if (!node) {
             return;
         }

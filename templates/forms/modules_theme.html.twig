@@ -57,7 +57,7 @@
     {% set attr = {
         'data-module-row-class': form.vars.module_row_class,
     }| merge(attr) | merge({
-        'data-polymorphic': 'collection',
+        'data-collection': 'collection',
         'data-modules-allowed': form.vars.allowed_modules|join(','),
         'data-modules-modal': 'module_prototypes_collection_modal',
         'data-full-name': form.vars.full_name,
@@ -78,7 +78,7 @@
 
         <div class="insert-module-at-the-end {{ attr['data-module-row-class'] }}">
             <a class="insert-module" data-bs-toggle="modal" data-bs-target="#module_prototypes_collection_modal"
-               data-polymorphic-collection="{{ form.vars.id }}" data-polymorphic-position="latest"
+               data-collection-target="{{ form.vars.id }}" data-collection-position="latest"
                title="Insert module here"></a>
         </div>
     </div>
@@ -99,13 +99,13 @@
 
 {% block module_buttons %}
     <div class="cms-module-buttons ps-2">
-        <button type="button" id="{{ id }}_up_node_button" data-polymorphic-action="up"><span
+        <button type="button" id="{{ id }}_up_node_button" data-collection-action="up"><span
                     class="bi bi-chevron-up h2"></span><span class="visually-hidden">^</span></button>
-        <button type="button" id="{{ id }}_down_node_button" data-polymorphic-action="down"><span
+        <button type="button" id="{{ id }}_down_node_button" data-collection-action="down"><span
                     class="bi bi-chevron-down h2"></span><span class="visually-hidden">v</span></button>
-        <button type="button" id="{{ id }}_duplicate_node_button" data-polymorphic-action="duplicate"><span
+        <button type="button" id="{{ id }}_duplicate_node_button" data-collection-action="duplicate"><span
                     class="bi bi-copy h2"></span><span class="visually-hidden">D</span></button>
-        <button type="button" id="{{ id }}_remove_node_button" data-polymorphic-action="delete" class="btn-close"><span
+        <button type="button" id="{{ id }}_remove_node_button" data-collection-action="delete" class="btn-close"><span
                     class="visually-hidden">x</span></button>
     </div>
 {% endblock %}
@@ -233,7 +233,7 @@
 
 {% block module_edit_header %}
     <div>
-        <span data-polymorphic="node-index" class="pe-3 d-none" id="{{ id }}_order_index">{{ form.vars.name }}</span>
+        <span data-collection="node-index" class="pe-3 d-none" id="{{ id }}_order_index">{{ form.vars.name }}</span>
 
         <span class="icon me-3">
                         {{ ( form.vars.prototype_button_label~'_icon')|trans(form.vars.label_translation_parameters, form.vars.translation_domain)|raw }}
@@ -247,8 +247,8 @@
 {% endblock %}
 
 {% block dynamic_form_module_row %}
-    <div data-polymorphic="node" {{ block('widget_container_attributes') }}>
-        <div class="insert-module" data-polymorphic-position="before" data-bs-toggle="modal"
+    <div data-collection="node" {{ block('widget_container_attributes') }}>
+        <div class="insert-module" data-collection-position="before" data-bs-toggle="modal"
              data-bs-target="#module_prototypes_collection_modal" title="Insert module here"></div>
         <div class="cms-module {{ form.vars.deprecated?'cms-module-deprecated':'' }} {% if form.vars.module_errors|length %}has-errors{% endif %}">
             <div class="cms-module-header">
@@ -282,8 +282,8 @@
 {% endblock dynamic_form_module_widget %}
 
 {% block container_module_row %}
-    <div data-polymorphic="node" {{ block('widget_container_attributes') }}>
-        <div class="insert-module" data-polymorphic-position="before" data-bs-toggle="modal"
+    <div data-collection="node" {{ block('widget_container_attributes') }}>
+        <div class="insert-module" data-collection-position="before" data-bs-toggle="modal"
              data-bs-target="#module_prototypes_collection_modal" title="Insert module here"></div>
         <div class="cms-module {{ form.vars.deprecated?'cms-module-deprecated':'' }}">
             <div class="cms-module-header">
@@ -317,8 +317,8 @@
 {% endblock container_module_widget %}
 
 {% block empty_module_row %}
-    <div data-polymorphic="node" {{ block('widget_container_attributes') }}>
-        <div class="insert-module" data-polymorphic-position="before" data-bs-toggle="modal"
+    <div data-collection="node" {{ block('widget_container_attributes') }}>
+        <div class="insert-module" data-collection-position="before" data-bs-toggle="modal"
              data-bs-target="#module_prototypes_collection_modal" title="Insert module here"></div>
 
         <div class="cms-module {{ form.vars.deprecated?'cms-module-deprecated':'' }}">
@@ -372,7 +372,7 @@
                                     {% for key, prototype in prototypes %}
                                         {% set trans_domain = prototype.vars.translation_domain | default(translation_domain) | default(false) %}
                                         <div class="col-3 mb-3 modal-module">
-                                            <div data-polymorphic-action="insert"
+                                            <div data-collection-action="insert"
                                                  data-module-id="{{ prototype.vars.module_id }}"
                                                  class="module-thumbnail" {{ block('polymorphic_prototype_button_attributes') }}>
                                                 <div class="icon">

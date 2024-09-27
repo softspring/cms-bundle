@@ -9,10 +9,10 @@ window.addEventListener('load', (event) => {
             return;
         }
 
-        const module = event.target.closest('[data-polymorphic=node]')
-        const moduleCollection = event.target.closest('[data-polymorphic=collection]')
+        const module = event.target.closest('[data-collection=node]')
+        const moduleCollection = event.target.closest('[data-collection=collection]')
         const prototypes = document.getElementById('module_prototypes_collection_modal');
-        const moduleButton = prototypes.querySelector('[data-polymorphic-action=insert][data-module-id=' + event.target.dataset.editContentEnterInsertsModule + ']');
+        const moduleButton = prototypes.querySelector('[data-collection-action=insert][data-module-id=' + event.target.dataset.editContentEnterInsertsModule + ']');
 
         // module does not exists
         if (!moduleButton) {
@@ -20,8 +20,8 @@ window.addEventListener('load', (event) => {
             return;
         }
 
-        moduleButton.dataset.polymorphicCollection = moduleCollection.id;
-        moduleButton.dataset.polymorphicCollectionInsertPosition = '' + (parseInt(module.dataset.index) + 1);
+        moduleButton.dataset.collectionTarget = moduleCollection.id;
+        moduleButton.dataset.collectionInsertPosition = '' + (parseInt(module.dataset.collectionIndex) + 1);
         moduleButton.click();
 
         event.preventDefault();
