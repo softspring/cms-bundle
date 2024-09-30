@@ -218,7 +218,6 @@ admin_menus:
     form:
         name.label: "Nombre"
         items:
-            new_format: 'Nuevo formato'
             label: "Elementos"
             add.button: "Añadir elemento"
             text.label: "Texto"
