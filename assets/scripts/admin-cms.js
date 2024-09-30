@@ -2,7 +2,6 @@ import './tools';
 
 import '@softspring/media-bundle/scripts/media-type';
 import '@softspring/collection-form-type/scripts/collection-form-type';
-import '@softspring/polymorphic-form-type/scripts/polymorphic-form-type';
 
 import './admin/content-edit/config-errors';
 import './admin/content-edit/content-enter-inserts-module';

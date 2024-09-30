@@ -38,9 +38,11 @@ class MenuForm extends AbstractType
             $builder->add('items', MenuItemCollectionType::class);
         }
 
-        $builder->add('data', DynamicFormType::class, [
-            'form_fields' => $options['menu_config']['form_fields'],
-            'translation_domain' => $options['translation_domain'],
-        ]);
+        if (!empty($options['menu_config']['form_fields'])) {
+            $builder->add('data', DynamicFormType::class, [
+                'form_fields' => $options['menu_config']['form_fields'],
+                'translation_domain' => $options['translation_domain'],
+            ]);
+        }
     }
 }
