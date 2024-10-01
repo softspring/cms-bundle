@@ -1,7 +1,13 @@
-// init behaviour on window load
-window.addEventListener('load', _init);
+import {cmsEditListener} from './event-listeners';
 
-function _init() {
+(function () {
+    if (!window.__sfs_cms_content_edit_preview_media_modal_registered) {
+        window.addEventListener('load', _register);
+    }
+    window.__sfs_cms_content_edit_preview_media_modal_registered = true;
+})();
+
+function _register() {
     document.addEventListener('sfs_media.selected', function (event) {
         if (!event.target || !event.target.hasAttribute('data-media-preview-input')) return;
         onModalMediaSelectShowPreview(event.target);

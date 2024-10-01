@@ -1,7 +1,16 @@
 /**
  * See Softspring\Form\Type\SymfonyRouteType and
  */
-window.addEventListener('load', (event) => {
+import {cmsEditListener} from './event-listeners';
+
+(function () {
+    if (!window.__sfs_cms_types_symfony_route_type_registered) {
+        window.addEventListener('load', _register);
+    }
+    window.__sfs_cms_types_symfony_route_type_registered = true;
+})();
+
+function _register() {
     function selectOptionRouteRequirements(option) {
         let routeParamsRequirements = {};
 
@@ -133,4 +142,4 @@ window.addEventListener('load', (event) => {
             document.getElementById(routeNameField.dataset.routeParams).closest('div').hideElement();
         }
     });
-});
+}

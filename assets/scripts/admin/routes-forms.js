@@ -1,7 +1,16 @@
 var underscored = require("underscore.string/underscored");
 var slugify = require("underscore.string/slugify");
 
-window.addEventListener('load', (event) => {
+import {cmsEditListener} from './event-listeners';
+
+(function () {
+    if (!window.__sfs_cms_routes_forms_registered) {
+        window.addEventListener('load', _register);
+    }
+    window.__sfs_cms_routes_forms_registered = true;
+})();
+
+function _register() {
 
     /* ****************************************************************************************************** *
      * SLUG GENERATION ON CONTENT FORM

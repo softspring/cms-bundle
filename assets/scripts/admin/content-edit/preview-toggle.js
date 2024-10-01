@@ -1,4 +1,13 @@
-window.addEventListener('load', (event) => {
+import {cmsEditListener} from './event-listeners';
+
+(function () {
+    if (!window.__sfs_cms_content_edit_preview_toggle_registered) {
+        window.addEventListener('load', _register);
+    }
+    window.__sfs_cms_content_edit_preview_toggle_registered = true;
+})();
+
+function _register() {
     /**
      * Toggles content from input
      *
@@ -24,4 +33,4 @@ window.addEventListener('load', (event) => {
             });
         }
     });
-});
+};

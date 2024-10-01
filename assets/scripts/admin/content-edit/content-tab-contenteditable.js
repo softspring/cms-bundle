@@ -1,3 +1,31 @@
+import {cmsEditListener} from './event-listeners';
+import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
+
+registerFeature('admin_content_edit_content_tab_contenteditable', () => {
+    cmsEditListener('[contenteditable=true]', 'keydown', onContentEditableTab);
+    cmsEditListener('input[data-allow-tabs],textarea[data-allow-tabs]', 'keydown', onInputTab);
+});
+
+function onContentEditableTab(inputElement, module, preview, form, event) {
+    if (event.key !== 'Tab') return;
+
+    event.preventDefault();
+
+    insertTabIntoContentEditableElement(inputElement);
+
+    return true;
+}
+
+function onInputTab(inputElement, module, preview, form, event) {
+    if (event.key !== 'Tab') return;
+
+    event.preventDefault();
+
+    insertTabForInput(inputElement);
+
+    return true;
+}
+
 function insertTabIntoContentEditableElement(element) {
     const doc = element.ownerDocument.defaultView;
     const sel = doc.getSelection();
@@ -22,30 +50,3 @@ function insertTabForInput(element) {
     // put caret at right position again
     element.selectionStart = element.selectionEnd = start + 1;
 }
-
-function _init() {
-    document.addEventListener('keydown', function (event) {
-        if (event.key !== 'Tab') return;
-        if (!event.target || !event.target.matches('[contenteditable=true]')) return;
-
-        event.preventDefault();
-
-        insertTabIntoContentEditableElement(event.target);
-
-        return true;
-    });
-
-    document.addEventListener('keydown', function (event) {
-        if (event.key !== 'Tab') return;
-        if (!event.target || !event.target.matches('input[data-allow-tabs],textarea[data-allow-tabs]')) return;
-
-        event.preventDefault();
-
-        insertTabForInput(event.target);
-
-        return true;
-    });
-}
-
-// init behaviour on window load
-window.addEventListener('load', _init);

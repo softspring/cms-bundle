@@ -1,3 +1,27 @@
+import {cmsEditListener} from './event-listeners';
+
+export {
+    getSelectedLanguage,
+    getSelectedSite,
+    filterCurrentFilterElements,
+};
+
+(function () {
+    if (!window.__sfs_cms_content_edit_filter_preview_registered) {
+        window.addEventListener('load', _register);
+    }
+    window.__sfs_cms_content_edit_filter_preview_registered = true;
+})();
+
+function _register() {
+    const contentEditionLanguageSelector = document.getElementById('contentEditionLanguageSelection');
+    const contentEditionSiteSelector = document.getElementById('contentEditionSiteSelection');
+    contentEditionLanguageSelector && contentEditionLanguageSelector.addEventListener('change', filterCurrentFilterElements);
+    contentEditionSiteSelector && contentEditionSiteSelector.addEventListener('change', filterCurrentFilterElements);
+
+    filterCurrentFilterElements();
+}
+
 function selectFilterElements(language, site) {
     if (language && site) {
         document.querySelectorAll('[data-lang][data-site]').forEach((el) => el.style.setProperty('display', 'none'));
@@ -38,18 +62,3 @@ function filterCurrentFilterElements() {
 
     selectFilterElements(getSelectedLanguage(), getSelectedSite());
 }
-
-window.addEventListener('load', (event) => {
-    const contentEditionLanguageSelector = document.getElementById('contentEditionLanguageSelection');
-    const contentEditionSiteSelector = document.getElementById('contentEditionSiteSelection');
-    contentEditionLanguageSelector && contentEditionLanguageSelector.addEventListener('change', filterCurrentFilterElements);
-    contentEditionSiteSelector && contentEditionSiteSelector.addEventListener('change', filterCurrentFilterElements);
-
-    filterCurrentFilterElements();
-});
-
-export {
-    getSelectedLanguage,
-    getSelectedSite,
-    filterCurrentFilterElements,
-};

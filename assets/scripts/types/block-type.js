@@ -1,4 +1,13 @@
-window.addEventListener('load', (event) => {
+import {cmsEditListener} from './event-listeners';
+
+(function () {
+    if (!window.__sfs_cms_types_block_type_registered) {
+        window.addEventListener('load', _register);
+    }
+    window.__sfs_cms_types_block_type_registered = true;
+})();
+
+function _register() {
     document.addEventListener('change', function (event) {
         if (!event.target || !event.target.matches('[data-block-message-select]')) {
             return;
@@ -45,4 +54,4 @@ window.addEventListener('load', (event) => {
     document.addEventListener("collection.node.insert.after", function (event) {
         [...event.node().querySelectorAll('[data-block-message-select]')].forEach((select) => blockMessageSelect(select));
     });
-});
+}

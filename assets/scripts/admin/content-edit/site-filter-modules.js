@@ -10,7 +10,16 @@ function siteHideModules(site) {
     });
 }
 
-window.addEventListener('load', (event) => {
+import {cmsEditListener} from './event-listeners';
+
+(function () {
+    if (!window.__sfs_cms_content_edit_site_filter_modules_registered) {
+        window.addEventListener('load', _register);
+    }
+    window.__sfs_cms_content_edit_site_filter_modules_registered = true;
+})();
+
+function _register() {
     const contentEditionSiteSelector = document.getElementById('contentEditionSiteSelection');
 
     document.addEventListener('click', function (event) {
@@ -38,6 +47,6 @@ window.addEventListener('load', (event) => {
 
         siteHideModules(contentEditionSiteSelector.value);
     }
-});
+};
 
 export { siteHideModules };

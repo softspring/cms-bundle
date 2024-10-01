@@ -1,4 +1,13 @@
-window.addEventListener('load', (event) => {
+import {cmsEditListener} from './event-listeners';
+
+(function () {
+    if (!window.__sfs_cms_content_edit_preview_collection_node_class_registered) {
+        window.addEventListener('load', _register);
+    }
+    window.__sfs_cms_content_edit_preview_collection_node_class_registered = true;
+})();
+
+function _register() {
     document.addEventListener('input', function (event) {
         if (!event.target || !event.target.hasAttribute('data-edit-collection-node-class')) return;
 
@@ -55,4 +64,4 @@ window.addEventListener('load', (event) => {
     });
 
     [...document.querySelectorAll('select[data-edit-collection-node-class]')].forEach((select) => showOrHideCustomClass(select));
-});
+};

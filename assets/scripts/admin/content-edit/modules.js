@@ -2,7 +2,16 @@ import { filterCurrentFilterElements } from './filter-preview';
 import { CollectionEvent,getCollectionLastIndex } from '@softspring/collection-form-type/scripts/collection-form-type';
 import { Modal } from 'bootstrap';
 
-window.addEventListener('load', (event) => {
+import {cmsEditListener} from './event-listeners';
+
+(function () {
+    if (!window.__sfs_cms_content_edit_preview_fill_registered) {
+        window.addEventListener('load', _register);
+    }
+    window.__sfs_cms_content_edit_preview_fill_registered = true;
+})();
+
+function _register() {
     function moduleFocus(module) {
         allLostFocus();
         module.classList.add('active');
@@ -210,4 +219,4 @@ window.addEventListener('load', (event) => {
     document.addEventListener("collection.node.insert.after", checkMaxInputVars);
     document.addEventListener("collection.node.add.after", checkMaxInputVars);
     document.addEventListener("collection.node.duplicate.after", checkMaxInputVars);
-});
+};

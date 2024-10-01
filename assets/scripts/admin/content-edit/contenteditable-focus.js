@@ -49,11 +49,16 @@ function contentEditableBlurInput(inputElement) {
 }
 
 
-/**
- * Init content editable focus behaviour
- * @private
- */
-function _init() {
+import {cmsEditListener} from './event-listeners';
+
+(function () {
+    if (!window.__sfs_cms_content_edit_contenteditable_focus_registered) {
+        window.addEventListener('load', _register);
+    }
+    window.__sfs_cms_content_edit_contenteditable_focus_registered = true;
+})();
+
+function _register() {
     document.addEventListener('focusin', function (event) {
         if (event.target && event.target.hasAttribute('data-edit-content-input')) {
             event.preventDefault();
@@ -103,6 +108,3 @@ function _init() {
         })
     });
 }
-
-// init behaviour on window load
-window.addEventListener('load', _init);

@@ -1,12 +1,19 @@
-window.addEventListener('load', _init);
-
 function decodeMessage(encoded) {
     return decodeURIComponent(atob(encoded).split('').map(function(c) {
         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
 }
 
-function _init() {
+import {cmsEditListener} from './event-listeners';
+
+(function () {
+    if (!window.__sfs_cms_confirm_modal_registered) {
+        window.addEventListener('load', _register);
+    }
+    window.__sfs_cms_confirm_modal_registered = true;
+})();
+
+function _register() {
     document.addEventListener('click', function (event) {
         if (!event.target.matches('[data-confirm-modal]')) return;
 

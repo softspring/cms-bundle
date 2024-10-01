@@ -1,18 +1,25 @@
-window.addEventListener('load', (event) => {
-    /**
-     * Shows a block preview
-     *
-     * The preview target element must have the "data-block-preview-target" attribute
-     * The select option must have the "data-block-preview-input"
-     * Both data attributes must have the same value (as identificator)
-     */
-    document.addEventListener('change', function (event) {
-        if (!event.target || !event.target.hasAttribute('data-block-preview-input')) return;
+import {cmsEditListener} from './event-listeners';
 
-        let moduleForm = event.target.closest('.cms-module-edit').querySelector('.module-preview');
+(function () {
+    if (!window.__sfs_cms_content_edit_preview_block_registered) {
+        window.addEventListener('load', _register);
+    }
+    window.__sfs_cms_content_edit_preview_block_registered = true;
+})();
 
-        let htmlTargetElements = moduleForm.querySelectorAll("[data-block-preview-target='" + event.target.dataset.blockPreviewInput + "']");
-        let blockPreview = event.target.options[event.target.selectedIndex].dataset.blockPreview;
-        [...htmlTargetElements].forEach((htmlTargetElement) => htmlTargetElement.innerHTML = blockPreview === undefined ? '' : blockPreview);
-    });
-});
+function _register() {
+    cmsEditListener('[data-block-preview-input]', 'change', showBlockPreview);
+}
+
+/**
+ * Shows a block preview
+ *
+ * The preview target element must have the "data-block-preview-target" attribute
+ * The select option must have the "data-block-preview-input"
+ * Both data attributes must have the same value (as identificator)
+ */
+function showBlockPreview (inputElement, module, preview, form, event) {
+    let htmlTargetElements = preview.querySelectorAll("[data-block-preview-target='" + inputElement.dataset.blockPreviewInput + "']");
+    let blockPreview = inputElement.options[inputElement.selectedIndex].dataset.blockPreview;
+    [...htmlTargetElements].forEach((htmlTargetElement) => htmlTargetElement.innerHTML = blockPreview === undefined ? '' : blockPreview);
+};

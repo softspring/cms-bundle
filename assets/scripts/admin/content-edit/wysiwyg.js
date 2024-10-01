@@ -108,11 +108,16 @@ function destroyWysiwyg(element) {
     }
 }
 
-/**
- * Init wysiwyg editors
- * @private
- */
-function _init() {
+import {cmsEditListener} from './event-listeners';
+
+(function () {
+    if (!window.__sfs_cms_content_edit_wysiwyg_registered) {
+        window.addEventListener('load', _register);
+    }
+    window.__sfs_cms_content_edit_wysiwyg_registered = true;
+})();
+
+function _register() {
     // dispatch event on focusin in a data-edit-content-wysiwyg element
     document.addEventListener('focusin', function (event) {
         if (!event.target || !event.target.hasAttribute('data-edit-content-wysiwyg')) return;
@@ -139,6 +144,3 @@ function _init() {
         // destroyWysiwyg(event.target); <-- disabled because on tinymce modals and windows openings it loses focus and gets destroyed
     });
 }
-
-// init wysiwyg on window load
-window.addEventListener('load', _init);

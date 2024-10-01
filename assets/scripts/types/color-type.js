@@ -1,4 +1,13 @@
-window.addEventListener('load', (event) => {
+import {cmsEditListener} from './event-listeners';
+
+(function () {
+    if (!window.__sfs_cms_types_color_type_registered) {
+        window.addEventListener('load', _register);
+    }
+    window.__sfs_cms_types_color_type_registered = true;
+})();
+
+function _register() {
     document.querySelectorAll('[data-color-type=toggler]').forEach(function(togglerHtmlElement) {
         colorDatePicker(togglerHtmlElement);
     });
@@ -58,4 +67,4 @@ window.addEventListener('load', (event) => {
 
         colorDatePicker(toggler);
     });
-});
+}

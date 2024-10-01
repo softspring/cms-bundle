@@ -1,4 +1,15 @@
-window.addEventListener('load', (event) => {
+import {cmsEditListener} from './event-listeners';
+
+(function () {
+    if (!window.__sfs_cms_content_edit_preview_fill_registered) {
+        window.addEventListener('load', _register);
+    }
+    window.__sfs_cms_content_edit_preview_fill_registered = true;
+})();
+
+function _register() {
+
+    // TODO refactor this function to separated functions
 
     const kebabize = (str) => str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? "-" : "") + $.toLowerCase());
 
@@ -50,4 +61,4 @@ window.addEventListener('load', (event) => {
             }
         });
     });
-});
+};
