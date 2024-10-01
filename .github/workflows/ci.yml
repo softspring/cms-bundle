@@ -110,8 +110,11 @@ jobs:
 
             -   name: Install npm dependencies
                 run: npm install
-                path: assets
+                with:
+                    path: assets
 
             -   name: Run eslint
                 run: npx eslint scripts/*
-                path: assets
+                with:
+                    path: assets
+
