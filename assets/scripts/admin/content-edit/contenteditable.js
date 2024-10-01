@@ -1,4 +1,44 @@
-import { Collapse } from 'bootstrap';
+import {getSelectedLanguage} from './filter-preview';
+import {callForeachSelector, registerFeature} from '@softspring/cms-bundle/scripts/tools';
+
+registerFeature('admin_content_edit_contenteditable', _init);
+
+/**
+ * Init content editable behaviour
+ * @private
+ */
+function _init() {
+    cssCodeNotValidatedWarningShown = false;
+
+    // dispatch custom events on input event over data-edit-content-input and data-edit-content-target elements
+    document.addEventListener('input', function (event) {
+        if (event.target && event.target.hasAttribute('data-edit-content-input')) {
+            event.preventDefault();
+            event.target.dispatchEvent(new CustomEvent('sfs_cms.content_edit.content_editable.input.change', {bubbles: true}));
+        }
+        if (event.target && event.target.hasAttribute('data-edit-content-target')) {
+            event.preventDefault();
+            event.target.dispatchEvent(new CustomEvent('sfs_cms.content_edit.content_editable.target.change', {bubbles: true}));
+        }
+    });
+
+    // on content editable input change, update preview, default listener
+    document.addEventListener('sfs_cms.content_edit.content_editable.input.change', function (event) {
+        event.preventDefault();
+        contentEditableUpdateElementsFromInput(event.target);
+    });
+
+    // on content editable preview change, update inputs, default listener
+    document.addEventListener('sfs_cms.content_edit.content_editable.target.change', function (event) {
+        event.preventDefault();
+        contentEditableUpdateInputsFromElement(event.target);
+    });
+
+    // hide elements with data-edit-content-hide-if-empty attribute if empty
+    callForeachSelector('[data-edit-content-hide-if-empty]:empty', (htmlElement) =>
+        htmlElement.style.setProperty('display', 'none')
+    );
+}
 
 /**
  * Content edit contenteditable behaviour
@@ -16,16 +56,7 @@ import { Collapse } from 'bootstrap';
  * - sfs_cms.content_edit.content_editable.target.change: dispatched when the target changes
  */
 
-import {getSelectedLanguage} from './filter-preview';
-
 let cssCodeNotValidatedWarningShown;
-
-export {
-    contentEditableUpdateElementsFromInput,
-    contentEditableUpdateInputsFromElement,
-    getInputsFromElement,
-    getPreviewElementsFromInput,
-};
 
 function getInputsFromElement(previewElement) {
     let moduleForm = previewElement.closest('.cms-module-edit').querySelector('.cms-module-form');
@@ -60,6 +91,28 @@ function contentEditableUpdateInputsFromElement(previewElement) {
     }
 }
 
+function previewElementParseHtml(inputElement, previewElement) {
+    let value = inputElement.value;
+
+    let valueToParse = '<body>' + value + '</body>';
+    valueToParse = valueToParse.replace(new RegExp(/\n/, 'g'), '');
+    let parser = new DOMParser();
+    let doc = parser.parseFromString(valueToParse, "application/xml");
+    let errorNode = doc.querySelector('parsererror');
+    if (errorNode) {
+        value = errorNode.innerText;
+        previewElement.classList.add('text-error');
+        previewElement.classList.add('border');
+        previewElement.classList.add('border-danger');
+    } else {
+        previewElement.classList.remove('text-error');
+        previewElement.classList.remove('border');
+        previewElement.classList.remove('border-danger');
+    }
+
+    return value;
+}
+
 /**
  * Updates the preview/s from input element
  * @param {HTMLElement} inputElement
@@ -71,21 +124,7 @@ function contentEditableUpdateElementsFromInput(inputElement) {
         if (previewElement.dataset.editContentValidate) {
             switch (previewElement.dataset.editContentValidate) {
                 case 'html':
-                    let valueToParse = '<body>' + value + '</body>';
-                    valueToParse = valueToParse.replace(new RegExp('\n', 'g'), '');
-                    let parser = new DOMParser();
-                    let doc = parser.parseFromString(valueToParse, "application/xml");
-                    let errorNode = doc.querySelector('parsererror');
-                    if (errorNode) {
-                        value = errorNode.innerText;
-                        previewElement.classList.add('text-error');
-                        previewElement.classList.add('border');
-                        previewElement.classList.add('border-danger');
-                    } else {
-                        previewElement.classList.remove('text-error');
-                        previewElement.classList.remove('border');
-                        previewElement.classList.remove('border-danger');
-                    }
+                    value = previewElementParseHtml(inputElement, previewElement);
                     break;
 
                 case 'css':
@@ -114,145 +153,9 @@ function contentEditableUpdateElementsFromInput(inputElement) {
     });
 }
 
-function contentEditableFocusElement(previewElement) {
-    const inputs = getInputsFromElement(previewElement);
-
-    if (!inputs.length) {
-        return;
-    }
-
-    inputs[0].classList.add('border', 'border-success');
-    const accordionItem = inputs[0].closest('.accordion-item').querySelector('.accordion-button.collapsed');
-    accordionItem && accordionItem.click();
-    
-    inputs[0].closest('.accordion-item').scrollIntoView({
-        behavior: 'smooth',
-        block: 'end',
-    });
-}
-
-function contentEditableBlurElement(previewElement) {
-    const inputs = getInputsFromElement(previewElement);
-
-    if (!inputs.length) {
-        return;
-    }
-
-    inputs[0].classList.remove('border', 'border-success');
-}
-
-function contentEditableFocusInput(inputElement) {
-    const previews = getPreviewElementsFromInput(inputElement);
-
-    if (!previews.length) {
-        return;
-    }
-
-    previews.map(preview => preview.classList.add('border', 'border-success'));
-}
-
-function contentEditableBlurInput(inputElement) {
-    const previews = getPreviewElementsFromInput(inputElement);
-
-    if (!previews.length) {
-        return;
-    }
-
-    previews.map(preview => preview.classList.remove('border', 'border-success'));
-}
-
-
-/**
- * Init content editable behaviour
- * @private
- */
-function _init() {
-    cssCodeNotValidatedWarningShown = false;
-
-    // dispatch custom events on input event over data-edit-content-input and data-edit-content-target elements
-    document.addEventListener('input', function (event) {
-        if (event.target && event.target.hasAttribute('data-edit-content-input')) {
-            event.preventDefault();
-            event.target.dispatchEvent(new CustomEvent('sfs_cms.content_edit.content_editable.input.change', {bubbles: true}));
-        }
-        if (event.target && event.target.hasAttribute('data-edit-content-target')) {
-            event.preventDefault();
-            event.target.dispatchEvent(new CustomEvent('sfs_cms.content_edit.content_editable.target.change', {bubbles: true}));
-        }
-    });
-
-    document.addEventListener('focusin', function (event) {
-        if (event.target && event.target.hasAttribute('data-edit-content-input')) {
-            event.preventDefault();
-            event.target.dispatchEvent(new CustomEvent('sfs_cms.content_edit.content_editable.input.focus', {bubbles: true}));
-        }
-    });
-
-    document.addEventListener('focusin', function (event) {
-        if (event.target && event.target.hasAttribute('data-edit-content-target')) {
-            event.preventDefault();
-            event.target.dispatchEvent(new CustomEvent('sfs_cms.content_edit.content_editable.target.focus', {bubbles: true}));
-        }
-    });
-
-    document.addEventListener('focusout', function (event) {
-        if (event.target && event.target.hasAttribute('data-edit-content-input')) {
-            event.preventDefault();
-            event.target.dispatchEvent(new CustomEvent('sfs_cms.content_edit.content_editable.input.blur', {bubbles: true}));
-        }
-    });
-
-    document.addEventListener('focusout', function (event) {
-        if (event.target && event.target.hasAttribute('data-edit-content-target')) {
-            event.preventDefault();
-            event.target.dispatchEvent(new CustomEvent('sfs_cms.content_edit.content_editable.target.blur', {bubbles: true}));
-        }
-    });
-
-    // on content editable input change, update preview, default listener
-    document.addEventListener('sfs_cms.content_edit.content_editable.input.change', function (event) {
-        event.preventDefault();
-        contentEditableUpdateElementsFromInput(event.target);
-    });
-
-    // on content editable preview change, update inputs, default listener
-    document.addEventListener('sfs_cms.content_edit.content_editable.target.change', function (event) {
-        event.preventDefault();
-        contentEditableUpdateInputsFromElement(event.target);
-    });
-
-    // focus and blur events
-    document.addEventListener('sfs_cms.content_edit.content_editable.target.focus', function (event) {
-        event.preventDefault();
-        contentEditableFocusElement(event.target);
-    });
-    document.addEventListener('sfs_cms.content_edit.content_editable.target.blur', function (event) {
-        event.preventDefault();
-        contentEditableBlurElement(event.target);
-    });
-    document.addEventListener('sfs_cms.content_edit.content_editable.input.focus', function (event) {
-        event.preventDefault();
-        contentEditableFocusInput(event.target);
-    });
-    document.addEventListener('sfs_cms.content_edit.content_editable.input.blur', function (event) {
-        event.preventDefault();
-        contentEditableBlurInput(event.target);
-    });
-    const collapseElementList = [].slice.call(document.querySelectorAll('.collapse'))
-    collapseElementList.map(function (collapseEl) {
-        collapseEl.addEventListener('shown.bs.collapse', function () {
-            this.scrollIntoView({
-                behavior: 'smooth',
-                block: 'end',
-            });
-        })
-    });
-
-    // hide elements with data-edit-content-hide-if-empty attribute if empty
-    document.querySelectorAll('[data-edit-content-hide-if-empty]:empty').forEach((htmlElement) =>
-        htmlElement.style.setProperty('display', 'none')
-    );
-}
-
-// init behaviour on window load
-window.addEventListener('load', _init);
+export {
+    contentEditableUpdateElementsFromInput,
+    contentEditableUpdateInputsFromElement,
+    getInputsFromElement,
+    getPreviewElementsFromInput,
+};

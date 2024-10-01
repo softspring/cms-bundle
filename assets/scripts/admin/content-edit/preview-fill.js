@@ -1,4 +1,13 @@
-window.addEventListener('load', (event) => {
+import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
+
+registerFeature('admin_content_edit_preview_fill', _init);
+
+/**
+ * Init behaviour
+ * @private
+ */
+function _init() {
+    // TODO refactor this function to separated functions
 
     const kebabize = (str) => str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? "-" : "") + $.toLowerCase());
 
@@ -20,7 +29,9 @@ window.addEventListener('load', (event) => {
 
         let dataAttributes = Object.keys(event.target.dataset);
         dataAttributes.forEach(function (dataAttribute) {
-            if (!dataAttribute.startsWith('editFillInput')) { return; }
+            if (!dataAttribute.startsWith('editFillInput')) {
+                return;
+            }
 
             let targetField = dataAttribute.replace('editFillInput', '');
             let kebabizedTargetField = kebabize(targetField);
@@ -32,17 +43,17 @@ window.addEventListener('load', (event) => {
             let htmlTargetElements = moduleEdit.querySelectorAll("[data-edit-fill-target-" + kebabizedTargetField + "]");
             if (htmlTargetElements.length) {
                 htmlTargetElements.forEach(function (htmlTargetElement) {
-                    let value = sourceElement.getAttribute('data-'+kebabizedSourceField);
-                    if (htmlTargetElement.hasAttribute('data-lang') && sourceElement.hasAttribute('data-'+kebabizedSourceField+'-'+htmlTargetElement.dataset.lang)) {
-                        value = sourceElement.getAttribute('data-'+kebabizedSourceField+'-'+htmlTargetElement.dataset.lang);
+                    let value = sourceElement.getAttribute('data-' + kebabizedSourceField);
+                    if (htmlTargetElement.hasAttribute('data-lang') && sourceElement.hasAttribute('data-' + kebabizedSourceField + '-' + htmlTargetElement.dataset.lang)) {
+                        value = sourceElement.getAttribute('data-' + kebabizedSourceField + '-' + htmlTargetElement.dataset.lang);
                     }
-                    if (htmlTargetElement.hasAttribute('data-input-lang') && sourceElement.hasAttribute('data-'+kebabizedSourceField+'-'+htmlTargetElement.dataset.inputLang)) {
-                        value = sourceElement.getAttribute('data-'+kebabizedSourceField+'-'+htmlTargetElement.dataset.inputLang);
+                    if (htmlTargetElement.hasAttribute('data-input-lang') && sourceElement.hasAttribute('data-' + kebabizedSourceField + '-' + htmlTargetElement.dataset.inputLang)) {
+                        value = sourceElement.getAttribute('data-' + kebabizedSourceField + '-' + htmlTargetElement.dataset.inputLang);
                     }
 
                     if (htmlTargetElement.tagName === 'INPUT') {
                         htmlTargetElement.value = value;
-                        htmlTargetElement.dispatchEvent(new Event('change', { bubbles: true }));
+                        htmlTargetElement.dispatchEvent(new Event('change', {bubbles: true}));
                     } else {
                         htmlTargetElement.innerHTML = value;
                     }
@@ -50,4 +61,4 @@ window.addEventListener('load', (event) => {
             }
         });
     });
-});
+};

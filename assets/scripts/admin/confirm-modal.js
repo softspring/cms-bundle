@@ -1,4 +1,34 @@
-window.addEventListener('load', _init);
+import {Modal} from 'bootstrap';
+import {registerFeature,addTargetEventListener} from '@softspring/cms-bundle/scripts/tools';
+
+registerFeature('admin_confirm_modal', _init);
+
+/**
+ * Init behaviour
+ * @private
+ */
+function _init() {
+    addTargetEventListener('[data-confirm-modal]', 'click', onConfirmModalClick);
+}
+
+function onConfirmModalClick(confirmModal, event) {
+    event.preventDefault();
+
+    const title = event.target.dataset.confirmModalTitle || '';
+    const message = decodeMessage(event.target.dataset.confirmModal || '');
+    const confirmButton = event.target.dataset.confirmModalConfirmButton || 'Continue';
+    const confirmButtonType = event.target.dataset.confirmModalConfirmButtonType || 'primary';
+    const cancelButton = event.target.dataset.confirmModalCancelButton || 'Cancel';
+
+    if (!event.target.href) {
+        console.error('Only links are supported for confirm modal');
+        return;
+    }
+
+    confirmModalLink(title, message, confirmButton, confirmButtonType, cancelButton, event.target.href);
+
+    return false;
+}
 
 function decodeMessage(encoded) {
     return decodeURIComponent(atob(encoded).split('').map(function(c) {
@@ -6,33 +36,10 @@ function decodeMessage(encoded) {
     }).join(''));
 }
 
-function _init() {
-    document.addEventListener('click', function (event) {
-        if (!event.target.matches('[data-confirm-modal]')) return;
-
-        event.preventDefault();
-
-        const title = event.target.dataset.confirmModalTitle || '';
-        const message = decodeMessage(event.target.dataset.confirmModal || '');
-        const confirmButton = event.target.dataset.confirmModalConfirmButton || 'Continue';
-        const confirmButtonType = event.target.dataset.confirmModalConfirmButtonType || 'primary';
-        const cancelButton = event.target.dataset.confirmModalCancelButton || 'Cancel';
-
-        if (!event.target.href) {
-            console.error('Only links are supported for confirm modal');
-            return;
-        }
-
-        confirmModalLink(title, message, confirmButton, confirmButtonType, cancelButton, event.target.href);
-
-        return false;
-    });
-}
-
 function confirmModalLink(title, message, confirmButton, confirmButtonType, cancelButton, url) {
     const modalId = createModal(title, message, confirmButton, confirmButtonType, cancelButton, url);
     const modalDiv = document.getElementById(modalId);
-    const modal = new bootstrap.Modal(modalDiv, {
+    const modal = new Modal(modalDiv, {
         keyboard: false
     });
     modal.show();

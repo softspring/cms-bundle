@@ -1,4 +1,12 @@
-window.addEventListener('load', (event) => {
+import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
+
+registerFeature('admin_content_edit_preview_collection_node_class', _init);
+
+/**
+ * Init behaviour
+ * @private
+ */
+function _init() {
     document.addEventListener('input', function (event) {
         if (!event.target || !event.target.hasAttribute('data-edit-collection-node-class')) return;
 
@@ -26,28 +34,10 @@ window.addEventListener('load', (event) => {
             collectionTargetElements.forEach(function (collectionTargetElement) {
                 collectionTargetElement.setAttribute('data-module-row-class', nodeClass);
                 [...collectionTargetElement.querySelectorAll(':scope > [data-collection=node]')].forEach((node) => node.setAttribute('class', nodeClass));
-                [...collectionTargetElement.querySelectorAll(':scope > .insert-module-at-the-end')].forEach((node) => node.setAttribute('class', 'insert-module-at-the-end '+nodeClass));
+                [...collectionTargetElement.querySelectorAll(':scope > .insert-module-at-the-end')].forEach((node) => node.setAttribute('class', 'insert-module-at-the-end ' + nodeClass));
             });
         }
     });
-
-    function showOrHideCustomClass(selectElement) {
-        const modulePreview = selectElement.closest('.cms-module-edit').querySelector('.module-preview');
-        const moduleEditForm = modulePreview.nextElementSibling;
-        const customClassInput = moduleEditForm.querySelector("input[type=text][data-edit-collection-node-class='" + selectElement.dataset.editCollectionNodeClass + "']");
-        const customClassInputRow = customClassInput.parentElement.parentElement;
-
-        if (selectElement.value) {
-            customClassInputRow.classList.add('d-none');
-        } else {
-            customClassInputRow.classList.remove('d-none');
-
-            if (!customClassInput.value) {
-                customClassInput.value = 'col';
-                customClassInput.setAttribute('value', 'col');
-            }
-        }
-    }
 
     document.addEventListener('change', function (event) {
         if (!event.target || !event.target.hasAttribute('data-edit-collection-node-class') || event.target.nodeName != 'SELECT') return;
@@ -55,4 +45,22 @@ window.addEventListener('load', (event) => {
     });
 
     [...document.querySelectorAll('select[data-edit-collection-node-class]')].forEach((select) => showOrHideCustomClass(select));
-});
+}
+
+function showOrHideCustomClass(selectElement) {
+    const modulePreview = selectElement.closest('.cms-module-edit').querySelector('.module-preview');
+    const moduleEditForm = modulePreview.nextElementSibling;
+    const customClassInput = moduleEditForm.querySelector("input[type=text][data-edit-collection-node-class='" + selectElement.dataset.editCollectionNodeClass + "']");
+    const customClassInputRow = customClassInput.parentElement.parentElement;
+
+    if (selectElement.value) {
+        customClassInputRow.classList.add('d-none');
+    } else {
+        customClassInputRow.classList.remove('d-none');
+
+        if (!customClassInput.value) {
+            customClassInput.value = 'col';
+            customClassInput.setAttribute('value', 'col');
+        }
+    }
+}

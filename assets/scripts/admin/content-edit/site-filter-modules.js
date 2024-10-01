@@ -1,16 +1,12 @@
-function siteHideModules(site) {
-    document.querySelectorAll('[data-cms-module-site-filter][value='+site+']').forEach(function (widget) {
-        let siteVisible = widget.checked;
-        let modulePreview = widget.closest('.cms-module-edit').querySelector('.module-preview');
-        if (siteVisible) {
-            modulePreview.classList.remove('cms-module-site-hidden');
-        } else {
-            modulePreview.classList.add('cms-module-site-hidden');
-        }
-    });
-}
+import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
 
-window.addEventListener('load', (event) => {
+registerFeature('admin_content_edit_site_filter_modules', _init);
+
+/**
+ * Init behaviour
+ * @private
+ */
+function _init() {
     const contentEditionSiteSelector = document.getElementById('contentEditionSiteSelection');
 
     document.addEventListener('click', function (event) {
@@ -38,6 +34,18 @@ window.addEventListener('load', (event) => {
 
         siteHideModules(contentEditionSiteSelector.value);
     }
-});
+}
+
+function siteHideModules(site) {
+    document.querySelectorAll('[data-cms-module-site-filter][value='+site+']').forEach(function (widget) {
+        let siteVisible = widget.checked;
+        let modulePreview = widget.closest('.cms-module-edit').querySelector('.module-preview');
+        if (siteVisible) {
+            modulePreview.classList.remove('cms-module-site-hidden');
+        } else {
+            modulePreview.classList.add('cms-module-site-hidden');
+        }
+    });
+}
 
 export { siteHideModules };

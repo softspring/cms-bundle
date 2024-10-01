@@ -1,38 +1,17 @@
 import {filterCurrentFilterElements} from "./filter-preview";
+import {cmsEditListener} from './event-listeners';
+import {callForeachSelector, registerFeature} from '@softspring/cms-bundle/scripts/tools';
 
-function localeHideModules(locale) {
-    document.querySelectorAll('[data-cms-module-locale-filter][value='+locale+']').forEach(function (widget) {
-        let localeVisible = widget.checked;
-        let modulePreview = widget.closest('.cms-module-edit').querySelector('.module-preview');
-        if (localeVisible) {
-            modulePreview.classList.remove('cms-module-locale-hidden');
-        } else {
-            modulePreview.classList.add('cms-module-locale-hidden');
-        }
-    });
-}
+registerFeature('admin_content_edit_locale_filter_modules', _init);
 
-window.addEventListener('load', (event) => {
-    const contentEditionLanguageSelector = document.getElementById('contentEditionLanguageSelection');
+/**
+ * Init behaviour
+ * @private
+ */
+function _init() {
+    cmsEditListener('[data-cms-module-locale-filter]', 'click', onLocaleFilterClick);
 
-    document.addEventListener('click', function (event) {
-        if (!event.target || !event.target.hasAttribute('data-cms-module-locale-filter')) return;
-
-        let widget = event.target;
-        let locale = widget.value;
-        let currentLocale = contentEditionLanguageSelector.value;
-
-        if (locale !== currentLocale) return;
-
-        let localeVisible = widget.checked;
-        let modulePreview = widget.closest('.cms-module-edit').querySelector('.module-preview');
-        if (localeVisible) {
-            modulePreview.classList.remove('cms-module-locale-hidden');
-        } else {
-            modulePreview.classList.add('cms-module-locale-hidden');
-        }
-    });
-
+    let contentEditionLanguageSelector = getContentEditionLanguageSelector();
     if (contentEditionLanguageSelector) {
         contentEditionLanguageSelector.addEventListener('change', function (event) {
             localeHideModules(event.target.value);
@@ -41,12 +20,53 @@ window.addEventListener('load', (event) => {
         localeHideModules(contentEditionLanguageSelector.value);
     }
 
-    window.addEventListener('focusin', function (event) {
-        if (!event.target || !event.target.hasAttribute('data-input-lang')) return;
+    // Add listener to input fields to change the global content edition language
+    cmsEditListener('[data-input-lang]', 'focusin', onInputLangFocusIn);
+}
 
-        document.getElementById('contentEditionLanguageSelection').value = event.target.getAttribute('data-input-lang');
-        filterCurrentFilterElements();
-    });
-});
+/**
+ * Change the global content edition language when an input field is focused
+ */
+function onInputLangFocusIn(input) {
+    document.getElementById('contentEditionLanguageSelection').value = input.getAttribute('data-input-lang');
+    filterCurrentFilterElements();
+}
 
-export { localeHideModules };
+function onLocaleFilterClick(localeSelector) {
+    let contentEditionLanguageSelector = getContentEditionLanguageSelector();
+    if (!contentEditionLanguageSelector) return;
+
+    let widget = localeSelector;
+    let locale = widget.value;
+    let currentLocale = contentEditionLanguageSelector.value;
+
+    if (locale !== currentLocale) return;
+
+    let localeVisible = widget.checked;
+    let modulePreview = widget.closest('.cms-module-edit').querySelector('.module-preview');
+    if (localeVisible) {
+        modulePreview.classList.remove('cms-module-locale-hidden');
+    } else {
+        modulePreview.classList.add('cms-module-locale-hidden');
+    }
+}
+
+function getContentEditionLanguageSelector() {
+    return document.getElementById('contentEditionLanguageSelection');
+}
+
+function localeHideModules(locale) {
+    callForeachSelector('[data-cms-module-locale-filter][value=' + locale + ']', widgetHideModules);
+}
+
+function widgetHideModules(widget) {
+    let localeVisible = widget.checked;
+    let modulePreview = widget.closest('.cms-module-edit').querySelector('.module-preview');
+    if (localeVisible) {
+        modulePreview.classList.remove('cms-module-locale-hidden');
+    } else {
+        modulePreview.classList.add('cms-module-locale-hidden');
+    }
+}
+
+export {localeHideModules};

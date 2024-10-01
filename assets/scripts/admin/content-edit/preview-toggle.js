@@ -1,4 +1,12 @@
-window.addEventListener('load', (event) => {
+import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
+
+registerFeature('admin_content_edit_preview_toggle', _init);
+
+/**
+ * Init behaviour
+ * @private
+ */
+function _init() {
     /**
      * Toggles content from input
      *
@@ -15,7 +23,7 @@ window.addEventListener('load', (event) => {
 
         let htmlTargetElements = modulePreview.querySelectorAll("[data-edit-content-toggle-target='" + event.target.dataset.editContentToggleInput + "']");
         if (htmlTargetElements.length) {
-            htmlTargetElements.forEach(function(htmlTargetElement) {
+            htmlTargetElements.forEach(function (htmlTargetElement) {
                 if (visible) {
                     htmlTargetElement.classList.remove('d-none');
                 } else {
@@ -24,4 +32,4 @@ window.addEventListener('load', (event) => {
             });
         }
     });
-});
+};

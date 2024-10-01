@@ -1,25 +1,15 @@
-import { filterCurrentFilterElements } from './filter-preview';
-import { CollectionEvent,getCollectionLastIndex } from '@softspring/collection-form-type/scripts/collection-form-type';
-import { Modal } from 'bootstrap';
+import {filterCurrentFilterElements} from './filter-preview';
+import {getCollectionLastIndex} from '@softspring/collection-form-type/scripts/collection-form-type';
+import {Modal} from 'bootstrap';
+import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
 
-window.addEventListener('load', (event) => {
-    function moduleFocus(module) {
-        allLostFocus();
-        module.classList.add('active');
+registerFeature('admin_content_edit_modules', _init);
 
-        document.getElementById('content-form').classList.remove('d-none');
-        // If has form to show
-        if(module.closest('div').querySelector('.active >.cms-module-body > .cms-module-edit > .cms-module-form')) {
-            document.querySelectorAll('[data-collection=collection]').forEach((element) => element.classList.add('has-form'));
-        }
-    }
-
-    function allLostFocus() {
-        document.getElementById('content-form').classList.add('d-none');
-        document.querySelectorAll('.cms-module').forEach((element) => element.classList.remove('active'));
-        document.querySelectorAll('[data-collection=collection]').forEach((element) => element.classList.remove('has-form'));
-    }
-
+/**
+ * Init behaviour
+ * @private
+ */
+function _init() {
     // close module edit form
     document.addEventListener('click', function (event) {
         if (!event.target || !event.target.hasAttribute('data-cms-module-form-close')) return;
@@ -90,13 +80,13 @@ window.addEventListener('load', (event) => {
         const nodeRow = insertElement.closest('[data-collection=node]');
         const modulesAllowed = modulesCollection.dataset.modulesAllowed.split(',');
 
-        let action = 'Add';
+        // let action = 'Add';
         modulesCollectionInsertIndex = null;
         if (insertElement.matches('[data-collection-position=after]')) {
-            action = 'Insert after';
+            // action = 'Insert after';
             modulesCollectionInsertIndex = nodeRow ? nodeRow.dataset.collectionIndex : null;
         } else if (insertElement.matches('[data-collection-position=before]')) {
-            action = 'Insert before';
+            // action = 'Insert before';
             modulesCollectionInsertIndex = nodeRow ? nodeRow.dataset.collectionIndex : null;
         }
 
@@ -112,7 +102,7 @@ window.addEventListener('load', (event) => {
         });
     });
 
-    prototypesModal && prototypesModal.addEventListener('hide.bs.modal', function (event) {
+    prototypesModal && prototypesModal.addEventListener('hide.bs.modal', function () {
         [...document.getElementsByClassName('insert-module')].forEach((element) => element.classList.remove('selected'));
         // insertElement.classList.remove('selected');
     });
@@ -185,29 +175,45 @@ window.addEventListener('load', (event) => {
         }
     });
 
-    function checkMaxInputVars()
-    {
-        let currentInputVars = document.querySelectorAll('input, textarea, select').length;
-        const buttons = document.querySelectorAll('#submitBtnGroupDrop1,#defaultSubmitBtn');
-        const maxInputVarsMessage = document.getElementById('maxInputVarsMessage');
-
-        if (!maxInputVarsMessage) {
-            return;
-        }
-
-        const maxInputVars = maxInputVarsMessage.dataset.maxInputVars;
-
-        if (currentInputVars > maxInputVars) {
-            [...buttons].forEach((button) => button.classList.add('disabled'));
-            maxInputVarsMessage.classList.remove('d-none');
-        } else {
-            [...buttons].forEach((button) => button.classList.remove('disabled'));
-            maxInputVarsMessage.classList.add('d-none');
-        }
-    }
-
     document.addEventListener("collection.node.delete.after", checkMaxInputVars);
     document.addEventListener("collection.node.insert.after", checkMaxInputVars);
     document.addEventListener("collection.node.add.after", checkMaxInputVars);
     document.addEventListener("collection.node.duplicate.after", checkMaxInputVars);
-});
+}
+
+function moduleFocus(module) {
+    allLostFocus();
+    module.classList.add('active');
+
+    document.getElementById('content-form').classList.remove('d-none');
+    // If has form to show
+    if (module.closest('div').querySelector('.active >.cms-module-body > .cms-module-edit > .cms-module-form')) {
+        document.querySelectorAll('[data-collection=collection]').forEach((element) => element.classList.add('has-form'));
+    }
+}
+
+function allLostFocus() {
+    document.getElementById('content-form').classList.add('d-none');
+    document.querySelectorAll('.cms-module').forEach((element) => element.classList.remove('active'));
+    document.querySelectorAll('[data-collection=collection]').forEach((element) => element.classList.remove('has-form'));
+}
+
+function checkMaxInputVars() {
+    let currentInputVars = document.querySelectorAll('input, textarea, select').length;
+    const buttons = document.querySelectorAll('#submitBtnGroupDrop1,#defaultSubmitBtn');
+    const maxInputVarsMessage = document.getElementById('maxInputVarsMessage');
+
+    if (!maxInputVarsMessage) {
+        return;
+    }
+
+    const maxInputVars = maxInputVarsMessage.dataset.maxInputVars;
+
+    if (currentInputVars > maxInputVars) {
+        [...buttons].forEach((button) => button.classList.add('disabled'));
+        maxInputVarsMessage.classList.remove('d-none');
+    } else {
+        [...buttons].forEach((button) => button.classList.remove('disabled'));
+        maxInputVarsMessage.classList.add('d-none');
+    }
+}

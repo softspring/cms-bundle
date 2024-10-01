@@ -1,15 +1,16 @@
-var underscored = require("underscore.string/underscored");
-var slugify = require("underscore.string/slugify");
+import * as underscored from 'underscore.string/underscored';
+import * as slugify from 'underscore.string/slugify';
+import 'underscore.string/slugify';
 
-window.addEventListener('load', (event) => {
+import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
 
-    /* ****************************************************************************************************** *
-     * SLUG GENERATION ON CONTENT FORM
-     * ****************************************************************************************************** */
+registerFeature('admin_routes_forms', _init);
 
-    String.prototype.removeAccents = function () {
-        return this.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    }
+/**
+ * Init behaviour
+ * @private
+ */
+function _init() {
 
     document.addEventListener('keyup', function (event) {
         if (!event.target.matches('[data-generate-underscore]') && !event.target.matches('[data-generate-slug]')) return;
@@ -21,7 +22,7 @@ window.addEventListener('load', (event) => {
         }
 
         // generate slug
-        var element = document.querySelector('[' + event.target.dataset.generateSlug + ']');
+        element = document.querySelector('[' + event.target.dataset.generateSlug + ']');
         if (element && element.value.replace(/^\/+/, '').replace(/\/+$/, '') === slugify(event.target.lastValue || '')) {
             element.value = slugify(event.target.value).removeAccents();
         }
@@ -38,4 +39,13 @@ window.addEventListener('load', (event) => {
         if (!event.target.matches('.sluggize')) return;
         event.target.value = slugify(event.target.value);
     });
-});
+}
+
+/* ****************************************************************************************************** *
+ * SLUG GENERATION ON CONTENT FORM
+ * ****************************************************************************************************** */
+
+String.prototype.removeAccents = function () {
+    return this.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+

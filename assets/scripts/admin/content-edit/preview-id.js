@@ -1,19 +1,26 @@
-window.addEventListener('load', (event) => {
-    /**
-     * Adds id field to target element
-     *
-     * The preview target element must have the "data-edit-id-target" attribute
-     * The input field must have the "data-edit-id-input"
-     * Both data attributes must have the same value (as identificator)
-     */
-    document.addEventListener('input', function (event) {
-        if (!event.target || !event.target.hasAttribute('data-edit-id-input')) return;
+import {cmsEditListener} from './event-listeners';
+import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
 
-        let modulePreview = event.target.closest('.cms-module-edit').querySelector('.module-preview');
+registerFeature('admin_content_edit_preview_id', _init);
 
-        let htmlTargetElements = modulePreview.querySelectorAll("[data-edit-id-target='" + event.target.dataset.editIdInput + "']");
-        if (htmlTargetElements.length) {
-            htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.id = event.target.value);
-        }
-    });
-});
+/**
+ * Init behaviour
+ * @private
+ */
+function _init() {
+    cmsEditListener('[data-edit-id-input]', 'input', onEditId);
+}
+
+/**
+ * Adds id field to target element
+ *
+ * The preview target element must have the "data-edit-id-target" attribute
+ * The input field must have the "data-edit-id-input"
+ * Both data attributes must have the same value (as identificator)
+ */
+function onEditId(inputElement, module, preview/*, form, event*/) {
+    let htmlTargetElements = preview.querySelectorAll("[data-edit-id-target='" + inputElement.dataset.editIdInput + "']");
+    if (htmlTargetElements.length) {
+        htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.id = inputElement.value);
+    }
+}

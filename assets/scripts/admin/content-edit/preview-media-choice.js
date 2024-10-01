@@ -1,6 +1,11 @@
-// init behaviour on window load
-window.addEventListener('load', _init);
+import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
 
+registerFeature('admin_content_edit_preview_media_choice', _init);
+
+/**
+ * Init behaviour
+ * @private
+ */
 function _init() {
     document.addEventListener('change', function (event) {
         if (!event.target || !event.target.hasAttribute('data-media-preview-input')) return;

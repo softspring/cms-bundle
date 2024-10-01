@@ -1,4 +1,4 @@
-function _addEditEventListener(eventName, listener, moduleName = null, targetMatcher = null) {
+function _addCmsEditEventListener(eventName, listener, moduleName = null, targetMatcher = null) {
     document.addEventListener(eventName, function (event) {
         if (!event.target) {
             return;
@@ -30,11 +30,11 @@ function _addEditEventListener(eventName, listener, moduleName = null, targetMat
 }
 
 function cmsEditModuleListener(moduleName, targetMatcher, eventName, listener) {
-    _addEditEventListener(eventName, listener, moduleName, targetMatcher);
+    _addCmsEditEventListener(eventName, listener, moduleName, targetMatcher);
 }
 
 function cmsEditListener(targetMatcher, eventName, listener) {
-    _addEditEventListener(eventName, listener, null, targetMatcher);
+    _addCmsEditEventListener(eventName, listener, null, targetMatcher);
 }
 
 export {

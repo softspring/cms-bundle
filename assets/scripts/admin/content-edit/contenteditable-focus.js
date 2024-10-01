@@ -1,56 +1,10 @@
-import { Collapse } from 'bootstrap';
-import { getInputsFromElement, getPreviewElementsFromInput } from './contenteditable';
+import {getInputsFromElement, getPreviewElementsFromInput} from './contenteditable';
+import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
 
-function contentEditableFocusElement(previewElement) {
-    const inputs = getInputsFromElement(previewElement);
-
-    if (!inputs.length) {
-        return;
-    }
-
-    inputs[0].classList.add('border', 'border-success');
-    const accordionItem = inputs[0].closest('.accordion-item').querySelector('.accordion-button.collapsed');
-    accordionItem && accordionItem.click();
-
-    inputs[0].closest('.accordion-item').scrollIntoView({
-        behavior: 'smooth',
-        block: 'end',
-    });
-}
-
-function contentEditableBlurElement(previewElement) {
-    const inputs = getInputsFromElement(previewElement);
-
-    if (!inputs.length) {
-        return;
-    }
-
-    inputs[0].classList.remove('border', 'border-success');
-}
-
-function contentEditableFocusInput(inputElement) {
-    const previews = getPreviewElementsFromInput(inputElement);
-
-    if (!previews.length) {
-        return;
-    }
-
-    previews.map(preview => preview.classList.add('border', 'border-success'));
-}
-
-function contentEditableBlurInput(inputElement) {
-    const previews = getPreviewElementsFromInput(inputElement);
-
-    if (!previews.length) {
-        return;
-    }
-
-    previews.map(preview => preview.classList.remove('border', 'border-success'));
-}
-
+registerFeature('admin_content_edit_contenteditable_focus', _init);
 
 /**
- * Init content editable focus behaviour
+ * Init behaviour
  * @private
  */
 function _init() {
@@ -104,5 +58,49 @@ function _init() {
     });
 }
 
-// init behaviour on window load
-window.addEventListener('load', _init);
+function contentEditableFocusElement(previewElement) {
+    const inputs = getInputsFromElement(previewElement);
+
+    if (!inputs.length) {
+        return;
+    }
+
+    inputs[0].classList.add('border', 'border-success');
+    const accordionItem = inputs[0].closest('.accordion-item').querySelector('.accordion-button.collapsed');
+    accordionItem && accordionItem.click();
+
+    inputs[0].closest('.accordion-item').scrollIntoView({
+        behavior: 'smooth',
+        block: 'end',
+    });
+}
+
+function contentEditableBlurElement(previewElement) {
+    const inputs = getInputsFromElement(previewElement);
+
+    if (!inputs.length) {
+        return;
+    }
+
+    inputs[0].classList.remove('border', 'border-success');
+}
+
+function contentEditableFocusInput(inputElement) {
+    const previews = getPreviewElementsFromInput(inputElement);
+
+    if (!previews.length) {
+        return;
+    }
+
+    previews.map(preview => preview.classList.add('border', 'border-success'));
+}
+
+function contentEditableBlurInput(inputElement) {
+    const previews = getPreviewElementsFromInput(inputElement);
+
+    if (!previews.length) {
+        return;
+    }
+
+    previews.map(preview => preview.classList.remove('border', 'border-success'));
+}

@@ -3,14 +3,22 @@
     "license": "MIT",
     "version": "5.3.0-dev",
     "dependencies": {
-        "underscore.string": "^3.3.6",
-        "bootstrap-icons": "^1.11.2",
         "bootstrap": "^5.1.1",
-        "tinymce": "^6.8.1"
+        "bootstrap-icons": "^1.11.2",
+        "tinymce": "^6.8.1",
+        "underscore.string": "^3.3.6"
     },
     "peerDependencies": {
         "@softspring/collection-form-type": "*",
         "@softspring/media-bundle": "*",
         "@softspring/polymorphic-form-type": "*"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.11.1",
+        "eslint": "^8.57.1",
+        "globals": "^15.9.0",
+        "@softspring/collection-form-type": "file:./../vendor/softspring/collection-form-type/assets",
+        "@softspring/media-bundle": "file:./../vendor/softspring/media-bundle/assets",
+        "@softspring/polymorphic-form-type": "file:./../vendor/softspring/polymorphic-form-type/assets"
     }
 }

@@ -1,71 +1,12 @@
-window.addEventListener('load', _init);
+import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
 
-function showFields(fieldsConcatenated) {
-    const fields = fieldsConcatenated.split(',');
-    fields.forEach((field) => {
-        const fieldContainer = document.querySelector('[data-field-container="' + field + '"]');
-        if (fieldContainer) {
-            fieldContainer.showElement();
-        }
-    });
-}
+registerFeature('admin_fields_visibility', _init);
 
-function hideFields(fieldsConcatenated) {
-    const fields = fieldsConcatenated.split(',');
-    fields.forEach((field) => {
-        const fieldContainer = document.querySelector('[data-field-container="' + field + '"]');
-        if (fieldContainer) {
-            fieldContainer.hideElement();
-        }
-    });
-}
-
-function emptyFields(fieldsConcatenated) {
-    const fields = fieldsConcatenated.split(',');
-    fields.forEach((field) => {
-        const fieldContainer = document.querySelector('[data-field-container="' + field + '"]');
-        if (fieldContainer) {
-            fieldContainer.querySelectorAll('input, select, textarea').forEach((input) => {
-                input.value = '';
-            });
-        }
-    });
-}
-
-function initFields(base) {
-    base.querySelectorAll('input[type=radio]').forEach((radio) => {
-        if (radio.checked) {
-            radio.dataset.showFields !== undefined && showFields(radio.dataset.showFields);
-            radio.dataset.hideFields !== undefined && hideFields(radio.dataset.hideFields);
-            radio.dataset.emptyFields !== undefined && emptyFields(radio.dataset.emptyFields);
-        }
-    });
-
-    base.querySelectorAll('input[type=checkbox]').forEach((checkbox) => {
-        if (checkbox.checked) {
-            checkbox.dataset.showFieldsIfChecked !== undefined && showFields(checkbox.dataset.showFieldsIfChecked);
-            checkbox.dataset.hideFieldsIfChecked !== undefined && hideFields(checkbox.dataset.hideFieldsIfChecked);
-            checkbox.dataset.emptyFieldsIfChecked !== undefined && emptyFields(checkbox.dataset.emptyFieldsIfChecked);
-        } else {
-            checkbox.dataset.showFieldsIfUnchecked !== undefined && showFields(checkbox.dataset.showFieldsIfUnchecked);
-            checkbox.dataset.hideFieldsIfUnchecked !== undefined && hideFields(checkbox.dataset.hideFieldsIfUnchecked);
-            checkbox.dataset.emptyFieldsIfUnchecked !== undefined && emptyFields(checkbox.dataset.emptyFieldsIfUnchecked);
-        }
-    });
-
-    base.querySelectorAll('select').forEach((select) => {
-        const selectedOption = select.options[select.selectedIndex];
-
-        if (selectedOption) {
-            selectedOption.dataset.showFields !== undefined && showFields(selectedOption.dataset.showFields);
-            selectedOption.dataset.hideFields !== undefined && hideFields(selectedOption.dataset.hideFields);
-            selectedOption.dataset.emptyFields !== undefined && emptyFields(selectedOption.dataset.emptyFields);
-        }
-    });
-}
-
+/**
+ * Init behaviour
+ * @private
+ */
 function _init() {
-
     initFields(document);
 
     document.addEventListener("collection.node.insert.after", function (event) {
@@ -140,5 +81,69 @@ function _init() {
         const selectedOption = event.target.options[event.target.selectedIndex];
         if (!selectedOption || !selectedOption.matches('[data-empty-fields]')) return;
         emptyFields(selectedOption.dataset.emptyFields);
+    });
+}
+
+function showFields(fieldsConcatenated) {
+    const fields = fieldsConcatenated.split(',');
+    fields.forEach((field) => {
+        const fieldContainer = document.querySelector('[data-field-container="' + field + '"]');
+        if (fieldContainer) {
+            fieldContainer.showElement();
+        }
+    });
+}
+
+function hideFields(fieldsConcatenated) {
+    const fields = fieldsConcatenated.split(',');
+    fields.forEach((field) => {
+        const fieldContainer = document.querySelector('[data-field-container="' + field + '"]');
+        if (fieldContainer) {
+            fieldContainer.hideElement();
+        }
+    });
+}
+
+function emptyFields(fieldsConcatenated) {
+    const fields = fieldsConcatenated.split(',');
+    fields.forEach((field) => {
+        const fieldContainer = document.querySelector('[data-field-container="' + field + '"]');
+        if (fieldContainer) {
+            fieldContainer.querySelectorAll('input, select, textarea').forEach((input) => {
+                input.value = '';
+            });
+        }
+    });
+}
+
+function initFields(base) {
+    base.querySelectorAll('input[type=radio]').forEach((radio) => {
+        if (radio.checked) {
+            radio.dataset.showFields !== undefined && showFields(radio.dataset.showFields);
+            radio.dataset.hideFields !== undefined && hideFields(radio.dataset.hideFields);
+            radio.dataset.emptyFields !== undefined && emptyFields(radio.dataset.emptyFields);
+        }
+    });
+
+    base.querySelectorAll('input[type=checkbox]').forEach((checkbox) => {
+        if (checkbox.checked) {
+            checkbox.dataset.showFieldsIfChecked !== undefined && showFields(checkbox.dataset.showFieldsIfChecked);
+            checkbox.dataset.hideFieldsIfChecked !== undefined && hideFields(checkbox.dataset.hideFieldsIfChecked);
+            checkbox.dataset.emptyFieldsIfChecked !== undefined && emptyFields(checkbox.dataset.emptyFieldsIfChecked);
+        } else {
+            checkbox.dataset.showFieldsIfUnchecked !== undefined && showFields(checkbox.dataset.showFieldsIfUnchecked);
+            checkbox.dataset.hideFieldsIfUnchecked !== undefined && hideFields(checkbox.dataset.hideFieldsIfUnchecked);
+            checkbox.dataset.emptyFieldsIfUnchecked !== undefined && emptyFields(checkbox.dataset.emptyFieldsIfUnchecked);
+        }
+    });
+
+    base.querySelectorAll('select').forEach((select) => {
+        const selectedOption = select.options[select.selectedIndex];
+
+        if (selectedOption) {
+            selectedOption.dataset.showFields !== undefined && showFields(selectedOption.dataset.showFields);
+            selectedOption.dataset.hideFields !== undefined && hideFields(selectedOption.dataset.hideFields);
+            selectedOption.dataset.emptyFields !== undefined && emptyFields(selectedOption.dataset.emptyFields);
+        }
     });
 }
