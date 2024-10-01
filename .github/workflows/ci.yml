@@ -73,8 +73,8 @@ jobs:
             contents: write
         strategy:
             matrix:
-                node-versions: [ '14' ]
-                npm-versions: [ '7' ]
+                node-versions: [ '18' ]
+                npm-versions: [ '10' ]
         steps:
             -   uses: actions/checkout@v4
 
