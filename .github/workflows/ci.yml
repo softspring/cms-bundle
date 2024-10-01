@@ -13,7 +13,7 @@ env:
     XDEBUG_MODE: coverage
 
 jobs:
-    build:
+    backend:
         runs-on: ubuntu-latest
         permissions:
             contents: write
@@ -65,3 +65,53 @@ jobs:
                     push_badge: true
                     coverage_badge_path: .github/badges/coverage.svg
                     repo_token: ${{ secrets.GITHUB_TOKEN }}
+
+    frontend:
+        needs: backend
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        strategy:
+            matrix:
+                node-versions: [ '14' ]
+                npm-versions: [ '7' ]
+
+        steps:
+            -   uses: actions/checkout@v4
+
+            -   name: Install Node.js
+                uses: actions/setup-node@v2
+                with:
+                    node-version: ${{ matrix.node-versions }}
+
+            -   name: Restore composer cache
+                id: composer-cache
+                uses: actions/cache@v4
+                with:
+                    path: vendor
+                    key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: |
+                        ${{ runner.os }}-php-
+
+            -   name: Check Node.js Version
+                run: node -v
+
+            -   name: Check npm Version
+                run: npm -v
+
+            -   name: Cache npm packages
+                id: npm-cache
+                uses: actions/cache@v2
+                with:
+                    path: assets/node_modules
+                    key: ${{ runner.os }}-node-${{ hashFiles('assets/package-lock.json') }}
+                    restore-keys: |
+                        ${{ runner.os }}-node-
+
+            -   name: Install npm dependencies
+                run: npm install
+                path: assets
+
+            -   name: Run eslint
+                run: npx eslint scripts/*
+                path: assets
