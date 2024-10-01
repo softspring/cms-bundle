@@ -1,8 +1,6 @@
 /**
  * See Softspring\Form\Type\SymfonyRouteType and
  */
-import {cmsEditListener} from './event-listeners';
-
 (function () {
     if (!window.__sfs_cms_types_symfony_route_type_registered) {
         window.addEventListener('load', _register);

@@ -4,8 +4,6 @@ function decodeMessage(encoded) {
     }).join(''));
 }
 
-import {cmsEditListener} from './event-listeners';
-
 (function () {
     if (!window.__sfs_cms_confirm_modal_registered) {
         window.addEventListener('load', _register);

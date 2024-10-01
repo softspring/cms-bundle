@@ -1,8 +1,6 @@
 var underscored = require("underscore.string/underscored");
 var slugify = require("underscore.string/slugify");
 
-import {cmsEditListener} from './event-listeners';
-
 (function () {
     if (!window.__sfs_cms_routes_forms_registered) {
         window.addEventListener('load', _register);
@@ -47,4 +45,4 @@ function _register() {
         if (!event.target.matches('.sluggize')) return;
         event.target.value = slugify(event.target.value);
     });
-});
+};

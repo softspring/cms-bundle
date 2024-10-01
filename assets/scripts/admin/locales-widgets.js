@@ -1,5 +1,3 @@
-import {cmsEditListener} from './event-listeners';
-
 (function () {
     if (!window.__sfs_cms_locales_widgets_registered) {
         window.addEventListener('load', _register);

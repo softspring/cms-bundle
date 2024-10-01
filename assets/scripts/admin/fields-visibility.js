@@ -1,5 +1,3 @@
-import {cmsEditListener} from './event-listeners';
-
 (function () {
     if (!window.__sfs_cms_content_edit_preview_fill_registered) {
         window.addEventListener('load', _register);
