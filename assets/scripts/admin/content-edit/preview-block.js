@@ -1,13 +1,13 @@
 import {cmsEditListener} from './event-listeners';
+import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
 
-(function () {
-    if (!window.__sfs_cms_content_edit_preview_block_registered) {
-        window.addEventListener('load', _register);
-    }
-    window.__sfs_cms_content_edit_preview_block_registered = true;
-})();
+registerFeature('admin_content_edit_preview_block', _init);
 
-function _register() {
+/**
+ * Init behaviour
+ * @private
+ */
+function _init() {
     cmsEditListener('[data-block-preview-input]', 'change', showBlockPreview);
 }
 
@@ -18,7 +18,7 @@ function _register() {
  * The select option must have the "data-block-preview-input"
  * Both data attributes must have the same value (as identificator)
  */
-function showBlockPreview (inputElement, module, preview, form, event) {
+function showBlockPreview(inputElement, module, preview/*, form, event*/) {
     let htmlTargetElements = preview.querySelectorAll("[data-block-preview-target='" + inputElement.dataset.blockPreviewInput + "']");
     let blockPreview = inputElement.options[inputElement.selectedIndex].dataset.blockPreview;
     [...htmlTargetElements].forEach((htmlTargetElement) => htmlTargetElement.innerHTML = blockPreview === undefined ? '' : blockPreview);

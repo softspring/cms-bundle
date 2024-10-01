@@ -1,64 +1,13 @@
-import { Collapse } from 'bootstrap';
-import { getInputsFromElement, getPreviewElementsFromInput } from './contenteditable';
+import {getInputsFromElement, getPreviewElementsFromInput} from './contenteditable';
+import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
 
-function contentEditableFocusElement(previewElement) {
-    const inputs = getInputsFromElement(previewElement);
+registerFeature('admin_content_edit_contenteditable_focus', _init);
 
-    if (!inputs.length) {
-        return;
-    }
-
-    inputs[0].classList.add('border', 'border-success');
-    const accordionItem = inputs[0].closest('.accordion-item').querySelector('.accordion-button.collapsed');
-    accordionItem && accordionItem.click();
-
-    inputs[0].closest('.accordion-item').scrollIntoView({
-        behavior: 'smooth',
-        block: 'end',
-    });
-}
-
-function contentEditableBlurElement(previewElement) {
-    const inputs = getInputsFromElement(previewElement);
-
-    if (!inputs.length) {
-        return;
-    }
-
-    inputs[0].classList.remove('border', 'border-success');
-}
-
-function contentEditableFocusInput(inputElement) {
-    const previews = getPreviewElementsFromInput(inputElement);
-
-    if (!previews.length) {
-        return;
-    }
-
-    previews.map(preview => preview.classList.add('border', 'border-success'));
-}
-
-function contentEditableBlurInput(inputElement) {
-    const previews = getPreviewElementsFromInput(inputElement);
-
-    if (!previews.length) {
-        return;
-    }
-
-    previews.map(preview => preview.classList.remove('border', 'border-success'));
-}
-
-
-import {cmsEditListener} from './event-listeners';
-
-(function () {
-    if (!window.__sfs_cms_content_edit_contenteditable_focus_registered) {
-        window.addEventListener('load', _register);
-    }
-    window.__sfs_cms_content_edit_contenteditable_focus_registered = true;
-})();
-
-function _register() {
+/**
+ * Init behaviour
+ * @private
+ */
+function _init() {
     document.addEventListener('focusin', function (event) {
         if (event.target && event.target.hasAttribute('data-edit-content-input')) {
             event.preventDefault();
@@ -107,4 +56,51 @@ function _register() {
             });
         })
     });
+}
+
+function contentEditableFocusElement(previewElement) {
+    const inputs = getInputsFromElement(previewElement);
+
+    if (!inputs.length) {
+        return;
+    }
+
+    inputs[0].classList.add('border', 'border-success');
+    const accordionItem = inputs[0].closest('.accordion-item').querySelector('.accordion-button.collapsed');
+    accordionItem && accordionItem.click();
+
+    inputs[0].closest('.accordion-item').scrollIntoView({
+        behavior: 'smooth',
+        block: 'end',
+    });
+}
+
+function contentEditableBlurElement(previewElement) {
+    const inputs = getInputsFromElement(previewElement);
+
+    if (!inputs.length) {
+        return;
+    }
+
+    inputs[0].classList.remove('border', 'border-success');
+}
+
+function contentEditableFocusInput(inputElement) {
+    const previews = getPreviewElementsFromInput(inputElement);
+
+    if (!previews.length) {
+        return;
+    }
+
+    previews.map(preview => preview.classList.add('border', 'border-success'));
+}
+
+function contentEditableBlurInput(inputElement) {
+    const previews = getPreviewElementsFromInput(inputElement);
+
+    if (!previews.length) {
+        return;
+    }
+
+    previews.map(preview => preview.classList.remove('border', 'border-success'));
 }

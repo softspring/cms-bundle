@@ -1,13 +1,12 @@
-import {cmsEditListener} from './event-listeners';
+import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
 
-(function () {
-    if (!window.__sfs_cms_content_edit_preview_media_modal_registered) {
-        window.addEventListener('load', _register);
-    }
-    window.__sfs_cms_content_edit_preview_media_modal_registered = true;
-})();
+registerFeature('admin_content_edit_preview_media_modal', _init);
 
-function _register() {
+/**
+ * Init behaviour
+ * @private
+ */
+function _init() {
     document.addEventListener('sfs_media.selected', function (event) {
         if (!event.target || !event.target.hasAttribute('data-media-preview-input')) return;
         onModalMediaSelectShowPreview(event.target);
@@ -30,7 +29,7 @@ function _register() {
     document.addEventListener('click', function (event) {
         if (!event.target || !event.target.hasAttribute('data-media-placeholder')) return;
 
-        const targetInput = document.querySelector('[data-media-preview-input="'+event.target.closest('[data-media-preview-target]').dataset.mediaPreviewTarget+'"]');
+        const targetInput = document.querySelector('[data-media-preview-input="' + event.target.closest('[data-media-preview-target]').dataset.mediaPreviewTarget + '"]');
         const mediaWidget = targetInput.closest('.media-widget');
         const openModalButton = mediaWidget.querySelector('[data-bs-toggle="modal"]');
         openModalButton.click();
@@ -48,7 +47,7 @@ function onModalMediaSelectShowPreview(selectedMedia) {
     let moduleForm = selectedMedia.closest('.cms-module-edit').querySelector('.module-preview');
 
     var config = JSON.parse(selectedMedia.dataset.mediaTypeConfig);
-    var typeConfig = config[selectedMedia.dataset.mediaTypeTypes];
+    // var typeConfig = config[selectedMedia.dataset.mediaTypeTypes];
 
     let previewMedia = null;
 
@@ -61,7 +60,7 @@ function onModalMediaSelectShowPreview(selectedMedia) {
             if ('_original' === version) {
                 previewMedia = selectedMedia.dataset['mediaImage-_original'];
             } else {
-                previewMedia = selectedMedia.dataset['mediaImage-'+version.charAt(0).toUpperCase() + version.slice(1)];
+                previewMedia = selectedMedia.dataset['mediaImage-' + version.charAt(0).toUpperCase() + version.slice(1)];
             }
         } else if (config[selectedMedia.dataset.mediaType].video) {
             version = config[selectedMedia.dataset.mediaType].video[0];
@@ -87,29 +86,29 @@ function onModalMediaVersionSelectShowPreview(mediaVersionInput) {
     const moduleForm = mediaVersionInput.closest('.cms-module-edit').querySelector('.module-preview');
     const mediaInput = document.getElementById(mediaVersionInput.dataset.mediaTypeField);
 
-    var config = JSON.parse(mediaInput.dataset.mediaTypeConfig);
-    var typeConfig = config[mediaInput.dataset.mediaTypeTypes];
+    //var config = JSON.parse(mediaInput.dataset.mediaTypeConfig);
+    //var typeConfig = config[mediaInput.dataset.mediaTypeTypes];
 
     let previewMedia = null;
 
     let [versionType, versionName] = mediaVersionInput.value.split('#');
-    versionName = '_' === versionName.charAt(0) ? '-'+versionName : versionName.charAt(0).toUpperCase() + versionName.slice(1);
+    versionName = '_' === versionName.charAt(0) ? '-' + versionName : versionName.charAt(0).toUpperCase() + versionName.slice(1);
 
     switch (versionType) {
         case 'image':
-            previewMedia = mediaInput.dataset['mediaImage'+versionName];
+            previewMedia = mediaInput.dataset['mediaImage' + versionName];
             break;
 
         case 'video':
-            previewMedia = mediaInput.dataset['mediaVideo'+versionName];
+            previewMedia = mediaInput.dataset['mediaVideo' + versionName];
             break;
 
         case 'picture':
-            previewMedia = mediaInput.dataset['mediaPicture'+versionName];
+            previewMedia = mediaInput.dataset['mediaPicture' + versionName];
             break;
 
         case 'videoSet':
-            previewMedia = mediaInput.dataset['mediaVideoSet'+versionName];
+            previewMedia = mediaInput.dataset['mediaVideoSet' + versionName];
             break;
     }
 
@@ -127,8 +126,8 @@ function onModalMediaVersionSelectShowPreview(mediaVersionInput) {
 function onModalMediaUnselectRemovePreview(unselectedMedia) {
     let moduleForm = unselectedMedia.closest('.cms-module-edit').querySelector('.module-preview');
 
-    var config = JSON.parse(unselectedMedia.dataset.mediaTypeConfig);
-    var typeConfig = config[unselectedMedia.dataset.mediaTypeTypes];
+    // var config = JSON.parse(unselectedMedia.dataset.mediaTypeConfig);
+    //var typeConfig = config[unselectedMedia.dataset.mediaTypeTypes];
 
     [...moduleForm.querySelectorAll("[data-media-preview-target='" + unselectedMedia.dataset.mediaPreviewInput + "']")].forEach((htmlTargetElement) => showMediaPlaceholder(htmlTargetElement));
 }
@@ -136,5 +135,5 @@ function onModalMediaUnselectRemovePreview(unselectedMedia) {
 function showMediaPlaceholder(htmlTargetElement) {
     if (!htmlTargetElement.matches('[data-media-preview-placeholder]') || htmlTargetElement.innerHTML.trim() !== '') return;
 
-    htmlTargetElement.innerHTML = '<img class="img-fluid" data-media-placeholder src="'+htmlTargetElement.dataset.mediaPreviewPlaceholder+'">';
+    htmlTargetElement.innerHTML = '<img class="img-fluid" data-media-placeholder src="' + htmlTargetElement.dataset.mediaPreviewPlaceholder + '">';
 }

@@ -28,8 +28,43 @@
  * - window.sfs_cms_tinymce_default_plugins: the plugins to use as default (space separated list)
  */
 
-import 'tinymce/tinymce';
+import * as tinymce from 'tinymce/tinymce';
 import {contentEditableUpdateInputsFromElement} from './contenteditable';
+import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
+
+registerFeature('admin_content_edit_wysiwyg', _init);
+
+/**
+ * Init behaviour
+ * @private
+ */
+function _init() {
+    // dispatch event on focusin in a data-edit-content-wysiwyg element
+    document.addEventListener('focusin', function (event) {
+        if (!event.target || !event.target.hasAttribute('data-edit-content-wysiwyg')) return;
+        event.preventDefault();
+        event.target.dispatchEvent(new CustomEvent('sfs_cms.content_edit.wysiwyg.focusin', {bubbles: true}));
+    });
+
+    // dispatch event on focusout in a data-edit-content-wysiwyg element
+    document.addEventListener('focusout', function () {
+        if (!event.target || !event.target.hasAttribute('data-edit-content-wysiwyg')) return;
+        event.preventDefault();
+        event.target.dispatchEvent(new CustomEvent('sfs_cms.content_edit.wysiwyg.focusout', {bubbles: true}));
+    });
+
+    // create wysiwyg on focus
+    document.addEventListener('sfs_cms.content_edit.wysiwyg.focusin', (event) => {
+        event.preventDefault();
+        createWysiwyg(event.target);
+    });
+
+    // destroy wysiwyg on focusout
+    document.addEventListener('sfs_cms.content_edit.wysiwyg.focusout', (event) => {
+        event.preventDefault();
+        // destroyWysiwyg(event.target); <-- disabled because on tinymce modals and windows openings it loses focus and gets destroyed
+    });
+}
 
 /**
  * Create a tinymce wysiwyg editor
@@ -66,7 +101,7 @@ function _createWysiwygTinyMCE(element) {
         valid_elements: validElements,
         valid_styles: validStyles,
         setup: (editor) => {
-            editor.on('change', (event) => {
+            editor.on('change', () => {
                 contentEditableUpdateInputsFromElement(element);
             });
         },
@@ -100,6 +135,7 @@ function createWysiwyg(element) {
  * @param {HTMLElement} element
  * @private
  */
+// eslint-disable-next-line no-unused-vars
 function destroyWysiwyg(element) {
     switch (event.target.dataset.editContentWysiwyg) {
         case 'tinymce':
@@ -108,39 +144,3 @@ function destroyWysiwyg(element) {
     }
 }
 
-import {cmsEditListener} from './event-listeners';
-
-(function () {
-    if (!window.__sfs_cms_content_edit_wysiwyg_registered) {
-        window.addEventListener('load', _register);
-    }
-    window.__sfs_cms_content_edit_wysiwyg_registered = true;
-})();
-
-function _register() {
-    // dispatch event on focusin in a data-edit-content-wysiwyg element
-    document.addEventListener('focusin', function (event) {
-        if (!event.target || !event.target.hasAttribute('data-edit-content-wysiwyg')) return;
-        event.preventDefault();
-        event.target.dispatchEvent(new CustomEvent('sfs_cms.content_edit.wysiwyg.focusin', {bubbles: true}));
-    });
-
-    // dispatch event on focusout in a data-edit-content-wysiwyg element
-    document.addEventListener('focusout', function (e) {
-        if (!event.target || !event.target.hasAttribute('data-edit-content-wysiwyg')) return;
-        event.preventDefault();
-        event.target.dispatchEvent(new CustomEvent('sfs_cms.content_edit.wysiwyg.focusout', {bubbles: true}));
-    });
-
-    // create wysiwyg on focus
-    document.addEventListener('sfs_cms.content_edit.wysiwyg.focusin', (event) => {
-        event.preventDefault();
-        createWysiwyg(event.target);
-    });
-
-    // destroy wysiwyg on focusout
-    document.addEventListener('sfs_cms.content_edit.wysiwyg.focusout', (event) => {
-        event.preventDefault();
-        // destroyWysiwyg(event.target); <-- disabled because on tinymce modals and windows openings it loses focus and gets destroyed
-    });
-}

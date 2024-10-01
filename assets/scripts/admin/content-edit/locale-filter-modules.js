@@ -1,16 +1,14 @@
 import {filterCurrentFilterElements} from "./filter-preview";
 import {cmsEditListener} from './event-listeners';
+import {callForeachSelector, registerFeature} from '@softspring/cms-bundle/scripts/tools';
 
-export { localeHideModules };
+registerFeature('admin_content_edit_locale_filter_modules', _init);
 
-(function () {
-    if (!window.__sfs_cms_content_edit_locale_filter_modules_registered) {
-        window.addEventListener('load', _register);
-    }
-    window.__sfs_cms_content_edit_locale_filter_modules_registered = true;
-})();
-
-function _register() {
+/**
+ * Init behaviour
+ * @private
+ */
+function _init() {
     cmsEditListener('[data-cms-module-locale-filter]', 'click', onLocaleFilterClick);
 
     let contentEditionLanguageSelector = getContentEditionLanguageSelector();
@@ -58,14 +56,17 @@ function getContentEditionLanguageSelector() {
 }
 
 function localeHideModules(locale) {
-    document.querySelectorAll('[data-cms-module-locale-filter][value='+locale+']').forEach(function (widget) {
-        let localeVisible = widget.checked;
-        let modulePreview = widget.closest('.cms-module-edit').querySelector('.module-preview');
-        if (localeVisible) {
-            modulePreview.classList.remove('cms-module-locale-hidden');
-        } else {
-            modulePreview.classList.add('cms-module-locale-hidden');
-        }
-    });
+    callForeachSelector('[data-cms-module-locale-filter][value=' + locale + ']', widgetHideModules);
 }
 
+function widgetHideModules(widget) {
+    let localeVisible = widget.checked;
+    let modulePreview = widget.closest('.cms-module-edit').querySelector('.module-preview');
+    if (localeVisible) {
+        modulePreview.classList.remove('cms-module-locale-hidden');
+    } else {
+        modulePreview.classList.add('cms-module-locale-hidden');
+    }
+}
+
+export {localeHideModules};

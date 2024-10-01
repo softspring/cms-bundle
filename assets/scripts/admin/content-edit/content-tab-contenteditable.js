@@ -1,10 +1,12 @@
 import {cmsEditListener} from './event-listeners';
 import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
 
-registerFeature('admin_content_edit_content_tab_contenteditable', () => {
+registerFeature('admin_content_edit_content_tab_contenteditable', _init);
+
+function _init() {
     cmsEditListener('[contenteditable=true]', 'keydown', onContentEditableTab);
     cmsEditListener('input[data-allow-tabs],textarea[data-allow-tabs]', 'keydown', onInputTab);
-});
+}
 
 function onContentEditableTab(inputElement, module, preview, form, event) {
     if (event.key !== 'Tab') return;

@@ -1,13 +1,12 @@
-import {cmsEditListener} from './event-listeners';
+import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
 
-(function () {
-    if (!window.__sfs_cms_content_edit_preview_tag_type_registered) {
-        window.addEventListener('load', _register);
-    }
-    window.__sfs_cms_content_edit_preview_tag_type_registered = true;
-})();
+registerFeature('admin_content_edit_preview_tag_type', _init);
 
-function _register() {
+/**
+ * Init behaviour
+ * @private
+ */
+function _init() {
     document.addEventListener('change', function (event) {
         if (!event.target || !event.target.hasAttribute('data-edit-tag-type-input')) return;
         event.preventDefault();

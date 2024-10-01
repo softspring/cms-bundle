@@ -1,43 +1,15 @@
-(function () {
-    if (!window.__sfs_cms_types_color_type_registered) {
-        window.addEventListener('load', _register);
-    }
-    window.__sfs_cms_types_color_type_registered = true;
-})();
+import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
 
-function _register() {
+registerFeature('types_color_type', _init);
+
+/**
+ * Init behaviour
+ * @private
+ */
+function _init() {
     document.querySelectorAll('[data-color-type=toggler]').forEach(function(togglerHtmlElement) {
         colorDatePicker(togglerHtmlElement);
     });
-
-    function colorDatePicker(toggler) {
-        let widget = toggler.closest('.input-group').querySelector('[data-color-type=widget]');
-
-        if (!widget) {
-            return;
-        }
-
-        widget.disabled = !toggler.checked;
-
-        if (widget.disabled) {
-            widget.classList.add('disabled')
-        } else {
-            widget.classList.remove('disabled')
-        }
-
-        if (!widget.hasAttribute('data-edit-bgcolor-input')) return;
-
-        let modulePreview = widget.closest('.cms-module-edit').querySelector('.module-preview');
-        let htmlTargetElements = modulePreview.querySelectorAll("[data-edit-bgcolor-target='" + widget.dataset.editBgcolorInput + "']");
-        if (htmlTargetElements.length) {
-
-            if (widget.disabled) {
-                htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.style.backgroundColor = null);
-            } else {
-                htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.style.backgroundColor = widget.value);
-            }
-        }
-    }
 
     document.addEventListener('change', function (event) {
         if (!event.target || !event.target.matches('[data-color-type=toggler]')) {
@@ -65,4 +37,33 @@ function _register() {
 
         colorDatePicker(toggler);
     });
+}
+
+function colorDatePicker(toggler) {
+    let widget = toggler.closest('.input-group').querySelector('[data-color-type=widget]');
+
+    if (!widget) {
+        return;
+    }
+
+    widget.disabled = !toggler.checked;
+
+    if (widget.disabled) {
+        widget.classList.add('disabled')
+    } else {
+        widget.classList.remove('disabled')
+    }
+
+    if (!widget.hasAttribute('data-edit-bgcolor-input')) return;
+
+    let modulePreview = widget.closest('.cms-module-edit').querySelector('.module-preview');
+    let htmlTargetElements = modulePreview.querySelectorAll("[data-edit-bgcolor-target='" + widget.dataset.editBgcolorInput + "']");
+    if (htmlTargetElements.length) {
+
+        if (widget.disabled) {
+            htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.style.backgroundColor = null);
+        } else {
+            htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.style.backgroundColor = widget.value);
+        }
+    }
 }

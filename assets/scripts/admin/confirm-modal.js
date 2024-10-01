@@ -1,37 +1,39 @@
+import * as bootstrap from 'bootstrap';
+import {registerFeature,addTargetEventListener} from '@softspring/cms-bundle/scripts/tools';
+
+registerFeature('admin_confirm_modal', _init);
+
+/**
+ * Init behaviour
+ * @private
+ */
+function _init() {
+    addTargetEventListener('[data-confirm-modal]', 'click', onConfirmModalClick);
+}
+
+function onConfirmModalClick(confirmModal, event) {
+    event.preventDefault();
+
+    const title = event.target.dataset.confirmModalTitle || '';
+    const message = decodeMessage(event.target.dataset.confirmModal || '');
+    const confirmButton = event.target.dataset.confirmModalConfirmButton || 'Continue';
+    const confirmButtonType = event.target.dataset.confirmModalConfirmButtonType || 'primary';
+    const cancelButton = event.target.dataset.confirmModalCancelButton || 'Cancel';
+
+    if (!event.target.href) {
+        console.error('Only links are supported for confirm modal');
+        return;
+    }
+
+    confirmModalLink(title, message, confirmButton, confirmButtonType, cancelButton, event.target.href);
+
+    return false;
+}
+
 function decodeMessage(encoded) {
     return decodeURIComponent(atob(encoded).split('').map(function(c) {
         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
-}
-
-(function () {
-    if (!window.__sfs_cms_confirm_modal_registered) {
-        window.addEventListener('load', _register);
-    }
-    window.__sfs_cms_confirm_modal_registered = true;
-})();
-
-function _register() {
-    document.addEventListener('click', function (event) {
-        if (!event.target.matches('[data-confirm-modal]')) return;
-
-        event.preventDefault();
-
-        const title = event.target.dataset.confirmModalTitle || '';
-        const message = decodeMessage(event.target.dataset.confirmModal || '');
-        const confirmButton = event.target.dataset.confirmModalConfirmButton || 'Continue';
-        const confirmButtonType = event.target.dataset.confirmModalConfirmButtonType || 'primary';
-        const cancelButton = event.target.dataset.confirmModalCancelButton || 'Cancel';
-
-        if (!event.target.href) {
-            console.error('Only links are supported for confirm modal');
-            return;
-        }
-
-        confirmModalLink(title, message, confirmButton, confirmButtonType, cancelButton, event.target.href);
-
-        return false;
-    });
 }
 
 function confirmModalLink(title, message, confirmButton, confirmButtonType, cancelButton, url) {
