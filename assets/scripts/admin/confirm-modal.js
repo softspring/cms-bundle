@@ -1,4 +1,4 @@
-import * as bootstrap from 'bootstrap';
+import {Modal} from 'bootstrap';
 import {registerFeature,addTargetEventListener} from '@softspring/cms-bundle/scripts/tools';
 
 registerFeature('admin_confirm_modal', _init);
@@ -39,7 +39,7 @@ function decodeMessage(encoded) {
 function confirmModalLink(title, message, confirmButton, confirmButtonType, cancelButton, url) {
     const modalId = createModal(title, message, confirmButton, confirmButtonType, cancelButton, url);
     const modalDiv = document.getElementById(modalId);
-    const modal = new bootstrap.Modal(modalDiv, {
+    const modal = new Modal(modalDiv, {
         keyboard: false
     });
     modal.show();
