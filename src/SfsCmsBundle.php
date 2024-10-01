@@ -6,6 +6,7 @@ use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappi
 use Softspring\CmsBundle\DependencyInjection\Compiler\AddCollectionTranslationsPass;
 use Softspring\CmsBundle\DependencyInjection\Compiler\AddTwigNamespacesPass;
 use Softspring\CmsBundle\DependencyInjection\Compiler\AliasDoctrineEntityManagerPass;
+use Softspring\CmsBundle\DependencyInjection\Compiler\DynamicFormResolversEntityPass;
 use Softspring\CmsBundle\DependencyInjection\Compiler\InjectWebDebugToolbarListenerPass;
 use Softspring\CmsBundle\DependencyInjection\Compiler\ResolveDoctrineTargetEntityPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -32,6 +33,7 @@ class SfsCmsBundle extends Bundle
         $container->addCompilerPass(new InjectWebDebugToolbarListenerPass());
         $container->addCompilerPass(new AddTwigNamespacesPass());
         $container->addCompilerPass(new AddCollectionTranslationsPass());
+        $container->addCompilerPass(new DynamicFormResolversEntityPass());
     }
 
     private function addRegisterMappingsPass(ContainerBuilder $container, array $mappings, $enablingParameter = false): void
