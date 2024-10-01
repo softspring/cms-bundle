@@ -19,18 +19,30 @@ function registerFeature(module, callable) {
  * @param {string} targetMatcher CSS selector to match the target
  * @param {string} eventName Event name to listen
  * @param {function} listener Listener to call
+ * @param {number} parentNodeDeep Parent node deep to search (0 = only the target, 1 = parent, 2 = grandparent, etc)
  */
-function addTargetEventListener(targetMatcher, eventName, listener) {
+function addTargetEventListener(targetMatcher, eventName, listener, parentNodeDeep = 0) {
     document.addEventListener(eventName, function (event) {
+        if (!targetMatcher) {
+            return;
+        }
+
         if (!event.target) {
             return;
         }
 
-        if (targetMatcher && !event.target.matches(targetMatcher)) {
-            return;
+        if (event.target.matches(targetMatcher)) {
+            return listener(event.target, event);
         }
 
-        return listener(event.target, event);
+        let currentNode = event.target;
+        while (parentNodeDeep > 0) {
+            if (currentNode.parentNode.matches(targetMatcher)) {
+                return listener(currentNode.parentNode, event);
+            }
+            currentNode = currentNode.parentNode;
+            parentNodeDeep--;
+        }
     });
 }
 
