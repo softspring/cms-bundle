@@ -38,8 +38,9 @@ class MenuRenderer extends AbstractRenderer
      * @throws RenderException
      * @throws InvalidMenuException
      */
-    public function renderMenuByType(string $type): string
+    public function renderMenuByType(string $type, ?string $locale = null): string
     {
+        $locale = $locale ?? $this->requestStack->getCurrentRequest()?->getLocale();
         $menuConfig = $this->cmsConfig->getMenu($type);
 
         if ($menuConfig['esi'] && !$this->isPreview()) {
@@ -53,6 +54,7 @@ class MenuRenderer extends AbstractRenderer
         }
 
         $previewJsonProperty = $this->isPreview() ? ",'_cms_preview':true" : '';
+        $previewJsonProperty .= $locale ? ",'_locale':'$locale'" : '';
 
         $twigCode = "{{ $renderFunction(controller('Softspring\\\\CmsBundle\\\\Controller\\\\MenuController::renderByType', {'type':'$type'$previewJsonProperty})) }}";
 
