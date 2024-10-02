@@ -54,8 +54,9 @@ class MenuRenderer extends AbstractRenderer
         }
 
         $previewJsonProperty = $this->isPreview() ? ",'_cms_preview':true" : '';
+        $previewJsonProperty .= $locale ? ",'_locale':'$locale'" : '';
 
-        $twigCode = "{{ $renderFunction(controller('Softspring\\\\CmsBundle\\\\Controller\\\\MenuController::renderByType', {'type':'$type','_locale':'$locale'$previewJsonProperty})) }}";
+        $twigCode = "{{ $renderFunction(controller('Softspring\\\\CmsBundle\\\\Controller\\\\MenuController::renderByType', {'type':'$type'$previewJsonProperty})) }}";
 
         $template = twig_template_from_string($this->twig, $twigCode);
 
