@@ -28,6 +28,10 @@ class MenuController extends AbstractController
 
     public function renderByType(string $type, Request $request): Response
     {
+        if ($request->attributes->has('_locale')) {
+            $request->setLocale($request->attributes->get('_locale'));
+        }
+
         try {
             $config = $this->cmsConfig->getMenu($type);
 
