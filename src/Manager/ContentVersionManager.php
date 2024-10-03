@@ -101,13 +101,8 @@ class ContentVersionManager implements ContentVersionManagerInterface
         foreach ($module as $fieldName => &$fieldValue) {
             if (in_array($fieldName, ['_module', '_revision'])) {
                 continue;
-<<<<<<< Updated upstream
-            } elseif ('modules' === $fieldName && is_array($field)) {
-                foreach ($field as &$subModule) {
-=======
             } else if ($fieldName === 'modules' && is_array($fieldValue)) {
                 foreach ($fieldValue as &$subModule) {
->>>>>>> Stashed changes
                     $this->addLocaleToModule($subModule, $locale);
                 }
             } elseif (is_array($fieldValue) && isset($fieldValue['_trans_id'])) {
