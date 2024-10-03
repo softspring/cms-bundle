@@ -101,7 +101,7 @@ class ContentVersionManager implements ContentVersionManagerInterface
         foreach ($module as $fieldName => &$fieldValue) {
             if (in_array($fieldName, ['_module', '_revision'])) {
                 continue;
-            } else if ($fieldName === 'modules' && is_array($fieldValue)) {
+            } elseif ('modules' === $fieldName && is_array($fieldValue)) {
                 foreach ($fieldValue as &$subModule) {
                     $this->addLocaleToModule($subModule, $locale);
                 }
