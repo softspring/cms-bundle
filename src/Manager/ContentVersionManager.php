@@ -19,12 +19,11 @@ class ContentVersionManager implements ContentVersionManagerInterface
     use CrudlEntityManagerTrait;
 
     public function __construct(
-        protected EntityManagerInterface       $em,
-        protected CmsConfig                    $cmsConfig,
-        protected ContentVersionCompiler       $contentCompiler,
+        protected EntityManagerInterface $em,
+        protected CmsConfig $cmsConfig,
+        protected ContentVersionCompiler $contentCompiler,
         protected CompiledDataManagerInterface $compiledDataManager,
-    )
-    {
+    ) {
     }
 
     public function getTargetClass(): string
@@ -102,7 +101,7 @@ class ContentVersionManager implements ContentVersionManagerInterface
         foreach ($module as $fieldName => &$field) {
             if (in_array($fieldName, ['_module', '_revision'])) {
                 continue;
-            } else if ($fieldName === 'modules' && is_array($field)) {
+            } elseif ('modules' === $fieldName && is_array($field)) {
                 foreach ($field as &$subModule) {
                     $this->addLocaleToModule($subModule, $locale);
                 }
