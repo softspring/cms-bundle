@@ -19,11 +19,12 @@ class ContentVersionManager implements ContentVersionManagerInterface
     use CrudlEntityManagerTrait;
 
     public function __construct(
-        protected EntityManagerInterface $em,
-        protected CmsConfig $cmsConfig,
-        protected ContentVersionCompiler $contentCompiler,
+        protected EntityManagerInterface       $em,
+        protected CmsConfig                    $cmsConfig,
+        protected ContentVersionCompiler       $contentCompiler,
         protected CompiledDataManagerInterface $compiledDataManager,
-    ) {
+    )
+    {
     }
 
     public function getTargetClass(): string
@@ -83,5 +84,36 @@ class ContentVersionManager implements ContentVersionManagerInterface
         }
 
         return $compiledData->getDataPart('content');
+    }
+
+    public function addLocale(ContentVersionInterface $contentVersion, string $locale): void
+    {
+        $data = $contentVersion->getData();
+        foreach ($data as &$container) {
+            foreach ($container as &$module) {
+                $this->addLocaleToModule($module, $locale);
+            }
+        }
+        $contentVersion->setData($data);
+    }
+
+    protected function addLocaleToModule(array &$module, string $locale): void
+    {
+        foreach ($module as $fieldName => &$field) {
+            if (in_array($fieldName, ['_module', '_revision'])) {
+                continue;
+            } else if ($fieldName === 'modules' && is_array($field)) {
+                foreach ($field as &$subModule) {
+                    $this->addLocaleToModule($subModule, $locale);
+                }
+            } elseif (isset($field['_trans_id'])) {
+                $field[$locale] = null;
+            } elseif ('locale_filter' === $fieldName) {
+                if (!empty($field)) {
+                    // if locale filter is not empty, add the locale to the filter
+                    $field[] = $locale;
+                }
+            }
+        }
     }
 }
