@@ -98,19 +98,24 @@ class ContentVersionManager implements ContentVersionManagerInterface
 
     protected function addLocaleToModule(array &$module, string $locale): void
     {
-        foreach ($module as $fieldName => &$field) {
+        foreach ($module as $fieldName => &$fieldValue) {
             if (in_array($fieldName, ['_module', '_revision'])) {
                 continue;
+<<<<<<< Updated upstream
             } elseif ('modules' === $fieldName && is_array($field)) {
                 foreach ($field as &$subModule) {
+=======
+            } else if ($fieldName === 'modules' && is_array($fieldValue)) {
+                foreach ($fieldValue as &$subModule) {
+>>>>>>> Stashed changes
                     $this->addLocaleToModule($subModule, $locale);
                 }
-            } elseif (isset($field['_trans_id'])) {
-                $field[$locale] = null;
+            } elseif (is_array($fieldValue) && isset($fieldValue['_trans_id'])) {
+                $fieldValue[$locale] = null;
             } elseif ('locale_filter' === $fieldName) {
-                if (!empty($field)) {
+                if (!empty($fieldValue)) {
                     // if locale filter is not empty, add the locale to the filter
-                    $field[] = $locale;
+                    $fieldValue[] = $locale;
                 }
             }
         }

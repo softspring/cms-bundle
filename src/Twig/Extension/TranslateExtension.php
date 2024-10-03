@@ -50,11 +50,13 @@ class TranslateExtension extends AbstractExtension
 
         $request = $this->requestStack->getCurrentRequest();
 
-        if (isset($translatableText[$request->getLocale()])) {
+        // TODO allow empty locale values with some metadata flag to avoid fallback to default locale
+
+        if (!empty($translatableText[$request->getLocale()])) {
             return $translatableText[$request->getLocale()];
         }
 
-        if (isset($translatableText[$request->getDefaultLocale()])) {
+        if (!empty($translatableText[$request->getDefaultLocale()])) {
             return $translatableText[$request->getDefaultLocale()];
         }
 
