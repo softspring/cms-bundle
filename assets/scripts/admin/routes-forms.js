@@ -2,7 +2,7 @@ import * as underscored from 'underscore.string/underscored';
 import * as slugify from 'underscore.string/slugify';
 import 'underscore.string/slugify';
 
-import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
+import {registerFeature} from '../tools';
 
 registerFeature('admin_routes_forms', _init);
 

@@ -1,5 +1,5 @@
 import {getInputsFromElement, getPreviewElementsFromInput} from './contenteditable';
-import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
+import {registerFeature} from '../../tools';
 
 registerFeature('admin_content_edit_contenteditable_focus', _init);
 

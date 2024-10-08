@@ -1,4 +1,4 @@
-import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
+import {registerFeature} from '../tools';
 
 registerFeature('types_block_type', _init);
 

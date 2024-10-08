@@ -1,5 +1,5 @@
 import {Modal} from 'bootstrap';
-import {registerFeature,addTargetEventListener} from '@softspring/cms-bundle/scripts/tools';
+import {registerFeature,addTargetEventListener} from '../tools';
 
 registerFeature('admin_confirm_modal', _init);
 

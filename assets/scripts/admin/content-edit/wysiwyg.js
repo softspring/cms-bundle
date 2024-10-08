@@ -30,7 +30,7 @@
 
 import * as tinymce from 'tinymce/tinymce';
 import {contentEditableUpdateInputsFromElement} from './contenteditable';
-import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
+import {registerFeature} from '../../tools';
 
 registerFeature('admin_content_edit_wysiwyg', _init);
 

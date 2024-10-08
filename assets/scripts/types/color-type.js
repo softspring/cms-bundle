@@ -1,4 +1,4 @@
-import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
+import {registerFeature} from '../tools';
 
 registerFeature('types_color_type', _init);
 
