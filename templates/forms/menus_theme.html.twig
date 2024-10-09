@@ -51,13 +51,13 @@
 
 {% block menu_item_row %}
     <div data-collection="node" {{ block('widget_container_attributes') }} data-collection-index="{{ form.vars.name }}" data-full-name="{{ form.vars.full_name }}">
-        <div class="row my-3">
-            <div class="col-sm-1"><span data-collection="node-index">{{ form.vars.name }}</span></div>
-            <div class="col-sm-10">{{ form_widget(form) }}{{ form_errors(form) }}</div>
-            <div class="col-sm-1">
-                <button type="button" class="btn btn-light rounded-circle px-3" data-collection-action="up">up</button>
-                <button type="button" class="btn btn-light rounded-circle px-3" data-collection-action="down">down</button>
-                <button type="button" class="btn btn-light rounded-circle px-3" data-collection-action="delete">x</button>
+        <div class="row my-3 bg-light border-bottom p-3 g-0">
+            <div class="col-sm-1"><span data-collection="node-index" class="btn btn-primary">{{ form.vars.name }}</span></div>
+            <div class="col-sm-8">{{ form_widget(form) }}{{ form_errors(form) }}</div>
+            <div class="col-sm-3 text-end">
+                <button type="button" class="btn btn-secondary rounded-circle px-2" data-collection-action="up"><span class="bi bi-chevron-up h4"></span></button>
+                <button type="button" class="btn btn-secondary rounded-circle px-2" data-collection-action="down"><span class="bi bi-chevron-down h4"></span></button>
+                <button type="button" class="btn btn-danger rounded-circle px-2" data-collection-action="delete"><span class="bi bi-x h4"></span></button>
             </div>
         </div>
     </div>
@@ -67,7 +67,7 @@
     <div class="row {{ not form.parent.vars.valid ? 'show-invalid' }}">
         <div class="col-sm-2">{{ form_label(form.text) }}</div>
         <div class="col-sm">{{ form_widget(form.text) }}{{ form_errors(form.text) }}</div>
-        <div class="col">{{ form_label(form.symfonyRoute) }}</div>
+        <div class="col-12">{{ form_label(form.symfonyRoute) }}</div>
         {{ form_rest(form) }}
     </div>
 {% endblock menu_item_widget %}
