@@ -24,4 +24,8 @@ interface MenuInterface
     public function addItem(MenuItemInterface $item): void;
 
     public function removeItem(MenuItemInterface $item): void;
+
+    public function getData(): ?array;
+
+    public function setData(?array $data): void;
 }
