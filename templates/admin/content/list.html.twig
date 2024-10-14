@@ -46,13 +46,13 @@
         {% endif %}
 
         {% block table %}
-            {% embed '@SfsComponents/paginator/table.html.twig' with {'collection':entities, 'pagination_route': 'sfs_cms_admin_content_'~content_type~'_list'} %}
+            {% embed '@SfsComponents/paginator/table.html.twig' with {'collection':entities, 'pagination_route': 'sfs_cms_admin_content_'~content_type~'_list', 'content_type': content_type, 'list_page_view': list_page_view, 'content_config': content_config} only %}
                 {% trans_default_domain 'sfs_cms_contents' %}
                 {% block ths %}
                     <th scope="col">
-                        <a href="{{ entities.sortToggleUrl(app.request, 'name') }}" class="text-dark">
+                        <a href="{{ collection.sortToggleUrl(app.request, 'name') }}" class="text-dark">
                             {{ ('admin_'~content_type~'.list.fields.name.header')|trans }}
-                            {% if entities.sortedBy('name', 'asc') %}<i class="bi bi-caret-up-fill"></i>{% elseif entities.sortedBy('name', 'desc') %}<i class="bi bi-caret-down-fill"></i>{% endif %}
+                            {% if collection.sortedBy('name', 'asc') %}<i class="bi bi-caret-up-fill"></i>{% elseif collection.sortedBy('name', 'desc') %}<i class="bi bi-caret-down-fill"></i>{% endif %}
                         </a>
                     </th>
                     <th class="">{{ ('admin_'~content_type~'.list.fields.site.header')|trans }}</th>

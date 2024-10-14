@@ -49,19 +49,19 @@
             </div>
         {% endif %}
 
-        {% embed '@SfsComponents/paginator/table.html.twig' with {'collection':entities, 'pagination_menu': 'sfs_cms_admin_blocks_list', 'empty_message': 'admin_blocks.list.empty_message'|trans} %}
+        {% embed '@SfsComponents/paginator/table.html.twig' with {'collection':entities, 'pagination_menu': 'sfs_cms_admin_blocks_list', 'empty_message': 'admin_blocks.list.empty_message'|trans, 'blocks_config': blocks_config} only %}
             {% trans_default_domain 'sfs_cms_admin' %}
             {% block ths %}
                 <th scope="col">
-                    <a href="{{ entities.sortToggleUrl(app.request, 'name') }}" class="text-dark">
+                    <a href="{{ collection.sortToggleUrl(app.request, 'name') }}" class="text-dark">
                         {{ 'admin_blocks.list.fields.name.header'|trans }}
-                        {% if entities.sortedBy('name', 'asc') %}<i class="bi bi-caret-up-fill"></i>{% elseif entities.sortedBy('name', 'desc') %}<i class="bi bi-caret-down-fill"></i>{% endif %}
+                        {% if collection.sortedBy('name', 'asc') %}<i class="bi bi-caret-up-fill"></i>{% elseif collection.sortedBy('name', 'desc') %}<i class="bi bi-caret-down-fill"></i>{% endif %}
                     </a>
                 </th>
                 <th scope="col">
-                    <a href="{{ entities.sortToggleUrl(app.request, 'type') }}" class="text-dark">
+                    <a href="{{ collection.sortToggleUrl(app.request, 'type') }}" class="text-dark">
                         {{ 'admin_blocks.list.fields.type.header'|trans }}
-                        {% if entities.sortedBy('type', 'asc') %}<i class="bi bi-caret-up-fill"></i>{% elseif entities.sortedBy('type', 'desc') %}<i class="bi bi-caret-down-fill"></i>{% endif %}
+                        {% if collection.sortedBy('type', 'asc') %}<i class="bi bi-caret-up-fill"></i>{% elseif collection.sortedBy('type', 'desc') %}<i class="bi bi-caret-down-fill"></i>{% endif %}
                     </a>
                 </th>
 {#                {% if sfs_cms_blocks_are_multisite() %}#}
