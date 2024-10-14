@@ -1,0 +1,9 @@
+{
+  "entrypoints": {
+    "cms-bundle.min": {
+      "js": [
+        "./cms-bundle.min.js"
+      ]
+    }
+  }
+}

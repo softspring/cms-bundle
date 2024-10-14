@@ -1,5 +1,5 @@
 import {getSelectedLanguage} from './filter-preview';
-import {callForeachSelector, registerFeature} from '@softspring/cms-bundle/scripts/tools';
+import {callForeachSelector, registerFeature} from '../../tools';
 
 registerFeature('admin_content_edit_contenteditable', _init);
 

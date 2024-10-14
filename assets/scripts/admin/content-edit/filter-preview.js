@@ -1,4 +1,4 @@
-import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
+import {registerFeature} from '../../tools';
 
 registerFeature('admin_content_edit_filter_preview', _init);
 

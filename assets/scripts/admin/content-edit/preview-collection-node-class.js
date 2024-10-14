@@ -1,4 +1,4 @@
-import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
+import {registerFeature} from '../../tools';
 
 registerFeature('admin_content_edit_preview_collection_node_class', _init);
 

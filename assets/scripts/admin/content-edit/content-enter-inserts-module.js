@@ -1,5 +1,5 @@
 import {cmsEditListener} from './event-listeners';
-import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
+import {registerFeature} from '../../tools';
 
 registerFeature('admin_content_edit_content_enter_inserts_module', _init);
 

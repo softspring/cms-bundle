@@ -1,7 +1,7 @@
 /**
  * See Softspring\Form\Type\SymfonyRouteType and
  */
-import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
+import {registerFeature} from '../tools';
 
 registerFeature('types_symfony_route_type', _init);
 

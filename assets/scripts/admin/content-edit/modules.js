@@ -1,7 +1,7 @@
 import {filterCurrentFilterElements} from './filter-preview';
 import {getCollectionLastIndex} from '@softspring/collection-form-type/scripts/collection-form-type';
 import {Modal} from 'bootstrap';
-import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
+import {registerFeature} from '../../tools';
 
 registerFeature('admin_content_edit_modules', _init);
 

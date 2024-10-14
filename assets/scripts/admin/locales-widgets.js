@@ -1,4 +1,4 @@
-import {addTargetEventListener, callForeachSelector, registerFeature} from '@softspring/cms-bundle/scripts/tools';
+import {addTargetEventListener, callForeachSelector, registerFeature} from '../tools';
 
 registerFeature('admin_locales_widgets', _init);
 
