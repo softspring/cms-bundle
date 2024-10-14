@@ -39,11 +39,11 @@ The values are stored as a json object with locale as key:
 The way to render translated values is using it as an array, accessing it throw the locale:
 
 ```twig
-{{ description[app.request.locale]|default('') }}
+{{ description|sfs_cms_trans }}
 ```
 
-> It's recommended to include a *|default('')* or check if it's defined before using it, just in case 
-> the locale does not exists yet, to prevent errors.
+> Also is posible to render it using *description[app.request.locale]|default* but it's not recommended because it
+> does not take into account the default locale. 
 
 ## Preview values
 

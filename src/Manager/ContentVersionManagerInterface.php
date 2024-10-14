@@ -30,4 +30,6 @@ interface ContentVersionManagerInterface extends CrudlEntityManagerInterface
     public function getLatestVersions(ContentInterface $content, int $limit = 3): Collection;
 
     public function getCompiledContent(ContentVersionInterface $contentVersion, Request $request): string;
+
+    public function addLocale(ContentVersionInterface $contentVersion, string $locale): void;
 }

@@ -84,4 +84,35 @@ class ContentVersionManager implements ContentVersionManagerInterface
 
         return $compiledData->getDataPart('content');
     }
+
+    public function addLocale(ContentVersionInterface $contentVersion, string $locale): void
+    {
+        $data = $contentVersion->getData();
+        foreach ($data as &$container) {
+            foreach ($container as &$module) {
+                $this->addLocaleToModule($module, $locale);
+            }
+        }
+        $contentVersion->setData($data);
+    }
+
+    protected function addLocaleToModule(array &$module, string $locale): void
+    {
+        foreach ($module as $fieldName => &$fieldValue) {
+            if (in_array($fieldName, ['_module', '_revision'])) {
+                continue;
+            } elseif ('modules' === $fieldName && is_array($fieldValue)) {
+                foreach ($fieldValue as &$subModule) {
+                    $this->addLocaleToModule($subModule, $locale);
+                }
+            } elseif (is_array($fieldValue) && isset($fieldValue['_trans_id'])) {
+                $fieldValue[$locale] = null;
+            } elseif ('locale_filter' === $fieldName) {
+                if (!empty($fieldValue)) {
+                    // if locale filter is not empty, add the locale to the filter
+                    $fieldValue[] = $locale;
+                }
+            }
+        }
+    }
 }

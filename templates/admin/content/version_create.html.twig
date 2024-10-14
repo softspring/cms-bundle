@@ -52,7 +52,7 @@
                         {% endif %}
                     </div>
 
-                    <div class="text-end">
+                    <div class="text-end d-flex align-center">
                         {% if app.request.query.get('back') == 'versions' %}
                             <a href="{{ url('sfs_cms_admin_content_'~content_type~'_versions', {'content':entity}) }}"
                                class="btn btn-light">{{ ('admin_'~content_type~'.content.actions.cancel.button')|trans }}</a>
