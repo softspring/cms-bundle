@@ -1,6 +1,6 @@
 {% trans_default_domain 'sfs_cms_contents' %}
 
-{% for entity in entities %}
+{% for entity in collection %}
     <tr>
         <td class="p-3">{{ entity.name }}</td>
         <td class="p-3">{{ entity.sitesSorted|map((site) => site|sfs_cms_site_name)|join(', ') }}</td>

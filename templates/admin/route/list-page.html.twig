@@ -1,6 +1,6 @@
 {% trans_default_domain 'sfs_cms_admin' %}
 
-{% for route in entities %}
+{% for route in collection %}
     <tr>
         <td class="p-3">{{ route.id }}</td>
         <td class="p-3">{{ route.sites|map((site) => site|sfs_cms_site_name)|join(', ') }}</td>

@@ -1,6 +1,6 @@
 {% trans_default_domain 'sfs_cms_admin' %}
 
-{% for menu in entities %}
+{% for menu in collection %}
     <tr>
         {#<td class="p-3">{{ menu.id }}</td>#}
         <td class="p-3">{{ menu.name|default('') }}</td>

@@ -33,13 +33,13 @@
 {#            </div>#}
 {#        {% endif %}#}
 
-        {% embed '@SfsComponents/paginator/table.html.twig' with {'collection':entities, 'pagination_site': 'sfs_cms_admin_sites_list'} %}
+        {% embed '@SfsComponents/paginator/table.html.twig' with {'collection':entities, 'pagination_site': 'sfs_cms_admin_sites_list'} only %}
             {% trans_default_domain 'sfs_cms_admin' %}
             {% block ths %}
                 <th class="p-3" scope="col">
-                    <a href="{{ entities.sortToggleUrl(app.request, 'id') }}" class="text-dark">
+                    <a href="{{ collection.sortToggleUrl(app.request, 'id') }}" class="text-dark">
                         {{ 'admin_sites.list.fields.id.header'|trans }}
-                        {% if entities.sortedBy('id', 'asc') %}<i class="bi bi-caret-up-fill"></i>{% elseif entities.sortedBy('id', 'desc') %}<i class="bi bi-caret-down-fill"></i>{% endif %}
+                        {% if collection.sortedBy('id', 'asc') %}<i class="bi bi-caret-up-fill"></i>{% elseif collection.sortedBy('id', 'desc') %}<i class="bi bi-caret-down-fill"></i>{% endif %}
                     </a>
                 </th>
                 <th class="p-3" scope="col">{{ 'admin_sites.list.fields.name.header'|trans }}</th>
