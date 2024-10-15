@@ -40,7 +40,7 @@
             </div>
         {% endif %}
 
-        {% embed '@SfsComponents/paginator/table.html.twig' with {'collection':entities, 'pagination_route': 'sfs_cms_admin_routes_list'} only %}
+        {% embed '@SfsComponents/paginator/table.html.twig' with {'collection':entities, 'filterForm': filterForm, 'pagination_route': 'sfs_cms_admin_routes_list'} only %}
             {% trans_default_domain 'sfs_cms_admin' %}
             {% block ths %}
                 <th class="p-3" scope="col">
