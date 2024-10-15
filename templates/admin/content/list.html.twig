@@ -46,7 +46,7 @@
         {% endif %}
 
         {% block table %}
-            {% embed '@SfsComponents/paginator/table.html.twig' with {'collection':entities, 'pagination_route': 'sfs_cms_admin_content_'~content_type~'_list', 'content_type': content_type, 'list_page_view': list_page_view, 'content_config': content_config} only %}
+            {% embed '@SfsComponents/paginator/table.html.twig' with {'collection':entities, 'filterForm': filterForm, 'pagination_route': 'sfs_cms_admin_content_'~content_type~'_list', 'content_type': content_type, 'list_page_view': list_page_view, 'content_config': content_config} only %}
                 {% trans_default_domain 'sfs_cms_contents' %}
                 {% block ths %}
                     <th scope="col">
