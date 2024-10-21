@@ -22,6 +22,40 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
+            ->beforeNormalization()
+                ->always()
+                ->then(function ($configuration) {
+                    $defaultCacheEnabled = $configuration['cache']['enabled'] ?? null;
+                    $defaultCacheType = $configuration['cache']['type'] ?? 'none';
+
+                    $contentCacheEnabled = $configuration['content']['cache']['enabled'] ?? $defaultCacheEnabled ?? null;
+                    if (isset($contentCacheEnabled)) {
+                        $configuration['content']['cache']['enabled'] = $contentCacheEnabled;
+                        $configuration['content']['cache']['type'] = $configuration['content']['cache']['type'] ?? $defaultCacheType;
+                    }
+
+                    $menuCacheEnabled = $configuration['menu']['cache']['enabled'] ?? $defaultCacheEnabled ?? null;
+                    if (isset($menuCacheEnabled)) {
+                        $configuration['menu']['cache']['enabled'] = $menuCacheEnabled;
+                        $configuration['menu']['cache']['type'] = $configuration['menu']['cache']['type'] ?? $defaultCacheType;
+                        if ('ttl' !== $configuration['menu']['cache']['type']) {
+                            $configuration['menu']['cache']['type'] = 'ttl'; // is the only supported now
+                        }
+                    }
+
+                    $blockCacheEnabled = $configuration['block']['cache']['enabled'] ?? $defaultCacheEnabled ?? null;
+                    if (isset($blockCacheEnabled)) {
+                        $configuration['block']['cache']['enabled'] = $blockCacheEnabled;
+                        $configuration['block']['cache']['type'] = $configuration['block']['cache']['type'] ?? $defaultCacheType;
+                        if ('ttl' !== $configuration['block']['cache']['type']) {
+                            $configuration['block']['cache']['type'] = 'ttl'; // is the only supported now
+                        }
+                    }
+
+                    return $configuration;
+                })
+            ->end()
+
             ->children()
                 ->scalarNode('entity_manager')
                     ->defaultValue('default')
@@ -32,7 +66,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('cache')
                     ->canBeDisabled()
                     ->children()
-                        ->enumNode('type')->defaultValue(null)->values(['ttl', 'last_modified'])->end()
+                        ->enumNode('type')->defaultValue(null)->values(['ttl', 'last_modified', 'none'])->end()
                     ->end()
                 ->end()
 
@@ -56,9 +90,9 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('find_field_name')->defaultValue('id')->end()
 
                         ->arrayNode('cache')
-                            ->canBeDisabled()
                             ->children()
-                                ->enumNode('type')->defaultNull()->values(['ttl'])->end()
+                                ->booleanNode('enabled')->end()
+                                ->enumNode('type')->defaultNull()->values(['ttl', 'none'])->end()
                             ->end()
                         ->end()
 
@@ -85,12 +119,6 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('class')->defaultValue(Route::class)->end()
                         ->scalarNode('path_class')->defaultValue(RoutePath::class)->end()
                         ->scalarNode('find_field_name')->defaultValue('id')->end()
-                        ->arrayNode('cache')
-                            ->canBeDisabled()
-                            ->children()
-                                ->enumNode('type')->defaultNull()->values(['ttl'])->end()
-                            ->end()
-                        ->end()
                     ->end()
                 ->end()
 
@@ -106,9 +134,9 @@ class Configuration implements ConfigurationInterface
                         /* @deprecated cache_last_modified since 5.3, will be removed in 6.0, use global sfs_cms.cache block */
                         ->booleanNode('cache_last_modified')->defaultFalse()->end()
                         ->arrayNode('cache')
-                            ->canBeDisabled()
                             ->children()
-                                ->enumNode('type')->defaultNull()->values(['ttl', 'last_modified'])->end()
+                                ->booleanNode('enabled')->end()
+                                ->enumNode('type')->defaultNull()->values(['ttl', 'last_modified', 'none'])->end()
                             ->end()
                         ->end()
                         ->booleanNode('recompile')->defaultTrue()->end()
@@ -121,6 +149,12 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('class')->defaultValue(Menu::class)->end()
                         ->scalarNode('item_class')->defaultValue(MenuItem::class)->end()
                         ->scalarNode('find_field_name')->defaultValue('id')->end()
+                        ->arrayNode('cache')
+                            ->children()
+                                ->booleanNode('enabled')->end()
+                                ->enumNode('type')->defaultNull()->values(['ttl', 'none'])->end()
+                            ->end()
+                        ->end()
                     ->end()
                 ->end()
 
