@@ -34,6 +34,12 @@ class Configuration implements ConfigurationInterface
                         $configuration['content']['cache']['type'] = $configuration['content']['cache']['type'] ?? $defaultCacheType;
                     }
 
+                    // @deprecated cache_last_modified since 5.3, will be removed in 6.0
+                    if (isset($configuration['content']['cache_last_modified'])) {
+                        $configuration['content']['cache']['type'] = 'last_modified';
+                        unset($configuration['content']['cache_last_modified']);
+                    }
+
                     $menuCacheEnabled = $configuration['menu']['cache']['enabled'] ?? $defaultCacheEnabled ?? null;
                     if (isset($menuCacheEnabled)) {
                         $configuration['menu']['cache']['enabled'] = $menuCacheEnabled;
