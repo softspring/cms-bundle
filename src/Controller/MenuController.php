@@ -43,7 +43,7 @@ class MenuController extends AbstractController
                 'menu' => $menu,
             ]));
 
-            if ('none' !== $this->cacheType && false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
+            if ('ttl' !== $this->cacheType && false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
                 $response->setPublic();
                 $response->setMaxAge($config['cache_ttl']);
             }
