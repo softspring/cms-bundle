@@ -64,14 +64,6 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         // set config parameters
         $container->setParameter('sfs_cms.entity_manager_name', $config['entity_manager']);
 
-        if ($config['cache']['enabled'] ?? false) {
-            $container->setParameter('sfs_cms.cache.enabled', $config['cache']['enabled']);
-            $container->setParameter('sfs_cms.cache.type', $config['cache']['type']);
-        } else {
-            $container->setParameter('sfs_cms.cache.enabled', false);
-            $container->setParameter('sfs_cms.cache.type', 'none');
-        }
-
         // configure route classes
         $container->setParameter('sfs_cms.route.class', $config['route']['class']);
         $container->setParameter('sfs_cms.route.path_class', $config['route']['path_class']);
@@ -85,17 +77,26 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $container->setParameter('sfs_cms.content.prefix_compiled', $config['content']['prefix_compiled'] ?? null);
         $container->setParameter('sfs_cms.content.page_class', $config['content']['page_class'] ?? null);
         $container->setParameter('sfs_cms.content.cache_enabled', $config['content']['cache_enabled'] ?? false);
-        $container->setParameter('sfs_cms.content.cache_last_modified_enabled', $config['content']['cache_last_modified'] ?? false);
+        $container->setParameter('sfs_cms.content.cache.enabled', $contentCacheEnabled = $config['content']['cache']['enabled'] ?? ($config['cache']['enabled'] ?? false));
+        $container->setParameter('sfs_cms.content.cache.type', $contentCacheEnabled ? ($config['content']['cache']['type'] ?? ($config['cache']['type'] ?? 'none')) : 'none');
         $container->setParameter('sfs_cms.content.recompile_enabled', $config['content']['recompile'] ?? false);
 
         // configure menu classes
         $container->setParameter('sfs_cms.menu.class', $config['menu']['class']);
         $container->setParameter('sfs_cms.menu.item_class', $config['menu']['item_class']);
         $container->setParameter('sfs_cms.menu.find_field_name', $config['menu']['find_field_name'] ?? null);
+        $container->setParameter('sfs_cms.menu.cache.enabled', $menuCacheEnabled = $config['menu']['cache']['enabled'] ?? ($config['cache']['enabled'] ?? false));
+        $menuCacheType = $menuCacheEnabled ? ($config['menu']['cache']['type'] ?? ($config['cache']['type'] ?? 'none')) : 'none';
+        $menuCacheType = 'last_modified' === $menuCacheType ? 'ttl' : $menuCacheType;
+        $container->setParameter('sfs_cms.menu.cache.type', $menuCacheType);
 
         // configure block classes
         $container->setParameter('sfs_cms.block.class', $config['block']['class'] ?? null);
         $container->setParameter('sfs_cms.block.find_field_name', $config['block']['find_field_name'] ?? null);
+        $container->setParameter('sfs_cms.block.cache.enabled', $blockCacheEnabled = $config['block']['cache']['enabled'] ?? ($config['cache']['enabled'] ?? false));
+        $blockCacheType = $blockCacheEnabled ? ($config['block']['cache']['type'] ?? ($config['cache']['type'] ?? 'none')) : 'none';
+        $blockCacheType = 'last_modified' === $blockCacheType ? 'ttl' : $blockCacheType;
+        $container->setParameter('sfs_cms.block.cache.type', $blockCacheType);
         //        $container->setParameter('sfs_cms.block.types', $config['block']['types'] ?? []);
 
         $container->setParameter('sfs_cms.compiled.class', CompiledData::class);

@@ -5,7 +5,7 @@ services:
         public: false
         bind:
             $em: '@sfs_cms.entity_manager'
-            $cacheType: '%sfs_cms.cache.type%'
+            $contentCacheType: '%sfs_cms.content.cache.type%'
 
     Softspring\CmsBundle\EventListener\Admin\Content\:
         resource: '../../src/EventListener/Admin/Content/*'

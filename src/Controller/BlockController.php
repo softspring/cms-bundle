@@ -24,7 +24,7 @@ class BlockController extends AbstractController
         protected BlockManagerInterface $blockManager,
         protected bool $debug,
         protected Environment $twig,
-        protected string $cacheType,
+        protected string $blockCacheType,
         protected ?LoggerInterface $cmsLogger,
     ) {
     }
@@ -51,7 +51,7 @@ class BlockController extends AbstractController
                 $response = new Response($this->twig->render($config['render_template']));
             }
 
-            if ('ttl' !== $this->cacheType && false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
+            if ('ttl' !== $this->blockCacheType && false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
                 $response->setPublic();
                 $response->setMaxAge($config['cache_ttl']);
             }
@@ -86,7 +86,7 @@ class BlockController extends AbstractController
                 $response = new Response($this->twig->render($config['render_template']));
             }
 
-            if ('ttl' !== $this->cacheType && false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
+            if ('ttl' !== $this->blockCacheType && false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
                 $response->setPublic();
                 $response->setMaxAge($config['cache_ttl']);
             }

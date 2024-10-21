@@ -13,7 +13,7 @@ services:
         public: false
         bind:
             $em: '@sfs_cms.entity_manager'
-            $cacheType: '%sfs_cms.cache.type%'
+            $contentCacheType: '%sfs_cms.content.cache.type%'
 
     Softspring\CmsBundle\Form\Admin\Route\:
         resource: '../../../src/Form/Admin/Route/Route*'

@@ -29,7 +29,7 @@ class ContentDataCollector extends DataCollector
         protected BlockRenderer $blockRenderer,
         protected MenuRenderer $menuRenderer,
         protected ContentVersionRenderer $contentRender,
-        protected string $cacheType,
+        protected string $contentCacheType,
         protected ?TranslatorInterface $translator,
         ?Profiler $profiler,
         ?Esi $esi,
@@ -106,7 +106,7 @@ class ContentDataCollector extends DataCollector
             ],
         ];
 
-        $this->data['cache'] = 'none' !== $this->cacheType ? array_intersect_key($response->headers->all(), array_flip(['cache-control', 'date', 'last-modified'])) : null;
+        $this->data['cache'] = 'none' !== $this->contentCacheType ? array_intersect_key($response->headers->all(), array_flip(['cache-control', 'date', 'last-modified'])) : null;
 
         $this->data['modules'] = $this->contentRender->getDebugCollectorData();
         $this->data['blocks'] = $this->blockRenderer->getDebugCollectorData();

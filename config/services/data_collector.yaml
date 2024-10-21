@@ -8,7 +8,7 @@ services:
             $fragmentListener: '@?fragment.listener'
             $httpCache: '@?http_cache'
             $profiler: '@?profiler'
-            $cacheType: '%sfs_cms.cache.type%'
+            $contentCacheType: '%sfs_cms.content.cache.type%'
 
     Softspring\CmsBundle\DataCollector\ContentDataCollector:
         tags:

@@ -31,7 +31,7 @@ class ReadListener extends AbstractContentListener
         RouterInterface $router,
         FlashNotifier $flashNotifier,
         AuthorizationCheckerInterface $authorizationChecker,
-        protected string $cacheType,
+        protected string $contentCacheType,
     ) {
         parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
     }
@@ -89,7 +89,7 @@ class ReadListener extends AbstractContentListener
         $event->getData()['entity'] = $event->getData()['content'];
         $event->getData()['entityLatestVersions'] = $this->contentVersionManager->getLatestVersions($event->getData()['content'], 3);
         parent::onView($event);
-        $event->getData()['contentCacheLastModifiedEnabled'] = 'last_modified' === $this->cacheType;
+        $event->getData()['contentCacheLastModifiedEnabled'] = 'last_modified' === $this->contentCacheType;
     }
 
     public function onViewAddCacheAlert(ViewEvent $event): void
@@ -97,7 +97,7 @@ class ReadListener extends AbstractContentListener
         /** @var ContentInterface $content */
         $content = $event->getData()['content'];
 
-        if ('last_modified' === $this->cacheType) {
+        if ('last_modified' === $this->contentCacheType) {
             // if cache lastModified is enabled, no need to check cache alert
             return;
         }

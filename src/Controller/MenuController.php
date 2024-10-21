@@ -17,7 +17,7 @@ class MenuController extends AbstractController
         protected CmsConfig $cmsConfig,
         protected MenuManagerInterface $menuManager,
         protected Environment $twig,
-        protected string $cacheType,
+        protected string $menuCacheType,
         protected ?LoggerInterface $cmsLogger,
     ) {
     }
@@ -43,7 +43,7 @@ class MenuController extends AbstractController
                 'menu' => $menu,
             ]));
 
-            if ('ttl' !== $this->cacheType && false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
+            if ('ttl' !== $this->menuCacheType && false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
                 $response->setPublic();
                 $response->setMaxAge($config['cache_ttl']);
             }

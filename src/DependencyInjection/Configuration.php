@@ -32,7 +32,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('cache')
                     ->canBeDisabled()
                     ->children()
-                        ->enumNode('type')->defaultValue('ttl')->values(['ttl', 'last_modified'])->end()
+                        ->enumNode('type')->defaultValue(null)->values(['ttl', 'last_modified'])->end()
                     ->end()
                 ->end()
 
@@ -54,6 +54,13 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->scalarNode('class')->defaultValue(Block::class)->end()
                         ->scalarNode('find_field_name')->defaultValue('id')->end()
+
+                        ->arrayNode('cache')
+                            ->canBeDisabled()
+                            ->children()
+                                ->enumNode('type')->defaultNull()->values(['ttl'])->end()
+                            ->end()
+                        ->end()
 
                         ->arrayNode('types')
                             ->prototype('array')
@@ -78,6 +85,12 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('class')->defaultValue(Route::class)->end()
                         ->scalarNode('path_class')->defaultValue(RoutePath::class)->end()
                         ->scalarNode('find_field_name')->defaultValue('id')->end()
+                        ->arrayNode('cache')
+                            ->canBeDisabled()
+                            ->children()
+                                ->enumNode('type')->defaultNull()->values(['ttl'])->end()
+                            ->end()
+                        ->end()
                     ->end()
                 ->end()
 
@@ -92,6 +105,12 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('prefix_compiled')->defaultValue('')->end()
                         /* @deprecated cache_last_modified since 5.3, will be removed in 6.0, use global sfs_cms.cache block */
                         ->booleanNode('cache_last_modified')->defaultFalse()->end()
+                        ->arrayNode('cache')
+                            ->canBeDisabled()
+                            ->children()
+                                ->enumNode('type')->defaultNull()->values(['ttl', 'last_modified'])->end()
+                            ->end()
+                        ->end()
                         ->booleanNode('recompile')->defaultTrue()->end()
                     ->end()
                 ->end()
