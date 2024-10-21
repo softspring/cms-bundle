@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ContentController extends AbstractController
 {
-    public function __construct(protected ContentVersionManagerInterface $contentVersionManager, protected ContentVersionCompiler $contentVersionCompiler, protected bool $contentCacheLastModifiedEnabled)
+    public function __construct(protected ContentVersionManagerInterface $contentVersionManager, protected ContentVersionCompiler $contentVersionCompiler, protected string $cacheType)
     {
     }
 
@@ -29,7 +29,7 @@ class ContentController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        if ($this->contentCacheLastModifiedEnabled) {
+        if ('last_modified' === $this->cacheType) {
             $response->setEtag(md5($content->getId().$content->getLastModified()?->getTimestamp().$this->contentVersionCompiler->getCompileKeyFromRequest($publishedVersion, $request)));
             $response->setLastModified($content->getLastModified());
             // Set response as public. Otherwise it will be private by default.
@@ -44,7 +44,7 @@ class ContentController extends AbstractController
         // create response
         $response->setContent($pageContent);
 
-        if (!$this->contentCacheLastModifiedEnabled && $routePath->getCacheTtl()) {
+        if ('ttl' === $this->cacheType && $routePath->getCacheTtl()) {
             $response->setPublic();
             $response->setMaxAge($routePath->getCacheTtl());
         }

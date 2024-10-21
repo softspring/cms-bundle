@@ -29,6 +29,13 @@ class Configuration implements ConfigurationInterface
 
                 ->booleanNode('admin')->defaultTrue()->end()
 
+                ->arrayNode('cache')
+                    ->canBeDisabled()
+                    ->children()
+                        ->enumNode('type')->defaultValue('ttl')->values(['ttl', 'last_modified'])->end()
+                    ->end()
+                ->end()
+
                 ->arrayNode('collections')
                     ->scalarPrototype()->end()
                 ->end()
@@ -83,6 +90,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('find_field_name')->defaultValue('id')->end()
                         ->booleanNode('save_compiled')->defaultTrue()->end()
                         ->scalarNode('prefix_compiled')->defaultValue('')->end()
+                        /* @deprecated cache_last_modified since 5.3, will be removed in 6.0, use global sfs_cms.cache block */
                         ->booleanNode('cache_last_modified')->defaultFalse()->end()
                         ->booleanNode('recompile')->defaultTrue()->end()
                     ->end()

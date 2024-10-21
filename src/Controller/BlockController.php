@@ -18,21 +18,15 @@ class BlockController extends AbstractController
 {
     use EnableSchedulableContentTrait;
 
-    protected EntityManagerInterface $em;
-    protected CmsConfig $cmsConfig;
-    protected BlockManagerInterface $blockManager;
-    protected bool $debug;
-    protected Environment $twig;
-    protected ?LoggerInterface $cmsLogger;
-
-    public function __construct(EntityManagerInterface $em, CmsConfig $cmsConfig, BlockManagerInterface $blockManager, bool $debug, Environment $twig, ?LoggerInterface $cmsLogger)
-    {
-        $this->em = $em;
-        $this->cmsConfig = $cmsConfig;
-        $this->blockManager = $blockManager;
-        $this->debug = $debug;
-        $this->twig = $twig;
-        $this->cmsLogger = $cmsLogger;
+    public function __construct(
+        protected EntityManagerInterface $em,
+        protected CmsConfig $cmsConfig,
+        protected BlockManagerInterface $blockManager,
+        protected bool $debug,
+        protected Environment $twig,
+        protected string $cacheType,
+        protected ?LoggerInterface $cmsLogger,
+    ) {
     }
 
     public function renderByType(string $type, Request $request): Response
@@ -57,7 +51,7 @@ class BlockController extends AbstractController
                 $response = new Response($this->twig->render($config['render_template']));
             }
 
-            if (false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
+            if ('ttl' !== $this->cacheType && false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
                 $response->setPublic();
                 $response->setMaxAge($config['cache_ttl']);
             }
@@ -92,7 +86,7 @@ class BlockController extends AbstractController
                 $response = new Response($this->twig->render($config['render_template']));
             }
 
-            if (false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
+            if ('ttl' !== $this->cacheType && false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
                 $response->setPublic();
                 $response->setMaxAge($config['cache_ttl']);
             }

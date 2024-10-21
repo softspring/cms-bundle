@@ -20,21 +20,22 @@ use Throwable;
 
 class ContentDataCollector extends DataCollector
 {
-    protected BlockRenderer $blockRenderer;
-    protected MenuRenderer $menuRenderer;
-    protected ContentVersionRenderer $contentRender;
-    protected ?TranslatorInterface $translator;
     protected bool $profilerEnabled = false;
     protected bool $esiEnabled = false;
     protected bool $fragmentsEnabled = false;
     protected bool $httpCacheEnabled = false;
 
-    public function __construct(BlockRenderer $blockRenderer, MenuRenderer $menuRenderer, ContentVersionRenderer $contentRender, ?TranslatorInterface $translator, ?Profiler $profiler, ?Esi $esi, ?FragmentListener $fragmentListener, ?HttpCache $httpCache)
-    {
-        $this->blockRenderer = $blockRenderer;
-        $this->menuRenderer = $menuRenderer;
-        $this->contentRender = $contentRender;
-        $this->translator = $translator;
+    public function __construct(
+        protected BlockRenderer $blockRenderer,
+        protected MenuRenderer $menuRenderer,
+        protected ContentVersionRenderer $contentRender,
+        protected string $cacheType,
+        protected ?TranslatorInterface $translator,
+        ?Profiler $profiler,
+        ?Esi $esi,
+        ?FragmentListener $fragmentListener,
+        ?HttpCache $httpCache,
+    ) {
         $this->profilerEnabled = (bool) $profiler;
         $this->esiEnabled = (bool) $esi;
         $this->fragmentsEnabled = (bool) $fragmentListener;
@@ -105,7 +106,7 @@ class ContentDataCollector extends DataCollector
             ],
         ];
 
-        $this->data['cache'] = array_intersect_key($response->headers->all(), array_flip(['cache-control', 'date', 'last-modified']));
+        $this->data['cache'] = 'none' !== $this->cacheType ? array_intersect_key($response->headers->all(), array_flip(['cache-control', 'date', 'last-modified'])) : null;
 
         $this->data['modules'] = $this->contentRender->getDebugCollectorData();
         $this->data['blocks'] = $this->blockRenderer->getDebugCollectorData();

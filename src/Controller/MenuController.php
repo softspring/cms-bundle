@@ -13,17 +13,13 @@ use Twig\Environment;
 
 class MenuController extends AbstractController
 {
-    protected CmsConfig $cmsConfig;
-    protected MenuManagerInterface $menuManager;
-    protected Environment $twig;
-    protected ?LoggerInterface $cmsLogger;
-
-    public function __construct(CmsConfig $cmsConfig, MenuManagerInterface $menuManager, Environment $twig, ?LoggerInterface $cmsLogger)
-    {
-        $this->cmsConfig = $cmsConfig;
-        $this->menuManager = $menuManager;
-        $this->twig = $twig;
-        $this->cmsLogger = $cmsLogger;
+    public function __construct(
+        protected CmsConfig $cmsConfig,
+        protected MenuManagerInterface $menuManager,
+        protected Environment $twig,
+        protected string $cacheType,
+        protected ?LoggerInterface $cmsLogger,
+    ) {
     }
 
     public function renderByType(string $type, Request $request): Response
@@ -47,7 +43,7 @@ class MenuController extends AbstractController
                 'menu' => $menu,
             ]));
 
-            if (false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
+            if ('ttl' !== $this->cacheType && false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
                 $response->setPublic();
                 $response->setMaxAge($config['cache_ttl']);
             }

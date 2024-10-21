@@ -64,6 +64,14 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         // set config parameters
         $container->setParameter('sfs_cms.entity_manager_name', $config['entity_manager']);
 
+        if ($config['cache']['enabled'] ?? false) {
+            $container->setParameter('sfs_cms.cache.enabled', $config['cache']['enabled']);
+            $container->setParameter('sfs_cms.cache.type', $config['cache']['type']);
+        } else {
+            $container->setParameter('sfs_cms.cache.enabled', false);
+            $container->setParameter('sfs_cms.cache.type', 'none');
+        }
+
         // configure route classes
         $container->setParameter('sfs_cms.route.class', $config['route']['class']);
         $container->setParameter('sfs_cms.route.path_class', $config['route']['path_class']);
@@ -76,6 +84,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $container->setParameter('sfs_cms.content.save_compiled', $config['content']['save_compiled'] ?? null);
         $container->setParameter('sfs_cms.content.prefix_compiled', $config['content']['prefix_compiled'] ?? null);
         $container->setParameter('sfs_cms.content.page_class', $config['content']['page_class'] ?? null);
+        $container->setParameter('sfs_cms.content.cache_enabled', $config['content']['cache_enabled'] ?? false);
         $container->setParameter('sfs_cms.content.cache_last_modified_enabled', $config['content']['cache_last_modified'] ?? false);
         $container->setParameter('sfs_cms.content.recompile_enabled', $config['content']['recompile'] ?? false);
 

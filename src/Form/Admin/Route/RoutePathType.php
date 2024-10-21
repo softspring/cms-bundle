@@ -17,7 +17,7 @@ class RoutePathType extends AbstractType
     public function __construct(
         protected RoutePathManagerInterface $routePathManager,
         protected LocaleHelper $localeHelper,
-        protected bool $contentCacheLastModifiedEnabled,
+        protected ?string $cacheType,
     ) {
     }
 
@@ -51,7 +51,7 @@ class RoutePathType extends AbstractType
             ],
         ]);
 
-        if (!$this->contentCacheLastModifiedEnabled) {
+        if ('ttl' === $this->cacheType) {
             $builder->add('cacheTtl', IntegerType::class);
         }
 
