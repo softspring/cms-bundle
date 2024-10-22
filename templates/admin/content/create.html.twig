@@ -30,9 +30,9 @@
 
                         <div class="row">
                             <div class="col">{{ form_row(form.name) }}</div>
-                            <div class="col">{{ form_row(form.sites, {'label_attr': {'class': 'checkbox-inline checkbox-switch'}}) }}</div>
-                            <div class="col">{{ form_row(form.defaultLocale, {'attr': {'data-locale-disables-choice': form.locales.vars.id}}) }}</div>
-                            <div class="col">{{ form_row(form.locales, {'label_attr': {'class': 'checkbox-inline checkbox-switch'}}) }}</div>
+                            <div class="col {{ form.sites.vars.choices|length < 2 ? 'd-none' : '' }}">{{ form_row(form.sites, {'label_attr': {'class': 'checkbox-inline checkbox-switch'}}) }}</div>
+                            <div class="col {{ form.defaultLocale.vars.choices|length < 2 ? 'd-none' : '' }}">{{ form_row(form.defaultLocale, {'attr': {'data-locale-disables-choice': form.locales.vars.id}}) }}</div>
+                            <div class="col {{ form.locales.vars.choices|length < 2 ? 'd-none' : '' }}">{{ form_row(form.locales, {'label_attr': {'class': 'checkbox-inline checkbox-switch'}}) }}</div>
                         </div>
 
                         {% if form.extraData is defined %}{{ form_widget(form.extraData) }}{% endif %}
