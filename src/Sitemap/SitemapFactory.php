@@ -45,6 +45,8 @@ class SitemapFactory
         /* @deprecated will only use alternates_sites */
         $siteAlternates = $sitemapConfig['alternates'] || $sitemapConfig['alternates_sites'];
 
+        $alternatesIncludeHreflang = $sitemapConfig['alternates_include_hreflang'] ?? true;
+
         foreach ($content->getRoutes() as $route) {
             foreach ($route->getPaths() as $path) {
                 if (!in_array($path->getLocale(), $site->getConfig()['locales'])) {
@@ -56,7 +58,7 @@ class SitemapFactory
                     'lastmod' => $content->getPublishedVersion()?->getCreatedAt()->format('Y-m-d'),
                     'changefreq' => $this->getChangeFreq($content, $sitemapConfig),
                     'priority' => $this->getPriority($content, $sitemapConfig),
-                    'xhtml:link' => $this->routingHelper->generateRoutePathAlternates($path, $site, $localeAlternates, $siteAlternates),
+                    'xhtml:link' => $this->routingHelper->generateRoutePathAlternates($path, $site, $localeAlternates, $siteAlternates, $alternatesIncludeHreflang),
                 ], fn ($v) => !empty($v));
             }
         }

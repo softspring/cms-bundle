@@ -56,4 +56,11 @@ class Site implements SiteInterface
         // return first host as default
         return $this->getConfig()['hosts'][0]['scheme'] ?? null;
     }
+
+    public function getGeoHrefLangForLocale(string $locale): string
+    {
+        $extraConfig = $this->getConfig()['extra'] ?? [];
+
+        return $extraConfig['hreflang_mapping'][$locale] ?? $locale;
+    }
 }
