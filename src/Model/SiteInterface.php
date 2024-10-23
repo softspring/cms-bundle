@@ -17,4 +17,6 @@ interface SiteInterface
     public function getCanonicalHost(): ?string;
 
     public function getCanonicalScheme(): ?string;
+
+    public function getGeoHrefLangForLocale(string $locale): string;
 }

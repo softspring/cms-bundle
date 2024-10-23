@@ -128,6 +128,7 @@ class Site implements ConfigurationInterface
                             ->booleanNode('alternates')->setDeprecated('softspring/cms-bundle', '5.1', 'Use alternates_locales and alternates_sites')->defaultTrue()->end()
                             ->booleanNode('alternates_locales')->defaultTrue()->end()
                             ->booleanNode('alternates_sites')->defaultTrue()->end()
+                            ->booleanNode('alternates_include_hreflang')->defaultTrue()->end()
                         ->end()
                     ->end()
                 ->end()
