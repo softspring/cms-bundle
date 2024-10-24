@@ -13,6 +13,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Schema\Identifier;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\AssociationMapping;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
 /**
@@ -244,9 +245,8 @@ class CmsPurger implements PurgerInterface, ORMPurgerInterface
         return $this->em->getConfiguration()->getQuoteStrategy()->getTableName($class, $platform);
     }
 
-    /** @param mixed[] $assoc */
     private function getJoinTableName(
-        array $assoc,
+        AssociationMapping $assoc,
         ClassMetadata $class,
         AbstractPlatform $platform,
     ): string {

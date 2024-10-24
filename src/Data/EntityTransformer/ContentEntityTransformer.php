@@ -76,15 +76,23 @@ abstract class ContentEntityTransformer implements ContentEntityTransformerInter
             $versions[] = [
                 'layout' => $contentVersion->getLayout(),
                 'data' => $this->dataTransformer->export($contentVersion->getData(), $files),
+                'version_number' => $contentVersion->getVersionNumber(),
+                'origin' => $contentVersion->getOrigin(),
+                'origin_description' => $contentVersion->getOriginDescription(),
+                'note' => $contentVersion->getNote(),
+                'created_at' => $contentVersion->getCreatedAt() ? $contentVersion->getCreatedAt()->format('Y-m-d H:i:s') : null,
+                'meta' => $contentVersion->getMeta(),
             ];
         }
 
         return [
             $contentType => [
                 'name' => $content->getName(),
+                'default_locale' => $content->getDefaultLocale(),
+                'locales' => $content->getLocales(),
                 'sites' => $content->getSites()->map(fn (SiteInterface $site) => $site->getId())->toArray(),
                 'extra' => $content->getExtraData(),
-                'seo' => $content->getSeo(),
+                'indexing' => $content->getIndexing(),
                 'versions' => $versions,
             ],
         ];
@@ -124,8 +132,15 @@ abstract class ContentEntityTransformer implements ContentEntityTransformerInter
             $content->addSite($referencesRepository->getReference("site___{$site}", true));
         }
 
+        $content->setDefaultLocale($contentData['default_locale'] ?? null);
+        $content->setLocales($contentData['locales'] ?? []);
+
         $content->setExtraData($contentData['extra']);
-        $content->setSeo($contentData['seo']);
+
+        if (isset($contentData['seo'])) {
+            $content->setSeo($contentData['seo']);
+        }
+        $content->setIndexing($contentData['indexing'] ?? []);
 
         foreach ($contentData['versions'] as $version) {
             if ($version['layout'] && $version['data']) {
@@ -144,6 +159,8 @@ abstract class ContentEntityTransformer implements ContentEntityTransformerInter
         $version = $this->contentManager->createVersion($content, null, $options['version_origin'] ?? ContentVersionInterface::ORIGIN_UNKNOWN);
         $version->setLayout($layout);
         $version->setData($this->dataTransformer->import($data, $referencesRepository, $options));
+
+        // TODO set version number and other metadata fields
 
         return $version;
     }

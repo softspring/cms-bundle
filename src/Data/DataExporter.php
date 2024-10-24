@@ -101,6 +101,11 @@ class DataExporter extends AbstractDataImportExport
                             $storageClient->bucket($fileData['bucket'])->object($fileData['object'])->downloadToFile("$path/$fileName");
                             break;
 
+                        case 'sfs-media-filesystem':
+                            !is_dir(dirname("$path/$fileName")) && mkdir(dirname("$path/$fileName"), 0755, true);
+                            copy($fileData['path'].'/'.$fileData['object'], "$path/$fileName");
+                            break;
+
                         default:
                             throw new Exception('Not yet implemented');
                     }
