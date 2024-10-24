@@ -245,7 +245,6 @@ class CmsPurger implements PurgerInterface, ORMPurgerInterface
         return $this->em->getConfiguration()->getQuoteStrategy()->getTableName($class, $platform);
     }
 
-    /** @param mixed[] $assoc */
     private function getJoinTableName(
         AssociationMapping $assoc,
         ClassMetadata $class,
