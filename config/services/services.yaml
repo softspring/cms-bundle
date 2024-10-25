@@ -26,6 +26,7 @@ services:
             $contentCacheType: '%sfs_cms.content.cache.type%'
             $menuCacheType: '%sfs_cms.menu.cache.type%'
             $blockCacheType: '%sfs_cms.block.cache.type%'
+            $mediaStoragePath: '%sfs_media.storage.filesystem.path%'
 
     Softspring\CmsBundle\Config\CmsConfig:
         arguments:

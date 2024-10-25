@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Data\FieldTransformer;
 
+use Exception;
 use Softspring\CmsBundle\Data\ReferencesRepository;
 use Softspring\MediaBundle\Model\MediaInterface;
 
@@ -10,6 +11,10 @@ use Softspring\MediaBundle\Model\MediaInterface;
  */
 class MediaFieldTransformer implements FieldTransformerInterface
 {
+    public function __construct(protected ?string $mediaStoragePath = null)
+    {
+    }
+
     public static function getPriority(): int
     {
         return 100;
@@ -26,7 +31,6 @@ class MediaFieldTransformer implements FieldTransformerInterface
 
         // TODO SET THIS IN A LOOP WITH ALL UPLOADED FILES (NOT ONLY _ORIGINAL FILE)
         $originalVersion = $data->getVersion('_original');
-        $parts = explode('/', $originalVersion->getUrl(), 4);
         $mediaFileName = 'media/'.$data->getId().([
             'image/jpeg' => '.jpeg',
             'image/png' => '.png',
@@ -36,12 +40,28 @@ class MediaFieldTransformer implements FieldTransformerInterface
         ][$originalVersion->getFileMimeType()] ?? '');
         $versionFiles['_original'] = $mediaFileName;
 
-        $files[$mediaFileName] = [
-            '@type' => 'file',
-            '@location' => 'gcs',
-            'bucket' => $parts[2],
-            'object' => $parts[3],
-        ];
+        $url = $originalVersion->getUrl();
+        if (str_starts_with($url, 'gcs://')) {
+            $parts = explode('/', substr($url, strlen('gcs://')));
+            $bucket = array_shift($parts);
+            $files[$mediaFileName] = [
+                '@type' => 'file',
+                '@location' => 'gcs',
+                'bucket' => $bucket,
+                'object' => implode('/', $parts),
+            ];
+        } elseif (str_starts_with($url, 'sfs-media-filesystem://')) {
+            $parts = explode('/', substr($url, strlen('sfs-media-filesystem://')));
+            $fileName = array_pop($parts);
+            $files[$mediaFileName] = [
+                '@type' => 'file',
+                '@location' => 'sfs-media-filesystem',
+                'path' => $this->mediaStoragePath.'/'.implode('/', $parts),
+                'object' => $fileName,
+            ];
+        } else {
+            throw new Exception('Media url not supported: '.$url);
+        }
 
         $files['media/'.$data->getId().'.json'] = [
             '@type' => 'json',
