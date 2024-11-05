@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Twig\Extension;
 
 use Softspring\CmsBundle\Model\RoutePathInterface;
 use Softspring\CmsBundle\Routing\UrlGenerator;
+use Softspring\TranslatableBundle\Twig\Extension\TranslateExtension as NewTranslateExtension;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Extension\AbstractExtension;
@@ -44,23 +45,8 @@ class TranslateExtension extends AbstractExtension
 
     public function translate(mixed $translatableText): string
     {
-        if (!is_array($translatableText)) {
-            return '';
-        }
-
-        $request = $this->requestStack->getCurrentRequest();
-
-        // TODO allow empty locale values with some metadata flag to avoid fallback to default locale
-
-        if (!empty($translatableText[$request->getLocale()])) {
-            return $translatableText[$request->getLocale()];
-        }
-
-        if (!empty($translatableText[$request->getDefaultLocale()])) {
-            return $translatableText[$request->getDefaultLocale()];
-        }
-
-        return '';
+        // TODO: deprecate this
+        return NewTranslateExtension::translateWithRequest($translatableText, $this->requestStack->getCurrentRequest());
     }
 
     /**
