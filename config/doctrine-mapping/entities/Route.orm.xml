@@ -6,7 +6,7 @@
 
     <entity name="Softspring\CmsBundle\Entity\Route" table="cms_route" repository-class="Softspring\CmsBundle\Repository\RouteRepository">
         <cache usage="NONSTRICT_READ_WRITE" />
-        <id name="id" type="string" column="id"/>
+        <id name="id" type="string" length="100" column="id"/>
 
         <one-to-many field="paths" target-entity="Softspring\CmsBundle\Model\RoutePathInterface" mapped-by="route" orphan-removal="true" fetch="EXTRA_LAZY">
             <cache usage="NONSTRICT_READ_WRITE" />
