@@ -5,6 +5,7 @@ namespace Softspring\CmsBundle\Form\Type;
 use Softspring\CmsBundle\Form\DynamicFormTrait;
 use Softspring\CmsBundle\Translator\TranslatableContext;
 use Softspring\TranslatableBundle\Form\Type\TranslatableType as BaseTranslatableType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TranslatableType extends BaseTranslatableType
@@ -28,6 +29,7 @@ class TranslatableType extends BaseTranslatableType
         $resolver->setDefaults([
             'default_language' => $this->translatableContext->getDefaultLocale(),
             'languages' => $this->translatableContext->getLocales(),
+            'type' => TextType::class,
         ]);
 
         $resolver->setNormalizer('type', function ($options, $value) {
