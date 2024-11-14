@@ -2,14 +2,14 @@
 
 namespace Softspring\CmsBundle\EventListener\Admin\ContentVersion;
 
+use Softspring\CmsBundle\Compiler\CompileException;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
-use Softspring\CmsBundle\Render\CompileException;
-use Softspring\CmsBundle\Render\RenderErrorException;
+use Softspring\CmsBundle\Render\Error\RenderErrorException;
 use Softspring\CmsBundle\Request\FlashNotifier;
 use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\CmsBundle\Translator\TranslatableContext;

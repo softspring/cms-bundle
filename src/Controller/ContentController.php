@@ -2,10 +2,10 @@
 
 namespace Softspring\CmsBundle\Controller;
 
+use Softspring\CmsBundle\Compiler\ContentVersionCompiler;
 use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Model\RoutePathInterface;
-use Softspring\CmsBundle\Render\ContentVersionCompiler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,22 +29,24 @@ class ContentController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        if ('last_modified' === $this->contentCacheType) {
-            $response->setEtag(md5($content->getId().$content->getLastModified()?->getTimestamp().$this->contentVersionCompiler->getCompileKeyFromRequest($publishedVersion, $request)));
-            $response->setLastModified($content->getLastModified());
-            // Set response as public. Otherwise it will be private by default.
-            $response->setPublic();
-            if ($response->isNotModified($request)) {
-                return $response;
-            }
-        }
+        //        if ('last_modified' === $this->contentCacheType) {
+        //            $response->setEtag(md5($content->getId().$content->getLastModified()?->getTimestamp().$this->contentVersionCompiler->getCompileKeyFromRequest($publishedVersion, $request)));
+        //            $response->setLastModified($content->getLastModified());
+        //            // Set response as public. Otherwise it will be private by default.
+        //            $response->setPublic();
+        //            if ($response->isNotModified($request)) {
+        //                return $response;
+        //            }
+        //        }
 
         $pageContent = $this->contentVersionManager->getCompiledContent($publishedVersion, $request);
 
         // create response
-        $response->setContent($pageContent);
+        $response->setContent($pageContent->getDataPart('content'));
 
-        if ('ttl' === $this->contentCacheType && $routePath->getCacheTtl()) {
+        if ($pageContent->hasErrors()) {
+            $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
+        } elseif ('ttl' === $this->contentCacheType && $routePath->getCacheTtl()) {
             $response->setPublic();
             $response->setMaxAge($routePath->getCacheTtl());
         }

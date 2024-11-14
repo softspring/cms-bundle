@@ -91,6 +91,9 @@ services:
         tags:
             - { name: container.service_subscriber, id: 'routing.loader' }
 
+    Softspring\CmsBundle\Compiler\:
+        resource: '../../src/Compiler/*'
+
     Softspring\CmsBundle\Render\:
         resource: '../../src/Render/*'
 

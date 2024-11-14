@@ -2,11 +2,11 @@
 
 namespace Softspring\CmsBundle\EventListener\Admin\ContentVersion;
 
+use Softspring\CmsBundle\Compiler\ContentVersionCompiler;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
-use Softspring\CmsBundle\Render\ContentVersionCompiler;
 use Softspring\CmsBundle\Request\FlashNotifier;
 use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\Component\CrudlController\Event\FormPrepareEvent;
