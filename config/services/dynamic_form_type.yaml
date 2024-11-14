@@ -1,3 +1,5 @@
+# This file is deprecated, use SfsDynamicFormTypeBundle witch replaces it.
+
 services:
     _defaults:
         autowire: true

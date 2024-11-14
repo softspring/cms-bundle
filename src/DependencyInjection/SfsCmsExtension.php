@@ -18,13 +18,14 @@ use Softspring\CmsBundle\Entity\RoutePath;
 use Softspring\CmsBundle\Entity\Site;
 use Softspring\CmsBundle\Model\BlockInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
+use Softspring\Component\DynamicFormType\SfsDynamicFormTypeBundle;
 use Symfony\Bundle\MakerBundle\MakerBundle;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class SfsCmsExtension extends Extension implements PrependExtensionInterface
 {
@@ -102,7 +103,11 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $loader->load('services.yaml');
         $adminEnabled && $loader->load('admin_services.yaml');
         $loader->load('entity_transformer.yaml');
-        $loader->load('dynamic_form_type.yaml');
+
+        if (!class_exists(SfsDynamicFormTypeBundle::class)) {
+            /** @deprecated This will be removed soon, use SfsDynamicFormTypeBundle instead */
+            $loader->load('dynamic_form_type.yaml');
+        }
         $adminEnabled && $loader->load('controller/admin_blocks.yaml');
         $adminEnabled && $loader->load('controller/admin_content.yaml');
         $adminEnabled && $loader->load('controller/admin_content_version.yaml');

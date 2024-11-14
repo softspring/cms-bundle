@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Twig\Extension;
 
 use Softspring\CmsBundle\Model\RoutePathInterface;
 use Softspring\CmsBundle\Routing\UrlGenerator;
+use Softspring\TranslatableBundle\Model\Translation;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Extension\AbstractExtension;
@@ -26,7 +27,7 @@ class TranslateExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('sfs_cms_trans', [$this, 'translate'], ['is_safe' => ['html']]),
+            new TwigFilter('sfs_cms_trans', [$this, 'translate'], ['is_safe' => ['html'], 'deprecated' => true]),
         ];
     }
 
@@ -42,15 +43,25 @@ class TranslateExtension extends AbstractExtension
         ];
     }
 
+    /**
+     * @deprecated
+     */
     public function translate(mixed $translatableText): string
     {
+        $request = $this->requestStack->getCurrentRequest();
+
+        if ($translatableText instanceof Translation) {
+            return $translatableText->translate($request->getLocale());
+        }
+
         if (!is_array($translatableText)) {
             return '';
         }
 
-        $request = $this->requestStack->getCurrentRequest();
-
-        // TODO allow empty locale values with some metadata flag to avoid fallback to default locale
+        // if it can be converted to a translation object
+        if (isset($translatableText['_default'])) {
+            return Translation::createFromArray($translatableText)->translate($request->getLocale());
+        }
 
         if (!empty($translatableText[$request->getLocale()])) {
             return $translatableText[$request->getLocale()];

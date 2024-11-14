@@ -16,7 +16,7 @@
         <h1 class="h3">{{ 'admin_blocks.list.title'|trans }}</h1>
 
         <div class="float-end">
-            {% if is_granted('PERMISSION_SFS_CMS_ADMIN_BLOCKS_CREATE') %}
+            {% if is_granted('PERMISSION_SFS_CMS_ADMIN_BLOCKS_CREATE') and blocks_config|filter((blockConfig) => not blockConfig.static)|length %}
             <div class="dropdown">
                 <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownBlockButton1" data-bs-toggle="dropdown" aria-expanded="false">
                     {{ 'admin_blocks.list.actions.create.link'|trans }}
