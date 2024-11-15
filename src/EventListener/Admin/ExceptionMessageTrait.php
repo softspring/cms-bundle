@@ -2,7 +2,7 @@
 
 namespace Softspring\CmsBundle\EventListener\Admin;
 
-use Softspring\CmsBundle\Render\RenderErrorException;
+use Softspring\CmsBundle\Render\Error\RenderErrorException;
 use Throwable;
 
 trait ExceptionMessageTrait

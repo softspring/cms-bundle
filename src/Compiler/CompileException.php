@@ -1,6 +1,6 @@
 <?php
 
-namespace Softspring\CmsBundle\Render;
+namespace Softspring\CmsBundle\Compiler;
 
 use Exception;
 

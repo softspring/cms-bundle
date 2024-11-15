@@ -2,20 +2,11 @@
 
 namespace Softspring\CmsBundle\Render;
 
-use Exception;
+use Softspring\CmsBundle\Render\Error\RenderErrorException as NewRenderErrorException;
 
-class RenderErrorException extends Exception
+/**
+ * @deprecated since 5.3, use Softspring\CmsBundle\Render\Error\RenderErrorException instead
+ */
+class RenderErrorException extends NewRenderErrorException
 {
-    protected RenderErrorList $renderErrorList;
-
-    public function __construct(RenderErrorList $renderErrorList)
-    {
-        $this->renderErrorList = $renderErrorList;
-        parent::__construct();
-    }
-
-    public function getRenderErrorList(): RenderErrorList
-    {
-        return $this->renderErrorList;
-    }
 }

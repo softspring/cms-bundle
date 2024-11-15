@@ -5,12 +5,13 @@ namespace Softspring\CmsBundle\Manager;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
+use Softspring\CmsBundle\Compiler\CompileException;
+use Softspring\CmsBundle\Compiler\ContentVersionCompiler;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Model\CompiledDataInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
-use Softspring\CmsBundle\Render\CompileException;
-use Softspring\CmsBundle\Render\ContentVersionCompiler;
+use Softspring\CmsBundle\Render\Error\RenderErrorException;
 use Softspring\Component\CrudlController\Manager\CrudlEntityManagerTrait;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -58,8 +59,9 @@ class ContentVersionManager implements ContentVersionManagerInterface
 
     /**
      * @throws CompileException
+     * @throws \Exception
      */
-    public function getCompiledContent(ContentVersionInterface $contentVersion, Request $request): string
+    public function getCompiledContent(ContentVersionInterface $contentVersion, Request $request, bool $throwExceptionOnCompileError = true): CompiledDataInterface
     {
         $compiledKey = $this->contentCompiler->getCompileKeyFromRequest($contentVersion, $request);
 
@@ -69,20 +71,12 @@ class ContentVersionManager implements ContentVersionManagerInterface
             'key' => $compiledKey,
         ]);
 
-        if (!$compiledData || !$compiledData->getDataPart('content')) {
-            if (!$compiledData) {
-                $compiledData = $this->compiledDataManager->createEntity();
-                $compiledData->setKey($compiledKey);
-                $compiledData->setContentVersion($contentVersion);
-                $contentVersion->addCompiled($compiledData);
-            }
-
-            $compiledContent = $this->contentCompiler->compileRequest($contentVersion, $request, $compiledData->getDataPart('modules'));
-            $compiledData->setDataPart('content', $compiledContent);
+        if (!$compiledData?->getDataPart('content')) {
+            $compiledData = $this->contentCompiler->compileRequest($contentVersion, $request, $compiledData?->getDataPart('modules'), $throwExceptionOnCompileError);
             $this->saveEntity($contentVersion);
         }
 
-        return $compiledData->getDataPart('content');
+        return $compiledData;
     }
 
     public function addLocale(ContentVersionInterface $contentVersion, string $locale): void

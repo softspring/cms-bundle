@@ -2,14 +2,14 @@
 
 namespace Softspring\CmsBundle\EventListener\Admin\ContentVersion;
 
+use Softspring\CmsBundle\Compiler\CompileException;
+use Softspring\CmsBundle\Compiler\ContentVersionCompiler;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Manager\SiteManagerInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
-use Softspring\CmsBundle\Render\CompileException;
-use Softspring\CmsBundle\Render\ContentVersionCompiler;
 use Softspring\CmsBundle\Request\FlashNotifier;
 use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\Component\CrudlController\Event\EntityFoundEvent;
@@ -87,6 +87,12 @@ class PreviewListener extends AbstractContentVersionListener
 
         $request->attributes->set('routePath', $version->getContent()->getRoutes()->first()?->getPathForLocale($request->getLocale()));
 
-        $event->setResponse(new Response($this->contentVersionCompiler->compileRequest($version, $request)));
+        $compiledData = $this->contentVersionCompiler->compileRequest($version, $request, null, false);
+
+        if (!$compiledData->hasErrors()) {
+            $event->setResponse(new Response($compiledData->getDataPart('content')));
+        } else {
+            $event->setResponse(new Response($compiledData->getDataPart('content') ?? '', Response::HTTP_INTERNAL_SERVER_ERROR));
+        }
     }
 }

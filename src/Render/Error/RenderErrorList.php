@@ -1,6 +1,6 @@
 <?php
 
-namespace Softspring\CmsBundle\Render;
+namespace Softspring\CmsBundle\Render\Error;
 
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
@@ -35,6 +35,24 @@ class RenderErrorList
     {
         return array_map(function ($error) {
             return sprintf('%s (%s): %s', $error['location'], $error['template'], $error['exception']->getMessage());
+        }, $this->getErrors());
+    }
+
+    public function getErrorsAsArray(): array
+    {
+        return array_map(function ($error) {
+            return [
+                'location' => $error['location'],
+                'template' => $error['template'],
+                'exception' => [
+                    'message' => $error['exception']->getMessage(),
+                    'code' => $error['exception']->getCode(),
+                    'file' => $error['exception']->getFile(),
+                    'line' => $error['exception']->getLine(),
+                    'trace' => $error['exception']->getTraceAsString(),
+                ],
+                'contextData' => $error['contextData']
+            ];
         }, $this->getErrors());
     }
 
