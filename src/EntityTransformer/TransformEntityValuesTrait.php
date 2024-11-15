@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping\MappingException as ORMMappingException;
 use Doctrine\Persistence\Mapping\MappingException as PersistenceMappingException;
 use Doctrine\Persistence\ObjectManager;
 use Softspring\CmsBundle\Model\RouteInterface;
+use Softspring\TranslatableBundle\Model\Translation;
 
 trait TransformEntityValuesTrait
 {
@@ -22,6 +23,8 @@ trait TransformEntityValuesTrait
                     $entities[] = $route;
                 }
             }
+        } elseif ($value instanceof Translation) {
+            return $value->__toArray();
         } elseif (is_object($value)) {
             try {
                 $entities[] = $value;
@@ -44,6 +47,8 @@ trait TransformEntityValuesTrait
                 $repo = $objectManager->getRepository($value['_entity_class']);
 
                 return $repo->findOneBy($value['_entity_id']);
+            } elseif (isset($value['_trans_id'])) {
+                return Translation::createFromArray($value);
             } else {
                 foreach ($value as $key => $value2) {
                     $value[$key] = $this->untransformEntityValues($value2, $objectManager);

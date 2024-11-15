@@ -5,12 +5,12 @@ namespace Softspring\CmsBundle\Form\Type;
 use Softspring\CmsBundle\Form\DynamicFormTrait;
 use Softspring\CmsBundle\Translator\TranslatableContext;
 use Softspring\Component\DynamicFormType\Form\Resolver\TypeResolverInterface;
-use Softspring\TranslatableBundle\Form\Type\TranslatableType as BaseTranslatableType;
+use Softspring\TranslatableBundle\Form\Type\TranslationType as BaseTranslationType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class TranslatableType extends AbstractType
+class TranslationType extends AbstractType
 {
     use DynamicFormTrait;
 
@@ -20,16 +20,18 @@ class TranslatableType extends AbstractType
 
     public function getParent(): string
     {
-        return BaseTranslatableType::class;
+        return BaseTranslationType::class;
     }
 
     public function getBlockPrefix(): string
     {
-        return 'cms_translatable';
+        return 'cms_translation';
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
+//        parent::configureOptions($resolver);
+
         $resolver->setDefaults([
             'default_language' => $this->translatableContext->getDefaultLocale(),
             'languages' => $this->translatableContext->getLocales(),
