@@ -1,0 +1,11 @@
+{% use '@SfsTranslatable/form/translatable_type.bootstrap5.html.twig' %}
+
+{% block translatable_element_widget %}
+    {% if attr['data-edit-content-input']|default(false) %}
+        {% set attr = attr|merge({'data-edit-content-input': attr['data-edit-content-input']~'.'~form.vars.label|lower}) -%}
+    {% endif %}
+    {% if attr['data-media-preview-input']|default(false) %}
+        {% set attr = attr|merge({'data-media-preview-input': attr['data-media-preview-input']~'.'~form.vars.label|lower}) -%}
+    {% endif %}
+    {{ parent() }}
+{% endblock %}

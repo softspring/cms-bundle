@@ -122,9 +122,9 @@ class Content implements ConfigurationInterface
 
                 ->arrayNode('version_seo')
                     ->defaultValue([
-                        'metaTitle' => ['type' => 'translatable'],
-                        'metaDescription' => ['type' => 'translatable'],
-                        'metaKeywords' => ['type' => 'translatable'],
+                        'metaTitle' => ['type' => 'translation'],
+                        'metaDescription' => ['type' => 'translation'],
+                        'metaKeywords' => ['type' => 'translation'],
                     ])
                     ->useAttributeAsKey('key')
                     ->arrayPrototype()

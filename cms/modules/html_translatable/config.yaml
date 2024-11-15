@@ -15,7 +15,7 @@ module:
                 type: 'class'
 
             code:
-                type: 'translatable'
+                type: 'translation'
                 type_options:
                     type: 'html'
                     type_options:
