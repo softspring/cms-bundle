@@ -21,6 +21,7 @@ services:
             $debug: '%kernel.debug%'
             $defaultRestrictPatterns: '%sfs_cms.form_type.symfony_route.default_restrict_patterns%'
             $saveCompiled: '%sfs_cms.content.save_compiled%'
+            $autoCompile: '%sfs_cms.content.autocompile%'
             $prefixCompiled: '%sfs_cms.content.prefix_compiled%'
             $entityDuplicators: !tagged_iterator { tag: sfs_cms.content_entity_duplicator }
             $contentCacheType: '%sfs_cms.content.cache.type%'

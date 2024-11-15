@@ -59,6 +59,7 @@ class ContentVersionManager implements ContentVersionManagerInterface
 
     /**
      * @throws CompileException
+     * @throws \Exception
      */
     public function getCompiledContent(ContentVersionInterface $contentVersion, Request $request, bool $throwExceptionOnCompileError = true): CompiledDataInterface
     {
@@ -71,7 +72,8 @@ class ContentVersionManager implements ContentVersionManagerInterface
         ]);
 
         if (!$compiledData?->getDataPart('content')) {
-            return $this->contentCompiler->compileRequest($contentVersion, $request, $compiledData?->getDataPart('modules'), $throwExceptionOnCompileError);
+            $compiledData = $this->contentCompiler->compileRequest($contentVersion, $request, $compiledData?->getDataPart('modules'), $throwExceptionOnCompileError);
+            $this->saveEntity($contentVersion);
         }
 
         return $compiledData;

@@ -109,7 +109,9 @@ class ContentVersionCompiler
             $compiledData->setErrors(true);
 
             // store error list
-            $compiledData->setDataPart('errors', $exception->getRenderErrorList()->getErrorsAsArray());
+            if ($exception instanceof RenderErrorException) {
+                $compiledData->setDataPart('errors', $exception->getRenderErrorList()->getErrorsAsArray());
+            }
         }
 
         return $compiledData;

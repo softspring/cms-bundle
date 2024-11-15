@@ -19,5 +19,5 @@ interface ContentEntityTransformerInterface extends EntityTransformerInterface
 
     public function import(array $data, ReferencesRepository $referencesRepository, array $options = []): ContentInterface;
 
-    public function importVersion(ContentInterface $content, string $layout, array $data, ReferencesRepository $referencesRepository, array $options = []): ContentVersionInterface;
+    public function importVersion(ContentInterface $content, string $layout, array $data, array $seo, ReferencesRepository $referencesRepository, array $options = []): ContentVersionInterface;
 }

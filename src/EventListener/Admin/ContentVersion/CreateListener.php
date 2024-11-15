@@ -195,6 +195,8 @@ class CreateListener extends AbstractContentVersionListener
             $request->attributes->set('_content_version_alert', ['error', 'admin_'.$contentConfig['_id'].'.content.render_error', ['%exception%' => $exception->getMessage()]]);
         } elseif ($exception instanceof CompileException) {
             $request->attributes->set('_content_version_alert', ['error', 'admin_'.$contentConfig['_id'].'.content.render_error', ['%exception%' => $exception->getMessage()]]);
+        } else {
+            $request->attributes->set('_content_version_alert', ['error', 'admin_'.$contentConfig['_id'].'.content.render_error', ['%exception%' => $exception->getMessage()]]);
         }
     }
 

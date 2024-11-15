@@ -2,16 +2,29 @@
 
 namespace Softspring\CmsBundle\EventListener\Admin\ContentVersion;
 
+use Softspring\CmsBundle\Compiler\ContentVersionCompiler;
+use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Manager\ContentManagerInterface;
+use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
+use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
+use Softspring\CmsBundle\Request\FlashNotifier;
 use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\Component\CrudlController\Event\ApplyEvent;
 use Softspring\Component\CrudlController\Event\FailureEvent;
 use Softspring\Component\CrudlController\Event\SuccessEvent;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class PublishListener extends AbstractContentVersionListener
 {
     protected const ACTION_NAME = 'version_publish';
+
+    public function __construct(ContentManagerInterface $contentManager, ContentVersionManagerInterface $contentVersionManager, RouteManagerInterface $routeManager, CmsConfig $cmsConfig, RouterInterface $router, FlashNotifier $flashNotifier, AuthorizationCheckerInterface $authorizationChecker, protected ContentVersionCompiler $contentVersionCompiler)
+    {
+        parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
+    }
 
     public static function getSubscribedEvents(): array
     {
@@ -58,6 +71,8 @@ class PublishListener extends AbstractContentVersionListener
         $version = $event->getEntity();
         /** @var ContentInterface $content */
         $content = $event->getRequest()->attributes->get('content');
+
+        $this->contentVersionCompiler->compileAll($version, true);
 
         $content->setPublishedVersion($version);
         $this->contentManager->saveEntity($content);

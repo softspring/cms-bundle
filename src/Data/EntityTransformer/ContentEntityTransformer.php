@@ -74,6 +74,7 @@ abstract class ContentEntityTransformer implements ContentEntityTransformerInter
 
         if ($contentVersion) {
             $versions[] = [
+                'seo' => $this->dataTransformer->export($contentVersion->getSeo()),
                 'layout' => $contentVersion->getLayout(),
                 'data' => $this->dataTransformer->export($contentVersion->getData(), $files),
                 'version_number' => $contentVersion->getVersionNumber(),
@@ -137,14 +138,14 @@ abstract class ContentEntityTransformer implements ContentEntityTransformerInter
 
         $content->setExtraData($contentData['extra']);
 
-        if (isset($contentData['seo'])) {
-            $content->setSeo($contentData['seo']);
+        if (isset($contentData['indexing'])) {
+            $content->setSeo($contentData['indexing']);
         }
         $content->setIndexing($contentData['indexing'] ?? []);
 
         foreach ($contentData['versions'] as $version) {
             if ($version['layout'] && $version['data']) {
-                $version = $this->importVersion($content, $version['layout'], $version['data'], $referencesRepository, $options);
+                $version = $this->importVersion($content, $version['layout'], $version['data'], $version['seo'], $referencesRepository, $options);
                 if ($options['auto_publish_version'] ?? false) {
                     $content->setPublishedVersion($version);
                 }
@@ -154,11 +155,12 @@ abstract class ContentEntityTransformer implements ContentEntityTransformerInter
         return $content;
     }
 
-    public function importVersion(ContentInterface $content, string $layout, array $data, ReferencesRepository $referencesRepository, array $options = []): ContentVersionInterface
+    public function importVersion(ContentInterface $content, string $layout, array $data, array $seo, ReferencesRepository $referencesRepository, array $options = []): ContentVersionInterface
     {
         $version = $this->contentManager->createVersion($content, null, $options['version_origin'] ?? ContentVersionInterface::ORIGIN_UNKNOWN);
         $version->setLayout($layout);
         $version->setData($this->dataTransformer->import($data, $referencesRepository, $options));
+        $version->setSeo($this->dataTransformer->import($seo, $referencesRepository, $options));
 
         // TODO set version number and other metadata fields
 

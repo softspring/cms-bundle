@@ -29,15 +29,15 @@ class ContentController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        //        if ('last_modified' === $this->contentCacheType) {
-        //            $response->setEtag(md5($content->getId().$content->getLastModified()?->getTimestamp().$this->contentVersionCompiler->getCompileKeyFromRequest($publishedVersion, $request)));
-        //            $response->setLastModified($content->getLastModified());
-        //            // Set response as public. Otherwise it will be private by default.
-        //            $response->setPublic();
-        //            if ($response->isNotModified($request)) {
-        //                return $response;
-        //            }
-        //        }
+        if ('last_modified' === $this->contentCacheType) {
+            $response->setEtag(md5($content->getId().$content->getLastModified()?->getTimestamp().$this->contentVersionCompiler->getCompileKeyFromRequest($publishedVersion, $request)));
+            $response->setLastModified($content->getLastModified());
+            // Set response as public. Otherwise it will be private by default.
+            $response->setPublic();
+            if ($response->isNotModified($request)) {
+                return $response;
+            }
+        }
 
         $pageContent = $this->contentVersionManager->getCompiledContent($publishedVersion, $request);
 

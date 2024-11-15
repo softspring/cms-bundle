@@ -22,10 +22,16 @@ class ContentVersionTransformer implements TransformerInterface
 
         $entities = [];
         $data = $contentVersion->getData();
-        foreach ($data as $layout => $modules) {
+        foreach ($data??[] as $layout => $modules) {
             $this->transformLayout($layout, $modules, $data, $em, $entities);
         }
         $contentVersion->setData($data);
+
+        $seo = $contentVersion->getSeo();
+        foreach ($seo??[] as $field => $value) {
+            $seo[$field] = $this->transformEntityValues($value, $em, $entities);
+        }
+        $contentVersion->setSeo($seo);
 
         // add media references
         foreach ($entities as $entity) {
@@ -73,17 +79,23 @@ class ContentVersionTransformer implements TransformerInterface
         /** @var ContentVersion $contentVersion */
         $contentVersion = $this->getContentVersion($entity);
 
-        if (!$contentVersion->getData()) {
-            return;
+        if ($contentVersion->getData()) {
+            $contentVersion->_setDataCallback(function ($data) use ($em) {
+                foreach ($data as $layout => $modules) {
+                    $this->untransformLayout($layout, $modules, $data, $em);
+                }
+
+                return $data;
+            });
         }
 
-        $contentVersion->_setDataCallback(function ($data) use ($em) {
-            foreach ($data as $layout => $modules) {
-                $this->untransformLayout($layout, $modules, $data, $em);
+        if ($contentVersion->getSeo()) {
+            $seo = $contentVersion->getSeo();
+            foreach ($seo as $field => $value) {
+                $seo[$field] = $this->untransformEntityValues($value, $em);
             }
-
-            return $data;
-        });
+            $contentVersion->setSeo($seo);
+        }
     }
 
     protected function untransformLayout(string $layout, array $modules, array &$data, ObjectManager $em): void
@@ -113,6 +125,9 @@ class ContentVersionTransformer implements TransformerInterface
         }
     }
 
+    /**
+     * @throws UnsupportedException
+     */
     protected function getContentVersion($entity): ContentVersionInterface
     {
         if (!$entity instanceof ContentVersionInterface) {
