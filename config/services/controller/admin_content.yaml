@@ -7,8 +7,8 @@ services:
             $em: '@sfs_cms.entity_manager'
             $contentCacheType: '%sfs_cms.content.cache.type%'
 
-    Softspring\CmsBundle\EventListener\Admin\Content\:
-        resource: '../../src/EventListener/Admin/Content/*'
+    Softspring\CmsBundle\Admin\ActionListener\Content\:
+        resource: '../../src/Admin/ActionListener/Content/*'
 
     Softspring\CmsBundle\Form\Admin\Content\:
         resource: '../../../src/Form/Admin/Content/*'

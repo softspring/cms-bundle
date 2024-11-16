@@ -1,0 +1,41 @@
+<?php
+
+namespace Softspring\CmsBundle\Doctrine\EventListener;
+
+use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
+use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\MappingException;
+use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Entity\Content;
+
+/**
+ * This class is responsible for adding the discriminator map to the Content entity to allow the use of inheritance
+ * with the content type entities.
+ */
+class ContentDiscriminatorMapListener
+{
+    protected CmsConfig $cmsConfig;
+
+    public function __construct(CmsConfig $cmsConfig)
+    {
+        $this->cmsConfig = $cmsConfig;
+    }
+
+    /**
+     * @throws MappingException
+     */
+    public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs): void
+    {
+        /** @var ClassMetadata $metadata */
+        $metadata = $eventArgs->getClassMetadata();
+        $class = $metadata->getReflectionClass();
+
+        if (Content::class !== $class->getName()) {
+            return;
+        }
+
+        foreach ($this->cmsConfig->getContentMappings() as $discriminator => $class) {
+            $metadata->addDiscriminatorMapClass($discriminator, $class);
+        }
+    }
+}

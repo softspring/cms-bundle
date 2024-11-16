@@ -96,9 +96,9 @@ class ContentTest extends TestCase
                 ]]]],
             ],
             'version_seo' => [
-                'metaTitle' => ['type' => 'translatable'],
-                'metaDescription' => ['type' => 'translatable'],
-                'metaKeywords' => ['type' => 'translatable'],
+                'metaTitle' => ['type' => 'translation'],
+                'metaDescription' => ['type' => 'translation'],
+                'metaKeywords' => ['type' => 'translation'],
             ],
             'admin' => [
                 'list' => [

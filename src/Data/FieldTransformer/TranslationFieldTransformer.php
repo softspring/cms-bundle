@@ -21,7 +21,7 @@ class TranslationFieldTransformer implements FieldTransformerInterface
     }
 
     /**
-     * @param Translation $data
+     * @param  Translation $data
      * @return array
      */
     public function export(mixed $data, &$files = []): mixed
@@ -35,7 +35,7 @@ class TranslationFieldTransformer implements FieldTransformerInterface
     }
 
     /**
-     * @param array $data
+     * @param  array       $data
      * @return Translation
      */
     public function import(mixed $data, ReferencesRepository $referencesRepository, array $options = []): mixed

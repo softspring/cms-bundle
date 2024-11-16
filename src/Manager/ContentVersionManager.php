@@ -5,13 +5,13 @@ namespace Softspring\CmsBundle\Manager;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Softspring\CmsBundle\Compiler\CompileException;
 use Softspring\CmsBundle\Compiler\ContentVersionCompiler;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Model\CompiledDataInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
-use Softspring\CmsBundle\Render\Error\RenderErrorException;
 use Softspring\Component\CrudlController\Manager\CrudlEntityManagerTrait;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -59,7 +59,7 @@ class ContentVersionManager implements ContentVersionManagerInterface
 
     /**
      * @throws CompileException
-     * @throws \Exception
+     * @throws Exception
      */
     public function getCompiledContent(ContentVersionInterface $contentVersion, Request $request, bool $throwExceptionOnCompileError = true): CompiledDataInterface
     {

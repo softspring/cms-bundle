@@ -118,15 +118,15 @@ services:
         tags:
             - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: 'Softspring\CmsBundle\Entity\ContentVersion',  priority: 11 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
 
-    Softspring\CmsBundle\EntityListener\ContentDiscriminatorMapListener:
+    Softspring\CmsBundle\Doctrine\EventListener\ContentDiscriminatorMapListener:
         tags:
             - { name: 'doctrine.event_listener', event: 'loadClassMetadata' }
 
-    Softspring\CmsBundle\EventListener\OverrideDoctrineClassSuperclassListener:
+    Softspring\CmsBundle\Doctrine\EventListener\OverrideDoctrineClassSuperclassListener:
         arguments:
             $superclassList: '%sfs_cms.convert_superclass_list%'
         tags:
-            - { name: doctrine.event_listener, event: loadClassMetadata, priority: 500 }
+            - { name: 'doctrine.event_listener', event: 'loadClassMetadata', priority: 500 }
 
     Softspring\CmsBundle\Security\Voter\ContentVersionDeleteVoter:
         tags: ['security.voter']

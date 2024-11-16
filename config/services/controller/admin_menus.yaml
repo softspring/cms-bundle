@@ -17,14 +17,14 @@ services:
 #            $defaultLocale: '%kernel.default_locale%'
 
 
-    Softspring\CmsBundle\EventListener\Admin\Menu\:
-        resource: '../../src/EventListener/Admin/Menu/*'
+    Softspring\CmsBundle\Admin\ActionListener\Menu\:
+        resource: '../../src/Admin/ActionListener/Menu/*'
 
     Softspring\CmsBundle\Form\Admin\Menu\:
         resource: '../../../src/Form/Admin/Menu/Menu*'
     
-    #    Softspring\CmsBundle\EventListener\Admin\:
-    #        resource: '../../../src/EventListener/Admin/Menu*'
+    #    Softspring\CmsBundle\Admin\ActionListener\:
+    #        resource: '../../../src/Admin/ActionListener/Menu*'
 
     Softspring\CmsBundle\Manager\MenuManagerInterface:
         class: Softspring\CmsBundle\Manager\MenuManager

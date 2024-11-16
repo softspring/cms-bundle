@@ -16,19 +16,15 @@ class ContentVersionTransformer implements TransformerInterface
     {
         $contentVersion = $this->getContentVersion($entity);
 
-        if (!$contentVersion->getData()) {
-            return;
-        }
-
         $entities = [];
         $data = $contentVersion->getData();
-        foreach ($data??[] as $layout => $modules) {
+        foreach ($data ?? [] as $layout => $modules) {
             $this->transformLayout($layout, $modules, $data, $em, $entities);
         }
         $contentVersion->setData($data);
 
         $seo = $contentVersion->getSeo();
-        foreach ($seo??[] as $field => $value) {
+        foreach ($seo ?? [] as $field => $value) {
             $seo[$field] = $this->transformEntityValues($value, $em, $entities);
         }
         $contentVersion->setSeo($seo);

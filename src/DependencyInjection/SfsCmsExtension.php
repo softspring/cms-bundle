@@ -106,7 +106,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $loader->load('entity_transformer.yaml');
 
         if (!class_exists(SfsDynamicFormTypeBundle::class)) {
-            /** @deprecated This will be removed soon, use SfsDynamicFormTypeBundle instead */
+            /* @deprecated This will be removed soon, use SfsDynamicFormTypeBundle instead */
             $loader->load('dynamic_form_type.yaml');
         }
         $adminEnabled && $loader->load('controller/admin_blocks.yaml');

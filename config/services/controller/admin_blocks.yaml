@@ -15,8 +15,8 @@ services:
             $em: '@sfs_cms.entity_manager'
             $blockTypes: [] # '%sfs_cms.block.types%'
 
-    Softspring\CmsBundle\EventListener\Admin\Block\:
-        resource: '../../src/EventListener/Admin/Block/*'
+    Softspring\CmsBundle\Admin\ActionListener\Block\:
+        resource: '../../src/Admin/ActionListener/Block/*'
 
     Softspring\CmsBundle\Form\Admin\Block\:
         resource: '../../../src/Form/Admin/Block/Block*'

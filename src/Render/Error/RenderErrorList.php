@@ -51,7 +51,7 @@ class RenderErrorList
                     'line' => $error['exception']->getLine(),
                     'trace' => $error['exception']->getTraceAsString(),
                 ],
-                'contextData' => $error['contextData']
+                'contextData' => $error['contextData'],
             ];
         }, $this->getErrors());
     }

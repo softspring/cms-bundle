@@ -30,7 +30,7 @@ class TranslationType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-//        parent::configureOptions($resolver);
+        //        parent::configureOptions($resolver);
 
         $resolver->setDefaults([
             'default_language' => $this->translatableContext->getDefaultLocale(),

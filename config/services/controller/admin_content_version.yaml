@@ -6,8 +6,8 @@ services:
         bind:
             $em: '@sfs_cms.entity_manager'
 
-    Softspring\CmsBundle\EventListener\Admin\ContentVersion\:
-        resource: '../../src/EventListener/Admin/ContentVersion/*'
+    Softspring\CmsBundle\Admin\ActionListener\ContentVersion\:
+        resource: '../../src/Admin/ActionListener/ContentVersion/*'
         bind:
             $recompileEnabled: '%sfs_cms.content.recompile_enabled%'
 
