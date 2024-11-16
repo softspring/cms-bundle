@@ -250,7 +250,7 @@ abstract class Content implements ContentInterface
 
     public function getLocales(): ?array
     {
-        return $this->locales;
+        return array_unique(array_merge([$this->defaultLocale], $this->locales ?? []));
     }
 
     public function setLocales(?array $locales): void
@@ -261,7 +261,7 @@ abstract class Content implements ContentInterface
 
     public function addLocale(string $locale): void
     {
-        $this->locales = array_unique(array_merge($this->locales ?? [], [$locale]));
+        $this->locales = array_unique(array_merge($this->getLocales(), [$locale]));
     }
 
     public function getLastModified(): ?DateTime
