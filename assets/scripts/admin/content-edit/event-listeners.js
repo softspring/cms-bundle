@@ -23,7 +23,7 @@ function _addCmsEditEventListener(eventName, listener, moduleName = null, target
         }
 
         let preview = event.target.closest('.cms-module-edit').querySelector('.module-preview');
-        let form = event.target.closest('.cms-module-edit').querySelector('.cms-module-form');
+        let form = event.target.closest('.cms-module-edit').querySelector(':scope > .cms-module-form');
 
         return listener(event.target, module, preview, form, event);
     });
