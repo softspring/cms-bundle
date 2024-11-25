@@ -9,9 +9,9 @@
     <li class="breadcrumb-item"><a
             href="{{ url('sfs_cms_admin_content_'~content_type~'_list') }}">{{ ('admin_'~content_type~'.list.breadcrumb')|trans }}</a>
     </li>
-    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content_type~'_details', {'content':entity}) }}">{{ ('admin_'~content_type~'.read.breadcrumb')|trans({'%name%': entity.name}) }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content_type~'_details', {'content':entity.id}) }}">{{ ('admin_'~content_type~'.read.breadcrumb')|trans({'%name%': entity.name}) }}</a></li>
     <li class="breadcrumb-item"><a
-            href="{{ url('sfs_cms_admin_content_'~content_type~'_versions', {'content':entity}) }}">{{ ('admin_'~content_type~'.versions.breadcrumb')|trans({'%name%':entity.name}) }}</a>
+            href="{{ url('sfs_cms_admin_content_'~content_type~'_versions', {'content':entity.id}) }}">{{ ('admin_'~content_type~'.versions.breadcrumb')|trans({'%name%':entity.name}) }}</a>
     </li>
     <li class="breadcrumb-item active"
         aria-current="content">{{ ('admin_'~content_type~'.version_info.breadcrumb')|trans({'%name%':entity.name, '%versionNumber%': version_entity.versionNumber}) }}</li>
@@ -19,13 +19,13 @@
 
 {% block content %}
     {% include ['@content/'~content_type~'/admin/_content_title.html.twig', '@SfsCms/admin/content/_content_title.html.twig']  with {'current':'version_info', 'content_type':content_type, 'content_entity':entity, 'version_entity': version_entity} %}
-    {% include ['@content/'~content_type~'/admin/_content_tabs.html.twig', '@SfsCms/admin/content/_content_tabs.html.twig']  with {'current':'versions', 'entity':entity} %}
+    {% include ['@content/'~content_type~'/admin/_content_tabs.html.twig', '@SfsCms/admin/content/_content_tabs.html.twig']  with {'current':'versions', 'content_entity':entity} %}
 
     <div class="container-fluid">
         <div class="row">
             <div class="col-4">
                 <a class="float-start me-3"
-                   href="{{ url('sfs_cms_admin_content_'~content_type~'_versions', {'content':entity}) }}"><i
+                   href="{{ url('sfs_cms_admin_content_'~content_type~'_versions', {'content':entity.id}) }}"><i
                         class="bi bi-arrow-return-left"></i></a>
                 <h2 class="h4">{{ ('admin_'~content_type~'.version_info.title')|trans({'%name%':entity.name, '%versionNumber%': version_entity.versionNumber}) }}</h2>
             </div>
@@ -34,19 +34,19 @@
                     {% block actions %}
                         {% if not content_config.admin.version_create.is_granted or is_granted(content_config.admin.version_create.is_granted, version) %}
                             <a class="btn btn-outline-secondary"
-                               href="{{ url('sfs_cms_admin_content_'~content_type~'_content_from_version', {'content':entity, 'prevVersion':version}) }}">{{ ('admin_'~content_type~'.versions.actions.edit.link')|trans }}
+                               href="{{ url('sfs_cms_admin_content_'~content_type~'_content_from_version', {'content':entity.id, 'prevVersion':version.id}) }}">{{ ('admin_'~content_type~'.versions.actions.edit.link')|trans }}
                                 <span class="bi bi-pencil"></span></a>
                         {% endif %}
 
                         {% if not content_config.admin.preview.is_granted or is_granted(content_config.admin.preview.is_granted, version) %}
                             <a class="btn btn-outline-secondary"
-                               href="{{ url('sfs_cms_admin_content_'~content_type~'_preview', {'content':entity, 'version':version}) }}">{{ ('admin_'~content_type~'.versions.actions.preview.link')|trans }}
+                               href="{{ url('sfs_cms_admin_content_'~content_type~'_preview', {'content':entity.id, 'version':version.id}) }}">{{ ('admin_'~content_type~'.versions.actions.preview.link')|trans }}
                                 <span class="bi bi-eye"></span></a>
                         {% endif %}
 
                         {% if not content_config.admin.export_version.is_granted or is_granted(content_config.admin.export_version.is_granted, version) %}
                             <a class="btn btn-outline-secondary"
-                               href="{{ url('sfs_cms_admin_content_'~content_type~'_export_version', {'content':entity, 'version':version}) }}">{{ ('admin_'~content_type~'.versions.actions.export.link')|trans }}
+                               href="{{ url('sfs_cms_admin_content_'~content_type~'_export_version', {'content':entity.id, 'version':version.id}) }}">{{ ('admin_'~content_type~'.versions.actions.export.link')|trans }}
                                 <span class="bi bi-box-arrow-down"></span></a>
                         {% endif %}
 
@@ -61,7 +61,7 @@
                                         <li><a class="dropdown-item"
                                                data-confirm-modal="{{ ('admin_'~content_type~'.version_publish.confirm_message_raw')|trans|base64_encode }}"
                                                data-confirm-modal-title="{{ ('admin_'~content_type~'.version_publish.confirm_message_title')|trans }}"
-                                               href="{{ url('sfs_cms_admin_content_'~content_type~'_publish_version', {'content':entity, 'version':version, 'back': 'version_info'}) }}">{{ ('admin_'~content_type~'.versions.actions.publish.link')|trans }}</a>
+                                               href="{{ url('sfs_cms_admin_content_'~content_type~'_publish_version', {'content':entity.id, 'version':version.id, 'back': 'version_info'}) }}">{{ ('admin_'~content_type~'.versions.actions.publish.link')|trans }}</a>
                                         </li>
                                     {% endif %}
                                 {% endif %}
@@ -70,7 +70,7 @@
                                 <li>
                                     {% if not content_config.admin.version_translations.is_granted or is_granted(content_config.admin.version_translations.is_granted, content_entity) %}
                                         <a class="dropdown-item"
-                                           href="{{ url('sfs_cms_admin_content_'~content_type~'_translations', {'content':content_entity, 'version': version_entity}) }}">{{ ('admin_'~content_type~'.tabs_menu.translations')|trans }}</a>
+                                           href="{{ url('sfs_cms_admin_content_'~content_type~'_translations', {'content':content_entity.id, 'version': version_entity.id}) }}">{{ ('admin_'~content_type~'.tabs_menu.translations')|trans }}</a>
                                     {% else %}
                                         <a class="dropdown-item disabled">{{ ('admin_'~content_type~'.tabs_menu.translations')|trans }}</a>
                                     {% endif %}
@@ -83,7 +83,7 @@
                                 <li>
                                     {% if not content_config.admin.version_delete.is_granted or is_granted(content_config.admin.version_delete.is_granted, version) %}
                                         <a class="dropdown-item text-danger"
-                                           href="{{ url('sfs_cms_admin_content_'~content_type~'_delete_version', {'content':entity, 'version':version, 'back': 'versions'}) }}">{{ ('admin_'~content_type~'.versions.actions.delete.link')|trans }}
+                                           href="{{ url('sfs_cms_admin_content_'~content_type~'_delete_version', {'content':entity.id, 'version':version.id, 'back': 'versions'}) }}">{{ ('admin_'~content_type~'.versions.actions.delete.link')|trans }}
                                         </a>
                                     {% else %}
                                         <a class="dropdown-item text-danger disabled" href="#">{{ ('admin_'~content_type~'.versions.actions.delete.link')|trans }}</a>

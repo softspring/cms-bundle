@@ -6,7 +6,7 @@
     {% block title %}
         {% if entity.publishedVersion %}
             {% if not content_config.admin.unpublish.is_granted or is_granted(content_config.admin.unpublish.is_granted, entity) %}
-                <a class="btn btn-sm btn-outline-secondary float-end"  href="{{ url('sfs_cms_admin_content_'~content_type~'_unpublish', {'content':entity}) }}"
+                <a class="btn btn-sm btn-outline-secondary float-end"  href="{{ url('sfs_cms_admin_content_'~content_type~'_unpublish', {'content':entity.id}) }}"
                    data-confirm-modal="{{ ('admin_'~content_type~'.unpublish.confirm_message_raw')|trans|base64_encode }}"
                    data-confirm-modal-title="{{ ('admin_'~content_type~'.unpublish.confirm_message_title')|trans }}"
                    data-confirm-modal-confirm-button-type="danger"
@@ -28,7 +28,7 @@
             <dd class="fw-bold">
                 {{ (content_type~'.status.'~entity.status)|trans }}
                 {% if entity.publishedVersion %}
-                    (<a href="{{ url('sfs_cms_admin_content_'~content_type~'_version_info', {'content':entity, 'version':entity.publishedVersion}) }}">v{{ entity.publishedVersion.versionNumber }}</a>)
+                    (<a href="{{ url('sfs_cms_admin_content_'~content_type~'_version_info', {'content':entity.id, 'version':entity.publishedVersion.id}) }}">v{{ entity.publishedVersion.versionNumber }}</a>)
                 {% endif %}
             </dd>
             {% if entity.publishedVersion %}
