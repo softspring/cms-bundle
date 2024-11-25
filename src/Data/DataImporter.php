@@ -123,6 +123,6 @@ class DataImporter extends AbstractDataImportExport
             }
         }
 
-        return $transformer->importVersion($content, $versionData['layout'], $versionData['data'] ?? [], $versionData['seo'] ?? [],$this->referenceRepository, $options);
+        return $transformer->importVersion($content, $versionData['layout'], $versionData['data'] ?? [], $versionData['seo'] ?? [], $this->referenceRepository, $options);
     }
 }
