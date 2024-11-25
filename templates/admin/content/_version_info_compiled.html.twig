@@ -76,11 +76,7 @@
                         <div class="accordion-body">
                             {% if compiled is not iterable %}
                                 {{ tools.drawEsiCalls(compiled.dataPart('content')) }}
-                                <pre class="overflow-auto" style="max-height: 600px">{% apply spaceless %}
-                                    <code class="text-muted">{{ compiled.dataPart('content') }}</code>
-                                    {#<code class="text-danger">{{ compiled.dataPart('errors')|default(false) }}</code>#}
-                                    <code class="text-danger">{{ compiled.dataPart('errors')|json_encode(128) }}</code>
-                                {% endapply %}</pre>
+                                <pre class="overflow-auto" style="max-height: 600px"><code class="text-muted">{{ compiled.dataPart('content') }}</code>{#<code class="text-danger">{{ compiled.dataPart('errors')|default(false) }}</code>#}<code class="text-danger">{{ compiled.dataPart('errors')|json_encode(128) }}</code></pre>
                             {% endif %}
                         </div>
                     </div>
