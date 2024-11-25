@@ -13,13 +13,13 @@
 {% block breadcrums_content %}
     {{ parent() }}
     <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content_type~'_list') }}">{{ ('admin_'~content_type~'.list.breadcrumb')|trans }}</a></li>
-    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content_type~'_details', {'content':entity}) }}">{{ ('admin_'~content_type~'.read.breadcrumb')|trans({'%name%': entity.name}) }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content_type~'_details', {'content':entity.id}) }}">{{ ('admin_'~content_type~'.read.breadcrumb')|trans({'%name%': entity.name}) }}</a></li>
     <li class="breadcrumb-item active" aria-current="content">{{ ('admin_'~content_type~'.delete.breadcrumb')|trans({'%name%':entity.name}) }}</li>
 {% endblock breadcrums_content %}
 
 {% block content %}
     {% include ['@content/'~content_type~'/admin/_content_title.html.twig', '@SfsCms/admin/content/_content_title.html.twig']  with {'current':'delete', 'content_type':content_type, 'content_entity':entity} %}
-    {% include ['@content/'~content_type~'/admin/_content_tabs.html.twig', '@SfsCms/admin/content/_content_tabs.html.twig']  with {'current':'delete', 'content':content, 'entity':entity} %}
+    {% include ['@content/'~content_type~'/admin/_content_tabs.html.twig', '@SfsCms/admin/content/_content_tabs.html.twig']  with {'current':'delete', 'content':content, 'content_entity':entity} %}
 
     {{ form_start(form) }}
 
@@ -32,7 +32,7 @@
                     <p>{{ ('admin_'~content_type~'.delete.offer_backup')|trans }}</p>
 
                     <div class="mb-4">
-                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_export_version', {'content':entity, 'version':entity.publishedVersion|default(entity.lastVersion)}) }}" class="btn btn-primary">
+                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_export_version', {'content':entity.id, 'version':entity.publishedVersion.id|default(entity.lastVersion.id)}) }}" class="btn btn-primary">
                         {{ ('admin_'~content_type~'.delete.actions.export.button')|trans }}</a>
                     </div>
                 {% endif %}
@@ -42,7 +42,7 @@
                 {{ form_rest(form) }}
 
                 <div class="d-flex justify-content-end align-items-center">
-                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_details', {'content':entity}) }}" class="btn btn-outline-secondary">{{ ('admin_'~content_type~'.delete.actions.cancel.button')|trans }}</a>
+                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_details', {'content':entity.id}) }}" class="btn btn-outline-secondary">{{ ('admin_'~content_type~'.delete.actions.cancel.button')|trans }}</a>
                     <input type="submit" value="{{ ('admin_'~content_type~'.delete.actions.delete.button')|trans }}" class="btn btn-danger ms-3" />
                 </div>
             </div>

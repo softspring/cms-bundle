@@ -7,7 +7,7 @@
         <ul>
             {% for media in version_entity.medias %}
                 <li>
-                    <a href="{{ url('sfs_media_admin_medias_read', {'media': media}) }}">{{ media.name }}</a>
+                    <a href="{{ url('sfs_media_admin_medias_read', {'media': media.id}) }}">{{ media.name }}</a>
                 </li>
             {% endfor %}
         </ul>

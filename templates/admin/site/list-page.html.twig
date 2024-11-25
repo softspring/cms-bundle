@@ -7,7 +7,7 @@
         <td class="p-3">{{ site.config.locales|join(', ') }}</td>
         <td class="p-3">{{ site.canonicalHost }}</td>
         <td class="p-3 text-end">
-            <a href="{{ url('sfs_cms_admin_sites_read', {'site':site}) }}" class="ms-2 text-nowrap">{{ 'admin_sites.list.actions.details.link'|trans }} <span class="bi bi-eye"></span></a>
+            <a href="{{ url('sfs_cms_admin_sites_read', {'site':site.id}) }}" class="ms-2 text-nowrap">{{ 'admin_sites.list.actions.details.link'|trans }} <span class="bi bi-eye"></span></a>
         </td>
     </tr>
 {% endfor %}

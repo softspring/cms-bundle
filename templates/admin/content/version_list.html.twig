@@ -7,26 +7,26 @@
 {% block breadcrums_content %}
     {{ parent() }}
     <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content_type~'_list') }}">{{ ('admin_'~content_type~'.list.breadcrumb')|trans }}</a></li>
-    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content_type~'_details', {'content':entity}) }}">{{ ('admin_'~content_type~'.read.breadcrumb')|trans({'%name%': entity.name}) }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content_type~'_details', {'content':entity.id}) }}">{{ ('admin_'~content_type~'.read.breadcrumb')|trans({'%name%': entity.name}) }}</a></li>
     <li class="breadcrumb-item active" aria-current="content">{{ ('admin_'~content_type~'.versions.breadcrumb')|trans({'%name%':entity.name}) }}</li>
 {% endblock breadcrums_content %}
 
 {% block content %}
     {% include ['@content/'~content_type~'/admin/_content_title.html.twig', '@SfsCms/admin/content/_content_title.html.twig']  with {'current':'versions', 'content_type':content_type, 'content_entity':entity} %}
-    {% include ['@content/'~content_type~'/admin/_content_tabs.html.twig', '@SfsCms/admin/content/_content_tabs.html.twig']  with {'current':'versions', 'content_type':content_type, 'entity':entity} %}
+    {% include ['@content/'~content_type~'/admin/_content_tabs.html.twig', '@SfsCms/admin/content/_content_tabs.html.twig']  with {'current':'versions', 'content_type':content_type, 'content_entity':entity} %}
 
     <div class="container-fluid mb-3">
         <div class="row">
             <div class="col">
                 <div class="float-end">
                     {% if not content_config.admin.version_import.is_granted or is_granted(content_config.admin.version_import.is_granted, entity) %}
-                        <a class="btn btn-outline-secondary" href="{{ url('sfs_cms_admin_content_'~content_type~'_import_version', {'content':entity, 'back':'versions'}) }}">{{ ('admin_'~content_type~'.versions.actions.import_version.link')|trans }}</a>
+                        <a class="btn btn-outline-secondary" href="{{ url('sfs_cms_admin_content_'~content_type~'_import_version', {'content':entity.id, 'back':'versions'}) }}">{{ ('admin_'~content_type~'.versions.actions.import_version.link')|trans }}</a>
                     {% else %}
                         <a class="btn btn-outline-secondary disabled">{{ ('admin_'~content_type~'.versions.actions.import_version.link')|trans }}</a>
                     {% endif %}
 
                     {% if not content_config.admin.version_cleanup.is_granted or is_granted(content_config.admin.version_cleanup.is_granted, entity) %}
-                        <a class="btn btn-outline-secondary" href="{{ url('sfs_cms_admin_content_'~content_type~'_cleanup_versions', {'content':entity, 'back':'versions'}) }}">{{ ('admin_'~content_type~'.versions.actions.cleanup_versions.link')|trans }}</a>
+                        <a class="btn btn-outline-secondary" href="{{ url('sfs_cms_admin_content_'~content_type~'_cleanup_versions', {'content':entity.id, 'back':'versions'}) }}">{{ ('admin_'~content_type~'.versions.actions.cleanup_versions.link')|trans }}</a>
                     {% else %}
                         <a class="btn btn-outline-secondary disabled">{{ ('admin_'~content_type~'.versions.actions.cleanup_versions.link')|trans }}</a>
                     {% endif %}

@@ -32,12 +32,12 @@
                 {% if not content_config.admin.version_lock.is_granted or is_granted(content_config.admin.version_lock.is_granted, version) %}
                     {% if version.keep %}
                         <a class=""
-                           href="{{ url('sfs_cms_admin_content_'~content_type~'_unkeep_version', {'content':entity, 'version':version, 'back': 'version_info'}) }}"><i
+                           href="{{ url('sfs_cms_admin_content_'~content_type~'_unkeep_version', {'content':entity.id, 'version':version.id, 'back': 'version_info'}) }}"><i
                                 class="bi bi-pin-angle-fill"></i> {{ ('admin_'~content_type~'.versions.actions.keep.link')|trans }}
                         </a>
                     {% else %}
                         <a class=""
-                           href="{{ url('sfs_cms_admin_content_'~content_type~'_keep_version', {'content':entity, 'version':version, 'back': 'version_info'}) }}"><i
+                           href="{{ url('sfs_cms_admin_content_'~content_type~'_keep_version', {'content':entity.id, 'version':version.id, 'back': 'version_info'}) }}"><i
                                 class="bi bi-pin-angle"></i> {{ ('admin_'~content_type~'.versions.actions.nokeep.link')|trans }}
                         </a>
                     {% endif %}

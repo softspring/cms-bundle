@@ -4,12 +4,12 @@
     {% block tabs %}
         <li class="nav-item" role="presentation">
             <a class="nav-link {{ current == 'read' ? 'active' : '' }}"
-               href="{{ url('sfs_cms_admin_routes_read', {'route':route}) }}" role="tab"
+               href="{{ url('sfs_cms_admin_routes_read', {'route':route.id}) }}" role="tab"
                aria-controls="edit" aria-selected="true">{{ ('admin_routes.tabs_menu.details')|trans }}</a>
         </li>
         <li class="nav-item" role="presentation">
             <a class="nav-link {{ current == 'update' ? 'active' : '' }}"
-               href="{{ url('sfs_cms_admin_routes_update', {'route':route}) }}"
+               href="{{ url('sfs_cms_admin_routes_update', {'route':route.id}) }}"
                role="tab" aria-controls="edit"
                aria-selected="true">{{ ('admin_routes.tabs_menu.update')|trans }}</a>
         </li>

@@ -14,7 +14,7 @@
             <ul class="dropdown-menu dropdown-menu-end">
                 <li>
                     {% if not content_config.admin.duplicate.is_granted or is_granted(content_config.admin.duplicate.is_granted, content_entity) %}
-                        <a class="dropdown-item" href="{{ url('sfs_cms_admin_content_'~content_type~'_duplicate', {'content':content_entity}) }}">
+                        <a class="dropdown-item" href="{{ url('sfs_cms_admin_content_'~content_type~'_duplicate', {'content':content_entity.id}) }}">
                             <span class="bi bi-copy"></span>{{ ('admin_page.tabs_menu.duplicate')|trans }}</a>
                     {% else %}
                         <a class="dropdown-item disabled">
