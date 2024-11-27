@@ -25,7 +25,7 @@ class Configuration implements ConfigurationInterface
             ->beforeNormalization()
                 ->always()
                 ->then(function ($configuration) {
-                    $defaultCacheEnabled = $configuration['cache']['enabled'] ?? null;
+                    $defaultCacheEnabled = $configuration['cache']['enabled'] ?? !empty($configuration['cache']['type']) ?? null;
                     $defaultCacheType = $configuration['cache']['type'] ?? 'none';
 
                     $contentCacheEnabled = $configuration['content']['cache']['enabled'] ?? $defaultCacheEnabled ?? null;
