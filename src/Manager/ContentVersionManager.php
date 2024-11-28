@@ -9,6 +9,7 @@ use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Model\CompiledDataInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
+use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\Render\CompileException;
 use Softspring\CmsBundle\Render\ContentVersionCompiler;
 use Softspring\Component\CrudlController\Manager\CrudlEntityManagerTrait;
@@ -111,6 +112,35 @@ class ContentVersionManager implements ContentVersionManagerInterface
                 if (!empty($fieldValue)) {
                     // if locale filter is not empty, add the locale to the filter
                     $fieldValue[] = $locale;
+                }
+            }
+        }
+    }
+
+    public function addSite(ContentVersionInterface $contentVersion, SiteInterface $site): void
+    {
+        $data = $contentVersion->getData();
+        foreach ($data as &$container) {
+            foreach ($container as &$module) {
+                $this->addSiteToModule($module, $site);
+            }
+        }
+        $contentVersion->setData($data);
+    }
+
+    protected function addSiteToModule(array &$module, SiteInterface $site): void
+    {
+        foreach ($module as $fieldName => &$fieldValue) {
+            if (in_array($fieldName, ['_module', '_revision'])) {
+                continue;
+            } elseif ('modules' === $fieldName && is_array($fieldValue)) {
+                foreach ($fieldValue as &$subModule) {
+                    $this->addSiteToModule($subModule, $site);
+                }
+            } elseif ('site_filter' === $fieldName) {
+                if (!empty($fieldValue)) {
+                    // if site filter is not empty, add the site to the filter
+                    $fieldValue[] = $site;
                 }
             }
         }
