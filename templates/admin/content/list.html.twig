@@ -1,8 +1,6 @@
 {% trans_default_domain 'sfs_cms_contents' %}
 {% extends '@SfsCms/admin_layout.html.twig' %}
 
-{% form_theme filterForm 'bootstrap_5_horizontal_layout.html.twig' %}
-
 {% block title %}{{ ('admin_'~content_type~'.list.meta.title')|trans }}{% endblock %}
 
 {% block breadcrums_content %}
@@ -14,13 +12,13 @@
     <div class="d-flex align-items-center justify-content-between mb-4">
         <h1 class="h3">{{ ('admin_'~content_type~'.list.title')|trans }}</h1>
 
-        <div class="float-end">
+        <div class="d-flex flex-wrap justify-items-end alig-items-center">
             {% if not content_config.admin.create.is_granted or is_granted(content_config.admin.create.is_granted) %}
-                <a class="btn btn-outline-primary" href="{{ url('sfs_cms_admin_content_'~content_type~'_create') }}">{{ ('admin_'~content_type~'.list.actions.create.link')|trans }}</a>
+                <a class="btn btn-primary ms-3 mb-2" href="{{ url('sfs_cms_admin_content_'~content_type~'_create') }}">{{ ('admin_'~content_type~'.list.actions.create.link')|trans }} <i class="bi bi-plus-circle"></i></a>
             {% endif %}
 
             {% if not content_config.admin.import.is_granted or is_granted(content_config.admin.import.is_granted) %}
-                <a class="btn btn-outline-primary" href="{{ url('sfs_cms_admin_content_'~content_type~'_import') }}">{{ ('admin_'~content_type~'.list.actions.import.link')|trans }}</a>
+                <a class="btn btn-outline-primary ms-3 mb-2" href="{{ url('sfs_cms_admin_content_'~content_type~'_import') }}">{{ ('admin_'~content_type~'.list.actions.import.link')|trans }} <i class="bi bi-cloud-upload"></i></a>
             {% endif %}
         </div>
     </div>
@@ -29,13 +27,13 @@
         {% if filterForm.vars.submitted or entities|length %}
             <div class="mb-4">
                 {{ form_start(filterForm) }}
-                <div class="row">
-                    <div class="col-1 py-2"><i class="bi bi-filter h4 text-muted"></i></div>
-                    {% if filterForm.name is defined %}<div class="col">{{ form_row(filterForm.name) }}</div>{% endif %}
-                    {% if filterForm.sites is defined %}<div class="col">{{ form_row(filterForm.sites, {'attr':{'onchange':'submit()'}}) }}</div>{% endif %}
-                    {% if filterForm.status is defined %}<div class="col">{{ form_row(filterForm.status, {'attr':{'onchange':'submit()'}}) }}</div>{% endif %}
-                    {% if filterForm.publishedVersionContent is defined %}<div class="col">{{ form_row(filterForm.publishedVersionContent, {'attr':{'onchange':'submit()'}}) }}</div>{% endif %}
-                    <div class="col-1">
+                <button class="btn btn-link px-0" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter"><i class="bi bi-filter h4 text-muted align-middle"></i> Filters</button>
+                <div class="row align-items-end border shadow-sm rounded p-3 collapse show" id="collapseFilter">
+                    {% if filterForm.name is defined %}<div class="col-12 col-md-6 col-lg-2">{{ form_row(filterForm.name) }}</div>{% endif %}
+                    {% if filterForm.sites is defined %}<div class="col-12 col-md-6 col-lg-2">{{ form_row(filterForm.sites, {'attr':{'onchange':'submit()'}}) }}</div>{% endif %}
+                    {% if filterForm.status is defined %}<div class="col-12 col-md-6 col-lg-2">{{ form_row(filterForm.status, {'attr':{'onchange':'submit()'}}) }}</div>{% endif %}
+                    {% if filterForm.publishedVersionContent is defined %}<div class="col-12 col-md-6 col-lg-4">{{ form_row(filterForm.publishedVersionContent, {'attr':{'onchange':'submit()'}}) }}</div>{% endif %}
+                    <div class="col pb-3">
                         <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
                     </div>
                 </div>

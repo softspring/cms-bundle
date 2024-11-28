@@ -1,8 +1,6 @@
 {% trans_default_domain 'sfs_cms_admin' %}
 {% extends '@SfsCms/admin_layout.html.twig' %}
 
-{% form_theme filterForm 'bootstrap_5_horizontal_layout.html.twig' %}
-
 {% block title %}{{ 'admin_routes.list.meta.title'|trans }}{% endblock %}
 
 {% block breadcrums_content %}
@@ -15,8 +13,8 @@
         <h1 class="h3">{{ 'admin_routes.list.title'|trans }}</h1>
 
 {#        #}{# TODO restrict by permission #}
-        <div class="float-end">
-            <a class="btn btn-outline-primary" href="{{ url('sfs_cms_admin_routes_create') }}">{{ 'admin_routes.list.actions.create.link'|trans }}</a>
+        <div class="d-flex flex-wrap justify-items-end alig-items-center">
+            <a class="btn btn-primary ms-3 mb-2" href="{{ url('sfs_cms_admin_routes_create') }}">{{ 'admin_routes.list.actions.create.link'|trans }} <i class="bi bi-plus-circle"></i></a>
         </div>
     </div>
 
@@ -24,13 +22,13 @@
         {% if filterForm.vars.submitted or entities|length %}
             <div class="mb-4">
                 {{ form_start(filterForm) }}
-                <div class="row">
-                    <div class="col-1 py-2"><i class="bi bi-filter h4 text-muted"></i></div>
-                    {% if filterForm.id is defined %}<div class="col">{{ form_row(filterForm.id) }}</div>{% endif %}
-                    {% if filterForm.path is defined %}<div class="col">{{ form_row(filterForm.path) }}</div>{% endif %}
-                    {% if filterForm.sites is defined %}<div class="col">{{ form_row(filterForm.sites, {'attr':{'onchange':'submit()'}}) }}</div>{% endif %}
-                    {% if filterForm.type is defined %}<div class="col">{{ form_row(filterForm.type, {'attr':{'onchange':'submit()'}}) }}</div>{% endif %}
-                    <div class="col-1">
+                <button class="btn btn-link px-0" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter"><i class="bi bi-filter h4 text-muted align-middle"></i> Filters</button>
+                <div class="row align-items-end border shadow-sm rounded p-3 collapse show" id="collapseFilter">
+                    {% if filterForm.id is defined %}<div class="col-12 col-md-6 col-lg-3">{{ form_row(filterForm.id) }}</div>{% endif %}
+                    {% if filterForm.path is defined %}<div class="col-12 col-md-6 col-lg-3">{{ form_row(filterForm.path) }}</div>{% endif %}
+                    {% if filterForm.sites is defined %}<div class="col-12 col-md-6 col-lg-2">{{ form_row(filterForm.sites, {'attr':{'onchange':'submit()'}}) }}</div>{% endif %}
+                    {% if filterForm.type is defined %}<div class="col-12 col-md-6 col-lg-2">{{ form_row(filterForm.type, {'attr':{'onchange':'submit()'}}) }}</div>{% endif %}
+                    <div class="col pb-3">
                         <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
                     </div>
                 </div>
