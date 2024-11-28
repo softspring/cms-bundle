@@ -3,6 +3,7 @@
 namespace Softspring\CmsBundle\Model;
 
 use Doctrine\Common\Collections\Collection;
+use Softspring\TranslatableBundle\Model\Translation;
 
 interface MenuItemInterface
 {
@@ -20,9 +21,9 @@ interface MenuItemInterface
 
     public function getType(): ?int;
 
-    public function setText(?array $text): void;
+    public function setText(array|Translation|null $text): void;
 
-    public function getText(): ?array;
+    public function getText(): array|Translation|null;
 
     public function getSymfonyRoute(): ?array;
 

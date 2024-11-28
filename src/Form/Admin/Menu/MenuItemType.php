@@ -3,8 +3,8 @@
 namespace Softspring\CmsBundle\Form\Admin\Menu;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Softspring\CmsBundle\Form\Type\SymfonyRouteType;
-use Softspring\CmsBundle\Form\Type\TranslatableType;
+use Softspring\CmsBundle\Form\Type\LinkType;
+use Softspring\CmsBundle\Form\Type\TranslationType;
 use Softspring\CmsBundle\Manager\MenuItemManagerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -33,11 +33,11 @@ class MenuItemType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('text', TranslatableType::class, [
+        $builder->add('text', TranslationType::class, [
             'constraints' => new NotBlank(),
         ]);
 
-        $builder->add('symfonyRoute', SymfonyRouteType::class, [
+        $builder->add('symfonyRoute', LinkType::class, [
             'required' => false,
         ]);
     }

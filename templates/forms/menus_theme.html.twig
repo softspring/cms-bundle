@@ -50,7 +50,7 @@
 {% endblock menu_item_collection_widget %}
 
 {% block menu_item_row %}
-    <div data-collection="node" {{ block('widget_container_attributes') }} data-collection-index="{{ form.vars.name }}" data-full-name="{{ form.vars.full_name }}">
+    <div class="mb-2" data-collection="node" {{ block('widget_container_attributes') }} data-collection-index="{{ form.vars.name }}" data-full-name="{{ form.vars.full_name }}">
         <div class="row my-3 bg-light border-bottom p-3 g-0">
             <div class="col-sm-1"><span data-collection="node-index" class="btn btn-primary">{{ form.vars.name }}</span></div>
             <div class="col-sm-8">{{ form_widget(form) }}{{ form_errors(form) }}</div>
@@ -67,7 +67,8 @@
     <div class="row {{ not form.parent.vars.valid ? 'show-invalid' }}">
         <div class="col-sm-2">{{ form_label(form.text) }}</div>
         <div class="col-sm">{{ form_widget(form.text) }}{{ form_errors(form.text) }}</div>
-        <div class="col-12">{{ form_label(form.symfonyRoute) }}</div>
+{#        <div class="col-12">{{ form_label(form.symfonyRoute) }}</div>#}
+        <div class="col-12">{{ form_widget(form.symfonyRoute) }}</div>
         {{ form_rest(form) }}
     </div>
 {% endblock menu_item_widget %}
