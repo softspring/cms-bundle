@@ -48,7 +48,7 @@
     </div>
 
     <button type="button" class="btn btn-outline-primary cursor-pointer mt-3" data-collection-action="add" data-collection-target="{{ id }}">
-        {{ 'admin_routes.form.paths.add.button'|trans }}
+        {{ 'admin_routes.form.paths.add.button'|trans }} <i class="bi bi-plus-circle"></i>
     </button>
 {% endblock route_path_collection_widget %}
 
@@ -114,7 +114,7 @@
 
         {% if allow_add %}
             <button type="button" class="btn btn-outline-primary cursor-pointer mt-3" data-collection-action="add" data-collection-target="{{ id }}">
-                {{ 'admin_routes.form.add.button'|trans }}
+                {{ 'admin_routes.form.add.button'|trans }} <i class="bi bi-plus-circle"></i>
             </button>
         {% endif %}
     </div>
