@@ -52,9 +52,9 @@
 {% block menu_item_row %}
     <div data-collection="node" {{ block('widget_container_attributes') }} data-collection-index="{{ form.vars.name }}" data-full-name="{{ form.vars.full_name }}">
         <div class="row my-3 bg-light border-bottom p-3 g-0">
-            <div class="col-sm-1"><span data-collection="node-index" class="btn btn-primary">{{ form.vars.name }}</span></div>
+            <div class="col-sm-auto pe-3"><span data-collection="node-index" class="btn btn-primary">{{ form.vars.name }}</span></div>
             <div class="col-sm-8">{{ form_widget(form) }}{{ form_errors(form) }}</div>
-            <div class="col-sm-3 text-end">
+            <div class="col-sm-2 text-end ms-auto">
                 <button type="button" class="btn btn-secondary rounded-circle px-2" data-collection-action="up"><span class="bi bi-chevron-up h4"></span></button>
                 <button type="button" class="btn btn-secondary rounded-circle px-2" data-collection-action="down"><span class="bi bi-chevron-down h4"></span></button>
                 <button type="button" class="btn btn-danger rounded-circle px-2" data-collection-action="delete"><span class="bi bi-x h4"></span></button>
