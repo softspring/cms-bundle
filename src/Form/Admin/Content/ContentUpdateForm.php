@@ -2,6 +2,8 @@
 
 namespace Softspring\CmsBundle\Form\Admin\Content;
 
+use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Form\Admin\SiteChoiceType;
 use Softspring\CmsBundle\Form\Type\DynamicFormType;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Translator\TranslatableContext;
@@ -15,7 +17,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ContentUpdateForm extends AbstractType implements ContentUpdateFormInterface
 {
-    public function __construct(protected TranslatableContext $translatableContext)
+    public function __construct(protected TranslatableContext $translatableContext, protected CmsConfig $cmsConfig)
     {
     }
 
@@ -54,6 +56,18 @@ class ContentUpdateForm extends AbstractType implements ContentUpdateFormInterfa
                 'choice_translation_domain' => false,
                 'choices' => array_combine(array_map(fn ($lang) => Locales::getName($lang), $addLocales), $addLocales),
                 'mapped' => false,
+            ]);
+        }
+
+        $contentId = $options['content_config']['_id'];
+        $sitesAvailableForContent = $this->cmsConfig->getSitesForContent($contentId);
+        $availableSites = array_diff($sitesAvailableForContent, $options['content']->getSites()->toArray());
+        if (!empty($availableSites)) {
+            $builder->add('addSite', SiteChoiceType::class, [
+                'content' => $options['content'],
+                'mapped' => false,
+                'default_value' => [],
+                'choices' => $availableSites,
             ]);
         }
 

@@ -5,6 +5,7 @@ namespace Softspring\CmsBundle\Manager;
 use Doctrine\Common\Collections\Collection;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
+use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\Component\CrudlController\Manager\CrudlEntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -32,4 +33,6 @@ interface ContentVersionManagerInterface extends CrudlEntityManagerInterface
     public function getCompiledContent(ContentVersionInterface $contentVersion, Request $request): string;
 
     public function addLocale(ContentVersionInterface $contentVersion, string $locale): void;
+
+    public function addSite(ContentVersionInterface $contentVersion, SiteInterface $site): void;
 }
