@@ -141,6 +141,7 @@ admin_page:
             5: "seo"
             6: "duplicated"
             7: "language added"
+            8: "site added"
         actions:
             edit.link: "Edit"
             preview.link: "Preview"
@@ -270,6 +271,7 @@ admin_page:
         defaultLocale.label: "Default language"
         locales.label: "Languages"
         addLocale.label: "Add language"
+        addSite.label: "Add site"
         sites.label: "Sites"
         duplicateVersion.label: "Duplicate version"
         routes:

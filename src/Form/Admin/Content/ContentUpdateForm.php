@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Form\Admin\Content;
 
+use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Form\Admin\SiteChoiceType;
 use Softspring\CmsBundle\Form\Type\DynamicFormType;
 use Softspring\CmsBundle\Model\ContentInterface;
@@ -17,7 +18,7 @@ use Symfony\Component\Validator\Constraints\Count;
 
 class ContentUpdateForm extends AbstractType implements ContentUpdateFormInterface
 {
-    public function __construct(protected TranslatableContext $translatableContext)
+    public function __construct(protected TranslatableContext $translatableContext, protected CmsConfig $cmsConfig)
     {
     }
 
