@@ -53,7 +53,10 @@
     "autoload": {
         "psr-4": {
             "Softspring\\CmsBundle\\": "src"
-        }
+        },
+        "files": [
+            "bootstrap.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
