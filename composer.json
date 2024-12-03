@@ -35,7 +35,7 @@
         "twig/twig": "^2.10|^3.0"
     },
     "require-dev": {
-        "doctrine/data-fixtures": "^1.6",
+        "doctrine/data-fixtures": "^2.0",
         "doctrine/doctrine-fixtures-bundle": "^3.4",
         "friendsofphp/php-cs-fixer": "3.65.*",
         "google/cloud-storage": "^1.30",
