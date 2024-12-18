@@ -115,6 +115,7 @@ class SeoListener extends AbstractContentVersionListener
         $contentConfig = $event->getRequest()->attributes->get('_content_config');
 
         $this->translatableContext->setLocales($version->getContent()->getLocales());
+        $this->translatableContext->setDefaultLocale($version->getContent()->getDefaultLocale());
 
         $event->setType($this->getOption($event->getRequest(), 'type'));
         $event->setFormOptions([
