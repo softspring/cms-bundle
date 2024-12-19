@@ -38,7 +38,7 @@ class UrlGenerator
     public function getUrl($routeOrName, ?string $locale = null, $site = null, array $routeParams = [], bool $onlyChecking = false): string
     {
         if ($this->isPreview()) {
-            return 'javascript:confirm(\'Esto es una previsualización!\')';
+            return 'javascript:confirm(\'This is a preview!\')';
         }
 
         $route = $routeOrName instanceof RouteInterface ? $routeOrName : $this->getRoute($routeOrName);
@@ -64,7 +64,7 @@ class UrlGenerator
     public function getPath($routeOrName, ?string $locale = null, $site = null, array $routeParams = [], bool $onlyChecking = false): string
     {
         if ($this->isPreview()) {
-            return 'javascript:confirm(\'Esto es una previsualización!\')';
+            return 'javascript:confirm(\'This is a preview!\')';
         }
 
         $route = $routeOrName instanceof RouteInterface ? $routeOrName : $this->getRoute($routeOrName);
@@ -88,7 +88,7 @@ class UrlGenerator
     public function getUrlFixed(RoutePathInterface $routePath, $site = null): string
     {
         if ($this->isPreview()) {
-            return 'javascript:confirm(\'Esto es una previsualización!\')';
+            return 'javascript:confirm(\'This is a preview!\')';
         }
 
         $route = $routePath->getRoute();
@@ -103,7 +103,7 @@ class UrlGenerator
     public function getPathFixed(RoutePathInterface $routePath, $site = null): string
     {
         if ($this->isPreview()) {
-            return 'javascript:confirm(\'Esto es una previsualización!\')';
+            return 'javascript:confirm(\'This is a preview!\')';
         }
 
         $route = $routePath->getRoute();
