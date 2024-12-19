@@ -129,6 +129,7 @@ class CreateListener extends AbstractContentVersionListener
     public function onFormPrepareResolve(FormPrepareEvent $event): void
     {
         $this->translatableContext->setLocales($event->getEntity()->getContent()->getLocales());
+        $this->translatableContext->setDefaultLocale($event->getEntity()->getContent()->getDefaultLocale());
 
         $version = $event->getEntity();
 
