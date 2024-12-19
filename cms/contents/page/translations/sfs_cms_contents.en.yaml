@@ -41,7 +41,7 @@ admin_page:
 
     version_publish:
         success_flash: "Version has been published"
-        failed_flash: "An error has been produced during the version publication"
+        failed_flash: "An error has been produced during the version publication<br/><small>%exception%</small>"
         confirm_message_title: "Publish version"
         with_errors_confirm_message_title: "Publish version"
         confirm_message_raw: "<p>Are you sure to publish this version?</p>"
@@ -312,14 +312,14 @@ admin_page:
     version_lock:
         success_locked_flash: "Version has been locked"
         success_unlocked_flash: "Version has been unlocked"
-        failed_flash: "An error has been produced during the version lock/unlock"
+        failed_flash: "An error has been produced during the version lock/unlock<br/><small>%exception%</small>"
 
     version_export:
-        failed_flash: "An error has been produced during the version export"
+        failed_flash: "An error has been produced during the version export<br/><small>%exception%</small>"
 
     version_import:
         success_flash: "Version has been imported"
-        failed_flash: "An error has been produced during the version import"
+        failed_flash: "An error has been produced during the version import<br/><small>%exception%</small>"
 
     version_cleanup:
         success_flash: "Versions cleanup has been done correctly"
