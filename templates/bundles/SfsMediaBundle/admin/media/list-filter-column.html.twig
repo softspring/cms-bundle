@@ -1,0 +1,12 @@
+{% extends '@!SfsMedia/admin/media/list-filter-column.html.twig' %}
+
+{% form_theme filterForm.content _self %}
+
+{% block _content_entry_widget %}
+    {{ form_widget(form, {'attr': {'onclick': 'submit()'}}) }}
+{% endblock %}
+
+{% block fields %}
+    {{ parent() }}
+    {{ form_row(filterForm.content, {}) }}
+{% endblock %}

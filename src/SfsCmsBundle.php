@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle;
 
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
 use Softspring\CmsBundle\DependencyInjection\Compiler\AddCollectionTranslationsPass;
+use Softspring\CmsBundle\DependencyInjection\Compiler\AddTwigBundlesNamespacesPass;
 use Softspring\CmsBundle\DependencyInjection\Compiler\AddTwigNamespacesPass;
 use Softspring\CmsBundle\DependencyInjection\Compiler\AliasDoctrineEntityManagerPass;
 use Softspring\CmsBundle\DependencyInjection\Compiler\InjectWebDebugToolbarListenerPass;
@@ -32,6 +33,9 @@ class SfsCmsBundle extends Bundle
         $container->addCompilerPass(new InjectWebDebugToolbarListenerPass());
         $container->addCompilerPass(new AddTwigNamespacesPass());
         $container->addCompilerPass(new AddCollectionTranslationsPass());
+
+        // allow overriding bundles templates
+        $container->addCompilerPass(new AddTwigBundlesNamespacesPass($this->getPath().'/templates'));
     }
 
     private function addRegisterMappingsPass(ContainerBuilder $container, array $mappings, $enablingParameter = false): void

@@ -1,0 +1,4 @@
+admin_medias:
+    list:
+        filter_form:
+            content.label: Contenido
