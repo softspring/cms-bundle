@@ -84,6 +84,7 @@ services:
                     view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_ROUTES_DELETE_VIEW
                     success_redirect_to: 'sfs_cms_admin_routes_list'
                     view: '%sfs_cms.admin.routes.delete_view%'
+                    form: 'Softspring\CmsBundle\Form\Admin\Route\RouteDeleteForm'
                 read:
                     is_granted: 'PERMISSION_SFS_CMS_ADMIN_ROUTES_DETAILS'
                     param_converter_key: 'id'
