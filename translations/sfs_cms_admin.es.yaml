@@ -110,6 +110,14 @@ admin_routes:
         actions:
             update.button: "Guardar cambios"
             cancel.button: "Cancelar"
+            delete.button: "Eliminar ruta"
+    delete:
+        meta.title: "Eliminar ruta"
+        title: "Eliminar ruta"
+        breadcrumb: "Eliminar ruta"
+        actions:
+            delete.button: "Eliminar ruta"
+            cancel.button: "Cancelar"
     read:
         meta.title: "Detalles de la ruta"
         title: "%name%"
