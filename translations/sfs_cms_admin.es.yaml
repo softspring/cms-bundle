@@ -175,8 +175,8 @@ admin_routes:
     types:
         0.name: "Indefinido"
         1.name: "Contenido"
-        2.name: "Redirección %redirectType% a ruta"
-        3.name: "Redirección %redirectType% a URL"
+        2.name: "Redirección a ruta"
+        3.name: "Redirección a URL"
         4.name: "Ruta padre"
 
 admin_menus:
