@@ -175,8 +175,8 @@ admin_routes:
     types:
         0.name: "Unkwown"
         1.name: "Content"
-        2.name: "Redirect %redirectType% to route"
-        3.name: "Redirect %redirectType% to URL"
+        2.name: "Redirect to route"
+        3.name: "Redirect to URL"
         4.name: "Parent route"
 
 admin_menus:
