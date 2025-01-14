@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Entity\Block;
 use Softspring\CmsBundle\Entity\Route;
 use Softspring\CmsBundle\EntityTransformer\BlockTransformer;
@@ -17,6 +18,7 @@ class BlockTransformerTest extends TestCase
     protected EntityManager|MockObject $em;
     protected ClassMetadata|MockObject $routeClassMetadata;
     protected EntityRepository|MockObject $routeRepository;
+    protected CmsConfig|MockObject $cmsConfig;
 
     protected function setUp(): void
     {
@@ -30,13 +32,15 @@ class BlockTransformerTest extends TestCase
 
         $this->routeRepository = $this->createMock(EntityRepository::class);
         $this->em->method('getRepository')->with(Route::class)->willReturn($this->routeRepository);
+
+        $this->cmsConfig = $this->createMock(CmsConfig::class);
     }
 
     public function testUnsupported(): void
     {
         $this->expectException(UnsupportedException::class);
 
-        $blockTransformer = new BlockTransformer();
+        $blockTransformer = new BlockTransformer($this->cmsConfig);
         $blockTransformer->transform(new \stdClass(), $this->em);
     }
 
@@ -44,7 +48,7 @@ class BlockTransformerTest extends TestCase
     {
         $block = new Block();
 
-        $blockTransformer = new BlockTransformer();
+        $blockTransformer = new BlockTransformer($this->cmsConfig);
 
         $blockTransformer->transform($block, $this->em);
         $this->assertNull($block->getData());
@@ -59,6 +63,7 @@ class BlockTransformerTest extends TestCase
         (new \ReflectionClass($route))->getProperty('id')->setValue($route, 'route_id');
 
         $block = new Block();
+        $block->setType('test');
         $block->setData([
             'test' => 'test',
             'test2' => [
@@ -72,7 +77,10 @@ class BlockTransformerTest extends TestCase
             'route' => $route,
         ]);
 
-        $blockTransformer = new BlockTransformer();
+        $blockTransformer = new BlockTransformer($this->cmsConfig);
+        $this->cmsConfig->method('getBlock')->willReturn(['revision_migration_scripts' => [], 'revision' => 1]);
+
+        $blockTransformer = new BlockTransformer($this->cmsConfig);
         $blockTransformer->transform($block, $this->em);
 
         $this->assertEquals([
@@ -91,6 +99,7 @@ class BlockTransformerTest extends TestCase
                     'id' => 'route_id',
                 ],
             ],
+            '_revision' => 1,
         ], $block->getData());
     }
 
@@ -102,6 +111,7 @@ class BlockTransformerTest extends TestCase
         $this->routeRepository->method('findOneBy')->willReturn($route);
 
         $block = new Block();
+        $block->setType('test');
         $block->setData([
             'test' => 'test',
             'test2' => [
@@ -120,7 +130,9 @@ class BlockTransformerTest extends TestCase
             ],
         ]);
 
-        $blockTransformer = new BlockTransformer();
+        $blockTransformer = new BlockTransformer($this->cmsConfig);
+        $this->cmsConfig->method('getBlock')->willReturn(['revision_migration_scripts' => [], 'revision' => 1]);
+        $blockTransformer = new BlockTransformer($this->cmsConfig);
         $blockTransformer->untransform($block, $this->em);
 
         $this->assertEquals([
@@ -134,6 +146,7 @@ class BlockTransformerTest extends TestCase
                 ],
             ],
             'route' => $route,
+            '_revision' => 1,
         ], $block->getData());
     }
 }
