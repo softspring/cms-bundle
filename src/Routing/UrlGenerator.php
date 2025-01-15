@@ -165,7 +165,7 @@ class UrlGenerator
     {
         $request = $this->requestStack->getCurrentRequest();
 
-        return $request->attributes->has('_cms_preview');
+        return $request && $request->attributes->has('_cms_preview');
     }
 
     protected function getSiteSchemeAndHost(RouteInterface $route, ?string $locale, $site = null): string

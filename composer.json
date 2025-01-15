@@ -23,7 +23,7 @@
         "softspring/media-bundle": "^5.2",
         "softspring/permissions-bundle": "^5.2",
         "softspring/polymorphic-form-type": "^5.3",
-        "softspring/translatable-bundle": "5.4.x-dev",
+        "softspring/translatable-bundle": "^5.4@dev",
         "softspring/twig-extra-bundle": "^5.1",
         "symfony/config": "^5.4|^6.0|^7.0",
         "symfony/intl": "^5.4|^6.0|^7.0",
@@ -37,7 +37,7 @@
     "require-dev": {
         "doctrine/data-fixtures": "^1.6 || ^2.0",
         "doctrine/doctrine-fixtures-bundle": "^3.4",
-        "friendsofphp/php-cs-fixer": "3.65.*",
+        "friendsofphp/php-cs-fixer": "^3.68",
         "google/cloud-storage": "^1.30",
         "phpstan/phpstan": "^1.12.3",
         "phpunit/phpunit": "^11.0",
