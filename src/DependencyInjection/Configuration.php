@@ -25,11 +25,13 @@ class Configuration implements ConfigurationInterface
             ->beforeNormalization()
                 ->always()
                 ->then(function ($configuration) {
+                    /** @phpstan-ignore-next-line */
                     $defaultCacheEnabled = $configuration['cache']['enabled'] ?? !empty($configuration['cache']['type']) ?? null;
                     $defaultCacheType = $configuration['cache']['type'] ?? 'none';
 
+                    /** @phpstan-ignore-next-line */
                     $contentCacheEnabled = $configuration['content']['cache']['enabled'] ?? $defaultCacheEnabled ?? null;
-                    if (isset($contentCacheEnabled)) {
+                    if ($contentCacheEnabled) {
                         $configuration['content']['cache']['enabled'] = $contentCacheEnabled;
                         $configuration['content']['cache']['type'] = $configuration['content']['cache']['type'] ?? $defaultCacheType;
                     }
@@ -40,8 +42,9 @@ class Configuration implements ConfigurationInterface
                         unset($configuration['content']['cache_last_modified']);
                     }
 
+                    /** @phpstan-ignore-next-line */
                     $menuCacheEnabled = $configuration['menu']['cache']['enabled'] ?? $defaultCacheEnabled ?? null;
-                    if (isset($menuCacheEnabled)) {
+                    if ($menuCacheEnabled) {
                         $configuration['menu']['cache']['enabled'] = $menuCacheEnabled;
                         $configuration['menu']['cache']['type'] = $configuration['menu']['cache']['type'] ?? $defaultCacheType;
                         if ('ttl' !== $configuration['menu']['cache']['type']) {
@@ -49,8 +52,9 @@ class Configuration implements ConfigurationInterface
                         }
                     }
 
+                    /** @phpstan-ignore-next-line */
                     $blockCacheEnabled = $configuration['block']['cache']['enabled'] ?? $defaultCacheEnabled ?? null;
-                    if (isset($blockCacheEnabled)) {
+                    if ($blockCacheEnabled) {
                         $configuration['block']['cache']['enabled'] = $blockCacheEnabled;
                         $configuration['block']['cache']['type'] = $configuration['block']['cache']['type'] ?? $defaultCacheType;
                         if ('ttl' !== $configuration['block']['cache']['type']) {
