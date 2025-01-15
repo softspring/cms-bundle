@@ -20,12 +20,14 @@
     {% include '@SfsCms/admin/route/_route_tabs.html.twig' with {'current':'delete', 'route':route} %}
 
     <div class="container-fluid bg-white p-4">
+        {{ ('admin_routes.delete.main_warnings_raw')|trans|raw }}
+
         {{ form_start(form) }}
         {{ form_widget(form) }}
         {{ form_rest(form) }}
 
         <div class="d-flex justify-content-end align-items-center pt-4">
-            <a href="{{ url('sfs_cms_admin_routes_list') }}"
+            <a href="{{ url('sfs_cms_admin_routes_update', {'route': route.id}) }}"
                class="btn btn-outline-secondary">{{ 'admin_routes.delete.actions.cancel.button'|trans }}</a>
             <button type="submit"
                     class="btn btn-danger ms-3">{{ 'admin_routes.delete.actions.delete.button'|trans }}</button>

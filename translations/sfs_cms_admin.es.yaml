@@ -118,6 +118,7 @@ admin_routes:
         actions:
             delete.button: "Eliminar ruta"
             cancel.button: "Cancelar"
+        main_warnings_raw: '<p>¿Estás seguro de eliminar esta ruta?</p><p>Esta acción no se puede deshacer</p>'
     read:
         meta.title: "Detalles de la ruta"
         title: "%name%"

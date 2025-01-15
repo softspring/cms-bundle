@@ -111,13 +111,14 @@ admin_routes:
             update.button: "Save changes"
             cancel.button: "Cancel"
             delete.button: "Delete route"
-        delete:
-            meta.title: "Delete route"
-            title: "Delete route"
-            breadcrumb: "Delete route"
-            actions:
-                delete.button: "Remove route"
-                cancel.button: "Cancel"
+    delete:
+        meta.title: "Delete route"
+        title: "Delete route"
+        breadcrumb: "Delete route"
+        actions:
+            delete.button: "Remove route"
+            cancel.button: "Cancel"
+        main_warnings_raw: '<p>Are you sure to delete this route?</p><p>This action can not be undone</p>'
     read:
         meta.title: "Route details"
         title: "%name%"
