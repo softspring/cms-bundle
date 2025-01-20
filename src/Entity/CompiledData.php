@@ -12,9 +12,4 @@ class CompiledData extends CompiledDataModel
     {
         return $this->id;
     }
-
-    public function __toString(): string
-    {
-        return ''.$this->getId();
-    }
 }

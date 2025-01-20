@@ -12,9 +12,4 @@ class Block extends BlockModel
     {
         return $this->id;
     }
-
-    public function __toString(): string
-    {
-        return ''.$this->getId();
-    }
 }

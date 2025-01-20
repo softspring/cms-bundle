@@ -12,9 +12,4 @@ abstract class Content extends ContentModel
     {
         return $this->id;
     }
-
-    public function __toString(): string
-    {
-        return ''.$this->getId();
-    }
 }

@@ -18,11 +18,6 @@ class Site implements SiteInterface
         $this->id = $id;
     }
 
-    public function __toString(): string
-    {
-        return "{$this->getId()}";
-    }
-
     public function getConfig(): ?array
     {
         return $this->config;

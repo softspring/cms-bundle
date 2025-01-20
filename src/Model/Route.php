@@ -35,11 +35,6 @@ abstract class Route implements RouteInterface
         $this->children = new ArrayCollection();
     }
 
-    public function __toString()
-    {
-        return ''.$this->getId();
-    }
-
     public function getId(): ?string
     {
         return $this->id;
