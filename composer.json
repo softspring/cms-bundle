@@ -20,7 +20,7 @@
         "softspring/doctrine-target-entity-resolver": "^5.2",
         "softspring/dynamic-form-type": "^5.1",
         "softspring/events": "^5.1",
-        "softspring/media-bundle": "^5.2",
+        "softspring/media-bundle": "^5.4@dev",
         "softspring/permissions-bundle": "^5.2",
         "softspring/polymorphic-form-type": "^5.3",
         "softspring/translatable-bundle": "^5.4@dev",
