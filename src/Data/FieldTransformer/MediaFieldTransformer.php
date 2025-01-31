@@ -25,6 +25,9 @@ class MediaFieldTransformer implements FieldTransformerInterface
         return $data instanceof MediaInterface;
     }
 
+    /**
+     * @throws Exception
+     */
     public function export(mixed $data, &$files = []): mixed
     {
         $versionFiles = [];
@@ -41,26 +44,27 @@ class MediaFieldTransformer implements FieldTransformerInterface
         $versionFiles['_original'] = $mediaFileName;
 
         $url = $originalVersion->getUrl();
-        if (str_starts_with($url, 'gcs://')) {
-            $parts = explode('/', substr($url, strlen('gcs://')));
-            $bucket = array_shift($parts);
+        $protocol = explode('://', $url)[0];
+        $urlWithoutProtocol = substr($url, strlen($protocol) + 3);
+        $urlParts = explode('/', $urlWithoutProtocol);
+        if (in_array($protocol, ['gs', 'gcs'])) {
+            $bucket = array_shift($urlParts);
             $files[$mediaFileName] = [
                 '@type' => 'file',
                 '@location' => 'gcs',
                 'bucket' => $bucket,
-                'object' => implode('/', $parts),
+                'object' => implode('/', $urlParts),
             ];
-        } elseif (str_starts_with($url, 'sfs-media-filesystem://')) {
-            $parts = explode('/', substr($url, strlen('sfs-media-filesystem://')));
-            $fileName = array_pop($parts);
+        } elseif ('sfs-media-filesystem' === $protocol) {
+            $fileName = array_pop($urlParts);
             $files[$mediaFileName] = [
                 '@type' => 'file',
                 '@location' => 'sfs-media-filesystem',
-                'path' => $this->mediaStoragePath.'/'.implode('/', $parts),
+                'path' => $this->mediaStoragePath.'/'.implode('/', $urlParts),
                 'object' => $fileName,
             ];
         } else {
-            throw new Exception('Media url not supported: '.$url);
+            throw new Exception(sprintf('Media %s protocol not supported for url %s', $protocol, $url));
         }
 
         $files['media/'.$data->getId().'.json'] = [

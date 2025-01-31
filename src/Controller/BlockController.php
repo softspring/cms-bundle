@@ -80,8 +80,7 @@ class BlockController extends AbstractController
             $config = $this->cmsConfig->getBlock($type);
 
             if (!$config['static']) {
-                $blockData = DataMigrator::migrate($config['revision_migration_scripts'], $block->getData(), $config['revision'], $this->cmsConfig);
-                $response = new Response($this->twig->render($config['render_template'], $blockData + ['_block' => $block]));
+                $response = new Response($this->twig->render($config['render_template'], $block->getData() + ['_block' => $block]));
             } else {
                 $response = new Response($this->twig->render($config['render_template']));
             }

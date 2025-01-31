@@ -15,14 +15,18 @@ use Softspring\CmsBundle\Form\Resolver\TypeResolver;
 use Softspring\CmsBundle\Form\Type\LinkType;
 use Softspring\CmsBundle\Form\Type\SymfonyRouteType;
 use Softspring\CmsBundle\Form\Type\TranslatableType;
+use Softspring\CmsBundle\Form\Type\TranslationType;
 use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Render\Error\RenderErrorList;
+use Softspring\CmsBundle\Render\Exception\ModuleRenderException;
 use Softspring\CmsBundle\Render\ModuleRenderer;
 use Softspring\CmsBundle\Translator\TranslatableContext;
 use Softspring\CmsBundle\Utils\DataMigrator;
 use Softspring\Component\DynamicFormType\Form\Extension\DynamicFormExtension;
 use Softspring\Component\DynamicFormType\Form\Resolver\ConstraintResolver;
+use Softspring\TranslatableBundle\Form\Type\TranslatableType as BaseTranslatableType;
+use Softspring\TranslatableBundle\Form\Type\TranslationType as BaseTranslationType;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Form\FormInterface;
@@ -69,7 +73,9 @@ abstract class ModuleTestCase extends TypeTestCase
         $preloadedFormTypes = [];
         $preloadedFormTypes[] = new DynamicFormModuleType($cmsHelper);
         $preloadedFormTypes[] = new TranslatableType($trabnslatableContext);
-        $preloadedFormTypes[] = new TranslatableType($trabnslatableContext);
+        $preloadedFormTypes[] = new TranslationType($trabnslatableContext);
+        $preloadedFormTypes[] = new BaseTranslatableType(null, null);
+        $preloadedFormTypes[] = new BaseTranslationType();
         $preloadedFormTypes[] = new SymfonyRouteType($router, $routeManager, []);
         $preloadedFormTypes[] = new LinkType($router, $routeManager, []);
 
@@ -177,6 +183,7 @@ abstract class ModuleTestCase extends TypeTestCase
     /**
      * @dataProvider provideModuleRender
      * @throws Exception
+     * @throws ModuleRenderException
      */
     #[DataProvider('provideModuleRender')]
     public function testRender(array $data, string|callable $expected, array $templatesSource = []): void
