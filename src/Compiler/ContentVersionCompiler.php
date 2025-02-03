@@ -49,6 +49,10 @@ class ContentVersionCompiler
             return; // not yet ready for render in fixtures, TODO improve this to allow render in fixtures
         }
 
+        if (!$this->saveCompiled) {
+            return;
+        }
+
         $exceptions = [];
 
         foreach ($contentVersion->getContent()->getSites() as $site) {

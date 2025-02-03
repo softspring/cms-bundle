@@ -5,6 +5,7 @@ services:
         public: false
         bind:
             $em: '@sfs_cms.entity_manager'
+            $autoCompileOnPublish: '%sfs_cms.content.autocompile_on_publish%'
 
     Softspring\CmsBundle\Admin\ActionListener\ContentVersion\:
         resource: '../../src/Admin/ActionListener/ContentVersion/*'
