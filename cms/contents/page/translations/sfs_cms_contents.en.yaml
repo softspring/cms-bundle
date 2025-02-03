@@ -147,6 +147,7 @@ admin_page:
             preview.link: "Preview"
             export.link: "Export"
             publish.link: "Publish"
+            unpublish.link: "Unpublish"
             import_version.link: "Import version"
             cleanup_versions.link: "Cleanup versions"
             keep.link: "Keep version, click to no keep"
