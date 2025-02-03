@@ -140,7 +140,8 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('page_class')->defaultValue(Page::class)->end()
                         ->scalarNode('find_field_name')->defaultValue('id')->end()
                         ->booleanNode('save_compiled')->defaultTrue()->end()
-                        ->booleanNode('autocompile')->defaultFalse()->end()
+                        ->booleanNode('autocompile_on_save')->defaultFalse()->end()
+                        ->booleanNode('autocompile_on_publish')->defaultTrue()->end()
                         ->scalarNode('prefix_compiled')->defaultValue('')->end()
                         /* @deprecated cache_last_modified since 5.3, will be removed in 6.0, use global sfs_cms.cache block */
                         ->booleanNode('cache_last_modified')->defaultFalse()->end()
