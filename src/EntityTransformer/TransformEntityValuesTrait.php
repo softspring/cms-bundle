@@ -47,7 +47,7 @@ trait TransformEntityValuesTrait
                 $repo = $objectManager->getRepository($value['_entity_class']);
 
                 return $repo->findOneBy($value['_entity_id']);
-            } elseif (isset($value['_trans_id']) && isset($value['_default']) && (is_string($value[$value['_default']]) || is_null($value[$value['_default']]??null))) {
+            } elseif (isset($value['_trans_id']) && isset($value['_default']) && (is_string($value[$value['_default']]) || is_null($value[$value['_default']] ?? null))) {
                 // if we are sure that this is a translation, we can create a new Translation object
                 return Translation::createFromArray($value);
             } else {
