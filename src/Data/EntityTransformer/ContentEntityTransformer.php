@@ -157,7 +157,7 @@ abstract class ContentEntityTransformer implements ContentEntityTransformerInter
         return $content;
     }
 
-    public function importVersion(ContentInterface $content, string $layout, array $data, array $seo, ReferencesRepository $referencesRepository, array $options = []): ContentVersionInterface
+    public function importVersion(ContentInterface $content, string $layout, array $data, ?array $seo, ReferencesRepository $referencesRepository, array $options = []): ContentVersionInterface
     {
         $version = $this->contentManager->createVersion($content, null, $options['version_origin'] ?? ContentVersionInterface::ORIGIN_UNKNOWN);
         $version->setLayout($layout);
