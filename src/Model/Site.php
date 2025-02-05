@@ -49,7 +49,7 @@ class Site implements SiteInterface
     {
         foreach ($this->getConfig()['hosts'] as $hostConfig) {
             if ($hostConfig['canonical']) {
-                return $hostConfig['port'];
+                return $hostConfig['port'] ?? null;
             }
         }
 
