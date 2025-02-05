@@ -57,14 +57,15 @@ class SiteResolver
     public function getCanonicalRedirectUrl(SiteInterface $site, Request $request): string
     {
         $canonicalHost = $site->getCanonicalHost() ?? '';
-        $canonicalScheme = $site->getCanonicalScheme() ?? $request->getScheme();
 
         if (!$canonicalHost) {
             throw new SiteHasNotACanonicalHostException();
         }
 
-        $queryString = $request->getQueryString();
+        $canonicalPort = $site->getCanonicalPort() ? ":{$site->getCanonicalPort()}" : '';
+        $canonicalScheme = $site->getCanonicalScheme() ?? $request->getScheme();
+        $queryString = $request->getQueryString() ? "?{$request->getQueryString()}" : '';
 
-        return $canonicalScheme.'://'.$canonicalHost.$request->getPathInfo().($queryString ? '?'.$queryString : '');
+        return "$canonicalScheme://$canonicalHost$canonicalPort{$request->getPathInfo()}$queryString";
     }
 }
