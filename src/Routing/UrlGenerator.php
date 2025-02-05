@@ -183,8 +183,9 @@ class UrlGenerator
                 if ($hostConfig['canonical'] && (!$hostConfig['locale'] || $hostConfig['locale'] === $locale)) {
                     $scheme = $hostConfig['scheme'] ?: $this->requestStack->getCurrentRequest()->getScheme();
                     $host = $hostConfig['domain'];
+                    $port = $hostConfig['port'] ?? null;
 
-                    return "$scheme://$host";
+                    return "$scheme://$host".($port ? ":$port" : '');
                 }
             }
         }

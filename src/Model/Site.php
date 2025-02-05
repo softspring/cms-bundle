@@ -45,6 +45,18 @@ class Site implements SiteInterface
         return $this->getConfig()['hosts'][0]['domain'] ?? null;
     }
 
+    public function getCanonicalPort(): ?int
+    {
+        foreach ($this->getConfig()['hosts'] as $hostConfig) {
+            if ($hostConfig['canonical']) {
+                return $hostConfig['port'];
+            }
+        }
+
+        // return first host as default
+        return $this->getConfig()['hosts'][0]['port'] ?? null;
+    }
+
     public function getCanonicalScheme(): ?string
     {
         foreach ($this->getConfig()['hosts'] as $hostConfig) {
