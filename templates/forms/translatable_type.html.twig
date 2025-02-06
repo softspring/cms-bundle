@@ -7,5 +7,23 @@
     {% if attr['data-media-preview-input']|default(false) %}
         {% set attr = attr|merge({'data-media-preview-input': attr['data-media-preview-input']~'.'~form.vars.label|lower}) -%}
     {% endif %}
-    {{ parent() }}
+    {% if not translate_prepend_button|default(false) %}
+        {# adding data-lang allows to filter fields in content edition #}
+        <div class="input-group mb-3 flex-nowrap" data-lang="{{ form.vars.name }}">
+        <span class="input-group-text">
+            {{ form.vars.label|upper }}
+        </span>
+    {% endif %}
+
+    {{ form_widget(form, {'attr':attr}) }}
+
+    {% if not translate_prepend_button|default(false) %}
+        </div>
+    {% endif %}
 {% endblock %}
+
+{% block cms_translation_widget %}
+    {{ form_widget(form._trans_id) }}
+    {{ form_widget(form._json) }}
+    {{ block('translatable_widget') }}
+{% endblock cms_translation_widget %}
