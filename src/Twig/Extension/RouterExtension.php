@@ -45,15 +45,24 @@ class RouterExtension extends AbstractExtension
 
         switch ($linkData['type']) {
             case 'anchor':
+                if (empty($linkData['anchor'])) {
+                    return '';
+                }
                 $attributes['href'] = '#'.ltrim($linkData['anchor'], '#');
                 break;
 
             case 'route':
+                if (empty($linkData['route_name'])) {
+                    return '';
+                }
                 $attributes['href'] = $this->generateUrl($linkData, $locale, $site);
                 $attributesString .= $this->urlGenerator->getRouteAttributes($linkData);
                 break;
 
             case 'url':
+                if (empty($linkData['url'])) {
+                    return '';
+                }
                 $attributes['href'] = $linkData['url'];
                 break;
         }
