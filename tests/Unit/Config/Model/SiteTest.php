@@ -47,6 +47,7 @@ class SiteTest extends TestCase
                     'scheme' => 'https',
                     'canonical' => false,
                     'redirect_to_canonical' => false,
+                    'port' => null,
                 ],
             ],
             'paths' => [],

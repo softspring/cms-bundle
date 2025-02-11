@@ -54,6 +54,7 @@ class Site implements ConfigurationInterface
                         ->children()
                             ->scalarNode('domain')->isRequired()->end()
                             ->scalarNode('locale')->defaultFalse()->end()
+                            ->integerNode('port')->defaultNull()->end()
                             ->enumNode('scheme')->defaultValue('https')->values(['http', 'https', false])->end()
                             ->booleanNode('canonical')->defaultFalse()->end()
                             ->booleanNode('redirect_to_canonical')->defaultFalse()->end()
