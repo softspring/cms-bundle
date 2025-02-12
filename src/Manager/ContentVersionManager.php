@@ -74,7 +74,7 @@ class ContentVersionManager implements ContentVersionManagerInterface
 
         if (!$compiledData?->getDataPart('content')) {
             $compiledData = $this->contentCompiler->compileRequest($contentVersion, $request, $compiledData?->getDataPart('modules'), $throwExceptionOnCompileError);
-            $this->saveEntity($contentVersion);
+            $this->contentCompiler->canSaveCompiled($contentVersion) && $this->saveEntity($contentVersion);
         }
 
         return $compiledData;
