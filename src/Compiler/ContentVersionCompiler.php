@@ -80,7 +80,7 @@ class ContentVersionCompiler
     {
         $compiledData = $this->compiledDataManager->createEntity();
         $compiledData->setKey($this->getCompileKeyFromRequest($contentVersion, $request));
-        $contentVersion->addCompiled($compiledData);
+        $this->canSaveCompiled($contentVersion) && $contentVersion->addCompiled($compiledData);
 
         try {
             if (empty($compiledModules)) {
@@ -94,7 +94,7 @@ class ContentVersionCompiler
 
             // compile data. Take into account that this method can return content and fill errors in the RenderErrorList
             $compiledCode = $this->contentRender->render($contentVersion, $request, $renderErrors, $compiledModules);
-            $this->canSaveCompiled($contentVersion) && $compiledData->setDataPart('content', $compiledCode);
+            $compiledData->setDataPart('content', $compiledCode);
 
             // generates an exception if there are errors
             $renderErrors->buildExceptionOnErrors();
