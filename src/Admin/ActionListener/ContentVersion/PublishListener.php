@@ -21,8 +21,17 @@ class PublishListener extends AbstractContentVersionListener
 {
     protected const ACTION_NAME = 'version_publish';
 
-    public function __construct(ContentManagerInterface $contentManager, ContentVersionManagerInterface $contentVersionManager, RouteManagerInterface $routeManager, CmsConfig $cmsConfig, RouterInterface $router, FlashNotifier $flashNotifier, AuthorizationCheckerInterface $authorizationChecker, protected ContentVersionCompiler $contentVersionCompiler)
-    {
+    public function __construct(
+        ContentManagerInterface $contentManager,
+        ContentVersionManagerInterface $contentVersionManager,
+        RouteManagerInterface $routeManager,
+        CmsConfig $cmsConfig,
+        RouterInterface $router,
+        FlashNotifier $flashNotifier,
+        AuthorizationCheckerInterface $authorizationChecker,
+        protected ContentVersionCompiler $contentVersionCompiler,
+        protected bool $autoCompileOnPublish,
+    ) {
         parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
     }
 
@@ -72,7 +81,9 @@ class PublishListener extends AbstractContentVersionListener
         /** @var ContentInterface $content */
         $content = $event->getRequest()->attributes->get('content');
 
-        $this->contentVersionCompiler->compileAll($version, true);
+        if ($this->autoCompileOnPublish) {
+            $this->contentVersionCompiler->compileAll($version, true);
+        }
 
         $content->setPublishedVersion($version);
         $this->contentManager->saveEntity($content);

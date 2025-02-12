@@ -65,7 +65,15 @@
                                         </li>
                                     {% endif %}
                                 {% endif %}
-                                {#                            <li><a class="dropdown-item" href="#">Unpublish</a></li> #}
+                                {% if not content_config.admin.unpublish.is_granted or is_granted(content_config.admin.unpublish.is_granted, version) %}
+                                    {% if version.published %}
+                                        <li><a class="dropdown-item"
+                                               data-confirm-modal="{{ ('admin_'~content_type~'.version_unpublish.confirm_message_raw')|trans|base64_encode }}"
+                                               data-confirm-modal-title="{{ ('admin_'~content_type~'.version_publish.confirm_message_title')|trans }}"
+                                               href="{{ url('sfs_cms_admin_content_'~content_type~'_unpublish', {'content':entity.id, 'version':version.id, 'back': 'version_info'}) }}">{{ ('admin_'~content_type~'.versions.actions.unpublish.link')|trans }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endif %}
                                 {% if content_config.admin.version_translations is defined %}
                                 <li>
                                     {% if not content_config.admin.version_translations.is_granted or is_granted(content_config.admin.version_translations.is_granted, content_entity) %}

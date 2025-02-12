@@ -165,7 +165,7 @@ class UrlGenerator
     {
         $request = $this->requestStack->getCurrentRequest();
 
-        return $request->attributes->has('_cms_preview');
+        return $request && $request->attributes->has('_cms_preview');
     }
 
     protected function getSiteSchemeAndHost(RouteInterface $route, ?string $locale, $site = null): string
@@ -183,8 +183,9 @@ class UrlGenerator
                 if ($hostConfig['canonical'] && (!$hostConfig['locale'] || $hostConfig['locale'] === $locale)) {
                     $scheme = $hostConfig['scheme'] ?: $this->requestStack->getCurrentRequest()->getScheme();
                     $host = $hostConfig['domain'];
+                    $port = $hostConfig['port'] ?? null;
 
-                    return "$scheme://$host";
+                    return "$scheme://$host".($port ? ":$port" : '');
                 }
             }
         }

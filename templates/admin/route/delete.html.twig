@@ -1,0 +1,37 @@
+{% trans_default_domain 'sfs_cms_admin' %}
+{% extends '@SfsCms/admin_layout.html.twig' %}
+{% block title %}{{ 'admin_routes.delete.meta.title'|trans }}{% endblock %}
+
+{% form_theme form
+    '@SfsCms/forms/cms_theme.html.twig'
+    '@SfsCms/forms/routes_theme.html.twig' %}
+
+{% block breadcrums_content %}
+    {{ parent() }}
+    <li class="breadcrumb-item"><a
+                href="{{ url('sfs_cms_admin_routes_list') }}">{{ 'admin_routes.list.breadcrumb'|trans }}</a></li>
+    <li class="breadcrumb-item active"
+        aria-current="content">{{ 'admin_routes.delete.breadcrumb'|trans({'%name%': route.name|default(route.id) }) }}</li>
+{% endblock breadcrums_content %}
+
+{% block content %}
+    <h1 class="h3">{{ 'admin_routes.delete.title'|trans }}</h1>
+
+    {% include '@SfsCms/admin/route/_route_tabs.html.twig' with {'current':'delete', 'route':route} %}
+
+    <div class="container-fluid bg-white p-4">
+        {{ ('admin_routes.delete.main_warnings_raw')|trans|raw }}
+
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        {{ form_rest(form) }}
+
+        <div class="d-flex justify-content-end align-items-center pt-4">
+            <a href="{{ url('sfs_cms_admin_routes_update', {'route': route.id}) }}"
+               class="btn btn-outline-secondary">{{ 'admin_routes.delete.actions.cancel.button'|trans }}</a>
+            <button type="submit"
+                    class="btn btn-danger ms-3">{{ 'admin_routes.delete.actions.delete.button'|trans }}</button>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock content %}

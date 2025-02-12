@@ -138,7 +138,9 @@ abstract class ContentEntityTransformer implements ContentEntityTransformerInter
 
         $content->setExtraData($contentData['extra']);
 
-        if (isset($contentData['indexing'])) {
+        if (isset($contentData['seo'])) {
+            $content->setSeo($contentData['seo']);
+        } elseif (isset($contentData['indexing'])) {
             $content->setSeo($contentData['indexing']);
         }
         $content->setIndexing($contentData['indexing'] ?? []);
@@ -155,7 +157,7 @@ abstract class ContentEntityTransformer implements ContentEntityTransformerInter
         return $content;
     }
 
-    public function importVersion(ContentInterface $content, string $layout, array $data, array $seo, ReferencesRepository $referencesRepository, array $options = []): ContentVersionInterface
+    public function importVersion(ContentInterface $content, string $layout, array $data, ?array $seo, ReferencesRepository $referencesRepository, array $options = []): ContentVersionInterface
     {
         $version = $this->contentManager->createVersion($content, null, $options['version_origin'] ?? ContentVersionInterface::ORIGIN_UNKNOWN);
         $version->setLayout($layout);

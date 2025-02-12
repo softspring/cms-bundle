@@ -5,6 +5,9 @@ body {
 .tox-notifications-container {
     display: none;
 }
+.tox.tox-tinymce-inline {
+    z-index: 1000;
+}
 
 .cms-content-header {
     display: flex;
