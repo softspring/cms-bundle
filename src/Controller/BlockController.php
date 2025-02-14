@@ -46,9 +46,12 @@ class BlockController extends AbstractController
                 }
 
                 $blockData = DataMigrator::migrate($config['revision_migration_scripts'], $block->getData(), $config['revision'], $this->cmsConfig);
-                $response = new Response($this->twig->render($config['render_template'], $blockData + ['_block' => $block]));
+                $response = new Response($this->twig->render($config['render_template'], $blockData + [
+                    '_block' => $block,
+                    '_block_config' => $config,
+                ]));
             } else {
-                $response = new Response($this->twig->render($config['render_template']));
+                $response = new Response($this->twig->render($config['render_template'], ['_block_config' => $config]));
             }
 
             if ('ttl' !== $this->blockCacheType && false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
@@ -80,9 +83,12 @@ class BlockController extends AbstractController
             $config = $this->cmsConfig->getBlock($type);
 
             if (!$config['static']) {
-                $response = new Response($this->twig->render($config['render_template'], $block->getData() + ['_block' => $block]));
+                $response = new Response($this->twig->render($config['render_template'], $block->getData() + [
+                    '_block' => $block,
+                    '_block_config' => $config,
+                ]));
             } else {
-                $response = new Response($this->twig->render($config['render_template']));
+                $response = new Response($this->twig->render($config['render_template'], ['_block_config' => $config]));
             }
 
             if ('ttl' !== $this->blockCacheType && false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
