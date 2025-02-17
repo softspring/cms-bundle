@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Twig\Extension;
 
+use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Utils\HtmlValidator;
@@ -11,7 +12,7 @@ use Twig\TwigFunction;
 
 class UtilsExtension extends AbstractExtension
 {
-    public function __construct(protected ContentManagerInterface $contentManager)
+    public function __construct(protected ContentManagerInterface $contentManager, protected CmsConfig $cmsConfig)
     {
     }
 
@@ -57,11 +58,13 @@ class UtilsExtension extends AbstractExtension
                 case 'Softspring\CmsBundle\Controller\BlockController::renderByType':
                     $processed['type'] = 'block';
                     $processed['block_type'] = $params['_path']['type'] ?? 'unknown';
+                    $processed['block_config'] = $this->cmsConfig->getBlock("{$processed['block_type']}", false);
                     break;
 
                 case 'Softspring\CmsBundle\Controller\MenuController::renderByType':
                     $processed['type'] = 'menu';
                     $processed['menu_type'] = $params['_path']['type'] ?? 'unknown';
+                    $processed['menu_config'] = $this->cmsConfig->getMenu("{$processed['menu_type']}", false);
                     break;
 
                 default:
