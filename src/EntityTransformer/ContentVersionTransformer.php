@@ -3,14 +3,20 @@
 namespace Softspring\CmsBundle\EntityTransformer;
 
 use Doctrine\Persistence\ObjectManager;
+use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Model\ContentVersion;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
+use Softspring\CmsBundle\Utils\DataMigrator;
 use Softspring\MediaBundle\Model\MediaInterface;
 
 class ContentVersionTransformer implements TransformerInterface
 {
     use TransformEntityValuesTrait;
+
+    public function __construct(protected CmsConfig $cmsConfig)
+    {
+    }
 
     public function transform(object $entity, ObjectManager $em): void
     {
@@ -87,6 +93,9 @@ class ContentVersionTransformer implements TransformerInterface
 
         if ($contentVersion->getSeo()) {
             $seo = $contentVersion->getSeo();
+
+            $config = $this->cmsConfig->getContent($contentVersion->getContent());
+            $seo = DataMigrator::migrate($config['seo_revision_migration_scripts'], $seo, $config['revision'], $this->cmsConfig);
             foreach ($seo as $field => $value) {
                 $seo[$field] = $this->untransformEntityValues($value, $em);
             }
