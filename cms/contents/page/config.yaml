@@ -1,6 +1,6 @@
 # this is the page base configuration
 content:
-    revision: 1
+    revision: 2
     entity_class: 'Softspring\CmsBundle\Entity\Page'
     default_layout: 'default'
     version_seo:

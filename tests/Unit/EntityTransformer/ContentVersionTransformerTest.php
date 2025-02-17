@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Entity\ContentVersion;
 use Softspring\CmsBundle\Entity\Route;
 use Softspring\CmsBundle\EntityTransformer\ContentVersionTransformer;
@@ -15,6 +16,7 @@ use Softspring\MediaBundle\Entity\Media;
 
 class ContentVersionTransformerTest extends TestCase
 {
+    protected CmsConfig|MockObject $cmsConfig;
     protected EntityManager|MockObject $em;
     protected ClassMetadata|MockObject $routeClassMetadata;
     protected ClassMetadata|MockObject $mediaClassMetadata;
@@ -23,6 +25,7 @@ class ContentVersionTransformerTest extends TestCase
 
     protected function setUp(): void
     {
+        $this->cmsConfig = $this->createMock(CmsConfig::class);
         $this->em = $this->createMock(EntityManager::class);
 
         $this->routeClassMetadata = $this->createMock(ClassMetadata::class);
@@ -64,7 +67,7 @@ class ContentVersionTransformerTest extends TestCase
     {
         $this->expectException(UnsupportedException::class);
 
-        $versionTransformer = new ContentVersionTransformer();
+        $versionTransformer = new ContentVersionTransformer($this->cmsConfig);
         $versionTransformer->transform(new \stdClass(), $this->em);
     }
 
@@ -72,7 +75,7 @@ class ContentVersionTransformerTest extends TestCase
     {
         $version = new ContentVersion();
 
-        $versionTransformer = new ContentVersionTransformer();
+        $versionTransformer = new ContentVersionTransformer($this->cmsConfig);
 
         $versionTransformer->transform($version, $this->em);
         $this->assertNull($version->getData());
@@ -177,7 +180,7 @@ class ContentVersionTransformerTest extends TestCase
         $version = new ContentVersion();
         $version->setData($data);
 
-        $versionTransformer = new ContentVersionTransformer();
+        $versionTransformer = new ContentVersionTransformer($this->cmsConfig);
         $versionTransformer->transform($version, $this->em);
 
         $this->assertEquals($expected, $version->getData());
@@ -281,7 +284,7 @@ class ContentVersionTransformerTest extends TestCase
         $version = new ContentVersion();
         $version->setData($data);
 
-        $versionTransformer = new ContentVersionTransformer();
+        $versionTransformer = new ContentVersionTransformer($this->cmsConfig);
         $versionTransformer->untransform($version, $this->em);
 
         $this->assertEquals($expected, $version->getData());

@@ -123,6 +123,14 @@ class ConfigLoader
         foreach ($configurations as $contentName => $contentConfigs) {
             $contents[$contentName] = $processor->processConfiguration(new Content($contentName, $this->getConfigExtensions(Content::class)), $contentConfigs);
             $contents[$contentName]['_id'] = $contentName;
+            $contents[$contentName]['seo_revision_migration_scripts'] = [];
+
+            foreach ($this->collectionPaths as $collectionPath) {
+                $elementsPath = $this->container->getParameter('kernel.project_dir').'/'.trim($collectionPath, '/').'/contents/'.$contentName;
+                if (is_file("$elementsPath/seo-migrate.php")) {
+                    $contents[$contentName]['seo_revision_migration_scripts'][] = "$elementsPath/seo-migrate.php";
+                }
+            }
         }
 
         return $contents;
