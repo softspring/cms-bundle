@@ -10,21 +10,8 @@
 
 ## Documentation
 
-- [1. Installation](docs/1_installation.md)
-- [2. Getting started](docs/2_getting_started.md)
-- [3. Concepts](docs/3_concepts.md)
-- [4. Configuration](docs/4_configuration.md)
-- [5. Sites](docs/5_sites.md)
-- 6- Layouts
-- [7. Modules](docs/7_modules.md)
-- 8- Menus
-- 9- Blocks
-- 10- Dynamic forms
-- 11- Using medias
-- 12- Caching
-- 13- Logging
-- [14. Extend with collections](docs/14_collections.md)
- 
+You have all information in [Armonic Docs-CMS Bundle](https://armonic.softspring.es/latest/bundles/cms-bundle/install)
+
 ## License
 
 This bundle is under the MIT license. See the complete license in the bundle [LICENSE](LICENSE) file.
