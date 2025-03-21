@@ -37,13 +37,18 @@ trait TransformEntityValuesTrait
         return $value;
     }
 
+    protected array $_references = [];
+
     protected function untransformEntityValues($value, ObjectManager $objectManager): mixed
     {
         if (is_array($value)) {
             if (isset($value['_entity_class'])) {
-                $repo = $objectManager->getRepository($value['_entity_class']);
+                $serializedId = sha1(serialize($value['_entity_id']));
+                if (!isset($this->_references[$value['_entity_class']][$serializedId])) {
+                    $this->_references[$value['_entity_class']][$serializedId] = $objectManager->getRepository($value['_entity_class'])->findOneBy($value['_entity_id']);
+                }
 
-                return $repo->findOneBy($value['_entity_id']);
+                return $this->_references[$value['_entity_class']][$serializedId];
             } else {
                 foreach ($value as $key => $value2) {
                     $value[$key] = $this->untransformEntityValues($value2, $objectManager);
