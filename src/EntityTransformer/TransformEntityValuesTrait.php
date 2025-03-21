@@ -40,13 +40,18 @@ trait TransformEntityValuesTrait
         return $value;
     }
 
+    protected array $_references = [];
+
     protected function untransformEntityValues($value, ObjectManager $objectManager): mixed
     {
         if (is_array($value)) {
             if (isset($value['_entity_class'])) {
-                $repo = $objectManager->getRepository($value['_entity_class']);
+                $serializedId = sha1(serialize($value['_entity_id']));
+                if (!isset($this->_references[$value['_entity_class']][$serializedId])) {
+                    $this->_references[$value['_entity_class']][$serializedId] = $objectManager->getRepository($value['_entity_class'])->findOneBy($value['_entity_id']);
+                }
 
-                return $repo->findOneBy($value['_entity_id']);
+                return $this->_references[$value['_entity_class']][$serializedId];
             } elseif (isset($value['_trans_id']) && isset($value['_default']) && (isset($value[$value['_default']]) && is_string($value[$value['_default']]) || is_null($value[$value['_default']] ?? null))) {
                 // if we are sure that this is a translation, we can create a new Translation object
                 return Translation::createFromArray($value);
