@@ -16,7 +16,7 @@ class ListListener extends AbstractContentListener
             SfsCmsEvents::ADMIN_CONTENTS_LIST_INITIALIZE => [
                 ['onInitializeGetConfig', 20],
                 ['onEventDispatchContentTypeEvent', 10],
-                ['onInitializeIsGranted', 0],
+                ['onInitializeUpdateHelperConfig', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENTS_LIST_FILTER_FORM_PREPARE => [
                 ['onEventDispatchContentTypeEvent', 10],
