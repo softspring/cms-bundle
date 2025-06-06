@@ -28,6 +28,7 @@ services:
             $menuCacheType: '%sfs_cms.menu.cache.type%'
             $blockCacheType: '%sfs_cms.block.cache.type%'
             $mediaStoragePath: '%sfs_media.storage.filesystem.path%'
+            $compiledDataExpirationTtl: '%sfs_cms.compiled.expiration_ttl%'
 
     Softspring\CmsBundle\Config\CmsConfig:
         arguments:

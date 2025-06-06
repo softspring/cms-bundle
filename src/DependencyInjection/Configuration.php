@@ -170,6 +170,13 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
 
+                ->arrayNode('compiled')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->integerNode('expiration_ttl')->defaultValue(3600*24*30)->end()
+                    ->end()
+                ->end()
+
             ->end()
         ;
 
