@@ -20,7 +20,7 @@ class RoutesListener extends AbstractContentListener
             SfsCmsEvents::ADMIN_CONTENTS_ROUTES_INITIALIZE => [
                 ['onInitializeGetConfig', 20],
                 ['onEventDispatchContentTypeEvent', 10],
-                ['onInitializeIsGranted', 0],
+                ['onInitializeUpdateHelperConfig', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENTS_ROUTES_LOAD_ENTITY => [
                 ['onEventDispatchContentTypeEvent', 10],

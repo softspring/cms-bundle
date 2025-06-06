@@ -42,7 +42,7 @@ class ReadListener extends AbstractContentListener
             SfsCmsEvents::ADMIN_CONTENTS_READ_INITIALIZE => [
                 ['onInitializeGetConfig', 20],
                 ['onEventDispatchContentTypeEvent', 10],
-                ['onInitializeIsGranted', 0],
+                ['onInitializeUpdateHelperConfig', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENTS_READ_LOAD_ENTITY => [
                 ['onEventDispatchContentTypeEvent', 10],
