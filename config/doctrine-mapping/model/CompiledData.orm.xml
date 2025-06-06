@@ -7,6 +7,7 @@
     <mapped-superclass name="Softspring\CmsBundle\Model\CompiledData" table="cms_compiled_data">
         <indexes>
             <index name="key_idx" columns="compiled_key"/>
+            <index name="expires_at_idx" columns="expires_at"/>
         </indexes>
 
         <field name="key" column="compiled_key" type="string" length="50" nullable="true"/>

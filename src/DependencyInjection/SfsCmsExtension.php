@@ -98,6 +98,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
 
         // configure compiled data class
         $container->setParameter('sfs_cms.compiled.class', CompiledData::class);
+        $container->setParameter('sfs_cms.compiled.expiration_ttl', $config['compiled']['expiration_ttl'] ?? null);
 
         $this->processDataClasses($container);
 
