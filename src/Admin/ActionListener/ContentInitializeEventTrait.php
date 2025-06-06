@@ -49,7 +49,7 @@ trait ContentInitializeEventTrait
     }
 
     /**
-     * @deprecated This method is deprecated and will be removed in future versions.
+     * @deprecated this method is deprecated and will be removed in future versions
      */
     public function onInitializeIsGranted(InitializeEvent $event): void
     {
