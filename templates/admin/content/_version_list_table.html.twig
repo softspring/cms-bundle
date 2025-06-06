@@ -103,8 +103,16 @@
                     {% endif %}
                 {% endif %}
             </td>
-            <td>{% if version.deleteOnCleanup %}<i class="bi bi-trash text-secondary"
-                                                   title="This version will be removed on versions cleanup"></i>{% endif %}
+            <td>
+                {% if content_config.admin.version_delete.is_granted and is_granted(content_config.admin.version_delete.is_granted, version) %}
+                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_delete_version', {'content':entity.id, 'version':version.id, 'back': backSection}) }}">
+                        <i class="bi bi-trash text-secondary"
+                           title="This version will be removed on versions cleanup"></i>
+                    </a>
+                {% elseif version.deleteOnCleanup %}
+                    <i class="bi bi-trash text-secondary"
+                                                   title="This version will be removed on versions cleanup"></i>
+                {% endif %}
             </td>
         {% endblock tds %}
     {% endembed %}

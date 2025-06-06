@@ -23,7 +23,7 @@ class CreateListener extends AbstractContentListener
             SfsCmsEvents::ADMIN_CONTENTS_CREATE_INITIALIZE => [
                 ['onInitializeGetConfig', 20],
                 ['onEventDispatchContentTypeEvent', 10],
-                ['onInitializeIsGranted', 0],
+                ['onInitializeUpdateHelperConfig', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENTS_CREATE_ENTITY => [
                 ['onEventDispatchContentTypeEvent', 10],

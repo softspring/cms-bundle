@@ -43,7 +43,7 @@ class UpdateListener extends AbstractContentListener
             SfsCmsEvents::ADMIN_CONTENTS_UPDATE_INITIALIZE => [
                 ['onInitializeGetConfig', 20],
                 ['onEventDispatchContentTypeEvent', 10],
-                ['onInitializeIsGranted', 0],
+                ['onInitializeUpdateHelperConfig', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENTS_UPDATE_LOAD_ENTITY => [
                 ['onEventDispatchContentTypeEvent', 10],
