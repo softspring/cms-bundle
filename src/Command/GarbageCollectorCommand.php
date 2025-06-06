@@ -11,9 +11,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 class GarbageCollectorCommand extends Command
 {
     public function __construct(
-        protected EntityManagerInterface $em
-    )
-    {
+        protected EntityManagerInterface $em,
+    ) {
         parent::__construct();
     }
 

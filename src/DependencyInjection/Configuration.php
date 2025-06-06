@@ -173,7 +173,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('compiled')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->integerNode('expiration_ttl')->defaultValue(3600*24*30)->end()
+                        ->integerNode('expiration_ttl')->defaultValue(3600 * 24 * 30)->end()
                     ->end()
                 ->end()
 
