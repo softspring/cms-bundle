@@ -13,7 +13,7 @@ class CompiledDataManager implements CompiledDataManagerInterface
 
     public function __construct(
         protected EntityManagerInterface $em,
-        protected ?int $expirationTtl = 3600 * 24 * 30, // 30 days
+        protected ?int $compiledDataExpirationTtl = null,
     ) {
     }
 
@@ -28,8 +28,8 @@ class CompiledDataManager implements CompiledDataManagerInterface
         /** @var CompiledDataInterface $entity */
         $entity = new $class();
 
-        if ($this->expirationTtl) {
-            $entity->setExpiresAt(new DateTime('now +'.$this->expirationTtl.' seconds'));
+        if ($this->compiledDataExpirationTtl) {
+            $entity->setExpiresAt(new DateTime('now +'.$this->compiledDataExpirationTtl.' seconds'));
         }
 
         return $entity;
