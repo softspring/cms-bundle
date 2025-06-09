@@ -42,6 +42,6 @@ class GarbageCollectorCommand extends Command
     protected function cleanupExpiredCompiledData(): void
     {
         $connection = $this->em->getConnection();
-        $connection->executeQuery('DELETE FROM cms_compiled_data WHERE expires_at < NOW()');
+        $connection->executeQuery('DELETE FROM cms_compiled_data WHERE expires_at < UNIX_TIMESTAMP()');
     }
 }
