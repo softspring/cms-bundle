@@ -2,10 +2,18 @@
 
 namespace Softspring\CmsBundle\Model;
 
-use DateTime;
 use Doctrine\Common\Collections\Collection;
 
-interface ContentInterface
+/**
+ * @method ContentVersionInterface[]|Collection getVersions()
+ * @method void                                 addVersion(ContentVersionInterface $version)
+ * @method void                                 removeVersion(ContentVersionInterface $version)
+ * @method ContentVersionInterface|null         getPublishedVersion()
+ * @method void                                 setPublishedVersion(ContentVersionInterface|null $publishedVersion)
+ * @method ContentVersionInterface|null         getLastVersion()
+ * @method void                                 setLastVersion(?ContentVersionInterface $lastVersion)
+ */
+interface ContentInterface extends VersionableInterface
 {
     public function getId();
 
@@ -21,19 +29,6 @@ interface ContentInterface
     public function addSite(SiteInterface $site): void;
 
     public function removeSite(SiteInterface $site): void;
-
-    /**
-     * @psalm-return ContentVersionInterface[]|Collection
-     */
-    public function getVersions(): Collection;
-
-    public function addVersion(ContentVersionInterface $version): void;
-
-    public function removeVersion(ContentVersionInterface $version): void;
-
-    public function getLastVersionNumber(): ?int;
-
-    public function setLastVersionNumber(?int $lastVersionNumber): void;
 
     /**
      * @return RouteInterface[]|Collection
@@ -64,15 +59,7 @@ interface ContentInterface
 
     public function setIndexing(?array $indexing): void;
 
-    public function getPublishedVersion(): ?ContentVersionInterface;
-
-    public function setPublishedVersion(?ContentVersionInterface $publishedVersion): void;
-
     public function getStatus(): string;
-
-    public function getLastVersion(): ?ContentVersionInterface;
-
-    public function setLastVersion(?ContentVersionInterface $lastVersion): void;
 
     public function getDefaultLocale(): ?string;
 
@@ -83,8 +70,4 @@ interface ContentInterface
     public function setLocales(?array $locales): void;
 
     public function addLocale(string $locale): void;
-
-    public function getLastModified(): ?DateTime;
-
-    public function setLastModified(?DateTime $lastModified): void;
 }

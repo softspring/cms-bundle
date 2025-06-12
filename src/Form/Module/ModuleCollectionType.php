@@ -109,8 +109,7 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
             'collection_row_attr' => [],
         ]);
 
-        $resolver->setRequired('content');
-        $resolver->setAllowedTypes('content', [ContentInterface::class]);
+        $resolver->setAllowedTypes('content', [ContentInterface::class, 'null']);
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void

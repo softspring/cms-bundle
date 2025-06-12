@@ -2,22 +2,21 @@
 
 namespace Softspring\CmsBundle\Model;
 
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
+/**
+ * @property ContentVersionInterface[]|Collection $versions
+ * @property ContentVersionInterface|null         $publishedVersion
+ * @property ContentVersionInterface|null         $lastVersion
+ */
 abstract class Content implements ContentInterface
 {
+    use Traits\VersionableTrait;
+
     protected ?string $name = null;
 
     protected ?Collection $sites = null;
-
-    /**
-     * @psalm-var ContentVersionInterface[]|Collection
-     */
-    protected Collection $versions;
-
-    protected ?int $lastVersionNumber = null;
 
     /**
      * @psalm-var RouteInterface[]|Collection
@@ -30,15 +29,9 @@ abstract class Content implements ContentInterface
 
     protected ?array $indexing = null;
 
-    protected ?ContentVersionInterface $publishedVersion = null;
-
-    protected ?ContentVersionInterface $lastVersion = null;
-
     protected ?string $defaultLocale = null;
 
     protected ?array $locales = null;
-
-    protected ?int $lastModified = null;
 
     public function __construct()
     {
@@ -93,39 +86,6 @@ abstract class Content implements ContentInterface
                 $route->removeSite($site);
             }
         }
-    }
-
-    /**
-     * @psalm-return Collection|ContentVersionInterface[]
-     */
-    public function getVersions(): Collection
-    {
-        return $this->versions;
-    }
-
-    public function addVersion(ContentVersionInterface $version): void
-    {
-        if (!$this->versions->contains($version)) {
-            $this->versions->add($version);
-            $version->setContent($this);
-        }
-    }
-
-    public function removeVersion(ContentVersionInterface $version): void
-    {
-        if ($this->versions->contains($version)) {
-            $this->versions->removeElement($version);
-        }
-    }
-
-    public function getLastVersionNumber(): ?int
-    {
-        return $this->lastVersionNumber;
-    }
-
-    public function setLastVersionNumber(?int $lastVersionNumber): void
-    {
-        $this->lastVersionNumber = $lastVersionNumber;
     }
 
     /**
@@ -207,17 +167,6 @@ abstract class Content implements ContentInterface
         $this->indexing = $indexing;
     }
 
-    public function getPublishedVersion(): ?ContentVersionInterface
-    {
-        return $this->publishedVersion;
-    }
-
-    public function setPublishedVersion(?ContentVersionInterface $publishedVersion): void
-    {
-        $this->publishedVersion = $publishedVersion;
-        $this->setLastModified(new DateTime());
-    }
-
     public function getStatus(): string
     {
         if ($this->getPublishedVersion()) {
@@ -225,16 +174,6 @@ abstract class Content implements ContentInterface
         }
 
         return 'draft';
-    }
-
-    public function getLastVersion(): ?ContentVersionInterface
-    {
-        return $this->lastVersion;
-    }
-
-    public function setLastVersion(?ContentVersionInterface $lastVersion): void
-    {
-        $this->lastVersion = $lastVersion;
     }
 
     public function getDefaultLocale(): ?string
@@ -262,15 +201,5 @@ abstract class Content implements ContentInterface
     public function addLocale(string $locale): void
     {
         $this->locales = array_unique(array_merge($this->getLocales(), [$locale]));
-    }
-
-    public function getLastModified(): ?DateTime
-    {
-        return $this->lastModified ? DateTime::createFromFormat('U', "{$this->lastModified}") : null;
-    }
-
-    public function setLastModified(?DateTime $lastModified): void
-    {
-        $this->lastModified = $lastModified ? (int) $lastModified->format('U') : null;
     }
 }
