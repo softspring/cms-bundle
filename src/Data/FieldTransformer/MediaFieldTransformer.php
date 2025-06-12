@@ -39,6 +39,7 @@ class MediaFieldTransformer implements FieldTransformerInterface
             'image/png' => '.png',
             'image/gif' => '.gif',
             'image/webp' => '.webp',
+            'image/svg+xml' => '.svg',
             'video/webm' => '.webm',
         ][$originalVersion->getFileMimeType()] ?? '');
         $versionFiles['_original'] = $mediaFileName;
