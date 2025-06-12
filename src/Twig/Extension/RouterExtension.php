@@ -103,9 +103,7 @@ class RouterExtension extends AbstractExtension
 
             $params = $route['route_params'] ?? [];
 
-            if ($locale) {
-                $params['_locale'] = $this->requestStack->getCurrentRequest()->getLocale(); // TODO CHECK THIS ????
-            }
+            $params['_locale'] = $locale ?: ($this->requestStack->getCurrentRequest()?->getLocale() ?: 'en');
 
             if ($site) {
                 $params['_site'] = $site;
@@ -116,11 +114,9 @@ class RouterExtension extends AbstractExtension
             return $this->router->generate($route->getId(), [], $referenceType);
         }
 
-        $params = [];
-
-        if ($locale) {
-            $params['_locale'] = $this->requestStack->getCurrentRequest()->getLocale();
-        }
+        $params = [
+            '_locale' => $locale ?: ($this->requestStack->getCurrentRequest()?->getLocale() ?: 'en'),
+        ];
 
         return $this->router->generate($route, $params, $referenceType);
     }
