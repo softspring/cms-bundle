@@ -18,11 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractModuleType extends AbstractNodeType
 {
-    protected CmsHelper $cmsHelper;
-
-    public function __construct(CmsHelper $cmsHelper)
+    public function __construct(protected CmsHelper $cmsHelper)
     {
-        $this->cmsHelper = $cmsHelper;
     }
 
     public function configureChildOptions(OptionsResolver $resolver): void
@@ -52,10 +49,10 @@ abstract class AbstractModuleType extends AbstractNodeType
         $resolver->setAllowedTypes('module_migrations', ['array']);
 
         $resolver->setRequired('content_type');
-        $resolver->setAllowedTypes('content_type', ['string']);
+        $resolver->setAllowedTypes('content_type', ['string', 'null']);
 
         $resolver->setRequired('content');
-        $resolver->setAllowedTypes('content', [ContentInterface::class]);
+        $resolver->setAllowedTypes('content', [ContentInterface::class, 'null']);
 
         $resolver->setDefault('form_template', null);
         $resolver->setAllowedTypes('form_template', ['null', 'string']);
@@ -69,11 +66,12 @@ abstract class AbstractModuleType extends AbstractNodeType
         $resolver->setAllowedTypes('available_locales', ['null', 'array']);
 
         $resolver->setNormalizer('available_sites', function (Options $options, $value) {
-            return $this->cmsHelper->site()->normalizeFormAvailableSites($value, $options['content']);
+            return $options['content'] ? $this->cmsHelper->site()->normalizeFormAvailableSites($value, $options['content']) : [];
         });
 
         $resolver->setNormalizer('available_locales', function (Options $options, $value) {
-            return $this->cmsHelper->locale()->normalizeFormAvailableLocalesForContent($value, $options['content']);
+            return $options['content'] ? $this->cmsHelper->locale()->normalizeFormAvailableLocalesForContent($value, $options['content']) :
+                $this->cmsHelper->locale()->getEnabledLocales();
         });
     }
 
@@ -118,7 +116,7 @@ abstract class AbstractModuleType extends AbstractNodeType
             });
         }
 
-        if ($options['site_filter'] && $options['content']->getSites()->count() > 1) {
+        if ($options['site_filter'] && $options['content']?->getSites()->count() > 1) {
             $builder->add('site_filter', SiteChoiceType::class, [
                 'multiple' => true,
                 'expanded' => true,

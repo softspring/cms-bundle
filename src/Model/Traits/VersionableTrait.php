@@ -86,4 +86,13 @@ trait VersionableTrait
     {
         $this->lastModified = $lastModified ? (int) $lastModified->format('U') : null;
     }
+
+    public function getStatus(): string
+    {
+        if ($this->getPublishedVersion()) {
+            return 'published';
+        }
+
+        return 'draft';
+    }
 }

@@ -7,6 +7,8 @@ use Softspring\MediaBundle\Model\MediaInterface;
 
 interface ContentDataInterface
 {
+    public function _setDataCallback(callable $getDataCallback): void;
+
     public function getData(): ?array;
 
     public function setData(?array $data): void;

@@ -130,6 +130,8 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $adminEnabled && $loader->load('controller/admin_content_version.yaml');
         $adminEnabled && $loader->load('controller/admin_menus.yaml');
         $adminEnabled && $loader->load('controller/admin_routes.yaml');
+        $adminEnabled && $loader->load('controller/admin_sections.yaml');
+        $adminEnabled && $loader->load('controller/admin_sections_version.yaml');
         $adminEnabled && $loader->load('controller/admin_sites.yaml');
 
         if (class_exists('Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle')) {

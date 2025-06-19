@@ -31,4 +31,6 @@ interface VersionableInterface
     public function getLastModified(): ?DateTime;
 
     public function setLastModified(?DateTime $lastModified): void;
+
+    public function getStatus(): string;
 }

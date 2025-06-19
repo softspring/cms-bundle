@@ -1,0 +1,15 @@
+section:
+    label: "Section"
+    prototype_button: "Section"
+    prototype_button_icon: '<i class="bi bi-boxes"></i>'
+    form:
+        _group:
+            filters: "Filters"
+            others: "Others"
+            attributes: "Attributes"
+            section: "Section"
+        locale_filter.label: "Locales"
+        site_filter.label: "Sites"
+        id.label: "Id"
+        class.label: "Classes"
+        section.label: "Section"

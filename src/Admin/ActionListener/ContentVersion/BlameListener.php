@@ -3,8 +3,8 @@
 namespace Softspring\CmsBundle\Admin\ActionListener\ContentVersion;
 
 use DateTime;
-use Softspring\CmsBundle\Model\ContentInterface;
-use Softspring\CmsBundle\Model\ContentVersionInterface;
+use Softspring\CmsBundle\Model\VersionableInterface;
+use Softspring\CmsBundle\Model\VersionInterface;
 use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\Component\CrudlController\Event\ApplyEvent;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -43,6 +43,21 @@ class BlameListener implements EventSubscriberInterface
             SfsCmsEvents::ADMIN_CONTENTS_DUPLICATE_APPLY => [
                 ['onDuplicateVersion', 6],
             ],
+            //            SfsCmsEvents::ADMIN_SECTION_VERSIONS_CREATE_APPLY => [
+            //                ['onCreateVersion', 5],
+            //            ],
+            //            SfsCmsEvents::ADMIN_SECTION_VERSIONS_PUBLISH_APPLY => [
+            //                ['onPublishVersion', 5],
+            //            ],
+            //            SfsCmsEvents::ADMIN_SECTION_VERSIONS_LOCK_APPLY => [
+            //                ['onLockVersion', 5],
+            //            ],
+            //            SfsCmsEvents::ADMIN_SECTION_VERSIONS_RECOMPILE_APPLY => [
+            //                ['onRecompileVersion', 5],
+            //            ],
+            //            SfsCmsEvents::ADMIN_SECTIONS_DUPLICATE_APPLY => [
+            //                ['onDuplicateVersion', 6],
+            //            ],
         ];
     }
 
@@ -52,7 +67,7 @@ class BlameListener implements EventSubscriberInterface
             return;
         }
 
-        /** @var ContentVersionInterface $version */
+        /** @var VersionInterface $version */
         $version = $event->getEntity();
         $version->setMetaField('creator', $this->getUser());
         $this->addHistory($version, 'create');
@@ -64,9 +79,9 @@ class BlameListener implements EventSubscriberInterface
             return;
         }
 
-        /** @var ContentInterface $content */
-        $content = $event->getEntity();
-        $version = $content->getVersions()->first();
+        /** @var VersionableInterface $versionable */
+        $versionable = $event->getEntity();
+        $version = $versionable->getVersions()->first();
         $version->setMetaField('creator', $this->getUser());
         $this->addHistory($version, 'duplicate');
     }
@@ -77,7 +92,7 @@ class BlameListener implements EventSubscriberInterface
             return;
         }
 
-        /** @var ContentVersionInterface $version */
+        /** @var VersionInterface $version */
         $version = $event->getEntity();
 
         // this runs before the version is updated, so we check the value inverted
@@ -91,7 +106,7 @@ class BlameListener implements EventSubscriberInterface
             return;
         }
 
-        /** @var ContentVersionInterface $version */
+        /** @var VersionInterface $version */
         $version = $event->getEntity();
         $this->addHistory($version, 'recompile');
     }
@@ -102,15 +117,15 @@ class BlameListener implements EventSubscriberInterface
             return;
         }
 
-        /** @var ContentVersionInterface $version */
+        /** @var VersionInterface $version */
         $version = $event->getEntity();
-        /** @var ContentInterface $content */
-        $content = $event->getRequest()->attributes->get('content');
+        /** @var VersionableInterface $versionable */
+        $versionable = $event->getRequest()->attributes->get('content');
 
         $this->addHistory($version, 'publish');
 
-        if ($content->getPublishedVersion()) {
-            $this->addHistory($content->getPublishedVersion(), 'unpublish', [
+        if ($versionable->getPublishedVersion()) {
+            $this->addHistory($versionable->getPublishedVersion(), 'unpublish', [
                 'new_version' => 'v'.$version->getVersionNumber(),
             ]);
         }
@@ -138,9 +153,9 @@ class BlameListener implements EventSubscriberInterface
         return $userData;
     }
 
-    protected function addHistory(ContentVersionInterface $contentVersion, string $action, array $extra = []): void
+    protected function addHistory(VersionInterface $version, string $action, array $extra = []): void
     {
-        $history = $contentVersion->getMetaField('history', []);
+        $history = $version->getMetaField('history', []);
 
         $date = new DateTime();
 
@@ -153,6 +168,6 @@ class BlameListener implements EventSubscriberInterface
             'user' => $this->getUser(),
             'extra' => $extra,
         ];
-        $contentVersion->setMetaField('history', $history);
+        $version->setMetaField('history', $history);
     }
 }

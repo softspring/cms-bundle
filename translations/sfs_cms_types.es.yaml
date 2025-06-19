@@ -19,3 +19,6 @@ link_type:
 symfony_route:
     show_parameters_link: 'mostrar parametros'
     hide_parameters_link: 'ocultar parametros'
+
+section_info:
+    draft_info: 'Esta sección está en modo borrador. Esto quiere decir que la sección no está publicada y no será visible en el sitio hasta que sea publicada.'

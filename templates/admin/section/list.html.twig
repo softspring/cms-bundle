@@ -1,0 +1,80 @@
+{% trans_default_domain 'sfs_cms_admin' %}
+{% extends '@SfsCms/admin_layout.html.twig' %}
+
+{% block title %}{{ 'admin_sections.list.meta.title'|trans }}{% endblock %}
+
+{% block breadcrums_content %}
+    {{ parent() }}
+    <li class="breadcrumb-item active" aria-current="content">{{ 'admin_sections.list.breadcrumb'|trans }}</li>
+{% endblock breadcrums_content %}
+
+{% block content %}
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3">{{ 'admin_sections.list.title'|trans }}</h1>
+
+        {#        #}{# TODO restrict by permission #}
+        <div class="d-flex flex-wrap justify-items-end alig-items-center">
+            <a class="btn btn-primary ms-3 mb-2" href="{{ url('sfs_cms_admin_sections_create') }}">{{ 'admin_sections.list.actions.create.link'|trans }} <i class="bi bi-plus-circle"></i></a>
+        </div>
+    </div>
+
+    <div class="container-fluid bg-white p-4">
+        {% if filterForm.vars.submitted or entities|length %}
+            <div class="mb-4">
+                {{ form_start(filterForm) }}
+                <button class="btn btn-link px-0" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter"><i class="bi bi-filter h4 text-muted align-middle"></i> Filters</button>
+                <div class="row align-items-end border shadow-sm rounded p-3 collapse show" id="collapseFilter">
+                    {% if filterForm.name is defined %}<div class="col-12 col-md-6 col-lg-2">{{ form_row(filterForm.name) }}</div>{% endif %}
+                    {% if filterForm.status is defined %}<div class="col-12 col-md-6 col-lg-2">{{ form_row(filterForm.status, {'attr':{'onchange':'submit()'}}) }}</div>{% endif %}
+                    {% if filterForm.publishedVersionSection is defined %}<div class="col-12 col-md-6 col-lg-4">{{ form_row(filterForm.publishedVersionSection, {'attr':{'onchange':'submit()'}}) }}</div>{% endif %}
+                    <div class="col pb-3">
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+                    </div>
+                </div>
+                {{ form_widget(filterForm) }}
+                {{ form_rest(filterForm) }}
+                {{ form_end(filterForm) }}
+            </div>
+        {% endif %}
+
+        {% embed '@SfsComponents/paginator/table.html.twig' with {'collection':entities, 'filterForm': filterForm, 'pagination_section': 'sfs_cms_admin_sections_list'} only %}
+            {% trans_default_domain 'sfs_cms_admin' %}
+            {% block ths %}
+                <th class="p-3" scope="col">
+                    <a href="{{ collection.sortToggleUrl(app.request, 'id') }}" class="text-dark">
+                        {{ 'admin_sections.list.fields.id.header'|trans }}
+                        {% if collection.sortedBy('id', 'asc') %}<i class="bi bi-caret-up-fill"></i>{% elseif collection.sortedBy('id', 'desc') %}<i class="bi bi-caret-down-fill"></i>{% endif %}
+                    </a>
+                </th>
+                <th class="">{{ ('admin_sections.list.fields.status.header')|trans }}</th>
+                <th class="">{{ ('admin_sections.list.fields.publishedAt.header')|trans }}</th>
+                <th class="p-3">&nbsp;</th>
+            {% endblock ths %}
+
+            {% block tbody %}
+                {% include '@SfsCms/admin/section/list-page.html.twig' %}
+            {% endblock tbody %}
+
+            {% block empty_message %}
+                {% if filterForm.vars.submitted %}
+                    <p class="text-center text-muted">
+                        {{ ('admin_sections.list.empty.clean_filters')|trans({'%url%': url('sfs_cms_admin_sections_list')})|raw }}
+                    </p>
+                {% else %}
+                    <p class="text-center text-muted">
+                        {#                        {% if is_granted() %}#}
+                        {{ ('admin_sections.list.empty.create_first_section_raw')|trans({
+                            '%create_link%': url('sfs_cms_admin_sections_create'),
+                        })|raw }}
+                        {#                        {% else %}#}
+                        {#                            {{ ('admin_sections.list.empty.can_not_create_sections')|trans }}#}
+                        {#                        {% endif %}#}
+                    </p>
+                    <p class="text-center text-muted">
+                        {{ ('admin_sections.list.empty.go_to_doc_raw')|trans|raw }}
+                    </p>
+                {% endif %}
+            {% endblock empty_message %}
+        {% endembed %}
+    </div>
+{% endblock content %}

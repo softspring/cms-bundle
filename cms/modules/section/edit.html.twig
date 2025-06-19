@@ -1,0 +1,6 @@
+{% trans_default_domain 'sfs_cms_modules' %}
+{% import '@SfsCms/macros/modules_edit.html.twig' as module %}
+
+<div {{ module.link_id(form.id) }} {{ module.link_class(form.class) }} {{ module.link_section(form.section) }}>
+    {{ form.section.vars.section_preview|raw }}
+</div>

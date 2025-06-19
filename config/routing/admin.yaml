@@ -18,6 +18,10 @@ _sfs_media_admin_types_:
     resource: "@SfsMediaBundle/config/routing/admin_media.yaml"
     prefix: "/media"
 
+_sfs_cms_sections_:
+    resource: "@SfsCmsBundle/config/routing/admin_sections.yaml"
+    prefix: "/sections"
+
 _sfs_cms_sites_:
     resource: "@SfsCmsBundle/config/routing/admin_sites.yaml"
     prefix: "/sites"

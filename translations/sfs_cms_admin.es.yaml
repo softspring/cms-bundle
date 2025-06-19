@@ -252,3 +252,122 @@ admin_sites:
         meta.title: "%name%"
         title: "%name%"
         breadcrumb: "%name%"
+
+sections:
+    status:
+        published: "Published"
+        draft: "Draft"
+
+
+admin_sections:
+    form:
+        name.label: "Nombre"
+
+    list:
+        meta.title: "Secciones"
+        title: "Secciones"
+        breadcrumb: "Secciones"
+        empty:
+            create_first_section_raw: '<a href="%create_link%">Crea</a> tu primera sección!'
+            can_not_create_sections: "No puedes crear secciones"
+            go_to_doc_raw: 'Si necesitas ayuda visita la <a href="https://github.com/softspring/cms-bundle" target="_blank">documentación</a>'
+            clean_filters: 'No se han encontrado secciones con tu búsqueda, <a href="%url%">limpia los filtros</a> para ver todas las rutas'
+        actions:
+            create.link: "Nueva sección"
+            details.link: "Detalles"
+            content.link: "Contenido"
+            preview.link: "Previsualizar"
+        filter_form:
+            name.label: "Nombre"
+            status.label: "Estado"
+            publishedVersionSection.label: "Versión publicada"
+        fields:
+            id.header: "Id"
+            status.header: "Estado"
+            publishedAt.header: "Publicada"
+
+    create:
+        meta.title: "Nueva sección"
+        title: "Nueva sección"
+        breadcrumb: "Nueva sección"
+        actions:
+            create.button: "Crear sección"
+            cancel.button: "Cancelar"
+
+    content:
+        meta.title: "Contenido de la sección"
+        title: "Contenido de la sección"
+        breadcrumb: "Contenido de la sección"
+        actions:
+            save.button: "Guardar cambios"
+            cancel.button: "Cancelar"
+            save_and_publish.button: "Guardar y publicar"
+            save_and_preview.button: "Guardar y previsualizar"
+            save_and_exit.button: "Guardar y salir"
+        render_error: "Se ha producido un error al compilar la sección, revisa la configuración.<br/><small>%exception%</small>"
+
+    update:
+        meta.title: "Editar sección"
+        title: "Editar sección"
+        breadcrumb: "Editar sección"
+        actions:
+            update.button: "Guardar cambios"
+            cancel.button: "Cancelar"
+            delete.button: "Eliminar sección"
+
+    preview:
+        meta.title: "Previsualizar sección %name%"
+        title: "%name%"
+        actions:
+            open.button: "Abrir"
+            cancel.button: "Cancelar"
+            content.button: "Editar versión"
+            publish.button: "Publicar versión"
+
+    read:
+        meta.title: "Detalles de la sección %name%"
+        title: "%name%"
+        breadcrumb: "Detalles de la sección"
+        general:
+            status: "Estado"
+        versions:
+            title: "Versiones"
+            more.link: "Ver más versiones"
+
+    versions:
+        meta.title: "Versiones"
+        title: "%name%"
+        breadcrumb: "Versiones"
+        fields:
+            id.header: "Versión"
+            origin.header: "Origen"
+            created.header: "Creación"
+            creator.header: "Creador"
+            publish_status.header: "Publicación"
+            note.header: "Nota"
+        publish_status:
+            published: "publicada"
+            unpublished: "no publicada"
+        origin:
+            "null": ""
+            1: "editado"
+            2: "fixture"
+            3: "cargada"
+            4: "traducida"
+            5: "seo"
+            6: "duplicada"
+            7: "idioma añadido"
+            8: "sitio añadido"
+        actions:
+            edit.link: "Editar"
+            preview.link: "Previsualizar"
+            export.link: "Exportar"
+            publish.link: "Publicar"
+            unpublish.link: "Despublicar"
+            import_version.link: "Importar versión"
+            cleanup_versions.link: "Limpiar versiones"
+            keep.link: "Mantener versión, pinchar para desmarcar"
+            nokeep.link: "No mantener esta versión, pinchar para mantener"
+            info.link: "Info"
+            add_note.link: "Añadir nota"
+            delete.link: "Eliminar versión"

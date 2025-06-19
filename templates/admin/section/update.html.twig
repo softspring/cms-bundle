@@ -1,0 +1,44 @@
+{% trans_default_domain 'sfs_cms_admin' %}
+
+{% extends '@SfsCms/admin_layout.html.twig' %}
+
+{% form_theme form
+    '@SfsCms/forms/cms_theme.html.twig'
+    '@SfsCms/forms/routes_theme.html.twig'
+    '@SfsCms/forms/types_theme.html.twig'
+%}
+
+{% block title %}{{ ('admin_sections.update.meta.title')|trans({'%name%':section.name}) }}{% endblock %}
+
+{% block breadcrums_content %}
+    {{ parent() }}
+    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_sections_list') }}">{{ ('admin_sections.list.breadcrumb')|trans }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_sections_details', {'section':section.id}) }}">{{ ('admin_sections.read.breadcrumb')|trans({'%name%': section.name}) }}</a></li>
+    <li class="breadcrumb-item active" aria-current="section">{{ ('admin_sections.update.breadcrumb')|trans({'%name%':section.name}) }}</li>
+{% endblock breadcrums_content %}
+
+{% block content %}
+    {% include '@SfsCms/admin/section/_section_title.html.twig' with {'current':'update', 'section_entity':section} %}
+    {% include '@SfsCms/admin/section/_section_tabs.html.twig' with {'current':'update', 'section_entity':section} %}
+
+    {{ form_start(form) }}
+
+    <div class="tab-section" id="myTabSection">
+        <div class="tab-pane fade show active" id="edit" role="tabpanel" aria-labelledby="edit-tab">
+            <div class="container-fluid bg-white p-3">
+                {% block form_fields %}
+                    {{ form_row(form.name) }}
+                    {% if form.addLocale is defined %}{{ form_row(form.addLocale) }}{% endif %}
+                    {% if form.extraData is defined %}{{ form_widget(form.extraData) }}{% endif %}
+                    {{ form_rest(form) }}
+                {% endblock %}
+
+                <div class="d-flex justify-section-end align-items-center">
+                    <a href="{{ url('sfs_cms_admin_sections_details', {'section':section.id}) }}" class="btn btn-outline-secondary ms-3">{{ ('admin_sections.update.actions.cancel.button')|trans }}</a>
+                    <input type="submit" value="{{ ('admin_sections.update.actions.update.button')|trans }}" class="btn btn-primary ms-3" />
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock content %}

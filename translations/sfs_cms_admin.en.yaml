@@ -252,3 +252,14 @@ admin_sites:
         meta.title: "%name%"
         title: "%name%"
         breadcrumb: "%name%"
+
+admin_sections:
+    list:
+        meta.title: "Sections"
+        title: "Sections"
+        breadcrumb: "Sections"
+        empty:
+            create_first_section_raw: '<a href="%create_link%">Create</a> your first section!'
+            can_not_create_sections: "You can not create a new section"
+            go_to_doc_raw: 'If you need help go to <a href="https://github.com/softspring/cms-bundle" target="_blank">documentation</a>'
+            clean_filters: 'Your query has no results, try to <a href="%url%">clean filters</a>'

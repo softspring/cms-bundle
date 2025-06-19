@@ -6,6 +6,16 @@ use DateTime;
 
 interface VersionInterface
 {
+    public const ORIGIN_UNKNOWN = null;
+    public const ORIGIN_EDIT = 1;
+    public const ORIGIN_FIXTURE = 2;
+    public const ORIGIN_IMPORT = 3;
+    public const ORIGIN_TRANSLATIONS = 4;
+    public const ORIGIN_SEO = 5;
+    public const ORIGIN_DUPLICATE = 6;
+    public const ORIGIN_ADD_LOCALE = 7;
+    public const ORIGIN_ADD_SITE = 8;
+
     public function setParent(?VersionableInterface $parent): void;
 
     public function getParent(): ?VersionableInterface;

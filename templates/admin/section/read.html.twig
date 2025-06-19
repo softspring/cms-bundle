@@ -1,0 +1,60 @@
+{% trans_default_domain 'sfs_cms_admin' %}
+
+{% extends '@SfsCms/admin_layout.html.twig' %}
+
+{% block title %}{{ ('admin_sections.read.meta.title')|trans({'%name%':section.name}) }}{% endblock %}
+
+{% block breadcrums_content %}
+    {{ parent() }}
+    <li class="breadcrumb-item"><a
+                href="{{ url('sfs_cms_admin_section_sections_list') }}">{{ ('admin_sections.list.breadcrumb')|trans }}</a>
+    </li>
+    <li class="breadcrumb-item active"
+        aria-current="section">{{ ('admin_sections.read.breadcrumb')|trans({'%name%':section.name}) }}</li>
+{% endblock breadcrums_content %}
+
+{% block content %}
+    {% include '@SfsCms/admin/section/_section_title.html.twig' with {'current':'read', 'section_entity':section} %}
+    {% include '@SfsCms/admin/section/_section_tabs.html.twig' with {'current':'details', 'section_entity':section} %}
+
+    {% if cache_alert is defined %}
+        <div class="alert alert-warning" role="alert">
+            {% if section.publishedVersion %}
+                {{ 'admin_section.read.published_cache_alert_raw'|trans({
+                    '%publishedDateTime%': cache_alert.publishedDatetime|date('H:i d-m-Y'),
+                    '%maxRouteTtl%': cache_alert.maxRouteTtl,
+                    '%waitSeconds%': cache_alert.waitTime,
+                }, 'sfs_cms_admin')|raw }}
+            {% else %}
+                {{ 'admin_section.read.unpublished_cache_alert_raw'|trans({
+                    '%publishedDateTime%': cache_alert.publishedDatetime|date('H:i d-m-Y'),
+                    '%maxRouteTtl%': cache_alert.maxRouteTtl,
+                    '%waitSeconds%': cache_alert.waitTime,
+                }, 'sfs_cms_admin')|raw }}
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                {% include ['@section/sections/admin/_read_general.html.twig', '@SfsCms/admin/section/_read_general.html.twig'] %}
+            </div>
+            <div class="col">
+{#                {% include ['@section/sections/admin/_read_indexing.html.twig', '@SfsCms/admin/section/_read_indexing.html.twig'] %}#}
+            </div>
+            <div class="col">
+{#                {% include ['@section/sections/admin/_read_routes.html.twig', '@SfsCms/admin/section/_read_routes.html.twig'] %}#}
+            </div>
+            <div class="col">
+{#                {% include ['@section/sections/admin/_read_translations.html.twig', '@SfsCms/admin/section/_read_translations.html.twig'] %}#}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                {% include '@SfsCms/admin/section/_read_versions.html.twig' with {'backSection': 'details'} %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}

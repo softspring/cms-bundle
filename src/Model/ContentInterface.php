@@ -59,8 +59,6 @@ interface ContentInterface extends VersionableInterface
 
     public function setIndexing(?array $indexing): void;
 
-    public function getStatus(): string;
-
     public function getDefaultLocale(): ?string;
 
     public function setDefaultLocale(?string $defaultLocale): void;

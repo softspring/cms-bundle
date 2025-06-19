@@ -10,34 +10,27 @@ use Softspring\CmsBundle\Config\Exception\InvalidLayoutException;
 use Softspring\CmsBundle\Manager\CompiledDataManagerInterface;
 use Softspring\CmsBundle\Model\CompiledDataInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
-use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\Render\ContentVersionRenderer;
 use Softspring\CmsBundle\Render\Error\RenderErrorException;
 use Softspring\CmsBundle\Render\Error\RenderErrorList;
 use Softspring\CmsBundle\Render\Exception\RenderException;
+use Softspring\CmsBundle\Render\Isolated\IsolatedRequest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class ContentVersionCompiler
+class ContentVersionCompiler extends AbstractVersionCompiler
 {
     public function __construct(
-        protected ContentVersionRenderer $contentRender,
+        protected ContentVersionRenderer $contentVersionRender,
         protected RequestStack $requestStack,
         protected array $enabledLocales,
-        protected ?LoggerInterface $cmsLogger,
-        protected string $prefixCompiled,
         protected bool $saveCompiled,
         protected CmsConfig $cmsConfig,
         protected CompiledDataManagerInterface $compiledDataManager,
+        string $prefixCompiled,
+        protected ?LoggerInterface $cmsLogger,
     ) {
-    }
-
-    public function clearCompiled(ContentVersionInterface $contentVersion): void
-    {
-        $contentVersion->getCompiled()->map(function (CompiledDataInterface $compiled) use ($contentVersion) {
-            $contentVersion->removeCompiled($compiled);
-        });
-        $contentVersion->setCompileErrors(false);
+        $this->prefixCompiled = $prefixCompiled;
     }
 
     /**
@@ -58,7 +51,7 @@ class ContentVersionCompiler
         foreach ($contentVersion->getContent()->getSites() as $site) {
             foreach ($contentVersion->getContent()->getLocales() ?? [] as $locale) {
                 $this->cmsLogger && $this->cmsLogger->debug(sprintf('Compiling "%s" content version for "%s" in "%s"', $contentVersion->getContent()->getName(), "$site", $locale));
-                $request = ContentVersionRenderer::generateRequestForContent($contentVersion->getContent(), $locale, $site);
+                $request = IsolatedRequest::createIsolatedForContentRoute($contentVersion->getContent(), $locale, $site);
 
                 try {
                     $this->compileRequest($contentVersion, $request, null, $failOnException);
@@ -80,11 +73,11 @@ class ContentVersionCompiler
     {
         $compiledData = $this->compiledDataManager->createEntity();
         $compiledData->setKey($this->getCompileKeyFromRequest($contentVersion, $request));
-        $this->canSaveCompiled($contentVersion) && $contentVersion->addCompiled($compiledData);
 
         try {
+            $this->canSaveCompiled($contentVersion) && $contentVersion->addCompiled($compiledData);
+
             if (empty($compiledModules)) {
-                /** @var array $compiledModules */
                 $compiledModules = $this->compileModulesRequest($contentVersion, $request, $failOnException);
                 $this->canSaveCompiledModules($contentVersion) && $compiledData->setDataPart('modules', $compiledModules);
             }
@@ -93,7 +86,7 @@ class ContentVersionCompiler
             $renderErrors = new RenderErrorList();
 
             // compile data. Take into account that this method can return content and fill errors in the RenderErrorList
-            $compiledCode = $this->contentRender->render($contentVersion, $request, $renderErrors, $compiledModules);
+            $compiledCode = $this->contentVersionRender->render($contentVersion, $request, $renderErrors, $compiledModules);
             $compiledData->setDataPart('content', $compiledCode);
 
             // generates an exception if there are errors
@@ -128,7 +121,7 @@ class ContentVersionCompiler
     {
         try {
             $renderErrors = new RenderErrorList();
-            $compiled = $this->contentRender->renderModules($contentVersion, $request, $renderErrors);
+            $compiled = $this->contentVersionRender->renderModules($contentVersion, $request, $renderErrors);
             $renderErrors->buildExceptionOnErrors();
 
             return $compiled;
@@ -180,15 +173,5 @@ class ContentVersionCompiler
         }
 
         return true;
-    }
-
-    public function getCompileKeyFromRequest(ContentVersionInterface $version, Request $request): string
-    {
-        return $this->getCompileKey($version, $request->attributes->get('_sfs_cms_site'), $request->getLocale());
-    }
-
-    public function getCompileKey(ContentVersionInterface $version, SiteInterface $site, string $locale): string
-    {
-        return "{$this->prefixCompiled}{$site}/{$locale}";
     }
 }

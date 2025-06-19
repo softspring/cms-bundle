@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Softspring\CmsBundle\Utils\SitesSorter;
 
 /**
  * @property ContentVersionInterface[]|Collection $versions
@@ -57,13 +58,7 @@ abstract class Content implements ContentInterface
 
     public function getSitesSorted(): Collection
     {
-        $sites = $this->getSites()->toArray();
-
-        usort($sites, function (SiteInterface $a, SiteInterface $b) {
-            return ($a->getConfig()['extra']['order'] ?? 500) <=> ($b->getConfig()['extra']['order'] ?? 500);
-        });
-
-        return new ArrayCollection($sites);
+        return SitesSorter::sort($this->getSites()->toArray());
     }
 
     public function addSite(SiteInterface $site): void
@@ -165,15 +160,6 @@ abstract class Content implements ContentInterface
     public function setIndexing(?array $indexing): void
     {
         $this->indexing = $indexing;
-    }
-
-    public function getStatus(): string
-    {
-        if ($this->getPublishedVersion()) {
-            return 'published';
-        }
-
-        return 'draft';
     }
 
     public function getDefaultLocale(): ?string

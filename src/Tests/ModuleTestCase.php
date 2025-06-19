@@ -208,13 +208,13 @@ abstract class ModuleTestCase extends TypeTestCase
             'strict_variables' => true,
         ]);
 
-        $moduleRenderer = new ModuleRenderer($cmsConfig, $requestStack, null, $twig);
+        $moduleRenderer = new ModuleRenderer($cmsConfig, $requestStack, $twig, null);
 
         $renderError = new RenderErrorList();
 
         $debugCollectorData = [];
         $data['_module'] = $this->moduleName;
-        $render = $moduleRenderer->render($data, null, $debugCollectorData, $renderError);
+        $render = $moduleRenderer->render($data, $debugCollectorData, [], $renderError);
 
         if ($renderError->getErrors()) {
             $this->fail($renderError->getErrors()[0]['exception']->getMessage());

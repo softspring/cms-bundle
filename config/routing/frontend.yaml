@@ -1,0 +1,5 @@
+_sfs_cms_blocks_:
+    resource: "@SfsCmsBundle/config/routing/frontend_blocks.yaml"
+
+_sfs_cms_sections_:
+    resource: "@SfsCmsBundle/config/routing/frontend_sections.yaml"

@@ -15,6 +15,8 @@ use Doctrine\Common\Collections\Collection;
  */
 interface SectionInterface extends VersionableInterface
 {
+    public function getId();
+
     public function getName(): ?string;
 
     public function setName(?string $name): void;

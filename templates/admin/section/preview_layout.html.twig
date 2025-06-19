@@ -1,0 +1,13 @@
+{% extends '@SfsComponents/base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                {% block content %}
+                    {{ content|raw }}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
