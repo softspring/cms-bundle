@@ -66,7 +66,7 @@ class BlameListener implements EventSubscriberInterface
 
         /** @var ContentInterface $content */
         $content = $event->getEntity();
-        $version = $content->getVersions()->first();
+        $version = $content->getLastVersion();
         $version->setMetaField('creator', $this->getUser());
         $this->addHistory($version, 'duplicate');
     }
