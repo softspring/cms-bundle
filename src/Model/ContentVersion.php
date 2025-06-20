@@ -229,7 +229,7 @@ abstract class ContentVersion implements ContentVersionInterface
 
     public function isLastVersion(): bool
     {
-        return $this->getContent()?->getVersions()->first() === $this;
+        return $this->getContent()?->getLastVersion() === $this;
     }
 
     public function deleteOnCleanup(): bool

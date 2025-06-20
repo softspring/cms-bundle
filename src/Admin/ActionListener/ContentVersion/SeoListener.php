@@ -95,7 +95,7 @@ class SeoListener extends AbstractContentVersionListener
         $prevVersion = $request->query->get('version');
 
         if ($prevVersion) {
-            $prevVersion = $content->getVersions()->filter(fn (ContentVersionInterface $version) => $version->getId() == $prevVersion)->first();
+            $prevVersion = $this->contentVersionManager->getRepository()->findOneBy(['id' => $prevVersion, 'content' => $content]);
         }
 
         $request->attributes->set('prevVersion', $prevVersion ?: $content->getLastVersion());

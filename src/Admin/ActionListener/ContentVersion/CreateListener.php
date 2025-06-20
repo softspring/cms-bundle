@@ -103,7 +103,7 @@ class CreateListener extends AbstractContentVersionListener
         $prevVersion = $request->attributes->get('prevVersion');
 
         if ($prevVersion) {
-            $prevVersion = $content->getVersions()->filter(fn (ContentVersionInterface $version) => $version->getId() == $prevVersion)->first();
+            $prevVersion = $this->contentVersionManager->getRepository()->findOneBy(['id' => $prevVersion, 'content' => $content]);
         }
 
         $request->attributes->set('prevVersion', $prevVersion ?: $content->getLastVersion());
