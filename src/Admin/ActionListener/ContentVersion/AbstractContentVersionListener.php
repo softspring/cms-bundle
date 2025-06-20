@@ -11,7 +11,6 @@ use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
-use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Request\FlashNotifier;
 use Softspring\Component\CrudlController\Event\LoadEntityEvent;
 use Softspring\Component\CrudlController\Event\NotFoundEvent;
@@ -85,7 +84,7 @@ abstract class AbstractContentVersionListener implements EventSubscriberInterfac
         /** @var ContentInterface $content */
         $content = $event->getRequest()->attributes->get('content');
 
-        $version = $content->getVersions()->filter(fn (ContentVersionInterface $versionI) => $versionI->getId() === $versionId)->first();
+        $version = $this->contentVersionManager->getRepository()->findOneBy(['id' => $versionId, 'content' => $content]);
         $event->getRequest()->attributes->set('version', $version);
 
         $event->setEntity($version);

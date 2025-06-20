@@ -76,6 +76,6 @@ class PreviewListener extends AbstractContentListener
             $version = $content->getVersions()->filter(fn (ContentVersionInterface $version) => $version->getId() == $event->getRequest()->query->get('version'))->first();
         }
 
-        $event->getData()['version'] = $version ?? $content->getVersions()->first();
+        $event->getData()['version'] = $version ?? $content->getLastVersion();
     }
 }

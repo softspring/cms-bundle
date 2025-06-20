@@ -154,12 +154,11 @@ class ContentVersionTest extends TestCase
         $this->assertFalse($version->isLastVersion());
 
         $page = new Page();
-        $page->addVersion($latestVersion = new ContentVersion());
         $page->addVersion($version);
-        $page->addVersion(new ContentVersion());
+        $page->setLastVersion(new ContentVersion());
         $this->assertFalse($version->isLastVersion());
 
-        $page->removeVersion($latestVersion);
+        $page->setLastVersion($version);
         $this->assertTrue($version->isLastVersion());
     }
 
@@ -178,6 +177,7 @@ class ContentVersionTest extends TestCase
 
         // check last version
         $page->addVersion($version);
+        $page->setLastVersion($version);
         $this->assertFalse($version->deleteOnCleanup());
 
         // check published
