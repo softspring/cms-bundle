@@ -15,8 +15,12 @@ body {
     min-height: 75px;
 }
 
-.cms-content-main{
+.cms-content-main {
     margin-top: 27px;
+
+    &.cms-content-section {
+        margin-top: 40px;
+    }
 
     main {
         > .container-fluid {

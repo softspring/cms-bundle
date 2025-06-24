@@ -260,8 +260,23 @@ sections:
 
 
 admin_sections:
+    tabs_menu:
+        details: "Detalles"
+        content: "Contenido"
+        update: "Editar"
+        versions: "Versiones"
+        preview: "Previsualizar"
+        delete: "Eliminar"
+
     form:
         name.label: "Nombre"
+        esi.label: "Habilitar ESI"
+        ttl.label: "Tiempo de cache"
+        defaultLocale.label: "Idioma por defecto"
+        locales.label: "Idiomas"
+
+    version_form:
+        note.label: "Nota"
 
     list:
         meta.title: "Secciones"
@@ -305,6 +320,7 @@ admin_sections:
             save_and_preview.button: "Guardar y previsualizar"
             save_and_exit.button: "Guardar y salir"
         render_error: "Se ha producido un error al compilar la sección, revisa la configuración.<br/><small>%exception%</small>"
+        success_saved: "La sección se ha guardado correctamente"
 
     update:
         meta.title: "Editar sección"
@@ -316,23 +332,48 @@ admin_sections:
             delete.button: "Eliminar sección"
 
     preview:
-        meta.title: "Previsualizar sección %name%"
-        title: "%name%"
+        meta.title: "Previsualizar sección %name% (v%versionNumber%)"
+        title: "%name% (v%versionNumber%)"
         actions:
             open.button: "Abrir"
             cancel.button: "Cancelar"
             content.button: "Editar versión"
             publish.button: "Publicar versión"
+            published.button: "Publicado"
 
     read:
         meta.title: "Detalles de la sección %name%"
         title: "%name%"
         breadcrumb: "Detalles de la sección"
         general:
+            title: "General"
             status: "Estado"
+            publishDate: "Fecha de publicación"
+        caching:
+            title: "Cache"
+            esi: "ESI"
+            ttl: "Tiempo de cache"
+            ttl.seconds: "segundos"
+            ttl.not_set: "no es cacheable"
         versions:
             title: "Versiones"
             more.link: "Ver más versiones"
+        translations:
+            title: "Traducciones"
+        actions:
+            unpublish.link: "Despublicar"
+            update.link: "Editar"
+        usages:
+            title: "Usos de la sección"
+
+    delete:
+        meta.title: "Eliminar sección"
+        title: "Eliminar sección"
+        breadcrumb: "Eliminar sección"
+        actions:
+            delete.button: "Eliminar sección"
+            cancel.button: "Cancelar"
+        main_warnings_raw: '<p>¿Estás seguro de eliminar esta sección?</p><p>Esta acción no se puede deshacer</p>'
 
     versions:
         meta.title: "Versiones"
@@ -371,3 +412,80 @@ admin_sections:
             info.link: "Info"
             add_note.link: "Añadir nota"
             delete.link: "Eliminar versión"
+
+    version_lock:
+        success_locked_flash: "La versión se ha bloqueado"
+        success_unlocked_flash: "La versión se ha desbloqueado"
+        failed_flash: "Se ha producido un error al bloquear/desbloquear la versión<br/><small>%exception%</small>"
+
+    version_info:
+        meta.title: "Información de la versión (v%versionNumber%)"
+        title: "%name% (v%versionNumber%)"
+        breadcrumb: "Información de la versión (v%versionNumber%)"
+        info:
+            version.title: "Version"
+            origin.title: "Origen"
+            created.title: "Creada"
+            creator.title: "Creador"
+            publish_status.title: "Publicada"
+            keep.title: "Keep"
+        actions:
+            save.button: "Guardar cambios"
+            cancel.button: "Cancelar"
+            recompile.link: "Recompilar"
+            clear_compiled.link: "Limpiar contenido compilado"
+        compiled:
+            title: "Contenido compilado"
+            error: "Este contenido tiene errores en la compilación, trata de editarlo para resolverlos o de republicar"
+            pre_compile_content_disabled: "La pre-compilación de contenido está desactivada para esta versión"
+            pre_compile_content_missing: "Esta versión no tiene contenido pre-compilado."
+            pre_compile_modules_disabled: "La pre-compilación de módulos está desactivada para esta versión"
+            pre_compile_modules_missing: "Esta versión no tiene módulos pre-compilados."
+        data:
+            title: "Datos"
+        seo:
+            title: "SEO"
+        linked_routes:
+            title: "Rutas vinculadas"
+        linked_medias:
+            title: "Medios vinculados"
+        linked_sections:
+            title: "Secciones vinculadas"
+        history:
+            title: "Histórico"
+            action:
+                publish: "Publicada por %userName% el %date%"
+                unpublish: "Despublicada por %userName% el %date% (nueva versión: %new_version%)"
+                lock: "Versión marcada para mantener por %userName% el %date%"
+                unlock: "Versión marcada para no mantener por %userName% el %date%"
+                recompile: "Versión recompilada por %userName% el %date%"
+                duplicate: "Página duplicada por %userName% el %date%"
+                create: "Creada por %userName% el %date%"
+                seo: "SEO actualizado por %userName% el %date%"
+        metadata:
+            title: "Metadatos"
+
+    version_publish:
+        success_flash: "La versión se ha publicado"
+        failed_flash: "Se ha producido un error al publicar la versión<br/><small>%exception%</small>"
+        confirm_message_title: "Publicar versión"
+        with_errors_confirm_message_title: "Publicar versión"
+        confirm_message_raw: "<p>¿Estás seguro de publicar esta versión?</p>"
+        with_errors_confirm_message_raw: "<p>¿Estás seguro de publicar esta versión?</p><p>La versión tiene errores, puede que no se vea correctamente</p>"
+
+    unpublish:
+        has_been_unpublished_flash: "La sección se ha despublicado"
+        confirm_message_title: "Despublicar sección"
+        confirm_message_raw: "<p>¿Estás seguro de despublicar esta sección?</p><p>Mostrará un error 404 a los usuarios</p>"
+
+    version_delete:
+        meta.title: "Eliminar versión"
+        title: "Eliminar versión"
+        breadcrumb: "Eliminar versión"
+        main_warnings_raw: '<p>¿Estás seguro de eliminar esta versión?</p><p>Esta acción no se puede deshacer</p>'
+        actions:
+            delete.button: "Eliminar versión"
+            cancel.button: "Cancelar"
+        success_flash: "La versión se ha eliminado"
+        failed_flash: "Se ha producido un error al eliminar la versión<br/><small>%exception%</small>"
+

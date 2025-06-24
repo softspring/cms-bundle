@@ -11,8 +11,6 @@ use Softspring\CmsBundle\Model\SectionVersionInterface;
 use Softspring\CmsBundle\Utils\Hash;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class VersionCreateForm extends AbstractType implements VersionCreateFormInterface
@@ -27,7 +25,7 @@ class VersionCreateForm extends AbstractType implements VersionCreateFormInterfa
             'data_class' => SectionVersionInterface::class,
             'label_format' => 'admin_section.form.%name%.label',
             'validation_groups' => ['Default', 'create'],
-            'translation_domain' => 'sfs_cms_sections',
+            'translation_domain' => 'sfs_cms_admin',
         ]);
 
         $resolver->setRequired('section');
@@ -59,10 +57,5 @@ class VersionCreateForm extends AbstractType implements VersionCreateFormInterfa
             'prototype' => true,
             'mapped' => false,
         ]);
-    }
-
-    public function buildView(FormView $view, FormInterface $form, array $options): void
-    {
-        $view->vars['available_locales'] = $this->localeHelper->getEnabledLocales();
     }
 }

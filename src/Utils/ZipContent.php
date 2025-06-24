@@ -11,9 +11,9 @@ use ZipArchive;
 class ZipContent
 {
     /**
-     * @return array[]|false
+     * @phpstan-ignore-next-line
      */
-    public static function read(string $path, string $zipName)
+    public static function read(string $path, string $zipName): array|false
     {
         $zip = new ZipArchive();
         if (true !== $zip->open("$path/$zipName")) {

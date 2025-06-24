@@ -13,7 +13,7 @@ use Doctrine\Common\Collections\Collection;
  * @method ContentVersionInterface|null         getLastVersion()
  * @method void                                 setLastVersion(?ContentVersionInterface $lastVersion)
  */
-interface ContentInterface extends VersionableInterface
+interface ContentInterface extends VersionableInterface, TranslatableConfigInterface
 {
     public function getId();
 

@@ -89,25 +89,6 @@
     {{- block('block_info') -}}
 {% endblock block_type_widget %}
 
-{% block section_info %}
-    {#    data-section-esi#}
-    {#    data-section-singleton#}
-    {#    data-section-schedulable#}
-    {#    data-section-cache-ttl#}
-
-    <div class="alert alert-warning mt-3 d-none" role="alert" data-section-message-when data-section-when-draft>
-        <i class="bi bi-exclamation-diamond"></i>
-        {{ 'section_info.draft_info'|trans({}, 'sfs_cms_types') }}
-    </div>
-{% endblock section_info %}
-
-{% block section_widget %}
-    asdfasdf
-    {{ form_widget(form, {'attr': attr | merge({'data-section-message-select': ''})}) }}
-    {{- block('section_info') -}}
-{% endblock section_widget %}
-
-
 {% block symfony_route_widget %}
     <div data-field-container="{{ form.vars.id }}">
         {{ form_row(form.route_name) }}

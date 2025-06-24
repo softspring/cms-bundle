@@ -24,4 +24,10 @@ interface ContentDataInterface
     public function removeRoute(RouteInterface $route): void;
 
     public function getRoutes(): Collection;
+
+    public function addSection(SectionInterface $section): void;
+
+    public function removeSection(SectionInterface $section): void;
+
+    public function getSections(): Collection;
 }

@@ -50,7 +50,7 @@ abstract class AbstractSectionVersionListener implements EventSubscriberInterfac
 
         if (!$entity instanceof SectionInterface) {
             if (method_exists($event, 'setResponse')) {
-                $this->flashNotifier->addTrans('warning', 'admin_sections.entity_not_found_flash', [], 'sfs_cms_sections');
+                $this->flashNotifier->addTrans('warning', 'admin_sections.entity_not_found_flash', [], 'sfs_cms_admin');
                 $url = $this->router->generate('sfs_cms_admin_sections_list');
                 $event->setResponse(new RedirectResponse($url));
 
@@ -84,7 +84,7 @@ abstract class AbstractSectionVersionListener implements EventSubscriberInterfac
     //    {
     //        $sectionConfig = $event->getRequest()->attributes->get('_section_config');
     //
-    //        $this->flashNotifier->addTrans('warning', "admin_{$sectionConfig['_id']}.entity_not_found_flash", [], 'sfs_cms_sections');
+    //        $this->flashNotifier->addTrans('warning', "admin_{$sectionConfig['_id']}.entity_not_found_flash", [], 'sfs_cms_admin');
     //        $url = $this->router->generate("sfs_cms_admin_section_{$sectionConfig['_id']}_list");
     //        $event->setResponse(new RedirectResponse($url));
     //    }
@@ -92,5 +92,6 @@ abstract class AbstractSectionVersionListener implements EventSubscriberInterfac
     public function onView(ViewEvent $event): void
     {
         $event->getData()['section_entity'] = $event->getRequest()->attributes->get('section');
+        $event->getData()['version_entity'] = $event->getRequest()->attributes->get('version');
     }
 }

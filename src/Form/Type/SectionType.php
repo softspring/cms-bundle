@@ -5,6 +5,7 @@ namespace Softspring\CmsBundle\Form\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Helper\LocaleHelper;
 use Softspring\CmsBundle\Model\SectionInterface;
 use Softspring\CmsBundle\Render\SectionVersionRenderer;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -13,7 +14,7 @@ use Symfony\Component\Form\ChoiceList\View\ChoiceView;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SectionType extends AbstractType
@@ -22,6 +23,8 @@ class SectionType extends AbstractType
         protected EntityManagerInterface $em,
         protected CmsConfig $cmsConfig,
         protected SectionVersionRenderer $sectionVersionRenderer,
+        protected RequestStack $requestStack,
+        protected readonly LocaleHelper $localeHelper,
     ) {
     }
 
@@ -41,13 +44,20 @@ class SectionType extends AbstractType
             'class' => SectionInterface::class,
             'em' => $this->em,
             'required' => false,
-            'section_types' => null,
             'query_builder' => fn (EntityRepository $entityRepository) => $entityRepository->createQueryBuilder('b'),
             'choice_label' => function (SectionInterface $section) {
-                return $section->getName();
+                $label = $section->getName();
+
+                if (!$section->getPublishedVersion()) {
+                    $label .= ' (draft)';
+                }
+
+                return $label;
             },
             'choice_filter' => function (?SectionInterface $section = null) {
-                return true;
+                $currentSection = $this->requestStack->getCurrentRequest()?->attributes->get('section');
+
+                return !$currentSection || $currentSection->getId() !== $section?->getId();
             },
             'choice_attr' => function (?SectionInterface $section) {
                 $attr = [
@@ -65,17 +75,27 @@ class SectionType extends AbstractType
                         $attr['data-section-draft'] = '';
                     }
 
-                    $attr['data-section-preview'] = $this->sectionVersionRenderer->render($section->getPublishedVersion() ?: $section->getLastVersion(), new Request());
+                    if ($section->getExtra('ttl', false)) {
+                        $attr['data-section-ttl'] = $section->getExtra('ttl');
+                    }
+
+                    $attr['data-section-preview'] = '';
+
+                    foreach ($this->localeHelper->getEnabledLocales() as $locale) {
+                        $request = new Request();
+                        $request->setLocale($locale);
+                        $attr['data-section-preview'] .= '<div data-lang="'.$locale.'" class="section-preview">'
+                            .$this->sectionVersionRenderer->render(
+                                $section->getPublishedVersion() ?: $section->getLastVersion(),
+                                $request,
+                            )
+                            .'</div>';
+                    }
                 }
 
                 return $attr;
             },
         ]);
-
-        $resolver->addAllowedTypes('section_types', ['null', 'array', 'string']);
-        $resolver->setNormalizer('section_types', function (Options $options, $value) {
-            return is_string($value) ? [$value] : $value;
-        });
     }
 
     public function finishView(FormView $view, FormInterface $form, array $options): void

@@ -22,6 +22,7 @@
     {% include '@SfsCms/admin/section/_section_tabs.html.twig' with {'current':'update', 'section_entity':section} %}
 
     {{ form_start(form) }}
+    {{ form_errors(form) }}
 
     <div class="tab-section" id="myTabSection">
         <div class="tab-pane fade show active" id="edit" role="tabpanel" aria-labelledby="edit-tab">

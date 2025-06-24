@@ -8,7 +8,7 @@ use Softspring\CmsBundle\Render\Isolated\IsolatedRequest;
 
 class IsolatedRequestTest extends TestCase
 {
-    public function testIsolatedRequest()
+    public function testIsolatedRequest(): void
     {
         $isolatedRequest = IsolatedRequest::createIsolated('fr', $this->createMock(Site::class), false);
 

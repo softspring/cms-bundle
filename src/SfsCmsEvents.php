@@ -482,6 +482,7 @@ class SfsCmsEvents
     public const ADMIN_SECTION_VERSIONS_PREVIEW_NOT_FOUND = 'sfs_cms.admin.section_versions.preview_not_found';
     public const ADMIN_SECTION_VERSIONS_PREVIEW_FOUND = 'sfs_cms.admin.section_versions.preview_found';
     public const ADMIN_SECTION_VERSIONS_PREVIEW_EXCEPTION = 'sfs_cms.admin.section_versions.preview_exception';
+    public const ADMIN_SECTION_VERSIONS_PREVIEW_VIEW = 'sfs_cms.admin.section_versions.preview_view';
     // SECTION_VERSION PUBLISH EVENTS, ALL OF THEM ARE INTERNAL
     public const ADMIN_SECTION_VERSIONS_PUBLISH_INITIALIZE = 'sfs_cms.admin.section_versions.publish_initialize';
     public const ADMIN_SECTION_VERSIONS_PUBLISH_LOAD_ENTITY = 'sfs_cms.admin.section_versions.publish_load_entity';
@@ -501,14 +502,14 @@ class SfsCmsEvents
     public const ADMIN_SECTION_VERSIONS_EXPORT_FAILURE = 'sfs_cms.admin.section_versions.export_failure';
     public const ADMIN_SECTION_VERSIONS_EXPORT_EXCEPTION = 'sfs_cms.admin.section_versions.export_exception';
     // SECTION VERSION CLEANUP EVENTS, ALL OF THEM ARE INTERNAL
-    public const ADMIN_SECTION_VERSIONS_CLEANUP_INITIALIZE = 'sfs_cms.admin.section_versions.cleanup_initialize';
-    public const ADMIN_SECTION_VERSIONS_CLEANUP_LOAD_ENTITY = 'sfs_cms.admin.section_versions.cleanup_load_entity';
-    public const ADMIN_SECTION_VERSIONS_CLEANUP_NOT_FOUND = 'sfs_cms.admin.section_versions.cleanup_not_found';
-    public const ADMIN_SECTION_VERSIONS_CLEANUP_FOUND = 'sfs_cms.admin.section_versions.cleanup_found';
-    public const ADMIN_SECTION_VERSIONS_CLEANUP_APPLY = 'sfs_cms.admin.section_versions.cleanup_apply';
-    public const ADMIN_SECTION_VERSIONS_CLEANUP_SUCCESS = 'sfs_cms.admin.section_versions.cleanup_success';
-    public const ADMIN_SECTION_VERSIONS_CLEANUP_FAILURE = 'sfs_cms.admin.section_versions.cleanup_failure';
-    public const ADMIN_SECTION_VERSIONS_CLEANUP_EXCEPTION = 'sfs_cms.admin.section_versions.cleanup_exception';
+    public const ADMIN_SECTION_CLEANUP_VERSIONS_INITIALIZE = 'sfs_cms.admin.section_versions.cleanup_initialize';
+    public const ADMIN_SECTION_CLEANUP_VERSIONS_LOAD_ENTITY = 'sfs_cms.admin.section_versions.cleanup_load_entity';
+    public const ADMIN_SECTION_CLEANUP_VERSIONS_NOT_FOUND = 'sfs_cms.admin.section_versions.cleanup_not_found';
+    public const ADMIN_SECTION_CLEANUP_VERSIONS_FOUND = 'sfs_cms.admin.section_versions.cleanup_found';
+    public const ADMIN_SECTION_CLEANUP_VERSIONS_APPLY = 'sfs_cms.admin.section_versions.cleanup_apply';
+    public const ADMIN_SECTION_CLEANUP_VERSIONS_SUCCESS = 'sfs_cms.admin.section_versions.cleanup_success';
+    public const ADMIN_SECTION_CLEANUP_VERSIONS_FAILURE = 'sfs_cms.admin.section_versions.cleanup_failure';
+    public const ADMIN_SECTION_CLEANUP_VERSIONS_EXCEPTION = 'sfs_cms.admin.section_versions.cleanup_exception';
     // SECTION VERSION INFO EVENTS, ALL OF THEM ARE INTERNAL
     public const ADMIN_SECTION_VERSIONS_INFO_INITIALIZE = 'sfs_cms.admin.section_versions.info_initialize';
     public const ADMIN_SECTION_VERSIONS_INFO_LOAD_ENTITY = 'sfs_cms.admin.section_versions.info_load_entity';

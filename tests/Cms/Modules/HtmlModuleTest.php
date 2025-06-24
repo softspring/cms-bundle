@@ -10,9 +10,12 @@ class HtmlModuleTest extends ModuleTestCase
     {
         parent::setUp();
         $this->moduleName = 'html';
-        $this->modulePath = realpath(__DIR__ . '/../../../cms/modules/html');
+        $this->modulePath = realpath(__DIR__.'/../../../cms/modules/html');
     }
 
+    /**
+     * @phpstan-ignore-next-line
+     */
     public static function provideModuleRender(): array
     {
         return [

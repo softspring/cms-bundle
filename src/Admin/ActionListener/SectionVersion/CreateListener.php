@@ -57,12 +57,9 @@ class CreateListener extends AbstractSectionVersionListener
             SfsCmsEvents::ADMIN_SECTION_VERSIONS_CREATE_FORM_PREPARE => [
                 ['onFormPrepareResolve', 0],
             ],
-            //            SfsCmsEvents::ADMIN_SECTION_VERSIONS_CREATE_FORM_INIT => [
-            //            ],
-            //            SfsCmsEvents::ADMIN_SECTION_VERSIONS_CREATE_FORM_VALID => [
-            //            ],
-            //            SfsCmsEvents::ADMIN_SECTION_VERSIONS_CREATE_APPLY => [
-            //            ],
+            // SfsCmsEvents::ADMIN_SECTION_VERSIONS_CREATE_FORM_INIT => [],
+            // SfsCmsEvents::ADMIN_SECTION_VERSIONS_CREATE_FORM_VALID => [],
+            // SfsCmsEvents::ADMIN_SECTION_VERSIONS_CREATE_APPLY => [],
             SfsCmsEvents::ADMIN_SECTION_VERSIONS_CREATE_SUCCESS => [
                 ['onSuccess', 0],
             ],
@@ -75,8 +72,7 @@ class CreateListener extends AbstractSectionVersionListener
             SfsCmsEvents::ADMIN_SECTION_VERSIONS_CREATE_VIEW => [
                 ['onView', 0],
             ],
-            //            SfsCmsEvents::ADMIN_SECTION_VERSIONS_CREATE_EXCEPTION => [
-            //            ],
+            // SfsCmsEvents::ADMIN_SECTION_VERSIONS_CREATE_EXCEPTION => [],
         ];
     }
 
@@ -103,6 +99,9 @@ class CreateListener extends AbstractSectionVersionListener
 
     public function onFormPrepareResolve(FormPrepareEvent $event): void
     {
+        $this->translatableContext->setLocales($event->getEntity()->getSection()->getLocales());
+        $this->translatableContext->setDefaultLocale($event->getEntity()->getSection()->getDefaultLocale());
+
         $event->setFormOptions([
             'section' => $event->getRequest()->attributes->get('section'),
             'method' => 'POST',
@@ -119,7 +118,7 @@ class CreateListener extends AbstractSectionVersionListener
         $version = $event->getEntity();
         $section = $version->getSection();
 
-        $this->flashNotifier->addTrans('success', 'admin_sections.section.success_saved', [], 'sfs_cms_sections');
+        $this->flashNotifier->addTrans('success', 'admin_sections.content.success_saved', [], 'sfs_cms_admin');
 
         switch ($request->request->get('goto')) {
             case 'content':
@@ -138,11 +137,7 @@ class CreateListener extends AbstractSectionVersionListener
                 break;
 
             default:
-                if ($redirectTo = $this->getOption($request, 'success_redirect_to')) {
-                    $event->setResponse(new RedirectResponse($this->router->generate($redirectTo, ['section' => $section])));
-                } else {
-                    $event->setResponse($this->redirectBack('', $section, $request));
-                }
+                $event->setResponse($this->redirectBack($section, $request));
         }
     }
 
@@ -154,14 +149,14 @@ class CreateListener extends AbstractSectionVersionListener
 
         if ($exception instanceof RenderErrorException) {
             $exception->getRenderErrorList()->formMapErrors($event->getForm());
-            $request->attributes->set('_section_version_alert', ['error', 'admin_sections.section.render_error', ['%exception%' => $exception->getMessage()]]);
+            $request->attributes->set('_section_version_alert', ['error', 'admin_sections.content.render_error', ['%exception%' => $exception->getMessage()]]);
         } elseif ($exception->getPrevious() instanceof RenderErrorException) {
             $exception->getPrevious()->getRenderErrorList()->formMapErrors($event->getForm());
-            $request->attributes->set('_section_version_alert', ['error', 'admin_sections.section.render_error', ['%exception%' => $exception->getMessage()]]);
+            $request->attributes->set('_section_version_alert', ['error', 'admin_sections.content.render_error', ['%exception%' => $exception->getMessage()]]);
         } elseif ($exception instanceof CompileException) {
-            $request->attributes->set('_section_version_alert', ['error', 'admin_sections.section.render_error', ['%exception%' => $exception->getMessage()]]);
+            $request->attributes->set('_section_version_alert', ['error', 'admin_sections.content.render_error', ['%exception%' => $exception->getMessage()]]);
         } else {
-            $request->attributes->set('_section_version_alert', ['error', 'admin_sections.section.render_error', ['%exception%' => $exception->getMessage()]]);
+            $request->attributes->set('_section_version_alert', ['error', 'admin_sections.content.render_error', ['%exception%' => $exception->getMessage()]]);
         }
     }
 
@@ -175,7 +170,7 @@ class CreateListener extends AbstractSectionVersionListener
 
         $sectionConfig = $request->attributes->get('_section_config');
 
-        $request->attributes->set('_section_version_alert', ['warning', 'admin_sections.section.validation_error']);
+        $request->attributes->set('_section_version_alert', ['warning', 'admin_sections.content.validation_error']);
     }
 
     public function onView(ViewEvent $event): void
@@ -215,7 +210,7 @@ class CreateListener extends AbstractSectionVersionListener
         $sectionConfig = $event->getRequest()->attributes->get('_section_config');
 
         if ($event->getException() instanceof MissingFormTypeException) {
-            $this->flashNotifier->addTrans('error', 'admin_sections.version_create.module_not_configured_flash', ['%module%' => $event->getException()->getDiscriminator()], 'sfs_cms_sections');
+            $this->flashNotifier->addTrans('error', 'admin_sections.version_create.module_not_configured_flash', ['%module%' => $event->getException()->getDiscriminator()], 'sfs_cms_admin');
 
             $url = $this->router->generate("sfs_cms_admin_section_{$event->getRequest()->attributes->get('_section_config')['_id']}_details", ['section' => $event->getRequest()->attributes->get('section')]);
             $event->setResponse(new RedirectResponse($url));

@@ -19,6 +19,3 @@ link_type:
 symfony_route:
     show_parameters_link: 'show parameters'
     hide_parameters_link: 'hide parameters'
-
-section_info:
-    draft_info: 'This section is in draft mode. This means that the section is not published and will not be visible on the site until it is published.'

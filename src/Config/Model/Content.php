@@ -3,12 +3,12 @@
 namespace Softspring\CmsBundle\Config\Model;
 
 use Softspring\CmsBundle\Form\Admin\Content\ContentCreateForm;
-use Softspring\CmsBundle\Form\Admin\Content\ContentDeleteForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentDuplicateForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentImportForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentListFilterForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentRoutesForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentUpdateForm;
+use Softspring\CmsBundle\Form\Admin\Content\SectionDeleteForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionCreateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionDeleteForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionImportForm;
@@ -280,7 +280,7 @@ class Content implements ConfigurationInterface
                         ->arrayNode('version_import')
                             ->addDefaultsIfNotSet()
                             ->children()
-                                ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_IMPORT_VERSION')->end()
+                                ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSION_IMPORT')->end()
                                 ->scalarNode('view')->defaultValue('@SfsCms/admin/content/version_import.html.twig')->end()
                                 ->scalarNode('type')->defaultValue(VersionImportForm::class)->end()
                                 ->scalarNode('success_redirect_to')->defaultValue('')->end()
@@ -328,25 +328,25 @@ class Content implements ConfigurationInterface
                         ->arrayNode('version_lock')
                             ->addDefaultsIfNotSet()
                             ->children()
-                                ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_KEEP_VERSION')->end()
+                                ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSION_KEEP')->end()
                             ->end()
                         ->end()
                         ->arrayNode('version_recompile')
                             ->addDefaultsIfNotSet()
                             ->children()
-                                ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_RECOMPILE_VERSION')->end()
+                                ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSION_RECOMPILE')->end()
                             ->end()
                         ->end()
                         ->arrayNode('version_clear_compiled')
                             ->addDefaultsIfNotSet()
                             ->children()
-                                ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_CLEAR_COMPILED_VERSION')->end()
+                                ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSION_CLEAR_COMPILED')->end()
                             ->end()
                         ->end()
                         ->arrayNode('export_version')
                             ->addDefaultsIfNotSet()
                             ->children()
-                                ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_EXPORT_VERSION')->end()
+                                ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSION_EXPORT')->end()
                             ->end()
                         ->end()
 
@@ -385,7 +385,7 @@ class Content implements ConfigurationInterface
                             ->children()
                                 ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_DELETE')->end()
                                 ->scalarNode('view')->defaultValue('@SfsCms/admin/content/delete.html.twig')->end()
-                                ->scalarNode('type')->defaultValue(ContentDeleteForm::class)->end()
+                                ->scalarNode('type')->defaultValue(SectionDeleteForm::class)->end()
                                 ->scalarNode('success_redirect_to')->defaultValue('')->end()
                             ->end()
                         ->end()
@@ -423,7 +423,7 @@ class Content implements ConfigurationInterface
                         ->arrayNode('publish_version')
                             ->addDefaultsIfNotSet()
                             ->children()
-                                ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_PUBLISH_VERSION')->end()
+                                ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSION_PUBLISH')->end()
                             ->end()
                         ->end()
                         ->arrayNode('unpublish')
@@ -436,7 +436,7 @@ class Content implements ConfigurationInterface
                         ->arrayNode('version_delete')
                             ->addDefaultsIfNotSet()
                             ->children()
-                                ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_DELETE_VERSION')->end()
+                                ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSION_DELETE')->end()
                                 ->scalarNode('view')->defaultValue('@SfsCms/admin/content/version_delete.html.twig')->end()
                                 ->scalarNode('type')->defaultValue(VersionDeleteForm::class)->end()
                                 ->scalarNode('success_redirect_to')->defaultValue('')->end()

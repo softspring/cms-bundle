@@ -43,21 +43,6 @@ class BlameListener implements EventSubscriberInterface
             SfsCmsEvents::ADMIN_CONTENTS_DUPLICATE_APPLY => [
                 ['onDuplicateVersion', 6],
             ],
-            //            SfsCmsEvents::ADMIN_SECTION_VERSIONS_CREATE_APPLY => [
-            //                ['onCreateVersion', 5],
-            //            ],
-            //            SfsCmsEvents::ADMIN_SECTION_VERSIONS_PUBLISH_APPLY => [
-            //                ['onPublishVersion', 5],
-            //            ],
-            //            SfsCmsEvents::ADMIN_SECTION_VERSIONS_LOCK_APPLY => [
-            //                ['onLockVersion', 5],
-            //            ],
-            //            SfsCmsEvents::ADMIN_SECTION_VERSIONS_RECOMPILE_APPLY => [
-            //                ['onRecompileVersion', 5],
-            //            ],
-            //            SfsCmsEvents::ADMIN_SECTIONS_DUPLICATE_APPLY => [
-            //                ['onDuplicateVersion', 6],
-            //            ],
         ];
     }
 

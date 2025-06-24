@@ -17,7 +17,14 @@ module:
             section:
                 type: 'section'
 
-            esi:
-                type: 'checkbox'
+            mode:
+                type: 'choice'
                 type_options:
-                    label: 'Enable ESI'
+                    choices:
+                        section.form.mode.choices.embedded: 'embedded'
+                        section.form.mode.choices.esi: 'esi'
+                        section.form.mode.choices.ajax: 'ajax'
+                    required: true
+                    expanded: false
+                    multiple: false
+

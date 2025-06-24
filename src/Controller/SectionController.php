@@ -25,6 +25,11 @@ class SectionController extends AbstractController
     ) {
     }
 
+    public function __invoke(Request $request, string $section): Response
+    {
+        return $this->renderById($section, $request);
+    }
+
     public function renderById(string $section, Request $request): Response
     {
         // $this->enableSchedulableFilter();
@@ -42,11 +47,9 @@ class SectionController extends AbstractController
             /** @var ?SectionVersionInterface $publishedVersion */
             $publishedVersion = $section->getPublishedVersion();
 
-            $publishedVersion = $section->getLastVersion();
-
-            //            if (!$publishedVersion) {
-            //                throw $this->createNotFoundException();
-            //            }
+            if (!$publishedVersion) {
+                throw $this->createNotFoundException();
+            }
 
             //            if ('last_modified' === $this->contentCacheType) {
             //                $response->setEtag(md5($content->getId().$content->getLastModified()?->getTimestamp().$this->contentVersionCompiler->getCompileKeyFromRequest($publishedVersion, $request)));

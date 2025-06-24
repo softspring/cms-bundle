@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Model\Traits;
 
 use Doctrine\Common\Collections\Collection;
 use Softspring\CmsBundle\Model\RouteInterface;
+use Softspring\CmsBundle\Model\SectionInterface;
 use Softspring\MediaBundle\Model\MediaInterface;
 
 trait ContentDataTrait
@@ -13,6 +14,8 @@ trait ContentDataTrait
     protected ?Collection $medias = null;
 
     protected ?Collection $routes = null;
+
+    protected ?Collection $sections = null;
 
     protected mixed $_getDataCallback = null;
 
@@ -81,5 +84,27 @@ trait ContentDataTrait
     public function getRoutes(): Collection
     {
         return $this->routes;
+    }
+
+    public function addSection(SectionInterface $section): void
+    {
+        if (!$this->sections->contains($section)) {
+            $this->sections->add($section);
+        }
+    }
+
+    public function removeSection(SectionInterface $section): void
+    {
+        if ($this->sections->contains($section)) {
+            $this->sections->removeElement($section);
+        }
+    }
+
+    /**
+     * @psalm-return ?Collection|SectionInterface[]
+     */
+    public function getSections(): Collection
+    {
+        return $this->sections;
     }
 }

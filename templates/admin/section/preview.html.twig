@@ -43,21 +43,21 @@
                             <a href="{{ url('sfs_cms_admin_sections_details', {'section':section.id}) }}" class="btn btn-light mx-1">{{ ('admin_sections.preview.actions.cancel.button')|trans }}</a>
                         {% endif %}
 
-                        {% if is_granted('PERMISSION_SFS_CMS_ADMIN_SECTIONS_CREATE', version) %}
+                        {% if is_granted('PERMISSION_SFS_CMS_ADMIN_SECTION_CREATE', version) %}
                             <a href="{{ url('sfs_cms_admin_sections_content_from_version', {'section':section.id, 'prevVersion':version.id}) }}" class="btn btn-light mx-1">{{ ('admin_sections.preview.actions.content.button')|trans }}</a>
                         {% else %}
                             <a class="btn btn-light mx-1 disabled">{{ ('admin_sections.preview.actions.content.button')|trans }}</a>
                         {% endif %}
 
-{#                        {% if version.published %}#}
-{#                            <span class="btn btn-light disabled mx-1">{{ ('admin_sections.preview.actions.published.button')|trans }}</span>#}
-{#                        {% else %}#}
-{#                            {% if not section_config.admin.publish_version.is_granted or is_granted(section_config.admin.publish_version.is_granted, version) %}#}
-{#                                <a href="{{ url('sfs_cms_admin_sections_publish_version', {'section':section.id, 'version':version.id, 'back':'preview'}) }}" class="btn btn-light mx-1">{{ ('admin_sections.preview.actions.publish.button')|trans }}</a>#}
-{#                            {% else %}#}
-{#                                <a class="btn btn-light mx-1 disabled">{{ ('admin_sections.preview.actions.publish.button')|trans }}</a>#}
-{#                            {% endif %}#}
-{#                        {% endif %}#}
+                        {% if version.published %}
+                            <span class="btn btn-light disabled mx-1">{{ ('admin_sections.preview.actions.published.button')|trans }}</span>
+                        {% else %}
+                            {% if is_granted('PERMISSION_SFS_CMS_ADMIN_SECTION_VERSION_PUBLISH', version) %}
+                                <a href="{{ url('sfs_cms_admin_sections_publish_version', {'section':section.id, 'version':version.id, 'back':'preview'}) }}" class="btn btn-light mx-1">{{ ('admin_sections.preview.actions.publish.button')|trans }}</a>
+                            {% else %}
+                                <a class="btn btn-light mx-1 disabled">{{ ('admin_sections.preview.actions.publish.button')|trans }}</a>
+                            {% endif %}
+                        {% endif %}
                     </div>
                 </div>
             </div>

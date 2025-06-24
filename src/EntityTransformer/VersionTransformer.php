@@ -5,6 +5,7 @@ namespace Softspring\CmsBundle\EntityTransformer;
 use Doctrine\Persistence\ObjectManager;
 use Softspring\CmsBundle\Model\ContentDataInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
+use Softspring\CmsBundle\Model\SectionInterface;
 use Softspring\CmsBundle\Model\VersionInterface;
 use Softspring\MediaBundle\Model\MediaInterface;
 
@@ -21,7 +22,7 @@ class VersionTransformer extends AbstractContentDataTransformer implements Trans
         $version = $entity;
 
         $entities = [];
-        $data = $version->getData();
+        $data = $version->getData() ?? [];
         $this->transformModule($data, $data, $em, $entities);
         $version->setData($data);
 
@@ -35,6 +36,12 @@ class VersionTransformer extends AbstractContentDataTransformer implements Trans
         foreach ($entities as $entity) {
             if ($entity instanceof RouteInterface) {
                 $version->addRoute($entity);
+            }
+        }
+        // add route references
+        foreach ($entities as $entity) {
+            if ($entity instanceof SectionInterface) {
+                $version->addSection($entity);
             }
         }
     }

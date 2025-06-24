@@ -13,6 +13,9 @@ class CssModuleTest extends ModuleTestCase
         $this->modulePath = realpath(__DIR__.'/../../../cms/modules/css');
     }
 
+    /**
+     * @phpstan-ignore-next-line
+     */
     public static function provideModuleRender(): array
     {
         return [

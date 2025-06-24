@@ -8,46 +8,63 @@ registerFeature('types_section_type', _init);
  */
 function _init() {
     document.addEventListener('change', function (event) {
-        if (!event.target || !event.target.matches('[data-section-message-select]')) {
+        if (!event.target ||
+            (!event.target.matches('[data-section-message-select]') && !event.target.matches('[data-section-mode-message-select]'))
+        ) {
             return;
         }
 
-        sectionMessageSelect(event.target);
+        sectionMessageSelect(event.target.closest('[data-section-message-container]'));
     });
 
     // on load, process mesages
-    [...document.querySelectorAll('[data-section-message-select]')].forEach((select) => sectionMessageSelect(select));
+    [...document.querySelectorAll('[data-section-message-container]')].forEach((container) => sectionMessageSelect(container));
 
     // on module add, process messages
     document.addEventListener("collection.node.add.after", function (event) {
-        [...event.node().querySelectorAll('[data-section-message-select]')].forEach((select) => sectionMessageSelect(select));
+        [...event.node().querySelectorAll('[data-section-message-container]')].forEach((container) => sectionMessageSelect(container));
     });
 
     // on module insert, process messages
     document.addEventListener("collection.node.insert.after", function (event) {
-        [...event.node().querySelectorAll('[data-section-message-select]')].forEach((select) => sectionMessageSelect(select));
+        [...event.node().querySelectorAll('[data-section-message-container]')].forEach((container) => sectionMessageSelect(container));
     });
 }
 
-function sectionMessageSelect (select) {
-    let selectedChoice = select.options[select.selectedIndex];
+function sectionMessageSelect (container) {
+    const sectionSelect = container.querySelector('[data-section-message-select]');
+    const sectionModeSelect = container.querySelector('[data-section-mode-message-select]');
 
-    [...select.parentElement.querySelectorAll('[data-section-message-when]')].forEach(function (message) {
-        let show = selectedChoice.value !== '';
+    let sectionSelectedChoice = sectionSelect.options[sectionSelect.selectedIndex];
+    let sectionModeSelectedChoice = sectionModeSelect ? sectionModeSelect.options[sectionModeSelect.selectedIndex] : null;
 
-        // if (message.dataset.sectionWhenNotEsi !== undefined && selectedChoice.dataset.sectionEsi !== undefined) {
-        //     show &= false;
-        // }
-        //
-        // if (message.dataset.sectionWhenEsi !== undefined && selectedChoice.dataset.sectionEsi == undefined) {
-        //     show &= false;
-        // }
-        //
-        // if (message.dataset.sectionWhenNotSchedulable !== undefined && selectedChoice.dataset.sectionSchedulable !== undefined) {
-        //     show &= false;
-        // }
+    let sectionSelectedChoiceValue = sectionSelectedChoice ? sectionSelectedChoice.value : '';
+    let sectionModeSelectedChoiceValue = sectionModeSelectedChoice ? sectionModeSelectedChoice.value : '';
 
-        if (message.dataset.sectionWhenDraft !== undefined && selectedChoice.dataset.sectionDraft === undefined) {
+    [...container.querySelectorAll('[data-section-message-when]')].forEach(function (message) {
+        let show = sectionSelectedChoiceValue !== '' || sectionModeSelectedChoiceValue !== '';
+
+        if (message.dataset.sectionWhenModeEmbedded !== undefined && sectionModeSelectedChoiceValue !== 'embedded') {
+            show &= false;
+        }
+
+        if (message.dataset.sectionWhenModeEsiAjax !== undefined && sectionModeSelectedChoiceValue === 'embedded') {
+            show &= false;
+        }
+
+        if (message.dataset.sectionWhenSectionDraft !== undefined && sectionSelectedChoice.dataset.sectionDraft === undefined) {
+            show &= false;
+        }
+
+        if (message.dataset.sectionWhenSectionPublished !== undefined && sectionSelectedChoice.dataset.sectionDraft !== undefined) {
+            show &= false;
+        }
+
+        if (message.dataset.sectionWhenSectionTtl !== undefined && sectionSelectedChoice.dataset.sectionTtl === undefined) {
+            show &= false;
+        }
+
+        if (message.dataset.sectionWhenSectionNoTtl !== undefined && sectionSelectedChoice.dataset.sectionTtl !== undefined) {
             show &= false;
         }
 

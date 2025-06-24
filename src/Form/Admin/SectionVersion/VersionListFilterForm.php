@@ -11,7 +11,7 @@ use Softspring\Component\DoctrinePaginator\Form\PaginatorForm;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class VersionListFilterForm extends PaginatorForm
+class VersionListFilterForm extends PaginatorForm implements VersionListFilterFormInterface
 {
     protected CmsConfig $cmsConfig;
 

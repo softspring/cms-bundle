@@ -1,0 +1,16 @@
+{% trans_default_domain 'sfs_cms_contents' %}
+
+{% embed '@SfsCms/admin/_embeds/_card.html.twig' with {'title': ('admin_'~content_type~'.version_info.linked_sections.title')|trans} %}
+    {% trans_default_domain 'sfs_cms_contents' %}
+
+    {% block content %}
+        <ul>
+            {% for section in version_entity.sections %}
+                <li>
+                    <a href="{{ url('sfs_cms_admin_sections_details', {'section': section.id}) }}">{{ section.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endblock content %}
+{% endembed %}
+

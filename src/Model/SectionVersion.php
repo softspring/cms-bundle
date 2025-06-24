@@ -17,6 +17,7 @@ abstract class SectionVersion implements SectionVersionInterface
     {
         $this->medias = new ArrayCollection();
         $this->routes = new ArrayCollection();
+        $this->sections = new ArrayCollection();
         $this->compiled = new ArrayCollection();
     }
 

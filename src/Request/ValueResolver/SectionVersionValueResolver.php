@@ -7,6 +7,7 @@ use Softspring\CmsBundle\Model\SectionVersionInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
+
 use function is_object;
 
 class SectionVersionValueResolver implements ValueResolverInterface

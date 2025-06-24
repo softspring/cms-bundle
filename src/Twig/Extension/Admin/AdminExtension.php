@@ -40,6 +40,7 @@ class AdminExtension extends AbstractExtension implements GlobalsInterface
         return [
             new TwigFunction('sfs_cms_admin_content_url', [$this, 'getContentUrl']),
             new TwigFunction('sfs_cms_admin_content_menu', [$this->menuProvider, 'getContentMenu']),
+            new TwigFunction('sfs_cms_admin_section_menu', [$this->menuProvider, 'getSectionMenu']),
         ];
     }
 

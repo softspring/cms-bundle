@@ -7,6 +7,7 @@ use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Model\ContentVersion;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
+use Softspring\CmsBundle\Model\SectionInterface;
 use Softspring\CmsBundle\Utils\DataMigrator;
 use Softspring\MediaBundle\Model\MediaInterface;
 
@@ -43,6 +44,12 @@ class ContentVersionTransformer extends AbstractContentDataTransformer implement
         foreach ($entities as $entity) {
             if ($entity instanceof RouteInterface) {
                 $contentVersion->addRoute($entity);
+            }
+        }
+        // add section references
+        foreach ($entities as $entity) {
+            if ($entity instanceof SectionInterface) {
+                $contentVersion->addSection($entity);
             }
         }
     }

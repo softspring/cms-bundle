@@ -2,11 +2,30 @@
 
 {% if section %}
     {% if id|default(false) or class|default(false) %}<div {{ module.id(id) }} {{ module.class(class) }}>{% endif %}
-        {% if esi %}
-            ESI
-            {{ render_esi(controller('Softspring\\CmsBundle\\Controller\\SectionController::renderById', {'section':section.id, '_locale':app.request.locale})) }}
+        {% if mode == 'esi' %}
+            <esi:include src="{{ fragment_uri(controller('Softspring\\CmsBundle\\Controller\\SectionController::renderById', {'section':section.id, '_locale':app.request.locale}))|raw }}" />
+        {% elseif mode == 'ajax' %}
+            {% set section_div_id = 's'~random() %}
+            <div id="{{ section_div_id }}" data-href="{{ url('sfs_cms_section_render', {'section': section.id, '_locale':app.request.locale}) }}">
+                <script type="text/javascript">
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const sectionDiv = document.getElementById('{{ section_div_id }}');
+                        fetch(sectionDiv.getAttribute('data-href'))
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response;
+                            })
+                            .then(response => response.text())
+                            .then(html => {
+                                sectionDiv.outerHTML = html;
+                            })
+                            .catch(error => console.error('Error loading section:', error));
+                    });
+                </script>
+            </div>
         {% else %}
-            NO ESI
             {{ render(url('sfs_cms_section_render', {'section': section.id, '_locale':app.request.locale})) }}
         {% endif %}
     {% if id|default(false) or class|default(false) %}</div>{% endif %}

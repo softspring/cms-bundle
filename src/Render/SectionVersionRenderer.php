@@ -29,7 +29,7 @@ class SectionVersionRenderer
             // preload all routes
             $version->getRoutes();
 
-            $versionData = $version->getData();
+            $versionData = $version->getData() ?? [];
 
             $renderErrorList && $renderErrorList->resetLocation();
             $renderErrorList && $renderErrorList->pushLocation('data');

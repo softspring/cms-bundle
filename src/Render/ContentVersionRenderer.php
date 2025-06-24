@@ -46,6 +46,8 @@ class ContentVersionRenderer implements ContentVersionRendererInterface
                 $version->getMedias();
                 // preload all routes
                 $version->getRoutes();
+                // preload all sections
+                $version->getSections();
 
                 $layout = $this->cmsConfig->getLayout($version->getLayout());
 
@@ -75,6 +77,8 @@ class ContentVersionRenderer implements ContentVersionRendererInterface
             $version->getMedias();
             // preload all routes
             $version->getRoutes();
+            // preload all sections
+            $version->getSections();
 
             $layout = $this->cmsConfig->getLayout($version->getLayout());
             $versionData = $version->getData();

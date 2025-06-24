@@ -29,6 +29,7 @@ services:
             $blockCacheType: '%sfs_cms.block.cache.type%'
             $mediaStoragePath: '%sfs_media.storage.filesystem.path%'
             $compiledDataExpirationTtl: '%sfs_cms.compiled.expiration_ttl%'
+            $recompileEnabled: '%sfs_cms.content.recompile_enabled%'
 
     Softspring\CmsBundle\Config\CmsConfig:
         arguments:
@@ -147,12 +148,8 @@ services:
         tags:
             - { name: 'doctrine.event_listener', event: 'loadClassMetadata', priority: 500 }
 
-    Softspring\CmsBundle\Security\Voter\ContentVersionDeleteVoter:
-        tags: [ 'security.voter' ]
-
-    Softspring\CmsBundle\Security\Voter\ContentVersionVoter:
-        arguments:
-            $recompileEnabled: '%sfs_cms.content.recompile_enabled%'
+    Softspring\CmsBundle\Security\Voter\:
+        resource: '../../src/Security/Voter/*'
         tags: [ 'security.voter' ]
 
     Softspring\CmsBundle\Security\Voter\DeprecatedPermissionVoter:

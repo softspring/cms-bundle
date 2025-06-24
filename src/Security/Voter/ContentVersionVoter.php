@@ -19,7 +19,7 @@ class ContentVersionVoter implements VoterInterface
         }
 
         // if recompile is disabled, deny access
-        if ('PERMISSION_SFS_CMS_ADMIN_CONTENT_RECOMPILE_VERSION' === $attributes[0] && !$this->recompileEnabled) {
+        if ('PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSION_RECOMPILE' === $attributes[0] && !$this->recompileEnabled) {
             return VoterInterface::ACCESS_DENIED;
         }
 

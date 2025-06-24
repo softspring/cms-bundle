@@ -38,16 +38,16 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                {% include ['@section/sections/admin/_read_general.html.twig', '@SfsCms/admin/section/_read_general.html.twig'] %}
+                {% include '@SfsCms/admin/section/_read_general.html.twig' %}
             </div>
             <div class="col">
-{#                {% include ['@section/sections/admin/_read_indexing.html.twig', '@SfsCms/admin/section/_read_indexing.html.twig'] %}#}
+                {% include '@SfsCms/admin/section/_read_caching.html.twig' %}
             </div>
             <div class="col">
-{#                {% include ['@section/sections/admin/_read_routes.html.twig', '@SfsCms/admin/section/_read_routes.html.twig'] %}#}
+                {% include '@SfsCms/admin/section/_read_usages.html.twig' %}
             </div>
             <div class="col">
-{#                {% include ['@section/sections/admin/_read_translations.html.twig', '@SfsCms/admin/section/_read_translations.html.twig'] %}#}
+                {% include '@SfsCms/admin/section/_read_translations.html.twig' %}
             </div>
         </div>
 

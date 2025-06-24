@@ -6,6 +6,10 @@
 
     <mapped-superclass name="Softspring\CmsBundle\Model\Section" table="cms_section">
         <field name="name" column="name" type="string" nullable="false" unique="true"/>
+        <field name="extraData" column="extra_data" type="json" nullable="true"/>
+
+        <field name="defaultLocale" column="default_locale" type="string" nullable="false"/>
+        <field name="locales" column="locales" type="json" nullable="true"/>
 
         <field name="lastVersionNumber" column="last_version_number" type="integer" nullable="true">
             <options>
