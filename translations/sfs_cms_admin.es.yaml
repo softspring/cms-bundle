@@ -77,21 +77,6 @@ admin_blocks:
         title: "Bloque"
         breadcrumb: "Bloque"
 
-#admin_content:
-#    form:
-#        name.label: "Nombre"
-#        sites.label: "Sitios web"
-#        layout.label: "Diseño"
-#        modules.label: "Módulos"
-#        seo.label: "SEO"
-#        metaTitle.label: "Título (barra de navegador)"
-#        metaDescription.label: "Descripción (meta description)"
-#        metaKeywords.label: "Palabras clave (meta keywords)"
-#        noIndex.label: "Evitar indexado (noindex)"
-#        noFollow.label: "Enlaces entrantes sin seguimiento (nofollow)"
-#        sitemap.label: "Mostrar en sitemap"
-#        versionLayout.label: "Diseño"
-
 admin_routes:
     tabs_menu:
         details: "Detalles"
@@ -255,9 +240,8 @@ admin_sites:
 
 sections:
     status:
-        published: "Published"
-        draft: "Draft"
-
+        published: "Publiacado"
+        draft: "Borrador"
 
 admin_sections:
     tabs_menu:

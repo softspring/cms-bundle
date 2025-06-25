@@ -77,21 +77,6 @@ admin_blocks:
         title: "Block"
         breadcrumb: "Block"
 
-#admin_content:
-#    form:
-#        name.label: "Name"
-#        sites.label: "Sites web"
-#        layout.label: "Diseño"
-#        modules.label: "Módulos"
-#        seo.label: "SEO"
-#        metaTitle.label: "Título (barra de navegador)"
-#        metaDescription.label: "Descripción (meta description)"
-#        metaKeywords.label: "Palabras clave (meta keywords)"
-#        noIndex.label: "Evitar indexado (noindex)"
-#        noFollow.label: "Enlaces entrantes sin seguimiento (nofollow)"
-#        sitemap.label: "Mostrar en sitemap"
-#        versionLayout.label: "Diseño"
-
 admin_routes:
     tabs_menu:
         details: "Details"
@@ -253,13 +238,237 @@ admin_sites:
         title: "%name%"
         breadcrumb: "%name%"
 
+sections:
+    status:
+        published: "Published"
+        draft: "Draft"
+
 admin_sections:
+    tabs_menu:
+        details: "Details"
+        content: "Content"
+        update: "Edit"
+        versions: "Versions"
+        preview: "Preview"
+        delete: "Delete"
+
+    form:
+        name.label: "Name"
+        esi.label: "Enable ESI"
+        ttl.label: "Cache time"
+        defaultLocale.label: "Default language"
+        locales.label: "Languages"
+
+    version_form:
+        note.label: "Note"
+
     list:
         meta.title: "Sections"
         title: "Sections"
         breadcrumb: "Sections"
         empty:
             create_first_section_raw: '<a href="%create_link%">Create</a> your first section!'
-            can_not_create_sections: "You can not create a new section"
+            can_not_create_sections: "You cannot create sections"
             go_to_doc_raw: 'If you need help go to <a href="https://github.com/softspring/cms-bundle" target="_blank">documentation</a>'
-            clean_filters: 'Your query has no results, try to <a href="%url%">clean filters</a>'
+            clean_filters: 'No sections found for your search, <a href="%url%">clear filters</a> to see all routes'
+        actions:
+            create.link: "New section"
+            details.link: "Details"
+            content.link: "Content"
+            preview.link: "Preview"
+        filter_form:
+            name.label: "Name"
+            status.label: "Status"
+            publishedVersionSection.label: "Published version"
+        fields:
+            id.header: "Id"
+            status.header: "Status"
+            publishedAt.header: "Published"
+
+    create:
+        meta.title: "New section"
+        title: "New section"
+        breadcrumb: "New section"
+        actions:
+            create.button: "Create section"
+            cancel.button: "Cancel"
+
+    content:
+        meta.title: "Section content"
+        title: "Section content"
+        breadcrumb: "Section content"
+        actions:
+            save.button: "Save changes"
+            cancel.button: "Cancel"
+            save_and_publish.button: "Save and publish"
+            save_and_preview.button: "Save and preview"
+            save_and_exit.button: "Save and exit"
+        render_error: "An error occurred while compiling the section, check the configuration.<br/><small>%exception%</small>"
+        success_saved: "The section has been saved successfully"
+
+    update:
+        meta.title: "Edit section"
+        title: "Edit section"
+        breadcrumb: "Edit section"
+        actions:
+            update.button: "Save changes"
+            cancel.button: "Cancel"
+            delete.button: "Delete section"
+
+    preview:
+        meta.title: "Preview section %name% (v%versionNumber%)"
+        title: "%name% (v%versionNumber%)"
+        actions:
+            open.button: "Open"
+            cancel.button: "Cancel"
+            content.button: "Edit version"
+            publish.button: "Publish version"
+            published.button: "Published"
+
+    read:
+        meta.title: "Section details %name%"
+        title: "%name%"
+        breadcrumb: "Section details"
+        general:
+            title: "General"
+            status: "Status"
+            publishDate: "Publish date"
+        caching:
+            title: "Cache"
+            esi: "ESI"
+            ttl: "Cache time"
+            ttl.seconds: "seconds"
+            ttl.not_set: "not cacheable"
+        versions:
+            title: "Versions"
+            more.link: "See more versions"
+        translations:
+            title: "Translations"
+        actions:
+            unpublish.link: "Unpublish"
+            update.link: "Edit"
+        usages:
+            title: "Section usages"
+
+    delete:
+        meta.title: "Delete section"
+        title: "Delete section"
+        breadcrumb: "Delete section"
+        actions:
+            delete.button: "Delete section"
+            cancel.button: "Cancel"
+        main_warnings_raw: '<p>Are you sure to delete this section?</p><p>This action cannot be undone</p>'
+
+    versions:
+        meta.title: "Versions"
+        title: "%name%"
+        breadcrumb: "Versions"
+        fields:
+            id.header: "Version"
+            origin.header: "Origin"
+            created.header: "Created"
+            creator.header: "Creator"
+            publish_status.header: "Publication"
+            note.header: "Note"
+        publish_status:
+            published: "published"
+            unpublished: "not published"
+        origin:
+            "null": ""
+            1: "edited"
+            2: "fixture"
+            3: "loaded"
+            4: "translated"
+            5: "seo"
+            6: "duplicated"
+            7: "language added"
+            8: "site added"
+        actions:
+            edit.link: "Edit"
+            preview.link: "Preview"
+            export.link: "Export"
+            publish.link: "Publish"
+            unpublish.link: "Unpublish"
+            import_version.link: "Import version"
+            cleanup_versions.link: "Cleanup versions"
+            keep.link: "Keep version, click to unmark"
+            nokeep.link: "Do not keep this version, click to keep"
+            info.link: "Info"
+            add_note.link: "Add note"
+            delete.link: "Delete version"
+
+    version_lock:
+        success_locked_flash: "The version has been locked"
+        success_unlocked_flash: "The version has been unlocked"
+        failed_flash: "An error occurred while locking/unlocking the version<br/><small>%exception%</small>"
+
+    version_info:
+        meta.title: "Version information (v%versionNumber%)"
+        title: "%name% (v%versionNumber%)"
+        breadcrumb: "Version information (v%versionNumber%)"
+        info:
+            version.title: "Version"
+            origin.title: "Origin"
+            created.title: "Created"
+            creator.title: "Creator"
+            publish_status.title: "Published"
+            keep.title: "Keep"
+        actions:
+            save.button: "Save changes"
+            cancel.button: "Cancel"
+            recompile.link: "Recompile"
+            clear_compiled.link: "Clear compiled content"
+        compiled:
+            title: "Compiled content"
+            error: "This content has compilation errors, try to edit it to resolve them or republish"
+            pre_compile_content_disabled: "Pre-compilation of content is disabled for this version"
+            pre_compile_content_missing: "This version does not have pre-compiled content."
+            pre_compile_modules_disabled: "Pre-compilation of modules is disabled for this version"
+            pre_compile_modules_missing: "This version does not have pre-compiled modules."
+        data:
+            title: "Data"
+        seo:
+            title: "SEO"
+        linked_routes:
+            title: "Linked routes"
+        linked_medias:
+            title: "Linked media"
+        linked_sections:
+            title: "Linked sections"
+        history:
+            title: "History"
+            action:
+                publish: "Published by %userName% on %date%"
+                unpublish: "Unpublished by %userName% on %date% (new version: %new_version%)"
+                lock: "Version marked to keep by %userName% on %date%"
+                unlock: "Version marked not to keep by %userName% on %date%"
+                recompile: "Version recompiled by %userName% on %date%"
+                duplicate: "Page duplicated by %userName% on %date%"
+                create: "Created by %userName% on %date%"
+                seo: "SEO updated by %userName% on %date%"
+        metadata:
+            title: "Metadata"
+
+    version_publish:
+        success_flash: "The version has been published"
+        failed_flash: "An error occurred while publishing the version<br/><small>%exception%</small>"
+        confirm_message_title: "Publish version"
+        with_errors_confirm_message_title: "Publish version"
+        confirm_message_raw: "<p>Are you sure to publish this version?</p>"
+        with_errors_confirm_message_raw: "<p>Are you sure to publish this version?</p><p>The version has errors, it may not display correctly</p>"
+
+    unpublish:
+        has_been_unpublished_flash: "The section has been unpublished"
+        confirm_message_title: "Unpublish section"
+        confirm_message_raw: "<p>Are you sure to unpublish this section?</p><p>It will show a 404 error to users</p>"
+
+    version_delete:
+        meta.title: "Delete version"
+        title: "Delete version"
+        breadcrumb: "Delete version"
+        main_warnings_raw: '<p>Are you sure to delete this version?</p><p>This action cannot be undone</p>'
+        actions:
+            delete.button: "Delete version"
+            cancel.button: "Cancel"
+        success_flash: "The version has been deleted"
+        failed_flash: "An error occurred while deleting the version<br/><small>%exception%</small>"
