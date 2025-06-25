@@ -6,7 +6,6 @@ module:
     render_template: '@module/section/render.html.twig'
     module_options:
         label_format: 'modules.section.%%name%%.label'
-        translation_domain: 'custom_domain'
         form_fields:
             id:
                 type: 'id'
