@@ -138,6 +138,10 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
             $loader->load('deprecated_param_converters.yaml');
         }
 
+        if (interface_exists('Symfony\Component\HttpKernel\Controller\ValueResolverInterface')) {
+            $loader->load('value_resolvers.yaml');
+        }
+
         $loader->load('data_collector.yaml');
 
         $version = InstalledVersions::getVersion('symfony/twig-bridge');

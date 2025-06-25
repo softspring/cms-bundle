@@ -102,8 +102,7 @@ services:
         exclude:
             - '../../src/Render/ModuleRenderer.php'
 
-    Softspring\CmsBundle\Request\:
-        resource: '../../src/Request/*'
+    Softspring\CmsBundle\Request\FlashNotifier: ~
 
     sfs_cms.twig.extension.loader:
         class: Twig\Extension\StringLoaderExtension
@@ -117,18 +116,6 @@ services:
     Softspring\CmsBundle\Twig\Extension\:
         resource: '../../src/Twig/Extension/*'
         tags: [ 'twig.extension' ]
-
-    Softspring\CmsBundle\Request\ValueResolver\SectionValueResolver:
-        tags:
-            -   controller.argument_value_resolver:
-                    name: section_id
-                    priority: 150
-
-    Softspring\CmsBundle\Request\ValueResolver\SectionVersionValueResolver:
-        tags:
-            -   controller.argument_value_resolver:
-                    name: section_version_id
-                    priority: 150
 
     Softspring\CmsBundle\EntityListener\ContentVersionCompileListener:
         tags:
