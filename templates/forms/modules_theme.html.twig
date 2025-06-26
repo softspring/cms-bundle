@@ -98,14 +98,17 @@
 {# {% endblock module_collection_entry %} #}
 
 {% block module_buttons %}
+    {% trans_default_domain 'sfs_cms_admin' %}
     <div class="cms-module-buttons ps-2">
-        <button type="button" id="{{ id }}_up_node_button" data-collection-action="up"><span
+        <button type="button" id="{{ id }}_up_node_button" title="{{ 'module_buttons.up.title'|trans }}" data-collection-action="up"><span
                     class="bi bi-chevron-up h2"></span><span class="visually-hidden">^</span></button>
-        <button type="button" id="{{ id }}_down_node_button" data-collection-action="down"><span
+        <button type="button" id="{{ id }}_down_node_button" title="{{ 'module_buttons.down.title'|trans }}" data-collection-action="down"><span
                     class="bi bi-chevron-down h2"></span><span class="visually-hidden">v</span></button>
-        <button type="button" id="{{ id }}_duplicate_node_button" data-collection-action="duplicate"><span
-                    class="bi bi-copy h2"></span><span class="visually-hidden">D</span></button>
-        <button type="button" id="{{ id }}_remove_node_button" data-collection-action="delete" class="btn-close"><span
+        <button type="button" id="{{ id }}_duplicate_node_button" title="{{ 'module_buttons.duplicate.title'|trans }}" data-collection-action="duplicate"><span
+                    class="bi bi-plus-square h2"></span><span class="visually-hidden">D</span></button>
+        <button type="button" id="{{ id }}_copy_node_button" title="{{ 'module_buttons.copy.title'|trans }}" data-collection-action="copy"><span
+                    class="bi bi-copy h2"></span><span class="visually-hidden">C</span></button>
+        <button type="button" id="{{ id }}_remove_node_button" title="{{ 'module_buttons.remove.title'|trans }}" data-collection-action="delete" class="btn-close"><span
                     class="visually-hidden">x</span></button>
     </div>
 {% endblock %}
@@ -359,6 +362,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title h5">{{ 'admin_content.content.modules_modal.label'|trans({}, 'sfs_cms_admin') }}</h1>
+                    <button type="button" class="btn btn-outline-secondary btn-sm float-end" aria-label="Paste" data-collection-action="paste">{{ 'admin_content.content.modules_modal.paste.button'|trans({}, 'sfs_cms_admin') }}</button>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">

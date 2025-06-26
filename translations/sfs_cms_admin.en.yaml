@@ -1,6 +1,13 @@
 admin:
     global_breadcrumb: "CMS"
 
+module_buttons:
+    up.title: "Move module up"
+    down.title: "Move module down"
+    delete.title: "Delete module"
+    duplicate.title: "Duplicate module"
+    copy.title: "Copy module"
+
 admin_content:
     read:
         published_cache_alert_raw: "This content was last published at %publishedDateTime%. Some content URLs are cached for %maxRouteTtl% seconds. So you may have to wait %waitSeconds% seconds before the new content is available."
@@ -9,6 +16,7 @@ admin_content:
         max_input_vars_raw: "You have reached the max_input_vars (%maxInputVars%). Please remove some fields to continue. <br/>If you need to increase this limit, please contact your provider."
         modules_modal:
             label: "Select module"
+            paste.button: "Paste module"
 
 admin_blocks:
     list:
