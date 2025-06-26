@@ -5,12 +5,12 @@ services:
         public: false
         bind:
             $em: '@sfs_cms.entity_manager'
-            $autoCompileOnPublish: '%sfs_cms.content.autocompile_on_publish%'
+            $contentAutoCompileOnPublish: '%sfs_cms.content.autocompile_on_publish%'
 
     Softspring\CmsBundle\Admin\ActionListener\ContentVersion\:
         resource: '../../src/Admin/ActionListener/ContentVersion/*'
         bind:
-            $recompileEnabled: '%sfs_cms.content.recompile_enabled%'
+            $contentRecompileEnabled: '%sfs_cms.content.recompile_enabled%'
 
     Softspring\CmsBundle\Form\Admin\ContentVersion\:
         resource: '../../../src/Form/Admin/ContentVersion/*'

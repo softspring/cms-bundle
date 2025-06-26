@@ -10,6 +10,8 @@ use Softspring\CmsBundle\Model\MenuInterface;
 use Softspring\CmsBundle\Model\MenuItemInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Model\RoutePathInterface;
+use Softspring\CmsBundle\Model\SectionInterface;
+use Softspring\CmsBundle\Model\SectionVersionInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\Component\DoctrineTargetEntityResolver\DependencyInjection\Compiler\AbstractResolveDoctrineTargetEntityPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -32,5 +34,7 @@ class ResolveDoctrineTargetEntityPass extends AbstractResolveDoctrineTargetEntit
         $this->setTargetEntityFromParameter('sfs_cms.menu.item_class', MenuItemInterface::class, $container, true);
         $this->setTargetEntityFromParameter('sfs_cms.site.class', SiteInterface::class, $container, true);
         $this->setTargetEntityFromParameter('sfs_cms.compiled.class', CompiledDataInterface::class, $container, true);
+        $this->setTargetEntityFromParameter('sfs_cms.section.section_class', SectionInterface::class, $container, true);
+        $this->setTargetEntityFromParameter('sfs_cms.section.section_version_class', SectionVersionInterface::class, $container, true);
     }
 }

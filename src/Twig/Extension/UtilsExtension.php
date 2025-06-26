@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Twig\Extension;
 
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
+use Softspring\CmsBundle\Manager\SectionManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Utils\HtmlValidator;
 use Twig\Extension\AbstractExtension;
@@ -12,7 +13,7 @@ use Twig\TwigFunction;
 
 class UtilsExtension extends AbstractExtension
 {
-    public function __construct(protected ContentManagerInterface $contentManager, protected CmsConfig $cmsConfig)
+    public function __construct(protected ContentManagerInterface $contentManager, protected CmsConfig $cmsConfig, protected SectionManagerInterface $sectionManager)
     {
     }
 
@@ -59,6 +60,12 @@ class UtilsExtension extends AbstractExtension
                     $processed['type'] = 'block';
                     $processed['block_type'] = $params['_path']['type'] ?? 'unknown';
                     $processed['block_config'] = $this->cmsConfig->getBlock("{$processed['block_type']}", false);
+                    break;
+
+                case 'Softspring\CmsBundle\Controller\SectionController::renderById':
+                    $processed['type'] = 'section';
+                    $processed['section_id'] = $params['_path']['section'] ?? 'unknown';
+                    $processed['section_name'] = $this->sectionManager->getRepository()->findOneById($processed['section_id'])?->getName() ?? 'unknown';
                     break;
 
                 case 'Softspring\CmsBundle\Controller\MenuController::renderByType':

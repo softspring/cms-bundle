@@ -17,14 +17,16 @@ class AdminExtension extends AbstractExtension implements GlobalsInterface
         protected RouterInterface $router,
         protected ContentManagerInterface $contentManager,
         protected MenuProvider $menuProvider,
-        protected bool $recompileEnabled,
+        protected bool $contentRecompileEnabled,
+        protected bool $sectionRecompileEnabled,
     ) {
     }
 
     public function getGlobals(): array
     {
         return [
-            'sfs_cms_admin_content_recompile_enabled' => $this->recompileEnabled,
+            'sfs_cms_admin_content_recompile_enabled' => $this->contentRecompileEnabled,
+            'sfs_cms_admin_section_recompile_enabled' => $this->sectionRecompileEnabled,
         ];
     }
 
@@ -40,6 +42,7 @@ class AdminExtension extends AbstractExtension implements GlobalsInterface
         return [
             new TwigFunction('sfs_cms_admin_content_url', [$this, 'getContentUrl']),
             new TwigFunction('sfs_cms_admin_content_menu', [$this->menuProvider, 'getContentMenu']),
+            new TwigFunction('sfs_cms_admin_section_menu', [$this->menuProvider, 'getSectionMenu']),
         ];
     }
 

@@ -22,7 +22,6 @@ class UrlMatcherTest extends TestCase
 {
     protected AbstractQuery $query;
     protected QueryBuilder $qb;
-    protected EntityRepository $repository;
     protected EntityManagerInterface $em;
     protected UrlGenerator $urlGenerator;
     protected SiteResolver $siteResolver;
@@ -39,15 +38,13 @@ class UrlMatcherTest extends TestCase
         $this->qb = $this->createMock(QueryBuilder::class);
         $this->qb->method('getQuery')->willReturn($this->query);
 
-        $this->repository = $this->createMock(EntityRepository::class);
-        $this->repository->method('createQueryBuilder')->willReturn($this->qb);
         $this->em = $this->createMock(EntityManagerInterface::class);
-        $this->em->method('getRepository')->willReturn($this->repository);
+        $this->em->method('getRepository')->willReturn($this->createMock(EntityRepository::class));
         $this->urlGenerator = $this->createMock(UrlGenerator::class);
         $this->siteResolver = $this->createMock(SiteResolver::class);
     }
 
-    public function testNoSiteFound()
+    public function testNoSiteFound(): void
     {
         $urlMatcher = new UrlMatcher($this->em, $this->urlGenerator, $this->siteResolver);
         $request = new Request();
@@ -56,7 +53,7 @@ class UrlMatcherTest extends TestCase
         $this->assertEmpty($attributes);
     }
 
-    public function testHttpsRedirect()
+    public function testHttpsRedirect(): void
     {
         $siteConfig = ['https_redirect' => true];
         $site = new Site();
@@ -80,7 +77,7 @@ class UrlMatcherTest extends TestCase
         ], $attributes);
     }
 
-    public function testRedirectToCanonical()
+    public function testRedirectToCanonical(): void
     {
         $siteConfig = ['https_redirect' => true];
         $site = new Site();
@@ -103,7 +100,7 @@ class UrlMatcherTest extends TestCase
         ], $attributes);
     }
 
-    public function testSlashRoute()
+    public function testSlashRoute(): void
     {
         $siteConfig = [
             'locales' => ['es', 'en'],
@@ -137,7 +134,7 @@ class UrlMatcherTest extends TestCase
         ], $attributes);
     }
 
-    public function testSiteButRouteNotFound()
+    public function testSiteButRouteNotFound(): void
     {
         $siteConfig = [
             'locales' => ['es', 'en'],
@@ -170,7 +167,7 @@ class UrlMatcherTest extends TestCase
         ], $attributes);
     }
 
-    public function testSiteWithPathsButRouteNotFound()
+    public function testSiteWithPathsButRouteNotFound(): void
     {
         $siteConfig = [
             'locales' => ['es', 'en'],
@@ -207,7 +204,7 @@ class UrlMatcherTest extends TestCase
         ], $attributes);
     }
 
-    public function testFoundRouteContent()
+    public function testFoundRouteContent(): void
     {
         $siteConfig = [
             'locales' => ['es', 'en'],

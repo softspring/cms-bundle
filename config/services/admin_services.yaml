@@ -7,18 +7,23 @@ services:
     _instanceof:
         Softspring\CmsBundle\Admin\Menu\ContentMenuProviderInterface:
             tags: [ 'sfs_cms.admin_menu.content_menu_provider' ]
-    
+        Softspring\CmsBundle\Admin\Menu\SectionMenuProviderInterface:
+            tags: [ 'sfs_cms.admin_menu.section_menu_provider' ]
+
     Softspring\CmsBundle\Admin\Menu\MenuProvider:
         arguments:
             $contentMenuProviders: !tagged_iterator { tag: sfs_cms.admin_menu.content_menu_provider, default_priority_method: getPriority }
+            $sectionMenuProviders: !tagged_iterator { tag: sfs_cms.admin_menu.section_menu_provider, default_priority_method: getPriority }
 
     Softspring\CmsBundle\Admin\Menu\ContentMenuProvider: ~
+    Softspring\CmsBundle\Admin\Menu\SectionMenuProvider: ~
 
     Softspring\CmsBundle\Twig\Extension\Admin\:
         resource: '../../src/Twig/Extension/Admin/*'
         tags: [ 'twig.extension' ]
         bind:
-            $recompileEnabled: '%sfs_cms.content.recompile_enabled%'
+            $contentRecompileEnabled: '%sfs_cms.content.recompile_enabled%'
+            $sectionRecompileEnabled: '%sfs_cms.section.recompile_enabled%'
 
     Softspring\CmsBundle\Admin\Routing\AdminRoutingLoader:
         arguments:

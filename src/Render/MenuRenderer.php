@@ -6,30 +6,26 @@ use Exception;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\InvalidMenuException;
 use Softspring\CmsBundle\Render\Exception\RenderException;
+use Softspring\CmsBundle\Render\Isolated\IsolatedRunner;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\HttpCache\Esi;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
-use Symfony\Component\Routing\RouterInterface;
-use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface;
 use Twig\Environment;
 
-class MenuRenderer extends AbstractRenderer
+class MenuRenderer
 {
     protected bool $profilerEnabled;
     protected bool $esiEnabled;
     protected array $profilerDebugCollectorData = [];
-    protected ?EntrypointLookupInterface $entrypointLookup;
 
     public function __construct(
-        RequestStack $requestStack,
+        protected RequestStack $requestStack,
         protected CmsConfig $cmsConfig,
         protected Environment $twig,
-        RouterInterface $router,
-        ?EntrypointLookupInterface $entrypointLookup,
-        ?Profiler $profiler,
-        ?Esi $esi,
+        protected IsolatedRunner $isolatedRunner,
+        protected ?Profiler $profiler,
+        protected ?Esi $esi,
     ) {
-        parent::__construct($requestStack, $entrypointLookup, $router);
         $this->profilerEnabled = (bool) $profiler;
         $this->esiEnabled = (bool) $esi;
     }
@@ -37,6 +33,7 @@ class MenuRenderer extends AbstractRenderer
     /**
      * @throws RenderException
      * @throws InvalidMenuException
+     * @throws Exception
      */
     public function renderMenuByType(string $type, ?string $locale = null): string
     {
@@ -67,11 +64,16 @@ class MenuRenderer extends AbstractRenderer
             ];
         }
 
-        return $this->encapsulateEsiCapableRender(function () use ($template) { return $template->render(); });
+        return $this->isolatedRunner->isolateEsiCapableRequestRender(function () use ($template) { return $template->render(); });
     }
 
     public function getDebugCollectorData(): array
     {
         return $this->profilerDebugCollectorData;
+    }
+
+    protected function isPreview(): bool
+    {
+        return $this->requestStack->getCurrentRequest()?->attributes->has('_cms_preview') ?: false;
     }
 }

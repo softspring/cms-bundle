@@ -1,0 +1,37 @@
+{% trans_default_domain 'sfs_cms_admin' %}
+
+<ul class="nav nav-tabs mt-3" id="myTab" role="tablist">
+    {% block tabs %}
+{#        <li class="nav-item">#}
+{#            <a class="nav-link {{ current == 'details' ? 'active' : '' }}" href="{{ url('sfs_cms_admin_sections_details', {'section': section_entity.id}) }}">General</a>#}
+{#        </li>#}
+{#        <li class="nav-item">#}
+{#            <a class="nav-link" href="{{ url('sfs_cms_admin_sections_content', {'section': section_entity.id}) }}">Contenido</a>#}
+{#        </li>#}
+{#        <li class="nav-item">#}
+{#            <a class="nav-link" href="{{ url('sfs_cms_admin_sections_preview', {'section': section_entity.id}) }}">Previsualizar</a>#}
+{#        </li>#}
+{#        <li class="nav-item">#}
+{#            <a class="nav-link " href="{{ url('sfs_cms_admin_sections_translations', {'section': section_entity.id}) }}">Traducciones</a>#}
+{#        </li>#}
+{#        <li class="nav-item">#}
+{#            <a class="nav-link {{ current == 'versions' ? 'active' : '' }}" href="{{ url('sfs_cms_admin_sections_versions', {'section': section_entity.id}) }}">Versiones</a>#}
+{#        </li>#}
+{#        <li class="nav-item">#}
+{#            <a class="nav-link {{ current == 'update' ? 'active' : '' }}" href="{{ url('sfs_cms_admin_sections_update', {'section': section_entity.id}) }}">Propiedades</a>#}
+{#        </li>#}
+{#        <li class="nav-item">#}
+{#            <a class="nav-link" href="{{ url('sfs_cms_admin_sections_delete', {'section': section_entity.id}) }}">Eliminar</a>#}
+{#        </li>#}
+
+        {% for item in sfs_cms_admin_section_menu(current, section_entity) %}
+            <li class="nav-item">
+                {% if not (item.disabled|default(false)) %}
+                    <a class="nav-link {{ item.active|default(false) ? 'active' : '' }}" href="{{ item.url|default('#') }}">{{ item.text }}</a>
+                {% else %}
+                    <a class="nav-link disabled text-muted">{{ item.text }}</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    {% endblock tabs %}
+</ul>

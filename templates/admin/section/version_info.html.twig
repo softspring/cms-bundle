@@ -1,0 +1,128 @@
+{% trans_default_domain 'sfs_cms_admin' %}
+
+{% extends '@SfsCms/admin_layout.html.twig' %}
+
+{% block title %}{{ ('admin_sections.version_info.meta.title')|trans({'%name%':section_entity.name, '%versionNumber%': version_entity.versionNumber}) }}{% endblock %}
+
+{% block breadcrums_content %}
+    {{ parent() }}
+    <li class="breadcrumb-item"><a
+            href="{{ url('sfs_cms_admin_sections_list') }}">{{ ('admin_sections.list.breadcrumb')|trans }}</a>
+    </li>
+    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_sections_details', {'section':section_entity.id}) }}">{{ ('admin_sections.read.breadcrumb')|trans({'%name%': section_entity.name}) }}</a></li>
+    <li class="breadcrumb-item"><a
+            href="{{ url('sfs_cms_admin_sections_versions', {'section':section_entity.id}) }}">{{ ('admin_sections.versions.breadcrumb')|trans({'%name%':section_entity.name}) }}</a>
+    </li>
+    <li class="breadcrumb-item active"
+        aria-current="section">{{ ('admin_sections.version_info.breadcrumb')|trans({'%name%':section_entity.name, '%versionNumber%': version_entity.versionNumber}) }}</li>
+{% endblock breadcrums_content %}
+
+{% block content %}
+    {% include '@SfsCms/admin/section/_section_title.html.twig' with {'current':'version_info', 'section_entity':section_entity, 'version_entity': version_entity} %}
+    {% include '@SfsCms/admin/section/_section_tabs.html.twig' with {'current':'versions', 'section_entity':section_entity} %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-4">
+                <a class="float-start me-3"
+                   href="{{ url('sfs_cms_admin_sections_versions', {'section':section_entity.id}) }}"><i
+                        class="bi bi-arrow-return-left"></i></a>
+                <h2 class="h4">{{ ('admin_sections.version_info.title')|trans({'%name%':section_entity.name, '%versionNumber%': version_entity.versionNumber}) }}</h2>
+            </div>
+            <div class="col">
+                <div class="float-end">
+                    {% block actions %}
+                        {% if is_granted('PERMISSION_SFS_CMS_ADMIN_SECTION_CREATE', version) %}
+                            <a class="btn btn-outline-secondary"
+                               href="{{ url('sfs_cms_admin_sections_section_from_version', {'section':section_entity.id, 'prevVersion':version.id}) }}">{{ ('admin_sections.versions.actions.edit.link')|trans }}
+                                <span class="bi bi-pencil"></span></a>
+                        {% endif %}
+
+                        {% if is_granted('PERMISSION_SFS_CMS_ADMIN_SECTION_PREVIEW', version) %}
+                            <a class="btn btn-outline-secondary"
+                               href="{{ url('sfs_cms_admin_sections_preview', {'section':section_entity.id, 'version':version.id}) }}">{{ ('admin_sections.versions.actions.preview.link')|trans }}
+                                <span class="bi bi-eye"></span></a>
+                        {% endif %}
+
+{#                        {% if is_granted('PERMISSION_SFS_CMS_ADMIN_SECTION_VERSION_EXPORT', version) %}#}
+{#                            <a class="btn btn-outline-secondary"#}
+{#                               href="{{ url('sfs_cms_admin_sections_export_version', {'section':section_entity.id, 'version':version.id}) }}">{{ ('admin_sections.versions.actions.export.link')|trans }}#}
+{#                                <span class="bi bi-box-arrow-down"></span></a>#}
+{#                        {% endif %}#}
+
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-outline-secondary dropdown-toggle"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                More
+                            </button>
+                            <ul class="dropdown-menu">
+                                {% if is_granted('PERMISSION_SFS_CMS_ADMIN_SECTION_VERSION_PUBLISH', version) %}
+                                    {% if not version.published %}
+                                        <li><a class="dropdown-item"
+                                               data-confirm-modal="{{ ('admin_sections.version_publish.confirm_message_raw')|trans|base64_encode }}"
+                                               data-confirm-modal-title="{{ ('admin_sections.version_publish.confirm_message_title')|trans }}"
+                                               href="{{ url('sfs_cms_admin_sections_publish_version', {'section':section_entity.id, 'version':version.id, 'back': 'version_info'}) }}">{{ ('admin_sections.versions.actions.publish.link')|trans }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endif %}
+                                {% if is_granted('PERMISSION_SFS_CMS_ADMIN_SECTION_UNPUBLISH', version) %}
+                                    {% if version.published %}
+                                        <li><a class="dropdown-item"
+                                               data-confirm-modal="{{ ('admin_sections.version_unpublish.confirm_message_raw')|trans|base64_encode }}"
+                                               data-confirm-modal-title="{{ ('admin_sections.version_publish.confirm_message_title')|trans }}"
+                                               href="{{ url('sfs_cms_admin_sections_unpublish', {'section':section_entity.id, 'version':version.id, 'back': 'version_info'}) }}">{{ ('admin_sections.versions.actions.unpublish.link')|trans }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endif %}
+{#                                {% if false %} #}{# TRANSLATIONS IS DEFINED #}
+{#                                <li>#}
+{#                                    {% if is_granted('ROLE_TRANSLATE', section_entity) %}#}
+{#                                        <a class="dropdown-item"#}
+{#                                           href="{{ url('sfs_cms_admin_sections_translations', {'section':section_entity.id, 'version': version_entity.id}) }}">{{ ('admin_sections.tabs_menu.translations')|trans }}</a>#}
+{#                                    {% else %}#}
+{#                                        <a class="dropdown-item disabled">{{ ('admin_sections.tabs_menu.translations')|trans }}</a>#}
+{#                                    {% endif %}#}
+{#                                </li>#}
+{#                                {% endif %}#}
+
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    {% if is_granted('PERMISSION_SFS_CMS_ADMIN_SECTION_VERSION_DELETE', version) %}
+                                        <a class="dropdown-item text-danger"
+                                           href="{{ url('sfs_cms_admin_sections_delete_version', {'section':section_entity.id, 'version':version.id, 'back': 'versions'}) }}">{{ ('admin_sections.versions.actions.delete.link')|trans }}
+                                        </a>
+                                    {% else %}
+                                        <a class="dropdown-item text-danger disabled" href="#">{{ ('admin_sections.versions.actions.delete.link')|trans }}</a>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                        </div>
+                    {% endblock actions %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-3">
+                {% include '@SfsCms/admin/section/_version_info_general.html.twig' %}
+            </div>
+            <div class="col-9">
+                {% include '@SfsCms/admin/section/_version_info_compiled.html.twig' %}
+                {% include '@SfsCms/admin/section/_version_info_data.html.twig' %}
+
+{#                <div class="row">#}
+{#                    <div class="col">#}
+{#                        {% include '@SfsCms/admin/section/_version_info_linked_routes.html.twig' %}#}
+{#                    </div>#}
+{#                    <div class="col">#}
+{#                        {% include '@SfsCms/admin/section/_version_info_linked_medias.html.twig' %}#}
+{#                    </div>#}
+{#                </div>#}
+            </div>
+        </div>
+
+{#        {% include '@SfsCms/admin/section/_version_info_history.html.twig' %}#}
+    </div>
+{% endblock content %}

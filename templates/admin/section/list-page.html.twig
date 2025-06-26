@@ -1,0 +1,20 @@
+{% trans_default_domain 'sfs_cms_admin' %}
+
+{% for entity in collection %}
+    <tr>
+        <td class="p-3">{{ entity.name }}</td>
+        <td class="p-3">{{ "sections.status.#{entity.status}"|trans }}</td>
+        <td class="p-3">{{ entity.publishedVersion ? entity.publishedVersion.createdAt|date('H:i d-m-Y') : '' }}</td>
+        <td class="p-3 text-end">
+            {% if is_granted('PERMISSION_SFS_CMS_ADMIN_SECTION_READ', entity) %}
+                <a href="{{ url('sfs_cms_admin_sections_details', {'section':entity.id}) }}" class="ms-2 text-nowrap">{{ ('admin_sections.list.actions.details.link')|trans }} <span class="bi bi-info"></span></a>
+            {% endif %}
+            {% if is_granted('PERMISSION_SFS_CMS_ADMIN_SECTION_CREATE', entity) %}
+                <a href="{{ url('sfs_cms_admin_sections_content', {'section':entity.id}) }}" class="ms-2 text-nowrap">{{ ('admin_sections.list.actions.content.link')|trans }} <span class="bi bi-pencil"></span></a>
+            {% endif %}
+            {% if is_granted('PERMISSION_SFS_CMS_ADMIN_SECTION_PREVIEW', entity) %}
+                <a href="{{ url('sfs_cms_admin_sections_preview', {'section':entity.id}) }}" class="ms-2 text-nowrap">{{ ('admin_sections.list.actions.preview.link')|trans }} <span class="bi bi-eye"></span></a>
+            {% endif %}
+        </td>
+    </tr>
+{% endfor %}

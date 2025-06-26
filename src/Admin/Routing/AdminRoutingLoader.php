@@ -26,6 +26,6 @@ class AdminRoutingLoader extends Loader
     public function supports($resource, ?string $type = null): bool
     {
         // in the future more types could be added
-        return in_array($type, ['sfs_cms_plugin_admin_content_type']);
+        return in_array($type, ['sfs_cms_plugin_admin_content_type', 'sfs_cms_plugin_admin_section']);
     }
 }

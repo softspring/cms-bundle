@@ -10,7 +10,7 @@ use Symfony\Component\Config\Definition\Processor;
 
 class ModuleTest extends TestCase
 {
-    public function testEmptyConfig()
+    public function testEmptyConfig(): void
     {
         $this->expectException(InvalidConfigurationException::class);
         $this->expectExceptionMessage('The child config "revision" under "module" must be configured.');
@@ -22,7 +22,7 @@ class ModuleTest extends TestCase
         $this->assertIsArray($config);
     }
 
-    public function testDefaultConfig()
+    public function testDefaultConfig(): void
     {
         $processor = new Processor();
         $configuration = new Module('module_name');
@@ -43,7 +43,7 @@ class ModuleTest extends TestCase
         ], $config);
     }
 
-    public function testCustomConfig()
+    public function testCustomConfig(): void
     {
         $processor = new Processor();
         $configuration = new Module('module_name');

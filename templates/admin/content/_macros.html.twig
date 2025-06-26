@@ -8,6 +8,9 @@
                     {% elseif esiCall.processed.type|default(false) == 'menu' %}
                         Menu {{ esiCall.processed.menu_type }}
                         {% if esiCall.processed.menu_config.cache_ttl|default(false) %}(TTL: {{ esiCall.processed.menu_config.cache_ttl }}){% endif %}
+                    {% elseif esiCall.processed.type|default(false) == 'section' %}
+                        Section {{ esiCall.processed.section_name }}
+                        {#{% if esiCall.processed.menu_config.cache_ttl|default(false) %}(TTL: {{ esiCall.processed.menu_config.cache_ttl }}){% endif %}#}
                     {% else %}
                         {{ esiCall.url }}
                     {% endif %}
