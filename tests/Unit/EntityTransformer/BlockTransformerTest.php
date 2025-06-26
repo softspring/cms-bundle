@@ -16,7 +16,11 @@ use Softspring\CmsBundle\EntityTransformer\UnsupportedException;
 class BlockTransformerTest extends TestCase
 {
     protected EntityManager|MockObject $em;
+
+    /** @var ClassMetadata<Route>|MockObject */
     protected ClassMetadata|MockObject $routeClassMetadata;
+
+    /** @var EntityRepository<Route>|MockObject */
     protected EntityRepository|MockObject $routeRepository;
     protected CmsConfig|MockObject $cmsConfig;
 

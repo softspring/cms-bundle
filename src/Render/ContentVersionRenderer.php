@@ -11,30 +11,25 @@ use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Render\Error\RenderErrorList;
 use Softspring\CmsBundle\Render\Exception\ModuleRenderException;
 use Softspring\CmsBundle\Render\Exception\RenderException;
+use Softspring\CmsBundle\Render\Isolated\IsolatedRunner;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
-use Symfony\Component\Routing\RouterInterface;
-use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface;
 use Twig\Environment;
 
-class ContentVersionRenderer extends AbstractRenderer implements ContentVersionRendererInterface
+class ContentVersionRenderer implements ContentVersionRendererInterface
 {
     protected bool $profilerEnabled;
 
     protected array $profilerDebugCollectorData = [];
 
     public function __construct(
-        protected Environment $twig,
         protected CmsConfig $cmsConfig,
         protected RequestStack $requestStack,
-        protected ModuleRenderer $moduleRenderer,
-        RouterInterface $router,
+        protected IsolatedRunner $isolatedRunner,
         protected ?LoggerInterface $cmsLogger,
         ?Profiler $profiler,
-        protected ?EntrypointLookupInterface $entrypointLookup,
     ) {
-        parent::__construct($requestStack, $this->entrypointLookup, $router);
         $this->profilerEnabled = (bool) $profiler;
     }
 
@@ -43,7 +38,7 @@ class ContentVersionRenderer extends AbstractRenderer implements ContentVersionR
      */
     public function render(ContentVersionInterface $version, Request $request, ?RenderErrorList $renderErrorList = null, ?array $compiledModules = null): string
     {
-        return $this->encapsulateRequestRender($request, function () use ($version, $renderErrorList, $compiledModules): string {
+        return $this->isolatedRunner->isolateRequestRender($request, function (Request $request, Environment $twig, ModuleRenderer $moduleRenderer) use ($version, $renderErrorList, $compiledModules): string {
             try {
                 $this->cmsLogger && $this->cmsLogger->debug(sprintf('Rendering %s content version', $version->getContent()->getName()));
 
@@ -51,6 +46,8 @@ class ContentVersionRenderer extends AbstractRenderer implements ContentVersionR
                 $version->getMedias();
                 // preload all routes
                 $version->getRoutes();
+                // preload all sections
+                $version->getSections();
 
                 $layout = $this->cmsConfig->getLayout($version->getLayout());
 
@@ -59,7 +56,7 @@ class ContentVersionRenderer extends AbstractRenderer implements ContentVersionR
 
                 $containers = $compiledModules ?? $this->renderModules($version, $request, $renderErrorList);
 
-                return $this->twig->render($layout['render_template'], [
+                return $twig->render($layout['render_template'], [
                     'containers' => $containers,
                     'version' => $version,
                     'content' => $version->getContent(),
@@ -75,11 +72,13 @@ class ContentVersionRenderer extends AbstractRenderer implements ContentVersionR
      */
     public function renderModules(ContentVersionInterface $version, Request $request, ?RenderErrorList $renderErrorList = null): array
     {
-        return $this->encapsulateRequestRender($request, function () use ($version, $renderErrorList): array {
+        return $this->isolatedRunner->isolateRequestRender($request, function (Request $request, Environment $twig, ModuleRenderer $moduleRenderer) use ($version, $renderErrorList): array {
             // preload all medias
             $version->getMedias();
             // preload all routes
             $version->getRoutes();
+            // preload all sections
+            $version->getSections();
 
             $layout = $this->cmsConfig->getLayout($version->getLayout());
             $versionData = $version->getData();
@@ -95,7 +94,11 @@ class ContentVersionRenderer extends AbstractRenderer implements ContentVersionR
                 foreach ($layoutContainer as $i => $module) {
                     $this->profilerDebugCollectorData[$layoutContainerId] = [];
                     $renderErrorList && $renderErrorList->pushLocation($i);
-                    $containers[$layoutContainerId] .= $this->moduleRenderer->render($module, $version, $this->profilerDebugCollectorData[$layoutContainerId], $renderErrorList);
+                    $twigAdditionalContext = [
+                        'version' => $version,
+                        'content' => $version->getContent(),
+                    ];
+                    $containers[$layoutContainerId] .= $moduleRenderer->render($module, $this->profilerDebugCollectorData[$layoutContainerId], $twigAdditionalContext, $renderErrorList);
                     $renderErrorList && $renderErrorList->popLocation();
                 }
                 $renderErrorList && $renderErrorList->popLocation();
@@ -114,16 +117,9 @@ class ContentVersionRenderer extends AbstractRenderer implements ContentVersionR
      */
     public function renderModuleById(string $moduleId, array $data, ?RenderErrorList $renderErrorList = null): string
     {
-        $moduleConfig = $this->cmsConfig->getModule($moduleId);
+        trigger_deprecation('softspring/cms-bundle', '5.1', 'The method "%s" is deprecated and will be removed in the next major version.', __METHOD__);
 
-        $module = $data;
-        $module['_module'] = $moduleId;
-        // simulate it is latest module revision
-        $module['_revision'] = $moduleConfig['revision'];
-
-        $profilerDebugCollectorData = [];
-
-        return $this->moduleRenderer->render($module, null, $profilerDebugCollectorData, $renderErrorList);
+        return '';
     }
 
     public function getDebugCollectorData(): array

@@ -30,7 +30,7 @@ class PublishListener extends AbstractContentVersionListener
         FlashNotifier $flashNotifier,
         AuthorizationCheckerInterface $authorizationChecker,
         protected ContentVersionCompiler $contentVersionCompiler,
-        protected bool $autoCompileOnPublish,
+        protected bool $contentAutoCompileOnPublish,
     ) {
         parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
     }
@@ -81,7 +81,7 @@ class PublishListener extends AbstractContentVersionListener
         /** @var ContentInterface $content */
         $content = $event->getRequest()->attributes->get('content');
 
-        if ($this->autoCompileOnPublish) {
+        if ($this->contentAutoCompileOnPublish) {
             $this->contentVersionCompiler->compileAll($version, true);
         }
 

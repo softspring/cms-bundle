@@ -158,7 +158,7 @@ class ImportListener extends AbstractContentListener
                 $exception .= '<br/><br/>'.get_class($event->getException());
                 $exception .= '<br/><br/>'.nl2br($event->getException()->getTraceAsString());
             }
-            $this->flashNotifier->addTrans('error', "admin_{$contentConfig['_id']}.import.failure_flash", ['%exception%' => $exception], 'sfs_cms_contents');
+            $this->flashNotifier->addTrans('error', "admin_{$contentConfig['_id']}.import.failed_flash", ['%exception%' => $exception], 'sfs_cms_contents');
         }
 
         $url = $this->router->generate("sfs_cms_admin_content_{$contentConfig['_id']}_list");

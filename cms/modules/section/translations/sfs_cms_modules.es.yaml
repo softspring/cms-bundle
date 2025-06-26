@@ -1,0 +1,27 @@
+section:
+    label: "Sección"
+    prototype_button: "Sección"
+    prototype_button_icon: '<i class="bi bi-boxes"></i>'
+    form:
+        _group:
+            filters: "Filtros"
+            others: "Otros"
+            attributes: "Atributos"
+            section: "Sección"
+        locale_filter.label: "Idiomas"
+        site_filter.label: "Sites"
+        id.label: "Id"
+        class.label: "Clases"
+        section.label: "Sección"
+        mode:
+            label: "Modo"
+            choices:
+                embedded: "Incrustada"
+                esi: "ESI"
+                ajax: "AJAX"
+    messages:
+        draft_embedded_info_raw: "Esta sección está en modo borrador. Esto quiere decir que la sección no está publicada y su contenido se representará vacío.<br/>Una vez que se publique, el contenido de la sección se mostrará cuando se recompile este contenido."
+        published_embedded_info_raw: "El contenido públicado actualmente de la sección no cambiará hasta que este contenido se vuelva a compilar."
+        esi_ajax_draft_info_raw: "Esta sección no está publicada y su contenido se mostrará vacío hasta el momento en que se publique."
+        esi_ajax_ttl_raw: "El contenido de la sección se generará al vuelo cuando se solicite este contenido, y se almacenará en caché durante el tiempo de vida (TTL) especificado."
+        esi_ajax_no_ttl_raw: "El contenido de la sección se generará al vuelo cada vez que se solicite este contenido."

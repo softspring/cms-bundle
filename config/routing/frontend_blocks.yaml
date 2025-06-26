@@ -1,0 +1,3 @@
+sfs_cms_block_render_by_type:
+    controller: Softspring\CmsBundle\Controller\BlockController::renderByType
+    path: "/_render_block/{type}"

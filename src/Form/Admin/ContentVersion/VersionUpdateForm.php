@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class VersionUpdateForm extends AbstractType implements VersionCreateFormInterface
+class VersionUpdateForm extends AbstractType implements VersionUpdateFormInterface
 {
     public function configureOptions(OptionsResolver $resolver): void
     {

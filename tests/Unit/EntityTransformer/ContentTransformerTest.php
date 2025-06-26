@@ -7,16 +7,21 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Softspring\CmsBundle\Entity\Content;
+use ReflectionClass;
 use Softspring\CmsBundle\Entity\Page;
 use Softspring\CmsBundle\Entity\Route;
 use Softspring\CmsBundle\EntityTransformer\ContentTransformer;
 use Softspring\CmsBundle\EntityTransformer\UnsupportedException;
+use stdClass;
 
 class ContentTransformerTest extends TestCase
 {
     protected EntityManager|MockObject $em;
+
+    /** @var ClassMetadata<Route>|MockObject */
     protected ClassMetadata|MockObject $routeClassMetadata;
+
+    /** @var EntityRepository<Route>|MockObject */
     protected EntityRepository|MockObject $routeRepository;
 
     protected function setUp(): void
@@ -38,7 +43,7 @@ class ContentTransformerTest extends TestCase
         $this->expectException(UnsupportedException::class);
 
         $contentTransformer = new ContentTransformer();
-        $contentTransformer->transform(new \stdClass(), $this->em);
+        $contentTransformer->transform(new stdClass(), $this->em);
     }
 
     public function testEmptyData(): void
@@ -53,11 +58,11 @@ class ContentTransformerTest extends TestCase
         $contentTransformer->untransform($content, $this->em);
         $this->assertNull($content->getExtraData());
     }
-    
+
     public function testTransform(): void
     {
         $route = new Route();
-        (new \ReflectionClass($route))->getProperty('id')->setValue($route, 'route_id');
+        (new ReflectionClass($route))->getProperty('id')->setValue($route, 'route_id');
 
         $content = new Page();
         $content->setExtraData([
@@ -98,7 +103,7 @@ class ContentTransformerTest extends TestCase
     public function testUntransform(): void
     {
         $route = new Route();
-        (new \ReflectionClass($route))->getProperty('id')->setValue($route, 'route_id');
+        (new ReflectionClass($route))->getProperty('id')->setValue($route, 'route_id');
 
         $this->routeRepository->method('findOneBy')->willReturn($route);
 

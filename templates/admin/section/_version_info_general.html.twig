@@ -1,0 +1,69 @@
+{% embed '@SfsCms/admin/_embeds/_card.html.twig' %}
+    {% trans_default_domain 'sfs_cms_admin' %}
+
+    {% block title %}{# not title #}{% endblock %}
+
+    {% block content %}
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+        <dl>
+            <dt>{{ ('admin_sections.version_info.info.version.title')|trans }}</dt>
+            <dd>v{{ version_entity.versionNumber }}</dd>
+
+            <dt>{{ ('admin_sections.version_info.info.origin.title')|trans }}</dt>
+            <dd>{{ ('admin_sections.versions.origin.'~(version_entity.origin|default('null')))|trans }} {{ version_entity.originDescription ? '('~version_entity.originDescription~')' : '' }}</dd>
+
+            {% set creator = version_entity.metaField('creator') %}
+            {% if creator %}
+                <dt>{{ ('admin_sections.version_info.info.creator.title')|trans }}</dt>
+                <dd>{{ creator.name|default(creator.id)|default('') }}</dd>
+            {% endif %}
+
+            <dt>{{ ('admin_sections.version_info.info.created.title')|trans }}</dt>
+            <dd>{{ version_entity.createdAt ? version_entity.createdAt|date('H:i:s d-m-Y') : '' }}</dd>
+
+            <dt>{{ ('admin_sections.version_info.info.publish_status.title')|trans }}</dt>
+            <dd>{{ version_entity.published ? ('admin_sections.versions.publish_status.published')|trans : ('admin_sections.versions.publish_status.unpublished')|trans }}</dd>
+
+            <dt>{{ ('admin_sections.version_info.info.keep.title')|trans }}</dt>
+            <dd>
+                {% if is_granted('PERMISSION_SFS_CMS_ADMIN_SECTION_VERSION_KEEP', version) %}
+                    {% if version.keep %}
+                        <a class=""
+                           href="{{ url('sfs_cms_admin_sections_unkeep_version', {'section':section_entity.id, 'version':version.id, 'back': 'version_info'}) }}"><i
+                                class="bi bi-pin-angle-fill"></i> {{ ('admin_sections.versions.actions.keep.link')|trans }}
+                        </a>
+                    {% else %}
+                        <a class=""
+                           href="{{ url('sfs_cms_admin_sections_keep_version', {'section':section_entity.id, 'version':version.id, 'back': 'version_info'}) }}"><i
+                                class="bi bi-pin-angle"></i> {{ ('admin_sections.versions.actions.nokeep.link')|trans }}
+                        </a>
+                    {% endif %}
+                {% else %}
+                    {% if version.keep %}
+                        <span><i
+                                class="bi bi-pin-angle-fill"></i> {{ ('admin_sections.versions.actions.keep.link')|trans }}</span>
+                    {% else %}
+                        <span><i
+                                class="bi bi-pin-angle"></i> {{ ('admin_sections.versions.actions.nokeep.link')|trans }}</span>
+                    {% endif %}
+                {% endif %}
+            </dd>
+
+            <dt>{{ form_label(form.note) }}</dt>
+            <dd>
+                <div class="input-group mb-3">
+                    {{ form_widget(form.note) }}
+                    <div class="input-group-append">
+                        <button class="btn btn-primary p-2 px-3 rounded-0"
+                                type="submit"
+                                title="{{ ('admin_sections.version_info.actions.save.button')|trans }}">
+                            <i class="bi bi-check"></i></button>
+                    </div>
+                </div>
+            </dd>
+        </dl>
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
+    {% endblock %}
+{% endembed %}

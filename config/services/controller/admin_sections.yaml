@@ -1,0 +1,178 @@
+parameters:
+    sfs_cms.admin.sections.list_view: '@@SfsCms/admin/section/list.html.twig'
+    sfs_cms.admin.sections.list_page_view: '@@SfsCms/admin/section/list-page.html.twig'
+    sfs_cms.admin.sections.create_view: '@@SfsCms/admin/section/create.html.twig'
+    sfs_cms.admin.sections.update_view: '@@SfsCms/admin/section/update.html.twig'
+    sfs_cms.admin.sections.delete_view: '@@SfsCms/admin/section/delete.html.twig'
+    sfs_cms.admin.sections.read_view: '@@SfsCms/admin/section/read.html.twig'
+    sfs_cms.admin.sections.preview_view: '@@SfsCms/admin/section/preview.html.twig'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+        bind:
+            $entityDuplicators: !tagged_iterator { tag: sfs_cms.content_entity_duplicator }
+
+    Softspring\CmsBundle\Admin\ActionListener\Section\:
+        resource: '../../src/Admin/ActionListener/Section/*'
+
+    Softspring\CmsBundle\Form\Admin\Section\:
+        resource: '../../../src/Form/Admin/Section/*'
+
+    Softspring\CmsBundle\Manager\SectionManagerInterface:
+        class: Softspring\CmsBundle\Manager\SectionManager
+
+    Softspring\CmsBundle\Form\Admin\Section\SectionCreateFormInterface:
+        class: Softspring\CmsBundle\Form\Admin\Section\SectionCreateForm
+
+    Softspring\CmsBundle\Form\Admin\Section\SectionUpdateFormInterface:
+        class: Softspring\CmsBundle\Form\Admin\Section\SectionUpdateForm
+
+    Softspring\CmsBundle\Form\Admin\Section\SectionDeleteFormInterface:
+        class: Softspring\CmsBundle\Form\Admin\Section\SectionDeleteForm
+
+    Softspring\CmsBundle\Form\Admin\Section\SectionListFilterFormInterface:
+        class: Softspring\CmsBundle\Form\Admin\Section\SectionListFilterForm
+
+    sfs_cms.admin.section.controller:
+        class: Softspring\Component\CrudlController\Controller\CrudlController
+        public: true
+        arguments:
+            $manager: '@Softspring\CmsBundle\Manager\SectionManagerInterface'
+            $configs:
+                entity_attribute: 'section'
+                create:
+                    is_granted: 'PERMISSION_SFS_CMS_ADMIN_SECTION_CREATE'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_CREATE_INITIALIZE
+                    create_entity_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_CREATE_ENTITY
+                    form_prepare_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_CREATE_FORM_PREPARE
+                    form_init_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_CREATE_FORM_INIT
+                    form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_CREATE_FORM_VALID
+                    apply_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_CREATE_APPLY
+                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_CREATE_SUCCESS
+                    failure_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_CREATE_FAILURE
+                    form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_CREATE_FORM_INVALID
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_CREATE_VIEW
+                    exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_CREATE_EXCEPTION
+                    success_redirect_to: 'sfs_cms_admin_sections_list'
+                    view: '%sfs_cms.admin.sections.create_view%'
+                    form: '@Softspring\CmsBundle\Form\Admin\Section\SectionCreateFormInterface'
+#                import:
+#                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_IMPORT_INITIALIZE
+#                    create_entity_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_IMPORT_ENTITY
+#                    form_prepare_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_IMPORT_FORM_PREPARE
+#                    form_init_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_IMPORT_FORM_INIT
+#                    form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_IMPORT_FORM_VALID
+#                    apply_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_IMPORT_APPLY
+#                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_IMPORT_SUCCESS
+#                    failure_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_IMPORT_FAILURE
+#                    form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_IMPORT_FORM_INVALID
+#                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_IMPORT_VIEW
+#                    exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_IMPORT_EXCEPTION
+                read:
+                    is_granted: 'PERMISSION_SFS_CMS_ADMIN_SECTION_READ'
+                    param_converter_key: 'id'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_READ_INITIALIZE
+                    load_entity_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_READ_LOAD_ENTITY
+                    not_found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_READ_NOT_FOUND
+                    found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_READ_FOUND
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_READ_VIEW
+                    exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_READ_EXCEPTION
+                    view: '%sfs_cms.admin.sections.read_view%'
+                update:
+                    is_granted: 'PERMISSION_SFS_CMS_ADMIN_SECTION_UPDATE'
+                    param_converter_key: 'id'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_UPDATE_INITIALIZE
+                    load_entity_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_UPDATE_LOAD_ENTITY
+                    not_found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_UPDATE_NOT_FOUND
+                    found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_UPDATE_FOUND
+                    form_prepare_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_UPDATE_FORM_PREPARE
+                    form_init_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_UPDATE_FORM_INIT
+                    form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_UPDATE_FORM_VALID
+                    apply_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_UPDATE_APPLY
+                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_UPDATE_SUCCESS
+                    failure_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_UPDATE_FAILURE
+                    form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_UPDATE_FORM_INVALID
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_UPDATE_VIEW
+                    exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_UPDATE_EXCEPTION
+                    success_redirect_to: 'sfs_cms_admin_sections_details'
+                    view: '%sfs_cms.admin.sections.update_view%'
+                    form: '@Softspring\CmsBundle\Form\Admin\Section\SectionUpdateFormInterface'
+#                duplicate:
+#                    param_converter_key: 'id'
+#                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_DUPLICATE_INITIALIZE
+#                    load_entity_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_DUPLICATE_LOAD_ENTITY
+#                    not_found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_DUPLICATE_NOT_FOUND
+#                    found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_DUPLICATE_FOUND
+#                    form_prepare_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_DUPLICATE_FORM_PREPARE
+#                    form_init_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_DUPLICATE_FORM_INIT
+#                    form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_DUPLICATE_FORM_VALID
+#                    apply_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_DUPLICATE_APPLY
+#                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_DUPLICATE_SUCCESS
+#                    failure_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_DUPLICATE_FAILURE
+#                    form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_DUPLICATE_FORM_INVALID
+#                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_DUPLICATE_VIEW
+#                    exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_DUPLICATE_EXCEPTION
+                delete:
+                    is_granted: 'PERMISSION_SFS_CMS_ADMIN_SECTION_DELETE'
+                    param_converter_key: 'id'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_DELETE_INITIALIZE
+                    load_entity_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_DELETE_LOAD_ENTITY
+                    not_found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_DELETE_NOT_FOUND
+                    found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_DELETE_FOUND
+                    form_prepare_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_DELETE_FORM_PREPARE
+                    form_init_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_DELETE_FORM_INIT
+                    form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_DELETE_FORM_VALID
+                    apply_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_DELETE_APPLY
+                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_DELETE_SUCCESS
+                    failure_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_DELETE_FAILURE
+                    form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_DELETE_FORM_INVALID
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_DELETE_VIEW
+                    exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_DELETE_EXCEPTION
+                    success_redirect_to: 'sfs_cms_admin_sections_list'
+                    view: '%sfs_cms.admin.sections.delete_view%'
+                    form: '@Softspring\CmsBundle\Form\Admin\Section\SectionDeleteFormInterface'
+                list:
+                    is_granted: 'PERMISSION_SFS_CMS_ADMIN_SECTION_LIST'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_LIST_INITIALIZE
+                    filter_form_prepare_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_LIST_FILTER_FORM_PREPARE
+                    filter_form_init_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_LIST_FILTER_FORM_INIT
+                    filter_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_LIST_FILTER
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_LIST_VIEW
+                    exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_LIST_EXCEPTION
+                    view: '%sfs_cms.admin.sections.list_view%'
+                    view_page: '%sfs_cms.admin.sections.list_page_view%'
+                    filter_form: '@Softspring\CmsBundle\Form\Admin\Section\SectionListFilterFormInterface'
+                unpublish:
+                    is_granted: 'PERMISSION_SFS_CMS_ADMIN_SECTION_UNPUBLISH'
+                    param_converter_key: 'id'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_UNPUBLISH_INITIALIZE
+                    load_entity_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_UNPUBLISH_LOAD_ENTITY
+                    not_found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_UNPUBLISH_NOT_FOUND
+                    found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_UNPUBLISH_FOUND
+                    apply_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_UNPUBLISH_APPLY
+                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_UNPUBLISH_SUCCESS
+                    failure_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_UNPUBLISH_FAILURE
+                preview:
+                    is_granted: 'PERMISSION_SFS_CMS_ADMIN_SECTION_PREVIEW'
+                    param_converter_key: 'id'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_PREVIEW_INITIALIZE
+                    load_entity_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_PREVIEW_LOAD_ENTITY
+                    not_found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_PREVIEW_NOT_FOUND
+                    found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_PREVIEW_FOUND
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_PREVIEW_VIEW
+                    exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTIONS_PREVIEW_EXCEPTION
+                    view: '%sfs_cms.admin.sections.preview_view%'
+                version_cleanup:
+                    is_granted: 'PERMISSION_SFS_CMS_ADMIN_SECTION_CLEANUP_VERSIONS'
+                    param_converter_key: 'id'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTION_CLEANUP_VERSIONS_INITIALIZE
+                    load_entity_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTION_CLEANUP_VERSIONS_LOAD_ENTITY
+                    not_found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTION_CLEANUP_VERSIONS_NOT_FOUND
+                    found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTION_CLEANUP_VERSIONS_FOUND
+                    apply_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTION_CLEANUP_VERSIONS_APPLY
+                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTION_CLEANUP_VERSIONS_SUCCESS
+                    failure_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTION_CLEANUP_VERSIONS_FAILURE
+                    exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_SECTION_CLEANUP_VERSIONS_EXCEPTION

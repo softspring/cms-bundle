@@ -9,7 +9,7 @@ use Symfony\Component\Config\Definition\Processor;
 
 class LayoutTest extends TestCase
 {
-    public function testEmptyConfig()
+    public function testEmptyConfig(): void
     {
         $this->expectException(InvalidConfigurationException::class);
         $this->expectExceptionMessage('The child config "revision" under "layout" must be configured.');
@@ -19,7 +19,7 @@ class LayoutTest extends TestCase
         $config = $processor->processConfiguration($configuration, []);
     }
 
-    public function testDefaultConfig()
+    public function testDefaultConfig(): void
     {
         $processor = new Processor();
         $configuration = new Layout('layout_name');
@@ -35,7 +35,7 @@ class LayoutTest extends TestCase
         $this->assertIsArray($config['containers']);
     }
 
-    public function testCustomConfig()
+    public function testCustomConfig(): void
     {
         $processor = new Processor();
         $configuration = new Layout('layout_name');

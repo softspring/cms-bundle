@@ -82,7 +82,7 @@ class SiteResolverTest extends TestCase
         });
     }
 
-    public function testResolveWithHost()
+    public function testResolveWithHost(): void
     {
         $sitesConfig = ['identification' => 'domain'];
         $siteResolver = new SiteResolver($this->cmsConfig, $sitesConfig);
@@ -94,7 +94,7 @@ class SiteResolverTest extends TestCase
         $this->assertEquals('sfs-cms.org', $hostConfig['domain']);
     }
 
-    public function testResolveNotFound()
+    public function testResolveNotFound(): void
     {
         $sitesConfig = ['identification' => 'domain', 'throw_not_found' => false];
         $siteResolver = new SiteResolver($this->cmsConfig, $sitesConfig);
@@ -107,7 +107,7 @@ class SiteResolverTest extends TestCase
         $this->assertNull($hostConfig);
     }
 
-    public function testResolveNotFoundWithException()
+    public function testResolveNotFoundWithException(): void
     {
         $this->expectException(SiteNotFoundException::class);
 
@@ -118,7 +118,7 @@ class SiteResolverTest extends TestCase
         $siteResolver->resolveSiteAndHost($request);
     }
 
-    public function testResolveWithPath()
+    public function testResolveWithPath(): void
     {
         $this->expectException(\Exception::class);
 
@@ -129,7 +129,7 @@ class SiteResolverTest extends TestCase
         $siteResolver->resolveSiteAndHost($request);
     }
 
-    public function testCanonicalUrl()
+    public function testCanonicalUrl(): void
     {
         $sitesConfig = ['identification' => 'domain', 'throw_not_found' => true];
         $siteResolver = new SiteResolver($this->cmsConfig, $sitesConfig);
@@ -137,7 +137,7 @@ class SiteResolverTest extends TestCase
         $this->assertEquals('https://sfs-cms.org/', $siteResolver->getCanonicalRedirectUrl($this->cmsConfig->getSite('default'), $request));
     }
 
-    public function testCanonicalUrlWithPathAndQueryString()
+    public function testCanonicalUrlWithPathAndQueryString(): void
     {
         $sitesConfig = ['identification' => 'domain', 'throw_not_found' => true];
         $siteResolver = new SiteResolver($this->cmsConfig, $sitesConfig);
