@@ -29,6 +29,7 @@ class InfoListener extends AbstractSectionVersionListener
         FlashNotifier $flashNotifier,
         AuthorizationCheckerInterface $authorizationChecker,
         protected SectionVersionCompiler $sectionVersionCompiler,
+        protected bool $sectionSaveCompiled,
     ) {
         parent::__construct($sectionManager, $sectionVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
     }
@@ -37,10 +38,12 @@ class InfoListener extends AbstractSectionVersionListener
     {
         return [
             SfsCmsEvents::ADMIN_SECTION_VERSIONS_INFO_INITIALIZE => [
-                ['onEventLoadSectionEntity', 9],
+                ['onLoadSectionEntity', 9],
             ],
             // SfsCmsEvents::ADMIN_SECTION_VERSIONS_INFO_LOAD_ENTITY => [],
-            // SfsCmsEvents::ADMIN_SECTION_VERSIONS_INFO_NOT_FOUND => [],
+            SfsCmsEvents::ADMIN_SECTION_VERSIONS_INFO_NOT_FOUND => [
+                ['onNotFoundAddFlashAndRedirectToList', 0],
+            ],
             // SfsCmsEvents::ADMIN_SECTION_VERSIONS_INFO_FOUND => [],
             SfsCmsEvents::ADMIN_SECTION_VERSIONS_INFO_FORM_PREPARE => [
                 ['onFormPrepareResolve', 0],
@@ -54,6 +57,7 @@ class InfoListener extends AbstractSectionVersionListener
             // SfsCmsEvents::ADMIN_SECTION_VERSIONS_INFO_FAILURE => [],
             // SfsCmsEvents::ADMIN_SECTION_VERSIONS_INFO_FORM_INVALID => [],
             SfsCmsEvents::ADMIN_SECTION_VERSIONS_INFO_VIEW => [
+                ['onViewAddEntities', 10],
                 ['onView', 0],
             ],
             // SfsCmsEvents::ADMIN_SECTION_VERSIONS_INFO_EXCEPTION => [],
@@ -70,10 +74,9 @@ class InfoListener extends AbstractSectionVersionListener
     public function onView(ViewEvent $event): void
     {
         $version = $event->getRequest()->attributes->get('version');
-        parent::onView($event);
         $event->getData()['version_entity'] = $version;
-        // $event->getData()['section_can_be_compiled'] = $this->sectionVersionCompiler->canSaveCompiled($version);
-        // $event->getData()['section_can_compile_modules'] = $this->sectionVersionCompiler->canSaveCompiledModules($version);
+        $event->getData()['section_can_be_compiled'] = $this->sectionSaveCompiled;
+        $event->getData()['section_can_compile_modules'] = $this->sectionSaveCompiled;
     }
 
     public function onSuccess(SuccessEvent $event): void

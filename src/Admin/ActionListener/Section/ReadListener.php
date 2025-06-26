@@ -11,9 +11,7 @@ use Softspring\CmsBundle\Manager\SectionVersionManagerInterface;
 use Softspring\CmsBundle\Model\SectionInterface;
 use Softspring\CmsBundle\Request\FlashNotifier;
 use Softspring\CmsBundle\SfsCmsEvents;
-use Softspring\Component\CrudlController\Event\NotFoundEvent;
 use Softspring\Component\CrudlController\Event\ViewEvent;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
@@ -42,27 +40,19 @@ class ReadListener extends AbstractSectionListener
             // SfsCmsEvents::ADMIN_SECTIONS_READ_INITIALIZE => [],
             // SfsCmsEvents::ADMIN_SECTIONS_READ_LOAD_ENTITY => [],
             SfsCmsEvents::ADMIN_SECTIONS_READ_NOT_FOUND => [
-                ['onNotFound', 0],
+                ['onNotFoundAddFlashAndRedirectToList', 0],
             ],
             // SfsCmsEvents::ADMIN_SECTIONS_READ_FOUND => [],
             SfsCmsEvents::ADMIN_SECTIONS_READ_VIEW => [
-                ['onView', 0],
+                ['onViewAddSectionEntity', 10],
+                ['onViewAddVersionsInfo', 0],
             ],
             // SfsCmsEvents::ADMIN_SECTIONS_READ_EXCEPTION => [],
         ];
     }
 
-    public function onNotFound(NotFoundEvent $event): void
+    public function onViewAddVersionsInfo(ViewEvent $event): void
     {
-        $this->flashNotifier->addTrans('warning', 'admin_sections.entity_not_found_flash', [], 'sfs_cms_admin');
-        $url = $this->router->generate('sfs_cms_admin_sections_list');
-        $event->setResponse(new RedirectResponse($url));
-    }
-
-    public function onView(ViewEvent $event): void
-    {
-        parent::onView($event);
-
         /** @var SectionInterface $section */
         $section = $event->getData()['section'];
 

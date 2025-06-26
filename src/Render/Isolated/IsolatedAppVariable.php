@@ -47,7 +47,7 @@ class IsolatedAppVariable extends AppVariable
     }
 
     /**
-     * @param array|string|null $types
+     * @param  array|string|null            $types
      * @throws IsolatedEnvironmentException
      */
     public function getFlashes($types = null): array

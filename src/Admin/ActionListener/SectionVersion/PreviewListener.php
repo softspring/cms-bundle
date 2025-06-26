@@ -45,15 +45,18 @@ class PreviewListener extends AbstractSectionVersionListener
     {
         return [
             SfsCmsEvents::ADMIN_SECTION_VERSIONS_PREVIEW_INITIALIZE => [
-                ['onEventLoadSectionEntity', 9],
+                ['onLoadSectionEntity', 9],
             ],
             // SfsCmsEvents::ADMIN_SECTION_VERSIONS_PREVIEW_LOAD_ENTITY => [],
-            // SfsCmsEvents::ADMIN_SECTION_VERSIONS_PREVIEW_NOT_FOUND => [],
+            SfsCmsEvents::ADMIN_SECTION_VERSIONS_PREVIEW_NOT_FOUND => [
+                ['onNotFoundAddFlashAndRedirectToList', 0],
+            ],
             SfsCmsEvents::ADMIN_SECTION_VERSIONS_PREVIEW_FOUND => [
                 ['onFoundShowSection', 0],
             ],
             // SfsCmsEvents::ADMIN_SECTION_VERSIONS_PREVIEW_EXCEPTION => [],
             SfsCmsEvents::ADMIN_SECTION_VERSIONS_PREVIEW_VIEW => [
+                ['onViewAddEntities', 10],
                 ['onView', 0],
             ],
         ];
@@ -71,8 +74,6 @@ class PreviewListener extends AbstractSectionVersionListener
     public function onView(ViewEvent $event): void
     {
         $version = $event->getRequest()->attributes->get('version');
-
-        parent::onView($event);
 
         $event->getData()['content'] = $this->getContentResponse($event->getRequest(), $version)->getContent();
     }

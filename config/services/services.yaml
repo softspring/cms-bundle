@@ -20,8 +20,10 @@ services:
             $cmsLogger: '@?monolog.logger.cms'
             $debug: '%kernel.debug%'
             $defaultRestrictPatterns: '%sfs_cms.form_type.symfony_route.default_restrict_patterns%'
-            $saveCompiled: '%sfs_cms.content.save_compiled%'
-            $autoCompileOnSave: '%sfs_cms.content.autocompile_on_save%'
+            $contentSaveCompiled: '%sfs_cms.content.save_compiled%'
+            $contentAutoCompileOnSave: '%sfs_cms.content.autocompile_on_save%'
+            $sectionSaveCompiled: '%sfs_cms.section.save_compiled%'
+            $sectionAutoCompileOnSave: '%sfs_cms.section.autocompile_on_save%'
             $prefixCompiled: '%sfs_cms.content.prefix_compiled%'
             $entityDuplicators: !tagged_iterator { tag: sfs_cms.content_entity_duplicator }
             $contentCacheType: '%sfs_cms.content.cache.type%'
@@ -29,7 +31,8 @@ services:
             $blockCacheType: '%sfs_cms.block.cache.type%'
             $mediaStoragePath: '%sfs_media.storage.filesystem.path%'
             $compiledDataExpirationTtl: '%sfs_cms.compiled.expiration_ttl%'
-            $recompileEnabled: '%sfs_cms.content.recompile_enabled%'
+            $contentRecompileEnabled: '%sfs_cms.content.recompile_enabled%'
+            $sectionRecompileEnabled: '%sfs_cms.section.recompile_enabled%'
 
     Softspring\CmsBundle\Config\CmsConfig:
         arguments:

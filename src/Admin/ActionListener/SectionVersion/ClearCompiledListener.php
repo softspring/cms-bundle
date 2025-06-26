@@ -7,7 +7,6 @@ use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Manager\SectionManagerInterface;
 use Softspring\CmsBundle\Manager\SectionVersionManagerInterface;
-use Softspring\CmsBundle\Model\SectionInterface;
 use Softspring\CmsBundle\Model\SectionVersionInterface;
 use Softspring\CmsBundle\Request\FlashNotifier;
 use Softspring\CmsBundle\SfsCmsEvents;
@@ -15,9 +14,9 @@ use Softspring\Component\CrudlController\Event\ApplyEvent;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-class PublishListener extends AbstractSectionVersionListener
+class ClearCompiledListener extends AbstractSectionVersionListener
 {
-    protected const ACTION_NAME = 'version_publish';
+    protected const ACTION_NAME = 'version_clear_compiled';
 
     public function __construct(
         SectionManagerInterface $sectionManager,
@@ -28,7 +27,6 @@ class PublishListener extends AbstractSectionVersionListener
         FlashNotifier $flashNotifier,
         AuthorizationCheckerInterface $authorizationChecker,
         protected SectionVersionCompiler $sectionVersionCompiler,
-        protected bool $sectionAutoCompileOnPublish,
     ) {
         parent::__construct($sectionManager, $sectionVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
     }
@@ -36,45 +34,42 @@ class PublishListener extends AbstractSectionVersionListener
     public static function getSubscribedEvents(): array
     {
         return [
-            SfsCmsEvents::ADMIN_SECTION_VERSIONS_PUBLISH_INITIALIZE => [
+            SfsCmsEvents::ADMIN_SECTION_VERSIONS_CLEAR_COMPILED_INITIALIZE => [
                 ['onLoadSectionEntity', 9],
             ],
-            // SfsCmsEvents::ADMIN_SECTION_VERSIONS_PUBLISH_LOAD_ENTITY => [],
-            SfsCmsEvents::ADMIN_SECTION_VERSIONS_PUBLISH_NOT_FOUND => [
+            // SfsCmsEvents::ADMIN_SECTION_VERSIONS_CLEAR_COMPILED_LOAD_ENTITY => [],
+            SfsCmsEvents::ADMIN_SECTION_VERSIONS_CLEAR_COMPILED_NOT_FOUND => [
                 ['onNotFoundAddFlashAndRedirectToList', 0],
             ],
-            // SfsCmsEvents::ADMIN_SECTION_VERSIONS_PUBLISH_FOUND => [],
-            SfsCmsEvents::ADMIN_SECTION_VERSIONS_PUBLISH_APPLY => [
-                ['onApply', 0],
+            // SfsCmsEvents::ADMIN_SECTION_VERSIONS_CLEAR_COMPILED_FOUND => [],
+            SfsCmsEvents::ADMIN_SECTION_VERSIONS_CLEAR_COMPILED_APPLY => [
+                ['onApplyClearCompiled', 0],
             ],
-            SfsCmsEvents::ADMIN_SECTION_VERSIONS_PUBLISH_SUCCESS => [
+            SfsCmsEvents::ADMIN_SECTION_VERSIONS_CLEAR_COMPILED_SUCCESS => [
                 ['onSuccessAddFlash', 10],
                 ['onSuccessRedirectBack', 0],
             ],
-            SfsCmsEvents::ADMIN_SECTION_VERSIONS_PUBLISH_FAILURE => [
+            SfsCmsEvents::ADMIN_SECTION_VERSIONS_CLEAR_COMPILED_FAILURE => [
                 ['onFailureAddFlash', 10],
                 ['onFailureRedirectBack', 0],
             ],
-            SfsCmsEvents::ADMIN_SECTION_VERSIONS_PUBLISH_EXCEPTION => [
+            SfsCmsEvents::ADMIN_SECTION_VERSIONS_CLEAR_COMPILED_EXCEPTION => [
                 ['onExceptionAddFlash', 10],
                 ['onExceptionRedirectBack', 0],
             ],
         ];
     }
 
-    public function onApply(ApplyEvent $event): void
+    public function onApplyClearCompiled(ApplyEvent $event): void
     {
-        /** @var SectionVersionInterface $version */
-        $version = $event->getEntity();
-        /** @var SectionInterface $section */
-        $section = $event->getRequest()->attributes->get('section');
+        /** @var SectionVersionInterface $entity */
+        $entity = $event->getEntity();
 
-        if ($this->sectionAutoCompileOnPublish) {
-            $this->sectionVersionCompiler->compileAll($version, true);
-        }
+        $entity->setKeep($event->getRequest()->attributes->get('recompile') ?: false);
 
-        $section->setPublishedVersion($version);
-        $this->sectionManager->saveEntity($section);
+        $this->sectionVersionCompiler->clearCompiled($entity);
+
+        $this->sectionVersionManager->saveEntity($entity);
 
         $event->setApplied(true);
     }

@@ -15,26 +15,29 @@ class DeleteListener extends AbstractSectionListener
         return [
             // SfsCmsEvents::ADMIN_SECTIONS_DELETE_INITIALIZE => [],
             // SfsCmsEvents::ADMIN_SECTIONS_DELETE_LOAD_ENTITY => [],
-            // SfsCmsEvents::ADMIN_SECTIONS_DELETE_NOT_FOUND => [],
+            SfsCmsEvents::ADMIN_SECTIONS_DELETE_NOT_FOUND => [
+                ['onNotFoundAddFlashAndRedirectToList', 0],
+            ],
             // SfsCmsEvents::ADMIN_SECTIONS_DELETE_FOUND => [],
             // SfsCmsEvents::ADMIN_SECTIONS_DELETE_FORM_PREPARE => [],
             // SfsCmsEvents::ADMIN_SECTIONS_DELETE_FORM_INIT => [],
             // SfsCmsEvents::ADMIN_SECTIONS_DELETE_FORM_VALID => [],
             // SfsCmsEvents::ADMIN_SECTIONS_DELETE_APPLY => [],
             SfsCmsEvents::ADMIN_SECTIONS_DELETE_SUCCESS => [
-                ['onSuccess', 0],
+                ['onSuccessAddFlash', 10],
+                ['onSuccessRedirect', 0],
             ],
-            // SfsCmsEvents::ADMIN_SECTIONS_DELETE_FAILURE => [],
+            SfsCmsEvents::ADMIN_SECTIONS_DELETE_FAILURE => [
+                ['onFailureAddFormError', 0],
+            ],
             // SfsCmsEvents::ADMIN_SECTIONS_DELETE_FORM_INVALID => [],
             // SfsCmsEvents::ADMIN_SECTIONS_DELETE_VIEW => [],
             // SfsCmsEvents::ADMIN_SECTIONS_DELETE_EXCEPTION => [],
         ];
     }
 
-    public function onSuccess(SuccessEvent $event): void
+    public function onSuccessRedirect(SuccessEvent $event): void
     {
-        $this->flashNotifier->addTrans('success', 'admin_sections.delete.success_flash', [], 'sfs_cms_admin');
-        $redirectUrl = $this->router->generate('sfs_cms_admin_sections_list');
-        $event->setResponse(new RedirectResponse($redirectUrl));
+        $event->setResponse(new RedirectResponse($this->router->generate('sfs_cms_admin_sections_list')));
     }
 }

@@ -12,9 +12,6 @@ trait SectionRedirectBackTrait
 {
     protected RouterInterface $router;
 
-    /**
-     * @noinspection PhpRouteMissingInspection
-     */
     protected function redirectBack(SectionInterface $entity, Request $request, ?SectionVersionInterface $version = null): RedirectResponse
     {
         switch ($request->query->get('back')) {

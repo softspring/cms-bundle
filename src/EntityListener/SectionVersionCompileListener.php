@@ -11,8 +11,8 @@ class SectionVersionCompileListener
 {
     public function __construct(
         protected SectionVersionCompiler $sectionVersionCompiler,
-        protected bool $saveCompiled,
-        protected bool $autoCompileOnSave,
+        protected bool $sectionSaveCompiled,
+        protected bool $sectionAutoCompileOnSave,
     ) {
     }
 
@@ -21,9 +21,9 @@ class SectionVersionCompileListener
      */
     public function prePersist(SectionVersionInterface $contentVersion, PrePersistEventArgs $event): void
     {
-        //        if (!$this->autoCompileOnSave || !$this->saveCompiled) {
-        //            return;
-        //        }
+        if (!$this->sectionAutoCompileOnSave || !$this->sectionSaveCompiled) {
+            return;
+        }
 
         $this->sectionVersionCompiler->compileAll($contentVersion, true);
     }

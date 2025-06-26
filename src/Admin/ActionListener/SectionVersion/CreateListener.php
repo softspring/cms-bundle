@@ -49,7 +49,7 @@ class CreateListener extends AbstractSectionVersionListener
     {
         return [
             SfsCmsEvents::ADMIN_SECTION_VERSIONS_CREATE_INITIALIZE => [
-                ['onEventLoadSectionEntity', 9],
+                ['onLoadSectionEntity', 9],
             ],
             SfsCmsEvents::ADMIN_SECTION_VERSIONS_CREATE_ENTITY => [
                 ['onCreateEntity', 1],
@@ -61,6 +61,7 @@ class CreateListener extends AbstractSectionVersionListener
             // SfsCmsEvents::ADMIN_SECTION_VERSIONS_CREATE_FORM_VALID => [],
             // SfsCmsEvents::ADMIN_SECTION_VERSIONS_CREATE_APPLY => [],
             SfsCmsEvents::ADMIN_SECTION_VERSIONS_CREATE_SUCCESS => [
+                ['onSuccessAddFlash', 10],
                 ['onSuccess', 0],
             ],
             SfsCmsEvents::ADMIN_SECTION_VERSIONS_CREATE_FAILURE => [
@@ -70,6 +71,7 @@ class CreateListener extends AbstractSectionVersionListener
                 ['onFormInvalidShowAlert', 0],
             ],
             SfsCmsEvents::ADMIN_SECTION_VERSIONS_CREATE_VIEW => [
+                ['onViewAddEntities', 10],
                 ['onView', 0],
             ],
             // SfsCmsEvents::ADMIN_SECTION_VERSIONS_CREATE_EXCEPTION => [],
@@ -108,17 +110,19 @@ class CreateListener extends AbstractSectionVersionListener
         ]);
     }
 
+    public function onSuccessAddFlash(SuccessEvent $event): void
+    {
+        $this->flashNotifier->addTrans('success', 'admin_sections.content.success_saved', [], 'sfs_cms_admin');
+    }
+
     /**
      * @noinspection PhpRouteMissingInspection
      */
     public function onSuccess(SuccessEvent $event): void
     {
         $request = $event->getRequest();
-        $sectionConfig = $request->attributes->get('_section_config');
         $version = $event->getEntity();
         $section = $version->getSection();
-
-        $this->flashNotifier->addTrans('success', 'admin_sections.content.success_saved', [], 'sfs_cms_admin');
 
         switch ($request->request->get('goto')) {
             case 'content':
@@ -145,7 +149,6 @@ class CreateListener extends AbstractSectionVersionListener
     {
         $request = $event->getRequest();
         $exception = $event->getException();
-        $sectionConfig = $request->attributes->get('_section_config');
 
         if ($exception instanceof RenderErrorException) {
             $exception->getRenderErrorList()->formMapErrors($event->getForm());
@@ -168,15 +171,11 @@ class CreateListener extends AbstractSectionVersionListener
             return;
         }
 
-        $sectionConfig = $request->attributes->get('_section_config');
-
         $request->attributes->set('_section_version_alert', ['warning', 'admin_sections.content.validation_error']);
     }
 
     public function onView(ViewEvent $event): void
     {
-        parent::onView($event);
-
         $request = $event->getRequest();
         /** @var SectionInterface $section */
         $section = $request->attributes->get('section');
@@ -207,8 +206,6 @@ class CreateListener extends AbstractSectionVersionListener
      */
     public function onException(ExceptionEvent $event): void
     {
-        $sectionConfig = $event->getRequest()->attributes->get('_section_config');
-
         if ($event->getException() instanceof MissingFormTypeException) {
             $this->flashNotifier->addTrans('error', 'admin_sections.version_create.module_not_configured_flash', ['%module%' => $event->getException()->getDiscriminator()], 'sfs_cms_admin');
 

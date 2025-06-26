@@ -3,12 +3,12 @@
 namespace Softspring\CmsBundle\Config\Model;
 
 use Softspring\CmsBundle\Form\Admin\Content\ContentCreateForm;
+use Softspring\CmsBundle\Form\Admin\Content\ContentDeleteForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentDuplicateForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentImportForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentListFilterForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentRoutesForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentUpdateForm;
-use Softspring\CmsBundle\Form\Admin\Content\SectionDeleteForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionCreateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionDeleteForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionImportForm;
@@ -385,7 +385,7 @@ class Content implements ConfigurationInterface
                             ->children()
                                 ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_DELETE')->end()
                                 ->scalarNode('view')->defaultValue('@SfsCms/admin/content/delete.html.twig')->end()
-                                ->scalarNode('type')->defaultValue(SectionDeleteForm::class)->end()
+                                ->scalarNode('type')->defaultValue(ContentDeleteForm::class)->end()
                                 ->scalarNode('success_redirect_to')->defaultValue('')->end()
                             ->end()
                         ->end()

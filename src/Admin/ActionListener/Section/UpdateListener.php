@@ -38,14 +38,17 @@ class UpdateListener extends AbstractSectionListener
         return [
             // SfsCmsEvents::ADMIN_SECTIONS_UPDATE_INITIALIZE => [],
             // SfsCmsEvents::ADMIN_SECTIONS_UPDATE_LOAD_ENTITY => [],
-            // SfsCmsEvents::ADMIN_SECTIONS_UPDATE_NOT_FOUND => [],
+            SfsCmsEvents::ADMIN_SECTIONS_UPDATE_NOT_FOUND => [
+                ['onNotFoundAddFlashAndRedirectToList', 0],
+            ],
             // SfsCmsEvents::ADMIN_SECTIONS_UPDATE_FOUND => [],
             // SfsCmsEvents::ADMIN_SECTIONS_UPDATE_FORM_PREPARE => [],
             // SfsCmsEvents::ADMIN_SECTIONS_UPDATE_FORM_INIT => [],
             // SfsCmsEvents::ADMIN_SECTIONS_UPDATE_FORM_VALID => [],
             // SfsCmsEvents::ADMIN_SECTIONS_UPDATE_APPLY => [],
             SfsCmsEvents::ADMIN_SECTIONS_UPDATE_SUCCESS => [
-                ['onSuccessAddFlashAndRedirect', 0],
+                ['onSuccessAddFlash', 10],
+                ['onSuccessRedirect', 0],
             ],
             SfsCmsEvents::ADMIN_SECTIONS_UPDATE_FAILURE => [
                 ['onFailureAddFormError', 0],
@@ -56,10 +59,8 @@ class UpdateListener extends AbstractSectionListener
         ];
     }
 
-    public function onSuccessAddFlashAndRedirect(SuccessEvent $event): void
+    public function onSuccessRedirect(SuccessEvent $event): void
     {
-        $this->flashNotifier->addTrans('success', 'admin_sections.update.success_flash', [], 'sfs_cms_admin');
-        $redirectUrl = $this->router->generate('sfs_cms_admin_sections_details', ['section' => $event->getEntity()]);
-        $event->setResponse(new RedirectResponse($redirectUrl));
+        $event->setResponse(new RedirectResponse($this->router->generate('sfs_cms_admin_sections_details', ['section' => $event->getEntity()])));
     }
 }

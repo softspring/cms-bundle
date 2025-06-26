@@ -11,8 +11,10 @@ use Softspring\CmsBundle\Manager\SectionVersionManagerInterface;
 use Softspring\CmsBundle\Model\SectionInterface;
 use Softspring\CmsBundle\Model\SectionVersionInterface;
 use Softspring\CmsBundle\Request\FlashNotifier;
-use Softspring\Component\CrudlController\Event\LoadEntityEvent;
+use Softspring\Component\CrudlController\Event\ExceptionEvent;
+use Softspring\Component\CrudlController\Event\FailureEvent;
 use Softspring\Component\CrudlController\Event\NotFoundEvent;
+use Softspring\Component\CrudlController\Event\SuccessEvent;
 use Softspring\Component\CrudlController\Event\ViewEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -39,7 +41,7 @@ abstract class AbstractSectionVersionListener implements EventSubscriberInterfac
     ) {
     }
 
-    public function onEventLoadSectionEntity(Event $event): void
+    public function onLoadSectionEntity(Event $event): void
     {
         if (!method_exists($event, 'getRequest')) {
             return;
@@ -63,35 +65,56 @@ abstract class AbstractSectionVersionListener implements EventSubscriberInterfac
         $event->getRequest()->attributes->set('section', $entity);
     }
 
-    //    public function onLoadEntity(LoadEntityEvent $event): void
-    //    {
-    //        $versionId = $event->getRequest()->attributes->get('version');
-    //
-    //        /** @var SectionInterface $section */
-    //        $section = $event->getRequest()->attributes->get('section');
-    //
-    //        $version = $section->getVersions()->filter(fn (SectionVersionInterface $versionI) => $versionI->getId() === $versionId)->first();
-    //        $event->getRequest()->attributes->set('version', $version);
-    //
-    //        $event->setEntity($version);
-    //        $event->setNotFound(!$version);
-    //    }
-    //
-    //    /**
-    //     * @noinspection PhpRouteMissingInspection
-    //     */
-    //    public function onNotFound(NotFoundEvent $event): void
-    //    {
-    //        $sectionConfig = $event->getRequest()->attributes->get('_section_config');
-    //
-    //        $this->flashNotifier->addTrans('warning', "admin_{$sectionConfig['_id']}.entity_not_found_flash", [], 'sfs_cms_admin');
-    //        $url = $this->router->generate("sfs_cms_admin_section_{$sectionConfig['_id']}_list");
-    //        $event->setResponse(new RedirectResponse($url));
-    //    }
+    public function onNotFoundAddFlashAndRedirectToList(NotFoundEvent $event): void
+    {
+        $this->flashNotifier->addTrans('warning', 'admin_sections.version_entity_not_found_flash', [], 'sfs_cms_admin');
+        $url = $this->router->generate('sfs_cms_admin_sections_versions', ['section' => $event->getRequest()->attributes->get('section')]);
+        $event->setResponse(new RedirectResponse($url));
+    }
 
-    public function onView(ViewEvent $event): void
+    public function onViewAddEntities(ViewEvent $event): void
     {
         $event->getData()['section_entity'] = $event->getRequest()->attributes->get('section');
         $event->getData()['version_entity'] = $event->getRequest()->attributes->get('version');
+    }
+
+    public function onSuccessAddFlash(SuccessEvent $event): void
+    {
+        $this->flashNotifier->addTrans('success', 'admin_sections.'.static::ACTION_NAME.'.success_flash', [], 'sfs_cms_admin');
+    }
+
+    public function onSuccessRedirectBack(SuccessEvent $event): void
+    {
+        /** @var SectionVersionInterface $version */
+        $version = $event->getEntity();
+        $event->setResponse($this->redirectBack($version->getSection(), $event->getRequest(), $version));
+    }
+
+    public function onFailureAddFlash(FailureEvent $event): void
+    {
+        $this->flashNotifier->addTrans('success', 'admin_sections.'.static::ACTION_NAME.'.failed_flash', [
+            '%exception%' => $event->getException()->getMessage(),
+        ], 'sfs_cms_admin');
+    }
+
+    public function onFailureRedirectBack(FailureEvent $event): void
+    {
+        /** @var SectionVersionInterface $version */
+        $version = $event->getEntity();
+        $event->setResponse($this->redirectBack($version->getSection(), $event->getRequest(), $version));
+    }
+
+    public function onExceptionAddFlash(ExceptionEvent $event): void
+    {
+        $this->flashNotifier->addTrans('success', 'admin_sections.'.static::ACTION_NAME.'.failed_flash', [
+            '%exception%' => $event->getException()->getMessage(),
+        ], 'sfs_cms_admin');
+    }
+
+    public function onExceptionRedirectBack(ExceptionEvent $event): void
+    {
+        /** @var SectionVersionInterface $version */
+        $version = $event->getRequest()->attributes->get('version');
+        $event->setResponse($this->redirectBack($version->getSection(), $event->getRequest(), $version));
     }
 }

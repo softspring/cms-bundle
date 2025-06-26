@@ -10,9 +10,6 @@ use ZipArchive;
 
 class ZipContent
 {
-    /**
-     * @phpstan-ignore-next-line
-     */
     public static function read(string $path, string $zipName): array|false
     {
         $zip = new ZipArchive();

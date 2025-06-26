@@ -4,7 +4,6 @@ namespace Softspring\CmsBundle\Admin\ActionListener\SectionVersion;
 
 use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\Component\CrudlController\Event\FormPrepareEvent;
-use Softspring\Component\CrudlController\Event\ViewEvent;
 
 class ListListener extends AbstractSectionVersionListener
 {
@@ -14,7 +13,7 @@ class ListListener extends AbstractSectionVersionListener
     {
         return [
             SfsCmsEvents::ADMIN_SECTION_VERSIONS_LIST_INITIALIZE => [
-                ['onEventLoadSectionEntity', 9],
+                ['onLoadSectionEntity', 9],
             ],
             SfsCmsEvents::ADMIN_SECTION_VERSIONS_LIST_FILTER_FORM_PREPARE => [
                 ['onFilterFormPrepareResolve', 0],
@@ -22,7 +21,7 @@ class ListListener extends AbstractSectionVersionListener
             // SfsCmsEvents::ADMIN_SECTION_VERSIONS_LIST_FILTER_FORM_INIT => [],
             // SfsCmsEvents::ADMIN_SECTION_VERSIONS_LIST_FILTER => [],
             SfsCmsEvents::ADMIN_SECTION_VERSIONS_LIST_VIEW => [
-                ['onView', 0],
+                ['onViewAddEntities', 10],
             ],
             // SfsCmsEvents::ADMIN_SECTION_VERSIONS_LIST_EXCEPTION => [],
         ];

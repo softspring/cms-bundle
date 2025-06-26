@@ -14,8 +14,6 @@ services:
         public: false
         bind:
             $entityDuplicators: !tagged_iterator { tag: sfs_cms.content_entity_duplicator }
-#            $em: '@sfs_cms.entity_manager'
-#            $sectionCacheType: '%sfs_cms.section.cache.type%'
 
     Softspring\CmsBundle\Admin\ActionListener\Section\:
         resource: '../../src/Admin/ActionListener/Section/*'

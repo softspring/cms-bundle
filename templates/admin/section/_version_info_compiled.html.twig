@@ -4,21 +4,21 @@
     {% trans_default_domain 'sfs_cms_admin' %}
 
     {% block title %}
-{#        {% if sfs_cms_admin_section_recompile_enabled %}#}
-{#            {% if not section_config.admin.version_recompile.is_granted or is_granted(section_config.admin.version_recompile.is_granted, version_entity) %}#}
-{#                <a class="mx-1 btn btn-sm btn-outline-secondary float-end"#}
-{#                   href="{{ url('sfs_cms_admin_sections_recompile_version', {'section':entity.id, 'version': version_entity.id, 'back': 'version_info'}) }}">{{ ('admin_sections.version_info.actions.recompile.link')|trans }}</a>#}
-{#            {% else %}#}
-{#                <a class="mx-1 btn btn-sm btn-outline-secondary float-end disabled">{{ ('admin_sections.version_info.actions.recompile.link')|trans }}</a>#}
-{#            {% endif %}#}
-{#        {% endif %}#}
+        {% if sfs_cms_admin_section_recompile_enabled %}
+            {% if is_granted('PERMISSION_SFS_CMS_ADMIN_SECTION_VERSION_RECOMPILE', version_entity) %}
+                <a class="mx-1 btn btn-sm btn-outline-secondary float-end"
+                   href="{{ url('sfs_cms_admin_sections_recompile_version', {'section':section_entity.id, 'version': version_entity.id, 'back': 'version_info'}) }}">{{ ('admin_sections.version_info.actions.recompile.link')|trans }}</a>
+            {% else %}
+                <a class="mx-1 btn btn-sm btn-outline-secondary float-end disabled">{{ ('admin_sections.version_info.actions.recompile.link')|trans }}</a>
+            {% endif %}
+        {% endif %}
 
-{#        {% if not section_config.admin.version_clear_compiled.is_granted or is_granted(section_config.admin.version_clear_compiled.is_granted, version_entity) %}#}
-{#            <a class="mx-1 btn btn-sm btn-outline-secondary float-end"#}
-{#               href="{{ url('sfs_cms_admin_sections_clear_compiled_version', {'section':entity.id, 'version': version_entity.id, 'back': 'version_info'}) }}">{{ ('admin_sections.version_info.actions.clear_compiled.link')|trans }}</a>#}
-{#        {% else %}#}
-{#            <a class="mx-1 btn btn-sm btn-outline-secondary float-end disabled">{{ ('admin_sections.version_info.actions.clear_compiled.link')|trans }}</a>#}
-{#        {% endif %}#}
+        {% if is_granted('PERMISSION_SFS_CMS_ADMIN_SECTION_VERSION_CLEAR_COMPILED', version_entity) %}
+            <a class="mx-1 btn btn-sm btn-outline-secondary float-end"
+               href="{{ url('sfs_cms_admin_sections_clear_compiled_version', {'section':section_entity.id, 'version': version_entity.id, 'back': 'version_info'}) }}">{{ ('admin_sections.version_info.actions.clear_compiled.link')|trans }}</a>
+        {% else %}
+            <a class="mx-1 btn btn-sm btn-outline-secondary float-end disabled">{{ ('admin_sections.version_info.actions.clear_compiled.link')|trans }}</a>
+        {% endif %}
 
         {{ parent() }}
     {% endblock %}
@@ -43,15 +43,15 @@
                 </div>
             {% endif %}
 
-{#            {% if not section_can_compile_modules %}#}
-{#                <div class="alert alert-warning" role="alert">#}
-{#                    {{ ('admin_sections.version_info.compiled.pre_compile_modules_disabled')|trans }}#}
-{#                </div>#}
-{#            {% elseif version_entity.compiled is empty and sfs_cms_admin_section_recompile_enabled %}#}
-{#                <div class="alert alert-danger" role="alert">#}
-{#                    {{ ('admin_sections.version_info.compiled.pre_compile_modules_missing')|trans }}#}
-{#                </div>#}
-{#            {% endif %}#}
+            {% if not section_can_compile_modules %}
+                <div class="alert alert-warning" role="alert">
+                    {{ ('admin_sections.version_info.compiled.pre_compile_modules_disabled')|trans }}
+                </div>
+            {% elseif version_entity.compiled is empty and sfs_cms_admin_section_recompile_enabled %}
+                <div class="alert alert-danger" role="alert">
+                    {{ ('admin_sections.version_info.compiled.pre_compile_modules_missing')|trans }}
+                </div>
+            {% endif %}
         {% endif %}
 
         <div class="accordion" id="accordionCompiled">

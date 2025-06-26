@@ -16,16 +16,19 @@ class PreviewListener extends AbstractSectionListener
         return [
             // SfsCmsEvents::ADMIN_SECTIONS_PREVIEW_INITIALIZE => [],
             // SfsCmsEvents::ADMIN_SECTIONS_PREVIEW_LOAD_ENTITY => [],
-            // SfsCmsEvents::ADMIN_SECTIONS_PREVIEW_NOT_FOUND => [],
+            SfsCmsEvents::ADMIN_SECTIONS_PREVIEW_NOT_FOUND => [
+                ['onNotFoundAddFlashAndRedirectToList', 0],
+            ],
             // SfsCmsEvents::ADMIN_SECTIONS_PREVIEW_FOUND => [],
             SfsCmsEvents::ADMIN_SECTIONS_PREVIEW_VIEW => [
-                ['onView', 0],
+                ['onViewAddSectionEntity', 10],
+                ['onViewAddHelpers', 0],
             ],
             // SfsCmsEvents::ADMIN_SECTIONS_PREVIEW_EXCEPTION => [],
         ];
     }
 
-    public function onView(ViewEvent $event): void
+    public function onViewAddHelpers(ViewEvent $event): void
     {
         /** @var SectionInterface $section */
         $section = $event->getRequest()->attributes->get('section');

@@ -18,11 +18,7 @@ class SectionVersionCompiler extends AbstractVersionCompiler
 {
     public function __construct(
         protected SectionVersionRenderer $sectionVersionRenderer,
-        //        protected RequestStack $requestStack,
-        //        protected array $enabledLocales,
-        //
-        //        protected bool $saveCompiled,
-        //        protected CmsConfig $cmsConfig,
+        protected bool $sectionSaveCompiled,
         protected CompiledDataManagerInterface $compiledDataManager,
         protected CmsHelper $cmsHelper,
         string $prefixCompiled,
@@ -36,13 +32,9 @@ class SectionVersionCompiler extends AbstractVersionCompiler
      */
     public function compileAll(SectionVersionInterface $version, bool $failOnException = true): void
     {
-        //        if (!$this->requestStack->getCurrentRequest()) {
-        //            return; // not yet ready for render in fixtures, TODO improve this to allow render in fixtures
-        //        }
-        //
-        //        if (!$this->saveCompiled) {
-        //            return;
-        //        }
+        if (!$this->sectionSaveCompiled) {
+            return;
+        }
 
         $exceptions = [];
 
@@ -66,7 +58,7 @@ class SectionVersionCompiler extends AbstractVersionCompiler
 
     public function canSaveCompiled(SectionVersionInterface $version): bool
     {
-        return true;
+        return $this->sectionSaveCompiled;
     }
 
     /**
@@ -96,10 +88,10 @@ class SectionVersionCompiler extends AbstractVersionCompiler
                 throw new CompileException('Error compiling content version request', 0, $exception);
             }
 
-            //            // if not content was set, set a default error content
-            //            if ($this->canSaveCompiled($sectionVersion) && empty($compiledData->getDataPart('content'))) {
-            //                $compiledData->setDataPart('content', '<!-- CONTENT_VERSION_COMPILE_ERROR -->');
-            //            }
+            // if not content was set, set a default error content
+            if ($this->sectionSaveCompiled && empty($compiledData->getDataPart('content'))) {
+                $compiledData->setDataPart('content', '<!-- CONTENT_VERSION_COMPILE_ERROR -->');
+            }
 
             // flag errors
             $compiledData->setErrors(true);

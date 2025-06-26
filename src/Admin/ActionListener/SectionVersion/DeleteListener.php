@@ -34,33 +34,35 @@ class DeleteListener extends AbstractSectionVersionListener
     {
         return [
             SfsCmsEvents::ADMIN_SECTION_VERSIONS_DELETE_INITIALIZE => [
-                ['onEventLoadSectionEntity', 9],
+                ['onLoadSectionEntity', 9],
             ],
             // SfsCmsEvents::ADMIN_SECTION_VERSIONS_DELETE_LOAD_ENTITY => [],
-            // SfsCmsEvents::ADMIN_SECTION_VERSIONS_DELETE_NOT_FOUND => [],
+            SfsCmsEvents::ADMIN_SECTION_VERSIONS_DELETE_NOT_FOUND => [
+                ['onNotFoundAddFlashAndRedirectToList', 0],
+            ],
             // SfsCmsEvents::ADMIN_SECTION_VERSIONS_DELETE_FOUND => [],
             // SfsCmsEvents::ADMIN_SECTION_VERSIONS_DELETE_FORM_PREPARE => [],
             // SfsCmsEvents::ADMIN_SECTION_VERSIONS_DELETE_FORM_INIT => [],
             // SfsCmsEvents::ADMIN_SECTION_VERSIONS_DELETE_FORM_VALID => [],
             // SfsCmsEvents::ADMIN_SECTION_VERSIONS_DELETE_APPLY => [],
             SfsCmsEvents::ADMIN_SECTION_VERSIONS_DELETE_SUCCESS => [
-                ['onSuccess', 0],
+                ['onSuccessAddFlash', 10],
+                ['onSuccessRedirectBack', 0],
             ],
-            // SfsCmsEvents::ADMIN_SECTION_VERSIONS_DELETE_FAILURE => [],
+            SfsCmsEvents::ADMIN_SECTION_VERSIONS_DELETE_FAILURE => [
+                ['onFailureAddFlash', 10],
+                ['onFailureRedirectBack', 0],
+            ],
             // SfsCmsEvents::ADMIN_SECTION_VERSIONS_DELETE_FORM_INVALID => [],
             SfsCmsEvents::ADMIN_SECTION_VERSIONS_DELETE_VIEW => [
-                ['onView', 0],
+                ['onViewAddEntities', 10],
             ],
             // SfsCmsEvents::ADMIN_SECTION_VERSIONS_DELETE_EXCEPTION => [],
         ];
     }
 
-    public function onSuccess(SuccessEvent $event): void
+    public function onSuccessRedirectBack(SuccessEvent $event): void
     {
-        $this->flashNotifier->addTrans('success', 'admin_sections.version_delete.success_flash', [], 'sfs_cms_admin');
-
-        $section = $event->getRequest()->attributes->get('section');
-
-        $event->setResponse($this->redirectBack($section, $event->getRequest()));
+        $event->setResponse($this->redirectBack($event->getRequest()->attributes->get('section'), $event->getRequest()));
     }
 }

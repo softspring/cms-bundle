@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Softspring\CmsBundle\Config\Model\Content;
 use Softspring\CmsBundle\Entity\Page;
 use Softspring\CmsBundle\Form\Admin\Content\ContentCreateForm;
+use Softspring\CmsBundle\Form\Admin\Content\ContentDeleteForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentDuplicateForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentImportForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentListFilterForm;
@@ -17,7 +18,6 @@ use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionImportForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionListFilterForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionSeoForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionUpdateForm;
-use Softspring\CmsBundle\Form\Admin\Section\SectionDeleteForm;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 
@@ -171,7 +171,7 @@ class ContentTest extends TestCase
                 'delete' => [
                     'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_DELETE',
                     'view' => '@SfsCms/admin/content/delete.html.twig',
-                    'type' => SectionDeleteForm::class,
+                    'type' => ContentDeleteForm::class,
                     'success_redirect_to' => '',
                 ],
                 'version_seo' => [

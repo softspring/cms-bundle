@@ -2,7 +2,9 @@
 
 namespace Softspring\CmsBundle\Test\Unit\Config\Entity;
 
+use DateTime;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Softspring\CmsBundle\Entity\CompiledData;
 use Softspring\CmsBundle\Entity\ContentVersion;
 use Softspring\CmsBundle\Entity\Page;
@@ -17,7 +19,7 @@ class ContentVersionTest extends TestCase
         $version = new ContentVersion();
         $this->assertNull($version->getId());
 
-        $reflection = new \ReflectionClass($version);
+        $reflection = new ReflectionClass($version);
         $property = $reflection->getProperty('id');
         $property->setValue($version, 'test');
         $this->assertEquals('test', $version->getId());
@@ -77,7 +79,7 @@ class ContentVersionTest extends TestCase
         $version = new ContentVersion();
         $this->assertNull($version->getCreatedAt());
 
-        $date = new \DateTime();
+        $date = new DateTime();
         $version->setCreatedAt($date);
         $this->assertEquals($date->format('Y-m-d'), $version->getCreatedAt()->format('Y-m-d'));
 
@@ -150,16 +152,16 @@ class ContentVersionTest extends TestCase
 
     public function testLastVersion(): void
     {
-        $version = new ContentVersion();
-        $this->assertFalse($version->isLastVersion());
+        $version1 = new ContentVersion();
+        $this->assertFalse($version1->isLastVersion());
 
         $page = new Page();
-        $page->addVersion($version);
-        $page->setLastVersion(new ContentVersion());
-        $this->assertFalse($version->isLastVersion());
+        $page->addVersion($version1);
+        $page->setLastVersion($version2 = new ContentVersion());
+        $this->assertFalse($version2->isLastVersion());
 
-        $page->setLastVersion($version);
-        $this->assertTrue($version->isLastVersion());
+        $page->setLastVersion($version1);
+        $this->assertTrue($version1->isLastVersion());
     }
 
     public function testDeleteOnCleanup(): void

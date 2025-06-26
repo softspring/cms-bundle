@@ -292,6 +292,7 @@ admin_sections:
         actions:
             create.button: "Crear sección"
             cancel.button: "Cancelar"
+        success_flash: "La sección se ha creado correctamente"
 
     content:
         meta.title: "Contenido de la sección"
@@ -314,6 +315,7 @@ admin_sections:
             update.button: "Guardar cambios"
             cancel.button: "Cancelar"
             delete.button: "Eliminar sección"
+        success_flash: "La sección se ha actualizado correctamente"
 
     preview:
         meta.title: "Previsualizar sección %name% (v%versionNumber%)"
@@ -358,6 +360,7 @@ admin_sections:
             delete.button: "Eliminar sección"
             cancel.button: "Cancelar"
         main_warnings_raw: '<p>¿Estás seguro de eliminar esta sección?</p><p>Esta acción no se puede deshacer</p>'
+        success_flash: "La sección se ha eliminado"
 
     versions:
         meta.title: "Versiones"
@@ -421,8 +424,8 @@ admin_sections:
         compiled:
             title: "Contenido compilado"
             error: "Este contenido tiene errores en la compilación, trata de editarlo para resolverlos o de republicar"
-            pre_compile_content_disabled: "La pre-compilación de contenido está desactivada para esta versión"
-            pre_compile_content_missing: "Esta versión no tiene contenido pre-compilado."
+            pre_compile_section_disabled: "La pre-compilación de contenido está desactivada para esta versión"
+            pre_compile_section_missing: "Esta versión no tiene contenido pre-compilado."
             pre_compile_modules_disabled: "La pre-compilación de módulos está desactivada para esta versión"
             pre_compile_modules_missing: "Esta versión no tiene módulos pre-compilados."
         data:

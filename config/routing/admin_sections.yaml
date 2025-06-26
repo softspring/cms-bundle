@@ -74,17 +74,17 @@ sfs_cms_admin_sections_unkeep_version:
         configKey: 'version_lock'
         lock: false
 
-#sfs_cms_admin_sections_recompile_version:
-#    controller: sfs_cms.admin.section_version.controller::apply
-#    path: /{section}/{version}/recompile
-#    defaults:
-#        configKey: 'version_recompile'
-#
-#sfs_cms_admin_sections_clear_compiled_version:
-#    controller: sfs_cms.admin.section_version.controller::apply
-#    path: /{section}/{version}/clear-compiled
-#    defaults:
-#        configKey: 'version_clear_compiled'
+sfs_cms_admin_sections_recompile_version:
+    controller: sfs_cms.admin.section_version.controller::apply
+    path: /{section}/{version}/recompile
+    defaults:
+        configKey: 'version_recompile'
+
+sfs_cms_admin_sections_clear_compiled_version:
+    controller: sfs_cms.admin.section_version.controller::apply
+    path: /{section}/{version}/clear-compiled
+    defaults:
+        configKey: 'version_clear_compiled'
 
 sfs_cms_admin_sections_version_preview:
     controller: sfs_cms.admin.section_version.controller::read

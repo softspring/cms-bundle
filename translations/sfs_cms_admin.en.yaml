@@ -292,6 +292,7 @@ admin_sections:
         actions:
             create.button: "Create section"
             cancel.button: "Cancel"
+        success_flash: "The section has been created"
 
     content:
         meta.title: "Section content"
@@ -314,6 +315,7 @@ admin_sections:
             update.button: "Save changes"
             cancel.button: "Cancel"
             delete.button: "Delete section"
+        success_flash: "The section has been updated"
 
     preview:
         meta.title: "Preview section %name% (v%versionNumber%)"
@@ -358,6 +360,7 @@ admin_sections:
             delete.button: "Delete section"
             cancel.button: "Cancel"
         main_warnings_raw: '<p>Are you sure to delete this section?</p><p>This action cannot be undone</p>'
+        success_flash: "The section has been deleted"
 
     versions:
         meta.title: "Versions"
@@ -421,8 +424,8 @@ admin_sections:
         compiled:
             title: "Compiled content"
             error: "This content has compilation errors, try to edit it to resolve them or republish"
-            pre_compile_content_disabled: "Pre-compilation of content is disabled for this version"
-            pre_compile_content_missing: "This version does not have pre-compiled content."
+            pre_compile_section_disabled: "Pre-compilation of content is disabled for this version"
+            pre_compile_section_missing: "This version does not have pre-compiled content."
             pre_compile_modules_disabled: "Pre-compilation of modules is disabled for this version"
             pre_compile_modules_missing: "This version does not have pre-compiled modules."
         data:

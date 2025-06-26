@@ -3,9 +3,7 @@
 namespace Softspring\CmsBundle\Admin\ActionListener\Section;
 
 use Softspring\CmsBundle\SfsCmsEvents;
-use Softspring\Component\CrudlController\Event\FailureEvent;
 use Softspring\Component\CrudlController\Event\SuccessEvent;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class CreateListener extends AbstractSectionListener
@@ -22,10 +20,11 @@ class CreateListener extends AbstractSectionListener
             // SfsCmsEvents::ADMIN_SECTIONS_CREATE_FORM_VALID => [],
             // SfsCmsEvents::ADMIN_SECTIONS_CREATE_APPLY => [],
             SfsCmsEvents::ADMIN_SECTIONS_CREATE_SUCCESS => [
-                ['onSuccess', 0],
+                ['onSuccessAddFlash', 10],
+                ['onSuccessRedirect', 0],
             ],
             SfsCmsEvents::ADMIN_SECTIONS_CREATE_FAILURE => [
-                ['onFailureShowAlert', 0],
+                ['onFailureAddFormError', 0],
             ],
             // SfsCmsEvents::ADMIN_SECTIONS_CREATE_FORM_INVALID => [],
             // SfsCmsEvents::ADMIN_SECTIONS_CREATE_VIEW => [],
@@ -33,18 +32,8 @@ class CreateListener extends AbstractSectionListener
         ];
     }
 
-    public function onSuccess(SuccessEvent $event): void
+    public function onSuccessRedirect(SuccessEvent $event): void
     {
-        $this->flashNotifier->addTrans('success', 'admin_sections.create_success_flash', [], 'sfs_cms_admin');
-
-        $redirectUrl = $this->router->generate('sfs_cms_admin_sections_section', ['section' => $event->getEntity()]);
-
-        $event->setResponse(new RedirectResponse($redirectUrl));
-    }
-
-    public function onFailureShowAlert(FailureEvent $event): void
-    {
-        $exception = $event->getException();
-        $event->getForm()->addError(new FormError($this->extractExceptionMessage($exception)));
+        $event->setResponse(new RedirectResponse($this->router->generate('sfs_cms_admin_sections_content', ['section' => $event->getEntity()])));
     }
 }

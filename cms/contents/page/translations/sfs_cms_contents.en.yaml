@@ -61,7 +61,7 @@ admin_page:
             cancel.button: "Cancel"
         form:
             file.label: "Import content file"
-        failure_flash: "An error has been produced during the page import<br/><small>%exception%</small>"
+        failed_flash: "An error has been produced during the page import<br/><small>%exception%</small>"
         duplicated_flash: "An error has been produced during the page import, the page already exists in the database, try to import it as a version<br/><small>%exception%</small>"
         success_flash: "Page has been imported"
 

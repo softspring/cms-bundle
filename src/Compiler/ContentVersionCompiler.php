@@ -24,7 +24,7 @@ class ContentVersionCompiler extends AbstractVersionCompiler
         protected ContentVersionRenderer $contentVersionRender,
         protected RequestStack $requestStack,
         protected array $enabledLocales,
-        protected bool $saveCompiled,
+        protected bool $contentSaveCompiled,
         protected CmsConfig $cmsConfig,
         protected CompiledDataManagerInterface $compiledDataManager,
         string $prefixCompiled,
@@ -42,7 +42,7 @@ class ContentVersionCompiler extends AbstractVersionCompiler
             return; // not yet ready for render in fixtures, TODO improve this to allow render in fixtures
         }
 
-        if (!$this->saveCompiled) {
+        if (!$this->contentSaveCompiled) {
             return;
         }
 
@@ -143,7 +143,7 @@ class ContentVersionCompiler extends AbstractVersionCompiler
      */
     public function canSaveCompiledModules(ContentVersionInterface $version): bool
     {
-        if (false === $this->saveCompiled) {
+        if (false === $this->contentSaveCompiled) {
             return false;
         }
 

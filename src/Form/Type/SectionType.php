@@ -69,12 +69,6 @@ class SectionType extends AbstractType
                 if ($section) {
                     $attr['data-section-url'] = $this->router->generate('sfs_cms_admin_sections_details', ['section' => $section->getId()]);
 
-                    // $sectionConfig = $this->cmsConfig->getSection($section->getType());
-                    // $sectionConfig['esi'] && $attr['data-section-esi'] = '';
-                    // $sectionConfig['singleton'] && $attr['data-section-singleton'] = '';
-                    // $sectionConfig['schedulable'] && $attr['data-section-schedulable'] = '';
-                    // $sectionConfig['cache_ttl'] && $attr['data-section-cache-ttl'] = '';
-
                     if ('draft' == $section->getStatus()) {
                         $attr['data-section-draft'] = '';
                     }
@@ -104,7 +98,7 @@ class SectionType extends AbstractType
 
     public function finishView(FormView $view, FormInterface $form, array $options): void
     {
-        $view->vars['section_preview'] = ''; // $options['section_attr'];
+        $view->vars['section_preview'] = '';
 
         /** @var ChoiceView $choice */
         foreach ($view->vars['choices'] as $choice) {

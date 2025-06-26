@@ -13,9 +13,6 @@ class CssModuleTest extends ModuleTestCase
         $this->modulePath = realpath(__DIR__.'/../../../cms/modules/css');
     }
 
-    /**
-     * @phpstan-ignore-next-line
-     */
     public static function provideModuleRender(): array
     {
         return [
@@ -25,10 +22,10 @@ class CssModuleTest extends ModuleTestCase
                     '_revision' => 1,
                     'css' => 'body { background-color: red; }',
                 ],
-                'expected' => function($result) {
+                'expected' => function ($result) {
                     ModuleTestCase::assertRenderText('body { background-color: red; }', $result, null, '//style');
                 },
-            ]
+            ],
         ];
     }
 }

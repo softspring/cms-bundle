@@ -5,7 +5,6 @@ namespace Softspring\CmsBundle\Admin\ActionListener\SectionVersion;
 use Softspring\CmsBundle\Model\SectionVersionInterface;
 use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\Component\CrudlController\Event\ApplyEvent;
-use Softspring\Component\CrudlController\Event\FailureEvent;
 use Softspring\Component\CrudlController\Event\SuccessEvent;
 
 class LockListener extends AbstractSectionVersionListener
@@ -16,25 +15,29 @@ class LockListener extends AbstractSectionVersionListener
     {
         return [
             SfsCmsEvents::ADMIN_SECTION_VERSIONS_LOCK_INITIALIZE => [
-                ['onEventLoadSectionEntity', 9],
+                ['onLoadSectionEntity', 9],
             ],
             // SfsCmsEvents::ADMIN_SECTION_VERSIONS_LOCK_LOAD_ENTITY => [],
-            // SfsCmsEvents::ADMIN_SECTION_VERSIONS_LOCK_NOT_FOUND => [],
+            SfsCmsEvents::ADMIN_SECTION_VERSIONS_LOCK_NOT_FOUND => [
+                ['onNotFoundAddFlashAndRedirectToList', 0],
+            ],
             // SfsCmsEvents::ADMIN_SECTION_VERSIONS_LOCK_FOUND => [],
             SfsCmsEvents::ADMIN_SECTION_VERSIONS_LOCK_APPLY => [
-                ['onApply', 0],
+                ['onApplyMarkKeep', 0],
             ],
             SfsCmsEvents::ADMIN_SECTION_VERSIONS_LOCK_SUCCESS => [
-                ['onSuccess', 0],
+                ['onSuccessAddFlash', 10],
+                ['onSuccessRedirectBack', 0],
             ],
             SfsCmsEvents::ADMIN_SECTION_VERSIONS_LOCK_FAILURE => [
-                ['onFailure', 0],
+                ['onFailureAddFlash', 10],
+                ['onFailureRedirectBack', 0],
             ],
             // SfsCmsEvents::ADMIN_SECTION_VERSIONS_LOCK_EXCEPTION => [],
         ];
     }
 
-    public function onApply(ApplyEvent $event): void
+    public function onApplyMarkKeep(ApplyEvent $event): void
     {
         /** @var SectionVersionInterface $entity */
         $entity = $event->getEntity();
@@ -46,7 +49,7 @@ class LockListener extends AbstractSectionVersionListener
         $event->setApplied(true);
     }
 
-    public function onSuccess(SuccessEvent $event): void
+    public function onSuccessAddFlash(SuccessEvent $event): void
     {
         /** @var SectionVersionInterface $version */
         $version = $event->getEntity();
@@ -56,18 +59,5 @@ class LockListener extends AbstractSectionVersionListener
         } else {
             $this->flashNotifier->addTrans('success', 'admin_sections.version_lock.success_unlocked_flash', [], 'sfs_cms_admin');
         }
-
-        $section = $event->getRequest()->attributes->get('section');
-
-        $event->setResponse($this->redirectBack($section, $event->getRequest(), $version));
-    }
-
-    public function onFailure(FailureEvent $event): void
-    {
-        $this->flashNotifier->addTrans('error', 'admin_sections.version_lock.failed_flash', ['%exception%' => $event->getException()->getMessage()], 'sfs_cms_admin');
-
-        $section = $event->getRequest()->attributes->get('section');
-
-        $event->setResponse($this->redirectBack($section, $event->getRequest()));
     }
 }

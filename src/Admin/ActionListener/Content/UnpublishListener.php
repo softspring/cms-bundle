@@ -79,7 +79,7 @@ class UnpublishListener extends AbstractContentListener
     {
         $contentConfig = $event->getRequest()->attributes->get('_content_config');
 
-        $this->flashNotifier->addTrans('error', "admin_{$contentConfig['_id']}.unpublish.failure_flash", ['%exception%' => $event->getException()->getMessage()], 'sfs_cms_contents');
+        $this->flashNotifier->addTrans('error', "admin_{$contentConfig['_id']}.unpublish.failed_flash", ['%exception%' => $event->getException()->getMessage()], 'sfs_cms_contents');
 
         $url = $this->router->generate("sfs_cms_admin_content_{$contentConfig['_id']}_list");
 

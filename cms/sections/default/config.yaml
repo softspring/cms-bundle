@@ -1,4 +1,0 @@
-# this is the section base configuration
-section:
-    revision: 1
-    entity_class: 'Softspring\CmsBundle\Entity\Section'

@@ -9,10 +9,11 @@ use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Manager\SectionManagerInterface;
 use Softspring\CmsBundle\Manager\SectionVersionManagerInterface;
+use Softspring\CmsBundle\Model\SectionInterface;
 use Softspring\CmsBundle\Request\FlashNotifier;
 use Softspring\Component\CrudlController\Event\FailureEvent;
-use Softspring\Component\CrudlController\Event\LoadEntityEvent;
 use Softspring\Component\CrudlController\Event\NotFoundEvent;
+use Softspring\Component\CrudlController\Event\SuccessEvent;
 use Softspring\Component\CrudlController\Event\ViewEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormError;
@@ -39,31 +40,43 @@ abstract class AbstractSectionListener implements EventSubscriberInterface
     ) {
     }
 
-    //    public function onLoadEntity(LoadEntityEvent $event): void
-    //    {
-    //        $sectionId = $event->getRequest()->attributes->get('section');
-    //        $entity = $this->sectionManager->getRepository()->findOneBy(['id' => $sectionId]);
-    //        $event->setEntity($entity);
-    //        $event->setNotFound(!$entity);
-    //        $event->getRequest()->attributes->set('section', $entity);
-    //    }
-
-    /**
-     * @noinspection PhpRouteMissingInspection
-     */
-    public function onNotFound(NotFoundEvent $event): void
+    public function onNotFoundAddFlashAndRedirectToList(NotFoundEvent $event): void
     {
         $this->flashNotifier->addTrans('warning', 'admin_sections.entity_not_found_flash', [], 'sfs_cms_admin');
-        $url = $this->router->generate('sfs_cms_admin__sections_list');
+        $url = $this->router->generate('sfs_cms_admin_sections_list');
         $event->setResponse(new RedirectResponse($url));
+    }
+
+    public function onSuccessAddFlash(SuccessEvent $event): void
+    {
+        $this->flashNotifier->addTrans('success', 'admin_sections.'.static::ACTION_NAME.'.success_flash', [], 'sfs_cms_admin');
+    }
+
+    public function onSuccessRedirectBack(SuccessEvent $event): void
+    {
+        /** @var SectionInterface $entity */
+        $entity = $event->getEntity();
+        $event->setResponse($this->redirectBack($entity, $event->getRequest()));
     }
 
     public function onFailureAddFormError(FailureEvent $event): void
     {
-        $event->getForm()->addError(new FormError($event->getException()->getMessage()));
+        $event->getForm()->addError(new FormError($this->extractExceptionMessage($event->getException())));
     }
 
-    public function onView(ViewEvent $event): void
+    public function onFailureAddFlash(FailureEvent $event): void
+    {
+        $this->flashNotifier->addTrans('error', 'admin_sections.'.static::ACTION_NAME.'.failed_flash', ['%exception%' => $event->getException()->getMessage()], 'sfs_cms_admin');
+    }
+
+    public function onFailureRedirectBack(FailureEvent $event): void
+    {
+        /** @var SectionInterface $entity */
+        $entity = $event->getEntity();
+        $event->setResponse($this->redirectBack($entity, $event->getRequest()));
+    }
+
+    public function onViewAddSectionEntity(ViewEvent $event): void
     {
         $event->getData()['section_entity'] = $event->getRequest()->attributes->get('section');
     }

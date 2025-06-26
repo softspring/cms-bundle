@@ -5,7 +5,6 @@ namespace Softspring\CmsBundle\Form\Admin\Section;
 use Softspring\CmsBundle\Model\SectionInterface;
 use Softspring\CmsBundle\Translator\TranslatableContext;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -40,11 +39,6 @@ class SectionCreateForm extends AbstractType implements SectionCreateFormInterfa
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('name', TextType::class);
-
-        // $builder->add('esi', CheckboxType::class, [
-        //     'property_path' => 'extraData[esi]',
-        //     'required' => false,
-        // ]);
 
         $builder->add('ttl', NumberType::class, [
             'property_path' => 'extraData[ttl]',

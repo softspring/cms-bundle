@@ -25,15 +25,19 @@ class SectionController extends AbstractController
     ) {
     }
 
+    /**
+     * @throws Exception
+     */
     public function __invoke(Request $request, string $section): Response
     {
         return $this->renderById($section, $request);
     }
 
+    /**
+     * @throws Exception
+     */
     public function renderById(string $section, Request $request): Response
     {
-        // $this->enableSchedulableFilter();
-
         try {
             /** @var ?SectionInterface $section */
             $section = $this->sectionManager->getRepository()->findOneById($section);
@@ -51,18 +55,15 @@ class SectionController extends AbstractController
                 throw $this->createNotFoundException();
             }
 
-            //            if ('last_modified' === $this->contentCacheType) {
-            //                $response->setEtag(md5($content->getId().$content->getLastModified()?->getTimestamp().$this->contentVersionCompiler->getCompileKeyFromRequest($publishedVersion, $request)));
-            //                $response->setLastModified($content->getLastModified());
-            //                // Set response as public. Otherwise it will be private by default.
-            //                $response->setPublic();
-            //                if ($response->isNotModified($request)) {
-            //                    return $response;
-            //                }
-            //            }
-
-            //            $type = $section->getType();
-            //            $config = $this->cmsConfig->getSection($type);
+            // if ('last_modified' === $this->contentCacheType) {
+            //     $response->setEtag(md5($content->getId().$content->getLastModified()?->getTimestamp().$this->contentVersionCompiler->getCompileKeyFromRequest($publishedVersion, $request)));
+            //     $response->setLastModified($content->getLastModified());
+            //     // Set response as public. Otherwise it will be private by default.
+            //     $response->setPublic();
+            //     if ($response->isNotModified($request)) {
+            //         return $response;
+            //     }
+            // }
 
             $response = new Response();
 
@@ -71,22 +72,16 @@ class SectionController extends AbstractController
             // create response
             $response->setContent($sectionContent->getDataPart('content'));
 
-            //            if ($sectionContent->hasErrors()) {
-            //                $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
-            //            } elseif ('ttl' === $this->contentCacheType && $routePath->getCacheTtl()) {
-            //                $response->setPublic();
-            //                $response->setMaxAge($routePath->getCacheTtl());
-            //            }
-
-            //            if ('ttl' !== $this->sectionCacheType && false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
-            $response->setPublic();
-            $response->setMaxAge(10);
-            //                $response->setMaxAge($config['cache_ttl']);
-            //            }
+            if ($sectionContent->hasErrors()) {
+                $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
+            } elseif (/* 'ttl' === $this->contentCacheType && */ $section->getExtra('ttl')) {
+                $response->setPublic();
+                $response->setMaxAge((int) $section->getExtra('ttl'));
+            }
 
             return $response;
         } catch (Exception $e) {
-            // return $this->renderSectionException("An exception has occurred rendering a section with id '$section'", $e);
+            $this->cmsLogger && $this->cmsLogger->error(sprintf('An error occurred while rendering section with id "%s": %s', $section->getId(), $e->getMessage()), ['exception' => $e]);
             throw $e;
         }
     }
