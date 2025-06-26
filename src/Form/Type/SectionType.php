@@ -16,6 +16,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Routing\RouterInterface;
 
 class SectionType extends AbstractType
 {
@@ -25,6 +26,7 @@ class SectionType extends AbstractType
         protected SectionVersionRenderer $sectionVersionRenderer,
         protected RequestStack $requestStack,
         protected readonly LocaleHelper $localeHelper,
+        protected RouterInterface $router,
     ) {
     }
 
@@ -65,6 +67,8 @@ class SectionType extends AbstractType
                 ];
 
                 if ($section) {
+                    $attr['data-section-url'] = $this->router->generate('sfs_cms_admin_sections_details', ['section' => $section->getId()]);
+
                     // $sectionConfig = $this->cmsConfig->getSection($section->getType());
                     // $sectionConfig['esi'] && $attr['data-section-esi'] = '';
                     // $sectionConfig['singleton'] && $attr['data-section-singleton'] = '';

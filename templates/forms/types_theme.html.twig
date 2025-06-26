@@ -89,6 +89,17 @@
     {{- block('block_info') -}}
 {% endblock block_type_widget %}
 
+{% block section_widget %}
+    {# temporary fix: remove row class inserted somewhere... #}
+    {%- set attr = attr|merge({'data-section-widget': '', class: (attr.class|replace({'row':''}))|trim}) -%}
+    <div class="input-group">
+        {{ form_widget(form, {'attr': attr}) }}
+        <a class="btn btn-outline-secondary d-none" target="_blank" href="#" title="{{ 'section.edit.link'|trans({}, 'sfs_cms_types') }}">
+            <i class="bi bi-pencil"></i>
+        </a>
+    </div>
+{% endblock section_widget %}
+
 {% block symfony_route_widget %}
     <div data-field-container="{{ form.vars.id }}">
         {{ form_row(form.route_name) }}

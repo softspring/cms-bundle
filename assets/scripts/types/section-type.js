@@ -1,4 +1,4 @@
-import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
+import {addTargetEventListener, registerFeature} from '@softspring/cms-bundle/scripts/tools';
 
 registerFeature('types_section_type', _init);
 
@@ -7,6 +7,10 @@ registerFeature('types_section_type', _init);
  * @private
  */
 function _init() {
+    // configure sections show url
+    addTargetEventListener('select[data-section-widget]', 'change', sectionShowUrl);
+    [...document.querySelectorAll('select[data-section-widget]')].forEach((inputSelect) => sectionShowUrl(inputSelect));
+
     document.addEventListener('change', function (event) {
         if (!event.target ||
             (!event.target.matches('[data-section-message-select]') && !event.target.matches('[data-section-mode-message-select]'))
@@ -29,6 +33,15 @@ function _init() {
     document.addEventListener("collection.node.insert.after", function (event) {
         [...event.node().querySelectorAll('[data-section-message-container]')].forEach((container) => sectionMessageSelect(container));
     });
+}
+
+function sectionShowUrl(selectInput) {
+    if (selectInput.selectedIndex) {
+        selectInput.nextElementSibling.classList.remove('d-none');
+        selectInput.nextElementSibling.setAttribute('href', selectInput.options[selectInput.selectedIndex].dataset.sectionUrl);
+    } else {
+        selectInput.nextElementSibling.classList.add('d-none');
+    }
 }
 
 function sectionMessageSelect (container) {
