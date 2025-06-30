@@ -85,6 +85,8 @@ class PublishListener extends AbstractContentVersionListener
             $this->contentVersionCompiler->compileAll($version, true);
         }
 
+        $version->setKeep(true); // Keep the version after publishing
+
         $content->setPublishedVersion($version);
         $this->contentManager->saveEntity($content);
 
