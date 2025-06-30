@@ -51,7 +51,6 @@ abstract class AbstractModuleType extends AbstractNodeType
         $resolver->setRequired('content_type');
         $resolver->setAllowedTypes('content_type', ['string', 'null']);
 
-        $resolver->setRequired('content');
         $resolver->setAllowedTypes('content', [ContentInterface::class, 'null']);
 
         $resolver->setDefault('form_template', null);
