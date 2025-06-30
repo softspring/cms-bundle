@@ -76,7 +76,7 @@
                                 {% endif %}
                                 {% if content_config.admin.version_translations is defined %}
                                 <li>
-                                    {% if not content_config.admin.version_translations.is_granted or is_granted(content_config.admin.version_translations.is_granted, content_entity) %}
+                                    {% if not content_config.admin.version_translations.is_granted or is_granted(content_config.admin.version_translations.is_granted, version) %}
                                         <a class="dropdown-item"
                                            href="{{ url('sfs_cms_admin_content_'~content_type~'_translations', {'content':content_entity.id, 'version': version_entity.id}) }}">{{ ('admin_'~content_type~'.tabs_menu.translations')|trans }}</a>
                                     {% else %}
