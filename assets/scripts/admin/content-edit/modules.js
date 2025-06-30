@@ -78,10 +78,49 @@ function _init() {
 
         if (!data || !data.source || data.source !== 'softspring/cms-bundle') {
             event.data(null);
-        } else {
-            event.data(data);
+            return;
         }
+
+        let htmlContent = data.content;
+
+        // find any data-module-id attribute in the html content
+        const moduleIdRegex = /data-module-id="([^"]+)"/g;
+        // get differnt values of data-module-id
+        const moduleIds = new Set();
+        let match;
+        while ((match = moduleIdRegex.exec(htmlContent)) !== null) {
+            moduleIds.add(match[1]);
+        }
+
+        let collection = event.pasteDestination();
+        let collectionModulesAllowed = collection.dataset.modulesAllowed.split(',');
+        // check if all modules are allowed in the collection
+        for (let moduleId of moduleIds) {
+            if (!collectionModulesAllowed.includes(moduleId)) {
+                showAlert('The module "' + moduleId + '" is not allowed in this collection.', 'danger', 5000);
+                event.data(null);
+                return;
+            }
+        }
+
+        // check if the collection is inside another collection with data-modules-allowed attribute
+        while (collection.parentNode.closest('[data-modules-allowed]') !== null) {
+            collection = collection.parentNode.closest('[data-modules-allowed]');
+            collectionModulesAllowed = collection.dataset.modulesAllowed.split(',');
+            // check if all modules are allowed in the collection
+            for (let moduleId of moduleIds) {
+                if (!collectionModulesAllowed.includes(moduleId)) {
+                    showAlert('The module "' + moduleId + '" is not allowed in this collection.', 'danger', 5000);
+                    event.data(null);
+                    return;
+                }
+            }
+        }
+
+        // content is valid and can be pasted
+        event.data(data);
     });
+
     document.addEventListener("collection.node.paste.after", function (event) { // (1)
         var module = event.target.querySelector('.cms-module');
         if (module) {
