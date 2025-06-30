@@ -1,4 +1,7 @@
 parameters:
+    excludePaths:
+        # until Twig Bridge is updated
+        - src/Render/Isolated/IsolatedAppVariable.php
     ignoreErrors:
         -
             message: "#Anonymous function never returns null so it can be removed from the return type.#"
