@@ -1,3 +1,5 @@
+import {Alert} from 'bootstrap';
+
 HTMLElement.prototype.showElement = function () {
     this.classList.remove("d-none", "hidden");
     return this;
@@ -95,7 +97,7 @@ function showAlert(message, type = 'info', durationMs = 1000, alertContainerSele
     // Auto-dismiss: Inicializa el componente Alert de Bootstrap y luego lo cierra.
     // Necesitamos una pequeña demora antes de cerrarlo para que 'show' se aplique y la animación 'fade' funcione.
     setTimeout(() => {
-        const bsAlert = new bootstrap.Alert(alertDiv); // Inicializa el objeto Alert de Bootstrap
+        const bsAlert = new Alert(alertDiv); // Inicializa el objeto Alert de Bootstrap
         bsAlert.close(); // Llama al método .close()
     }, durationMs); // Espera la duración especificada antes de cerrar
 

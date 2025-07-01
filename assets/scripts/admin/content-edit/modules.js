@@ -1,7 +1,7 @@
 // let collectionFormTypeDebug = true;
 
 import {filterCurrentFilterElements} from './filter-preview';
-import {getCollectionLastIndex, CollectionEvent} from '@softspring/collection-form-type/scripts/collection-form-type';
+import {getCollectionLastIndex} from '@softspring/collection-form-type/scripts/collection-form-type';
 import {Modal} from 'bootstrap';
 import {registerFeature, showAlert} from '@softspring/cms-bundle/scripts/tools';
 
@@ -62,7 +62,7 @@ function _init() {
         filterCurrentFilterElements();
     });
 
-    document.addEventListener("collection.node.copy.after", function (event) { // (1)
+    document.addEventListener("collection.node.copy.after", function () { // (1)
         showAlert('Copied to clipboard!', 'secondary', 800);
     });
 
