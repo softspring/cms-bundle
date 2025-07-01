@@ -73,6 +73,8 @@ class PublishListener extends AbstractSectionVersionListener
             $this->sectionVersionCompiler->compileAll($version, true);
         }
 
+        $version->setKeep(true); // Keep the version after publishing
+
         $section->setPublishedVersion($version);
         $this->sectionManager->saveEntity($section);
 
