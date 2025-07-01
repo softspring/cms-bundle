@@ -11,6 +11,7 @@ use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Request\FlashNotifier;
 use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\CmsBundle\Translator\TranslatableContext;
+use Softspring\Component\CrudlController\Event\ApplyEvent;
 use Softspring\Component\CrudlController\Event\FormPrepareEvent;
 use Softspring\Component\CrudlController\Event\SuccessEvent;
 use Softspring\Component\CrudlController\Event\ViewEvent;
@@ -66,6 +67,7 @@ class DeleteListener extends AbstractContentVersionListener
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_DELETE_APPLY => [
                 ['onEventDispatchContentTypeEvent', 10],
+                ['onApplySetOtherLastVersion', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_DELETE_SUCCESS => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -85,6 +87,20 @@ class DeleteListener extends AbstractContentVersionListener
                 ['onEventDispatchContentTypeEvent', 10],
             ],
         ];
+    }
+
+    public function onApplySetOtherLastVersion(ApplyEvent $event): void
+    {
+        /** @var ContentVersionInterface $deleteVersion */
+        $deleteVersion = $event->getEntity();
+        $content = $deleteVersion->getContent();
+
+        if ($deleteVersion->isLastVersion()) {
+            $previousVersion = $content->getVersions()->filter(function (ContentVersionInterface $version) use ($deleteVersion) {
+                return $version->getId() !== $deleteVersion->getId();
+            })->first();
+            $content->setLastVersion($previousVersion);
+        }
     }
 
     public function onFormPrepareResolve(FormPrepareEvent $event): void
