@@ -57,7 +57,7 @@ class BlockRenderer
     {
         $blockConfig = $this->cmsConfig->getBlock($type);
 
-        if ($blockConfig['esi'] && !$this->isPreview()) {
+        if ($blockConfig['esi']) {
             if (!$this->esiEnabled) {
                 throw new Exception('You must enable esi with framework.esi configuration to use it in CMS');
             }
