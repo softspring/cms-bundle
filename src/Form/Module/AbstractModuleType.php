@@ -117,7 +117,7 @@ abstract class AbstractModuleType extends AbstractNodeType
 
         if ($options['site_filter']) {
             if ($options['content'] instanceof ContentInterface) {
-                $sites = $options['content']?->getSites()->toArray();
+                $sites = $options['content']->getSites()->toArray();
             } else {
                 $sites = $this->cmsHelper->config()->getSites();
             }
