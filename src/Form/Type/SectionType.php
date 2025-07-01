@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityRepository;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Helper\LocaleHelper;
 use Softspring\CmsBundle\Model\SectionInterface;
+use Softspring\CmsBundle\Render\Exception\RenderException;
 use Softspring\CmsBundle\Render\SectionVersionRenderer;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -79,15 +80,27 @@ class SectionType extends AbstractType
 
                     $attr['data-section-preview'] = '';
 
-                    foreach ($this->localeHelper->getEnabledLocales() as $locale) {
-                        $request = new Request();
-                        $request->setLocale($locale);
-                        $attr['data-section-preview'] .= '<div data-lang="'.$locale.'" class="section-preview">'
-                            .$this->sectionVersionRenderer->render(
-                                $section->getPublishedVersion() ?: $section->getLastVersion(),
-                                $request,
-                            )
-                            .'</div>';
+                    foreach ($this->cmsConfig->getSites() as $site) {
+                        foreach ($this->localeHelper->getEnabledLocales() as $locale) {
+                            $request = new Request();
+                            $request->setLocale($locale);
+                            $request->attributes->set('_sfs_cms_site', $site);
+
+                            try {
+                                $sectionRender = $this->sectionVersionRenderer->render(
+                                    $section->getPublishedVersion() ?: $section->getLastVersion(),
+                                    $request,
+                                );
+                            } catch (RenderException $e) {
+                                $sectionRender = '<div class="alert alert-danger">'
+                                    .'<strong>Error rendering section:</strong> '.$e->getMessage()
+                                    .'</div>';
+                            }
+
+                            $attr['data-section-preview'] .= '<div data-lang="'.$locale.'" data-site="'.$site.'" class="section-preview">'
+                                .$sectionRender
+                                .'</div>';
+                        }
                     }
                 }
 

@@ -115,31 +115,43 @@ abstract class AbstractModuleType extends AbstractNodeType
             });
         }
 
-        if ($options['site_filter'] && $options['content']?->getSites()->count() > 1) {
-            $builder->add('site_filter', SiteChoiceType::class, [
-                'multiple' => true,
-                'expanded' => true,
-                'block_prefix' => 'module_site_filter',
-                'choice_translation_domain' => false,
-                'content' => $options['content'],
-            ]);
+        if ($options['site_filter']) {
+            if ($options['content'] instanceof ContentInterface) {
+                $sites = $options['content']?->getSites()->toArray();
+            } else {
+                $sites = $this->cmsHelper->config()->getSites();
+            }
 
-            $builder->addEventListener(FormEvents::PRE_SET_DATA, function (PreSetDataEvent $event) {
-                $data = $event->getData();
-                $allAvailableSites = $event->getForm()->getConfig()->getOption('content')->getSites()->toArray();
+            if (count($sites) > 1) {
+                $builder->add('site_filter', SiteChoiceType::class, [
+                    'multiple' => true,
+                    'expanded' => true,
+                    'block_prefix' => 'module_site_filter',
+                    'choice_translation_domain' => false,
+                    'content' => $options['content'],
+                ]);
 
-                if (null === $data) {
-                    // set all locales on prototyping (data = null)
-                    $data = ['site_filter' => $allAvailableSites];
-                }
+                $builder->addEventListener(FormEvents::PRE_SET_DATA, function (PreSetDataEvent $event) {
+                    $data = $event->getData();
+                    if ($event->getForm()->getConfig()->getOption('content')) {
+                        $allAvailableSites = $event->getForm()->getConfig()->getOption('content')->getSites()->toArray();
+                    } else {
+                        $allAvailableSites = $this->cmsHelper->config()->getSites();
+                    }
 
-                if (!isset($data['site_filter'])) {
-                    // set all locales on no stored site_filter
-                    $data['site_filter'] = $allAvailableSites;
-                }
+                    if (null === $data) {
+                        // set all locales on prototyping (data = null)
+                        $data = ['site_filter' => $allAvailableSites];
+                    }
 
-                $event->setData($data);
-            });
+                    if (!isset($data['site_filter'])) {
+                        // set all locales on no stored site_filter
+                        $data['site_filter'] = $allAvailableSites;
+                    }
+
+                    $event->setData($data);
+                });
+            }
         }
 
         $builder->add('_revision', HiddenType::class, [
