@@ -1,3 +1,7 @@
 sfs_cms_block_render_by_type:
     controller: Softspring\CmsBundle\Controller\BlockController::renderByType
-    path: "/_render_block/{type}"
+    path: "/__/bt/{type}"
+
+sfs_cms_block_render_by_id:
+    controller: Softspring\CmsBundle\Controller\BlockController::renderById
+    path: "/__/bid/{id}"
