@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Config\Model;
 
 use Softspring\CmsBundle\Form\Admin\Content\ContentCreateForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentDeleteForm;
+use Softspring\CmsBundle\Form\Admin\Content\ContentDiffForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentDuplicateForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentImportForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentListFilterForm;
@@ -387,6 +388,15 @@ class Content implements ConfigurationInterface
                                 ->scalarNode('view')->defaultValue('@SfsCms/admin/content/delete.html.twig')->end()
                                 ->scalarNode('type')->defaultValue(ContentDeleteForm::class)->end()
                                 ->scalarNode('success_redirect_to')->defaultValue('')->end()
+                            ->end()
+                        ->end()
+
+                        ->arrayNode('diff')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_DIFF')->end()
+                                ->scalarNode('view')->defaultValue('@SfsCms/admin/content/diff.html.twig')->end()
+                                ->scalarNode('form')->defaultValue(ContentDiffForm::class)->end()
                             ->end()
                         ->end()
 

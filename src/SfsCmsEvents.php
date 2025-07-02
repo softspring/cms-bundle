@@ -188,6 +188,13 @@ class SfsCmsEvents
     public const ADMIN_CONTENTS_PREVIEW_FOUND = 'sfs_cms.admin.contents.preview_found';
     public const ADMIN_CONTENTS_PREVIEW_VIEW = 'sfs_cms.admin.contents.preview_view';
     public const ADMIN_CONTENTS_PREVIEW_EXCEPTION = 'sfs_cms.admin.contents.preview_exception';
+    // CONTENT DIFF EVENTS, ALL OF THEM ARE INTERNAL
+    public const ADMIN_CONTENTS_DIFF_INITIALIZE = 'sfs_cms.admin.contents.diff_initialize';
+    public const ADMIN_CONTENTS_DIFF_LOAD_ENTITY = 'sfs_cms.admin.contents.diff_load_entity';
+    public const ADMIN_CONTENTS_DIFF_NOT_FOUND = 'sfs_cms.admin.contents.diff_not_found';
+    public const ADMIN_CONTENTS_DIFF_FOUND = 'sfs_cms.admin.contents.diff_found';
+    public const ADMIN_CONTENTS_DIFF_VIEW = 'sfs_cms.admin.contents.diff_view';
+    public const ADMIN_CONTENTS_DIFF_EXCEPTION = 'sfs_cms.admin.contents.diff_exception';
 
     // CONTENT_VERSION CREATE EVENTS, ALL OF THEM ARE INTERNAL
     public const ADMIN_CONTENT_VERSIONS_CREATE_INITIALIZE = 'sfs_cms.admin.content_versions.create_initialize';

@@ -7,6 +7,7 @@ use Softspring\CmsBundle\Config\Model\Content;
 use Softspring\CmsBundle\Entity\Page;
 use Softspring\CmsBundle\Form\Admin\Content\ContentCreateForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentDeleteForm;
+use Softspring\CmsBundle\Form\Admin\Content\ContentDiffForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentDuplicateForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentImportForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentListFilterForm;
@@ -132,6 +133,11 @@ class ContentTest extends TestCase
                 'preview' => [
                     'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_PREVIEW',
                     'view' => '@SfsCms/admin/content/preview.html.twig',
+                ],
+                'diff' => [
+                    'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_DIFF',
+                    'view' => '@SfsCms/admin/content/diff.html.twig',
+                    'form' => ContentDiffForm::class
                 ],
                 'version_list' => [
                     'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSIONS',
