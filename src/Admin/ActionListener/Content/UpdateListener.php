@@ -15,7 +15,6 @@ use Softspring\CmsBundle\Translator\TranslatableContext;
 use Softspring\Component\CrudlController\Event\ApplyEvent;
 use Softspring\Component\CrudlController\Event\FormPrepareEvent;
 use Softspring\Component\CrudlController\Event\SuccessEvent;
-use Softspring\Component\CrudlController\Event\ViewEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -25,15 +24,16 @@ class UpdateListener extends AbstractContentListener
     protected const ACTION_NAME = 'update';
 
     public function __construct(
-        ContentManagerInterface $contentManager,
+        ContentManagerInterface        $contentManager,
         ContentVersionManagerInterface $contentVersionManager,
-        RouteManagerInterface $routeManager,
-        CmsConfig $cmsConfig,
-        RouterInterface $router,
-        FlashNotifier $flashNotifier,
-        AuthorizationCheckerInterface $authorizationChecker,
-        protected TranslatableContext $translatableContext,
-    ) {
+        RouteManagerInterface          $routeManager,
+        CmsConfig                      $cmsConfig,
+        RouterInterface                $router,
+        FlashNotifier                  $flashNotifier,
+        AuthorizationCheckerInterface  $authorizationChecker,
+        protected TranslatableContext  $translatableContext,
+    )
+    {
         parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
     }
 
@@ -82,7 +82,9 @@ class UpdateListener extends AbstractContentListener
             ],
             SfsCmsEvents::ADMIN_CONTENTS_UPDATE_VIEW => [
                 ['onEventDispatchContentTypeEvent', 10],
-                ['onView', 0],
+                ['onViewAddConfig', 0],
+                ['onViewSetTemplate', 0],
+                ['onViewAddEntities', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENTS_UPDATE_EXCEPTION => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -118,7 +120,7 @@ class UpdateListener extends AbstractContentListener
 
                 $lastVersion = $content->getLastVersion();
                 $newVersion = $this->contentManager->createVersion($content, $lastVersion, ContentVersionInterface::ORIGIN_ADD_LOCALE);
-                $newVersion->setOriginDescription('v'.$lastVersion->getVersionNumber().' + '.implode(',', $addLocales));
+                $newVersion->setOriginDescription('v' . $lastVersion->getVersionNumber() . ' + ' . implode(',', $addLocales));
 
                 foreach ($addLocales as $locale) {
                     $this->contentVersionManager->addLocale($newVersion, $locale);
@@ -134,8 +136,8 @@ class UpdateListener extends AbstractContentListener
 
             $lastVersion = $content->getLastVersion();
             $newVersion = $this->contentManager->createVersion($content, $lastVersion, ContentVersionInterface::ORIGIN_ADD_SITE);
-            $addSitesNames = array_map(fn (SiteInterface $site) => $site->getId(), $addSites->toArray());
-            $newVersion->setOriginDescription('v'.$lastVersion->getVersionNumber().' + '.implode(',', $addSitesNames));
+            $addSitesNames = array_map(fn(SiteInterface $site) => $site->getId(), $addSites->toArray());
+            $newVersion->setOriginDescription('v' . $lastVersion->getVersionNumber() . ' + ' . implode(',', $addSitesNames));
 
             foreach ($addSites as $site) {
                 $this->contentVersionManager->addSite($newVersion, $site);
@@ -158,11 +160,5 @@ class UpdateListener extends AbstractContentListener
 
             $event->setResponse(new RedirectResponse($redirectUrl));
         }
-    }
-
-    public function onView(ViewEvent $event): void
-    {
-        $event->getData()['entity'] = $event->getData()['content'];
-        parent::onView($event);
     }
 }

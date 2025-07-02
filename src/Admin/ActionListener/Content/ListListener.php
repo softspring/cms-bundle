@@ -30,7 +30,9 @@ class ListListener extends AbstractContentListener
             ],
             SfsCmsEvents::ADMIN_CONTENTS_LIST_VIEW => [
                 ['onEventDispatchContentTypeEvent', 10],
-                ['onView', 0],
+                ['onViewAddConfig', 0],
+                ['onViewSetTemplate', 0],
+                ['onViewAddPatination', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENTS_LIST_EXCEPTION => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -50,10 +52,8 @@ class ListListener extends AbstractContentListener
         ]);
     }
 
-    public function onView(ViewEvent $event): void
+    public function onViewAddPatination(ViewEvent $event): void
     {
-        parent::onView($event);
-
         $contentConfig = $event->getRequest()->attributes->get('_content_config');
         $event->getData()['list_page_view'] = $contentConfig['admin']['list']['page_view'];
         // 'filterForm' => $form->createView(),
