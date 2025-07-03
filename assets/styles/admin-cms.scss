@@ -99,6 +99,10 @@ body {
         }
     }
 }
+.insert-module-at-the-end {
+    position: relative;
+    z-index: 1035;
+}
 
 .insert-module-at-the-end.col,
 .insert-module-at-the-end[class^="col-"],
