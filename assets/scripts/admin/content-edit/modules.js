@@ -29,6 +29,7 @@ function _init() {
         if (event.target && (event.target.hasAttribute('data-cms-module-form-close') || event.target.matches('[data-collection-action=delete]'))) {
             if (event.target.matches('[data-collection-action=delete]')) {
                 allLostFocus();
+                checkEmptyModules();
             }
             return;
         }
@@ -333,7 +334,7 @@ function checkMaxInputVars() {
 
 function checkEmptyModules() {
     // check if we have a module form
-    const modules = document.querySelectorAll('[data-collection="collection"] .insert-module');
+    const modules = document.querySelectorAll('main [data-collection="collection"] .insert-module');
 
     if (modules.length === 1) {
         modules[0].classList.add('active');

@@ -5,7 +5,7 @@
 {% block title %}{{ ('admin_sections.preview.meta.title')|trans({'%name%':section.name}) }}{% endblock %}
 
 {% block body %}
-    <div class="d-flex flex-col align-items-stretch min-vh-100 pt-5">
+    <div class="cms-content d-flex lign-items-stretch min-vh-100">
         <header class="cms-section-header flex-fill p-3 bg-dark fixed-top border-bottom">
             <div class="container-fluid">
                 <div class="d-flex flex-wrap align-items-center justify-section-center justify-section-lg-start">
@@ -63,9 +63,7 @@
             </div>
         </header>
         <main class="flex-fill d-flex flex-row align-items-stretch bg-light  min-vh-100">
-            <div class="pt-4 h-100 w-100">
-                <iframe name="previewFrame" id="preview" src="{{ url('sfs_cms_admin_sections_version_preview', {'section':section.id, 'version':version.id, '_site': sites.first, '_locale': defaultLocale}) }}" width="100%" height="100%"></iframe>
-            </div>
+            <iframe class="h-100 w-100" name="previewFrame" id="preview" src="{{ url('sfs_cms_admin_sections_version_preview', {'section':section.id, 'version':version.id, '_site': sites.first, '_locale': defaultLocale}) }}" width="100%" height="100%"></iframe>
         </main>
     </div>
 
