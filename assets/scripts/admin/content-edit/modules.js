@@ -339,7 +339,9 @@ function checkEmptyModules() {
         modules[0].classList.add('active');
         modules[0].closest('[data-collection="collection"]').classList.add('active');
     } else {
-        modules[0].classList.remove('active');
-        modules[0].closest('[data-collection="collection"]').classList.remove('active');
+        modules.forEach((module) => {
+            module.classList.remove('active');
+            module.closest('[data-collection="collection"]').classList.remove('active');
+        });
     }
 }
