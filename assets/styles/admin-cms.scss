@@ -45,8 +45,10 @@ body {
     background-color: $gray-500;
     z-index: 1000;
 
-    &:hover {
+    &:hover,
+    &.active {
         z-index: 1001;
+        text-decoration: none;
 
         &:before {
             opacity: 1;
@@ -71,18 +73,12 @@ body {
     }
 }
 
-[data-collection=collection]:hover > .row {
+[data-collection=collection]:hover > .row,
+[data-collection=collection].active > .row {
     & > .insert-module {
         display: block;
         margin-top: -4px;
         height: 4px;
-
-        //&:before {
-        //    margin-top: -8px;
-        //    margin-left: -10px;
-        //    position: relative;
-        //    left: 50%;
-        //}
 
         &.selected,
         &:hover {
