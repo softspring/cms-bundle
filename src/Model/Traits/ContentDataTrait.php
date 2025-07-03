@@ -19,6 +19,8 @@ trait ContentDataTrait
 
     protected mixed $_getDataCallback = null;
 
+    protected mixed $_rawData = null;
+
     public function _setDataCallback(callable $getDataCallback): void
     {
         $this->_getDataCallback = $getDataCallback;
@@ -30,6 +32,7 @@ trait ContentDataTrait
         $data = $this->data;
 
         if ($this->_getDataCallback) {
+            $this->_rawData = $this->data;
             $this->data = call_user_func($this->_getDataCallback, $this->data);
             $this->_getDataCallback = null;
         }
@@ -40,6 +43,11 @@ trait ContentDataTrait
     public function setData(?array $data): void
     {
         $this->data = $data;
+    }
+
+    public function getRawData(): ?array
+    {
+        return $this->_rawData ?? $this->data;
     }
 
     public function addMedia(MediaInterface $media): void

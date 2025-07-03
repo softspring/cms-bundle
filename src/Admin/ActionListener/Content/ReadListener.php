@@ -12,10 +12,7 @@ use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Model\RoutePathInterface;
 use Softspring\CmsBundle\Request\FlashNotifier;
 use Softspring\CmsBundle\SfsCmsEvents;
-use Softspring\Component\CrudlController\Event\LoadEntityEvent;
-use Softspring\Component\CrudlController\Event\NotFoundEvent;
 use Softspring\Component\CrudlController\Event\ViewEvent;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
@@ -24,15 +21,16 @@ class ReadListener extends AbstractContentListener
     protected const ACTION_NAME = 'read';
 
     public function __construct(
-        ContentManagerInterface $contentManager,
+        ContentManagerInterface        $contentManager,
         ContentVersionManagerInterface $contentVersionManager,
-        RouteManagerInterface $routeManager,
-        CmsConfig $cmsConfig,
-        RouterInterface $router,
-        FlashNotifier $flashNotifier,
-        AuthorizationCheckerInterface $authorizationChecker,
-        protected string $contentCacheType,
-    ) {
+        RouteManagerInterface          $routeManager,
+        CmsConfig                      $cmsConfig,
+        RouterInterface                $router,
+        FlashNotifier                  $flashNotifier,
+        AuthorizationCheckerInterface  $authorizationChecker,
+        protected string               $contentCacheType,
+    )
+    {
         parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
     }
 
@@ -57,7 +55,10 @@ class ReadListener extends AbstractContentListener
             ],
             SfsCmsEvents::ADMIN_CONTENTS_READ_VIEW => [
                 ['onEventDispatchContentTypeEvent', 10],
-                ['onView', 0],
+                ['onViewAddConfig', 0],
+                ['onViewSetTemplate', 0],
+                ['onViewAddEntities', 0],
+                ['onViewAddExtra', 0],
                 ['onViewAddCacheAlert', -10],
             ],
             SfsCmsEvents::ADMIN_CONTENTS_READ_EXCEPTION => [
@@ -66,29 +67,9 @@ class ReadListener extends AbstractContentListener
         ];
     }
 
-    public function onLoadEntity(LoadEntityEvent $event): void
+    public function onViewAddExtra(ViewEvent $event): void
     {
-        $contentId = $event->getRequest()->attributes->get('content');
-        $contentConfig = $event->getRequest()->attributes->get('_content_config');
-        $entity = $this->contentManager->getRepository($contentConfig['_id'])->findOneBy(['id' => $contentId]);
-        $event->setEntity($entity);
-        $event->setNotFound(!$entity);
-    }
-
-    public function onNotFound(NotFoundEvent $event): void
-    {
-        $contentConfig = $event->getRequest()->attributes->get('_content_config');
-
-        $this->flashNotifier->addTrans('warning', "admin_{$contentConfig['_id']}.entity_not_found_flash", [], 'sfs_cms_contents');
-        $url = $this->router->generate("sfs_cms_admin_content_{$contentConfig['_id']}_list");
-        $event->setResponse(new RedirectResponse($url));
-    }
-
-    public function onView(ViewEvent $event): void
-    {
-        $event->getData()['entity'] = $event->getData()['content'];
         $event->getData()['entityLatestVersions'] = $this->contentVersionManager->getLatestVersions($event->getData()['content'], 3);
-        parent::onView($event);
         $event->getData()['contentCacheLastModifiedEnabled'] = 'last_modified' === $this->contentCacheType;
     }
 

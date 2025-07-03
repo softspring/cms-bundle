@@ -136,3 +136,11 @@ services:
                     found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_PREVIEW_FOUND
                     view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_PREVIEW_VIEW
                     exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_PREVIEW_EXCEPTION
+                diff:
+                    param_converter_key: 'id'
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_DIFF_INITIALIZE
+                    load_entity_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_DIFF_LOAD_ENTITY
+                    not_found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_DIFF_NOT_FOUND
+                    found_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_DIFF_FOUND
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_DIFF_VIEW
+                    exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_DIFF_EXCEPTION

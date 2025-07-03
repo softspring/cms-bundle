@@ -11,6 +11,8 @@ interface ContentDataInterface
 
     public function getData(): ?array;
 
+    public function getRawData(): ?array;
+
     public function setData(?array $data): void;
 
     public function addMedia(MediaInterface $media): void;

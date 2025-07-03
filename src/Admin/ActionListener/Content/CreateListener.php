@@ -56,7 +56,8 @@ class CreateListener extends AbstractContentListener
             ],
             SfsCmsEvents::ADMIN_CONTENTS_CREATE_VIEW => [
                 ['onEventDispatchContentTypeEvent', 10],
-                ['onView', 0],
+                ['onViewAddConfig', 0],
+                ['onViewSetTemplate', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENTS_CREATE_EXCEPTION => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -114,9 +115,7 @@ class CreateListener extends AbstractContentListener
 
     public function onFailureShowAlert(FailureEvent $event): void
     {
-        $request = $event->getRequest();
         $exception = $event->getException();
-        $contentConfig = $request->attributes->get('_content_config');
 
         $event->getForm()->addError(new FormError($this->extractExceptionMessage($exception)));
     }

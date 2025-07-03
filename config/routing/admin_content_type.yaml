@@ -48,6 +48,12 @@ preview:
     defaults:
         configKey: 'preview'
 
+diff:
+    controller: sfs_cms.admin.content.controller::read
+    path: /{content}/diff
+    defaults:
+        configKey: 'diff'
+
 content:
     controller: sfs_cms.admin.content_version.controller::create
     path: /{content}/content

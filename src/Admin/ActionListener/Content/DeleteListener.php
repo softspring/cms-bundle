@@ -8,7 +8,6 @@ use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\Component\CrudlController\Event\FormPrepareEvent;
 use Softspring\Component\CrudlController\Event\FormValidEvent;
 use Softspring\Component\CrudlController\Event\SuccessEvent;
-use Softspring\Component\CrudlController\Event\ViewEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -61,7 +60,9 @@ class DeleteListener extends AbstractContentListener
             ],
             SfsCmsEvents::ADMIN_CONTENTS_DELETE_VIEW => [
                 ['onEventDispatchContentTypeEvent', 10],
-                ['onView', 0],
+                ['onViewAddConfig', 0],
+                ['onViewSetTemplate', 0],
+                ['onViewAddEntities', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENTS_DELETE_EXCEPTION => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -122,11 +123,5 @@ class DeleteListener extends AbstractContentListener
         $redirectUrl = $this->router->generate($contentConfig['admin']['delete']['success_redirect_to']);
 
         $event->setResponse(new RedirectResponse($redirectUrl));
-    }
-
-    public function onView(ViewEvent $event): void
-    {
-        parent::onView($event);
-        $event->getData()['entity'] = $event->getData()['content'];
     }
 }

@@ -150,6 +150,7 @@ admin_page:
             unpublish.link: "Despublicar"
             import_version.link: "Importar versión"
             cleanup_versions.link: "Limpiar versiones"
+            diff.link: "Ver diferencias"
             keep.link: "Mantener versión, pinchar para desmarcar"
             nokeep.link: "No mantener esta versión, pinchar para mantener"
             info.link: "Info"
