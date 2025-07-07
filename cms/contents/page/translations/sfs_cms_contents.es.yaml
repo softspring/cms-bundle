@@ -393,3 +393,13 @@ admin_page:
             delete.button: "Eliminar definitivamente"
             cancel.button: "Cancelar"
         success_flash: "La versión se ha eliminado"
+    
+    diff:
+        title: "Diferencias entre versiones"
+        breadcrumb: "Diferencias entre versiones"
+        form:
+            version1.label: "Version 1"
+            version2.label: "Version 2"
+        actions:
+            submit.button: "Comaprar"
+            cancel.button: "Cancelar"
