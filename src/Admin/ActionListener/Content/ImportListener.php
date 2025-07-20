@@ -30,16 +30,15 @@ class ImportListener extends AbstractContentListener
     protected const ACTION_NAME = 'import';
 
     public function __construct(
-        ContentManagerInterface        $contentManager,
+        ContentManagerInterface $contentManager,
         ContentVersionManagerInterface $contentVersionManager,
-        RouteManagerInterface          $routeManager,
-        CmsConfig                      $cmsConfig,
-        RouterInterface                $router,
-        FlashNotifier                  $flashNotifier,
-        AuthorizationCheckerInterface  $authorizationChecker,
-        protected DataImporter         $dataImporter,
-    )
-    {
+        RouteManagerInterface $routeManager,
+        CmsConfig $cmsConfig,
+        RouterInterface $router,
+        FlashNotifier $flashNotifier,
+        AuthorizationCheckerInterface $authorizationChecker,
+        protected DataImporter $dataImporter,
+    ) {
         parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
     }
 
@@ -148,8 +147,8 @@ class ImportListener extends AbstractContentListener
         } else {
             $exception = $event->getException()->getMessage();
             if ('1' === $event->getRequest()->server->get('APP_DEBUG')) {
-                $exception .= '<br/><br/>' . get_class($event->getException());
-                $exception .= '<br/><br/>' . nl2br($event->getException()->getTraceAsString());
+                $exception .= '<br/><br/>'.get_class($event->getException());
+                $exception .= '<br/><br/>'.nl2br($event->getException()->getTraceAsString());
             }
             $this->flashNotifier->addTrans('error', "admin_{$contentConfig['_id']}.import.failed_flash", ['%exception%' => $exception], 'sfs_cms_contents');
         }

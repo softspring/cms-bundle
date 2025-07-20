@@ -17,4 +17,9 @@ services:
         class: Softspring\Component\DynamicFormType\Form\Resolver\ConstraintResolver
 
     Softspring\Component\DynamicFormType\Form\Resolver\TypeResolverInterface:
-        class: Softspring\CmsBundle\Form\Resolver\TypeResolver
+        class: Softspring\CmsBundle\Form\Resolver\DefaultTypeResolver
+        arguments:
+            $resolvers: !tagged_iterator 'softspring.dynamic_form_type.type_resolver'
+
+    Softspring\Component\DynamicFormType\Form\Resolver\DefaultTypeResolver:
+        tags: [ { name: 'softspring.dynamic_form_type.type_resolver', priority: 0 } ]

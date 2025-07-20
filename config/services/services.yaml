@@ -103,7 +103,7 @@ services:
     Softspring\CmsBundle\Render\:
         resource: '../../src/Render/*'
         exclude:
-            - '../../src/Render/ModuleRenderer.php'
+            - '../../src/Render/Module/ModuleRenderer.php'
 
     Softspring\CmsBundle\Request\FlashNotifier: ~
 
@@ -145,3 +145,6 @@ services:
     Softspring\CmsBundle\Security\Voter\DeprecatedPermissionVoter:
         tags:
             - { name: security.voter, priority: 1000 }
+
+    Softspring\CmsBundle\Form\Resolver\CmsTypeResolver:
+        tags: [ { name: 'softspring.dynamic_form_type.type_resolver', priority: 10 } ]

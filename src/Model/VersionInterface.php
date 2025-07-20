@@ -16,6 +16,8 @@ interface VersionInterface
     public const ORIGIN_ADD_LOCALE = 7;
     public const ORIGIN_ADD_SITE = 8;
 
+    public function getId();
+
     public function setParent(?VersionableInterface $parent): void;
 
     public function getParent(): ?VersionableInterface;

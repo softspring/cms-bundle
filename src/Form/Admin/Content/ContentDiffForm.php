@@ -38,7 +38,7 @@ class ContentDiffForm extends AbstractType implements ContentDiffFormInterface
         $versionFieldsOptions = [
             'choices' => $content->getVersions(),
             'choice_label' => function (VersionInterface $version) {
-                return 'v' . $version->getVersionNumber();
+                return 'v'.$version->getVersionNumber();
             },
             'choice_value' => function (?VersionInterface $version) {
                 return $version?->getId();

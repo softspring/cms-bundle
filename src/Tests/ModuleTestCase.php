@@ -11,7 +11,7 @@ use Softspring\CmsBundle\Entity\Page;
 use Softspring\CmsBundle\Form\Extension\DefaultValueExtension;
 use Softspring\CmsBundle\Form\Extension\DynamicTypesExtension;
 use Softspring\CmsBundle\Form\Module\DynamicFormModuleType;
-use Softspring\CmsBundle\Form\Resolver\TypeResolver;
+use Softspring\CmsBundle\Form\Resolver\CmsTypeResolver;
 use Softspring\CmsBundle\Form\Type\LinkType;
 use Softspring\CmsBundle\Form\Type\SymfonyRouteType;
 use Softspring\CmsBundle\Form\Type\TranslatableType;
@@ -55,7 +55,7 @@ abstract class ModuleTestCase extends TypeTestCase
      */
     protected function getExtensions(): array
     {
-        $cmsTypeResolver = new TypeResolver();
+        $cmsTypeResolver = new CmsTypeResolver();
 
         $router = $this->createMock(RouterInterface::class);
         $router->method('getRouteCollection')->willReturn(new RouteCollection());
