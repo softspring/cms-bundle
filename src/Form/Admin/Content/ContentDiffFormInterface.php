@@ -6,5 +6,4 @@ use Symfony\Component\Form\FormTypeInterface;
 
 interface ContentDiffFormInterface extends FormTypeInterface
 {
-
 }

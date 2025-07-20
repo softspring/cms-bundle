@@ -8,7 +8,6 @@ use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Request\FlashNotifier;
 use Softspring\CmsBundle\SfsCmsEvents;
-use Softspring\CmsBundle\Utils\ArrayDiff;
 use Softspring\Component\Events\ViewEvent;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -19,17 +18,16 @@ class DiffListener extends AbstractContentListener
     protected const ACTION_NAME = 'diff';
 
     public function __construct(
-        ContentManagerInterface        $contentManager,
+        ContentManagerInterface $contentManager,
         ContentVersionManagerInterface $contentVersionManager,
-        RouteManagerInterface          $routeManager,
-        CmsConfig                      $cmsConfig,
-        RouterInterface                $router,
-        FlashNotifier                  $flashNotifier,
-        AuthorizationCheckerInterface  $authorizationChecker,
-        protected string               $contentCacheType,
+        RouteManagerInterface $routeManager,
+        CmsConfig $cmsConfig,
+        RouterInterface $router,
+        FlashNotifier $flashNotifier,
+        AuthorizationCheckerInterface $authorizationChecker,
+        protected string $contentCacheType,
         protected FormFactoryInterface $formFactory,
-    )
-    {
+    ) {
         parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
     }
 

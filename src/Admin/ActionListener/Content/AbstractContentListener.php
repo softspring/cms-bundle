@@ -32,15 +32,14 @@ abstract class AbstractContentListener implements EventSubscriberInterface
     protected const ACTION_NAME = '_abstract_';
 
     public function __construct(
-        protected ContentManagerInterface        $contentManager,
+        protected ContentManagerInterface $contentManager,
         protected ContentVersionManagerInterface $contentVersionManager,
-        protected RouteManagerInterface          $routeManager,
-        protected CmsConfig                      $cmsConfig,
-        protected RouterInterface                $router,
-        protected FlashNotifier                  $flashNotifier,
-        protected AuthorizationCheckerInterface  $authorizationChecker,
-    )
-    {
+        protected RouteManagerInterface $routeManager,
+        protected CmsConfig $cmsConfig,
+        protected RouterInterface $router,
+        protected FlashNotifier $flashNotifier,
+        protected AuthorizationCheckerInterface $authorizationChecker,
+    ) {
     }
 
     public function onEventDispatchContentTypeEvent(object $event, string $eventName, EventDispatcherInterface $dispatcher): void
@@ -94,7 +93,7 @@ abstract class AbstractContentListener implements EventSubscriberInterface
     {
         $event->getData()['content_entity'] = $event->getRequest()->attributes->get('content');
 
-        /** @deprecated use content_entity */
+        /* @deprecated use content_entity */
         $event->getData()['entity'] = $event->getRequest()->attributes->get('content');
     }
 
