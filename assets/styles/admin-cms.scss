@@ -245,6 +245,9 @@ body {
             background-color: #5d5d5d70;
         }
 
+        > .cms-module-body {
+            overflow: hidden;
+        }
         > .cms-module-body > .cms-module-edit > .cms-module-form {
             display: block;
             position: fixed;

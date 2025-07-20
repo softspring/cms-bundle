@@ -35,6 +35,8 @@ class ContentVersionCompiler extends AbstractVersionCompiler
 
     /**
      * @throws CompileAllException
+     * @throws InvalidLayoutException
+     * @throws InvalidContentException
      */
     public function compileAll(ContentVersionInterface $contentVersion, bool $failOnException = true): void
     {
@@ -67,47 +69,64 @@ class ContentVersionCompiler extends AbstractVersionCompiler
     }
 
     /**
+     * @throws InvalidLayoutException
+     * @throws InvalidContentException
      * @throws CompileException
      */
-    public function compileRequest(ContentVersionInterface $contentVersion, Request $request, ?array $compiledModules = null, bool $failOnException = true): CompiledDataInterface
+    public function compileRequest(ContentVersionInterface $contentVersion, Request $request, ?array $compiledContainers = null, bool $failOnException = true): CompiledDataInterface
     {
         $compiledData = $this->compiledDataManager->createEntity();
         $compiledData->setKey($this->getCompileKeyFromRequest($contentVersion, $request));
 
-        try {
-            $this->canSaveCompiled($contentVersion) && $contentVersion->addCompiled($compiledData);
+        $this->canSaveCompiled($contentVersion) && $contentVersion->addCompiled($compiledData);
 
-            if (empty($compiledModules)) {
-                $compiledModules = $this->compileModulesRequest($contentVersion, $request, $failOnException);
-                $this->canSaveCompiledModules($contentVersion) && $compiledData->setDataPart('modules', $compiledModules);
+        $renderErrors = new RenderErrorList();
+
+        if (empty($compiledContainers)) {
+            try {
+                $compiledContainers = $this->compileContainersRequest($contentVersion, $request, $renderErrors, false);
+                $this->canSaveCompiledModules($contentVersion) && $compiledData->setDataPart('containers', $compiledContainers);
+
+                if ($renderErrors->hasErrors()) {
+                    $compiledData->setErrors(true);
+                    $compiledData->setDataPart('containers_errors', $renderErrors->getErrorsAsArray());
+                }
+            } catch (CompileException $exception) {
+                if ($failOnException) {
+                    throw new CompileException('Error compiling content version request', 0, $exception);
+                }
+
+                $this->canSaveCompiledModules($contentVersion) && $compiledData->setDataPart('containers', $compiledContainers);
+
+                $this->saveExceptionInCompiledData($compiledData, $exception);
+
+                return $compiledData;
             }
+        }
 
-            // create structure for errors
-            $renderErrors = new RenderErrorList();
-
+        try {
             // compile data. Take into account that this method can return content and fill errors in the RenderErrorList
-            $compiledCode = $this->contentVersionRender->render($contentVersion, $request, $renderErrors, $compiledModules);
+            $compiledCode = $this->contentVersionRender->render($contentVersion, $request, $renderErrors, $compiledContainers);
             $compiledData->setDataPart('content', $compiledCode);
 
             // generates an exception if there are errors
-            $renderErrors->buildExceptionOnErrors();
-        } catch (RenderException|RenderErrorException $exception) {
-            // if set to fail on exception, throw it
-            if ($failOnException) {
-                throw new CompileException('Error compiling content version request', 0, $exception);
-            }
+            $failOnException && $renderErrors->buildExceptionOnErrors();
 
+            if ($renderErrors->hasErrors()) {
+                $compiledData->setErrors(true);
+                $compiledData->setDataPart('errors', $renderErrors->getErrorsAsArray());
+            }
+        } catch (RenderException|RenderErrorException|CompileException $exception) {
             // if not content was set, set a default error content
             if ($this->canSaveCompiled($contentVersion) && empty($compiledData->getDataPart('content'))) {
                 $compiledData->setDataPart('content', '<!-- CONTENT_VERSION_COMPILE_ERROR -->');
             }
 
-            // flag errors
-            $compiledData->setErrors(true);
+            $this->saveExceptionInCompiledData($compiledData, $exception);
 
-            // store error list
-            if ($exception instanceof RenderErrorException) {
-                $compiledData->setDataPart('errors', $exception->getRenderErrorList()->getErrorsAsArray());
+            // if set to fail on exception, throw it
+            if ($failOnException) {
+                throw new CompileException('Error compiling content version request', 0, $exception);
             }
         }
 
@@ -117,12 +136,11 @@ class ContentVersionCompiler extends AbstractVersionCompiler
     /**
      * @throws CompileException
      */
-    public function compileModulesRequest(ContentVersionInterface $contentVersion, Request $request, bool $failOnException = true): array
+    public function compileContainersRequest(ContentVersionInterface $contentVersion, Request $request, RenderErrorList $renderErrors, bool $failOnException = true): array
     {
         try {
-            $renderErrors = new RenderErrorList();
-            $compiled = $this->contentVersionRender->renderModules($contentVersion, $request, $renderErrors);
-            $renderErrors->buildExceptionOnErrors();
+            $compiled = $this->contentVersionRender->renderContainers($contentVersion, $request, $renderErrors);
+            $failOnException && $renderErrors->buildExceptionOnErrors();
 
             return $compiled;
         } catch (Exception $exception) {

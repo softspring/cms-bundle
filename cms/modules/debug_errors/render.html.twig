@@ -1,0 +1,7 @@
+<div class="alert alert-info">
+    <h4 class="alert-heading">Error: {{ error_type }}</h4>
+</div>
+
+{% if error_type == 'render' %}
+    {{ ____fake_undefined_function_error____() }}
+{% endif %}

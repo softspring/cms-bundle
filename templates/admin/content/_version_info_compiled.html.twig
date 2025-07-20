@@ -76,28 +76,30 @@
                         <div class="accordion-body">
                             {% if compiled is not iterable %}
                                 {{ tools.drawEsiCalls(compiled.dataPart('content')) }}
-                                <pre class="overflow-auto" style="max-height: 600px"><code class="text-muted">{{ compiled.dataPart('content') }}</code>{#<code class="text-danger">{{ compiled.dataPart('errors')|default(false) }}</code>#}<code class="text-danger">{{ compiled.dataPart('errors')|json_encode(128) }}</code></pre>
+                                <pre class="overflow-auto" style="max-height: 600px">{%- if compiled.dataPart('errors') -%}
+                                <code class="text-danger">{{ compiled.dataPart('errors')|json_encode(128) }}</code>
+{%- endif -%}<code class="text-muted">{{ compiled.dataPart('content') }}</code></pre>
                             {% endif %}
                         </div>
                     </div>
                     {% set first = false %}
                 {% endfor %}
 
-                {% for compiled in version_entity.compiled|filter((compiled)=>compiled.dataPart('modules')|default(false)) %}
-                    {% set keyCleaned = ('modules'~compiled.key)|replace({'/': '', ' ': '', '.': ''}) %}
+                {% for compiled in version_entity.compiled|filter((compiled)=>compiled.dataPart('containers')|default(false)) %}
+                    {% set keyCleaned = ('containers'~compiled.key)|replace({'/': '', ' ': '', '.': ''}) %}
                     <h2 class="accordion-header" id="heading{{ keyCleaned }}">
                         <button class="accordion-button {{ first?'':'collapsed' }}" type="button"
                                 data-bs-toggle="collapse" data-bs-target="#collapse{{ keyCleaned }}"
                                 aria-expanded="{{ first?'true':'false' }}"
                                 aria-controls="collapse{{ keyCleaned }}">
-                            Pre-compiled modules {{ compiled.key }}
+                            Pre-compiled containers {{ compiled.key }}
                         </button>
                     </h2>
                     <div id="collapse{{ keyCleaned }}"
                          class="accordion-collapse collapse {{ first?'show':'' }}"
                          aria-labelledby="heading{{ keyCleaned }}" data-bs-parent="#accordionCompiled">
                         <div class="accordion-body">
-                            {% for container, content in compiled.dataPart('modules') %}
+                            {% for container, content in compiled.dataPart('containers') %}
                                 <strong>{{ container }}</strong>
                                 {{ tools.drawEsiCalls(content) }}
                                 <pre class="overflow-auto"

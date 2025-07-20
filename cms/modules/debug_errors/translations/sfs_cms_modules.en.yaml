@@ -1,0 +1,8 @@
+debug_errors:
+    label: "Test errors"
+    prototype_button: "Test errors"
+    prototype_button_icon: '<i class="bi bi-bug"></i>'
+    form:
+        _group:
+            filters: "Filters"
+        locale_filter.label: "Locales"

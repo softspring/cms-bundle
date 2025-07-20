@@ -1,9 +1,10 @@
 <?php
 
-namespace Softspring\CmsBundle\Render;
+namespace Softspring\CmsBundle\Render\Module;
 
 use Exception;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\DisabledModuleException;
 use Softspring\CmsBundle\Config\Exception\InvalidModuleException;
@@ -22,11 +23,12 @@ class ModuleRenderer
     public const DISABLED_HIDDEN_MODULE = '<!-- DISABLED_HIDDEN_MODULE -->';
 
     public function __construct(
-        protected CmsConfig $cmsConfig,
-        protected RequestStack $requestStack,
-        protected Environment $twig,
+        protected CmsConfig        $cmsConfig,
+        protected RequestStack     $requestStack,
+        protected Environment      $twig,
         protected ?LoggerInterface $cmsLogger,
-    ) {
+    )
+    {
     }
 
     /**
@@ -36,14 +38,16 @@ class ModuleRenderer
     {
         try {
             if ($this->skipModuleRenderBySiteFilter($moduleData)) {
-                return self::SITE_HIDDEN_MODULE."\n";
+                $this->cmsLogger && $this->cmsLogger->debug(sprintf('Skipping %s module render by site', $moduleData['_module']));
+                return self::SITE_HIDDEN_MODULE . "\n";
             }
         } catch (InvalidSiteException $e) {
             throw new ModuleRenderException($moduleData, $e);
         }
 
         if ($this->skipModuleRenderByLocaleFilter($moduleData)) {
-            return self::LOCALE_HIDDEN_MODULE."\n";
+            $this->cmsLogger && $this->cmsLogger->debug(sprintf('Skipping %s module render by locale', $moduleData['_module']));
+            return self::LOCALE_HIDDEN_MODULE . "\n";
         }
 
         $this->cmsLogger && $this->cmsLogger->debug(sprintf('Rendering %s module', $moduleData['_module']));
@@ -55,7 +59,7 @@ class ModuleRenderer
         } catch (DisabledModuleException) {
             $this->cmsLogger && $this->cmsLogger->warning(sprintf('Module %s is disabled, but it is rendered.', $moduleData['_module']));
 
-            return self::DISABLED_HIDDEN_MODULE."\n";
+            return self::DISABLED_HIDDEN_MODULE . "\n";
         }
 
         $moduleData = DataMigrator::migrate($moduleConfig['revision_migration_scripts'], $moduleData, $moduleConfig['revision']);
@@ -103,6 +107,7 @@ class ModuleRenderer
 
     /**
      * @throws ModuleRenderException
+     * @throws RuntimeException
      */
     protected function renderContainerModule(array $module, array $moduleConfig, array &$profilerDebugCollectorData, array $twigAdditionalContext = [], ?RenderErrorList $renderErrorList = null): string
     {
@@ -137,12 +142,21 @@ class ModuleRenderer
                 'moduleData' => $module,
             ]);
 
-            return '<div class="alert alert-danger" role="alert"><!-- MODULE_RENDER_ERROR -->We\'re sorry, an error has been produced rendering this content, please review content configuration and try again. If the problem persist talk to developers.</div>';
+            try {
+                return $this->twig->render('@SfsCms/errors/module_render_error.html.twig', [
+                    'isContainer' => true,
+                    'moduleConfig' => $moduleConfig,
+                    'moduleData' => $module,
+                ]);
+            } catch (Exception $e) {
+                throw new RuntimeException('Fatal error rendering module error template', 0, $e);
+            }
         }
     }
 
     /**
      * @throws ModuleRenderException
+     * @throws RuntimeException
      */
     protected function renderNoContainerModule(array $moduleData, array $moduleConfig, array &$profilerDebugCollectorData, array $twigAdditionalContext = [], ?RenderErrorList $renderErrorList = null): string
     {
@@ -169,7 +183,16 @@ class ModuleRenderer
                 'twigAdditionalContext' => $twigAdditionalContext,
             ]);
 
-            return '<div class="alert alert-danger" role="alert"><!-- MODULE_RENDER_ERROR -->We\'re sorry, an error has been produced rendering this content, please review content configuration and try again. If the problem persist talk to developers.</div>';
+            try {
+                return $this->twig->render('@SfsCms/errors/module_render_error.html.twig', [
+                    'isContainer' => false,
+                    'moduleConfig' => $moduleConfig,
+                    'moduleData' => $moduleData,
+                    'twigAdditionalContext' => $twigAdditionalContext,
+                ]);
+            } catch (Exception $e) {
+                throw new RuntimeException('Fatal error rendering module error template', 0, $e);
+            }
         }
     }
 
