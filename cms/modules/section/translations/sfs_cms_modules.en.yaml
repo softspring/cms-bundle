@@ -1,0 +1,27 @@
+section:
+    label: "Section"
+    prototype_button: "Section"
+    prototype_button_icon: '<i class="bi bi-boxes"></i>'
+    form:
+        _group:
+            filters: "Filters"
+            others: "Others"
+            attributes: "Attributes"
+            section: "Section"
+        locale_filter.label: "Locales"
+        site_filter.label: "Sites"
+        id.label: "Id"
+        class.label: "Classes"
+        section.label: "Section"
+        mode:
+            label: "Mode"
+            choices:
+                embedded: "Embedded"
+                esi: "ESI"
+                ajax: "AJAX"
+    messages:
+        draft_embedded_info_raw: "This section is in draft mode. This means that the section is not published and its content will be displayed empty.<br/>Once published, the section content will be shown when this content is recompiled."
+        published_embedded_info_raw: "The currently published content of the section will not change until this content is recompiled."
+        esi_ajax_draft_info_raw: "This section is in draft mode. This means that the section is not published and its content will be displayed empty until it is published."
+        esi_ajax_ttl_raw: "The section content will be generated on-the-fly when this content is requested, and cached for the specified time-to-live (TTL)."
+        esi_ajax_no_ttl_raw: "The section content will be generated on-the-fly every time this content is requested."

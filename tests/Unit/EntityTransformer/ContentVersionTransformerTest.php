@@ -18,9 +18,13 @@ class ContentVersionTransformerTest extends TestCase
 {
     protected CmsConfig|MockObject $cmsConfig;
     protected EntityManager|MockObject $em;
+    /** @var ClassMetadata<Route>|MockObject */
     protected ClassMetadata|MockObject $routeClassMetadata;
+    /** @var ClassMetadata<Media>|MockObject */
     protected ClassMetadata|MockObject $mediaClassMetadata;
+    /** @var EntityRepository<Route>|MockObject */
     protected EntityRepository|MockObject $routeRepository;
+    /** @var EntityRepository<Media>|MockObject */
     protected EntityRepository|MockObject $mediaRepository;
 
     protected function setUp(): void

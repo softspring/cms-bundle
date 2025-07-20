@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                      https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <mapped-superclass name="Softspring\CmsBundle\Model\Section" table="cms_section">
+        <field name="name" column="name" type="string" nullable="false" unique="true"/>
+        <field name="extraData" column="extra_data" type="json" nullable="true"/>
+
+        <field name="defaultLocale" column="default_locale" type="string" nullable="false"/>
+        <field name="locales" column="locales" type="json" nullable="true"/>
+
+        <field name="lastVersionNumber" column="last_version_number" type="integer" nullable="true">
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+
+        <field name="lastModified" column="last_modified" type="integer" nullable="true">
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+    </mapped-superclass>
+
+</doctrine-mapping>

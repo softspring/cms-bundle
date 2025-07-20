@@ -1,0 +1,45 @@
+{{ sfs_cms_admin_module_accordion_block_start(form, accordion, 'attributes') }}
+<div class="col-12">
+    {{ form_row(form.id) }}
+</div>
+<div class="col-12">
+    {{ form_row(form.class) }}
+</div>
+{{ sfs_cms_admin_module_accordion_block_end() }}
+
+{{ sfs_cms_admin_module_accordion_block_start(form, accordion, 'section', true) }}
+<div class="col-12" data-section-message-container>
+    {{ form_row(form.section, {'attr': attr | merge({'data-section-message-select': ''})}) }}
+    {{ form_row(form.mode, {'attr': attr | merge({'data-section-mode-message-select': ''})}) }}
+
+    <div class="alert alert-danger mt-3 d-none" role="alert" data-section-message-when data-section-when-section-draft
+         data-section-when-mode-embedded>
+        <i class="bi bi-exclamation-diamond"></i>
+        {{ 'section.messages.draft_embedded_info_raw'|trans({}, 'sfs_cms_modules')|raw }}
+    </div>
+
+    <div class="alert alert-warning mt-3 d-none" role="alert" data-section-message-when
+         data-section-when-section-published data-section-when-mode-embedded>
+        <i class="bi bi-exclamation-diamond"></i>
+        {{ 'section.messages.published_embedded_info_raw'|trans({}, 'sfs_cms_modules')|raw }}
+    </div>
+
+    <div class="alert alert-warning mt-3 d-none" role="alert" data-section-message-when data-section-when-section-draft
+         data-section-when-mode-esi-ajax>
+        <i class="bi bi-exclamation-diamond"></i>
+        {{ 'section.messages.esi_ajax_draft_info_raw'|trans({}, 'sfs_cms_modules')|raw }}
+    </div>
+
+    <div class="alert alert-info mt-3 d-none" role="alert" data-section-message-when
+         data-section-when-section-published data-section-when-section-ttl data-section-when-mode-esi-ajax>
+        <i class="bi bi-exclamation-diamond"></i>
+        {{ 'section.messages.esi_ajax_ttl_raw'|trans({}, 'sfs_cms_modules')|raw }}
+    </div>
+
+    <div class="alert alert-info mt-3 d-none" role="alert" data-section-message-when
+         data-section-when-section-published data-section-when-section-no-ttl data-section-when-mode-esi-ajax>
+        <i class="bi bi-exclamation-diamond"></i>
+        {{ 'section.messages.esi_ajax_no_ttl_raw'|trans({}, 'sfs_cms_modules')|raw }}
+    </div>
+</div>
+{{ sfs_cms_admin_module_accordion_block_end() }}

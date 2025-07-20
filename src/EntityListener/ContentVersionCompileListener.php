@@ -11,8 +11,8 @@ class ContentVersionCompileListener
 {
     public function __construct(
         protected ContentVersionCompiler $contentVersionCompiler,
-        protected bool $saveCompiled,
-        protected bool $autoCompileOnSave,
+        protected bool $contentSaveCompiled,
+        protected bool $contentAutoCompileOnSave,
     ) {
     }
 
@@ -21,7 +21,7 @@ class ContentVersionCompileListener
      */
     public function prePersist(ContentVersionInterface $contentVersion, PrePersistEventArgs $event): void
     {
-        if (!$this->autoCompileOnSave || !$this->saveCompiled) {
+        if (!$this->contentAutoCompileOnSave || !$this->contentSaveCompiled) {
             return;
         }
 

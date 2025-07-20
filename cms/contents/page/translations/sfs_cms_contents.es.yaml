@@ -61,7 +61,7 @@ admin_page:
             cancel.button: "Cancelar"
         form:
             file.label: "Fichero a importar"
-        failure_flash: "Se ha producido un error al importar la página<br/><small>%exception%</small>"
+        failed_flash: "Se ha producido un error al importar la página<br/><small>%exception%</small>"
         duplicated_flash: "Se ha producido un error al importar la página, la página ya existe en la base de datos, intenta importarla como versión<br/><small>%exception%</small>"
         success_flash: "La página se ha importado"
 
@@ -150,6 +150,7 @@ admin_page:
             unpublish.link: "Despublicar"
             import_version.link: "Importar versión"
             cleanup_versions.link: "Limpiar versiones"
+            diff.link: "Ver diferencias"
             keep.link: "Mantener versión, pinchar para desmarcar"
             nokeep.link: "No mantener esta versión, pinchar para mantener"
             info.link: "Info"
@@ -357,6 +358,8 @@ admin_page:
             title: "Rutas vinculadas"
         linked_medias:
             title: "Medios vinculados"
+        linked_sections:
+            title: "Secciones vinculadas"
         history:
             title: "Histórico"
             action:
@@ -390,3 +393,13 @@ admin_page:
             delete.button: "Eliminar definitivamente"
             cancel.button: "Cancelar"
         success_flash: "La versión se ha eliminado"
+    
+    diff:
+        title: "Diferencias entre versiones"
+        breadcrumb: "Diferencias entre versiones"
+        form:
+            version1.label: "Version 1"
+            version2.label: "Version 2"
+        actions:
+            submit.button: "Comaprar"
+            cancel.button: "Cancelar"

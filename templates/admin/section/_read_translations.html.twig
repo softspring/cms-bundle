@@ -1,0 +1,16 @@
+{% trans_default_domain 'sfs_cms_admin' %}
+
+{% embed '@SfsCms/admin/_embeds/_card.html.twig' with {'title': ('admin_sections.read.translations.title')|trans} %}
+    {% trans_default_domain 'sfs_cms_admin' %}
+
+    {% block content %}
+        <p class="d-flex mb-2">
+            <span class="pe-2">Default language</span>
+            <strong>{{ section.defaultLocale }}</strong>
+        </p>
+        <p class="d-flex mb-2">
+            <span class="pe-2">Languages</span>
+            <strong>{{ section.locales|join(', ') }}</strong>
+        </p>
+    {% endblock %}
+{% endembed %}

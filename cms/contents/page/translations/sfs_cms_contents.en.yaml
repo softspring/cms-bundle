@@ -61,7 +61,7 @@ admin_page:
             cancel.button: "Cancel"
         form:
             file.label: "Import content file"
-        failure_flash: "An error has been produced during the page import<br/><small>%exception%</small>"
+        failed_flash: "An error has been produced during the page import<br/><small>%exception%</small>"
         duplicated_flash: "An error has been produced during the page import, the page already exists in the database, try to import it as a version<br/><small>%exception%</small>"
         success_flash: "Page has been imported"
 
@@ -150,6 +150,7 @@ admin_page:
             unpublish.link: "Unpublish"
             import_version.link: "Import version"
             cleanup_versions.link: "Cleanup versions"
+            diff.link: "Diff versions"
             keep.link: "Keep version, click to no keep"
             nokeep.link: "Do not keep version, click to keep"
             info.link: "Info"
@@ -357,6 +358,8 @@ admin_page:
             title: "Linked routes"
         linked_medias:
             title: "Linked medias"
+        linked_sections:
+            title: "Linked sections"
         history:
             title: "History"
             action:
@@ -390,3 +393,13 @@ admin_page:
             delete.button: "Delete definitely"
             cancel.button: "Cancel"
         success_flash: "Version has been deleted"
+    
+    diff:
+        title: "Compare versions"
+        breadcrumb: "Compare versions"
+        form:
+            version1.label: "Version 1"
+            version2.label: "Version 2"
+        actions:
+            submit.button: "Compare"
+            cancel.button: "Cancel"

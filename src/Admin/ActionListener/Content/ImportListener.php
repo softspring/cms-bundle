@@ -18,7 +18,6 @@ use Softspring\Component\CrudlController\Event\ExceptionEvent;
 use Softspring\Component\CrudlController\Event\FailureEvent;
 use Softspring\Component\CrudlController\Event\FormPrepareEvent;
 use Softspring\Component\CrudlController\Event\SuccessEvent;
-use Softspring\Component\CrudlController\Event\ViewEvent;
 use Softspring\Component\PolymorphicFormType\Form\Exception\MissingFormTypeException;
 use stdClass;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -49,7 +48,7 @@ class ImportListener extends AbstractContentListener
             SfsCmsEvents::ADMIN_CONTENTS_IMPORT_INITIALIZE => [
                 ['onInitializeGetConfig', 20],
                 ['onEventDispatchContentTypeEvent', 10],
-                ['onInitializeIsGranted', 0],
+                ['onInitializeUpdateHelperConfig', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENTS_IMPORT_ENTITY => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -82,7 +81,9 @@ class ImportListener extends AbstractContentListener
             ],
             SfsCmsEvents::ADMIN_CONTENTS_IMPORT_VIEW => [
                 ['onEventDispatchContentTypeEvent', 10],
-                ['onView', 0],
+                ['onViewAddConfig', 0],
+                ['onViewSetTemplate', 0],
+                ['onViewAddEntities', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENTS_IMPORT_EXCEPTION => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -128,15 +129,6 @@ class ImportListener extends AbstractContentListener
      */
     public function onSuccess(SuccessEvent $event): void
     {
-        //        $contentConfig = $event->getRequest()->attributes->get('_content_config');
-        //
-        //        if (empty($contentConfig['admin']['import']['success_redirect_to'])) {
-        //            $contentConfig['admin']['import']['success_redirect_to'] = "sfs_cms_admin_content_{$contentConfig['_id']}_content";
-        //        }
-        //
-        //        $redirectUrl = $this->router->generate($contentConfig['admin']['import']['success_redirect_to'], ['content' => $event->getEntity()]);
-        //
-        //        $event->setResponse(new RedirectResponse($redirectUrl));
         $contentConfig = $event->getRequest()->attributes->get('_content_config');
 
         $this->flashNotifier->addTrans('success', "admin_{$contentConfig['_id']}.import.success_flash", [], 'sfs_cms_contents');
@@ -158,39 +150,12 @@ class ImportListener extends AbstractContentListener
                 $exception .= '<br/><br/>'.get_class($event->getException());
                 $exception .= '<br/><br/>'.nl2br($event->getException()->getTraceAsString());
             }
-            $this->flashNotifier->addTrans('error', "admin_{$contentConfig['_id']}.import.failure_flash", ['%exception%' => $exception], 'sfs_cms_contents');
+            $this->flashNotifier->addTrans('error', "admin_{$contentConfig['_id']}.import.failed_flash", ['%exception%' => $exception], 'sfs_cms_contents');
         }
 
         $url = $this->router->generate("sfs_cms_admin_content_{$contentConfig['_id']}_list");
 
         $event->setResponse(new RedirectResponse($url));
-    }
-
-    public function onView(ViewEvent $event): void
-    {
-        parent::onView($event);
-
-        //        $request = $event->getRequest();
-        //        /** @var ContentInterface $content */
-        //        $content = $request->attributes->get('content');
-        //        /** @var ContentVersionInterface $version */
-        //        $version = $request->attributes->get('version');
-        //
-        //        // preview mode
-        //        $request->attributes->set('_cms_preview', true);
-        //
-        //        // add enabled locales
-        //        $sitesLocales = $content->getSites()->map(fn(SiteInterface $site) => $site->getConfig()['locales'])->toArray();
-        //        $enabledLocales = call_user_func_array('array_merge', $sitesLocales);
-        //        $enabledLocales = array_unique($enabledLocales);
-        //        $event->getData()['enabledLocales'] = $enabledLocales;
-        //
-        //        // add max_input_vars to prevent errors
-        //        // @see https://www.php.net/manual/en/info.configuration.php#ini.max-input-vars
-        //        $event->getData()['maxInputVars'] = ini_get('max_input_vars');
-        //
-        //        // add layout config
-        //        $event->getData()['layout_config'] = $this->cmsConfig->getLayout($version->getLayout());
     }
 
     /**

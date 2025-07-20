@@ -22,9 +22,9 @@ interface CompiledDataInterface
 
     public function setDataPart(string $part, mixed $value): void;
 
-    public function getContentVersion(): ?ContentVersionInterface;
+    public function getVersion(): ?VersionInterface;
 
-    public function setContentVersion(?ContentVersionInterface $contentVersion): void;
+    public function setVersion(?VersionInterface $version): void;
 
     public function hasErrors(): bool;
 

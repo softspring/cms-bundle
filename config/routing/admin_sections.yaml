@@ -1,0 +1,134 @@
+sfs_cms_admin_sections_list:
+    controller: sfs_cms.admin.section.controller::list
+    path: /
+
+sfs_cms_admin_sections_create:
+    controller: sfs_cms.admin.section.controller::create
+    path: /create
+
+#sfs_cms_admin_sections_import:
+#    controller: sfs_cms.admin.section.controller::create
+#    path: /import
+#    defaults:
+#        configKey: 'import'
+
+sfs_cms_admin_sections_details:
+    controller: sfs_cms.admin.section.controller::read
+    path: /{section}
+
+sfs_cms_admin_sections_update:
+    controller: sfs_cms.admin.section.controller::update
+    path: /{section}/update
+
+#sfs_cms_admin_sections_duplicate:
+#    controller: sfs_cms.admin.section.controller::update
+#    path: /{section}/duplicate
+#    defaults:
+#        configKey: 'duplicate'
+
+sfs_cms_admin_sections_delete:
+    controller: sfs_cms.admin.section.controller::delete
+    path: /{section}/delete
+
+sfs_cms_admin_sections_unpublish:
+    controller: sfs_cms.admin.section.controller::apply
+    path: /{section}/unpublish
+    defaults:
+        configKey: 'unpublish'
+
+sfs_cms_admin_sections_preview:
+    controller: sfs_cms.admin.section.controller::read
+    path: /{section}/preview
+    defaults:
+        configKey: 'preview'
+
+sfs_cms_admin_sections_content:
+    controller: sfs_cms.admin.section_version.controller::create
+    path: /{section}/content
+    defaults:
+        configKey: 'version_create'
+
+sfs_cms_admin_sections_content_from_version:
+    controller: sfs_cms.admin.section_version.controller::create
+    path: /{section}/{prevVersion}/content
+    defaults:
+        configKey: 'version_create'
+
+sfs_cms_admin_sections_versions:
+    controller: sfs_cms.admin.section_version.controller::list
+    path: /{section}/versions
+    defaults:
+        configKey: 'version_list'
+
+sfs_cms_admin_sections_keep_version:
+    controller: sfs_cms.admin.section_version.controller::apply
+    path: /{section}/{version}/keep-version
+    defaults:
+        configKey: 'version_lock'
+        lock: true
+
+sfs_cms_admin_sections_unkeep_version:
+    controller: sfs_cms.admin.section_version.controller::apply
+    path: /{section}/{version}/unkeep-version
+    defaults:
+        configKey: 'version_lock'
+        lock: false
+
+sfs_cms_admin_sections_recompile_version:
+    controller: sfs_cms.admin.section_version.controller::apply
+    path: /{section}/{version}/recompile
+    defaults:
+        configKey: 'version_recompile'
+
+sfs_cms_admin_sections_clear_compiled_version:
+    controller: sfs_cms.admin.section_version.controller::apply
+    path: /{section}/{version}/clear-compiled
+    defaults:
+        configKey: 'version_clear_compiled'
+
+sfs_cms_admin_sections_version_preview:
+    controller: sfs_cms.admin.section_version.controller::read
+    path: /{section}/{version}/preview
+    defaults:
+        configKey: 'version_preview'
+
+sfs_cms_admin_sections_publish_version:
+    controller: sfs_cms.admin.section_version.controller::apply
+    path: /{section}/{version}/publish
+    defaults:
+        configKey: 'version_publish'
+
+#sfs_cms_admin_sections_export_version:
+#    controller: sfs_cms.admin.section_version.controller::apply
+#    path: /{section}/{version}/export
+#    defaults:
+#        configKey: 'version_export'
+
+sfs_cms_admin_sections_version_info:
+    controller: sfs_cms.admin.section_version.controller::update
+    path: /{section}/{version}/info
+    defaults:
+        configKey: 'version_info'
+
+#sfs_cms_admin_sections_import_version:
+#    controller: sfs_cms.admin.section_version.controller::create
+#    path: /{section}/import
+#    defaults:
+#        configKey: 'version_import'
+
+sfs_cms_admin_sections_cleanup_versions:
+    controller: sfs_cms.admin.section.controller::apply
+    path: /{section}/versions-cleanup
+    defaults:
+        configKey: 'version_cleanup'
+
+sfs_cms_admin_sections_delete_version:
+    controller: sfs_cms.admin.section_version.controller::delete
+    path: /{section}/{version}/delete
+    defaults:
+        configKey: 'version_delete'
+
+_plugin_routes:
+    resource: '.'
+    type: sfs_cms_plugin_admin_section
+    name_prefix: sfs_cms_admin_sections_

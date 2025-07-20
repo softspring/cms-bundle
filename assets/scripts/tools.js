@@ -1,3 +1,5 @@
+import {Alert} from 'bootstrap';
+
 HTMLElement.prototype.showElement = function () {
     this.classList.remove("d-none", "hidden");
     return this;
@@ -56,8 +58,59 @@ function callForeachSelector(targetMatcher, callback) {
     });
 }
 
+/**
+ * Muestra un alert de Bootstrap que se auto-cierra.
+ * @param {string} message El mensaje a mostrar en el alert.
+ * @param {'primary'|'secondary'|'success'|'danger'|'warning'|'info'|'light'|'dark'} type El tipo de alert de Bootstrap.
+ * @param {number} durationMs La duración en milisegundos antes de que el alert empiece a desvanecerse (por defecto 1000ms).
+ * @param alertContainerSelector
+ */
+function showAlert(message, type = 'info', durationMs = 1000, alertContainerSelector = 'body') {
+    const container = document.querySelector(alertContainerSelector);
+
+    let alertContainer = container.querySelector('#showAlertContainer');
+    if (!alertContainer) {
+        container.appendChild(alertContainer = document.createElement('div')).setAttribute('id', 'showAlertContainer');
+        alertContainer.className = 'fixed-top w-50 float-right m-5';
+    }
+
+    // Crea el elemento div para el alert
+    const alertDiv = document.createElement('div');
+    // Añade las clases de Bootstrap para el alert y la animación
+    alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+    alertDiv.setAttribute('role', 'alert');
+
+    // Añade el mensaje al alert
+    alertDiv.textContent = message;
+
+    // Opcional: añade un botón de cierre manual, aunque se auto-cerrará
+    const closeButton = document.createElement('button');
+    closeButton.type = 'button';
+    closeButton.className = 'btn-close';
+    closeButton.dataset.bsDismiss = 'alert'; // Atributo de Bootstrap para cerrar
+    closeButton.setAttribute('aria-label', 'Close');
+    alertDiv.appendChild(closeButton);
+
+    // Añade el alert al contenedor
+    alertContainer.appendChild(alertDiv);
+
+    // Auto-dismiss: Inicializa el componente Alert de Bootstrap y luego lo cierra.
+    // Necesitamos una pequeña demora antes de cerrarlo para que 'show' se aplique y la animación 'fade' funcione.
+    setTimeout(() => {
+        const bsAlert = new Alert(alertDiv); // Inicializa el objeto Alert de Bootstrap
+        bsAlert.close(); // Llama al método .close()
+    }, durationMs); // Espera la duración especificada antes de cerrar
+
+    // Opcional: Elimina el elemento del DOM después de que la animación de cierre haya terminado
+    // (Bootstrap tarda unos 500ms en la animación 'fade')
+    alertDiv.addEventListener('closed.bs.alert', function () {
+        alertDiv.remove();
+    });
+}
+
 export {
     registerFeature,
     addTargetEventListener,
     callForeachSelector,
+    showAlert
 }

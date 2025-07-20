@@ -30,7 +30,7 @@ class PublishListener extends AbstractContentVersionListener
         FlashNotifier $flashNotifier,
         AuthorizationCheckerInterface $authorizationChecker,
         protected ContentVersionCompiler $contentVersionCompiler,
-        protected bool $autoCompileOnPublish,
+        protected bool $contentAutoCompileOnPublish,
     ) {
         parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
     }
@@ -42,7 +42,7 @@ class PublishListener extends AbstractContentVersionListener
                 ['onInitializeGetConfig', 20],
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onEventLoadContentEntity', 9],
-                ['onInitializeIsGranted', 0],
+                ['onInitializeUpdateHelperConfig', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_PUBLISH_LOAD_ENTITY => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -81,9 +81,11 @@ class PublishListener extends AbstractContentVersionListener
         /** @var ContentInterface $content */
         $content = $event->getRequest()->attributes->get('content');
 
-        if ($this->autoCompileOnPublish) {
+        if ($this->contentAutoCompileOnPublish) {
             $this->contentVersionCompiler->compileAll($version, true);
         }
+
+        $version->setKeep(true); // Keep the version after publishing
 
         $content->setPublishedVersion($version);
         $this->contentManager->saveEntity($content);

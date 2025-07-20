@@ -18,6 +18,11 @@
     data-block-preview-target="{{ formField.vars.attr['data-block-preview-input'] }}"
 {%- endmacro -%}
 
+{%- macro link_section (formField) -%}
+    {{ _self._update_link_value(formField, 'data-section-preview-input') }}
+    data-section-preview-target="{{ formField.vars.attr['data-section-preview-input'] }}"
+{%- endmacro -%}
+
 {%- macro link_class (formFields, defaultClasses = []) -%}
     {# convert to array of form fields #}
     {% set formFields = formFields.vars is not defined ? formFields : [formFields] %}

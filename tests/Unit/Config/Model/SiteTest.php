@@ -9,7 +9,7 @@ use Symfony\Component\Config\Definition\Processor;
 
 class SiteTest extends TestCase
 {
-    public function testEmptyDefaultConfiguration()
+    public function testEmptyDefaultConfiguration(): void
     {
         $this->expectException(InvalidConfigurationException::class);
         $this->expectExceptionMessage('Invalid configuration for path "site": Invalid configuration, either hosts either paths must be set for a valid site');
@@ -18,7 +18,7 @@ class SiteTest extends TestCase
         $config = $processor->processConfiguration($configuration, ['site' => []]);
     }
 
-    public function testBasic()
+    public function testBasic(): void
     {
         $processor = new Processor();
         $configuration = new Site('site_name');

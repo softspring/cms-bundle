@@ -18,11 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractModuleType extends AbstractNodeType
 {
-    protected CmsHelper $cmsHelper;
-
-    public function __construct(CmsHelper $cmsHelper)
+    public function __construct(protected CmsHelper $cmsHelper)
     {
-        $this->cmsHelper = $cmsHelper;
     }
 
     public function configureChildOptions(OptionsResolver $resolver): void
@@ -52,10 +49,9 @@ abstract class AbstractModuleType extends AbstractNodeType
         $resolver->setAllowedTypes('module_migrations', ['array']);
 
         $resolver->setRequired('content_type');
-        $resolver->setAllowedTypes('content_type', ['string']);
+        $resolver->setAllowedTypes('content_type', ['string', 'null']);
 
-        $resolver->setRequired('content');
-        $resolver->setAllowedTypes('content', [ContentInterface::class]);
+        $resolver->setAllowedTypes('content', [ContentInterface::class, 'null']);
 
         $resolver->setDefault('form_template', null);
         $resolver->setAllowedTypes('form_template', ['null', 'string']);
@@ -69,11 +65,12 @@ abstract class AbstractModuleType extends AbstractNodeType
         $resolver->setAllowedTypes('available_locales', ['null', 'array']);
 
         $resolver->setNormalizer('available_sites', function (Options $options, $value) {
-            return $this->cmsHelper->site()->normalizeFormAvailableSites($value, $options['content']);
+            return $options['content'] ? $this->cmsHelper->site()->normalizeFormAvailableSites($value, $options['content']) : [];
         });
 
         $resolver->setNormalizer('available_locales', function (Options $options, $value) {
-            return $this->cmsHelper->locale()->normalizeFormAvailableLocalesForContent($value, $options['content']);
+            return $options['content'] ? $this->cmsHelper->locale()->normalizeFormAvailableLocalesForContent($value, $options['content']) :
+                $this->cmsHelper->locale()->getEnabledLocales();
         });
     }
 
@@ -118,31 +115,43 @@ abstract class AbstractModuleType extends AbstractNodeType
             });
         }
 
-        if ($options['site_filter'] && $options['content']->getSites()->count() > 1) {
-            $builder->add('site_filter', SiteChoiceType::class, [
-                'multiple' => true,
-                'expanded' => true,
-                'block_prefix' => 'module_site_filter',
-                'choice_translation_domain' => false,
-                'content' => $options['content'],
-            ]);
+        if ($options['site_filter']) {
+            if ($options['content'] instanceof ContentInterface) {
+                $sites = $options['content']->getSites()->toArray();
+            } else {
+                $sites = $this->cmsHelper->config()->getSites();
+            }
 
-            $builder->addEventListener(FormEvents::PRE_SET_DATA, function (PreSetDataEvent $event) {
-                $data = $event->getData();
-                $allAvailableSites = $event->getForm()->getConfig()->getOption('content')->getSites()->toArray();
+            if (count($sites) > 1) {
+                $builder->add('site_filter', SiteChoiceType::class, [
+                    'multiple' => true,
+                    'expanded' => true,
+                    'block_prefix' => 'module_site_filter',
+                    'choice_translation_domain' => false,
+                    'content' => $options['content'],
+                ]);
 
-                if (null === $data) {
-                    // set all locales on prototyping (data = null)
-                    $data = ['site_filter' => $allAvailableSites];
-                }
+                $builder->addEventListener(FormEvents::PRE_SET_DATA, function (PreSetDataEvent $event) {
+                    $data = $event->getData();
+                    if ($event->getForm()->getConfig()->getOption('content')) {
+                        $allAvailableSites = $event->getForm()->getConfig()->getOption('content')->getSites()->toArray();
+                    } else {
+                        $allAvailableSites = $this->cmsHelper->config()->getSites();
+                    }
 
-                if (!isset($data['site_filter'])) {
-                    // set all locales on no stored site_filter
-                    $data['site_filter'] = $allAvailableSites;
-                }
+                    if (null === $data) {
+                        // set all locales on prototyping (data = null)
+                        $data = ['site_filter' => $allAvailableSites];
+                    }
 
-                $event->setData($data);
-            });
+                    if (!isset($data['site_filter'])) {
+                        // set all locales on no stored site_filter
+                        $data['site_filter'] = $allAvailableSites;
+                    }
+
+                    $event->setData($data);
+                });
+            }
         }
 
         $builder->add('_revision', HiddenType::class, [

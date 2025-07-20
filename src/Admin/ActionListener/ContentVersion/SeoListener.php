@@ -46,7 +46,7 @@ class SeoListener extends AbstractContentVersionListener
                 ['onInitializeGetConfig', 20],
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onEventLoadContentEntity', 9],
-                ['onInitializeIsGranted', 0],
+                ['onInitializeUpdateHelperConfig', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_SEO_ENTITY => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -95,7 +95,7 @@ class SeoListener extends AbstractContentVersionListener
         $prevVersion = $request->query->get('version');
 
         if ($prevVersion) {
-            $prevVersion = $content->getVersions()->filter(fn (ContentVersionInterface $version) => $version->getId() == $prevVersion)->first();
+            $prevVersion = $this->contentVersionManager->getRepository()->findOneBy(['id' => $prevVersion, 'content' => $content]);
         }
 
         $request->attributes->set('prevVersion', $prevVersion ?: $content->getLastVersion());

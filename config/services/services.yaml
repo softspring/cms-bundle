@@ -20,14 +20,19 @@ services:
             $cmsLogger: '@?monolog.logger.cms'
             $debug: '%kernel.debug%'
             $defaultRestrictPatterns: '%sfs_cms.form_type.symfony_route.default_restrict_patterns%'
-            $saveCompiled: '%sfs_cms.content.save_compiled%'
-            $autoCompileOnSave: '%sfs_cms.content.autocompile_on_save%'
+            $contentSaveCompiled: '%sfs_cms.content.save_compiled%'
+            $contentAutoCompileOnSave: '%sfs_cms.content.autocompile_on_save%'
+            $sectionSaveCompiled: '%sfs_cms.section.save_compiled%'
+            $sectionAutoCompileOnSave: '%sfs_cms.section.autocompile_on_save%'
             $prefixCompiled: '%sfs_cms.content.prefix_compiled%'
             $entityDuplicators: !tagged_iterator { tag: sfs_cms.content_entity_duplicator }
             $contentCacheType: '%sfs_cms.content.cache.type%'
             $menuCacheType: '%sfs_cms.menu.cache.type%'
             $blockCacheType: '%sfs_cms.block.cache.type%'
             $mediaStoragePath: '%sfs_media.storage.filesystem.path%'
+            $compiledDataExpirationTtl: '%sfs_cms.compiled.expiration_ttl%'
+            $contentRecompileEnabled: '%sfs_cms.content.recompile_enabled%'
+            $sectionRecompileEnabled: '%sfs_cms.section.recompile_enabled%'
 
     Softspring\CmsBundle\Config\CmsConfig:
         arguments:
@@ -44,31 +49,31 @@ services:
 
     Softspring\CmsBundle\Controller\:
         resource: '../../src/Controller/*'
-        tags: ['controller.service_arguments']
+        tags: [ 'controller.service_arguments' ]
 
     Softspring\CmsBundle\DataFixtures\:
         resource: '../../src/DataFixtures/*'
-        tags: ['doctrine.fixtures.loader']
+        tags: [ 'doctrine.fixtures.loader' ]
 
     Softspring\CmsBundle\DataFixtures\Purger\CmsPurgerFactory:
-        tags: 
+        tags:
             - { name: 'doctrine.fixtures.purger_factory', alias: 'cms_purge' }
 
     Softspring\CmsBundle\Form\Admin\:
         resource: '../../src/Form/Admin/*'
-        tags: ['form.type']
+        tags: [ 'form.type' ]
 
     Softspring\CmsBundle\Form\Module\:
         resource: '../../src/Form/Module/*'
-        tags: ['form.type']
+        tags: [ 'form.type' ]
 
     Softspring\CmsBundle\Form\Type\:
         resource: '../../src/Form/Type/*'
-        tags: ['form.type']
+        tags: [ 'form.type' ]
 
     Softspring\CmsBundle\Form\Extension\:
         resource: '../../src/Form/Extension/*'
-        tags: ['form.extension']
+        tags: [ 'form.extension' ]
 
     Softspring\CmsBundle\EventListener\SiteResolverListener: ~
 
@@ -97,13 +102,14 @@ services:
 
     Softspring\CmsBundle\Render\:
         resource: '../../src/Render/*'
+        exclude:
+            - '../../src/Render/Module/ModuleRenderer.php'
 
-    Softspring\CmsBundle\Request\:
-        resource: '../../src/Request/*'
+    Softspring\CmsBundle\Request\FlashNotifier: ~
 
     sfs_cms.twig.extension.loader:
         class: Twig\Extension\StringLoaderExtension
-        tags: ['twig.extension']
+        tags: [ 'twig.extension' ]
 
     Softspring\CmsBundle\Sitemap\SitemapFactory: ~
     Softspring\CmsBundle\Sitemap\IndexFactory: ~
@@ -112,11 +118,15 @@ services:
 
     Softspring\CmsBundle\Twig\Extension\:
         resource: '../../src/Twig/Extension/*'
-        tags: ['twig.extension']
+        tags: [ 'twig.extension' ]
 
     Softspring\CmsBundle\EntityListener\ContentVersionCompileListener:
         tags:
             - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: 'Softspring\CmsBundle\Entity\ContentVersion',  priority: 11 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
+
+    Softspring\CmsBundle\EntityListener\SectionVersionCompileListener:
+        tags:
+            - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: 'Softspring\CmsBundle\Entity\SectionVersion',  priority: 11 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
 
     Softspring\CmsBundle\Doctrine\EventListener\ContentDiscriminatorMapListener:
         tags:
@@ -128,14 +138,13 @@ services:
         tags:
             - { name: 'doctrine.event_listener', event: 'loadClassMetadata', priority: 500 }
 
-    Softspring\CmsBundle\Security\Voter\ContentVersionDeleteVoter:
-        tags: ['security.voter']
-
-    Softspring\CmsBundle\Security\Voter\ContentVersionVoter:
-        arguments:
-            $recompileEnabled: '%sfs_cms.content.recompile_enabled%'
-        tags: ['security.voter']
+    Softspring\CmsBundle\Security\Voter\:
+        resource: '../../src/Security/Voter/*'
+        tags: [ 'security.voter' ]
 
     Softspring\CmsBundle\Security\Voter\DeprecatedPermissionVoter:
         tags:
             - { name: security.voter, priority: 1000 }
+
+    Softspring\CmsBundle\Form\Resolver\CmsTypeResolver:
+        tags: [ { name: 'softspring.dynamic_form_type.type_resolver', priority: 10 } ]

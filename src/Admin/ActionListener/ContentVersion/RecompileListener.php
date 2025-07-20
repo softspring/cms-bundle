@@ -32,7 +32,7 @@ class RecompileListener extends AbstractContentVersionListener
         FlashNotifier $flashNotifier,
         AuthorizationCheckerInterface $authorizationChecker,
         protected ContentVersionCompiler $contentVersionCompiler,
-        protected bool $recompileEnabled,
+        protected bool $contentRecompileEnabled,
     ) {
         parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
     }
@@ -45,7 +45,7 @@ class RecompileListener extends AbstractContentVersionListener
                 ['onInitializeGetConfig', 20],
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onEventLoadContentEntity', 9],
-                ['onInitializeIsGranted', 0],
+                ['onInitializeUpdateHelperConfig', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_RECOMPILE_LOAD_ENTITY => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -79,7 +79,7 @@ class RecompileListener extends AbstractContentVersionListener
 
     public function onInitializeCheckEnabled(InitializeEvent $event): void
     {
-        if (!$this->recompileEnabled) {
+        if (!$this->contentRecompileEnabled) {
             throw new NotFoundHttpException('Recompile is disabled');
         }
     }

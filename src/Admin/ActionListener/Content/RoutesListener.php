@@ -7,7 +7,6 @@ use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\Component\CrudlController\Event\ApplyEvent;
 use Softspring\Component\CrudlController\Event\FormPrepareEvent;
 use Softspring\Component\CrudlController\Event\SuccessEvent;
-use Softspring\Component\CrudlController\Event\ViewEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class RoutesListener extends AbstractContentListener
@@ -20,7 +19,7 @@ class RoutesListener extends AbstractContentListener
             SfsCmsEvents::ADMIN_CONTENTS_ROUTES_INITIALIZE => [
                 ['onInitializeGetConfig', 20],
                 ['onEventDispatchContentTypeEvent', 10],
-                ['onInitializeIsGranted', 0],
+                ['onInitializeUpdateHelperConfig', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENTS_ROUTES_LOAD_ENTITY => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -59,7 +58,9 @@ class RoutesListener extends AbstractContentListener
             ],
             SfsCmsEvents::ADMIN_CONTENTS_ROUTES_VIEW => [
                 ['onEventDispatchContentTypeEvent', 10],
-                ['onView', 0],
+                ['onViewAddConfig', 0],
+                ['onViewSetTemplate', 0],
+                ['onViewAddEntities', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENTS_ROUTES_EXCEPTION => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -98,11 +99,5 @@ class RoutesListener extends AbstractContentListener
 
             $event->setResponse(new RedirectResponse($redirectUrl));
         }
-    }
-
-    public function onView(ViewEvent $event): void
-    {
-        $event->getData()['entity'] = $event->getData()['content'];
-        parent::onView($event);
     }
 }

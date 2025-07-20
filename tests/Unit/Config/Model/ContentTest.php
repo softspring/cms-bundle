@@ -7,6 +7,7 @@ use Softspring\CmsBundle\Config\Model\Content;
 use Softspring\CmsBundle\Entity\Page;
 use Softspring\CmsBundle\Form\Admin\Content\ContentCreateForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentDeleteForm;
+use Softspring\CmsBundle\Form\Admin\Content\ContentDiffForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentDuplicateForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentImportForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentListFilterForm;
@@ -47,7 +48,7 @@ class ContentTest extends TestCase
         ]);
     }
 
-    public function testDefaultConfig()
+    public function testDefaultConfig(): void
     {
         $processor = new Processor();
         $configuration = new Content('content_name');
@@ -120,7 +121,7 @@ class ContentTest extends TestCase
                     'success_redirect_to' => '',
                 ],
                 'version_import' => [
-                    'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_IMPORT_VERSION',
+                    'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSION_IMPORT',
                     'view' => '@SfsCms/admin/content/version_import.html.twig',
                     'type' => VersionImportForm::class,
                     'success_redirect_to' => '',
@@ -132,6 +133,11 @@ class ContentTest extends TestCase
                 'preview' => [
                     'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_PREVIEW',
                     'view' => '@SfsCms/admin/content/preview.html.twig',
+                ],
+                'diff' => [
+                    'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_DIFF',
+                    'view' => '@SfsCms/admin/content/diff.html.twig',
+                    'form' => ContentDiffForm::class
                 ],
                 'version_list' => [
                     'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSIONS',
@@ -145,10 +151,10 @@ class ContentTest extends TestCase
                     'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_CLEANUP_VERSIONS',
                 ],
                 'version_lock' => [
-                    'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_KEEP_VERSION',
+                    'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSION_KEEP',
                 ],
                 'export_version' => [
-                    'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_EXPORT_VERSION',
+                    'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSION_EXPORT',
                 ],
                 'update' => [
                     'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_UPDATE',
@@ -187,7 +193,7 @@ class ContentTest extends TestCase
                     'success_redirect_to' => '',
                 ],
                 'publish_version' => [
-                    'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_PUBLISH_VERSION',
+                    'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSION_PUBLISH',
                 ],
                 'unpublish' => [
                     'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_UNPUBLISH',
@@ -199,16 +205,16 @@ class ContentTest extends TestCase
                     'success_redirect_to' => '',
                 ],
                 'version_recompile' => [
-                    'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_RECOMPILE_VERSION',
+                    'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSION_RECOMPILE',
                 ],
                 'version_delete' => [
-                    'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_DELETE_VERSION',
+                    'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSION_DELETE',
                     'view' => '@SfsCms/admin/content/version_delete.html.twig',
                     'type' => VersionDeleteForm::class,
                     'success_redirect_to' => '',
                 ],
                 'version_clear_compiled' => [
-                    'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_CLEAR_COMPILED_VERSION',
+                    'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSION_CLEAR_COMPILED',
                 ],
             ],
             'allowed_layouts' => [],

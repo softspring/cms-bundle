@@ -1,0 +1,47 @@
+{% trans_default_domain 'sfs_cms_admin' %}
+
+{% embed '@SfsCms/admin/_embeds/_card.html.twig' with {'title': ('admin_sections.read.general.title')|trans} %}
+    {% trans_default_domain 'sfs_cms_admin' %}
+
+    {% block title %}
+        {% if section.publishedVersion %}
+            {% if is_granted('PERMISSION_SFS_CMS_ADMIN_SECTION_UNPUBLISH', section) %}
+                <a class="btn btn-sm btn-outline-secondary float-end"
+                   href="{{ url('sfs_cms_admin_sections_unpublish', {'section':section.id}) }}"
+                   data-confirm-modal="{{ ('admin_sections.unpublish.confirm_message_raw')|trans|base64_encode }}"
+                   data-confirm-modal-title="{{ ('admin_sections.unpublish.confirm_message_title')|trans }}"
+                   data-confirm-modal-confirm-button-type="danger"
+                >{{ ('admin_sections.read.actions.unpublish.link')|trans }} <i class="bi bi-toggle-off"></i></a>
+            {% else %}
+                <a class="btn btn-sm btn-outline-secondary float-end disabled">{{ ('admin_sections.read.actions.unpublish.link')|trans }}
+                    <i class="bi bi-toggle-off"></i></a>
+            {% endif %}
+        {% endif %}
+        {{ parent() }}
+    {% endblock %}
+
+    {% block content %}
+        <dl class="mb-0">
+            {# <dt class=fw-normal>{{ ('admin_sections.read.name')|trans }}</dt> #}
+            {# <dd class=fw-bold>{{ section.name }}</dd> #}
+            {#            <dt class="fw-normal">{{ ('admin_sections.read.sites')|trans }}</dt> #}
+            {#            <dd class="fw-bold">{{ section.sites|map((site) => site|sfs_cms_site_name)|join(', ') }}</dd> #}
+            <dt class="fw-normal">{{ ('admin_sections.read.general.status')|trans }}</dt>
+            <dd class="fw-bold">
+                {{ ('sections.status.'~section.status)|trans }}
+                {% if section.publishedVersion %}
+                    (
+                    <a href="{{ url('sfs_cms_admin_sections_version_info', {'section':section.id, 'version':section.publishedVersion.id}) }}">v{{ section.publishedVersion.versionNumber }}</a>)
+                {% endif %}
+            </dd>
+            {% if section.publishedVersion %}
+                <dt class="fw-normal">{{ ('admin_sections.read.general.publishDate')|trans }}</dt>
+                <dd class="fw-bold">
+                    {% if section.lastModified %}
+                        {{ section.lastModified|date('H:i d-m-Y') }}
+                    {% endif %}
+                </dd>
+            {% endif %}
+        </dl>
+    {% endblock %}
+{% endembed %}

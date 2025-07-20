@@ -5,9 +5,9 @@
         'id': form.id.vars.data,
         'data-edit-id-target': 'containerDivId',
 
-        'class': 'py-5 '~(form.class.vars.data|default)~' '~(form.container_type.vars.data),
+        'class': (form.class.vars.data|default)~' '~(form.container_type.vars.data),
         'data-edit-class-target': 'containerDivClass',
-        'data-edit-class-default': 'py-5',
+        'data-edit-class-default': '',
 
         'data-edit-bgcolor-target': 'containerDivBgColor',
         'style': module.bg_color_style(form.bg_color),

@@ -15,8 +15,12 @@ body {
     min-height: 75px;
 }
 
-.cms-content-main{
+.cms-content-main {
     margin-top: 27px;
+
+    &.cms-content-section {
+        margin-top: 40px;
+    }
 
     main {
         > .container-fluid {
@@ -180,7 +184,7 @@ body {
     &.active>.cms-module-header,
     &:hover>.cms-module-header {
         display: block;
-        width: 140px;
+        width: 175px;
         height: 34px;
         position: absolute;
         right: 0px;
@@ -201,8 +205,12 @@ body {
 
                 &:hover {
                     color: black;
+                    .bi {
+                        opacity: var(--bs-btn-close-hover-opacity);
+                    }
                 }
                 .bi {
+                    opacity: var(--bs-btn-close-opacity);
                     font-size: 24px;
                 }
             }
