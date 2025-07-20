@@ -124,7 +124,7 @@ class ContentVersionTest extends TestCase
         $compiled->setDataPart('content', 'test');
         $this->assertEquals('test', $version->getCompiled()->first()->getDataPart('content'));
 
-        $compiled->setData(['modules' => 'test']);
+        $compiled->setData(['containers' => 'test']);
         $this->assertEquals('test', $version->getCompiled()->first()->getDataPart('containers'));
 
         $this->assertFalse($version->hasCompileErrors());
