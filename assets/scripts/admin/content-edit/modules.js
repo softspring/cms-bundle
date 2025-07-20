@@ -12,6 +12,9 @@ registerFeature('admin_content_edit_modules', _init);
  * @private
  */
 function _init() {
+
+    checkEmptyModules();
+
     // close module edit form
     document.addEventListener('click', function (event) {
         if (!event.target || !event.target.hasAttribute('data-cms-module-form-close')) return;
@@ -26,6 +29,7 @@ function _init() {
         if (event.target && (event.target.hasAttribute('data-cms-module-form-close') || event.target.matches('[data-collection-action=delete]'))) {
             if (event.target.matches('[data-collection-action=delete]')) {
                 allLostFocus();
+                checkEmptyModules();
             }
             return;
         }
@@ -44,6 +48,7 @@ function _init() {
             moduleFocus(module);
         }
         filterCurrentFilterElements();
+        checkEmptyModules();
     });
 
     document.addEventListener("collection.node.add.after", function (event) { // (1)
@@ -52,6 +57,7 @@ function _init() {
             moduleFocus(module);
         }
         filterCurrentFilterElements();
+        checkEmptyModules();
     });
 
     document.addEventListener("collection.node.duplicate.after", function (event) { // (1)
@@ -60,6 +66,7 @@ function _init() {
             moduleFocus(module);
         }
         filterCurrentFilterElements();
+        checkEmptyModules();
     });
 
     document.addEventListener("collection.node.copy.after", function () { // (1)
@@ -127,6 +134,7 @@ function _init() {
             moduleFocus(module);
         }
         filterCurrentFilterElements();
+        checkEmptyModules();
     });
 
     const prototypesModal = document.getElementById('module_prototypes_collection_modal');
@@ -321,5 +329,20 @@ function checkMaxInputVars() {
     } else {
         [...buttons].forEach((button) => button.classList.remove('disabled'));
         maxInputVarsMessage.classList.add('d-none');
+    }
+}
+
+function checkEmptyModules() {
+    // check if we have a module form
+    const modules = document.querySelectorAll('main [data-collection="collection"] .insert-module');
+
+    if (modules.length === 1) {
+        modules[0].classList.add('active');
+        modules[0].closest('[data-collection="collection"]').classList.add('active');
+    } else {
+        modules.forEach((module) => {
+            module.classList.remove('active');
+            module.closest('[data-collection="collection"]').classList.remove('active');
+        });
     }
 }

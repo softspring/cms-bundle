@@ -21,13 +21,13 @@
 
     {# disable turbo for content edit #}
     {{ form_start(form, {'attr': {'novalidate':'', 'data-turbo': 'false'}}) }}
-    <div class="d-flex flex-col align-items-stretch min-vh-100 pt-5">
+    <div class="cms-content min-vh-100">
         <header class="cms-content-header flex-fill p-3 bg-dark fixed-top border-bottom">
             <div class="container-fluid">
                 <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                    <a href="#" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                    <span class="d-flex align-items-center mb-2 mb-lg-0 text-white">
                         {{ ('admin_sections.content.title')|trans({'%name%':section_entity.name, '%versionNumber%': prev_version.versionNumber|default('0')}) }}
-                    </a>
+                    </span>
 
                     <div class="col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"></div>
 
@@ -74,7 +74,7 @@
                 </div>
             </div>
         </header>
-        <main class="cms-content-main cms-content-section flex-fill d-flex flex-row align-items-stretch bg-light h-100">
+        <div class="cms-content-main cms-content-section flex-fill d-flex flex-row align-items-stretch bg-light h-100">
             <div class="row h-100 w-100 mx-0">
                 <div class="col px-0">
                     {{ form_errors(form) }}
@@ -86,7 +86,7 @@
                 </div>
                 <div class="col-2 h-100 bg-white d-none" id="content-form"></div>
             </div>
-        </main>
+        </div>
     </div>
     {#        <iframe id="previewFrame" src="/preview.html"></iframe> #}
     {#        <button onclick="document.getElementById('previewFrame').contentWindow.document.getElementsByTagName('body')[0].innerHTML = 'Otra cosa'; return false;">Change</button> #}
