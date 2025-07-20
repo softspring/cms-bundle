@@ -8,6 +8,7 @@ use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\Model\VersionInterface;
 use Softspring\CmsBundle\Render\Error\RenderErrorException;
 use Symfony\Component\HttpFoundation\Request;
+use Throwable;
 
 abstract class AbstractVersionCompiler
 {
@@ -31,7 +32,7 @@ abstract class AbstractVersionCompiler
         return "{$this->prefixCompiled}{$site}/{$locale}";
     }
 
-    protected function saveExceptionInCompiledData(CompiledDataInterface $compiledData, \Throwable $exception): void
+    protected function saveExceptionInCompiledData(CompiledDataInterface $compiledData, Throwable $exception): void
     {
         // flag errors
         $compiledData->setErrors(true);

@@ -22,14 +22,13 @@ class ContentVersionRenderer implements ContentVersionRendererInterface
     protected array $profilerDebugCollectorData = [];
 
     public function __construct(
-        protected CmsConfig        $cmsConfig,
-        protected RequestStack     $requestStack,
-        protected IsolatedRunner   $isolatedRunner,
+        protected CmsConfig $cmsConfig,
+        protected RequestStack $requestStack,
+        protected IsolatedRunner $isolatedRunner,
         protected ?LoggerInterface $cmsLogger,
-        ?Profiler                  $profiler,
-    )
-    {
-        $this->profilerEnabled = (bool)$profiler;
+        ?Profiler $profiler,
+    ) {
+        $this->profilerEnabled = (bool) $profiler;
     }
 
     /**
