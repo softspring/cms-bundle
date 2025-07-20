@@ -11,6 +11,11 @@
     <li class="breadcrumb-item active" aria-current="content">{{ ('admin_'~content_type~'.diff.breadcrumb')|trans({'%name%':entity.name}) }}</li>
 {% endblock breadcrums_content %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsondiffpatch/0.4.1/formatters-styles/html.css">
+{% endblock stylesheets %}
+
 {% block content %}
     {% include ['@content/'~content_type~'/admin/_content_title.html.twig', '@SfsCms/admin/content/_content_title.html.twig']  with {'current':'versions', 'content_type':content_type, 'content_entity':entity} %}
     {% include ['@content/'~content_type~'/admin/_content_tabs.html.twig', '@SfsCms/admin/content/_content_tabs.html.twig']  with {'current':'versions', 'content_type':content_type, 'content_entity':entity} %}
@@ -30,19 +35,36 @@
                 </div>
 
                 {% if version1|default(false) and version2|default(false) %}
-                    <div class="row">
-                        <div class="col" style="overflow-y: auto; max-height: 600px;">
-                            <h3 class="ui header">Version 1</h3>
-                            <pre>{{ version1.rawData|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+                        <div class="row">
+                            <div class="col-6" style="overflow-y: auto; max-height: 600px;" data-sync-scroll>
+                                <h3 class="ui header">Version 1</h3>
+                                <pre>{{ version1.rawData|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+                            </div>
+
+                            <div class="col-6" style="overflow-y: auto; max-height: 600px;" data-sync-scroll>
+                                <h3 class="ui header">Version 2</h3>
+                                <pre>{{ version2.rawData|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+                            </div>
+
+                            <div class="col-12" style="overflow-y: auto; max-height: 600px;">
+                                <h3 class="ui header">Diff</h3>
+                                <div id="json-diff"></div>
+                            </div>
                         </div>
-                        <div class="col" style="overflow-y: auto; max-height: 600px;">
-                            <h3 class="ui header">Version 2</h3>
-                            <pre>{{ version2.rawData|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
-                        </div>
-                    </div>
                 {% endif %}
             </div>
         </div>
     </div>
     {{ form_end(form) }}
 {% endblock content %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        {% if version1|default(false) and version2|default(false) %}
+        const version1 = {{ version1.rawData|json_encode()|raw }};
+        const version2 = {{ version2.rawData|json_encode()|raw }};
+        {% endif %}
+    </script>
+{% endblock javascripts %}

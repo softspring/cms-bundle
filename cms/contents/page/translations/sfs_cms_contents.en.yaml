@@ -393,3 +393,13 @@ admin_page:
             delete.button: "Delete definitely"
             cancel.button: "Cancel"
         success_flash: "Version has been deleted"
+    
+    diff:
+        title: "Compare versions"
+        breadcrumb: "Compare versions"
+        form:
+            version1.label: "Version 1"
+            version2.label: "Version 2"
+        actions:
+            submit.button: "Compare"
+            cancel.button: "Cancel"
