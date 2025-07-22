@@ -278,7 +278,7 @@ admin_sections:
             create_first_section_raw: '<a href="%create_link%">Crea</a> tu primera sección!'
             can_not_create_sections: "No puedes crear secciones"
             go_to_doc_raw: 'Si necesitas ayuda visita la <a href="https://github.com/softspring/cms-bundle" target="_blank">documentación</a>'
-            clean_filters: 'No se han encontrado secciones con tu búsqueda, <a href="%url%">limpia los filtros</a> para ver todas las rutas'
+            clean_filters: 'No se han encontrado secciones con tu búsqueda, <a href="%url%">limpia los filtros</a> para ver todas las secciones'
         actions:
             create.link: "Nueva sección"
             details.link: "Detalles"
@@ -303,9 +303,9 @@ admin_sections:
         success_flash: "La sección se ha creado correctamente"
 
     content:
-        meta.title: "Contenido de la sección"
-        title: "Contenido de la sección"
-        breadcrumb: "Contenido de la sección"
+        meta.title: "Editar contenido"
+        title: "%name% (nueva versión desde v%versionNumber%)"
+        breadcrumb: "Editar contenido"
         actions:
             save.button: "Guardar cambios"
             cancel.button: "Cancelar"
@@ -472,6 +472,17 @@ admin_sections:
         has_been_unpublished_flash: "La sección se ha despublicado"
         confirm_message_title: "Despublicar sección"
         confirm_message_raw: "<p>¿Estás seguro de despublicar esta sección?</p><p>Mostrará un error 404 a los usuarios</p>"
+
+    version_recompile:
+        success_flash: "La versión se ha recompilado"
+        failed_flash: "Se ha producido un error al recompilar la versión.<br/><small>%exception%</small>"
+
+    version_clear_compiled:
+        success_flash: "La versión se ha limpiado correctamente"
+        failed_flash: "Se ha producido un error al limpiar el contenido de la versión.<br/><small>%exception%</small>"
+
+    version_cleanup:
+        success_flash: "Se ha realizado la limpieza de versiones correctamente"
 
     version_delete:
         meta.title: "Eliminar versión"
