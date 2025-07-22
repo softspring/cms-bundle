@@ -5,13 +5,11 @@ namespace Softspring\CmsBundle\Render;
 use Exception;
 use Psr\Log\LoggerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
-use Softspring\CmsBundle\Config\Exception\DisabledModuleException;
-use Softspring\CmsBundle\Config\Exception\InvalidModuleException;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Render\Error\RenderErrorList;
-use Softspring\CmsBundle\Render\Exception\ModuleRenderException;
 use Softspring\CmsBundle\Render\Exception\RenderException;
 use Softspring\CmsBundle\Render\Isolated\IsolatedRunner;
+use Softspring\CmsBundle\Render\Module\ModuleRenderer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
@@ -36,9 +34,9 @@ class ContentVersionRenderer implements ContentVersionRendererInterface
     /**
      * @throws RenderException
      */
-    public function render(ContentVersionInterface $version, Request $request, ?RenderErrorList $renderErrorList = null, ?array $compiledModules = null): string
+    public function render(ContentVersionInterface $version, Request $request, ?RenderErrorList $renderErrorList = null, ?array $compiledContainers = null): string
     {
-        return $this->isolatedRunner->isolateRequestRender($request, function (Request $request, Environment $twig, ModuleRenderer $moduleRenderer) use ($version, $renderErrorList, $compiledModules): string {
+        return $this->isolatedRunner->isolateRequestRender($request, function (Request $request, Environment $twig, ModuleRenderer $moduleRenderer) use ($version, $renderErrorList, $compiledContainers): string {
             try {
                 $this->cmsLogger && $this->cmsLogger->debug(sprintf('Rendering %s content version', $version->getContent()->getName()));
 
@@ -54,7 +52,7 @@ class ContentVersionRenderer implements ContentVersionRendererInterface
                 $request = $this->requestStack->getCurrentRequest();
                 $request->attributes->set('_route', $version->getContent()->getRoutes()->first()?->getId());
 
-                $containers = $compiledModules ?? $this->renderModules($version, $request, $renderErrorList);
+                $containers = $compiledContainers ?? $this->renderContainers($version, $request, $renderErrorList);
 
                 return $twig->render($layout['render_template'], [
                     'containers' => $containers,
@@ -70,49 +68,49 @@ class ContentVersionRenderer implements ContentVersionRendererInterface
     /**
      * @throws RenderException
      */
-    public function renderModules(ContentVersionInterface $version, Request $request, ?RenderErrorList $renderErrorList = null): array
+    public function renderContainers(ContentVersionInterface $version, Request $request, ?RenderErrorList $renderErrorList = null): array
     {
         return $this->isolatedRunner->isolateRequestRender($request, function (Request $request, Environment $twig, ModuleRenderer $moduleRenderer) use ($version, $renderErrorList): array {
-            // preload all medias
-            $version->getMedias();
-            // preload all routes
-            $version->getRoutes();
-            // preload all sections
-            $version->getSections();
+            try {
+                // preload all medias
+                $version->getMedias();
+                // preload all routes
+                $version->getRoutes();
+                // preload all sections
+                $version->getSections();
 
-            $layout = $this->cmsConfig->getLayout($version->getLayout());
-            $versionData = $version->getData();
+                $layout = $this->cmsConfig->getLayout($version->getLayout());
+                $versionData = $version->getData();
 
-            $containers = [];
-            $renderErrorList && $renderErrorList->resetLocation();
-            $renderErrorList && $renderErrorList->pushLocation('data');
-            foreach ($layout['containers'] as $layoutContainerId => $layoutContainerConfig) {
-                $layoutContainer = $versionData ? $versionData[$layoutContainerId] ?? [] : [];
-                $containers[$layoutContainerId] = '';
+                $containers = [];
+                $renderErrorList && $renderErrorList->resetLocation();
+                $renderErrorList && $renderErrorList->pushLocation('data');
+                foreach ($layout['containers'] as $layoutContainerId => $layoutContainerConfig) {
+                    $layoutContainer = $versionData ? $versionData[$layoutContainerId] ?? [] : [];
+                    $containers[$layoutContainerId] = '';
 
-                $renderErrorList && $renderErrorList->pushLocation($layoutContainerId);
-                foreach ($layoutContainer as $i => $module) {
-                    $this->profilerDebugCollectorData[$layoutContainerId] = [];
-                    $renderErrorList && $renderErrorList->pushLocation($i);
-                    $twigAdditionalContext = [
-                        'version' => $version,
-                        'content' => $version->getContent(),
-                    ];
-                    $containers[$layoutContainerId] .= $moduleRenderer->render($module, $this->profilerDebugCollectorData[$layoutContainerId], $twigAdditionalContext, $renderErrorList);
+                    $renderErrorList && $renderErrorList->pushLocation($layoutContainerId);
+                    foreach ($layoutContainer as $i => $module) {
+                        $this->profilerDebugCollectorData[$layoutContainerId] = [];
+                        $renderErrorList && $renderErrorList->pushLocation($i);
+                        $twigAdditionalContext = [
+                            'version' => $version,
+                            'content' => $version->getContent(),
+                        ];
+                        $containers[$layoutContainerId] .= $moduleRenderer->render($module, $this->profilerDebugCollectorData[$layoutContainerId], $twigAdditionalContext, $renderErrorList);
+                        $renderErrorList && $renderErrorList->popLocation();
+                    }
                     $renderErrorList && $renderErrorList->popLocation();
                 }
-                $renderErrorList && $renderErrorList->popLocation();
-            }
 
-            return $containers;
+                return $containers;
+            } catch (Exception $e) {
+                throw new RenderException(sprintf('Error rendering content version v%s containers', $version->getVersionNumber()), 0, $e);
+            }
         });
     }
 
     /**
-     * @throws DisabledModuleException
-     * @throws InvalidModuleException
-     * @throws ModuleRenderException
-     *
      * @deprecated this is not used anymore, will be removed in next major version
      */
     public function renderModuleById(string $moduleId, array $data, ?RenderErrorList $renderErrorList = null): string

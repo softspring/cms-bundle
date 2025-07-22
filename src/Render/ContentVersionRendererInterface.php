@@ -12,10 +12,10 @@ interface ContentVersionRendererInterface
     /**
      * @throws RenderException
      */
-    public function render(ContentVersionInterface $version, Request $request, ?RenderErrorList $renderErrorList = null, ?array $compiledModules = null): string;
+    public function render(ContentVersionInterface $version, Request $request, ?RenderErrorList $renderErrorList = null, ?array $compiledContainers = null): string;
 
     /**
      * @throws RenderException
      */
-    public function renderModules(ContentVersionInterface $version, Request $request, ?RenderErrorList $renderErrorList = null);
+    public function renderContainers(ContentVersionInterface $version, Request $request, ?RenderErrorList $renderErrorList = null);
 }

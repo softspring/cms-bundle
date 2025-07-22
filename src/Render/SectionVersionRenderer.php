@@ -6,6 +6,7 @@ use Softspring\CmsBundle\Model\SectionVersionInterface;
 use Softspring\CmsBundle\Render\Error\RenderErrorList;
 use Softspring\CmsBundle\Render\Exception\RenderException;
 use Softspring\CmsBundle\Render\Isolated\IsolatedRunner;
+use Softspring\CmsBundle\Render\Module\ModuleRenderer;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
 

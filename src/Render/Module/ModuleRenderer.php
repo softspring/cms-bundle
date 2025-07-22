@@ -1,9 +1,10 @@
 <?php
 
-namespace Softspring\CmsBundle\Render;
+namespace Softspring\CmsBundle\Render\Module;
 
 use Exception;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\DisabledModuleException;
 use Softspring\CmsBundle\Config\Exception\InvalidModuleException;
@@ -36,6 +37,8 @@ class ModuleRenderer
     {
         try {
             if ($this->skipModuleRenderBySiteFilter($moduleData)) {
+                $this->cmsLogger && $this->cmsLogger->debug(sprintf('Skipping %s module render by site', $moduleData['_module']));
+
                 return self::SITE_HIDDEN_MODULE."\n";
             }
         } catch (InvalidSiteException $e) {
@@ -43,6 +46,8 @@ class ModuleRenderer
         }
 
         if ($this->skipModuleRenderByLocaleFilter($moduleData)) {
+            $this->cmsLogger && $this->cmsLogger->debug(sprintf('Skipping %s module render by locale', $moduleData['_module']));
+
             return self::LOCALE_HIDDEN_MODULE."\n";
         }
 
@@ -103,6 +108,7 @@ class ModuleRenderer
 
     /**
      * @throws ModuleRenderException
+     * @throws RuntimeException
      */
     protected function renderContainerModule(array $module, array $moduleConfig, array &$profilerDebugCollectorData, array $twigAdditionalContext = [], ?RenderErrorList $renderErrorList = null): string
     {
@@ -137,12 +143,21 @@ class ModuleRenderer
                 'moduleData' => $module,
             ]);
 
-            return '<div class="alert alert-danger" role="alert"><!-- MODULE_RENDER_ERROR -->We\'re sorry, an error has been produced rendering this content, please review content configuration and try again. If the problem persist talk to developers.</div>';
+            try {
+                return $this->twig->render('@SfsCms/errors/module_render_error.html.twig', [
+                    'isContainer' => true,
+                    'moduleConfig' => $moduleConfig,
+                    'moduleData' => $module,
+                ]);
+            } catch (Exception $e) {
+                throw new RuntimeException('Fatal error rendering module error template', 0, $e);
+            }
         }
     }
 
     /**
      * @throws ModuleRenderException
+     * @throws RuntimeException
      */
     protected function renderNoContainerModule(array $moduleData, array $moduleConfig, array &$profilerDebugCollectorData, array $twigAdditionalContext = [], ?RenderErrorList $renderErrorList = null): string
     {
@@ -169,7 +184,16 @@ class ModuleRenderer
                 'twigAdditionalContext' => $twigAdditionalContext,
             ]);
 
-            return '<div class="alert alert-danger" role="alert"><!-- MODULE_RENDER_ERROR -->We\'re sorry, an error has been produced rendering this content, please review content configuration and try again. If the problem persist talk to developers.</div>';
+            try {
+                return $this->twig->render('@SfsCms/errors/module_render_error.html.twig', [
+                    'isContainer' => false,
+                    'moduleConfig' => $moduleConfig,
+                    'moduleData' => $moduleData,
+                    'twigAdditionalContext' => $twigAdditionalContext,
+                ]);
+            } catch (Exception $e) {
+                throw new RuntimeException('Fatal error rendering module error template', 0, $e);
+            }
         }
     }
 

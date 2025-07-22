@@ -84,21 +84,21 @@
                     {% set first = false %}
                 {% endfor %}
 
-                {% for compiled in version_entity.compiled|filter((compiled)=>compiled.dataPart('modules')|default(false)) %}
-                    {% set keyCleaned = ('modules'~compiled.key)|replace({'/': '', ' ': '', '.': ''}) %}
+                {% for compiled in version_entity.compiled|filter((compiled)=>compiled.dataPart('containers')|default(false)) %}
+                    {% set keyCleaned = ('containers'~compiled.key)|replace({'/': '', ' ': '', '.': ''}) %}
                     <h2 class="accordion-header" id="heading{{ keyCleaned }}">
                         <button class="accordion-button {{ first?'':'collapsed' }}" type="button"
                                 data-bs-toggle="collapse" data-bs-target="#collapse{{ keyCleaned }}"
                                 aria-expanded="{{ first?'true':'false' }}"
                                 aria-controls="collapse{{ keyCleaned }}">
-                            Pre-compiled modules {{ compiled.key }}
+                            Pre-compiled containers {{ compiled.key }}
                         </button>
                     </h2>
                     <div id="collapse{{ keyCleaned }}"
                          class="accordion-collapse collapse {{ first?'show':'' }}"
                          aria-labelledby="heading{{ keyCleaned }}" data-bs-parent="#accordionCompiled">
                         <div class="accordion-body">
-                            {% for container, section in compiled.dataPart('modules') %}
+                            {% for container, section in compiled.dataPart('containers') %}
                                 <strong>{{ container }}</strong>
                                 {{ tools.drawEsiCalls(section) }}
                                 <pre class="overflow-auto"

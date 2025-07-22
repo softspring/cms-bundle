@@ -10,7 +10,7 @@ use Softspring\CmsBundle\Form\Module\ContainerModuleType;
 use Softspring\CmsBundle\Form\Module\DynamicFormModuleType;
 use Softspring\CmsBundle\Model\Site;
 use Softspring\CmsBundle\Render\Isolated\IsolatedRequest;
-use Softspring\CmsBundle\Render\ModuleRenderer;
+use Softspring\CmsBundle\Render\Module\ModuleRenderer;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
 

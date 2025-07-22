@@ -12,6 +12,7 @@ use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Request\FlashNotifier;
 use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\Component\CrudlController\Event\ApplyEvent;
+use Softspring\Component\CrudlController\Event\ExceptionEvent;
 use Softspring\Component\CrudlController\Event\FailureEvent;
 use Softspring\Component\CrudlController\Event\SuccessEvent;
 use Symfony\Component\Routing\RouterInterface;
@@ -82,6 +83,7 @@ class PublishListener extends AbstractContentVersionListener
         $content = $event->getRequest()->attributes->get('content');
 
         if ($this->contentAutoCompileOnPublish) {
+            $this->contentVersionCompiler->clearCompiled($version);
             $this->contentVersionCompiler->compileAll($version, true);
         }
 
@@ -107,16 +109,19 @@ class PublishListener extends AbstractContentVersionListener
 
     public function onFailure(FailureEvent $event): void
     {
+        // save compiled data if it was created, to allow to debug the issue
+        $this->contentManager->saveEntity($event->getEntity()->getContent());
+
         $contentConfig = $event->getRequest()->attributes->get('_content_config');
 
         $this->flashNotifier->addTrans('error', "admin_{$contentConfig['_id']}.version_publish.failed_flash", ['%exception%' => $event->getException()->getMessage()], 'sfs_cms_contents');
 
         $content = $event->getRequest()->attributes->get('content');
 
-        $event->setResponse($this->redirectBack($contentConfig['_id'], $content, $event->getRequest()));
+        $event->setResponse($this->redirectBack($contentConfig['_id'], $content, $event->getRequest(), $event->getEntity()));
     }
 
-    public function onException(FailureEvent $event): void
+    public function onException(ExceptionEvent $event): void
     {
         $contentConfig = $event->getRequest()->attributes->get('_content_config');
 
@@ -124,6 +129,6 @@ class PublishListener extends AbstractContentVersionListener
 
         $content = $event->getRequest()->attributes->get('content');
 
-        $event->setResponse($this->redirectBack($contentConfig['_id'], $content, $event->getRequest()));
+        $event->setResponse($this->redirectBack($contentConfig['_id'], $content, $event->getRequest(), $event->getRequest()->attributes->get('version')));
     }
 }

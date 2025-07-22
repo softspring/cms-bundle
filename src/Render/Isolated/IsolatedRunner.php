@@ -4,7 +4,7 @@ namespace Softspring\CmsBundle\Render\Isolated;
 
 use Exception;
 use Softspring\CmsBundle\Render\Exception\RenderException;
-use Softspring\CmsBundle\Render\ModuleRendererFactory;
+use Softspring\CmsBundle\Render\Module\ModuleRendererFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RequestContext;

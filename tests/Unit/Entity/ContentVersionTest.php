@@ -124,15 +124,15 @@ class ContentVersionTest extends TestCase
         $compiled->setDataPart('content', 'test');
         $this->assertEquals('test', $version->getCompiled()->first()->getDataPart('content'));
 
-        $compiled->setData(['modules' => 'test']);
-        $this->assertEquals('test', $version->getCompiled()->first()->getDataPart('modules'));
+        $compiled->setData(['containers' => 'test']);
+        $this->assertEquals('test', $version->getCompiled()->first()->getDataPart('containers'));
 
         $this->assertFalse($version->hasCompileErrors());
 
         // TODO ENABLE WHEN HASCOMPILEERRORS IS IMPLEMENTED AGAIN
         // $compiled = new CompiledData();
         // $compiled->setKey('es');
-        // $compiled->setDataPart('modules', 'test with MODULE_RENDER_ERROR');
+        // $compiled->setDataPart('containers', 'test with MODULE_RENDER_ERROR');
         // $version->addCompiled($compiled);
         // $this->assertTrue($version->hasCompileErrors());
     }

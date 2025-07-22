@@ -2,7 +2,7 @@
 
 import {filterCurrentFilterElements} from './filter-preview';
 import {getCollectionLastIndex} from '@softspring/collection-form-type/scripts/collection-form-type';
-import {Modal} from 'bootstrap';
+// import {Modal} from 'bootstrap';
 import {registerFeature, showAlert} from '@softspring/cms-bundle/scripts/tools';
 
 registerFeature('admin_content_edit_modules', _init);
@@ -216,7 +216,7 @@ function _init() {
         modulesCollection = null;
         modulesCollectionInsertIndex = null;
 
-        const modal = Modal.getInstance(prototypesModal);
+        const modal = bootstrap.Modal.getInstance(prototypesModal);
         modal && modal.hide();
     });
 
@@ -276,7 +276,7 @@ function _init() {
             up.classList.add('bi-chevron-left');
         }
 
-        const modal = Modal.getInstance(prototypesModal);
+        const modal = bootstrap.Modal.getInstance(prototypesModal);
         modal && modal.hide();
 
         moduleFocus(event.node().querySelector('.cms-module'));

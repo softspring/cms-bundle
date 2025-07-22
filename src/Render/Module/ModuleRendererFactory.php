@@ -1,6 +1,6 @@
 <?php
 
-namespace Softspring\CmsBundle\Render;
+namespace Softspring\CmsBundle\Render\Module;
 
 use Psr\Log\LoggerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
