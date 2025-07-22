@@ -2,7 +2,6 @@
 
 import {filterCurrentFilterElements} from './filter-preview';
 import {getCollectionLastIndex} from '@softspring/collection-form-type/scripts/collection-form-type';
-// import {Modal} from 'bootstrap';
 import {registerFeature, showAlert} from '@softspring/cms-bundle/scripts/tools';
 
 registerFeature('admin_content_edit_modules', _init);
@@ -187,7 +186,7 @@ function _init() {
     /**
      * @param {CollectionEvent} event
      */
-    document.addEventListener("collection.node.insert.before", function (event) {
+    document.addEventListener("collection.node.insert.before", async function (event) {
         if (modulesCollection) {
             event.collection(modulesCollection);
             event.position(modulesCollectionInsertIndex !== null ? modulesCollectionInsertIndex : getCollectionLastIndex(modulesCollection) + 1);
@@ -216,14 +215,15 @@ function _init() {
         modulesCollection = null;
         modulesCollectionInsertIndex = null;
 
-        const modal = bootstrap.Modal.getInstance(prototypesModal);
+        const {Modal} = await import('bootstrap');
+        const modal = Modal.getInstance(prototypesModal);
         modal && modal.hide();
     });
 
     /**
      * @param {CollectionEvent} event
      */
-    document.addEventListener("collection.node.paste.before", function (event) {
+    document.addEventListener("collection.node.paste.before", async function (event) {
         if (modulesCollection) {
             event.collection(modulesCollection);
             event.position(modulesCollectionInsertIndex !== null ? modulesCollectionInsertIndex : getCollectionLastIndex(modulesCollection) + 1);
@@ -252,6 +252,7 @@ function _init() {
         modulesCollection = null;
         modulesCollectionInsertIndex = null;
 
+        const {Modal} = await import('bootstrap');
         const modal = Modal.getInstance(prototypesModal);
         modal && modal.hide();
     });
@@ -259,7 +260,7 @@ function _init() {
     /**
      * @param {CollectionEvent} event
      */
-    document.addEventListener("collection.node.insert.after", function (event) {
+    document.addEventListener("collection.node.insert.after", async function (event) {
         if (!event.collection() || !event.node() || event.collection().dataset.moduleRowClass === undefined) {
             return;
         }
@@ -276,7 +277,8 @@ function _init() {
             up.classList.add('bi-chevron-left');
         }
 
-        const modal = bootstrap.Modal.getInstance(prototypesModal);
+        const {Modal} = await import('bootstrap');
+        const modal = Modal.getInstance(prototypesModal);
         modal && modal.hide();
 
         moduleFocus(event.node().querySelector('.cms-module'));
