@@ -5,12 +5,15 @@ import {registerFeature, addTargetEventListener} from '@softspring/cms-bundle/sc
 registerFeature('admin_versions_diff', _init);
 
 function _init() {
+    const target = document.getElementById('json-diff');
+
+    if (!target) {
+        return;
+    }
 
     jsondiffpatchHtml.config = {
         propertyOrder: (names) => names // Key
     };
-
-    const target = document.getElementById('json-diff');
 
     const delta = diff(version1, version2);
 
