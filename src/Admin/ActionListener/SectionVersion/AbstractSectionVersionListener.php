@@ -92,7 +92,7 @@ abstract class AbstractSectionVersionListener implements EventSubscriberInterfac
 
     public function onFailureAddFlash(FailureEvent $event): void
     {
-        $this->flashNotifier->addTrans('success', 'admin_sections.'.static::ACTION_NAME.'.failed_flash', [
+        $this->flashNotifier->addTrans('error', 'admin_sections.'.static::ACTION_NAME.'.failed_flash', [
             '%exception%' => $event->getException()->getMessage(),
         ], 'sfs_cms_admin');
     }
@@ -106,7 +106,7 @@ abstract class AbstractSectionVersionListener implements EventSubscriberInterfac
 
     public function onExceptionAddFlash(ExceptionEvent $event): void
     {
-        $this->flashNotifier->addTrans('success', 'admin_sections.'.static::ACTION_NAME.'.failed_flash', [
+        $this->flashNotifier->addTrans('error', 'admin_sections.'.static::ACTION_NAME.'.failed_flash', [
             '%exception%' => $event->getException()->getMessage(),
         ], 'sfs_cms_admin');
     }
