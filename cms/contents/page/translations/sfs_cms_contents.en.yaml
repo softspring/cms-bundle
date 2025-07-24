@@ -41,7 +41,7 @@ admin_page:
 
     version_publish:
         success_flash: "Version has been published"
-        failed_flash: "An error has been produced during the version publication<br/><small>%exception%</small>"
+        failed_flash: 'An error has been produced during the version publication<br/><small>%exception%</small><div style="margin-top:10px; max-height: 200px; overflow-y: auto;">%exception_details%</div>'
         confirm_message_title: "Publish version"
         with_errors_confirm_message_title: "Publish version"
         confirm_message_raw: "<p>Are you sure to publish this version?</p>"

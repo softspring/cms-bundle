@@ -3,8 +3,8 @@
 namespace Softspring\CmsBundle\Admin\ActionListener\Content;
 
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Data\DataImporter;
+use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
@@ -33,13 +33,13 @@ class ImportListener extends AbstractContentListener
         ContentManagerInterface $contentManager,
         ContentVersionManagerInterface $contentVersionManager,
         RouteManagerInterface $routeManager,
-        CmsConfig $cmsConfig,
+        CmsHelper $cmsHelper,
         RouterInterface $router,
         FlashNotifier $flashNotifier,
         AuthorizationCheckerInterface $authorizationChecker,
         protected DataImporter $dataImporter,
     ) {
-        parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
+        parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsHelper, $router, $flashNotifier, $authorizationChecker);
     }
 
     public static function getSubscribedEvents(): array

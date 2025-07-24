@@ -4,7 +4,7 @@ namespace Softspring\CmsBundle\Admin\ActionListener\SectionVersion;
 
 use Softspring\CmsBundle\Admin\ActionListener\ExceptionMessageTrait;
 use Softspring\CmsBundle\Admin\ActionListener\SectionRedirectBackTrait;
-use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Manager\SectionManagerInterface;
 use Softspring\CmsBundle\Manager\SectionVersionManagerInterface;
@@ -34,7 +34,7 @@ abstract class AbstractSectionVersionListener implements EventSubscriberInterfac
         protected SectionManagerInterface $sectionManager,
         protected SectionVersionManagerInterface $sectionVersionManager,
         protected RouteManagerInterface $routeManager,
-        protected CmsConfig $cmsConfig,
+        protected CmsHelper $cmsHelper,
         protected RouterInterface $router,
         protected FlashNotifier $flashNotifier,
         protected AuthorizationCheckerInterface $authorizationChecker,

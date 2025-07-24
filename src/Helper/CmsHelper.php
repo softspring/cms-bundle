@@ -11,6 +11,7 @@ class CmsHelper
         protected SiteHelper $siteHelper,
         protected LocaleHelper $localeHelper,
         protected LayoutHelper $layoutHelper,
+        protected CompileHelper $compileHelper,
     ) {
     }
 
@@ -32,5 +33,10 @@ class CmsHelper
     public function layout(): LayoutHelper
     {
         return $this->layoutHelper;
+    }
+
+    public function compile(): CompileHelper
+    {
+        return $this->compileHelper;
     }
 }

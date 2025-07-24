@@ -23,5 +23,5 @@ section:
         draft_embedded_info_raw: "This section is in draft mode. This means that the section is not published and its content will be displayed empty.<br/>Once published, the section content will be shown when this content is recompiled."
         published_embedded_info_raw: "The currently published content of the section will not change until this content is recompiled."
         esi_ajax_draft_info_raw: "This section is in draft mode. This means that the section is not published and its content will be displayed empty until it is published."
-        esi_ajax_ttl_raw: "The section content will be generated on-the-fly when this content is requested, and cached for the specified time-to-live (TTL)."
+        esi_ajax_ttl_raw: "The section content will be generated on-the-fly when this content is requested, and cached for the specified time-to-live (<span class=\"ttl\">TTL</span>)."
         esi_ajax_no_ttl_raw: "The section content will be generated on-the-fly every time this content is requested."

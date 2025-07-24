@@ -462,7 +462,7 @@ admin_sections:
 
     version_publish:
         success_flash: "The version has been published"
-        failed_flash: "An error occurred while publishing the version<br/><small>%exception%</small>"
+        failed_flash: 'An error occurred while publishing the version<br/><small>%exception%</small><div style="margin-top:10px; max-height: 200px; overflow-y: auto;">%exception_details%</div>'
         confirm_message_title: "Publish version"
         with_errors_confirm_message_title: "Publish version"
         confirm_message_raw: "<p>Are you sure to publish this version?</p>"
@@ -475,7 +475,7 @@ admin_sections:
 
     version_recompile:
         success_flash: "Version has been recompiled"
-        failed_flash: "An error has been produced during the version recompilation.<br/><small>%exception%</small>"
+        failed_flash: 'An error has been produced during the version recompilation.<br/><small>%exception%</small><div style="margin-top:10px; max-height: 200px; overflow-y: auto;">%exception_details%</div>'
 
     version_clear_compiled:
         success_flash: "Version compiled content has been cleared"

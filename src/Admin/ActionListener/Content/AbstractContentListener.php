@@ -6,7 +6,7 @@ use Softspring\CmsBundle\Admin\ActionListener\ContentGetOptionTrait;
 use Softspring\CmsBundle\Admin\ActionListener\ContentInitializeEventTrait;
 use Softspring\CmsBundle\Admin\ActionListener\ContentRedirectBackTrait;
 use Softspring\CmsBundle\Admin\ActionListener\ExceptionMessageTrait;
-use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
@@ -35,7 +35,7 @@ abstract class AbstractContentListener implements EventSubscriberInterface
         protected ContentManagerInterface $contentManager,
         protected ContentVersionManagerInterface $contentVersionManager,
         protected RouteManagerInterface $routeManager,
-        protected CmsConfig $cmsConfig,
+        protected CmsHelper $cmsHelper,
         protected RouterInterface $router,
         protected FlashNotifier $flashNotifier,
         protected AuthorizationCheckerInterface $authorizationChecker,

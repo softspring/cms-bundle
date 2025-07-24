@@ -8,6 +8,7 @@ use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Helper\LocaleHelper;
 use Softspring\CmsBundle\Model\SectionInterface;
 use Softspring\CmsBundle\Render\Exception\RenderException;
+use Softspring\CmsBundle\Render\Isolated\IsolatedRequest;
 use Softspring\CmsBundle\Render\SectionVersionRenderer;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -82,7 +83,7 @@ class SectionType extends AbstractType
 
                     foreach ($this->cmsConfig->getSites() as $site) {
                         foreach ($this->localeHelper->getEnabledLocales() as $locale) {
-                            $request = new Request();
+                            $request = new IsolatedRequest(new Request());
                             $request->setLocale($locale);
                             $request->attributes->set('_sfs_cms_site', $site);
 

@@ -2,9 +2,9 @@
 
 namespace Softspring\CmsBundle\Admin\ActionListener;
 
-use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\InvalidContentException;
 use Softspring\CmsBundle\Config\Exception\MissingContentTypeException;
+use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Request\FlashNotifier;
 use Softspring\Component\CrudlController\Event\InitializeEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 trait ContentInitializeEventTrait
 {
     protected FlashNotifier $flashNotifier;
-    protected CmsConfig $cmsConfig;
+    protected CmsHelper $cmsHelper;
 
     public function onInitializeGetConfig(InitializeEvent $event): void
     {
@@ -45,7 +45,7 @@ trait ContentInitializeEventTrait
             throw new MissingContentTypeException('_content_type is required in route defaults');
         }
 
-        return $this->cmsConfig->getContent($request->attributes->get('_content_type')); // required = true
+        return $this->cmsHelper->config()->getContent($request->attributes->get('_content_type')); // required = true
     }
 
     /**

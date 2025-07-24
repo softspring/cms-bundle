@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Softspring\CmsBundle\Compiler\CompileException;
 use Softspring\CmsBundle\Compiler\SectionVersionCompiler;
-use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Model\CompiledDataInterface;
 use Softspring\CmsBundle\Model\SectionInterface;
 use Softspring\CmsBundle\Model\SectionVersionInterface;
@@ -22,7 +22,7 @@ class SectionVersionManager implements SectionVersionManagerInterface
 
     public function __construct(
         protected EntityManagerInterface $em,
-        protected CmsConfig $cmsConfig,
+        protected CmsHelper $cmsHelper,
         protected SectionVersionCompiler $sectionCompiler,
         protected CompiledDataManagerInterface $compiledDataManager,
     ) {
@@ -62,7 +62,7 @@ class SectionVersionManager implements SectionVersionManagerInterface
      */
     public function getCompiledContent(SectionVersionInterface $sectionVersion, Request $request, bool $throwExceptionOnCompileError = true): CompiledDataInterface
     {
-        $compiledKey = $this->sectionCompiler->getCompileKeyFromRequest($sectionVersion, $request);
+        $compiledKey = $this->compiledDataManager->getCompileKeyFromRequest($sectionVersion, $request);
 
         /** @var ?CompiledDataInterface $compiledData */
         $compiledData = $this->compiledDataManager->getRepository()->findOneBy([
@@ -70,9 +70,14 @@ class SectionVersionManager implements SectionVersionManagerInterface
             'key' => $compiledKey,
         ]);
 
-        if (!$compiledData?->getDataPart('content') || !$this->sectionCompiler->canSaveCompiled($sectionVersion)) {
-            $compiledData = $this->sectionCompiler->compileRequest($sectionVersion, $request, $throwExceptionOnCompileError);
-            $this->sectionCompiler->canSaveCompiled($sectionVersion) && $this->saveEntity($sectionVersion);
+        if (!$compiledData?->getDataPart('content') || !$this->cmsHelper->compile()->sectionSaveCompiled($sectionVersion)) {
+            $compiledData = $this->sectionCompiler->compileRequest($sectionVersion, $request);
+
+            if ($throwExceptionOnCompileError && $compiledData->hasErrors()) {
+                throw new CompileException('Compilation errors occurred: '.implode(', ', $compiledData->getDataPart('errors')));
+            }
+
+            $this->cmsHelper->compile()->sectionSaveCompiled($sectionVersion) && $this->saveEntity($sectionVersion);
         }
 
         return $compiledData;

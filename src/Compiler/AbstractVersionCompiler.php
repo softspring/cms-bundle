@@ -2,37 +2,13 @@
 
 namespace Softspring\CmsBundle\Compiler;
 
-use Softspring\CmsBundle\Model\CompilableInterface;
 use Softspring\CmsBundle\Model\CompiledDataInterface;
-use Softspring\CmsBundle\Model\SiteInterface;
-use Softspring\CmsBundle\Model\VersionInterface;
 use Softspring\CmsBundle\Render\Error\RenderErrorException;
-use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 
-abstract class AbstractVersionCompiler
+abstract class AbstractVersionCompiler implements CompilerInterface
 {
-    protected string $prefixCompiled;
-
-    public function clearCompiled(VersionInterface|CompilableInterface $version): void
-    {
-        $version->getCompiled()->map(function (CompiledDataInterface $compiled) use ($version) {
-            $version->removeCompiled($compiled);
-        });
-        $version->setCompileErrors(false);
-    }
-
-    public function getCompileKeyFromRequest(VersionInterface $version, Request $request): string
-    {
-        return $this->getCompileKey($version, $request->getLocale(), $request->attributes->get('_sfs_cms_site'));
-    }
-
-    public function getCompileKey(VersionInterface $version, string $locale, ?SiteInterface $site = null): string
-    {
-        return "{$this->prefixCompiled}{$site}/{$locale}";
-    }
-
-    protected function saveExceptionInCompiledData(CompiledDataInterface $compiledData, Throwable $exception): void
+    protected function saveExceptionInCompiledData(CompiledDataInterface $compiledData, Throwable $exception, string $errorsKey = 'errors'): void
     {
         // flag errors
         $compiledData->setErrors(true);
@@ -60,6 +36,6 @@ abstract class AbstractVersionCompiler
             $currentException = $currentException->getPrevious();
         }
 
-        $compiledData->setDataPart('errors', $exceptions);
+        $compiledData->setDataPart($errorsKey, $exceptions);
     }
 }
