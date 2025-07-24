@@ -44,7 +44,7 @@ function sectionShowUrl(selectInput) {
     }
 }
 
-function sectionMessageSelect (container) {
+function sectionMessageSelect(container) {
     const sectionSelect = container.querySelector('[data-section-message-select]');
     const sectionModeSelect = container.querySelector('[data-section-mode-message-select]');
 
@@ -75,6 +75,11 @@ function sectionMessageSelect (container) {
 
         if (message.dataset.sectionWhenSectionTtl !== undefined && sectionSelectedChoice.dataset.sectionTtl === undefined) {
             show &= false;
+        } else {
+            const ttl = message.querySelector('.ttl');
+            if (ttl) {
+                ttl.innerText = sectionSelectedChoice.dataset.sectionTtl + 's';
+            }
         }
 
         if (message.dataset.sectionWhenSectionNoTtl !== undefined && sectionSelectedChoice.dataset.sectionTtl !== undefined) {
