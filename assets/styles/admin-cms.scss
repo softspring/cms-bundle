@@ -196,6 +196,17 @@ body {
 
     > .cms-module-body {
         overflow: hidden;
+
+        &.disabled {
+            > .cms-module-edit {
+                > .module-preview,
+                > .cms-module-form > .cms-module-form-body {
+                    pointer-events: none;
+                    filter: grayscale(100%);
+                    opacity: 0.5;
+                }
+            }
+        }
     }
 
     &.active>.cms-module-header,
@@ -356,7 +367,19 @@ body {
                 transition: all .3s ease-in-out;
             }
 
-            &:hover {
+            &.disabled {
+                cursor: default;
+                border-color: $gray-500;
+
+                .icon {
+                    color: $gray-500;
+                }
+                .name {
+                    color: $gray-500;
+                }
+            }
+
+            &:not(.disabled):hover {
                 border-color: $primary;
 
                 .icon {
