@@ -4,6 +4,9 @@ import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
 
 registerFeature('admin_versions_diff', _init);
 
+/* global version1 */
+/* global version2 */
+
 function _init() {
     const target = document.getElementById('json-diff');
 
@@ -11,9 +14,11 @@ function _init() {
         return;
     }
 
+    /* eslint-disable no-import-assign */
     jsondiffpatchHtml.config = {
         propertyOrder: (names) => names // Key
     };
+    /* eslint-enable no-import-assign */
 
     const delta = diff(version1, version2);
 
