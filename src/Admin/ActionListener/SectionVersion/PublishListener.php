@@ -100,7 +100,7 @@ class PublishListener extends AbstractSectionVersionListener
     {
         $this->flashNotifier->addTrans('error', 'admin_sections.version_publish.failed_flash', [
             '%exception%' => $event->getException()->getMessage(),
-            '%exception_details%' => $event->getException() instanceof CompileExceptionDetailsInterface ? $event->getException()->getDetails() : '',
+            // '%exception_details%' => $event->getException() instanceof CompileExceptionDetailsInterface ? $event->getException()->getDetails() : '',
         ], 'sfs_cms_admin');
     }
 }

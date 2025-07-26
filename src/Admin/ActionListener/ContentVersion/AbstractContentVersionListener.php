@@ -154,7 +154,7 @@ abstract class AbstractContentVersionListener implements EventSubscriberInterfac
 
         $this->flashNotifier->addTrans('error', "admin_{$contentConfig['_id']}.".static::ACTION_NAME.'.failed_flash', [
             '%exception%' => $event->getException()->getMessage(),
-            '%exception_details%' => $event->getException() instanceof CompileExceptionDetailsInterface ? $event->getException()->getDetails() : '',
+            // '%exception_details%' => $event->getException() instanceof CompileExceptionDetailsInterface ? $event->getException()->getDetails() : '',
         ], 'sfs_cms_contents');
     }
 
@@ -164,7 +164,7 @@ abstract class AbstractContentVersionListener implements EventSubscriberInterfac
 
         $this->flashNotifier->addTrans('error', "admin_{$contentConfig['_id']}.".static::ACTION_NAME.'.failed_flash', [
             '%exception%' => $event->getException()->getMessage(),
-            '%exception_details%' => $event->getException() instanceof CompileExceptionDetailsInterface ? $event->getException()->getDetails() : '',
+            // '%exception_details%' => $event->getException() instanceof CompileExceptionDetailsInterface ? $event->getException()->getDetails() : '',
         ], 'sfs_cms_contents');
     }
 
