@@ -132,6 +132,11 @@ class CompiledData implements CompiledDataInterface
     public function setErrors(bool $errors): void
     {
         $this->errors = $errors;
-        $this->getContentVersion()?->setCompileErrors($errors);
+
+        $version = $this->getVersion();
+
+        if ($version instanceof CompilableInterface) {
+            $version->setCompileErrors($errors);
+        }
     }
 }

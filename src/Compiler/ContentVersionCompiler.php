@@ -4,130 +4,91 @@ namespace Softspring\CmsBundle\Compiler;
 
 use Exception;
 use Psr\Log\LoggerInterface;
-use Softspring\CmsBundle\Config\CmsConfig;
-use Softspring\CmsBundle\Config\Exception\InvalidContentException;
-use Softspring\CmsBundle\Config\Exception\InvalidLayoutException;
+use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Manager\CompiledDataManagerInterface;
 use Softspring\CmsBundle\Model\CompiledDataInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
+use Softspring\CmsBundle\Model\VersionInterface;
 use Softspring\CmsBundle\Render\ContentVersionRenderer;
-use Softspring\CmsBundle\Render\Error\RenderErrorException;
 use Softspring\CmsBundle\Render\Error\RenderErrorList;
 use Softspring\CmsBundle\Render\Exception\RenderException;
 use Softspring\CmsBundle\Render\Isolated\IsolatedRequest;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 class ContentVersionCompiler extends AbstractVersionCompiler
 {
     public function __construct(
         protected ContentVersionRenderer $contentVersionRender,
-        protected RequestStack $requestStack,
-        protected array $enabledLocales,
-        protected bool $contentSaveCompiled,
-        protected CmsConfig $cmsConfig,
         protected CompiledDataManagerInterface $compiledDataManager,
-        string $prefixCompiled,
+        protected CmsHelper $cmsHelper,
         protected ?LoggerInterface $cmsLogger,
     ) {
-        $this->prefixCompiled = $prefixCompiled;
     }
 
     /**
-     * @throws CompileAllException
-     * @throws InvalidLayoutException
-     * @throws InvalidContentException
-     */
-    public function compileAll(ContentVersionInterface $contentVersion, bool $failOnException = true): void
-    {
-        if (!$this->requestStack->getCurrentRequest()) {
-            return; // not yet ready for render in fixtures, TODO improve this to allow render in fixtures
-        }
-
-        if (!$this->contentSaveCompiled) {
-            return;
-        }
-
-        $exceptions = [];
-
-        foreach ($contentVersion->getContent()->getSites() as $site) {
-            foreach ($contentVersion->getContent()->getLocales() ?? [] as $locale) {
-                $this->cmsLogger && $this->cmsLogger->debug(sprintf('Compiling "%s" content version for "%s" in "%s"', $contentVersion->getContent()->getName(), "$site", $locale));
-                $request = IsolatedRequest::createIsolatedForContentRoute($contentVersion->getContent(), $locale, $site);
-
-                try {
-                    $this->compileRequest($contentVersion, $request, null, $failOnException);
-                } catch (CompileException $exception) {
-                    $exceptions[] = $exception;
-                }
-            }
-        }
-
-        if (!empty($exceptions) && $failOnException) {
-            throw new CompileAllException($exceptions);
-        }
-    }
-
-    /**
-     * @throws InvalidLayoutException
-     * @throws InvalidContentException
+     * @return CompiledDataInterface[]
      * @throws CompileException
      */
-    public function compileRequest(ContentVersionInterface $contentVersion, Request $request, ?array $compiledContainers = null, bool $failOnException = true): CompiledDataInterface
+    public function compileAll(VersionInterface $version): array
     {
-        $compiledData = $this->compiledDataManager->createEntity();
-        $compiledData->setKey($this->getCompileKeyFromRequest($contentVersion, $request));
+        if (!$version instanceof ContentVersionInterface) {
+            throw new CompileException('Version must be an instance of ContentVersionInterface');
+        }
 
-        $this->canSaveCompiled($contentVersion) && $contentVersion->addCompiled($compiledData);
+        $compiledDatas = [];
 
-        $renderErrors = new RenderErrorList();
-
-        if (empty($compiledContainers)) {
-            try {
-                $compiledContainers = $this->compileContainersRequest($contentVersion, $request, $renderErrors, false);
-                $this->canSaveCompiledModules($contentVersion) && $compiledData->setDataPart('containers', $compiledContainers);
-
-                if ($renderErrors->hasErrors()) {
-                    $compiledData->setErrors(true);
-                    $compiledData->setDataPart('containers_errors', $renderErrors->getErrorsAsArray());
-                }
-            } catch (CompileException $exception) {
-                if ($failOnException) {
-                    throw new CompileException('Error compiling content version request', 0, $exception);
-                }
-
-                $this->canSaveCompiledModules($contentVersion) && $compiledData->setDataPart('containers', $compiledContainers);
-
-                $this->saveExceptionInCompiledData($compiledData, $exception);
-
-                return $compiledData;
+        foreach ($version->getContent()->getSites() as $site) {
+            foreach ($version->getContent()->getLocales() ?? [] as $locale) {
+                $this->cmsLogger && $this->cmsLogger->debug(sprintf('Compiling "%s" content version for "%s" in "%s"', $version->getContent()->getName(), "$site", $locale));
+                $request = IsolatedRequest::createIsolatedForContentRoute($version->getContent(), $locale, $site);
+                $compiledDatas[] = $this->compileRequest($version, $request);
             }
         }
 
-        try {
-            // compile data. Take into account that this method can return content and fill errors in the RenderErrorList
-            $compiledCode = $this->contentVersionRender->render($contentVersion, $request, $renderErrors, $compiledContainers);
-            $compiledData->setDataPart('content', $compiledCode);
+        return $compiledDatas;
+    }
 
-            // generates an exception if there are errors
-            $failOnException && $renderErrors->buildExceptionOnErrors();
+    /**
+     * @throws CompileException
+     */
+    public function compileRequest(VersionInterface $version, Request $request, ?CompiledDataInterface $preCompiledData = null): CompiledDataInterface
+    {
+        if (!$version instanceof ContentVersionInterface) {
+            throw new CompileException('Version must be an instance of ContentVersionInterface');
+        }
+
+        $compiledData = $this->compiledDataManager->createEntity();
+        $compiledData->setKey($this->compiledDataManager->getCompileKeyFromRequest($version, $request));
+        $compiledData->setVersion($version);
+
+        try {
+            if ($this->cmsHelper->compile()->contentSaveCompiled($version)) {
+                $version->addCompiled($compiledData);
+            }
+
+            $renderErrors = new RenderErrorList();
+
+            $compiledData = $this->compileRequestContainers($compiledData, $version, $request, $renderErrors, $preCompiledData);
+
+            $compiledContainers = $compiledData->getDataPart('containers') ?? [];
+
+            // compile data. Take into account that this method can return content and fill errors in the RenderErrorList
+            $compiledCode = $this->contentVersionRender->render($version, $request, $renderErrors, $compiledContainers);
+            $compiledData->setDataPart('content', $compiledCode);
 
             if ($renderErrors->hasErrors()) {
                 $compiledData->setErrors(true);
                 $compiledData->setDataPart('errors', $renderErrors->getErrorsAsArray());
             }
-        } catch (RenderException|RenderErrorException|CompileException $exception) {
+        } catch (RenderException $exception) {
             // if not content was set, set a default error content
-            if ($this->canSaveCompiled($contentVersion) && empty($compiledData->getDataPart('content'))) {
+            if (empty($compiledData->getDataPart('content'))) {
                 $compiledData->setDataPart('content', '<!-- CONTENT_VERSION_COMPILE_ERROR -->');
             }
 
             $this->saveExceptionInCompiledData($compiledData, $exception);
-
-            // if set to fail on exception, throw it
-            if ($failOnException) {
-                throw new CompileException('Error compiling content version request', 0, $exception);
-            }
+        } catch (Exception $exception) {
+            throw new CompileException('Error compiling content version request', 0, $exception);
         }
 
         return $compiledData;
@@ -136,60 +97,38 @@ class ContentVersionCompiler extends AbstractVersionCompiler
     /**
      * @throws CompileException
      */
-    public function compileContainersRequest(ContentVersionInterface $contentVersion, Request $request, RenderErrorList $renderErrors, bool $failOnException = true): array
+    protected function compileRequestContainers(CompiledDataInterface $compiledData, ContentVersionInterface $version, Request $request, RenderErrorList $renderErrors, ?CompiledDataInterface $preCompiledData = null): CompiledDataInterface
     {
         try {
-            $compiled = $this->contentVersionRender->renderContainers($contentVersion, $request, $renderErrors);
-            $failOnException && $renderErrors->buildExceptionOnErrors();
-
-            return $compiled;
+            $canSaveCompiledContainers = $this->cmsHelper->compile()->contentSaveCompiledContainers($version);
         } catch (Exception $exception) {
-            $this->cmsLogger && $this->cmsLogger->error(sprintf('Error compiling "%s" content version for "%s" in "%s"', $contentVersion->getContent()->getName(), $request->attributes->get('_sfs_cms_site'), $request->getLocale()), [
-                'exception' => $exception,
-            ]);
-
-            //            if (!$failOnException) {
-            //                return [];
-            //            }
-
-            throw new CompileException('Error compiling content version modules', 0, $exception);
-        }
-    }
-
-    /**
-     * @throws InvalidContentException
-     */
-    public function canSaveCompiledModules(ContentVersionInterface $version): bool
-    {
-        if (false === $this->contentSaveCompiled) {
-            return false;
+            throw new CompileException('Error determining if compiled containers can be saved', 0, $exception);
         }
 
-        $contentConfig = $this->cmsConfig->getContent($version->getContent());
+        try {
+            $compiledContainers = $preCompiledData?->getDataPart('containers');
 
-        if (false === $contentConfig['save_compiled']) {
-            return false;
+            if (null === $compiledContainers) {
+                $compiledContainers = $this->contentVersionRender->renderContainers($version, $request, $renderErrors);
+
+                if ($renderErrors->hasErrors()) {
+                    $compiledData->setErrors(true);
+                    $compiledData->setDataPart('containers_errors', $renderErrors->getErrorsAsArray());
+                }
+            }
+
+            $canSaveCompiledContainers && $compiledData->setDataPart('containers', $compiledContainers);
+        } catch (RenderException $exception) {
+            // if not content was set, set a default error content
+            if (empty($compiledData->getDataPart('containers'))) {
+                $canSaveCompiledContainers && $compiledData->setDataPart('containers', '<!-- CONTENT_VERSION_COMPILE_ERROR -->');
+            }
+
+            $this->saveExceptionInCompiledData($compiledData, $exception, 'containers_errors');
+        } catch (Exception $exception) {
+            throw new CompileException('Error compiling content version request', 0, $exception);
         }
 
-        return true;
-    }
-
-    /**
-     * @throws InvalidLayoutException
-     * @throws InvalidContentException
-     */
-    public function canSaveCompiled(ContentVersionInterface $version): bool
-    {
-        if (!$this->canSaveCompiledModules($version)) {
-            return false;
-        }
-
-        $layoutConfig = $this->cmsConfig->getLayout($version->getLayout());
-
-        if (false === $layoutConfig['save_compiled']) {
-            return false;
-        }
-
-        return true;
+        return $compiledData;
     }
 }

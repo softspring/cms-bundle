@@ -4,7 +4,6 @@ namespace Softspring\CmsBundle\Admin\ActionListener\SectionVersion;
 
 use Softspring\CmsBundle\Compiler\CompileException;
 use Softspring\CmsBundle\Compiler\SectionVersionCompiler;
-use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Manager\SectionManagerInterface;
@@ -29,8 +28,7 @@ class PreviewListener extends AbstractSectionVersionListener
         SectionManagerInterface $sectionManager,
         SectionVersionManagerInterface $sectionVersionManager,
         RouteManagerInterface $routeManager,
-        CmsConfig $cmsConfig,
-        protected CmsHelper $cmsHelper,
+        CmsHelper $cmsHelper,
         RouterInterface $router,
         FlashNotifier $flashNotifier,
         AuthorizationCheckerInterface $authorizationChecker,
@@ -38,7 +36,7 @@ class PreviewListener extends AbstractSectionVersionListener
         protected SectionVersionCompiler $sectionVersionCompiler,
         protected ?WebDebugToolbarListener $webDebugToolbarListener = null,
     ) {
-        parent::__construct($sectionManager, $sectionVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
+        parent::__construct($sectionManager, $sectionVersionManager, $routeManager, $cmsHelper, $router, $flashNotifier, $authorizationChecker);
     }
 
     public static function getSubscribedEvents(): array
@@ -90,7 +88,7 @@ class PreviewListener extends AbstractSectionVersionListener
 
         $request->attributes->set('_cms_preview', true);
 
-        $compiledData = $this->sectionVersionCompiler->compileRequest($version, $request, false);
+        $compiledData = $this->sectionVersionCompiler->compileRequest($version, $request);
 
         if (!$compiledData->hasErrors()) {
             return new Response($compiledData->getDataPart('content'));

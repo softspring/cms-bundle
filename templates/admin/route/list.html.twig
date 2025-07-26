@@ -58,7 +58,7 @@
             {% endblock tbody %}
 
             {% block empty_message %}
-                {% if filterForm.vars.submitted %}
+                {% if filterForm|default(false) and filterForm.vars.data|default([])|filter(v=>v) is not empty %}
                     <p class="text-center text-muted">
                         {{ ('admin_routes.list.empty.clean_filters')|trans({'%url%': url('sfs_cms_admin_routes_list')})|raw }}
                     </p>

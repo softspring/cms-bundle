@@ -278,7 +278,7 @@ admin_sections:
             create_first_section_raw: '<a href="%create_link%">Crea</a> tu primera sección!'
             can_not_create_sections: "No puedes crear secciones"
             go_to_doc_raw: 'Si necesitas ayuda visita la <a href="https://github.com/softspring/cms-bundle" target="_blank">documentación</a>'
-            clean_filters: 'No se han encontrado secciones con tu búsqueda, <a href="%url%">limpia los filtros</a> para ver todas las rutas'
+            clean_filters: 'No se han encontrado secciones con tu búsqueda, <a href="%url%">limpia los filtros</a> para ver todas las secciones'
         actions:
             create.link: "Nueva sección"
             details.link: "Detalles"
@@ -303,9 +303,9 @@ admin_sections:
         success_flash: "La sección se ha creado correctamente"
 
     content:
-        meta.title: "Contenido de la sección"
-        title: "Contenido de la sección"
-        breadcrumb: "Contenido de la sección"
+        meta.title: "Editar contenido"
+        title: "%name% (nueva versión desde v%versionNumber%)"
+        breadcrumb: "Editar contenido"
         actions:
             save.button: "Guardar cambios"
             cancel.button: "Cancelar"
@@ -401,7 +401,9 @@ admin_sections:
             publish.link: "Publicar"
             unpublish.link: "Despublicar"
             import_version.link: "Importar versión"
-            cleanup_versions.link: "Limpiar versiones"
+            cleanup_versions:
+                link: "Limpiar versiones"
+                confirm: "¿Estás seguro de limpiar las versiones? Esta acción eliminará todas las versiones excepto la publicada, la última y las marcadas para mantener."
             keep.link: "Mantener versión, pinchar para desmarcar"
             nokeep.link: "No mantener esta versión, pinchar para mantener"
             info.link: "Info"
@@ -462,7 +464,7 @@ admin_sections:
 
     version_publish:
         success_flash: "La versión se ha publicado"
-        failed_flash: "Se ha producido un error al publicar la versión<br/><small>%exception%</small>"
+        failed_flash: 'Se ha producido un error al publicar la versión<br/><small>%exception%</small>' # '<div style="margin-top:10px; max-height: 200px; overflow-y: auto;">%exception_details%</div>'
         confirm_message_title: "Publicar versión"
         with_errors_confirm_message_title: "Publicar versión"
         confirm_message_raw: "<p>¿Estás seguro de publicar esta versión?</p>"
@@ -472,6 +474,17 @@ admin_sections:
         has_been_unpublished_flash: "La sección se ha despublicado"
         confirm_message_title: "Despublicar sección"
         confirm_message_raw: "<p>¿Estás seguro de despublicar esta sección?</p><p>Mostrará un error 404 a los usuarios</p>"
+
+    version_recompile:
+        success_flash: "La versión se ha recompilado"
+        failed_flash: 'Se ha producido un error al recompilar la versión.<br/><small>%exception%</small>' # '<div style="margin-top:10px; max-height: 200px; overflow-y: auto;">%exception_details%</div>'
+
+    version_clear_compiled:
+        success_flash: "La versión se ha limpiado correctamente"
+        failed_flash: "Se ha producido un error al limpiar el contenido de la versión.<br/><small>%exception%</small>"
+
+    version_cleanup:
+        success_flash: "Se ha realizado la limpieza de versiones correctamente"
 
     version_delete:
         meta.title: "Eliminar versión"

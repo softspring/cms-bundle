@@ -26,7 +26,9 @@
 {#                    {% endif %}#}
 
                     {% if is_granted('PERMISSION_SFS_CMS_ADMIN_SECTION_CLEANUP_VERSIONS', section_entity) %}
-                        <a class="btn btn-outline-secondary" href="{{ url('sfs_cms_admin_sections_cleanup_versions', {'section':section_entity.id, 'back':'versions'}) }}">{{ ('admin_sections.versions.actions.cleanup_versions.link')|trans }}</a>
+                        <a class="btn btn-outline-secondary"
+                           onclick="return confirm('{{ ('admin_sections.versions.actions.cleanup_versions.confirm')|trans }}');"
+                           href="{{ url('sfs_cms_admin_sections_cleanup_versions', {'section':section_entity.id, 'back':'versions'}) }}">{{ ('admin_sections.versions.actions.cleanup_versions.link')|trans }}</a>
                     {% else %}
                         <a class="btn btn-outline-secondary disabled">{{ ('admin_sections.versions.actions.cleanup_versions.link')|trans }}</a>
                     {% endif %}

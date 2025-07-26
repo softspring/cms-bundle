@@ -5,7 +5,7 @@ namespace Softspring\CmsBundle\Compiler;
 use Exception;
 use Throwable;
 
-class CompileAllException extends Exception
+class CompileAllException extends Exception implements CompileExceptionDetailsInterface
 {
     /**
      * @param Throwable[] $exceptions
@@ -21,5 +21,19 @@ class CompileAllException extends Exception
     public function getExceptions(): array
     {
         return $this->exceptions;
+    }
+
+    public function getDetails(): string
+    {
+        $details = [];
+        foreach ($this->exceptions as $exception) {
+            if ($exception instanceof CompileExceptionDetailsInterface) {
+                $details[] = $exception->getDetails();
+            } else {
+                $details[] = $exception->getMessage();
+            }
+        }
+
+        return implode("\n", $details);
     }
 }

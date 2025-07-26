@@ -26,7 +26,9 @@
                     {% endif %}
 
                     {% if not content_config.admin.version_cleanup.is_granted or is_granted(content_config.admin.version_cleanup.is_granted, entity) %}
-                        <a class="btn btn-outline-secondary" href="{{ url('sfs_cms_admin_content_'~content_type~'_cleanup_versions', {'content':entity.id, 'back':'versions'}) }}">{{ ('admin_'~content_type~'.versions.actions.cleanup_versions.link')|trans }}</a>
+                        <a class="btn btn-outline-secondary"
+                           onclick="return confirm('{{ ('admin_'~content_type~'.versions.actions.cleanup_versions.confirm')|trans }}');"
+                           href="{{ url('sfs_cms_admin_content_'~content_type~'_cleanup_versions', {'content':entity.id, 'back':'versions'}) }}">{{ ('admin_'~content_type~'.versions.actions.cleanup_versions.link')|trans }}</a>
                     {% else %}
                         <a class="btn btn-outline-secondary disabled">{{ ('admin_'~content_type~'.versions.actions.cleanup_versions.link')|trans }}</a>
                     {% endif %}

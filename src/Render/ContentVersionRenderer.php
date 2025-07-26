@@ -10,6 +10,7 @@ use Softspring\CmsBundle\Render\Error\RenderErrorList;
 use Softspring\CmsBundle\Render\Exception\RenderException;
 use Softspring\CmsBundle\Render\Isolated\IsolatedRunner;
 use Softspring\CmsBundle\Render\Module\ModuleRenderer;
+use Softspring\CmsBundle\Utils\DeprecatedVariable;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
@@ -96,6 +97,7 @@ class ContentVersionRenderer implements ContentVersionRendererInterface
                         $twigAdditionalContext = [
                             'version' => $version,
                             'content' => $version->getContent(),
+                            '_content' => new DeprecatedVariable($version->getContent(), '_content', 'content'),
                         ];
                         $containers[$layoutContainerId] .= $moduleRenderer->render($module, $this->profilerDebugCollectorData[$layoutContainerId], $twigAdditionalContext, $renderErrorList);
                         $renderErrorList && $renderErrorList->popLocation();

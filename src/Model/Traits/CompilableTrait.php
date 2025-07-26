@@ -31,28 +31,40 @@ trait CompilableTrait
 
     public function addCompiled(CompiledDataInterface $compiled): void
     {
-        if (!$this->compiled->contains($compiled)) {
+        if (!$this->getCompiled()->contains($compiled)) {
             if ($this->isPublished()) {
                 $this->getParent()->setLastModified(new DateTime());
             }
             $compiled->setVersion($this);
-            $this->compiled->add($compiled);
+            $this->getCompiled()->add($compiled);
+
+            if ($compiled->hasErrors()) {
+                $this->setCompileErrors(true);
+            }
         }
     }
 
     public function removeCompiled(CompiledDataInterface $compiled): void
     {
-        if ($this->compiled->contains($compiled)) {
-            $this->compiled->removeElement($compiled);
+        if ($this->getCompiled()->contains($compiled)) {
+            $this->getCompiled()->removeElement($compiled);
             $compiled->setVersion(null);
+
+            // recalculate compile errors, without removed compiled data element
+            $compileErrors = false;
+            foreach ($this->getCompiled() as $c) {
+                $compileErrors |= $c->hasErrors();
+            }
+            $this->setCompileErrors($compileErrors);
         }
     }
 
     public function cleanCompiled(): void
     {
-        $this->compiled->map(function (CompiledDataInterface $compiled) {
+        $this->getCompiled()->map(function (CompiledDataInterface $compiled) {
             $this->removeCompiled($compiled);
         });
+        $this->setCompileErrors(false);
     }
 
     public function hasCompileErrors(): bool

@@ -3,28 +3,26 @@
 namespace Softspring\CmsBundle\EntityListener;
 
 use Doctrine\ORM\Event\PrePersistEventArgs;
-use Softspring\CmsBundle\Compiler\CompileAllException;
 use Softspring\CmsBundle\Compiler\SectionVersionCompiler;
+use Softspring\CmsBundle\Helper\CompileHelper;
 use Softspring\CmsBundle\Model\SectionVersionInterface;
 
 class SectionVersionCompileListener
 {
     public function __construct(
+        protected CompileHelper $compileHelper,
         protected SectionVersionCompiler $sectionVersionCompiler,
-        protected bool $sectionSaveCompiled,
-        protected bool $sectionAutoCompileOnSave,
     ) {
     }
 
-    /**
-     * @throws CompileAllException
-     */
-    public function prePersist(SectionVersionInterface $contentVersion, PrePersistEventArgs $event): void
+    public function prePersist(SectionVersionInterface $sectionVersion, PrePersistEventArgs $event): void
     {
-        if (!$this->sectionAutoCompileOnSave || !$this->sectionSaveCompiled) {
+        if (!$this->compileHelper->sectionAutoCompileOnSave($sectionVersion)) {
             return;
         }
 
-        $this->sectionVersionCompiler->compileAll($contentVersion, true);
+        foreach ($this->sectionVersionCompiler->compileAll($sectionVersion) as $compiledData) {
+            $sectionVersion->addCompiled($compiledData);
+        }
     }
 }

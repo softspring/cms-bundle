@@ -5,4 +5,7 @@ debug_errors:
     form:
         _group:
             filters: "Filters"
+            error: "Error"
         locale_filter.label: "Locales"
+        error_type.label: "Error type"
+    edit_message: "This module is for debugging purposes only; it will throw an error."
