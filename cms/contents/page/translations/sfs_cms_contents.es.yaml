@@ -147,9 +147,13 @@ admin_page:
             preview.link: "Previsualizar"
             export.link: "Exportar"
             publish.link: "Publicar"
-            unpublish.link: "Despublicar"
+            unpublish:
+                link: "Despublicar"
+                confirm: "¿Estás seguro de despublicar esta versión? Mostrará un error 404 a los usuarios."
             import_version.link: "Importar versión"
-            cleanup_versions.link: "Limpiar versiones"
+            cleanup_versions:
+                link: "Limpiar versiones"
+                confirm: "¿Estás seguro de limpiar las versiones? Esta acción eliminará todas las versiones excepto la publicada, la última y las marcadas para mantener."
             diff.link: "Ver diferencias"
             keep.link: "Mantener versión, pinchar para desmarcar"
             nokeep.link: "No mantener esta versión, pinchar para mantener"

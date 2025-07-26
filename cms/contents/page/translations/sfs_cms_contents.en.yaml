@@ -147,9 +147,13 @@ admin_page:
             preview.link: "Preview"
             export.link: "Export"
             publish.link: "Publish"
-            unpublish.link: "Unpublish"
+            unpublish:
+                link: "Unpublish"
+                confirm: "Are you sure you want to unpublish this page? It will show a 404 error to the users."
             import_version.link: "Import version"
-            cleanup_versions.link: "Cleanup versions"
+            cleanup_versions:
+                link: "Cleanup versions"
+                confirm: "Are you sure to cleanup versions? This action will delete all versions except the published one, the last one and the ones marked to keep."
             diff.link: "Diff versions"
             keep.link: "Keep version, click to no keep"
             nokeep.link: "Do not keep version, click to keep"

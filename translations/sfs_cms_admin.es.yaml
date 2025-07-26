@@ -401,7 +401,9 @@ admin_sections:
             publish.link: "Publicar"
             unpublish.link: "Despublicar"
             import_version.link: "Importar versión"
-            cleanup_versions.link: "Limpiar versiones"
+            cleanup_versions:
+                link: "Limpiar versiones"
+                confirm: "¿Estás seguro de limpiar las versiones? Esta acción eliminará todas las versiones excepto la publicada, la última y las marcadas para mantener."
             keep.link: "Mantener versión, pinchar para desmarcar"
             nokeep.link: "No mantener esta versión, pinchar para mantener"
             info.link: "Info"
