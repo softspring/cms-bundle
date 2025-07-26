@@ -74,7 +74,7 @@ class SectionVersionManager implements SectionVersionManagerInterface
             $compiledData = $this->sectionCompiler->compileRequest($sectionVersion, $request);
 
             if ($throwExceptionOnCompileError && $compiledData->hasErrors()) {
-                throw new CompileException('Compilation errors occurred: '.implode(', ', $compiledData->getDataPart('errors')));
+                throw new CompileException('Compilation error occurred');
             }
 
             $this->cmsHelper->compile()->sectionSaveCompiled($sectionVersion) && $this->saveEntity($sectionVersion);

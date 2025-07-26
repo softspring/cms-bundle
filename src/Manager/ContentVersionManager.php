@@ -78,7 +78,7 @@ class ContentVersionManager implements ContentVersionManagerInterface
             $compiledData = $this->contentCompiler->compileRequest($contentVersion, $request, $compiledData);
 
             if ($throwExceptionOnCompileError && $compiledData->hasErrors()) {
-                throw new CompileException('Compilation errors occurred: '.implode(', ', $compiledData->getDataPart('errors')));
+                throw new CompileException('Compilation error occurred');
             }
 
             $this->cmsHelper->compile()->contentSaveCompiled($contentVersion) && $this->saveEntity($contentVersion);
