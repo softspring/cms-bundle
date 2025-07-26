@@ -1,13 +1,13 @@
 import { diff } from 'jsondiffpatch';
 import * as jsondiffpatchHtml from 'jsondiffpatch/formatters/html';
-import {registerFeature, addTargetEventListener} from '@softspring/cms-bundle/scripts/tools';
+import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
 
 registerFeature('admin_versions_diff', _init);
 
 function _init() {
     const target = document.getElementById('json-diff');
 
-    if (!target) {
+    if (!target || version1 === undefined || version2 === undefined) {
         return;
     }
 
