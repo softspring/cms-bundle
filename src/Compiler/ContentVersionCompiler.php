@@ -70,10 +70,6 @@ class ContentVersionCompiler extends AbstractVersionCompiler
 
             $compiledData = $this->compileRequestContainers($compiledData, $version, $request, $renderErrors, $preCompiledData);
 
-            if ($compiledData->hasErrors()) {
-                return $compiledData;
-            }
-
             $compiledContainers = $compiledData->getDataPart('containers') ?? [];
 
             // compile data. Take into account that this method can return content and fill errors in the RenderErrorList

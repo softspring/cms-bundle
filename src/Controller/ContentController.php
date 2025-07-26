@@ -45,7 +45,7 @@ class ContentController extends AbstractController
             }
         }
 
-        $pageContent = $this->contentVersionManager->getCompiledContent($publishedVersion, $request);
+        $pageContent = $this->contentVersionManager->getCompiledContent($publishedVersion, $request, true);
 
         // create response
         $response->setContent($pageContent->getDataPart('content'));
