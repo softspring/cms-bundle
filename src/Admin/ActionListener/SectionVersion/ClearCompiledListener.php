@@ -3,7 +3,7 @@
 namespace Softspring\CmsBundle\Admin\ActionListener\SectionVersion;
 
 use Softspring\CmsBundle\Compiler\SectionVersionCompiler;
-use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Manager\SectionManagerInterface;
 use Softspring\CmsBundle\Manager\SectionVersionManagerInterface;
@@ -22,13 +22,13 @@ class ClearCompiledListener extends AbstractSectionVersionListener
         SectionManagerInterface $sectionManager,
         SectionVersionManagerInterface $sectionVersionManager,
         RouteManagerInterface $routeManager,
-        CmsConfig $cmsConfig,
+        CmsHelper $cmsHelper,
         RouterInterface $router,
         FlashNotifier $flashNotifier,
         AuthorizationCheckerInterface $authorizationChecker,
         protected SectionVersionCompiler $sectionVersionCompiler,
     ) {
-        parent::__construct($sectionManager, $sectionVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
+        parent::__construct($sectionManager, $sectionVersionManager, $routeManager, $cmsHelper, $router, $flashNotifier, $authorizationChecker);
     }
 
     public static function getSubscribedEvents(): array
@@ -67,7 +67,7 @@ class ClearCompiledListener extends AbstractSectionVersionListener
 
         $entity->setKeep($event->getRequest()->attributes->get('recompile') ?: false);
 
-        $this->sectionVersionCompiler->clearCompiled($entity);
+        $entity->cleanCompiled();
 
         $this->sectionVersionManager->saveEntity($entity);
 

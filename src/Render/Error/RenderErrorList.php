@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Render\Error;
 
+use Softspring\CmsBundle\Utils\Exceptions;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Throwable;
@@ -44,13 +45,7 @@ class RenderErrorList
             return [
                 'location' => $error['location'],
                 'template' => $error['template'],
-                'exception' => [
-                    'message' => $error['exception']->getMessage(),
-                    'code' => $error['exception']->getCode(),
-                    'file' => $error['exception']->getFile(),
-                    'line' => $error['exception']->getLine(),
-                    'trace' => $error['exception']->getTraceAsString(),
-                ],
+                'exception' => Exceptions::toArray($error['exception']),
                 'contextData' => $error['contextData'],
             ];
         }, $this->getErrors());

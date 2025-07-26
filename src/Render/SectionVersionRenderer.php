@@ -29,6 +29,8 @@ class SectionVersionRenderer
             $version->getMedias();
             // preload all routes
             $version->getRoutes();
+            // preload all sections
+            $version->getSections();
 
             $versionData = $version->getData() ?? [];
 
@@ -36,8 +38,10 @@ class SectionVersionRenderer
             $renderErrorList && $renderErrorList->pushLocation('data');
 
             $section = '';
-            foreach ($versionData as $moduleData) {
+            foreach ($versionData as $m => $moduleData) {
+                $renderErrorList && $renderErrorList->pushLocation($m);
                 $section .= $moduleRenderer->render($moduleData, $this->profilerDebugCollectorData, [], $renderErrorList);
+                $renderErrorList && $renderErrorList->popLocation();
             }
 
             return $section;

@@ -280,7 +280,7 @@ admin_sections:
             create_first_section_raw: '<a href="%create_link%">Create</a> your first section!'
             can_not_create_sections: "You cannot create sections"
             go_to_doc_raw: 'If you need help go to <a href="https://github.com/softspring/cms-bundle" target="_blank">documentation</a>'
-            clean_filters: 'No sections found for your search, <a href="%url%">clear filters</a> to see all routes'
+            clean_filters: 'No sections found for your search, <a href="%url%">clear filters</a> to see all sections'
         actions:
             create.link: "New section"
             details.link: "Details"
@@ -305,9 +305,9 @@ admin_sections:
         success_flash: "The section has been created"
 
     content:
-        meta.title: "Section content"
-        title: "Section content"
-        breadcrumb: "Section content"
+        meta.title: "Edit content"
+        title: "%name% (new version from v%versionNumber%)"
+        breadcrumb: "Edit content"
         actions:
             save.button: "Save changes"
             cancel.button: "Cancel"
@@ -403,7 +403,9 @@ admin_sections:
             publish.link: "Publish"
             unpublish.link: "Unpublish"
             import_version.link: "Import version"
-            cleanup_versions.link: "Cleanup versions"
+            cleanup_versions:
+                link: "Cleanup versions"
+                confirm: "Are you sure to cleanup versions? This action will delete all versions except the published one, the last one and the ones marked to keep."
             keep.link: "Keep version, click to unmark"
             nokeep.link: "Do not keep this version, click to keep"
             info.link: "Info"
@@ -464,7 +466,7 @@ admin_sections:
 
     version_publish:
         success_flash: "The version has been published"
-        failed_flash: "An error occurred while publishing the version<br/><small>%exception%</small>"
+        failed_flash: 'An error occurred while publishing the version<br/><small>%exception%</small>' # '<div style="margin-top:10px; max-height: 200px; overflow-y: auto;">%exception_details%</div>'
         confirm_message_title: "Publish version"
         with_errors_confirm_message_title: "Publish version"
         confirm_message_raw: "<p>Are you sure to publish this version?</p>"
@@ -474,6 +476,17 @@ admin_sections:
         has_been_unpublished_flash: "The section has been unpublished"
         confirm_message_title: "Unpublish section"
         confirm_message_raw: "<p>Are you sure to unpublish this section?</p><p>It will show a 404 error to users</p>"
+
+    version_recompile:
+        success_flash: "Version has been recompiled"
+        failed_flash: 'An error has been produced during the version recompilation.<br/><small>%exception%</small>' # '<div style="margin-top:10px; max-height: 200px; overflow-y: auto;">%exception_details%</div>'
+
+    version_clear_compiled:
+        success_flash: "Version compiled content has been cleared"
+        failed_flash: "An error has been produced during the version content clearing.<br/><small>%exception%</small>"
+
+    version_cleanup:
+        success_flash: "Versions cleanup has been done correctly"
 
     version_delete:
         meta.title: "Delete version"

@@ -7,7 +7,7 @@
 {% block breadcrums_content %}
     {{ parent() }}
     <li class="breadcrumb-item"><a
-                href="{{ url('sfs_cms_admin_section_sections_list') }}">{{ ('admin_sections.list.breadcrumb')|trans }}</a>
+                href="{{ url('sfs_cms_admin_sections_list') }}">{{ ('admin_sections.list.breadcrumb')|trans }}</a>
     </li>
     <li class="breadcrumb-item active"
         aria-current="section">{{ ('admin_sections.read.breadcrumb')|trans({'%name%':section.name}) }}</li>

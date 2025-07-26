@@ -2,7 +2,6 @@
 
 namespace Softspring\CmsBundle\Admin\ActionListener\Section;
 
-use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
@@ -23,7 +22,6 @@ class ReadListener extends AbstractSectionListener
         SectionManagerInterface $sectionManager,
         SectionVersionManagerInterface $sectionVersionManager,
         RouteManagerInterface $routeManager,
-        CmsConfig $cmsConfig,
         CmsHelper $cmsHelper,
         RouterInterface $router,
         FlashNotifier $flashNotifier,
@@ -31,7 +29,7 @@ class ReadListener extends AbstractSectionListener
         protected ContentVersionManagerInterface $contentVersionManager,
         //        protected string $sectionCacheType,
     ) {
-        parent::__construct($sectionManager, $sectionVersionManager, $routeManager, $cmsConfig, $cmsHelper, $router, $flashNotifier, $authorizationChecker);
+        parent::__construct($sectionManager, $sectionVersionManager, $routeManager, $cmsHelper, $router, $flashNotifier, $authorizationChecker);
     }
 
     public static function getSubscribedEvents(): array

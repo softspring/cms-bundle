@@ -21,7 +21,7 @@ trait TranslatableConfigTrait
 
     public function getLocales(): ?array
     {
-        return array_unique(array_merge([$this->defaultLocale], $this->locales ?? []));
+        return array_unique(array_merge($this->defaultLocale ? [$this->defaultLocale] : [], $this->locales ?? []));
     }
 
     public function setLocales(?array $locales): void

@@ -41,7 +41,7 @@ admin_page:
 
     version_publish:
         success_flash: "La versión se ha publicado"
-        failed_flash: "Se ha producido un error al publicar la versión<br/><small>%exception%</small>"
+        failed_flash: 'Se ha producido un error al publicar la versión<br/><small>%exception%</small>' # '<div style="margin-top:10px; max-height: 200px; overflow-y: auto;">%exception_details%</div>'
         confirm_message_title: "Publicar versión"
         with_errors_confirm_message_title: "Publicar versión"
         confirm_message_raw: "<p>¿Estás seguro de publicar esta versión?</p>"
@@ -147,9 +147,13 @@ admin_page:
             preview.link: "Previsualizar"
             export.link: "Exportar"
             publish.link: "Publicar"
-            unpublish.link: "Despublicar"
+            unpublish:
+                link: "Despublicar"
+                confirm: "¿Estás seguro de despublicar esta versión? Mostrará un error 404 a los usuarios."
             import_version.link: "Importar versión"
-            cleanup_versions.link: "Limpiar versiones"
+            cleanup_versions:
+                link: "Limpiar versiones"
+                confirm: "¿Estás seguro de limpiar las versiones? Esta acción eliminará todas las versiones excepto la publicada, la última y las marcadas para mantener."
             diff.link: "Ver diferencias"
             keep.link: "Mantener versión, pinchar para desmarcar"
             nokeep.link: "No mantener esta versión, pinchar para mantener"

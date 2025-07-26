@@ -5,4 +5,7 @@ debug_errors:
     form:
         _group:
             filters: "Filtros"
+            error: "Error"
         locale_filter.label: "Idiomas"
+        error_type.label: "Tipo de error"
+    edit_message: "Este módulo es solo para fines de depuración; generará un error."
