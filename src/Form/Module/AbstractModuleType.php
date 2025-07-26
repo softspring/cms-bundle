@@ -37,6 +37,8 @@ abstract class AbstractModuleType extends AbstractNodeType
             'deprecated' => false,
             'available_sites' => null,
             'available_locales' => null,
+            'module_enabled' => null,
+            'module_disabled' => null,
         ]);
 
         $resolver->setRequired('module_id');
@@ -77,6 +79,8 @@ abstract class AbstractModuleType extends AbstractNodeType
     public function buildChildView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['module_id'] = $options['module_id'];
+        $view->vars['module_enabled'] = $options['module_enabled'];
+        $view->vars['module_disabled'] = $options['module_disabled'];
         $view->vars['form_template'] = $options['form_template'];
         $view->vars['edit_template'] = $options['edit_template'];
         $view->vars['sites'] = $options['available_sites'];

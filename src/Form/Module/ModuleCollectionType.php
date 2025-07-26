@@ -41,7 +41,7 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
     {
         $discriminatorMap = [];
 
-        foreach ($this->cmsConfig->getModules() as $moduleId => $config) {
+        foreach ($this->cmsConfig->getModules(false) as $moduleId => $config) {
             $discriminatorMap[$moduleId] = 'array';
         }
 
@@ -52,8 +52,10 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
     {
         $typesOptions = [];
 
-        foreach ($this->cmsConfig->getModules() as $moduleId => $config) {
+        foreach ($this->cmsConfig->getModules(false) as $moduleId => $config) {
             $typesOptions[$moduleId] = $config['module_options'] ?? [];
+            $typesOptions[$moduleId]['module_enabled'] = $config['enabled'];
+            $typesOptions[$moduleId]['module_disabled'] = !$config['enabled'];
             $typesOptions[$moduleId]['compatible_contents'] = $config['compatible_contents'] ?? [];
             $typesOptions[$moduleId]['form_template'] = $config['form_template'] ?? null;
             $typesOptions[$moduleId]['edit_template'] = $config['edit_template'] ?? null;
@@ -74,7 +76,7 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
     {
         $typesMap = [];
 
-        foreach ($this->cmsConfig->getModules() as $moduleId => $config) {
+        foreach ($this->cmsConfig->getModules(false) as $moduleId => $config) {
             $typeReflection = new ReflectionClass($config['module_type']);
             if (!$typeReflection->isSubclassOf(AbstractModuleType::class)) {
                 throw new InvalidConfigurationException(sprintf('%s class configured in module\'s module_type option must extends %s', $config['form_type'], AbstractNodeType::class));
@@ -155,7 +157,7 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
             'helper' => [],
         ];
         foreach ($view->vars['prototypes'] as $prototypeId => $prototype) {
-            $moduleConfig = $this->cmsConfig->getModule($prototypeId);
+            $moduleConfig = $this->cmsConfig->getModule($prototypeId, true, false);
             $groupedPrototypes[$moduleConfig['group']][$prototypeId] = $prototype;
         }
         $view->vars['prototypes'] = array_filter($groupedPrototypes);

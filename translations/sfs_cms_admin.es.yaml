@@ -8,6 +8,8 @@ module_buttons:
     copy.title: "Copiar módulo"
     remove.title: "Eliminar módulo"
 
+module_disabled_raw: "El módulo está desactivado en configuración y no se puede editar."
+
 admin_content:
     read:
         published_cache_alert_raw: "Este contenido fue publicado por última vez el %publishedDateTime%. Algunas URLs de contenido están cacheadas durante %maxRouteTtl% segundos.<br/>Por lo que puede que tengas que esperar %waitSeconds% segundos antes de que el nuevo contenido esté disponible."

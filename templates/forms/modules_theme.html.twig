@@ -137,6 +137,10 @@
         <div class="alert alert-warning m-3" role="alert">{{ form.vars.deprecated }}</div>
     {% endif %}
 
+    {% if form.vars.module_disabled %}
+        <div class="alert alert-warning m-3" role="alert">{{ 'module_disabled_raw'|trans({}, 'sfs_cms_admin')|raw }}</div>
+    {% endif %}
+
     {{ form_widget(form._module) }}
     {{ form_widget(form._revision) }}
 
@@ -257,7 +261,7 @@
             <div class="cms-module-header">
                 {{ block('module_buttons') }}
             </div>
-            <div class="cms-module-body">
+            <div class="cms-module-body {{ not form.vars.module_enabled ? 'disabled' : '' }}">
                 {{ form_widget(form) }}
             </div>
         </div>
@@ -277,7 +281,7 @@
             <div class="d-flex justify-content-between border-bottom bg-gray-200 p-3">
                 {{ block('module_edit_header') }}
             </div>
-            <div class="text-start">
+            <div class="text-start cms-module-form-body">
                 {{ block('module_edit_form') }}
             </div>
         </div>
@@ -374,22 +378,38 @@
                             <div class="container">
                                 <div class="row">
                                     {% for key, prototype in prototypes %}
-                                        {% set trans_domain = prototype.vars.translation_domain | default(translation_domain) | default(false) %}
                                         <div class="col-3 mb-3 modal-module">
-                                            <div data-collection-action="insert"
-                                                 data-module-id="{{ prototype.vars.module_id }}"
-                                                 class="module-thumbnail" {{ block('polymorphic_prototype_button_attributes') }}>
-                                                <div class="icon">
-                                                    {{ (not trans_domain ? '' : (prototype.vars.prototype_button_label~'_icon')|trans({}, trans_domain))|raw }}
+                                            {% set trans_domain = prototype.vars.translation_domain | default(translation_domain) | default(false) %}
+                                            {% if prototype.vars.module_disabled %}
+                                                <div data-module-id="{{ prototype.vars.module_id }}"
+                                                     class="module-thumbnail disabled">
+                                                    <div class="icon">
+                                                        {{ (not trans_domain ? '' : (prototype.vars.prototype_button_label~'_icon')|trans({}, trans_domain))|raw }}
+                                                    </div>
+                                                    <div class="name">
+                                                        {{ not trans_domain ? prototype.vars.prototype_button_label : prototype.vars.prototype_button_label|trans({}, trans_domain) }}
+                                                        {% if prototype.vars.deprecated %}
+                                                            <i class="bi bi-exclamation-diamond text-warning"
+                                                               title="{{ prototype.vars.deprecated }}"></i>
+                                                        {% endif %}
+                                                    </div>
                                                 </div>
-                                                <div class="name">
-                                                    {{ not trans_domain ? prototype.vars.prototype_button_label : prototype.vars.prototype_button_label|trans({}, trans_domain) }}
-                                                    {% if prototype.vars.deprecated %}
-                                                        <i class="bi bi-exclamation-diamond text-warning"
-                                                           title="{{ prototype.vars.deprecated }}"></i>
-                                                    {% endif %}
+                                            {% else %}
+                                                <div data-collection-action="insert"
+                                                     data-module-id="{{ prototype.vars.module_id }}"
+                                                     class="module-thumbnail" {{ block('polymorphic_prototype_button_attributes') }}>
+                                                    <div class="icon">
+                                                        {{ (not trans_domain ? '' : (prototype.vars.prototype_button_label~'_icon')|trans({}, trans_domain))|raw }}
+                                                    </div>
+                                                    <div class="name">
+                                                        {{ not trans_domain ? prototype.vars.prototype_button_label : prototype.vars.prototype_button_label|trans({}, trans_domain) }}
+                                                        {% if prototype.vars.deprecated %}
+                                                            <i class="bi bi-exclamation-diamond text-warning"
+                                                               title="{{ prototype.vars.deprecated }}"></i>
+                                                        {% endif %}
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            {% endif %}
                                         </div>
                                     {% endfor %}
                                 </div>

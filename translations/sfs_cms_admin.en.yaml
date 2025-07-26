@@ -8,6 +8,8 @@ module_buttons:
     duplicate.title: "Duplicate module"
     copy.title: "Copy module"
 
+module_disabled_raw: "Module is disabled. Please enable it in the configuration to use it."
+
 admin_content:
     read:
         published_cache_alert_raw: "This content was last published at %publishedDateTime%. Some content URLs are cached for %maxRouteTtl% seconds. So you may have to wait %waitSeconds% seconds before the new content is available."
