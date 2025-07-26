@@ -9,14 +9,14 @@ readonly class DeprecatedVariable
         private string $oldName,
         private string $newName,
         private string $message = 'The %s variable is deprecated and will be removed in a future version. Please use the new variable %s instead.',
-        private string $removeVersion = '6.0'
-    )
-    {
+        private string $removeVersion = '6.0',
+    ) {
     }
 
     public function __get(string $name)
     {
         trigger_deprecation('softspring/cms-bundle', $this->removeVersion, sprintf($this->message, $this->oldName, $this->newName));
+
         return $this->inner->{$name};
     }
 
@@ -24,9 +24,9 @@ readonly class DeprecatedVariable
     {
         trigger_deprecation('softspring/cms-bundle', $this->removeVersion, sprintf($this->message, $this->oldName, $this->newName));
 
-        if (!method_exists($this->inner, $name) && method_exists($this->inner, 'get' . ucfirst($name))) {
+        if (!method_exists($this->inner, $name) && method_exists($this->inner, 'get'.ucfirst($name))) {
             // If the method does not exist, but a getter does, we call the getter instead
-            $name = 'get' . ucfirst($name);
+            $name = 'get'.ucfirst($name);
         }
 
         return call_user_func([$this->inner, $name], ...$arguments);
@@ -35,6 +35,7 @@ readonly class DeprecatedVariable
     public function __isset(string $name): bool
     {
         trigger_deprecation('softspring/cms-bundle', $this->removeVersion, sprintf($this->message, $this->oldName, $this->newName));
+
         return isset($this->inner->{$name});
     }
 
@@ -53,6 +54,7 @@ readonly class DeprecatedVariable
     public function __toString(): string
     {
         trigger_deprecation('softspring/cms-bundle', $this->removeVersion, sprintf($this->message, $this->oldName, $this->newName));
-        return (string)$this->inner->__toString();
+
+        return (string) $this->inner->__toString();
     }
 }
