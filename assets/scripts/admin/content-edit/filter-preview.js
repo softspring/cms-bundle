@@ -28,7 +28,12 @@ function showElement(htmlElement) {
         fetch(previewUrl)
             .then(response => response.text())
             .then(html => {
-                htmlElement.innerHTML = html;
+                const previewUrlType = htmlElement.dataset.previewUrlType || 'html';
+                if (previewUrlType === 'text') {
+                    htmlElement.textContent = html;
+                } else {
+                    htmlElement.innerHTML = html;
+                }
                 filterCurrentFilterElements();
             })
             .catch(error => console.error('Error loading preview:', error));
