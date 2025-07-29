@@ -31,9 +31,9 @@ class BlockController extends AbstractController
 
     public function renderByType(string $type, Request $request): Response
     {
-        $this->enableSchedulableFilter();
-
         try {
+            $this->enableSchedulableFilter();
+
             $config = $this->cmsConfig->getBlock($type);
 
             if (!$config['static']) {
@@ -67,9 +67,9 @@ class BlockController extends AbstractController
 
     public function renderById(string $id, Request $request): Response
     {
-        $this->enableSchedulableFilter();
-
         try {
+            $this->enableSchedulableFilter();
+
             /** @var ?BlockInterface $block */
             $block = $this->blockManager->getRepository()->findOneById($id);
 

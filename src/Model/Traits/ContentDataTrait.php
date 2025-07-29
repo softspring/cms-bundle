@@ -4,7 +4,7 @@ namespace Softspring\CmsBundle\Model\Traits;
 
 use Doctrine\Common\Collections\Collection;
 use Softspring\CmsBundle\Model\RouteInterface;
-use Softspring\CmsBundle\Model\SectionInterface;
+use Softspring\CmsSectionsPlugin\Model\SectionInterface;
 use Softspring\MediaBundle\Model\MediaInterface;
 
 trait ContentDataTrait

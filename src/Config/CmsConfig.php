@@ -16,14 +16,7 @@ use Softspring\CmsBundle\Model\SiteInterface;
 
 class CmsConfig
 {
-    protected array $layouts;
-    protected array $modules;
-    protected array $contents;
-    protected array $menus;
-    protected array $blocks;
     protected array $siteConfigs;
-    protected SiteManagerInterface $siteManager;
-
     /**
      * @var SiteInterface[]|null
      */
@@ -37,7 +30,6 @@ class CmsConfig
         $this->menus = $menus;
         $this->blocks = $blocks;
         $this->siteConfigs = $sites;
-        $this->siteManager = $siteManager;
     }
 
     public function getLayouts(): array
@@ -208,5 +200,24 @@ class CmsConfig
         $sites = $this->getSites();
 
         return array_filter($sites, fn (SiteInterface $site) => in_array($contentType, $site->getConfig()['allowed_content_types']));
+    }
+
+    public function getRegisteredPlugins(): array
+    {
+        return $this->registeredPlugins;
+    }
+
+    public function hasRegisteredPlugin(string $pluginName): bool
+    {
+        foreach ($this->registeredPlugins as $plugin) {
+            if ($plugin['name'] == $pluginName) {
+                return true;
+            }
+            if ($plugin['class'] == $pluginName) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

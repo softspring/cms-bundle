@@ -16,10 +16,6 @@
         <many-to-one field="contentVersion" target-entity="Softspring\CmsBundle\Model\ContentVersionInterface" inversed-by="compiled">
             <join-column name="content_version_id" on-delete="CASCADE"/>
         </many-to-one>
-
-        <many-to-one field="sectionVersion" target-entity="Softspring\CmsBundle\Model\SectionVersionInterface" inversed-by="compiled">
-            <join-column name="section_version_id" on-delete="CASCADE"/>
-        </many-to-one>
     </entity>
 
 </doctrine-mapping>

@@ -4,12 +4,12 @@ namespace Softspring\CmsBundle\Form\Resolver;
 
 use Softspring\Component\DynamicFormType\Form\Resolver\DefaultTypeResolver;
 
-class CmsTypeResolver extends DefaultTypeResolver
+class AppTypeResolver extends DefaultTypeResolver
 {
     public function getPossibleFormClasses(string $type): array
     {
         return [
-            'Softspring\CmsBundle\Form\Type\\'.ucfirst($type).'Type',
+            'App\Form\Type\\'.ucfirst($type).'Type',
         ];
     }
 }

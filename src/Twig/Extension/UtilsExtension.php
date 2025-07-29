@@ -4,17 +4,21 @@ namespace Softspring\CmsBundle\Twig\Extension;
 
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
-use Softspring\CmsBundle\Manager\SectionManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Utils\HtmlValidator;
+use Softspring\CmsSectionsPlugin\Manager\SectionManagerInterface;
+use Softspring\CmsSectionsPlugin\Model\SectionInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 class UtilsExtension extends AbstractExtension
 {
-    public function __construct(protected ContentManagerInterface $contentManager, protected CmsConfig $cmsConfig, protected SectionManagerInterface $sectionManager)
-    {
+    public function __construct(
+        protected ContentManagerInterface $contentManager,
+        protected CmsConfig $cmsConfig,
+        protected ?SectionManagerInterface $sectionManager,
+    ) {
     }
 
     public function getFilters(): array
@@ -38,7 +42,7 @@ class UtilsExtension extends AbstractExtension
     public function searchContentEsiCalls(string $content): array
     {
         $matches = [];
-        preg_match_all('/<esi:include src="([^"]+)"\s?\/>/', $content, $matches);
+        preg_match_all('/<esi:include .*src="([^"]+)"\s?\/>/', $content, $matches);
 
         $esiCalls = [];
 
@@ -62,10 +66,13 @@ class UtilsExtension extends AbstractExtension
                     $processed['block_config'] = $this->cmsConfig->getBlock("{$processed['block_type']}", false);
                     break;
 
-                case 'Softspring\CmsBundle\Controller\SectionController::renderById':
+                case 'Softspring\CmsSectionsPlugin\Controller\SectionController::renderById':
+                    /* @var SectionInterface $section */
                     $processed['type'] = 'section';
                     $processed['section_id'] = $params['_path']['section'] ?? 'unknown';
-                    $processed['section_name'] = $this->sectionManager->getRepository()->findOneById($processed['section_id'])?->getName() ?? 'unknown';
+                    $section = $this->sectionManager?->getRepository()->findOneById($processed['section_id']);
+                    $processed['section_name'] = $section?->getName() ?? 'unknown';
+                    $processed['section_ttl'] = $section?->getExtra('ttl') ?? 0;
                     break;
 
                 case 'Softspring\CmsBundle\Controller\MenuController::renderByType':

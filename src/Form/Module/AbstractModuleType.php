@@ -67,7 +67,7 @@ abstract class AbstractModuleType extends AbstractNodeType
         $resolver->setAllowedTypes('available_locales', ['null', 'array']);
 
         $resolver->setNormalizer('available_sites', function (Options $options, $value) {
-            return $options['content'] ? $this->cmsHelper->site()->normalizeFormAvailableSites($value, $options['content']) : [];
+            return $options['content'] ? $this->cmsHelper->site()->normalizeFormAvailableSites($value, $options['content']) : $this->cmsHelper->config()->getSites();
         });
 
         $resolver->setNormalizer('available_locales', function (Options $options, $value) {

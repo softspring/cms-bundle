@@ -10,8 +10,6 @@ use Softspring\CmsBundle\Entity\MenuItem;
 use Softspring\CmsBundle\Entity\Page;
 use Softspring\CmsBundle\Entity\Route;
 use Softspring\CmsBundle\Entity\RoutePath;
-use Softspring\CmsBundle\Entity\Section;
-use Softspring\CmsBundle\Entity\SectionVersion;
 use Softspring\CmsBundle\Entity\Site;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -153,28 +151,6 @@ class Configuration implements ConfigurationInterface
                                 ->enumNode('type')->defaultNull()->values(['ttl', 'last_modified', 'none'])->end()
                             ->end()
                         ->end()
-                        ->booleanNode('recompile')->defaultTrue()->end()
-                    ->end()
-                ->end()
-
-                ->arrayNode('section')
-                    ->addDefaultsIfNotSet()
-                    ->children()
-                        ->scalarNode('section_class')->defaultValue(Section::class)->end()
-                        ->scalarNode('section_version_class')->defaultValue(SectionVersion::class)->end()
-                        ->scalarNode('find_field_name')->defaultValue('id')->end()
-                        ->booleanNode('save_compiled')->defaultTrue()->end()
-                        ->booleanNode('autocompile_on_save')->defaultFalse()->end()
-                        ->booleanNode('autocompile_on_publish')->defaultTrue()->end()
-                        ->scalarNode('prefix_compiled')->defaultValue('')->end()
-                        /* @deprecated cache_last_modified since 5.3, will be removed in 6.0, use global sfs_cms.cache block */
-                        // ->booleanNode('cache_last_modified')->defaultFalse()->end()
-                        // ->arrayNode('cache')
-                        //     ->children()
-                        //         ->booleanNode('enabled')->end()
-                        //         ->enumNode('type')->defaultNull()->values(['ttl', 'last_modified', 'none'])->end()
-                        //     ->end()
-                        // ->end()
                         ->booleanNode('recompile')->defaultTrue()->end()
                     ->end()
                 ->end()

@@ -14,9 +14,9 @@ class ContentMenuProvider extends AbstractContentMenuProvider
     /**
      * @throws InvalidContentException
      */
-    public function getMenu(array $menu, ?string $currentSelection = null, array $context = []): array
+    public function getMenu(array $menu, ?string $currentSelection = null, ?object $entity = null): array
     {
-        [$content, $contentType, $contentConfig] = $this->getContent($context);
+        [$content, $contentType, $contentConfig] = $this->getContent(['content' => $entity]);
 
         $menu[] = $this->getMenuItem('details', $currentSelection, $content, $contentType, $contentConfig, 'read');
 

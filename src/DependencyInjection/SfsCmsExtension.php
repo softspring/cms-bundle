@@ -15,8 +15,6 @@ use Softspring\CmsBundle\Entity\MenuItem;
 use Softspring\CmsBundle\Entity\Page;
 use Softspring\CmsBundle\Entity\Route;
 use Softspring\CmsBundle\Entity\RoutePath;
-use Softspring\CmsBundle\Entity\Section;
-use Softspring\CmsBundle\Entity\SectionVersion;
 use Softspring\CmsBundle\Entity\Site;
 use Softspring\CmsBundle\Model\BlockInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
@@ -85,18 +83,6 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $container->setParameter('sfs_cms.content.cache.type', $config['content']['cache']['type'] ?? 'none');
         $container->setParameter('sfs_cms.content.recompile_enabled', $config['content']['recompile'] ?? false);
 
-        // configure section classes
-        $container->setParameter('sfs_cms.section.section_class', $config['section']['section_class']);
-        $container->setParameter('sfs_cms.section.section_version_class', $config['section']['section_version_class']);
-        $container->setParameter('sfs_cms.section.find_field_name', $config['section']['find_field_name'] ?? null);
-        $container->setParameter('sfs_cms.section.save_compiled', $config['section']['save_compiled'] ?? null);
-        $container->setParameter('sfs_cms.section.autocompile_on_save', $config['section']['autocompile_on_save'] ?? null);
-        $container->setParameter('sfs_cms.section.autocompile_on_publish', $config['section']['autocompile_on_publish'] ?? null);
-        $container->setParameter('sfs_cms.section.prefix_compiled', $config['section']['prefix_compiled'] ?? null);
-        // $container->setParameter('sfs_cms.section.cache.enabled', $config['section']['cache']['enabled'] ?? false);
-        // $container->setParameter('sfs_cms.section.cache.type', $config['section']['cache']['type'] ?? 'none');
-        $container->setParameter('sfs_cms.section.recompile_enabled', $config['section']['recompile'] ?? false);
-
         // configure menu classes
         $container->setParameter('sfs_cms.menu.class', $config['menu']['class']);
         $container->setParameter('sfs_cms.menu.item_class', $config['menu']['item_class']);
@@ -130,8 +116,6 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $adminEnabled && $loader->load('controller/admin_content_version.yaml');
         $adminEnabled && $loader->load('controller/admin_menus.yaml');
         $adminEnabled && $loader->load('controller/admin_routes.yaml');
-        $adminEnabled && $loader->load('controller/admin_sections.yaml');
-        $adminEnabled && $loader->load('controller/admin_sections_version.yaml');
         $adminEnabled && $loader->load('controller/admin_sites.yaml');
 
         if (class_exists('Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle')) {
@@ -169,8 +153,6 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
             'sfs_cms.menu.item_class' => MenuItem::class,
             'sfs_cms.block.class' => Block::class,
             'sfs_cms.compiled.class' => CompiledData::class,
-            'sfs_cms.section.section_class' => Section::class,
-            'sfs_cms.section.section_version_class' => SectionVersion::class,
         ];
 
         foreach ($defaultClasses as $parameter => $defaultEntityClass) {

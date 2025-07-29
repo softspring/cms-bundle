@@ -121,7 +121,8 @@ class ContentVersionCompiler extends AbstractVersionCompiler
         } catch (RenderException $exception) {
             // if not content was set, set a default error content
             if (empty($compiledData->getDataPart('containers'))) {
-                $canSaveCompiledContainers && $compiledData->setDataPart('containers', '<!-- CONTENT_VERSION_COMPILE_ERROR -->');
+                $containers = array_combine(array_keys($version->getData()), array_fill(0, count($version->getData()), '<!-- CONTENT_VERSION_COMPILE_ERROR -->'));
+                $canSaveCompiledContainers && $compiledData->setDataPart('containers', $containers);
             }
 
             $this->saveExceptionInCompiledData($compiledData, $exception, 'containers_errors');
