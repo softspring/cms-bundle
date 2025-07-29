@@ -17,6 +17,8 @@
 {% block content %}
     <h1 class="h3">{{ 'admin_blocks.update.title'|trans }}</h1>
 
+    {% include '@SfsCms/admin/block/_block_tabs.html.twig' with {'current':'update', 'block':block} %}
+
     <div class="container-fluid bg-white p-4">
         {{ form_start(form) }}
             {{ form_row(form.name) }}
