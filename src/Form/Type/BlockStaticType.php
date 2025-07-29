@@ -2,8 +2,7 @@
 
 namespace Softspring\CmsBundle\Form\Type;
 
-use Softspring\CmsBundle\Config\CmsConfig;
-use Softspring\CmsBundle\Render\BlockRenderer;
+use Softspring\CmsBundle\Helper\CmsHelper;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\ChoiceList\View\ChoiceView;
@@ -13,16 +12,14 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Routing\RouterInterface;
 
 class BlockStaticType extends AbstractType
 {
-    protected CmsConfig $cmsConfig;
-    protected BlockRenderer $blockRenderer;
-
-    public function __construct(CmsConfig $cmsConfig, BlockRenderer $blockRenderer)
-    {
-        $this->cmsConfig = $cmsConfig;
-        $this->blockRenderer = $blockRenderer;
+    public function __construct(
+        protected CmsHelper $cmsHelper,
+        protected RouterInterface $router,
+    ) {
     }
 
     public function getBlockPrefix(): string
@@ -43,20 +40,32 @@ class BlockStaticType extends AbstractType
             'choice_value' => '_id',
             'choice_translation_domain' => 'sfs_cms_blocks',
             'choice_label' => function (?object $blockConfig) {
-                return $blockConfig->_id ? "{$blockConfig->_id}.name" : '';
+                return $blockConfig->_id ? "admin_{$blockConfig->_id}.name" : '';
             },
             'choice_filter' => function (?object $blockConfig) {
                 return $blockConfig && $blockConfig->static;
             },
             'choice_attr' => function (?object $blockConfig) {
                 $attr = [
-                    'data-block-preview' => $blockConfig ? $this->blockRenderer->renderBlockByType($blockConfig->_id) : '',
+                    'data-block-preview' => '',
                 ];
+
+                if (!$blockConfig) {
+                    return $attr;
+                }
 
                 $blockConfig->esi && $attr['data-block-esi'] = '';
                 $blockConfig->singleton && $attr['data-block-singleton'] = '';
                 $blockConfig->schedulable && $attr['data-block-schedulable'] = '';
                 $blockConfig->cache_ttl && $attr['data-block-cache-ttl'] = '';
+
+                foreach ($this->cmsHelper->config()->getSites() as $site) {
+                    foreach ($this->cmsHelper->locale()->getEnabledLocales() as $locale) {
+                        $attr['data-block-preview'] .= '<div data-lang="'.$locale.'" data-site="'.$site.'" class="section-preview"'
+                            .' data-preview-url="'.$this->router->generate('sfs_cms_admin_blocks_render_preview_by_type', ['type' => $blockConfig->_id, '_locale' => $locale, '_sfs_cms_site' => $site]).'"'
+                            .'>BLOCK PREVIEW</div>';
+                    }
+                }
 
                 return $attr;
             },
@@ -68,7 +77,7 @@ class BlockStaticType extends AbstractType
         });
 
         $resolver->setDefault('choices', function (Options $options) {
-            $blockTypes = $this->cmsConfig->getBlocks();
+            $blockTypes = $this->cmsHelper->config()->getBlocks();
 
             if (null !== $options['block_types']) {
                 $blockTypes = array_intersect_key($blockTypes, array_flip($options['block_types']));

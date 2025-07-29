@@ -4,9 +4,8 @@ namespace Softspring\CmsBundle\Form\Type;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Model\BlockInterface;
-use Softspring\CmsBundle\Render\BlockRenderer;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\ChoiceList\View\ChoiceView;
@@ -14,18 +13,15 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Routing\RouterInterface;
 
 class BlockInstanceType extends AbstractType
 {
-    protected EntityManagerInterface $em;
-    protected CmsConfig $cmsConfig;
-    protected BlockRenderer $blockRenderer;
-
-    public function __construct(EntityManagerInterface $em, CmsConfig $cmsConfig, BlockRenderer $blockRenderer)
-    {
-        $this->em = $em;
-        $this->cmsConfig = $cmsConfig;
-        $this->blockRenderer = $blockRenderer;
+    public function __construct(
+        protected EntityManagerInterface $em,
+        protected CmsHelper $cmsHelper,
+        protected RouterInterface $router,
+    ) {
     }
 
     public function getBlockPrefix(): string
@@ -58,16 +54,18 @@ class BlockInstanceType extends AbstractType
                 ];
 
                 if ($block) {
-                    $blockConfig = $this->cmsConfig->getBlock($block->getType());
+                    $blockConfig = $this->cmsHelper->config()->getBlock($block->getType());
                     $blockConfig['esi'] && $attr['data-block-esi'] = '';
                     $blockConfig['singleton'] && $attr['data-block-singleton'] = '';
                     $blockConfig['schedulable'] && $attr['data-block-schedulable'] = '';
                     $blockConfig['cache_ttl'] && $attr['data-block-cache-ttl'] = '';
 
-                    if ($blockConfig['esi']) {
-                        $attr['data-block-preview'] = $this->blockRenderer->renderBlock($block, null, true);
-                    } else {
-                        $attr['data-block-preview'] = $this->blockRenderer->renderBlock($block);
+                    foreach ($this->cmsHelper->config()->getSites() as $site) {
+                        foreach ($this->cmsHelper->locale()->getEnabledLocales() as $locale) {
+                            $attr['data-block-preview'] .= '<div data-lang="'.$locale.'" data-site="'.$site.'" class="section-preview"'
+                                .' data-preview-url="'.$this->router->generate('sfs_cms_admin_blocks_render_preview_by_type', ['type' => $block->getType(), '_locale' => $locale, '_sfs_cms_site' => $site]).'"'
+                                .'>BLOCK PREVIEW</div>';
+                        }
                     }
                 }
 
@@ -84,11 +82,11 @@ class BlockInstanceType extends AbstractType
             $blockTypes = $options['block_types'];
 
             if (null === $blockTypes) {
-                $blockTypes = array_keys($this->cmsConfig->getBlocks());
+                $blockTypes = array_keys($this->cmsHelper->config()->getBlocks());
             }
 
             $blockTypes = array_filter($blockTypes, function ($blockType) {
-                $config = $this->cmsConfig->getBlock($blockType);
+                $config = $this->cmsHelper->config()->getBlock($blockType);
 
                 return $config && !$config['static'];
             });
