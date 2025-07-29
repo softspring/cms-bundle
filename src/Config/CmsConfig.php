@@ -22,13 +22,16 @@ class CmsConfig
      */
     protected ?array $siteEntities = null;
 
-    public function __construct(array $layouts, array $modules, array $contents, array $menus, array $blocks, array $sites, SiteManagerInterface $siteManager)
-    {
-        $this->layouts = $layouts;
-        $this->modules = $modules;
-        $this->contents = $contents;
-        $this->menus = $menus;
-        $this->blocks = $blocks;
+    public function __construct(
+        protected array $layouts,
+        protected array $modules,
+        protected array $contents,
+        protected array $menus,
+        protected array $blocks,
+        protected array $sites,
+        protected SiteManagerInterface $siteManager,
+        protected array $registeredPlugins = [],
+    ) {
         $this->siteConfigs = $sites;
     }
 

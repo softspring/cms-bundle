@@ -9,3 +9,15 @@ sfs_cms_admin_blocks_create:
 sfs_cms_admin_blocks_update:
     controller: sfs_cms.admin.block.controller::update
     path: /{block}/update
+
+sfs_cms_admin_blocks_render_preview_by_type:
+    controller: Softspring\CmsBundle\Controller\BlockController::renderByType
+    path: "/type/{type}/preview-render"
+    defaults:
+        _cms_preview: true
+
+sfs_cms_admin_blocks_render_preview_by_id:
+    controller: Softspring\CmsBundle\Controller\BlockController::renderById
+    path: "/{id}/preview-render"
+    defaults:
+        _cms_preview: true
