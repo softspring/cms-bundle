@@ -5,8 +5,8 @@ namespace Softspring\CmsBundle\EntityTransformer;
 use Doctrine\Persistence\ObjectManager;
 use Softspring\CmsBundle\Model\ContentDataInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
-use Softspring\CmsBundle\Model\SectionInterface;
 use Softspring\CmsBundle\Model\VersionInterface;
+use Softspring\CmsSectionsPlugin\Model\SectionInterface;
 use Softspring\MediaBundle\Model\MediaInterface;
 
 class VersionTransformer extends AbstractContentDataTransformer implements TransformerInterface

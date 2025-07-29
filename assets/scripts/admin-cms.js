@@ -20,7 +20,7 @@ import './admin/content-edit/preview-fill';
 import './admin/content-edit/preview-id';
 import './admin/content-edit/preview-media-choice';
 import './admin/content-edit/preview-media-modal';
-import './admin/content-edit/preview-section';
+// import './admin/content-edit/preview-section';
 import './admin/content-edit/preview-tag-type';
 import './admin/content-edit/preview-toggle';
 import './admin/content-edit/wysiwyg';
@@ -33,6 +33,6 @@ import './admin/versions-diff';
 
 import './types/block-type';
 import './types/color-type';
-import './types/section-type';
+// import './types/section-type';
 import './types/symfony-route-type';
 

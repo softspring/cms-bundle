@@ -19,6 +19,3 @@ link_type:
 symfony_route:
     show_parameters_link: 'show parameters'
     hide_parameters_link: 'hide parameters'
-
-section:
-    edit.link: 'Edit section (new window)'

@@ -3,6 +3,7 @@
 namespace Softspring\CmsBundle\Model;
 
 use Doctrine\Common\Collections\Collection;
+use Softspring\CmsSectionsPlugin\Model\SectionInterface;
 use Softspring\MediaBundle\Model\MediaInterface;
 
 interface ContentDataInterface

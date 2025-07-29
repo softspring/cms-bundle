@@ -1,3 +1,0 @@
-Softspring\CmsBundle\Model\SectionInterface:
-    constraints:
-        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: name

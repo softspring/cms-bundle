@@ -6,7 +6,6 @@ use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\InvalidContentException;
 use Softspring\CmsBundle\Config\Exception\InvalidLayoutException;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
-use Softspring\CmsBundle\Model\SectionVersionInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class CompileHelper
@@ -16,8 +15,6 @@ class CompileHelper
         protected RequestStack $requestStack,
         protected bool $contentSaveCompiled,
         protected bool $contentAutoCompileOnSave,
-        protected bool $sectionSaveCompiled,
-        protected bool $sectionAutoCompileOnSave,
     ) {
     }
 
@@ -73,23 +70,5 @@ class CompileHelper
         }
 
         return true;
-    }
-
-    public function sectionAutoCompileOnSave(SectionVersionInterface $version): bool
-    {
-        if (!$this->contentAutoCompileOnSave) {
-            return false;
-        }
-
-        if (!$this->requestStack->getCurrentRequest()) {
-            return false; // not yet ready for render in fixtures, TODO improve this to allow render in fixtures
-        }
-
-        return $this->sectionSaveCompiled($version);
-    }
-
-    public function sectionSaveCompiled(SectionVersionInterface $version): bool
-    {
-        return $this->sectionSaveCompiled;
     }
 }

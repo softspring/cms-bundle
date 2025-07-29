@@ -22,8 +22,6 @@ services:
             $defaultRestrictPatterns: '%sfs_cms.form_type.symfony_route.default_restrict_patterns%'
             $contentSaveCompiled: '%sfs_cms.content.save_compiled%'
             $contentAutoCompileOnSave: '%sfs_cms.content.autocompile_on_save%'
-            $sectionSaveCompiled: '%sfs_cms.section.save_compiled%'
-            $sectionAutoCompileOnSave: '%sfs_cms.section.autocompile_on_save%'
             $prefixCompiled: '%sfs_cms.content.prefix_compiled%'
             $entityDuplicators: !tagged_iterator { tag: sfs_cms.content_entity_duplicator }
             $contentCacheType: '%sfs_cms.content.cache.type%'
@@ -32,7 +30,7 @@ services:
             $mediaStoragePath: '%sfs_media.storage.filesystem.path%'
             $compiledDataExpirationTtl: '%sfs_cms.compiled.expiration_ttl%'
             $contentRecompileEnabled: '%sfs_cms.content.recompile_enabled%'
-            $sectionRecompileEnabled: '%sfs_cms.section.recompile_enabled%'
+            $registeredPlugins: '%sfs_cms.registered_plugins%'
 
     Softspring\CmsBundle\Config\CmsConfig:
         arguments:
@@ -124,10 +122,6 @@ services:
         tags:
             - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: 'Softspring\CmsBundle\Entity\ContentVersion',  priority: 11 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
 
-    Softspring\CmsBundle\EntityListener\SectionVersionCompileListener:
-        tags:
-            - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: 'Softspring\CmsBundle\Entity\SectionVersion',  priority: 11 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
-
     Softspring\CmsBundle\Doctrine\EventListener\ContentDiscriminatorMapListener:
         tags:
             - { name: 'doctrine.event_listener', event: 'loadClassMetadata' }
@@ -146,5 +140,17 @@ services:
         tags:
             - { name: security.voter, priority: 1000 }
 
+    Softspring\CmsBundle\Form\Resolver\AppTypeResolver:
+        tags: [ { name: 'softspring.dynamic_form_type.type_resolver', priority: 100 } ]
+
     Softspring\CmsBundle\Form\Resolver\CmsTypeResolver:
         tags: [ { name: 'softspring.dynamic_form_type.type_resolver', priority: 10 } ]
+
+    Softspring\CmsBundle\Routing\Provider\:
+        resource: '../../src/Routing/Provider/*'
+        tags: [ 'sfs_cms.routing_provider' ]
+
+    Softspring\CmsBundle\Routing\Loader\RoutingLoader:
+        arguments:
+            $routingProviders: !tagged_iterator { tag: sfs_cms.routing_provider }
+        tags: [ 'routing.loader' ]

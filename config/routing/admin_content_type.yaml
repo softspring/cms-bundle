@@ -152,6 +152,6 @@ delete_version:
     defaults:
         configKey: 'version_delete'
 
-_plugin_routes:
+_sfs_cms_plugin_admin_content_type_routes:
     resource: '.'
     type: sfs_cms_plugin_admin_content_type

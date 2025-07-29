@@ -30,9 +30,3 @@ services:
             - { name: 'doctrine.orm.entity_listener', event: 'postLoad', entity: 'Softspring\CmsBundle\Entity\ContentVersion',  priority: 10 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
             - { name: 'doctrine.orm.entity_listener', event: 'preUpdate', entity: 'Softspring\CmsBundle\Entity\ContentVersion',  priority: 10 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
             - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: 'Softspring\CmsBundle\Entity\ContentVersion',  priority: 10 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
-
-    Softspring\CmsBundle\EntityListener\SectionVersionListener:
-        tags:
-            - { name: 'doctrine.orm.entity_listener', event: 'postLoad', entity: 'Softspring\CmsBundle\Entity\SectionVersion',  priority: 10 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
-            - { name: 'doctrine.orm.entity_listener', event: 'preUpdate', entity: 'Softspring\CmsBundle\Entity\SectionVersion',  priority: 10 } #, entity_manager: '%sfs_cms.entity_manager_name%' }
-            - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: 'Softspring\CmsBundle\Entity\SectionVersion',  priority: 10 } #, entity_manager: '%sfs_cms.entity_manager_name%' }

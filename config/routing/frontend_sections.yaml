@@ -1,3 +1,0 @@
-sfs_cms_section_render:
-    controller: Softspring\CmsBundle\Controller\SectionController::renderById
-    path: "/__/s/{section}"

@@ -8,7 +8,6 @@ use Softspring\CmsBundle\Compiler\CompileException;
 use Softspring\CmsBundle\Compiler\ContentVersionCompiler;
 use Softspring\CmsBundle\Entity\ContentVersion;
 use Softspring\CmsBundle\Entity\Page;
-use Softspring\CmsBundle\Entity\SectionVersion;
 use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Helper\CompileHelper;
 use Softspring\CmsBundle\Manager\CompiledDataManagerInterface;
@@ -60,7 +59,7 @@ class ContentVersionCompilerTest extends TestCase
     {
         $this->expectException(CompileException::class);
         $this->expectExceptionMessage('Version must be an instance of ContentVersionInterface');
-        $this->compiler->compileRequest(new SectionVersion(), new Request());
+        $this->compiler->compileRequest($this->createMock(VersionInterface::class), new Request());
     }
 
     public function testCompileRequestPreviousContainers(): void
@@ -142,7 +141,10 @@ class ContentVersionCompilerTest extends TestCase
     {
         $this->contentVersionRenderMock->method('renderContainers')->willThrowException(new RenderException('Test error'));
 
-        $compiledData = $this->compiler->compileRequest($version = new ContentVersion(), new Request());
+        $version = new ContentVersion();
+        $version->setData(['container1' => []]); // Ensure there is at least one container to compile
+
+        $compiledData = $this->compiler->compileRequest($version, new Request());
 
         $this->assertInstanceOf(CompiledData::class, $compiledData);
         // $this->assertArrayHasKey('containers', $compiledData->getData());
@@ -166,7 +168,7 @@ class ContentVersionCompilerTest extends TestCase
     {
         $this->expectException(CompileException::class);
         $this->expectExceptionMessage('Version must be an instance of ContentVersionInterface');
-        $this->compiler->compileAll(new SectionVersion());
+        $this->compiler->compileAll($this->createMock(VersionInterface::class));
     }
 
     public function testCompileAll(): void

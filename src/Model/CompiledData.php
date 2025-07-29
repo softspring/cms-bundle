@@ -3,6 +3,7 @@
 namespace Softspring\CmsBundle\Model;
 
 use DateTime;
+use Softspring\CmsSectionsPlugin\Model\SectionVersionInterface;
 
 class CompiledData implements CompiledDataInterface
 {

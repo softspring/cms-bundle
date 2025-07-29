@@ -7,8 +7,8 @@ use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Model\ContentVersion;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
-use Softspring\CmsBundle\Model\SectionInterface;
 use Softspring\CmsBundle\Utils\DataMigrator;
+use Softspring\CmsSectionsPlugin\Model\SectionInterface;
 use Softspring\MediaBundle\Model\MediaInterface;
 
 class ContentVersionTransformer extends AbstractContentDataTransformer implements TransformerInterface
