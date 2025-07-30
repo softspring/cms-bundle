@@ -30,6 +30,9 @@ admin_blocks:
         title: "Blocks"
         breadcrumb: "Blocks"
         empty_message: "No block created yet"
+        filter_form:
+            name.label: "Name"
+            type.label: "Type"
         fields:
             name.header: "Name"
             type.header: "Type"
