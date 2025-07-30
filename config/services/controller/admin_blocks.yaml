@@ -72,3 +72,16 @@ services:
                     success_redirect_to: 'sfs_cms_admin_blocks_list'
                     view: '%sfs_cms.admin.blocks.update_view%'
                     form: '@Softspring\CmsBundle\Form\Admin\Block\BlockUpdateFormInterface'
+                delete:
+                    is_granted: 'PERMISSION_SFS_CMS_ADMIN_BLOCKS_DELETE'
+                    param_converter_key: 'id'
+                    not_found_event_name: null
+                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_DELETE_INITIALIZE
+                    form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_DELETE_FORM_VALID
+                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_DELETE_SUCCESS
+                    form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_DELETE_FORM_INVALID
+                    failure_event_name: null
+                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_BLOCKS_DELETE_VIEW
+                    success_redirect_to: 'sfs_cms_admin_blocks_list'
+                    view: '%sfs_cms.admin.blocks.delete_view%'
+                    form: 'Softspring\CmsBundle\Form\Admin\Block\BlockDeleteForm'

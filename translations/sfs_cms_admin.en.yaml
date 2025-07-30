@@ -21,6 +21,10 @@ admin_content:
             paste.button: "Paste module"
 
 admin_blocks:
+    tabs_menu:
+        details: "Details"
+        update: "Update"
+        delete: "Delete"
     list:
         meta.title: "Blocks"
         title: "Blocks"
@@ -84,6 +88,7 @@ admin_blocks:
         actions:
             delete.button: "Delete"
             cancel.button: "Cancel"
+        main_warnings_raw: '<p>Are you sure to delete this block?</p><p>This action can not be undone</p>'
 
     read:
         meta.title: "Block"
