@@ -32,6 +32,7 @@ class BlockController extends AbstractController
     public function renderByType(string $type, Request $request): Response
     {
         try {
+            $this->preprocessPreviewRequest($request);
             $this->enableSchedulableFilter();
 
             $config = $this->cmsConfig->getBlock($type);
@@ -68,6 +69,7 @@ class BlockController extends AbstractController
     public function renderById(string $id, Request $request): Response
     {
         try {
+            $this->preprocessPreviewRequest($request);
             $this->enableSchedulableFilter();
 
             /** @var ?BlockInterface $block */
@@ -142,5 +144,23 @@ ERROR;
         $block = current($blocks);
 
         return $block ?: null;
+    }
+
+    protected function preprocessPreviewRequest(Request $request): void
+    {
+        if (!$request->attributes->has('_cms_preview')) {
+            return;
+        }
+
+        if (!$request->attributes->has('_sfs_cms_site') && $request->query->has('_sfs_cms_site')) {
+            $request->attributes->set('_sfs_cms_site', $this->cmsConfig->getSite($request->query->get('_sfs_cms_site')));
+        }
+        if (!$request->attributes->has('_sfs_cms_site') && $request->query->has('_site')) {
+            $request->attributes->set('_sfs_cms_site', $this->cmsConfig->getSite($request->query->get('_site')));
+        }
+        if (!$request->attributes->has('_locale') && $request->query->has('_locale')) {
+            $request->attributes->set('_locale', $request->query->get('_locale'));
+            $request->setLocale($request->attributes->get('_locale'));
+        }
     }
 }
