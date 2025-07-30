@@ -43,7 +43,6 @@
         "phpunit/phpunit": "^11.0",
         "rector/rector": "^1.0",
         "sensio/framework-extra-bundle": "^5.4|^6.2",
-        "softspring/cms-sections-plugin": "^5.5@dev",
         "softspring/user-bundle": "^5.5@dev",
         "symfony/css-selector": "^5.4|^6.0|^7.0",
         "symfony/dom-crawler": "^5.4|^6.0|^7.0",
