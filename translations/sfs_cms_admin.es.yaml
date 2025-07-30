@@ -21,11 +21,18 @@ admin_content:
             paste.button: "Pegar módulo"
 
 admin_blocks:
+    tabs_menu:
+        details: "Detalles"
+        update: "Editar"
+        delete: "Eliminar"
     list:
         meta.title: "Bloques"
         title: "Bloques"
         breadcrumb: "Bloques"
         empty_message: "Aún no se ha creado ningún bloque"
+        filter_form:
+            name.label: "Nombre"
+            type.label: "Tipo"
         fields:
             name.header: "Nombre"
             type.header: "Tipo"
@@ -81,6 +88,7 @@ admin_blocks:
         actions:
             delete.button: "Eliminar"
             cancel.button: "Cancelar"
+        main_warnings_raw: '<p>¿Estás seguro de eliminar este bloque?</p><p>Esta acción no se puede deshacer</p>'
 
     read:
         meta.title: "Bloque"
