@@ -68,27 +68,31 @@ class CmsRouter implements RouterInterface, RequestMatcherInterface, WarmableInt
             $site = $parameters['_site'] ?? $parameters['_sfs_cms_site'] ?? null;
             $onlyChecking = isset($parameters['__twig_extra_route_defined_check']);
 
-            // if it does not exist, try witch CMS routes
-            switch ($referenceType) {
-                case UrlGeneratorInterface::ABSOLUTE_URL:
-                    $url = $this->urlGenerator->getUrl($name, $locale, $site, $cleanParams, $onlyChecking);
-                    break;
+            try {
+                // if it does not exist, try witch CMS routes
+                switch ($referenceType) {
+                    case UrlGeneratorInterface::ABSOLUTE_URL:
+                        $url = $this->urlGenerator->getUrl($name, $locale, $site, $cleanParams, $onlyChecking);
+                        break;
 
-                case UrlGeneratorInterface::ABSOLUTE_PATH:
-                case UrlGeneratorInterface::RELATIVE_PATH:
-                    $url = $this->urlGenerator->getPath($name, $locale, $site, $cleanParams, $onlyChecking);
-                    break;
+                    case UrlGeneratorInterface::ABSOLUTE_PATH:
+                    case UrlGeneratorInterface::RELATIVE_PATH:
+                        $url = $this->urlGenerator->getPath($name, $locale, $site, $cleanParams, $onlyChecking);
+                        break;
 
-                case UrlGeneratorInterface::NETWORK_PATH:
-                    $url = $this->urlGenerator->getUrl($name, $locale, $site, $cleanParams, $onlyChecking);
-                    $url = preg_replace('/^(https?)/', '', $url);
-                    break;
+                    case UrlGeneratorInterface::NETWORK_PATH:
+                        $url = $this->urlGenerator->getUrl($name, $locale, $site, $cleanParams, $onlyChecking);
+                        $url = preg_replace('/^(https?)/', '', $url);
+                        break;
 
-                default:
-                    throw new Exception('Invalid $referenceType');
+                    default:
+                        throw new Exception('Invalid $referenceType');
+                }
+
+                return $url;
+            } catch (RouteNotFoundException $e) {
+                return '#';
             }
-
-            return $url;
         }
     }
 

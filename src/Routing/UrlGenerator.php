@@ -139,7 +139,9 @@ class UrlGenerator
             $path = null;
         }
 
-        $path = $path ?: $route->getPaths()->first();
+        if (!$path) {
+            throw new RouteNotFoundException(sprintf('Route path for route "%s" and locale "%s" not found', $route->getId(), $locale));
+        }
 
         return $path->getCompiledPath();
     }
