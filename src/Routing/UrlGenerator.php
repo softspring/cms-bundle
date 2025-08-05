@@ -51,6 +51,10 @@ class UrlGenerator
             return '#';
         }
 
+        if (!$route->getContent()->getPublishedVersion()) {
+            return '#';
+        }
+
         $queryString = !empty($routeParams) ? '?'.http_build_query($routeParams) : '';
 
         return $this->getSiteSchemeAndHost($route, $locale, $site).$this->getSiteOrLocalePath($route, $locale, $site).'/'.$this->getRoutePath($route, $locale, $site).$queryString;
@@ -74,6 +78,10 @@ class UrlGenerator
                 throw new RouteNotFoundException();
             }
 
+            return '#';
+        }
+
+        if (!$route->getContent()->getPublishedVersion()) {
             return '#';
         }
 
