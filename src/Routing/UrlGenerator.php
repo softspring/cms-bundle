@@ -51,7 +51,7 @@ class UrlGenerator
             return '#';
         }
 
-        if (!$route->getContent()->getPublishedVersion()) {
+        if ($route->getContent() && !$route->getContent()->getPublishedVersion()) {
             return '#';
         }
 
@@ -81,7 +81,7 @@ class UrlGenerator
             return '#';
         }
 
-        if (!$route->getContent()->getPublishedVersion()) {
+        if ($route->getContent() && !$route->getContent()->getPublishedVersion()) {
             return '#';
         }
 
