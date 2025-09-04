@@ -1,0 +1,11 @@
+
+# This file is deprecated, use SfsDynamicFormTypeBundle witch replaces it.
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Softspring\Component\DynamicFormType\Form\Resolver\TypeResolverInterface:
+        class: Softspring\CmsBundle\Form\Resolver\TypeResolver

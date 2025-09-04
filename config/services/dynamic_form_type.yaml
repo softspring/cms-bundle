@@ -15,6 +15,3 @@ services:
 
     Softspring\Component\DynamicFormType\Form\Resolver\ConstraintResolverInterface:
         class: Softspring\Component\DynamicFormType\Form\Resolver\ConstraintResolver
-
-    Softspring\Component\DynamicFormType\Form\Resolver\TypeResolverInterface:
-        class: Softspring\CmsBundle\Form\Resolver\TypeResolver
