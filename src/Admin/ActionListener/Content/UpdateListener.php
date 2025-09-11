@@ -143,7 +143,7 @@ class UpdateListener extends AbstractContentListener
 
             $lastVersion = $content->getLastVersion();
             $newVersion = $this->contentManager->createVersion($content, $lastVersion, ContentVersionInterface::ORIGIN_ADD_SITE);
-            $addedSitesNames = array_map(fn (SiteInterface $site) => $site->getId(), $addedSites->toArray());
+            $addedSitesNames = array_map(fn (SiteInterface $site) => $site->getId(), $addedSites);
             $newVersion->setOriginDescription('v'.$lastVersion->getVersionNumber().' + '.implode(',', $addedSitesNames));
 
             foreach ($addedSites as $site) {
