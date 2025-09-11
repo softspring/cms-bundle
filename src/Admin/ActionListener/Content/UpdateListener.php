@@ -14,6 +14,7 @@ use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\CmsBundle\Translator\TranslatableContext;
 use Softspring\Component\CrudlController\Event\ApplyEvent;
 use Softspring\Component\CrudlController\Event\FormPrepareEvent;
+use Softspring\Component\CrudlController\Event\LoadEntityEvent;
 use Softspring\Component\CrudlController\Event\SuccessEvent;
 use Softspring\Component\CrudlController\Event\ViewEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -48,6 +49,7 @@ class UpdateListener extends AbstractContentListener
             SfsCmsEvents::ADMIN_CONTENTS_UPDATE_LOAD_ENTITY => [
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onLoadEntity', 0],
+                ['onLoadEntityStoreLocalesAndSites', -10],
             ],
             SfsCmsEvents::ADMIN_CONTENTS_UPDATE_NOT_FOUND => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -104,40 +106,47 @@ class UpdateListener extends AbstractContentListener
         ]);
     }
 
+    private array $initialLocales = [];
+    private array $initialSites = [];
+
+    public function onLoadEntityStoreLocalesAndSites(LoadEntityEvent $event): void
+    {
+        $this->initialLocales = $event->getEntity()->getLocales() ?? [];
+        $this->initialSites = $event->getEntity()->getSites()?->toArray() ?? [];
+    }
+
     public function onApply(ApplyEvent $event): void
     {
         /** @var ContentInterface $content */
         $content = $event->getEntity();
 
-        if ($event->getForm()->has('addLocale')) {
-            $addLocales = $event->getForm()->get('addLocale')->getData();
-            if (!empty($addLocales)) {
-                foreach ($addLocales as $locale) {
-                    $content->addLocale($locale);
-                }
+        $addedLocales = array_diff($content->getLocales(), $this->initialLocales);
+        if (!empty($addedLocales)) {
+            foreach ($addedLocales as $locale) {
+                $content->addLocale($locale);
+            }
 
-                $lastVersion = $content->getLastVersion();
-                $newVersion = $this->contentManager->createVersion($content, $lastVersion, ContentVersionInterface::ORIGIN_ADD_LOCALE);
-                $newVersion->setOriginDescription('v'.$lastVersion->getVersionNumber().' + '.implode(',', $addLocales));
+            $lastVersion = $content->getLastVersion();
+            $newVersion = $this->contentManager->createVersion($content, $lastVersion, ContentVersionInterface::ORIGIN_ADD_LOCALE);
+            $newVersion->setOriginDescription('v'.$lastVersion->getVersionNumber().' + '.implode(',', $addedLocales));
 
-                foreach ($addLocales as $locale) {
-                    $this->contentVersionManager->addLocale($newVersion, $locale);
-                }
+            foreach ($addedLocales as $locale) {
+                $this->contentVersionManager->addLocale($newVersion, $locale);
             }
         }
 
-        if ($event->getForm()->has('addSite') && !empty($event->getForm()->get('addSite')->getData())) {
-            $addSites = $event->getForm()->get('addSite')->getData();
-            foreach ($addSites as $site) {
+        $addedSites = array_diff($content->getSites()->toArray(), $this->initialSites);
+        if (!empty($addedSites)) {
+            foreach ($addedSites as $site) {
                 $content->addSite($site);
             }
 
             $lastVersion = $content->getLastVersion();
             $newVersion = $this->contentManager->createVersion($content, $lastVersion, ContentVersionInterface::ORIGIN_ADD_SITE);
-            $addSitesNames = array_map(fn (SiteInterface $site) => $site->getId(), $addSites->toArray());
-            $newVersion->setOriginDescription('v'.$lastVersion->getVersionNumber().' + '.implode(',', $addSitesNames));
+            $addedSitesNames = array_map(fn (SiteInterface $site) => $site->getId(), $addedSites->toArray());
+            $newVersion->setOriginDescription('v'.$lastVersion->getVersionNumber().' + '.implode(',', $addedSitesNames));
 
-            foreach ($addSites as $site) {
+            foreach ($addedSites as $site) {
                 $this->contentVersionManager->addSite($newVersion, $site);
             }
         }
