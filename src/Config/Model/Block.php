@@ -50,6 +50,12 @@ class Block implements ConfigurationInterface
                 })
                 ->thenInvalid('A block defined as static can not be schedulable.')
             ->end()
+            ->validate()
+                ->ifTrue(function ($config) {
+                    return !$config['esi'] && is_bool($config['isolate_request']);
+                })
+                ->thenInvalid('You can not set isolate_request if esi is false.')
+            ->end()
             ->children()
                 ->integerNode('revision')->isRequired()->end()
 
@@ -57,6 +63,13 @@ class Block implements ConfigurationInterface
                 ->scalarNode('form_template')->end()
 
                 ->booleanNode('esi')->defaultTrue()->end()
+
+                // isolate request from user session, only if esi is true
+                ->booleanNode('isolate_request')
+                    ->defaultNull()
+                    ->info('If true, the block will be rendered with a sub-request that does not have access to the user session. Only usable if esi is true.')
+                ->end()
+
                 ->integerNode('cache_ttl')->defaultFalse()->end()
                 ->booleanNode('singleton')->defaultTrue()->end()
                 ->booleanNode('static')->defaultFalse()->end()
