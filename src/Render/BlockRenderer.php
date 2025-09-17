@@ -41,7 +41,7 @@ class BlockRenderer
      * @throws RenderException
      * @throws InvalidBlockException
      */
-    public function renderBlockByType(string $type, array $params = [], ?string $locale = null, mixed $site = null): string
+    public function renderBlockByType(string $type, array $params = [], ?string $locale = null, mixed $site = null, ?Request $request = null): string
     {
         $blockConfig = $this->cmsConfig->getBlock($type);
 
