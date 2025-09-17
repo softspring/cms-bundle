@@ -36,7 +36,7 @@ class MenuRenderer
      * @throws InvalidMenuException
      * @throws Exception
      */
-    public function renderMenuByType(string $type, ?string $locale = null): string
+    public function renderMenuByType(string $type, ?string $locale = null, mixed $site = null): string
     {
         $locale = $locale ?? $this->requestStack->getCurrentRequest()?->getLocale();
         $menuConfig = $this->cmsConfig->getMenu($type);
@@ -60,7 +60,7 @@ class MenuRenderer
         $locale && $params['_locale'] = $locale;
         $site && $params['_site'] = "$site";
 
-        $params_string = '{' . Parser::arrayToParamsString($params) . '}';
+        $params_string = '{'.Parser::arrayToParamsString($params).'}';
         $twigCode = "{{ $renderFunction(controller('Softspring\\\\CmsBundle\\\\Controller\\\\MenuController::renderByType', $params_string)) }}";
 
         $template = twig_template_from_string($this->twig, $twigCode);

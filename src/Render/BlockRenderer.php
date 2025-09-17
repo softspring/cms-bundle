@@ -37,7 +37,6 @@ class BlockRenderer
         $this->esiEnabled = (bool) $esi;
     }
 
-
     /**
      * @throws RenderException
      * @throws InvalidBlockException
@@ -61,12 +60,12 @@ class BlockRenderer
         $params['_locale'] = $locale ?? $this->requestStack->getCurrentRequest()?->getLocale();
         $site && $params['_site'] = $site;
         if (!empty($blockConfig['render_url'])) {
-            $params_string = '{' . Parser::arrayToParamsString($params) . '}';
+            $params_string = '{'.Parser::arrayToParamsString($params).'}';
             $twigCode = "{{ $renderFunction(url('{$blockConfig['render_url']}', $params_string)) }}";
         } else {
             // $twigCode = "{{ $renderFunction(url('sfs_cms_block_render_by_type', {'type':'$type'})) }}";
             $params['type'] = $type;
-            $params_string = '{' . Parser::arrayToParamsString($params) . '}';
+            $params_string = '{'.Parser::arrayToParamsString($params).'}';
             $controller = "controller('Softspring\\\\CmsBundle\\\\Controller\\\\BlockController::renderByType', $params_string)";
 
             if ('render_esi' == $renderFunction) {
@@ -119,12 +118,12 @@ class BlockRenderer
         }
 
         if (!empty($blockConfig['render_url'])) {
-            $params_string = '{' . Parser::arrayToParamsString($params) . '}';
+            $params_string = '{'.Parser::arrayToParamsString($params).'}';
             $twigCode = "{{ $renderFunction(url('{$blockConfig['render_url']}', $params_string)) }}";
         } else {
             // $twigCode = "{{ $renderFunction(url('sfs_cms_block_render_by_type', {'type':'$type'})) }}";
             $params['id'] = $blockId;
-            $params_string = '{' . Parser::arrayToParamsString($params) . '}';
+            $params_string = '{'.Parser::arrayToParamsString($params).'}';
             $twigCode = "{{ $renderFunction(controller('Softspring\\\\CmsBundle\\\\Controller\\\\BlockController::renderById', $params_string)) }}";
         }
 
