@@ -24,6 +24,13 @@ class Menu implements ConfigurationInterface
                 ->integerNode('revision')->isRequired()->end()
                 ->scalarNode('render_template')->defaultValue("@menu/{$this->menuName}/render.html.twig")->end()
                 ->booleanNode('esi')->defaultTrue()->end()
+
+                // isolate request from user session, only if esi is true
+                ->booleanNode('isolate_request')
+                    ->defaultNull()
+                    ->info('If true, the block will be rendered with a sub-request that does not have access to the user session. Only usable if esi is true.')
+                ->end()
+
                 ->integerNode('cache_ttl')->defaultFalse()->end()
                 ->booleanNode('singleton')->defaultTrue()->end()
                 ->booleanNode('items')->defaultTrue()->end()

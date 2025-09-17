@@ -38,6 +38,16 @@ class IsolatedRunner
         // Set the Surrogate-Capability header to indicate ESI support
         $currentRequest->headers->set('Surrogate-Capability', 'ESI/1.0');
 
+        // if isolate_request attribute is not set, set it to true
+        if (!$currentRequest->attributes->has('isolate_request')) {
+            $currentRequest->attributes->set('isolate_request', true);
+        }
+
+        // if isolate_request query parameter is set, override the attribute
+        if ($currentRequest->query->has('isolate_request')) {
+            $currentRequest->attributes->set('isolate_request', filter_var($currentRequest->query->get('isolate_request'), FILTER_VALIDATE_BOOLEAN));
+        }
+
         // do the render
         $result = $this->isolateRequestRender($currentRequest, $renderFunction);
 

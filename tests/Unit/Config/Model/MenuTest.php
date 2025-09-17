@@ -39,6 +39,7 @@ class MenuTest extends TestCase
             'singleton' => true,
             'items' => true,
             'form_fields' => [],
+            'isolate_request' => null,
         ], $config);
     }
 
@@ -61,6 +62,7 @@ class MenuTest extends TestCase
             'singleton' => true,
             'items' => true,
             'form_fields' => [],
+            'isolate_request' => null,
         ], $config);
     }
 }

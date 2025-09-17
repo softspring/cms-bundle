@@ -7,6 +7,7 @@ use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\InvalidMenuException;
 use Softspring\CmsBundle\Render\Exception\RenderException;
 use Softspring\CmsBundle\Render\Isolated\IsolatedRunner;
+use Softspring\CmsBundle\Utils\Parser;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\HttpCache\Esi;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
@@ -35,7 +36,7 @@ class MenuRenderer
      * @throws InvalidMenuException
      * @throws Exception
      */
-    public function renderMenuByType(string $type, ?string $locale = null): string
+    public function renderMenuByType(string $type, ?string $locale = null, mixed $site = null): string
     {
         $locale = $locale ?? $this->requestStack->getCurrentRequest()?->getLocale();
         $site = $this->requestStack->getCurrentRequest()?->attributes->get('_sfs_cms_site');
@@ -51,10 +52,17 @@ class MenuRenderer
             $renderFunction = 'render';
         }
 
-        $previewJsonProperty = $this->isPreview() ? ",'_cms_preview':true" : '';
-        $previewJsonProperty .= $locale ? ",'_locale':'$locale'" : '';
+        $params = [
+            'type' => $type,
+        ];
 
-        $twigCode = "{{ $renderFunction(controller('Softspring\\\\CmsBundle\\\\Controller\\\\MenuController::renderByType', {'type':'$type'$previewJsonProperty})) }}";
+        $this->isPreview() && $params['_cms_preview'] = true;
+        $params['isolate_request'] = !is_bool($menuConfig['isolate_request']) || $menuConfig['isolate_request'];
+        $locale && $params['_locale'] = $locale;
+        $site && $params['_site'] = "$site";
+
+        $params_string = '{'.Parser::arrayToParamsString($params).'}';
+        $twigCode = "{{ $renderFunction(controller('Softspring\\\\CmsBundle\\\\Controller\\\\MenuController::renderByType', $params_string)) }}";
 
         $template = twig_template_from_string($this->twig, $twigCode);
 

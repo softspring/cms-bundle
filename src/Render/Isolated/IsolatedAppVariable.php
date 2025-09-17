@@ -27,6 +27,10 @@ class IsolatedAppVariable extends AppVariable
      */
     public function getUser(): ?UserInterface
     {
+        if (!$this->getRequest()?->attributes->get('isolate_request')) {
+            return $this->inner->getUser();
+        }
+
         throw new IsolatedEnvironmentException(IsolatedAppVariable::class, 'getUser');
     }
 
@@ -35,6 +39,10 @@ class IsolatedAppVariable extends AppVariable
      */
     public function getToken(): ?TokenInterface
     {
+        if (!$this->getRequest()?->attributes->get('isolate_request')) {
+            return $this->inner->getToken();
+        }
+
         throw new IsolatedEnvironmentException(IsolatedAppVariable::class, 'getToken');
     }
 
@@ -43,6 +51,10 @@ class IsolatedAppVariable extends AppVariable
      */
     public function getSession(): ?SessionInterface
     {
+        if (!$this->getRequest()?->attributes->get('isolate_request')) {
+            return $this->inner->getSession();
+        }
+
         throw new IsolatedEnvironmentException(IsolatedAppVariable::class, 'getSession');
     }
 
@@ -52,6 +64,10 @@ class IsolatedAppVariable extends AppVariable
      */
     public function getFlashes($types = null): array
     {
+        if (!$this->getRequest()?->attributes->get('isolate_request')) {
+            return $this->inner->getFlashes($types);
+        }
+
         throw new IsolatedEnvironmentException(IsolatedAppVariable::class, 'getFlashes');
     }
 
