@@ -41,6 +41,7 @@ class BlockTest extends TestCase
             'form_options' => [],
             'form_fields' => [],
             'schedulable' => false,
+            'isolate_request' => null,
         ], $config);
     }
 
@@ -65,6 +66,7 @@ class BlockTest extends TestCase
             'form_options' => [],
             'form_fields' => [],
             'schedulable' => false,
+            'isolate_request' => null,
         ], $config);
     }
 
@@ -146,6 +148,7 @@ class BlockTest extends TestCase
             'form_fields' => [],
             'render_url' => 'render_route',
             'schedulable' => false,
+            'isolate_request' => null,
         ], $config);
     }
 
@@ -171,6 +174,7 @@ class BlockTest extends TestCase
             'form_fields' => [],
             'form_type' => 'App\\Form\\ExampleType',
             'schedulable' => false,
+            'isolate_request' => null,
         ], $config);
     }
 }
