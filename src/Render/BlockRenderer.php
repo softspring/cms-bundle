@@ -41,7 +41,7 @@ class BlockRenderer
      * @throws RenderException
      * @throws InvalidBlockException
      */
-    public function renderBlockByType(string $type, array $params = [], ?string $locale = null, mixed $site = null): string
+    public function renderBlockByType(string $type, array $params = [], ?string $locale = null, mixed $site = null, ?Request $request = null): string
     {
         $blockConfig = $this->cmsConfig->getBlock($type);
 
@@ -57,8 +57,8 @@ class BlockRenderer
             $renderFunction = 'render';
         }
 
-        $params['_locale'] = $locale ?? $this->requestStack->getCurrentRequest()?->getLocale();
-        $site && $params['_site'] = $site;
+        $params['_locale'] = $locale ?? $request?->getLocale() ?? $this->requestStack->getCurrentRequest()?->getLocale();
+        $params['_site'] = $site ?? $request?->attributes->get('_site') ?? $this->requestStack->getCurrentRequest()?->attributes->get('_site');
         if (!empty($blockConfig['render_url'])) {
             $params_string = '{'.Parser::arrayToParamsString($params).'}';
             $twigCode = "{{ $renderFunction(url('{$blockConfig['render_url']}', $params_string)) }}";
@@ -147,10 +147,5 @@ class BlockRenderer
     public function getDebugCollectorData(): array
     {
         return $this->profilerDebugCollectorData;
-    }
-
-    protected function isPreview(): bool
-    {
-        return $this->requestStack->getCurrentRequest()?->attributes->has('_cms_preview') ?: false;
     }
 }

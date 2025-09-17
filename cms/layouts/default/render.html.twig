@@ -76,3 +76,21 @@
         </div>
     </main>
 {% endblock body %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% if app.request.attributes.get('_cms_preview') %}
+        {# prevent unload page on click URLs, and show a confirm button #}
+        <script>
+            window.addEventListener('click', function(event) {
+                if (event.target.tagName === 'A') {
+                    event.preventDefault();
+                    if (confirm("This is a preview mode. Target links could not work. Do you want to leave this page?")) {
+                        window.onbeforeunload = null; // Allow navigation
+                        window.location.href = event.target.href;
+                    }
+                }
+            });
+        </script>
+    {% endif %}
+{% endblock javascripts %}
