@@ -38,6 +38,7 @@ class MenuRenderer
     public function renderMenuByType(string $type, ?string $locale = null): string
     {
         $locale = $locale ?? $this->requestStack->getCurrentRequest()?->getLocale();
+        $site = $this->requestStack->getCurrentRequest()?->attributes->get('_sfs_cms_site');
         $menuConfig = $this->cmsConfig->getMenu($type);
 
         if ($menuConfig['esi'] && !$this->isPreview()) {

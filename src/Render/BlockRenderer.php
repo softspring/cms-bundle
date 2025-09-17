@@ -68,8 +68,8 @@ class BlockRenderer
             $renderFunction = 'render';
         }
 
-        $params['_locale'] = $locale ?? $this->requestStack->getCurrentRequest()?->getLocale();
-        $site && $params['_site'] = $site;
+        $params['_locale'] = $locale ?? $request?->getLocale() ?? $this->requestStack->getCurrentRequest()?->getLocale();
+        $params['_site'] = $site ?? $request?->attributes->get('_site') ?? $this->requestStack->getCurrentRequest()?->attributes->get('_site');
         if (!empty($blockConfig['render_url'])) {
             $params_string = $this->paramsAsString($params);
             $twigCode = "{{ $renderFunction(url('{$blockConfig['render_url']}', {{$params_string}})) }}";
@@ -149,10 +149,5 @@ class BlockRenderer
     public function getDebugCollectorData(): array
     {
         return $this->profilerDebugCollectorData;
-    }
-
-    protected function isPreview(): bool
-    {
-        return $this->requestStack->getCurrentRequest()?->attributes->has('_cms_preview') ?: false;
     }
 }
