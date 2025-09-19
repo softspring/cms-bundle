@@ -32,5 +32,5 @@ interface ContentDataInterface
 
     public function removeSection(SectionInterface $section): void;
 
-    public function getSections(): Collection;
+    public function getSections(): ?Collection;
 }

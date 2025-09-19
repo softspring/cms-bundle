@@ -111,7 +111,7 @@ trait ContentDataTrait
     /**
      * @psalm-return ?Collection|SectionInterface[]
      */
-    public function getSections(): Collection
+    public function getSections(): ?Collection
     {
         return $this->sections;
     }

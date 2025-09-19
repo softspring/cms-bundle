@@ -100,12 +100,6 @@ class ContentVersionCompiler extends AbstractVersionCompiler
     protected function compileRequestContainers(CompiledDataInterface $compiledData, ContentVersionInterface $version, Request $request, RenderErrorList $renderErrors, ?CompiledDataInterface $preCompiledData = null): CompiledDataInterface
     {
         try {
-            $canSaveCompiledContainers = $this->cmsHelper->compile()->contentSaveCompiledContainers($version);
-        } catch (Exception $exception) {
-            throw new CompileException('Error determining if compiled containers can be saved', 0, $exception);
-        }
-
-        try {
             $compiledContainers = $preCompiledData?->getDataPart('containers');
 
             if (null === $compiledContainers) {
@@ -117,12 +111,12 @@ class ContentVersionCompiler extends AbstractVersionCompiler
                 }
             }
 
-            $canSaveCompiledContainers && $compiledData->setDataPart('containers', $compiledContainers);
+            $compiledData->setDataPart('containers', $compiledContainers);
         } catch (RenderException $exception) {
             // if not content was set, set a default error content
             if (empty($compiledData->getDataPart('containers'))) {
                 $containers = array_combine(array_keys($version->getData()), array_fill(0, count($version->getData()), '<!-- CONTENT_VERSION_COMPILE_ERROR -->'));
-                $canSaveCompiledContainers && $compiledData->setDataPart('containers', $containers);
+                $compiledData->setDataPart('containers', $containers);
             }
 
             $this->saveExceptionInCompiledData($compiledData, $exception, 'containers_errors');
