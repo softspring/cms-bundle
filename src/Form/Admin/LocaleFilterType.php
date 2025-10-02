@@ -64,7 +64,7 @@ class LocaleFilterType extends AbstractType
             $event->setData($data);
         });
 
-        $builder->addModelTransformer(new CallbackTransformer(function ($data) use ($availableLocales) {
+        $builder->addModelTransformer(new CallbackTransformer(function ($data) {
             // from database to form
             if (is_array($data)) {
                 return array_keys(array_filter($data));
@@ -88,5 +88,4 @@ class LocaleFilterType extends AbstractType
             return $data;
         }));
     }
-
 }
