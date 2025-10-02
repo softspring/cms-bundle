@@ -10,6 +10,7 @@ use Softspring\CmsBundle\Config\Exception\InvalidModuleException;
 use Softspring\CmsBundle\Config\Exception\InvalidSiteException;
 use Softspring\CmsBundle\Form\Module\ContainerModuleType;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
+use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\Render\Error\RenderErrorList;
 use Softspring\CmsBundle\Render\Exception\ModuleRenderException;
 use Softspring\CmsBundle\Utils\DataMigrator;
@@ -76,6 +77,16 @@ class ModuleRenderer
         if (isset($module['site_filter'])) {
             $currentSite = $this->requestStack->getCurrentRequest()->get('_sfs_cms_site');
 
+            // @todo remove @deprecated next block, is for legacy locale filter, remove in 6.0
+            if (!empty($module['site_filter']) && is_int(key($module['site_filter']))) {
+                $siteFilters = [];
+                foreach ($module['site_filter'] as $site) {
+                    $siteFilters[] = is_string($site) ? $this->cmsConfig->getSite($site) : $site;
+                }
+
+                return !in_array($currentSite, $siteFilters);
+            }
+
             return ($module['site_filter']["$currentSite"] ?? false) !== true;
         }
 
@@ -86,6 +97,11 @@ class ModuleRenderer
     {
         if (isset($module['locale_filter'])) {
             $currentLocale = $this->requestStack->getCurrentRequest()->getLocale();
+
+            // @todo remove @deprecated next block, is for legacy locale filter, remove in 6.0
+            if (!empty($module['locale_filter']) && is_int(key($module['locale_filter']))) {
+                return !in_array($currentLocale, $module['locale_filter']);
+            }
 
             return ($module['locale_filter'][$currentLocale] ?? false) !== true;
         }
