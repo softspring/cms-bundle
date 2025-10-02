@@ -76,14 +76,7 @@ class ModuleRenderer
         if (isset($module['site_filter'])) {
             $currentSite = $this->requestStack->getCurrentRequest()->get('_sfs_cms_site');
 
-            $siteFilters = [];
-            foreach ($module['site_filter'] as $site) {
-                $siteFilters[] = is_string($site) ? $this->cmsConfig->getSite($site) : $site;
-            }
-
-            if (!in_array($currentSite, $siteFilters)) {
-                return true;
-            }
+            return ($module['site_filter']["$currentSite"]??false) !== true;
         }
 
         return false;
@@ -94,9 +87,7 @@ class ModuleRenderer
         if (isset($module['locale_filter'])) {
             $currentLocale = $this->requestStack->getCurrentRequest()->getLocale();
 
-            if (!in_array($currentLocale, $module['locale_filter'])) {
-                return true;
-            }
+            return ($module['locale_filter'][$currentLocale]??false) !== true;
         }
 
         return false;

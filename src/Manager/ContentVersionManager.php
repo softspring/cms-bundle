@@ -105,7 +105,7 @@ class ContentVersionManager implements ContentVersionManagerInterface
             } elseif ('locale_filter' === $fieldName) {
                 if (!empty($fieldValue)) {
                     // if locale filter is not empty, add the locale to the filter
-                    $fieldValue[] = $locale;
+                    $fieldValue[$locale] = true;
                 }
             }
         }
@@ -134,7 +134,7 @@ class ContentVersionManager implements ContentVersionManagerInterface
             } elseif ('site_filter' === $fieldName) {
                 if (!empty($fieldValue)) {
                     // if site filter is not empty, add the site to the filter
-                    $fieldValue[] = $site;
+                    $fieldValue["$site"] = true;
                 }
             }
         }
