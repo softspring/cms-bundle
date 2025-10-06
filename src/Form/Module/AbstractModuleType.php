@@ -2,15 +2,13 @@
 
 namespace Softspring\CmsBundle\Form\Module;
 
-use Softspring\CmsBundle\Form\Admin\SiteChoiceType;
+use Softspring\CmsBundle\Form\Admin\LocaleFilterType;
+use Softspring\CmsBundle\Form\Admin\SiteFilterType;
 use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\Component\PolymorphicFormType\Form\Type\Node\AbstractNodeType;
-use Symfony\Component\Form\Event\PreSetDataEvent;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
@@ -92,57 +90,15 @@ abstract class AbstractModuleType extends AbstractNodeType
     protected function buildChildForm(FormBuilderInterface $builder, array $options): void
     {
         if ($options['locale_filter'] && sizeof($options['available_locales']) > 1) {
-            $builder->add('locale_filter', ChoiceType::class, [
-                'multiple' => true,
-                'expanded' => true,
-                'block_prefix' => 'module_locale_filter',
-                'choice_translation_domain' => false,
-                'choices' => array_combine($options['available_locales'], $options['available_locales']),
+            $builder->add('locale_filter', LocaleFilterType::class, [
+                'available_locales' => $options['available_locales'],
             ]);
-
-            $builder->addEventListener(FormEvents::PRE_SET_DATA, function (PreSetDataEvent $event) {
-                $data = $event->getData();
-                $options = $event->getForm()->getConfig()->getOptions();
-
-                if (null === $data) {
-                    // set all locales on prototyping (data = null)
-                    $data = ['locale_filter' => $options['available_locales']];
-                }
-
-                if (!isset($data['locale_filter'])) {
-                    // set all locales on no stored locale_filter
-                    $data['locale_filter'] = $options['available_locales'];
-                }
-
-                $event->setData($data);
-            });
         }
 
         if ($options['site_filter'] && $options['content']->getSites()->count() > 1) {
-            $builder->add('site_filter', SiteChoiceType::class, [
-                'multiple' => true,
-                'expanded' => true,
-                'block_prefix' => 'module_site_filter',
-                'choice_translation_domain' => false,
+            $builder->add('site_filter', SiteFilterType::class, [
                 'content' => $options['content'],
             ]);
-
-            $builder->addEventListener(FormEvents::PRE_SET_DATA, function (PreSetDataEvent $event) {
-                $data = $event->getData();
-                $allAvailableSites = $event->getForm()->getConfig()->getOption('content')->getSites()->toArray();
-
-                if (null === $data) {
-                    // set all locales on prototyping (data = null)
-                    $data = ['site_filter' => $allAvailableSites];
-                }
-
-                if (!isset($data['site_filter'])) {
-                    // set all locales on no stored site_filter
-                    $data['site_filter'] = $allAvailableSites;
-                }
-
-                $event->setData($data);
-            });
         }
 
         $builder->add('_revision', HiddenType::class, [
