@@ -52,9 +52,15 @@ class Block implements ConfigurationInterface
             ->end()
             ->validate()
                 ->ifTrue(function ($config) {
-                    return !$config['esi'] && is_bool($config['isolate_request']);
+                    return is_bool($config['isolate_request']) && !$config['esi'] && !$config['ajax'];
                 })
-                ->thenInvalid('You can not set isolate_request if esi is false.')
+                ->thenInvalid('You can not set isolate_request if esi and ajax are false.')
+            ->end()
+            ->validate()
+                ->ifTrue(function ($config) {
+                    return $config['esi'] && $config['ajax'];
+                })
+                ->thenInvalid('You can not set ajax if esi is true.')
             ->end()
             ->children()
                 ->integerNode('revision')->isRequired()->end()
@@ -63,11 +69,12 @@ class Block implements ConfigurationInterface
                 ->scalarNode('form_template')->end()
 
                 ->booleanNode('esi')->defaultTrue()->end()
+                ->booleanNode('ajax')->defaultFalse()->end()
 
                 // isolate request from user session, only if esi is true
                 ->booleanNode('isolate_request')
                     ->defaultNull()
-                    ->info('If true, the block will be rendered with a sub-request that does not have access to the user session. Only usable if esi is true.')
+                    ->info('If true, the block will be rendered with a sub-request that does not have access to the user session. Only usable if esi or ajax is true.')
                 ->end()
 
                 ->integerNode('cache_ttl')->defaultFalse()->end()

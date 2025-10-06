@@ -36,7 +36,39 @@ class UtilsExtension extends AbstractExtension
             new TwigFunction('sfs_cms_check_content_locales_and_routes', [$this, 'checkContentLocalesAndRoutes']),
             new TwigFunction('sfs_cms_validate_module_html', [HtmlValidator::class, 'validateModule']),
             new TwigFunction('sfs_cms_content_type', [$this->contentManager, 'getType']),
+            new TwigFunction('sfs_cms_render_ajax', [$this, 'renderAjax'], ['is_safe' => ['html']]),
         ];
+    }
+
+    public function renderAjax(string $url, array $containerAttrs = []): string
+    {
+        $divId = 'a'.rand(100000, 999999);
+        $containerAttrs['id'] = $divId;
+        $containerAttrs['data-href'] = $url;
+
+        $attrs = implode(' ', array_map(fn ($k, $v) => sprintf('%s="%s"', htmlspecialchars($k, ENT_QUOTES), htmlspecialchars($v, ENT_QUOTES)), array_keys($containerAttrs), $containerAttrs));
+
+        return <<<AJAX
+<div $attrs>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            const ajaxDiv = document.getElementById('$divId');
+            fetch(ajaxDiv.getAttribute('data-href'))
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response;
+                })
+                .then(response => response.text())
+                .then(html => {
+                    ajaxDiv.outerHTML = html;
+                })
+                .catch(error => console.error('Error loading ajax content:', error));
+        });
+    </script>
+</div>
+AJAX;
     }
 
     public function searchContentEsiCalls(string $content): array

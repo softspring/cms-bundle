@@ -53,6 +53,8 @@ class BlockRenderer
             $renderFunction = 'render_esi';
             $params['ignore_errors'] = true;
             $params['isolate_request'] = !is_bool($blockConfig['isolate_request']) || $blockConfig['isolate_request'];
+        } elseif ($blockConfig['ajax']) {
+            $renderFunction = 'sfs_cms_render_ajax';
         } else {
             $renderFunction = 'render';
         }
@@ -61,16 +63,21 @@ class BlockRenderer
         $params['_site'] = $site ?? $request?->attributes->get('_site') ?? $this->requestStack->getCurrentRequest()?->attributes->get('_site');
         if (!empty($blockConfig['render_url'])) {
             $params_string = '{'.Parser::arrayToParamsString($params).'}';
-            $twigCode = "{{ $renderFunction(url('{$blockConfig['render_url']}', $params_string)) }}";
+            $twigCode = "{{ $renderFunction(path('{$blockConfig['render_url']}', $params_string)) }}";
         } else {
             // $twigCode = "{{ $renderFunction(url('sfs_cms_block_render_by_type', {'type':'$type'})) }}";
             $params['type'] = $type;
             $params_string = '{'.Parser::arrayToParamsString($params).'}';
             $controller = "controller('Softspring\\\\CmsBundle\\\\Controller\\\\BlockController::renderByType', $params_string)";
 
+            $fragmentEsiAbsolute = 'false'; // todo make it configurable per block?, for example Varnish does not support absolute urls
+
             if ('render_esi' == $renderFunction) {
                 // {{ fragment_uri(controller, absolute = false, strict = true, sign = true) }}
-                $twigCode = "{{ $renderFunction(fragment_uri($controller, true, true, true)) }}";
+                $twigCode = "{{ $renderFunction(fragment_uri($controller, $fragmentEsiAbsolute, true, true)) }}";
+            } elseif ('sfs_cms_render_ajax' == $renderFunction) {
+                // {{ fragment_uri(controller, absolute = false, strict = true, sign = true) }}
+                $twigCode = "{{ $renderFunction(url('sfs_cms_block_render_by_type', {'type':'$type'})) }}";
             } else {
                 $twigCode = "{{ $renderFunction($controller) }}";
             }
@@ -113,13 +120,18 @@ class BlockRenderer
             }
 
             $renderFunction = $forceEsiRender ? 'render' : 'render_esi';
+            $urlFunction = $forceEsiRender ? 'url' : 'path';
+        } elseif ($blockConfig['ajax']) {
+            $renderFunction = 'sfs_cms_render_ajax';
+            $urlFunction = 'url';
         } else {
             $renderFunction = 'render';
+            $urlFunction = 'url';
         }
 
         if (!empty($blockConfig['render_url'])) {
             $params_string = '{'.Parser::arrayToParamsString($params).'}';
-            $twigCode = "{{ $renderFunction(url('{$blockConfig['render_url']}', $params_string)) }}";
+            $twigCode = "{{ $renderFunction($urlFunction('{$blockConfig['render_url']}', $params_string)) }}";
         } else {
             // $twigCode = "{{ $renderFunction(url('sfs_cms_block_render_by_type', {'type':'$type'})) }}";
             $params['id'] = $blockId;
