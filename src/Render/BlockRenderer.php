@@ -53,17 +53,20 @@ class BlockRenderer
             $renderFunction = 'render_esi';
             $params['ignore_errors'] = true;
             $params['isolate_request'] = !is_bool($blockConfig['isolate_request']) || $blockConfig['isolate_request'];
+            $urlFunction = 'path'; // TODO, review this: maybe if site or locale is at the domain that info can be lost
         } elseif ($blockConfig['ajax']) {
             $renderFunction = 'sfs_cms_render_ajax';
+            $urlFunction = 'url';
         } else {
             $renderFunction = 'render';
+            $urlFunction = 'url';
         }
 
         $params['_locale'] = $locale ?? $request?->getLocale() ?? $this->requestStack->getCurrentRequest()?->getLocale();
         $params['_site'] = $site ?? $request?->attributes->get('_site') ?? $this->requestStack->getCurrentRequest()?->attributes->get('_site');
         if (!empty($blockConfig['render_url'])) {
             $params_string = '{'.Parser::arrayToParamsString($params).'}';
-            $twigCode = "{{ $renderFunction(path('{$blockConfig['render_url']}', $params_string)) }}";
+            $twigCode = "{{ $renderFunction($urlFunction('{$blockConfig['render_url']}', $params_string)) }}";
         } else {
             // $twigCode = "{{ $renderFunction(url('sfs_cms_block_render_by_type', {'type':'$type'})) }}";
             $params['type'] = $type;

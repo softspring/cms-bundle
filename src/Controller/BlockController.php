@@ -56,7 +56,8 @@ class BlockController extends AbstractController
             }
 
             if ('ttl' !== $this->blockCacheType && false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
-                $response->setPublic();
+                'public' === $config['cache_type'] && $response->setPublic();
+                'private' === $config['cache_type'] && $response->setPrivate();
                 $response->setMaxAge($config['cache_ttl']);
             }
 
