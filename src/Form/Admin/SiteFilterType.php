@@ -3,7 +3,6 @@
 namespace Softspring\CmsBundle\Form\Admin;
 
 use Softspring\CmsBundle\Helper\CmsHelper;
-use Softspring\CmsBundle\Model\ContentInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Event\PreSetDataEvent;
@@ -29,18 +28,26 @@ class SiteFilterType extends AbstractType
             'expanded' => true,
             'block_prefix' => 'module_site_filter',
             'choice_translation_domain' => false,
+            'available_sites' => null,
         ]);
+
+        $resolver->setRequired('available_sites');
+        $resolver->setAllowedTypes('available_sites', ['array']);
+
+        $resolver->setNormalizer('choices', function (OptionsResolver $options, $value) {
+            return !empty($value) ? $value : array_combine($options['available_sites'], $options['available_sites']);
+        });
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $allAvailableSites = $options['content'] instanceof ContentInterface ? $options['content']->getSites()->toArray() : $this->cmsHelper->config()->getSites();
+        $availableSites = $options['available_sites'];
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (PreSetDataEvent $event) use ($allAvailableSites) {
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (PreSetDataEvent $event) use ($availableSites) {
             $data = $event->getData();
 
             if (null === $data) {
-                $data = $allAvailableSites;
+                $data = $availableSites;
             }
 
             foreach ($data as $key => $value) {
@@ -48,7 +55,7 @@ class SiteFilterType extends AbstractType
                     unset($data[$key]);
 
                     if ($value) {
-                        $data[] = $allAvailableSites[array_search($key, array_map('strval', $allAvailableSites))];
+                        $data[] = $availableSites[array_search($key, array_map('strval', $availableSites))];
                     }
                 }
             }
@@ -56,25 +63,25 @@ class SiteFilterType extends AbstractType
             $event->setData($data);
         });
 
-        $builder->addModelTransformer(new CallbackTransformer(function ($data) use ($allAvailableSites) {
+        $builder->addModelTransformer(new CallbackTransformer(function ($data) use ($availableSites) {
             // from database to form
             if (is_array($data)) {
                 foreach ($data as $k => $v) {
                     if (is_string($v)) {
-                        $data[$k] = $allAvailableSites[array_search($v, array_map('strval', $allAvailableSites))];
+                        $data[$k] = $availableSites[array_search($v, array_map('strval', $availableSites))];
                     }
                 }
             }
 
             return array_values($data);
-        }, function ($data) use ($allAvailableSites) {
-            // ensure all available locales are present in the array
-            $value = array_combine($allAvailableSites, array_fill(0, count($allAvailableSites), false));
+        }, function ($data) use ($availableSites) {
+            // ensure all available sites are present in the array
+            $value = array_combine($availableSites, array_fill(0, count($availableSites), false));
 
             // from form to database
             if (is_array($data)) {
                 foreach ($data as $site) {
-                    if (in_array("$site", $allAvailableSites)) {
+                    if (in_array("$site", $availableSites)) {
                         $value["$site"] = true;
                     }
                 }
