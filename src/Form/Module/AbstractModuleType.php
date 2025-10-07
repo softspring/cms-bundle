@@ -96,9 +96,10 @@ abstract class AbstractModuleType extends AbstractNodeType
             ]);
         }
 
-        if ($options['site_filter'] && $options['content']->getSites()->count() > 1) {
+        if ($options['site_filter'] && sizeof($options['available_sites']) > 1) {
             $builder->add('site_filter', SiteFilterType::class, [
                 'content' => $options['content'],
+                'available_sites' => $options['available_sites'],
             ]);
         }
 
