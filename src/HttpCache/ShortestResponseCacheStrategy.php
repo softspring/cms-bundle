@@ -16,7 +16,6 @@ class ShortestResponseCacheStrategy implements ResponseCacheStrategyInterface
             $this->isPrivate = true;
         }
 
-        // Calculamos TTL
         $this->ttls[] = $response->getTtl();
     }
 
