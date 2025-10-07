@@ -80,6 +80,13 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
 
+                ->arrayNode('esi')
+                    ->canBeDisabled()
+                    ->children()
+                        ->enumNode('response_cache_strategy')->defaultValue('default')->values(['default', 'shortest_response'])->end()
+                    ->end()
+                ->end()
+
                 ->arrayNode('collections')
                     ->scalarPrototype()->end()
                 ->end()
