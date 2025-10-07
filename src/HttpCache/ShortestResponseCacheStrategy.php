@@ -9,6 +9,7 @@ class ShortestResponseCacheStrategy implements ResponseCacheStrategyInterface
 {
     private array $ttls = [];
     private bool $isPrivate = false;
+    private bool $cacheable = true;
 
     public function add(Response $response): void
     {
@@ -18,6 +19,8 @@ class ShortestResponseCacheStrategy implements ResponseCacheStrategyInterface
 
         if ($response->getTtl()) {
             $this->ttls[] = $response->getTtl();
+        } else {
+            $this->cacheable = false;
         }
     }
 
@@ -27,12 +30,17 @@ class ShortestResponseCacheStrategy implements ResponseCacheStrategyInterface
             return;
         }
 
+        if (!$this->cacheable || !$response->isCacheable()) {
+            return;
+        }
+
         if ($this->isPrivate) {
             $response->setPrivate();
         } else {
             $response->setPublic();
         }
 
+        $response->getTtl() && $this->ttls[] = $response->getTtl();
         $minTtl = min($this->ttls);
         $response->setSharedMaxAge($minTtl);
 
