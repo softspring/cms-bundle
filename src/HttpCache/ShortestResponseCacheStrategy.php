@@ -12,30 +12,32 @@ class ShortestResponseCacheStrategy implements ResponseCacheStrategyInterface
 
     public function add(Response $response): void
     {
-        if (!$response->isCacheable()) {
+        if ($response->headers->hasCacheControlDirective('private')) {
             $this->isPrivate = true;
         }
 
-        $this->ttls[] = $response->getTtl();
+        if ($response->getTtl()) {
+            $this->ttls[] = $response->getTtl();
+        }
     }
 
     public function update(Response $response): void
     {
-        if ($this->isPrivate) {
-            $response->setPrivate();
-
+        if (empty($this->ttls)) {
             return;
         }
 
-        $ttls = array_filter($this->ttls, fn ($ttl) => $ttl > 0);
+        if ($this->isPrivate) {
+            $response->setPrivate();
+        } else {
+            $response->setPublic();
+        }
 
-        if (!empty($ttls)) {
-            $minTtl = min($ttls);
-            $response->setSharedMaxAge($minTtl);
+        $minTtl = min($this->ttls);
+        $response->setSharedMaxAge($minTtl);
 
-            if ((int) $response->getMaxAge() > (int) $minTtl) {
-                $response->setMaxAge($minTtl);
-            }
+        if ((int) $response->getMaxAge() > (int) $minTtl) {
+            $response->setMaxAge($minTtl);
         }
     }
 }
