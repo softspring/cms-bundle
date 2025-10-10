@@ -2,14 +2,27 @@
 
 namespace Softspring\CmsBundle\Helper;
 
+use Exception;
+use Softspring\CmsBundle\Exception\SiteHasNotACanonicalHostException;
+use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Model\RoutePathInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
+use Softspring\CmsBundle\Routing\SiteResolver;
 use Softspring\CmsBundle\Routing\UrlGenerator;
+use Softspring\CmsBundle\Routing\UrlMatcher;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 class RoutingHelper
 {
     public function __construct(
+        protected RouterInterface $router,
         protected UrlGenerator $urlGenerator,
+        protected SiteResolver $siteResolver,
+        protected UrlMatcher $urlMatcher,
+        protected RequestStack $requestStack,
     ) {
     }
 
@@ -50,5 +63,62 @@ class RoutingHelper
         }
 
         return $alternates;
+    }
+
+    public function resolveRequestFromUrl(string $url): ?Request
+    {
+        try {
+            $request = Request::create($url);
+            [$siteId, $site, $siteHostConfig] = $this->siteResolver->resolveSiteAndHost($request);
+
+            if (!$siteId) {
+                return null;
+            }
+
+            $request->attributes->set('_site', $siteId);
+            $request->attributes->set('_sfs_cms_site', $site);
+            $request->attributes->set('_sfs_cms_site_host_config', $siteHostConfig);
+            $request->attributes->add($this->urlMatcher->matchRequest($request));
+
+            return $request;
+        } catch (SiteHasNotACanonicalHostException|Exception) {
+            return null;
+        }
+    }
+
+    public function generatePath($route, ?string $locale = null, $site = null): string
+    {
+        return $this->generateUrl($route, $locale, $site, UrlGeneratorInterface::ABSOLUTE_PATH);
+    }
+
+    public function generateUrl($route, ?string $locale = null, $site = null, int $referenceType = UrlGeneratorInterface::ABSOLUTE_URL): string
+    {
+        if (is_null($route)) {
+            return '#';
+        }
+
+        if (is_array($route)) {
+            if (is_null($route['route_name'])) {
+                return '#';
+            }
+
+            $params = $route['route_params'] ?? [];
+
+            $params['_locale'] = $locale ?: ($this->requestStack->getCurrentRequest()?->getLocale() ?: 'en');
+
+            if ($site) {
+                $params['_site'] = $site;
+            }
+
+            return $this->router->generate($route['route_name'], $params, $referenceType);
+        } elseif ($route instanceof RouteInterface) {
+            return $this->router->generate($route->getId(), [], $referenceType);
+        }
+
+        $params = [
+            '_locale' => $locale ?: ($this->requestStack->getCurrentRequest()?->getLocale() ?: 'en'),
+        ];
+
+        return $this->router->generate($route, $params, $referenceType);
     }
 }
