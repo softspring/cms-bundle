@@ -2,25 +2,17 @@
 
 namespace Softspring\CmsBundle\Twig\Extension;
 
-use Softspring\CmsBundle\Model\RouteInterface;
+use Softspring\CmsBundle\Helper\RoutingHelper;
 use Softspring\CmsBundle\Routing\UrlGenerator;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\RouterInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class RouterExtension extends AbstractExtension
 {
-    protected UrlGenerator $urlGenerator;
-    protected RouterInterface $router;
-    protected RequestStack $requestStack;
-
-    public function __construct(UrlGenerator $urlGenerator, RouterInterface $router, RequestStack $requestStack)
-    {
-        $this->urlGenerator = $urlGenerator;
-        $this->router = $router;
-        $this->requestStack = $requestStack;
+    public function __construct(
+        protected RoutingHelper $routingHelper,
+        protected UrlGenerator $urlGenerator,
+    ) {
     }
 
     /**
@@ -30,8 +22,9 @@ class RouterExtension extends AbstractExtension
     {
         return [
             new TwigFunction('sfs_cms_link_attr', [$this, 'generateLinkAttributes'], ['is_safe' => ['html']]),
-            new TwigFunction('sfs_cms_url', [$this, 'generateUrl']),
-            new TwigFunction('sfs_cms_path', [$this, 'generatePath']),
+            new TwigFunction('sfs_cms_resolve_request_from_url', [$this->routingHelper, 'resolveRequestFromUrl']),
+            new TwigFunction('sfs_cms_url', [$this->routingHelper, 'generateUrl']),
+            new TwigFunction('sfs_cms_path', [$this->routingHelper, 'generatePath']),
             new TwigFunction('sfs_cms_route_path_url', [$this->urlGenerator, 'getUrlFixed']), // TODO REVIEW THIS, check if it works with symfony native routes
             new TwigFunction('sfs_cms_route_path_path', [$this->urlGenerator, 'getPathFixed']), // TODO REVIEW THIS, check if it works with symfony native routes
             new TwigFunction('sfs_cms_route_attr', [$this->urlGenerator, 'getRouteAttributes']), // TODO REVIEW THIS, check if it works with symfony native routes
@@ -55,7 +48,7 @@ class RouterExtension extends AbstractExtension
                 if (empty($linkData['route_name'])) {
                     return '';
                 }
-                $attributes['href'] = $this->generateUrl($linkData, $locale, $site);
+                $attributes['href'] = $this->routingHelper->generateUrl($linkData, $locale, $site);
                 $attributesString .= $this->urlGenerator->getRouteAttributes($linkData);
                 break;
 
@@ -83,41 +76,5 @@ class RouterExtension extends AbstractExtension
         $attributesString && $attributes[] = $attributesString;
 
         return implode(' ', $attributes);
-    }
-
-    public function generatePath($route, ?string $locale = null, $site = null): string
-    {
-        return $this->generateUrl($route, $locale, $site, UrlGeneratorInterface::ABSOLUTE_PATH);
-    }
-
-    public function generateUrl($route, ?string $locale = null, $site = null, int $referenceType = UrlGeneratorInterface::ABSOLUTE_URL): string
-    {
-        if (is_null($route)) {
-            return '#';
-        }
-
-        if (is_array($route)) {
-            if (is_null($route['route_name'])) {
-                return '#';
-            }
-
-            $params = $route['route_params'] ?? [];
-
-            $params['_locale'] = $locale ?: ($this->requestStack->getCurrentRequest()?->getLocale() ?: 'en');
-
-            if ($site) {
-                $params['_site'] = $site;
-            }
-
-            return $this->router->generate($route['route_name'], $params, $referenceType);
-        } elseif ($route instanceof RouteInterface) {
-            return $this->router->generate($route->getId(), [], $referenceType);
-        }
-
-        $params = [
-            '_locale' => $locale ?: ($this->requestStack->getCurrentRequest()?->getLocale() ?: 'en'),
-        ];
-
-        return $this->router->generate($route, $params, $referenceType);
     }
 }
