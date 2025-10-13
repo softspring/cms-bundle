@@ -36,7 +36,7 @@
     },
     "require-dev": {
         "doctrine/data-fixtures": "^1.6 || ^2.0",
-        "doctrine/doctrine-fixtures-bundle": "^3.4",
+        "doctrine/doctrine-fixtures-bundle": "^4.2",
         "friendsofphp/php-cs-fixer": "^3.68",
         "google/cloud-storage": "^1.30",
         "phpstan/phpstan": "^1.12.3",
