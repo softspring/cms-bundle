@@ -1,18 +1,51 @@
 {% macro drawEsiCalls(content) %}
     <div>
-        {% for esiCall in sfs_cms_search_content_esi_calls(content) %}
+        {% for esiCall in sfs_cms_admin_search_content_esi_calls(content) %}
             <p class="border-1 border-success border p-1"><code class="text-success">ESI:
                     {% if esiCall.processed.type|default(false) == 'block' %}
                         <i class="bi bi-puzzle"></i> Block {{ esiCall.processed.block_type }}
-                        {% if esiCall.processed.block_config.cache_ttl|default(false) %}(TTL: {{ esiCall.processed.block_config.cache_ttl }}){% endif %}
+                        {% if esiCall.processed.block_config.cache_ttl|default(false) %}
+                            (Cache: {{ esiCall.processed.block_config.cache_type == 'public' ? 'public' : 'private' }}, max-age: {{ esiCall.processed.block_config.cache_ttl }})
+                        {% endif %}
+                        {% if esiCall.processed.block_config.schedulable %}
+                            <i class="bi bi-clock" title="Schedulable"></i>
+                        {% endif %}
+                        {% if esiCall.processed.block_config.isolate_request == null or esiCall.processed.block_config.isolate_request %}
+                            <i class="bi bi-shield-shaded" title="Isolated request, do not reach the session or cookies"></i>
+                        {% else %}
+                            <i class="bi bi-person-fill" title="Request reach session and cookies"></i>
+                        {% endif %}
                     {% elseif esiCall.processed.type|default(false) == 'menu' %}
                         <i class="bi bi-list-nested"></i> Menu {{ esiCall.processed.menu_type }}
-                        {% if esiCall.processed.menu_config.cache_ttl|default(false) %}(TTL: {{ esiCall.processed.menu_config.cache_ttl }}){% endif %}
+                        {% if esiCall.processed.menu_config.cache_ttl|default(false) %}
+                            (Cache: public, max-age: {{ esiCall.processed.menu_config.cache_ttl }})
+                        {% endif %}
+                        {% if esiCall.processed.menu_config.isolate_request == null or esiCall.processed.menu_config.isolate_request %}
+                            <i class="bi bi-shield-shaded" title="Isolated request, do not reach the session or cookies"></i>
+                        {% else %}
+                            <i class="bi bi-person-fill" title="Request reach session and cookies"></i>
+                        {% endif %}
                     {% elseif esiCall.processed.type|default(false) == 'section' %}
                         <i class="bi bi-grid-fill"></i> Section {{ esiCall.processed.section_name }}
                         {#{% if esiCall.processed.menu_config.cache_ttl|default(false) %}(TTL: {{ esiCall.processed.menu_config.cache_ttl }}){% endif %}#}
                     {% else %}
                         <i class="bi bi-link"></i> {{ esiCall.url }}
+                    {% endif %}
+                </code></p>
+        {% endfor %}
+        {% for ajaxCall in sfs_cms_admin_search_content_ajax_calls(content) %}
+            <p class="border-1 border-success border p-1"><code class="text-success">AJAX:
+                    {% if ajaxCall.processed.type|default(false) == 'block' %}
+                        <i class="bi bi-puzzle"></i> Block {{ ajaxCall.processed.block_type }}
+                        {% if ajaxCall.processed.block_config.cache_ttl|default(false) %}(TTL: {{ ajaxCall.processed.block_config.cache_ttl }}){% endif %}
+                    {% elseif ajaxCall.processed.type|default(false) == 'menu' %}
+                        <i class="bi bi-list-nested"></i> Menu {{ ajaxCall.processed.menu_type }}
+                        {% if ajaxCall.processed.menu_config.cache_ttl|default(false) %}(TTL: {{ ajaxCall.processed.menu_config.cache_ttl }}){% endif %}
+                    {% elseif ajaxCall.processed.type|default(false) == 'section' %}
+                        <i class="bi bi-grid-fill"></i> Section {{ ajaxCall.processed.section_name }}
+                        {#{% if ajaxCall.processed.menu_config.cache_ttl|default(false) %}(TTL: {{ ajaxCall.processed.menu_config.cache_ttl }}){% endif %}#}
+                    {% else %}
+                        <i class="bi bi-link"></i> {{ ajaxCall.url }}
                     {% endif %}
                 </code></p>
         {% endfor %}
