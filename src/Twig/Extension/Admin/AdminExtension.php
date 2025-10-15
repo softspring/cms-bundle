@@ -122,7 +122,7 @@ class AdminExtension extends AbstractExtension implements GlobalsInterface
     public function searchContentAjaxCalls(string $content): array
     {
         $matches = [];
-        preg_match_all('/<div.*data-sfs-cms-ajax=.*>/', $content, $matches);
+        preg_match_all('/<div[^>]*data-sfs-cms-ajax[^>]*>/', $content, $matches);
 
         $ajaxCalls = [];
 
