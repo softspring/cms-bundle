@@ -86,7 +86,7 @@ class BlockRenderer
                 $twigCode = "{{ $renderFunction(fragment_uri($controller, $fragmentEsiAbsolute, true, true)) }}";
             } elseif ('sfs_cms_render_ajax' == $renderFunction) {
                 // {{ fragment_uri(controller, absolute = false, strict = true, sign = true) }}
-                $twigCode = "{{ $renderFunction(url('sfs_cms_block_render_by_type', {'type':'$type'}) $render_function_attrs) }}";
+                $twigCode = "{{ $renderFunction(url('sfs_cms_block_render_by_type', $params_string) $render_function_attrs) }}";
             } else {
                 $twigCode = "{{ $renderFunction($controller) }}";
             }
