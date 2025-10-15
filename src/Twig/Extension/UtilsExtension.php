@@ -2,12 +2,9 @@
 
 namespace Softspring\CmsBundle\Twig\Extension;
 
-use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Utils\HtmlValidator;
-use Softspring\CmsSectionsPlugin\Manager\SectionManagerInterface;
-use Softspring\CmsSectionsPlugin\Model\SectionInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -16,8 +13,6 @@ class UtilsExtension extends AbstractExtension
 {
     public function __construct(
         protected ContentManagerInterface $contentManager,
-        protected CmsConfig $cmsConfig,
-        protected ?SectionManagerInterface $sectionManager,
     ) {
     }
 
@@ -32,7 +27,6 @@ class UtilsExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('sfs_cms_search_content_esi_calls', [$this, 'searchContentEsiCalls']),
             new TwigFunction('sfs_cms_check_content_locales_and_routes', [$this, 'checkContentLocalesAndRoutes']),
             new TwigFunction('sfs_cms_validate_module_html', [HtmlValidator::class, 'validateModule']),
             new TwigFunction('sfs_cms_content_type', [$this->contentManager, 'getType']),
@@ -69,63 +63,6 @@ class UtilsExtension extends AbstractExtension
     </script>
 </div>
 AJAX;
-    }
-
-    public function searchContentEsiCalls(string $content): array
-    {
-        $matches = [];
-        preg_match_all('/<esi:include .*src="([^"]+)"\s?\/>/', $content, $matches);
-
-        $esiCalls = [];
-
-        /* @phpstan-ignore-next-line */
-        foreach ($matches[1] ?? [] as $url) {
-            $parsed = parse_url($url);
-
-            $params = [];
-            parse_str($parsed['query'], $params);
-
-            if (isset($params['_path'])) {
-                parse_str($params['_path'], $params['_path']);
-            }
-
-            $processed = [];
-
-            switch ($params['_path']['_controller'] ?? false) {
-                case 'Softspring\CmsBundle\Controller\BlockController::renderByType':
-                    $processed['type'] = 'block';
-                    $processed['block_type'] = $params['_path']['type'] ?? 'unknown';
-                    $processed['block_config'] = $this->cmsConfig->getBlock("{$processed['block_type']}", false);
-                    break;
-
-                case 'Softspring\CmsSectionsPlugin\Controller\SectionController::renderById':
-                    /* @var SectionInterface $section */
-                    $processed['type'] = 'section';
-                    $processed['section_id'] = $params['_path']['section'] ?? 'unknown';
-                    $section = $this->sectionManager?->getRepository()->findOneById($processed['section_id']);
-                    $processed['section_name'] = $section?->getName() ?? 'unknown';
-                    $processed['section_ttl'] = $section?->getExtra('ttl') ?? 0;
-                    break;
-
-                case 'Softspring\CmsBundle\Controller\MenuController::renderByType':
-                    $processed['type'] = 'menu';
-                    $processed['menu_type'] = $params['_path']['type'] ?? 'unknown';
-                    $processed['menu_config'] = $this->cmsConfig->getMenu("{$processed['menu_type']}", false);
-                    break;
-
-                default:
-                    $processed['type'] = 'unknown';
-            }
-
-            $esiCalls[] = [
-                'url' => $url,
-                'parsed' => $parsed,
-                'params' => $params,
-                'processed' => $processed,
-            ];
-        }
-
-        return $esiCalls;
     }
 
     public function checkContentLocalesAndRoutes(ContentInterface $content): array
