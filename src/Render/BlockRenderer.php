@@ -16,6 +16,7 @@ use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface;
 use Twig\Environment;
+use Twig\Extension\StringLoaderExtension;
 
 class BlockRenderer
 {
@@ -92,7 +93,7 @@ class BlockRenderer
             }
         }
 
-        $template = twig_template_from_string($this->twig, $twigCode);
+        $template = StringLoaderExtension::templateFromString($this->twig, $twigCode);
 
         if ($this->profilerEnabled) {
             $this->profilerDebugCollectorData[] = [
@@ -154,7 +155,7 @@ class BlockRenderer
             $twigCode = "{{ $renderFunction(controller('Softspring\\\\CmsBundle\\\\Controller\\\\BlockController::renderById', $params_string) $render_function_attrs) }}";
         }
 
-        $template = twig_template_from_string($this->twig, $twigCode);
+        $template = StringLoaderExtension::templateFromString($this->twig, $twigCode);
 
         if ($this->profilerEnabled) {
             $this->profilerDebugCollectorData[] = [
