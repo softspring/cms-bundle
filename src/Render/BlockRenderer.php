@@ -93,7 +93,12 @@ class BlockRenderer
             }
         }
 
-        $template = StringLoaderExtension::templateFromString($this->twig, $twigCode);
+        if (class_exists(StringLoaderExtension::class)) {
+            /** @phpstan-ignore-next-line  */
+            $template = StringLoaderExtension::templateFromString($this->twig, $twigCode);
+        } else {
+            $template = twig_template_from_string($this->twig, $twigCode);
+        }
 
         if ($this->profilerEnabled) {
             $this->profilerDebugCollectorData[] = [
@@ -155,7 +160,12 @@ class BlockRenderer
             $twigCode = "{{ $renderFunction(controller('Softspring\\\\CmsBundle\\\\Controller\\\\BlockController::renderById', $params_string) $render_function_attrs) }}";
         }
 
-        $template = StringLoaderExtension::templateFromString($this->twig, $twigCode);
+        if (class_exists(StringLoaderExtension::class)) {
+            /** @phpstan-ignore-next-line  */
+            $template = StringLoaderExtension::templateFromString($this->twig, $twigCode);
+        } else {
+            $template = twig_template_from_string($this->twig, $twigCode);
+        }
 
         if ($this->profilerEnabled) {
             $this->profilerDebugCollectorData[] = [
