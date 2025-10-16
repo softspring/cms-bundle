@@ -67,6 +67,6 @@ function slug(value, allowLastDash = false) {
     return value.replace(/[\s_]+/g, '-') // convert spaces to dashes
         .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // remove accents
         .replace(/[^a-zA-Z0-9\-]/g, '') // remove special chars
-        .replace(/\-+/g, '-') // remove double dashes
+        .replace(/-+/g, '-') // remove double dashes
         .toLowerCase(); // makes lowercase
 }
