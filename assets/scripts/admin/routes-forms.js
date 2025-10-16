@@ -56,7 +56,7 @@ function underscore(value, allowLastUnderscore = false) {
     return value.replace(/[\s\-]+/g, '_') // convert spaces to underscores
         .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // remove accents
         .replace(/[^a-zA-Z0-9_]/g, '') // remove special chars
-        .replace(/\_+/g, '_') // remove double underscores
+        .replace(/_+/g, '_') // remove double underscores
         .toLowerCase(); // makes lowercase
 }
 
