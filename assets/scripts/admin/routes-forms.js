@@ -53,7 +53,7 @@ function underscore(value, allowLastUnderscore = false) {
     if (!allowLastUnderscore) {
         value = value.replace(/_+$/g, ''); // remove last underscores
     }
-    return value.replace(/[\s\-]+/g, '_') // convert spaces to underscores
+    return value.replace(/[\s-]+/g, '_') // convert spaces to underscores
         .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // remove accents
         .replace(/[^a-zA-Z0-9_]/g, '') // remove special chars
         .replace(/_+/g, '_') // remove double underscores
@@ -66,7 +66,7 @@ function slug(value, allowLastDash = false) {
     }
     return value.replace(/[\s_]+/g, '-') // convert spaces to dashes
         .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // remove accents
-        .replace(/[^a-zA-Z0-9\-]/g, '') // remove special chars
+        .replace(/[^a-zA-Z0-9-]/g, '') // remove special chars
         .replace(/-+/g, '-') // remove double dashes
         .toLowerCase(); // makes lowercase
 }
