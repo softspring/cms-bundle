@@ -27,3 +27,6 @@ parameters:
         -
             message: "#Class Softspring\\\\CmsSectionsPlugin\\\\Model\\\\SectionInterface not found.#"
             reportUnmatched: false
+        -
+            message: "#Call to an undefined static method Twig\\\\Extension\\\\StringLoaderExtension::templateFromString\\(\\)#"
+            reportUnmatched: false

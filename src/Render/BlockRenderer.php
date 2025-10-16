@@ -94,7 +94,6 @@ class BlockRenderer
         }
 
         if (class_exists(StringLoaderExtension::class)) {
-            /** @phpstan-ignore-next-line  */
             $template = StringLoaderExtension::templateFromString($this->twig, $twigCode);
         } else {
             $template = twig_template_from_string($this->twig, $twigCode);
@@ -161,7 +160,6 @@ class BlockRenderer
         }
 
         if (class_exists(StringLoaderExtension::class)) {
-            /** @phpstan-ignore-next-line  */
             $template = StringLoaderExtension::templateFromString($this->twig, $twigCode);
         } else {
             $template = twig_template_from_string($this->twig, $twigCode);
