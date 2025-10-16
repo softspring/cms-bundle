@@ -67,15 +67,22 @@ function _init() {
 function selectOptionRouteRequirements(option) {
     let routeParamsRequirements = {};
 
-    for (let attr in option.attributes) {
-        const dataName = option.attributes[attr];
-        if (!dataName.nodeName || !dataName.nodeName.startsWith('data-route-parameter-')) {
-            continue;
-        }
-        const paramName = dataName.nodeName.substring(21);
-        const requirement = dataName.nodeValue;
+    // extract from data-route-parameter attribute each param with optional requirements
+    // parameters are separated by " ;; " and it can be just a parameter name without requirement
+    // or parameter name "=" requirement
+    // e.g. data-route-parameter="id ;; slug=\\d+"
 
-        routeParamsRequirements[paramName] = requirement;
+    if (option.dataset.routeParameter) {
+        const routeParameters = option.dataset.routeParameter.split(' ;; ');
+
+        routeParameters.forEach((param) => {
+            const paramParts = param.split('=');
+            if (paramParts.length === 2) {
+                routeParamsRequirements[paramParts[0]] = paramParts[1];
+            } else {
+                routeParamsRequirements[paramParts[0]] = null;
+            }
+        });
     }
 
     return routeParamsRequirements;
