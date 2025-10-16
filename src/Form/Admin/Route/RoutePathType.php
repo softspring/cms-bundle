@@ -60,6 +60,9 @@ class RoutePathType extends AbstractType
             'required' => true,
             'choices' => array_combine(array_map(fn ($lang) => Locales::getName($lang), $options['languages']), $options['languages']),
             'choice_translation_domain' => false,
+            'attr' => [
+                'data-route-form' => 'path-locale',
+            ],
         ]);
     }
 }

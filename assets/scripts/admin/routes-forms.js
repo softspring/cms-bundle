@@ -1,8 +1,4 @@
-import * as underscored from 'underscore.string/underscored';
-import * as slugify from 'underscore.string/slugify';
-import 'underscore.string/slugify';
-
-import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
+import {addTargetEventListener, registerFeature} from '@softspring/cms-bundle/scripts/tools';
 
 registerFeature('admin_routes_forms', _init);
 
@@ -11,41 +7,66 @@ registerFeature('admin_routes_forms', _init);
  * @private
  */
 function _init() {
-
-    document.addEventListener('keyup', function (event) {
-        if (!event.target.matches('[data-generate-underscore]') && !event.target.matches('[data-generate-slug]')) return;
-
-        // generate underscore
-        var element = document.querySelector('[' + event.target.dataset.generateUnderscore + ']');
-        if (element && element.value === underscored(event.target.lastValue || '')) {
-            element.value = underscored(event.target.value).removeAccents();
-        }
-
-        // generate slug
-        element = document.querySelector('[' + event.target.dataset.generateSlug + ']');
-        if (element && element.value.replace(/^\/+/, '').replace(/\/+$/, '') === slugify(event.target.lastValue || '')) {
-            element.value = slugify(event.target.value).removeAccents();
-        }
-
-        event.target.lastValue = event.target.value.removeAccents();
-    });
-
-    document.addEventListener('keyup', function (event) {
-        if (!event.target.matches('.snake-case')) return;
-        event.target.value = underscored(event.target.value);
-    });
-
-    document.addEventListener('keyup', function (event) {
-        if (!event.target.matches('.sluggize')) return;
-        event.target.value = slugify(event.target.value);
-    });
+    addTargetEventListener('[data-generate-underscore]', 'keyup', fillUnderscore);
+    addTargetEventListener('[data-generate-slug]', 'keyup', fillSlug);
+    addTargetEventListener('.snake-case', 'keyup', underscoreInput);
+    addTargetEventListener('.snake-case', 'focusout', underscoreInput);
+    addTargetEventListener('.sluggize', 'keyup', slugInput);
+    addTargetEventListener('.sluggize', 'focusout', slugInput);
 }
 
-/* ****************************************************************************************************** *
- * SLUG GENERATION ON CONTENT FORM
- * ****************************************************************************************************** */
+function fillUnderscore(sourceElement) {
+    const htmlTargetElements = document.querySelectorAll('[' + sourceElement.dataset.generateUnderscore + ']');
+    const cleanValue = underscore(sourceElement.value);
 
-String.prototype.removeAccents = function () {
-    return this.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    [...htmlTargetElements].forEach(function (htmlTargetElement) {
+        if (sourceElement.lastUnderscoreValue === undefined || htmlTargetElement.value === sourceElement.lastUnderscoreValue) {
+            htmlTargetElement.value = cleanValue;
+        }
+    });
+
+    sourceElement.lastUnderscoreValue = cleanValue;
 }
 
+function underscoreInput(input, event) {
+    input.value = underscore(input.value, event.type === 'keyup');
+}
+
+function fillSlug(sourceElement) {
+    const htmlTargetElements = document.querySelectorAll('[' + sourceElement.dataset.generateSlug + ']');
+    const cleanValue = slug(sourceElement.value);
+
+    [...htmlTargetElements].forEach(function (htmlTargetElement) {
+        if (sourceElement.lastSlugValue === undefined || htmlTargetElement.value === sourceElement.lastSlugValue) {
+            htmlTargetElement.value = cleanValue;
+        }
+    });
+
+    sourceElement.lastSlugValue = cleanValue;
+}
+
+function slugInput(input, event) {
+    input.value = slug(input.value, event.type === 'keyup');
+}
+
+function underscore(value, allowLastUnderscore = false) {
+    if (!allowLastUnderscore) {
+        value = value.replace(/_+$/g, ''); // remove last underscores
+    }
+    return value.replace(/[\s\-]+/g, '_') // convert spaces to underscores
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // remove accents
+        .replace(/[^a-zA-Z0-9\_]/g, '') // remove special chars
+        .replace(/\_+/g, '_') // remove double underscores
+        .toLowerCase(); // makes lowercase
+}
+
+function slug(value, allowLastDash = false) {
+    if (!allowLastDash) {
+        value = value.replace(/-+$/g, ''); // remove last dashes
+    }
+    return value.replace(/[\s_]+/g, '-') // convert spaces to dashes
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // remove accents
+        .replace(/[^a-zA-Z0-9\-]/g, '') // remove special chars
+        .replace(/\-+/g, '-') // remove double dashes
+        .toLowerCase(); // makes lowercase
+}

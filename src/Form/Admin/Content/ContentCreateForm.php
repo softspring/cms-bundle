@@ -11,6 +11,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Locales;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -95,5 +97,12 @@ class ContentCreateForm extends AbstractType implements ContentCreateFormInterfa
             'label' => "admin_{$options['content_config']['_id']}.form.indexing.label",
             'label_format' => "admin_{$options['content_config']['_id']}.form.indexing.%name%.label",
         ]);
+    }
+
+    public function finishView(FormView $view, FormInterface $form, array $options): void
+    {
+        array_map(function (FormView $localeInput) use ($view) {
+            $localeInput->vars['attr']['data-locale-add-path'] = $view->children['routes']->children[0]->children['paths']->vars['id'] ?? '';
+        }, $view->children['locales']->children);
     }
 }

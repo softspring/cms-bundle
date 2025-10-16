@@ -26,6 +26,7 @@ import './admin/content-edit/preview-toggle';
 import './admin/content-edit/wysiwyg';
 
 import './admin/confirm-modal';
+import './admin/content-forms';
 import './admin/routes-forms';
 import './admin/fields-visibility';
 import './admin/locales-widgets';
