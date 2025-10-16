@@ -1,4 +1,7 @@
 parameters:
+    excludePaths:
+        # until Twig Bridge is updated
+        - src/Render/Isolated/IsolatedAppVariable.php
     ignoreErrors:
         -
             message: "#Anonymous function never returns null so it can be removed from the return type.#"
@@ -20,4 +23,7 @@ parameters:
             path: src/DataFixtures/Purger/CmsPurger.php
         -
             message: "#Function twig_template_from_string not found.#"
+            reportUnmatched: false
+        -
+            message: "#Class Softspring\\\\CmsSectionsPlugin\\\\Model\\\\SectionInterface not found.#"
             reportUnmatched: false

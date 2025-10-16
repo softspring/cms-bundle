@@ -11,7 +11,6 @@ use Softspring\CmsBundle\Entity\Page;
 use Softspring\CmsBundle\Form\Extension\DefaultValueExtension;
 use Softspring\CmsBundle\Form\Extension\DynamicTypesExtension;
 use Softspring\CmsBundle\Form\Module\DynamicFormModuleType;
-use Softspring\CmsBundle\Form\Resolver\TypeResolver;
 use Softspring\CmsBundle\Form\Type\LinkType;
 use Softspring\CmsBundle\Form\Type\SymfonyRouteType;
 use Softspring\CmsBundle\Form\Type\TranslatableType;
@@ -20,11 +19,12 @@ use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Render\Error\RenderErrorList;
 use Softspring\CmsBundle\Render\Exception\ModuleRenderException;
-use Softspring\CmsBundle\Render\ModuleRenderer;
+use Softspring\CmsBundle\Render\Module\ModuleRenderer;
 use Softspring\CmsBundle\Translator\TranslatableContext;
 use Softspring\CmsBundle\Utils\DataMigrator;
 use Softspring\Component\DynamicFormType\Form\Extension\DynamicFormExtension;
 use Softspring\Component\DynamicFormType\Form\Resolver\ConstraintResolver;
+use Softspring\Component\DynamicFormType\Form\Resolver\DefaultTypeResolver;
 use Softspring\TranslatableBundle\Form\Type\TranslatableType as BaseTranslatableType;
 use Softspring\TranslatableBundle\Form\Type\TranslationType as BaseTranslationType;
 use Symfony\Component\Config\Definition\Processor;
@@ -55,7 +55,7 @@ abstract class ModuleTestCase extends TypeTestCase
      */
     protected function getExtensions(): array
     {
-        $cmsTypeResolver = new TypeResolver();
+        $cmsTypeResolver = new DefaultTypeResolver();
 
         $router = $this->createMock(RouterInterface::class);
         $router->method('getRouteCollection')->willReturn(new RouteCollection());
@@ -208,13 +208,13 @@ abstract class ModuleTestCase extends TypeTestCase
             'strict_variables' => true,
         ]);
 
-        $moduleRenderer = new ModuleRenderer($cmsConfig, $requestStack, null, $twig);
+        $moduleRenderer = new ModuleRenderer($cmsConfig, $requestStack, $twig, null);
 
         $renderError = new RenderErrorList();
 
         $debugCollectorData = [];
         $data['_module'] = $this->moduleName;
-        $render = $moduleRenderer->render($data, null, $debugCollectorData, $renderError);
+        $render = $moduleRenderer->render($data, $debugCollectorData, [], $renderError);
 
         if ($renderError->getErrors()) {
             $this->fail($renderError->getErrors()[0]['exception']->getMessage());

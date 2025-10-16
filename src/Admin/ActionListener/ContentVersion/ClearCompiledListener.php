@@ -3,7 +3,7 @@
 namespace Softspring\CmsBundle\Admin\ActionListener\ContentVersion;
 
 use Softspring\CmsBundle\Compiler\ContentVersionCompiler;
-use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
@@ -11,9 +11,7 @@ use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Request\FlashNotifier;
 use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\Component\CrudlController\Event\ApplyEvent;
-use Softspring\Component\CrudlController\Event\ExceptionEvent;
 use Softspring\Component\CrudlController\Event\FailureEvent;
-use Softspring\Component\CrudlController\Event\SuccessEvent;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
@@ -25,13 +23,13 @@ class ClearCompiledListener extends AbstractContentVersionListener
         ContentManagerInterface $contentManager,
         ContentVersionManagerInterface $contentVersionManager,
         RouteManagerInterface $routeManager,
-        CmsConfig $cmsConfig,
+        CmsHelper $cmsHelper,
         RouterInterface $router,
         FlashNotifier $flashNotifier,
         AuthorizationCheckerInterface $authorizationChecker,
         protected ContentVersionCompiler $contentVersionCompiler,
     ) {
-        parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
+        parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsHelper, $router, $flashNotifier, $authorizationChecker);
     }
 
     public static function getSubscribedEvents(): array
@@ -41,7 +39,7 @@ class ClearCompiledListener extends AbstractContentVersionListener
                 ['onInitializeGetConfig', 20],
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onEventLoadContentEntity', 9],
-                ['onInitializeIsGranted', 0],
+                ['onInitializeUpdateHelperConfig', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEAR_COMPILED_LOAD_ENTITY => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -49,7 +47,8 @@ class ClearCompiledListener extends AbstractContentVersionListener
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEAR_COMPILED_NOT_FOUND => [
                 ['onEventDispatchContentTypeEvent', 10],
-                ['onNotFound', 0],
+                ['onNotFoundAddFlash', 5],
+                ['onNotFoundRedirectToList', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEAR_COMPILED_FOUND => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -60,7 +59,8 @@ class ClearCompiledListener extends AbstractContentVersionListener
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEAR_COMPILED_SUCCESS => [
                 ['onEventDispatchContentTypeEvent', 10],
-                ['onSuccess', 0],
+                ['onSuccessAddFlash', 5],
+                ['onEventRedirectBack', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEAR_COMPILED_FAILURE => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -68,7 +68,8 @@ class ClearCompiledListener extends AbstractContentVersionListener
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEAR_COMPILED_EXCEPTION => [
                 ['onEventDispatchContentTypeEvent', 10],
-                ['onException', 0],
+                ['onExceptionAddFlash', 5],
+                ['onEventRedirectBack', 0],
             ],
         ];
     }
@@ -80,25 +81,11 @@ class ClearCompiledListener extends AbstractContentVersionListener
 
         $entity->setKeep($event->getRequest()->attributes->get('recompile') ?: false);
 
-        $this->contentVersionCompiler->clearCompiled($entity);
+        $entity->cleanCompiled();
 
         $this->contentVersionManager->saveEntity($entity);
 
         $event->setApplied(true);
-    }
-
-    public function onSuccess(SuccessEvent $event): void
-    {
-        $contentConfig = $event->getRequest()->attributes->get('_content_config');
-
-        /** @var ContentVersionInterface $version */
-        $version = $event->getEntity();
-
-        $this->flashNotifier->addTrans('success', "admin_{$contentConfig['_id']}.version_clear_compiled.success_flash", [], 'sfs_cms_contents');
-
-        $content = $event->getRequest()->attributes->get('content');
-
-        $event->setResponse($this->redirectBack($contentConfig['_id'], $content, $event->getRequest(), $version));
     }
 
     public function onFailure(FailureEvent $event): void
@@ -107,20 +94,6 @@ class ClearCompiledListener extends AbstractContentVersionListener
 
         /** @var ContentVersionInterface $version */
         $version = $event->getEntity();
-
-        $this->flashNotifier->addTrans('error', "admin_{$contentConfig['_id']}.version_clear_compiled.failed_flash", ['%exception%' => $this->extractExceptionMessage($event->getException())], 'sfs_cms_contents');
-
-        $content = $event->getRequest()->attributes->get('content');
-
-        $event->setResponse($this->redirectBack($contentConfig['_id'], $content, $event->getRequest(), $version));
-    }
-
-    public function onException(ExceptionEvent $event): void
-    {
-        $contentConfig = $event->getRequest()->attributes->get('_content_config');
-
-        /** @var ?ContentVersionInterface $version */
-        $version = $event->getRequest()->attributes->get('version');
 
         $this->flashNotifier->addTrans('error', "admin_{$contentConfig['_id']}.version_clear_compiled.failed_flash", ['%exception%' => $this->extractExceptionMessage($event->getException())], 'sfs_cms_contents');
 

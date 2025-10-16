@@ -1,5 +1,6 @@
 import {cmsEditListener} from './event-listeners';
 import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
+import {filterCurrentFilterElements} from "./filter-preview";
 
 registerFeature('admin_content_edit_preview_block', _init);
 
@@ -22,4 +23,5 @@ function showBlockPreview(inputElement, module, preview/*, form, event*/) {
     let htmlTargetElements = preview.querySelectorAll("[data-block-preview-target='" + inputElement.dataset.blockPreviewInput + "']");
     let blockPreview = inputElement.options[inputElement.selectedIndex].dataset.blockPreview;
     [...htmlTargetElements].forEach((htmlTargetElement) => htmlTargetElement.innerHTML = blockPreview === undefined ? '' : blockPreview);
+    filterCurrentFilterElements();
 };

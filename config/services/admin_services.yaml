@@ -5,12 +5,12 @@ services:
         public: false
 
     _instanceof:
-        Softspring\CmsBundle\Admin\Menu\ContentMenuProviderInterface:
-            tags: [ 'sfs_cms.admin_menu.content_menu_provider' ]
-    
-    Softspring\CmsBundle\Admin\Menu\MenuProvider:
+        Softspring\CmsBundle\Admin\Menu\MenuProviderInterface:
+            tags: [ 'sfs_cms.admin_menu.menu_provider' ]
+
+    Softspring\CmsBundle\Admin\Menu\MenuManager:
         arguments:
-            $contentMenuProviders: !tagged_iterator { tag: sfs_cms.admin_menu.content_menu_provider, default_priority_method: getPriority }
+            $menuProviders: !tagged_iterator { tag: sfs_cms.admin_menu.menu_provider, default_priority_method: getPriority }
 
     Softspring\CmsBundle\Admin\Menu\ContentMenuProvider: ~
 
@@ -18,12 +18,7 @@ services:
         resource: '../../src/Twig/Extension/Admin/*'
         tags: [ 'twig.extension' ]
         bind:
-            $recompileEnabled: '%sfs_cms.content.recompile_enabled%'
-
-    Softspring\CmsBundle\Admin\Routing\AdminRoutingLoader:
-        arguments:
-            $adminRoutingProviders: !tagged_iterator { tag: sfs_cms.admin_routing_provider }
-        tags: [ 'routing.loader' ]
+            $contentRecompileEnabled: '%sfs_cms.content.recompile_enabled%'
 
     Softspring\CmsBundle\Admin\ActionListener\Media\:
         resource: '../../src/Admin/ActionListener/Media/*'

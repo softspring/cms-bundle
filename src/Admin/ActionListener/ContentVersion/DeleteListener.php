@@ -2,7 +2,7 @@
 
 namespace Softspring\CmsBundle\Admin\ActionListener\ContentVersion;
 
-use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
@@ -11,6 +11,7 @@ use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Request\FlashNotifier;
 use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\CmsBundle\Translator\TranslatableContext;
+use Softspring\Component\CrudlController\Event\ApplyEvent;
 use Softspring\Component\CrudlController\Event\FormPrepareEvent;
 use Softspring\Component\CrudlController\Event\SuccessEvent;
 use Softspring\Component\CrudlController\Event\ViewEvent;
@@ -25,13 +26,13 @@ class DeleteListener extends AbstractContentVersionListener
         ContentManagerInterface $contentManager,
         ContentVersionManagerInterface $contentVersionManager,
         RouteManagerInterface $routeManager,
-        CmsConfig $cmsConfig,
+        CmsHelper $cmsHelper,
         RouterInterface $router,
         FlashNotifier $flashNotifier,
         AuthorizationCheckerInterface $authorizationChecker,
         protected TranslatableContext $translatableContext,
     ) {
-        parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
+        parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsHelper, $router, $flashNotifier, $authorizationChecker);
     }
 
     public static function getSubscribedEvents(): array
@@ -41,7 +42,7 @@ class DeleteListener extends AbstractContentVersionListener
                 ['onInitializeGetConfig', 20],
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onEventLoadContentEntity', 9],
-                ['onInitializeIsGranted', 0],
+                ['onInitializeUpdateHelperConfig', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_DELETE_LOAD_ENTITY => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -49,7 +50,8 @@ class DeleteListener extends AbstractContentVersionListener
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_DELETE_NOT_FOUND => [
                 ['onEventDispatchContentTypeEvent', 10],
-                ['onNotFound', 0],
+                ['onNotFoundAddFlash', 5],
+                ['onNotFoundRedirectToList', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_DELETE_FOUND => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -66,6 +68,7 @@ class DeleteListener extends AbstractContentVersionListener
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_DELETE_APPLY => [
                 ['onEventDispatchContentTypeEvent', 10],
+                ['onApplySetOtherLastVersion', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_DELETE_SUCCESS => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -85,6 +88,20 @@ class DeleteListener extends AbstractContentVersionListener
                 ['onEventDispatchContentTypeEvent', 10],
             ],
         ];
+    }
+
+    public function onApplySetOtherLastVersion(ApplyEvent $event): void
+    {
+        /** @var ContentVersionInterface $deleteVersion */
+        $deleteVersion = $event->getEntity();
+        $content = $deleteVersion->getContent();
+
+        if ($deleteVersion->isLastVersion()) {
+            $previousVersion = $content->getVersions()->filter(function (ContentVersionInterface $version) use ($deleteVersion) {
+                return $version->getId() !== $deleteVersion->getId();
+            })->first();
+            $content->setLastVersion($previousVersion);
+        }
     }
 
     public function onFormPrepareResolve(FormPrepareEvent $event): void

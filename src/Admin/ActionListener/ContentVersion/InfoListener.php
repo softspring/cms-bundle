@@ -3,7 +3,7 @@
 namespace Softspring\CmsBundle\Admin\ActionListener\ContentVersion;
 
 use Softspring\CmsBundle\Compiler\ContentVersionCompiler;
-use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
@@ -24,13 +24,13 @@ class InfoListener extends AbstractContentVersionListener
         ContentManagerInterface $contentManager,
         ContentVersionManagerInterface $contentVersionManager,
         RouteManagerInterface $routeManager,
-        CmsConfig $cmsConfig,
+        CmsHelper $cmsHelper,
         RouterInterface $router,
         FlashNotifier $flashNotifier,
         AuthorizationCheckerInterface $authorizationChecker,
         protected ContentVersionCompiler $contentVersionCompiler,
     ) {
-        parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
+        parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsHelper, $router, $flashNotifier, $authorizationChecker);
     }
 
     public static function getSubscribedEvents(): array
@@ -40,7 +40,7 @@ class InfoListener extends AbstractContentVersionListener
                 ['onInitializeGetConfig', 20],
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onEventLoadContentEntity', 9],
-                ['onInitializeIsGranted', 0],
+                ['onInitializeUpdateHelperConfig', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_INFO_LOAD_ENTITY => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -106,8 +106,8 @@ class InfoListener extends AbstractContentVersionListener
         $version = $event->getRequest()->attributes->get('version');
         parent::onView($event);
         $event->getData()['version_entity'] = $version;
-        $event->getData()['content_can_be_compiled'] = $this->contentVersionCompiler->canSaveCompiled($version);
-        $event->getData()['content_can_compile_modules'] = $this->contentVersionCompiler->canSaveCompiledModules($version);
+        $event->getData()['content_can_be_compiled'] = $this->cmsHelper->compile()->contentSaveCompiled($version);
+        $event->getData()['content_can_compile_modules'] = $this->cmsHelper->compile()->contentSaveCompiledContainers($version);
     }
 
     public function onSuccess(SuccessEvent $event): void

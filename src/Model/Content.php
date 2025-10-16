@@ -2,22 +2,23 @@
 
 namespace Softspring\CmsBundle\Model;
 
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Softspring\CmsBundle\Utils\SitesSorter;
 
+/**
+ * @property ContentVersionInterface[]|Collection $versions
+ * @property ContentVersionInterface|null         $publishedVersion
+ * @property ContentVersionInterface|null         $lastVersion
+ */
 abstract class Content implements ContentInterface
 {
+    use Traits\VersionableTrait;
+    use Traits\TranslatableConfigTrait;
+
     protected ?string $name = null;
 
     protected ?Collection $sites = null;
-
-    /**
-     * @psalm-var ContentVersionInterface[]|Collection
-     */
-    protected Collection $versions;
-
-    protected ?int $lastVersionNumber = null;
 
     /**
      * @psalm-var RouteInterface[]|Collection
@@ -29,16 +30,6 @@ abstract class Content implements ContentInterface
     protected ?array $extraData = null;
 
     protected ?array $indexing = null;
-
-    protected ?ContentVersionInterface $publishedVersion = null;
-
-    protected ?ContentVersionInterface $lastVersion = null;
-
-    protected ?string $defaultLocale = null;
-
-    protected ?array $locales = null;
-
-    protected ?int $lastModified = null;
 
     public function __construct()
     {
@@ -64,13 +55,7 @@ abstract class Content implements ContentInterface
 
     public function getSitesSorted(): Collection
     {
-        $sites = $this->getSites()->toArray();
-
-        usort($sites, function (SiteInterface $a, SiteInterface $b) {
-            return ($a->getConfig()['extra']['order'] ?? 500) <=> ($b->getConfig()['extra']['order'] ?? 500);
-        });
-
-        return new ArrayCollection($sites);
+        return SitesSorter::sort($this->getSites()->toArray());
     }
 
     public function addSite(SiteInterface $site): void
@@ -93,39 +78,6 @@ abstract class Content implements ContentInterface
                 $route->removeSite($site);
             }
         }
-    }
-
-    /**
-     * @psalm-return Collection|ContentVersionInterface[]
-     */
-    public function getVersions(): Collection
-    {
-        return $this->versions;
-    }
-
-    public function addVersion(ContentVersionInterface $version): void
-    {
-        if (!$this->versions->contains($version)) {
-            $this->versions->add($version);
-            $version->setContent($this);
-        }
-    }
-
-    public function removeVersion(ContentVersionInterface $version): void
-    {
-        if ($this->versions->contains($version)) {
-            $this->versions->removeElement($version);
-        }
-    }
-
-    public function getLastVersionNumber(): ?int
-    {
-        return $this->lastVersionNumber;
-    }
-
-    public function setLastVersionNumber(?int $lastVersionNumber): void
-    {
-        $this->lastVersionNumber = $lastVersionNumber;
     }
 
     /**
@@ -205,72 +157,5 @@ abstract class Content implements ContentInterface
     public function setIndexing(?array $indexing): void
     {
         $this->indexing = $indexing;
-    }
-
-    public function getPublishedVersion(): ?ContentVersionInterface
-    {
-        return $this->publishedVersion;
-    }
-
-    public function setPublishedVersion(?ContentVersionInterface $publishedVersion): void
-    {
-        $this->publishedVersion = $publishedVersion;
-        $this->setLastModified(new DateTime());
-    }
-
-    public function getStatus(): string
-    {
-        if ($this->getPublishedVersion()) {
-            return 'published';
-        }
-
-        return 'draft';
-    }
-
-    public function getLastVersion(): ?ContentVersionInterface
-    {
-        return $this->lastVersion;
-    }
-
-    public function setLastVersion(?ContentVersionInterface $lastVersion): void
-    {
-        $this->lastVersion = $lastVersion;
-    }
-
-    public function getDefaultLocale(): ?string
-    {
-        return $this->defaultLocale;
-    }
-
-    public function setDefaultLocale(?string $defaultLocale): void
-    {
-        $this->defaultLocale = $defaultLocale;
-        $this->addLocale($defaultLocale);
-    }
-
-    public function getLocales(): ?array
-    {
-        return array_unique(array_merge([$this->defaultLocale], $this->locales ?? []));
-    }
-
-    public function setLocales(?array $locales): void
-    {
-        $this->locales = $locales;
-        $this->defaultLocale && $this->addLocale($this->defaultLocale);
-    }
-
-    public function addLocale(string $locale): void
-    {
-        $this->locales = array_unique(array_merge($this->getLocales(), [$locale]));
-    }
-
-    public function getLastModified(): ?DateTime
-    {
-        return $this->lastModified ? DateTime::createFromFormat('U', "{$this->lastModified}") : null;
-    }
-
-    public function setLastModified(?DateTime $lastModified): void
-    {
-        $this->lastModified = $lastModified ? (int) $lastModified->format('U') : null;
     }
 }

@@ -1,6 +1,15 @@
 admin:
     global_breadcrumb: "CMS"
 
+module_buttons:
+    up.title: "Subir módulo"
+    down.title: "Bajar módulo"
+    duplicate.title: "Duplicar módulo"
+    copy.title: "Copiar módulo"
+    remove.title: "Eliminar módulo"
+
+module_disabled_raw: "El módulo está desactivado en configuración y no se puede editar."
+
 admin_content:
     read:
         published_cache_alert_raw: "Este contenido fue publicado por última vez el %publishedDateTime%. Algunas URLs de contenido están cacheadas durante %maxRouteTtl% segundos.<br/>Por lo que puede que tengas que esperar %waitSeconds% segundos antes de que el nuevo contenido esté disponible."
@@ -9,13 +18,21 @@ admin_content:
         max_input_vars_raw: "Has alcanzado el número máximo de campos soportados (%maxInputVars%). Por favor, elimina algunos módulos para continuar. <br/>Si es necesario incrementar este límite habla con tu proveedor."
         modules_modal:
             label: "Selecciona el módulo"
+            paste.button: "Pegar módulo"
 
 admin_blocks:
+    tabs_menu:
+        details: "Detalles"
+        update: "Editar"
+        delete: "Eliminar"
     list:
         meta.title: "Bloques"
         title: "Bloques"
         breadcrumb: "Bloques"
         empty_message: "Aún no se ha creado ningún bloque"
+        filter_form:
+            name.label: "Nombre"
+            type.label: "Tipo"
         fields:
             name.header: "Nombre"
             type.header: "Tipo"
@@ -71,26 +88,12 @@ admin_blocks:
         actions:
             delete.button: "Eliminar"
             cancel.button: "Cancelar"
+        main_warnings_raw: '<p>¿Estás seguro de eliminar este bloque?</p><p>Esta acción no se puede deshacer</p>'
 
     read:
         meta.title: "Bloque"
         title: "Bloque"
         breadcrumb: "Bloque"
-
-#admin_content:
-#    form:
-#        name.label: "Nombre"
-#        sites.label: "Sitios web"
-#        layout.label: "Diseño"
-#        modules.label: "Módulos"
-#        seo.label: "SEO"
-#        metaTitle.label: "Título (barra de navegador)"
-#        metaDescription.label: "Descripción (meta description)"
-#        metaKeywords.label: "Palabras clave (meta keywords)"
-#        noIndex.label: "Evitar indexado (noindex)"
-#        noFollow.label: "Enlaces entrantes sin seguimiento (nofollow)"
-#        sitemap.label: "Mostrar en sitemap"
-#        versionLayout.label: "Diseño"
 
 admin_routes:
     tabs_menu:

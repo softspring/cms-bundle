@@ -31,9 +31,10 @@ class BlockController extends AbstractController
 
     public function renderByType(string $type, Request $request): Response
     {
-        $this->enableSchedulableFilter();
-
         try {
+            $this->preprocessPreviewRequest($request);
+            $this->enableSchedulableFilter();
+
             $config = $this->cmsConfig->getBlock($type);
 
             if (!$config['static']) {
@@ -55,7 +56,8 @@ class BlockController extends AbstractController
             }
 
             if ('ttl' !== $this->blockCacheType && false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
-                $response->setPublic();
+                'public' === $config['cache_type'] && $response->setPublic();
+                'private' === $config['cache_type'] && $response->setPrivate();
                 $response->setMaxAge($config['cache_ttl']);
             }
 
@@ -67,9 +69,10 @@ class BlockController extends AbstractController
 
     public function renderById(string $id, Request $request): Response
     {
-        $this->enableSchedulableFilter();
-
         try {
+            $this->preprocessPreviewRequest($request);
+            $this->enableSchedulableFilter();
+
             /** @var ?BlockInterface $block */
             $block = $this->blockManager->getRepository()->findOneById($id);
 
@@ -142,5 +145,19 @@ ERROR;
         $block = current($blocks);
 
         return $block ?: null;
+    }
+
+    protected function preprocessPreviewRequest(Request $request): void
+    {
+        if (!$request->attributes->has('_sfs_cms_site') && $request->get('_sfs_cms_site')) {
+            $request->attributes->set('_sfs_cms_site', $this->cmsConfig->getSite($request->get('_sfs_cms_site')));
+        }
+        if (!$request->attributes->has('_sfs_cms_site') && $request->get('_site')) {
+            $request->attributes->set('_sfs_cms_site', $this->cmsConfig->getSite($request->get('_site')));
+        }
+        if (!$request->attributes->has('_locale') && $request->get('_locale')) {
+            $request->attributes->set('_locale', $request->get('_locale'));
+            $request->setLocale($request->get('_locale'));
+        }
     }
 }

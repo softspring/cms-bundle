@@ -1,0 +1,70 @@
+{% trans_default_domain 'sfs_cms_contents' %}
+
+{% extends '@SfsCms/admin_layout.html.twig' %}
+
+{% block title %}{{ ('admin_'~content_type~'.diff.meta.title')|trans({'%name%':entity.name}) }}{% endblock %}
+
+{% block breadcrums_content %}
+    {{ parent() }}
+    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content_type~'_list') }}">{{ ('admin_'~content_type~'.list.breadcrumb')|trans }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content_type~'_details', {'content':entity.id}) }}">{{ ('admin_'~content_type~'.read.breadcrumb')|trans({'%name%': entity.name}) }}</a></li>
+    <li class="breadcrumb-item active" aria-current="content">{{ ('admin_'~content_type~'.diff.breadcrumb')|trans({'%name%':entity.name}) }}</li>
+{% endblock breadcrums_content %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsondiffpatch/0.4.1/formatters-styles/html.css">
+{% endblock stylesheets %}
+
+{% block content %}
+    {% include ['@content/'~content_type~'/admin/_content_title.html.twig', '@SfsCms/admin/content/_content_title.html.twig']  with {'current':'versions', 'content_type':content_type, 'content_entity':entity} %}
+    {% include ['@content/'~content_type~'/admin/_content_tabs.html.twig', '@SfsCms/admin/content/_content_tabs.html.twig']  with {'current':'versions', 'content_type':content_type, 'content_entity':entity} %}
+
+    {{ form_start(form) }}
+
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="edit" role="tabpanel" aria-labelledby="edit-tab">
+            <div class="container-fluid bg-white p-3">
+                {{ form_errors(form) }}
+                {{ form_widget(form) }}
+                {{ form_rest(form) }}
+
+                <div class="d-flex justify-content-end align-items-center">
+                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_details', {'content':entity.id}) }}" class="btn btn-outline-secondary ms-3">{{ ('admin_'~content_type~'.diff.actions.cancel.button')|trans }}</a>
+                    <input type="submit" value="{{ ('admin_'~content_type~'.diff.actions.submit.button')|trans }}" class="btn btn-primary ms-3" />
+                </div>
+
+                {% if version1|default(false) and version2|default(false) %}
+                        <div class="row">
+                            <div class="col-6" style="overflow-y: auto; max-height: 600px;" data-sync-scroll>
+                                <h3 class="ui header">Version 1</h3>
+                                <pre>{{ version1.rawData|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+                            </div>
+
+                            <div class="col-6" style="overflow-y: auto; max-height: 600px;" data-sync-scroll>
+                                <h3 class="ui header">Version 2</h3>
+                                <pre>{{ version2.rawData|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+                            </div>
+
+                            <div class="col-12" style="overflow-y: auto; max-height: 600px;">
+                                <h3 class="ui header">Diff</h3>
+                                <div id="json-diff"></div>
+                            </div>
+                        </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock content %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        {% if version1|default(false) and version2|default(false) %}
+        const version1 = {{ version1.rawData|json_encode()|raw }};
+        const version2 = {{ version2.rawData|json_encode()|raw }};
+        {% endif %}
+    </script>
+{% endblock javascripts %}

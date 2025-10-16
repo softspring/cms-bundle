@@ -5,8 +5,6 @@ namespace Softspring\CmsBundle\Admin\ActionListener\ContentVersion;
 use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\Component\CrudlController\Event\ApplyEvent;
 use Softspring\Component\CrudlController\Event\LoadEntityEvent;
-use Softspring\Component\CrudlController\Event\SuccessEvent;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class CleanupVersionsListener extends AbstractContentVersionListener
 {
@@ -19,7 +17,7 @@ class CleanupVersionsListener extends AbstractContentVersionListener
                 ['onInitializeGetConfig', 20],
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onEventLoadContentEntity', 9],
-                ['onInitializeIsGranted', 0],
+                ['onInitializeUpdateHelperConfig', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEANUP_LOAD_ENTITY => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -27,7 +25,8 @@ class CleanupVersionsListener extends AbstractContentVersionListener
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEANUP_NOT_FOUND => [
                 ['onEventDispatchContentTypeEvent', 10],
-                ['onNotFound', 0],
+                ['onNotFoundAddFlash', 5],
+                ['onNotFoundRedirectToList', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEANUP_FOUND => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -38,7 +37,8 @@ class CleanupVersionsListener extends AbstractContentVersionListener
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEANUP_SUCCESS => [
                 ['onEventDispatchContentTypeEvent', 10],
-                ['onSuccess', 0],
+                ['onSuccessAddFlash', 5],
+                ['onEventRedirectBack', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CLEANUP_FAILURE => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -65,25 +65,5 @@ class CleanupVersionsListener extends AbstractContentVersionListener
             }
         }
         $event->setApplied(true);
-    }
-
-    /**
-     * @noinspection PhpRouteMissingInspection
-     */
-    public function onSuccess(SuccessEvent $event): void
-    {
-        $request = $event->getRequest();
-        $contentConfig = $request->attributes->get('_content_config');
-        $content = $request->attributes->get('content');
-
-        $this->flashNotifier->addTrans('success', "admin_{$contentConfig['_id']}.version_cleanup.success_flash", [], 'sfs_cms_contents');
-
-        if ($this->getOption($request, 'success_redirect_to')) {
-            $url = $this->router->generate($this->getOption($request, 'success_redirect_to'), ['content' => $content]);
-        } else {
-            $url = $this->router->generate("sfs_cms_admin_content_{$contentConfig['_id']}_versions", ['content' => $content]);
-        }
-
-        $event->setResponse(new RedirectResponse($url));
     }
 }

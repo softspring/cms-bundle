@@ -3,7 +3,7 @@
 namespace Softspring\CmsBundle\Admin\ActionListener\ContentVersion;
 
 use Softspring\CmsBundle\Compiler\CompileException;
-use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
@@ -36,13 +36,13 @@ class CreateListener extends AbstractContentVersionListener
         ContentManagerInterface $contentManager,
         ContentVersionManagerInterface $contentVersionManager,
         RouteManagerInterface $routeManager,
-        CmsConfig $cmsConfig,
+        CmsHelper $cmsHelper,
         RouterInterface $router,
         FlashNotifier $flashNotifier,
         AuthorizationCheckerInterface $authorizationChecker,
         protected TranslatableContext $translatableContext,
     ) {
-        parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
+        parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsHelper, $router, $flashNotifier, $authorizationChecker);
     }
 
     public static function getSubscribedEvents(): array
@@ -52,7 +52,7 @@ class CreateListener extends AbstractContentVersionListener
                 ['onInitializeGetConfig', 20],
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onEventLoadContentEntity', 9],
-                ['onInitializeIsGranted', 0],
+                ['onInitializeUpdateHelperConfig', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CREATE_ENTITY => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -103,7 +103,7 @@ class CreateListener extends AbstractContentVersionListener
         $prevVersion = $request->attributes->get('prevVersion');
 
         if ($prevVersion) {
-            $prevVersion = $content->getVersions()->filter(fn (ContentVersionInterface $version) => $version->getId() == $prevVersion)->first();
+            $prevVersion = $this->contentVersionManager->getRepository()->findOneBy(['id' => $prevVersion, 'content' => $content]);
         }
 
         $request->attributes->set('prevVersion', $prevVersion ?: $content->getLastVersion());
@@ -242,7 +242,7 @@ class CreateListener extends AbstractContentVersionListener
         $event->getData()['maxInputVars'] = ini_get('max_input_vars');
 
         // add layout config
-        $event->getData()['layout_config'] = $this->cmsConfig->getLayout($version->getLayout());
+        $event->getData()['layout_config'] = $this->cmsHelper->config()->getLayout($version->getLayout());
 
         // add prev version
         $event->getData()['prev_version'] = $request->attributes->get('prevVersion');

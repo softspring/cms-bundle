@@ -9,7 +9,7 @@ use Symfony\Component\Config\Definition\Processor;
 
 class MenuTest extends TestCase
 {
-    public function testEmptyConfig()
+    public function testEmptyConfig(): void
     {
         $this->expectException(InvalidConfigurationException::class);
         $this->expectExceptionMessage('The child config "revision" under "menu" must be configured.');
@@ -21,7 +21,7 @@ class MenuTest extends TestCase
         $this->assertIsArray($config);
     }
 
-    public function testDefaultConfig()
+    public function testDefaultConfig(): void
     {
         $processor = new Processor();
         $configuration = new Menu('menu_name');
@@ -39,10 +39,11 @@ class MenuTest extends TestCase
             'singleton' => true,
             'items' => true,
             'form_fields' => [],
+            'isolate_request' => null,
         ], $config);
     }
 
-    public function testCustomConfig()
+    public function testCustomConfig(): void
     {
         $processor = new Processor();
         $configuration = new Menu('menu_name');
@@ -61,6 +62,7 @@ class MenuTest extends TestCase
             'singleton' => true,
             'items' => true,
             'form_fields' => [],
+            'isolate_request' => null,
         ], $config);
     }
 }

@@ -8,7 +8,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 class ContentVersionVoter implements VoterInterface
 {
-    public function __construct(protected bool $recompileEnabled)
+    public function __construct(protected bool $contentRecompileEnabled)
     {
     }
 
@@ -19,7 +19,7 @@ class ContentVersionVoter implements VoterInterface
         }
 
         // if recompile is disabled, deny access
-        if ('PERMISSION_SFS_CMS_ADMIN_CONTENT_RECOMPILE_VERSION' === $attributes[0] && !$this->recompileEnabled) {
+        if ('PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSION_RECOMPILE' === $attributes[0] && !$this->contentRecompileEnabled) {
             return VoterInterface::ACCESS_DENIED;
         }
 

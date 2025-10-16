@@ -39,6 +39,7 @@ class ContentVersionDeleteVoter implements VoterInterface
             return VoterInterface::ACCESS_ABSTAIN;
         }
 
+        // manually delete, is disabled for published versions
         if ($version->isPublished()) {
             return VoterInterface::ACCESS_DENIED;
         }

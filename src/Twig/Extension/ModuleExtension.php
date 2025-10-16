@@ -24,7 +24,7 @@ class ModuleExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('sfs_cms_module', [$this, 'renderModule'], ['is_safe' => ['html']]),
+            new TwigFunction('sfs_cms_module', [$this, 'renderModule'], ['is_safe' => ['html'], 'deprecated' => true]),
         ];
     }
 

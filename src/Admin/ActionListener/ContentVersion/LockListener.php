@@ -19,7 +19,7 @@ class LockListener extends AbstractContentVersionListener
                 ['onInitializeGetConfig', 20],
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onEventLoadContentEntity', 9],
-                ['onInitializeIsGranted', 0],
+                ['onInitializeUpdateHelperConfig', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_LOCK_LOAD_ENTITY => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -27,7 +27,8 @@ class LockListener extends AbstractContentVersionListener
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_LOCK_NOT_FOUND => [
                 ['onEventDispatchContentTypeEvent', 10],
-                ['onNotFound', 0],
+                ['onNotFoundAddFlash', 5],
+                ['onNotFoundRedirectToList', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_LOCK_FOUND => [
                 ['onEventDispatchContentTypeEvent', 10],

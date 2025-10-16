@@ -56,6 +56,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $container->setParameter('sfs_cms.menus', $configLoader->getMenus($container));
         $container->setParameter('sfs_cms.blocks', $configLoader->getBlocks($container));
         $container->setParameter('sfs_cms.sites', $configLoader->getSites($container));
+        $container->setParameter('sfs_cms.esi', $config['esi']);
         $container->setParameter('sfs_cms.site_config', $config['site']);
         $container->setParameter('sfs_cms.site.class', $config['site']['class'] ?? null);
 
@@ -98,6 +99,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
 
         // configure compiled data class
         $container->setParameter('sfs_cms.compiled.class', CompiledData::class);
+        $container->setParameter('sfs_cms.compiled.expiration_ttl', $config['compiled']['expiration_ttl'] ?? null);
 
         $this->processDataClasses($container);
 
@@ -119,6 +121,10 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
 
         if (class_exists('Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle')) {
             $loader->load('deprecated_param_converters.yaml');
+        }
+
+        if (interface_exists('Symfony\Component\HttpKernel\Controller\ValueResolverInterface')) {
+            $loader->load('value_resolvers.yaml');
         }
 
         $loader->load('data_collector.yaml');

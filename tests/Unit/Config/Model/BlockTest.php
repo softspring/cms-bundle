@@ -9,7 +9,7 @@ use Symfony\Component\Config\Definition\Processor;
 
 class BlockTest extends TestCase
 {
-    public function testEmptyConfig()
+    public function testEmptyConfig(): void
     {
         $this->expectException(InvalidConfigurationException::class);
         $this->expectExceptionMessage('The child config "revision" under "block" must be configured.');
@@ -21,7 +21,7 @@ class BlockTest extends TestCase
         $this->assertIsArray($config);
     }
 
-    public function testDefaultConfig()
+    public function testDefaultConfig(): void
     {
         $processor = new Processor();
         $configuration = new Block('block_name');
@@ -35,16 +35,19 @@ class BlockTest extends TestCase
             'revision' => 1,
             'render_template' => '@block/block_name/render.html.twig',
             'esi' => true,
+            'cache_type' => 'public',
             'cache_ttl' => false,
             'singleton' => true,
             'static' => false,
             'form_options' => [],
             'form_fields' => [],
             'schedulable' => false,
+            'isolate_request' => null,
+            'ajax' => false,
         ], $config);
     }
 
-    public function testCustomConfig()
+    public function testCustomConfig(): void
     {
         $processor = new Processor();
         $configuration = new Block('block_name');
@@ -59,16 +62,19 @@ class BlockTest extends TestCase
             'revision' => 2,
             'render_template' => 'other_render_file.html.twig',
             'esi' => true,
+            'cache_type' => 'public',
             'cache_ttl' => false,
             'singleton' => true,
             'static' => false,
             'form_options' => [],
             'form_fields' => [],
             'schedulable' => false,
+            'isolate_request' => null,
+            'ajax' => false,
         ], $config);
     }
 
-    public function testInvalidStaticAndNotSingleton()
+    public function testInvalidStaticAndNotSingleton(): void
     {
         $this->expectException(InvalidConfigurationException::class);
         $this->expectExceptionMessage('Invalid configuration for path "block": A block defined as static must be singleton.');
@@ -84,7 +90,7 @@ class BlockTest extends TestCase
         ]);
     }
 
-    public function testInvalidStaticAndFormFields()
+    public function testInvalidStaticAndFormFields(): void
     {
         $this->expectException(InvalidConfigurationException::class);
         $this->expectExceptionMessage('Invalid configuration for path "block": A block defined as static can not have form_fields.');
@@ -105,7 +111,7 @@ class BlockTest extends TestCase
         ]);
     }
 
-    public function testInvalidStaticAndFormOptions()
+    public function testInvalidStaticAndFormOptions(): void
     {
         $this->expectException(InvalidConfigurationException::class);
         $this->expectExceptionMessage('Invalid configuration for path "block": A block defined as static can not have form_options.');
@@ -124,7 +130,7 @@ class BlockTest extends TestCase
         ]);
     }
 
-    public function testRenderUrl()
+    public function testRenderUrl(): void
     {
         $processor = new Processor();
         $configuration = new Block('block_name');
@@ -139,6 +145,7 @@ class BlockTest extends TestCase
             'revision' => 2,
             'render_template' => '@block/block_name/render.html.twig',
             'esi' => true,
+            'cache_type' => 'public',
             'cache_ttl' => false,
             'singleton' => true,
             'static' => false,
@@ -146,10 +153,12 @@ class BlockTest extends TestCase
             'form_fields' => [],
             'render_url' => 'render_route',
             'schedulable' => false,
+            'isolate_request' => null,
+            'ajax' => false,
         ], $config);
     }
 
-    public function testCustomFormType()
+    public function testCustomFormType(): void
     {
         $processor = new Processor();
         $configuration = new Block('block_name');
@@ -164,6 +173,7 @@ class BlockTest extends TestCase
             'revision' => 2,
             'render_template' => '@block/block_name/render.html.twig',
             'esi' => true,
+            'cache_type' => 'public',
             'cache_ttl' => false,
             'singleton' => true,
             'static' => false,
@@ -171,6 +181,8 @@ class BlockTest extends TestCase
             'form_fields' => [],
             'form_type' => 'App\\Form\\ExampleType',
             'schedulable' => false,
+            'isolate_request' => null,
+            'ajax' => false,
         ], $config);
     }
 }

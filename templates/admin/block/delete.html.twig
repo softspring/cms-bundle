@@ -1,0 +1,33 @@
+{% trans_default_domain 'sfs_cms_admin' %}
+{% extends '@SfsCms/admin_layout.html.twig' %}
+{% block title %}{{ 'admin_blocks.delete.meta.title'|trans }}{% endblock %}
+
+{% block breadcrums_content %}
+    {{ parent() }}
+    <li class="breadcrumb-item"><a
+                href="{{ url('sfs_cms_admin_blocks_list') }}">{{ 'admin_blocks.list.breadcrumb'|trans }}</a></li>
+    <li class="breadcrumb-item active"
+        aria-current="content">{{ 'admin_blocks.delete.breadcrumb'|trans({'%name%': block.name|default(block.id) }) }}</li>
+{% endblock breadcrums_content %}
+
+{% block content %}
+    <h1 class="h3">{{ 'admin_blocks.delete.title'|trans }}</h1>
+
+    {% include '@SfsCms/admin/block/_block_tabs.html.twig' with {'current':'delete', 'block':block} %}
+
+    <div class="container-fluid bg-white p-4">
+        {{ ('admin_blocks.delete.main_warnings_raw')|trans|raw }}
+
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        {{ form_rest(form) }}
+
+        <div class="d-flex justify-content-end align-items-center pt-4">
+            <a href="{{ url('sfs_cms_admin_blocks_update', {'block': block.id}) }}"
+               class="btn btn-outline-secondary">{{ 'admin_blocks.delete.actions.cancel.button'|trans }}</a>
+            <button type="submit"
+                    class="btn btn-danger ms-3">{{ 'admin_blocks.delete.actions.delete.button'|trans }}</button>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock content %}

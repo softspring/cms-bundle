@@ -4,7 +4,7 @@ namespace Softspring\CmsBundle\Admin\ActionListener\ContentVersion;
 
 use Softspring\CmsBundle\Compiler\CompileException;
 use Softspring\CmsBundle\Compiler\ContentVersionCompiler;
-use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
@@ -26,7 +26,7 @@ class PreviewListener extends AbstractContentVersionListener
         ContentManagerInterface $contentManager,
         ContentVersionManagerInterface $contentVersionManager,
         RouteManagerInterface $routeManager,
-        CmsConfig $cmsConfig,
+        CmsHelper $cmsHelper,
         RouterInterface $router,
         FlashNotifier $flashNotifier,
         AuthorizationCheckerInterface $authorizationChecker,
@@ -34,7 +34,7 @@ class PreviewListener extends AbstractContentVersionListener
         protected ContentVersionCompiler $contentVersionCompiler,
         protected ?WebDebugToolbarListener $webDebugToolbarListener = null,
     ) {
-        parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
+        parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsHelper, $router, $flashNotifier, $authorizationChecker);
     }
 
     public static function getSubscribedEvents(): array
@@ -44,7 +44,7 @@ class PreviewListener extends AbstractContentVersionListener
                 ['onInitializeGetConfig', 20],
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onEventLoadContentEntity', 9],
-                ['onInitializeIsGranted', 0],
+                ['onInitializeUpdateHelperConfig', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_PREVIEW_LOAD_ENTITY => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -52,7 +52,8 @@ class PreviewListener extends AbstractContentVersionListener
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_PREVIEW_NOT_FOUND => [
                 ['onEventDispatchContentTypeEvent', 10],
-                ['onNotFound', 0],
+                ['onNotFoundAddFlash', 5],
+                ['onNotFoundRedirectToList', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_PREVIEW_FOUND => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -87,7 +88,7 @@ class PreviewListener extends AbstractContentVersionListener
 
         $request->attributes->set('routePath', $version->getContent()->getRoutes()->first()?->getPathForLocale($request->getLocale()));
 
-        $compiledData = $this->contentVersionCompiler->compileRequest($version, $request, null, false);
+        $compiledData = $this->contentVersionCompiler->compileRequest($version, $request);
 
         if (!$compiledData->hasErrors()) {
             $event->setResponse(new Response($compiledData->getDataPart('content')));

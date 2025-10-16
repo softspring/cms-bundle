@@ -1,0 +1,11 @@
+debug_errors:
+    label: "Test errors"
+    prototype_button: "Test errors"
+    prototype_button_icon: '<i class="bi bi-bug"></i>'
+    form:
+        _group:
+            filters: "Filters"
+            error: "Error"
+        locale_filter.label: "Locales"
+        error_type.label: "Error type"
+    edit_message: "This module is for debugging purposes only; it will throw an error."

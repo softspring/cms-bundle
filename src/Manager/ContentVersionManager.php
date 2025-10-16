@@ -8,11 +8,12 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Softspring\CmsBundle\Compiler\CompileException;
 use Softspring\CmsBundle\Compiler\ContentVersionCompiler;
-use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Model\CompiledDataInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
+use Softspring\CmsBundle\Model\VersionInterface;
 use Softspring\Component\CrudlController\Manager\CrudlEntityManagerTrait;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -22,9 +23,10 @@ class ContentVersionManager implements ContentVersionManagerInterface
 
     public function __construct(
         protected EntityManagerInterface $em,
-        protected CmsConfig $cmsConfig,
+        protected CmsHelper $cmsHelper,
         protected ContentVersionCompiler $contentCompiler,
         protected CompiledDataManagerInterface $compiledDataManager,
+        protected bool $contentSaveCompiled,
     ) {
     }
 
@@ -40,7 +42,7 @@ class ContentVersionManager implements ContentVersionManagerInterface
         $newContentVersion->setContent($content ?? $contentVersion->getContent());
         $newContentVersion->setData($contentVersion->getData());
         $newContentVersion->setSeo($contentVersion->getSeo());
-        $newContentVersion->setOrigin(ContentVersionInterface::ORIGIN_DUPLICATE);
+        $newContentVersion->setOrigin(VersionInterface::ORIGIN_DUPLICATE);
         $newContentVersion->setOriginDescription($originDescription);
         $newContentVersion->setLayout($contentVersion->getLayout());
 
@@ -62,9 +64,9 @@ class ContentVersionManager implements ContentVersionManagerInterface
      * @throws CompileException
      * @throws Exception
      */
-    public function getCompiledContent(ContentVersionInterface $contentVersion, Request $request, bool $throwExceptionOnCompileError = true): CompiledDataInterface
+    public function getCompiledContent(ContentVersionInterface $contentVersion, Request $request, bool $throwExceptionOnCompileErrorAndNoContent = true): CompiledDataInterface
     {
-        $compiledKey = $this->contentCompiler->getCompileKeyFromRequest($contentVersion, $request);
+        $compiledKey = $this->compiledDataManager->getCompileKeyFromRequest($contentVersion, $request);
 
         /** @var ?CompiledDataInterface $compiledData */
         $compiledData = $this->compiledDataManager->getRepository()->findOneBy([
@@ -72,9 +74,13 @@ class ContentVersionManager implements ContentVersionManagerInterface
             'key' => $compiledKey,
         ]);
 
-        if (!$compiledData?->getDataPart('content') || !$this->contentCompiler->canSaveCompiled($contentVersion)) {
-            $compiledData = $this->contentCompiler->compileRequest($contentVersion, $request, $compiledData?->getDataPart('modules'), $throwExceptionOnCompileError);
-            $this->contentCompiler->canSaveCompiled($contentVersion) && $this->saveEntity($contentVersion);
+        if (!$compiledData?->getDataPart('content') || !$this->cmsHelper->compile()->contentSaveCompiled($contentVersion)) {
+            $compiledData = $this->contentCompiler->compileRequest($contentVersion, $request, $compiledData);
+            $this->cmsHelper->compile()->contentSaveCompiled($contentVersion) && $this->saveEntity($contentVersion);
+        }
+
+        if ($throwExceptionOnCompileErrorAndNoContent && $compiledData->hasErrors() && !$compiledData->getDataPart('content')) {
+            throw new CompileException('Compilation error occurred');
         }
 
         return $compiledData;
@@ -105,7 +111,7 @@ class ContentVersionManager implements ContentVersionManagerInterface
             } elseif ('locale_filter' === $fieldName) {
                 if (!empty($fieldValue)) {
                     // if locale filter is not empty, add the locale to the filter
-                    $fieldValue[] = $locale;
+                    $fieldValue[$locale] = true;
                 }
             }
         }
@@ -134,7 +140,7 @@ class ContentVersionManager implements ContentVersionManagerInterface
             } elseif ('site_filter' === $fieldName) {
                 if (!empty($fieldValue)) {
                     // if site filter is not empty, add the site to the filter
-                    $fieldValue[] = $site;
+                    $fieldValue["$site"] = true;
                 }
             }
         }

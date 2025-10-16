@@ -11,7 +11,7 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-abstract class AbstractContentMenuProvider implements ContentMenuProviderInterface
+abstract class AbstractContentMenuProvider implements MenuProviderInterface
 {
     public function __construct(
         protected CmsConfig $cmsConfig,
@@ -20,6 +20,11 @@ abstract class AbstractContentMenuProvider implements ContentMenuProviderInterfa
         protected TranslatorInterface $translator,
         protected AuthorizationCheckerInterface $authorizationChecker,
     ) {
+    }
+
+    public function supports(string $menuId, object $entity): bool
+    {
+        return 'content' === $menuId && $entity instanceof ContentInterface;
     }
 
     protected function getMenuItem(string $id, string $current, ContentInterface $content, string $contentType, array $contentConfig, ?string $configKey = null): MenuItem

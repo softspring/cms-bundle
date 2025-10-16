@@ -1,6 +1,15 @@
 admin:
     global_breadcrumb: "CMS"
 
+module_buttons:
+    up.title: "Move module up"
+    down.title: "Move module down"
+    delete.title: "Delete module"
+    duplicate.title: "Duplicate module"
+    copy.title: "Copy module"
+
+module_disabled_raw: "Module is disabled. Please enable it in the configuration to use it."
+
 admin_content:
     read:
         published_cache_alert_raw: "This content was last published at %publishedDateTime%. Some content URLs are cached for %maxRouteTtl% seconds. So you may have to wait %waitSeconds% seconds before the new content is available."
@@ -9,13 +18,21 @@ admin_content:
         max_input_vars_raw: "You have reached the max_input_vars (%maxInputVars%). Please remove some fields to continue. <br/>If you need to increase this limit, please contact your provider."
         modules_modal:
             label: "Select module"
+            paste.button: "Paste module"
 
 admin_blocks:
+    tabs_menu:
+        details: "Details"
+        update: "Update"
+        delete: "Delete"
     list:
         meta.title: "Blocks"
         title: "Blocks"
         breadcrumb: "Blocks"
         empty_message: "No block created yet"
+        filter_form:
+            name.label: "Name"
+            type.label: "Type"
         fields:
             name.header: "Name"
             type.header: "Type"
@@ -71,26 +88,12 @@ admin_blocks:
         actions:
             delete.button: "Delete"
             cancel.button: "Cancel"
+        main_warnings_raw: '<p>Are you sure to delete this block?</p><p>This action can not be undone</p>'
 
     read:
         meta.title: "Block"
         title: "Block"
         breadcrumb: "Block"
-
-#admin_content:
-#    form:
-#        name.label: "Name"
-#        sites.label: "Sites web"
-#        layout.label: "Diseño"
-#        modules.label: "Módulos"
-#        seo.label: "SEO"
-#        metaTitle.label: "Título (barra de navegador)"
-#        metaDescription.label: "Descripción (meta description)"
-#        metaKeywords.label: "Palabras clave (meta keywords)"
-#        noIndex.label: "Evitar indexado (noindex)"
-#        noFollow.label: "Enlaces entrantes sin seguimiento (nofollow)"
-#        sitemap.label: "Mostrar en sitemap"
-#        versionLayout.label: "Diseño"
 
 admin_routes:
     tabs_menu:

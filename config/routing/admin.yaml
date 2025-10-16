@@ -1,3 +1,9 @@
+_sfs_dashboard_:
+    path: "/"
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController
+    defaults:
+        route: sfs_cms_admin_content_page_list
+
 _sfs_cms_pages_:
     resource: "@SfsCmsBundle/config/routing/admin_pages.yaml"
     prefix: "/pages"
@@ -21,3 +27,7 @@ _sfs_media_admin_types_:
 _sfs_cms_sites_:
     resource: "@SfsCmsBundle/config/routing/admin_sites.yaml"
     prefix: "/sites"
+
+_sfs_cms_plugin_admin_routes:
+    resource: '.'
+    type: sfs_cms_plugin_admin

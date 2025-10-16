@@ -6,9 +6,9 @@
             'id': form.id.vars.data,
             'data-edit-id-target': 'gridDivId',
 
-            'class': 'py-5 '~(form.class.vars.data|default),
+            'class': (form.class.vars.data|default),
             'data-edit-class-target': 'gridDivClass',
-            'data-edit-class-default': 'py-5',
+            'data-edit-class-default': '',
 
             'data-edit-bgcolor-target': 'gridDivBgColor',
             'style': form.bg_color.vars.data ? 'background-color:'~form.bg_color.vars.data : '',

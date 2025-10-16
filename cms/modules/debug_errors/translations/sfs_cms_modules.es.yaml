@@ -1,0 +1,11 @@
+debug_errors:
+    label: "Prueba de errores"
+    prototype_button: "Prueba de errores"
+    prototype_button_icon: '<i class="bi bi-bug"></i>'
+    form:
+        _group:
+            filters: "Filtros"
+            error: "Error"
+        locale_filter.label: "Idiomas"
+        error_type.label: "Tipo de error"
+    edit_message: "Este módulo es solo para fines de depuración; generará un error."

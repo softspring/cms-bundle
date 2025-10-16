@@ -2,7 +2,7 @@
 
 namespace Softspring\CmsBundle\Admin\ActionListener\Content;
 
-use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
@@ -29,13 +29,13 @@ class DuplicateListener extends AbstractContentListener
         ContentManagerInterface $contentManager,
         ContentVersionManagerInterface $contentVersionManager,
         RouteManagerInterface $routeManager,
-        CmsConfig $cmsConfig,
+        CmsHelper $cmsHelper,
         RouterInterface $router,
         FlashNotifier $flashNotifier,
         AuthorizationCheckerInterface $authorizationChecker,
         protected TranslatableContext $translatableContext,
     ) {
-        parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsConfig, $router, $flashNotifier, $authorizationChecker);
+        parent::__construct($contentManager, $contentVersionManager, $routeManager, $cmsHelper, $router, $flashNotifier, $authorizationChecker);
     }
 
     public static function getSubscribedEvents(): array
@@ -44,7 +44,7 @@ class DuplicateListener extends AbstractContentListener
             SfsCmsEvents::ADMIN_CONTENTS_DUPLICATE_INITIALIZE => [
                 ['onInitializeGetConfig', 20],
                 ['onEventDispatchContentTypeEvent', 10],
-                ['onInitializeIsGranted', 0],
+                ['onInitializeUpdateHelperConfig', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENTS_DUPLICATE_LOAD_ENTITY => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -85,7 +85,9 @@ class DuplicateListener extends AbstractContentListener
             ],
             SfsCmsEvents::ADMIN_CONTENTS_DUPLICATE_VIEW => [
                 ['onEventDispatchContentTypeEvent', 10],
-                ['onView', 0],
+                ['onViewAddConfig', 0],
+                ['onViewSetTemplate', 0],
+                ['onViewAddOriginEntity', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENTS_DUPLICATE_EXCEPTION => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -155,10 +157,9 @@ class DuplicateListener extends AbstractContentListener
         }
     }
 
-    public function onView(ViewEvent $event): void
+    public function onViewAddOriginEntity(ViewEvent $event): void
     {
         $event->getData()['origin_entity'] = $event->getRequest()->attributes->get('content');
         $event->getData()['entity'] = $event->getData()['content'];
-        parent::onView($event);
     }
 }

@@ -1,0 +1,15 @@
+module:
+    revision: 1
+    group: 'basic'
+    enabled: false
+    edit_template: '@module/debug_errors/edit.html.twig'
+    form_template: '@module/debug_errors/form.html.twig'
+    module_options:
+        label_format: 'modules.debug_errors.%%name%%.label'
+        locale_filter: false
+        form_fields:
+            error_type:
+                type: 'choice'
+                type_options:
+                    choices:
+                        'Render error': 'render'

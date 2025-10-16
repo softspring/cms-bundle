@@ -6,7 +6,7 @@ use Softspring\CmsBundle\Admin\ActionListener\ContentGetOptionTrait;
 use Softspring\CmsBundle\Admin\ActionListener\ContentInitializeEventTrait;
 use Softspring\CmsBundle\Admin\ActionListener\ContentRedirectBackTrait;
 use Softspring\CmsBundle\Admin\ActionListener\ExceptionMessageTrait;
-use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
@@ -35,7 +35,7 @@ abstract class AbstractContentListener implements EventSubscriberInterface
         protected ContentManagerInterface $contentManager,
         protected ContentVersionManagerInterface $contentVersionManager,
         protected RouteManagerInterface $routeManager,
-        protected CmsConfig $cmsConfig,
+        protected CmsHelper $cmsHelper,
         protected RouterInterface $router,
         protected FlashNotifier $flashNotifier,
         protected AuthorizationCheckerInterface $authorizationChecker,
@@ -74,14 +74,27 @@ abstract class AbstractContentListener implements EventSubscriberInterface
         $event->setResponse(new RedirectResponse($url));
     }
 
-    public function onView(ViewEvent $event): void
+    public function onViewAddConfig(ViewEvent $event): void
     {
         $contentConfig = $event->getRequest()->attributes->get('_content_config');
 
         $event->getData()['content_type'] = $contentConfig['_id'];
         $event->getData()['content_config'] = $contentConfig;
+    }
+
+    public function onViewSetTemplate(ViewEvent $event): void
+    {
+        $contentConfig = $event->getRequest()->attributes->get('_content_config');
 
         $event->setTemplate($contentConfig['admin'][get_called_class()::ACTION_NAME]['view']);
+    }
+
+    public function onViewAddEntities(ViewEvent $event): void
+    {
+        $event->getData()['content_entity'] = $event->getRequest()->attributes->get('content');
+
+        /* @deprecated use content_entity */
+        $event->getData()['entity'] = $event->getRequest()->attributes->get('content');
     }
 
     public function onFailureAddFormError(FailureEvent $event): void

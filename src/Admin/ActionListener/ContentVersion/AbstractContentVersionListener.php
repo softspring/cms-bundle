@@ -6,15 +6,21 @@ use Softspring\CmsBundle\Admin\ActionListener\ContentGetOptionTrait;
 use Softspring\CmsBundle\Admin\ActionListener\ContentInitializeEventTrait;
 use Softspring\CmsBundle\Admin\ActionListener\ContentRedirectBackTrait;
 use Softspring\CmsBundle\Admin\ActionListener\ExceptionMessageTrait;
-use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Compiler\CompileExceptionDetailsInterface;
+use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Request\FlashNotifier;
+use Softspring\Component\CrudlController\Event\ApplyEvent;
+use Softspring\Component\CrudlController\Event\EntityEvent;
+use Softspring\Component\CrudlController\Event\ExceptionEvent;
+use Softspring\Component\CrudlController\Event\FailureEvent;
 use Softspring\Component\CrudlController\Event\LoadEntityEvent;
 use Softspring\Component\CrudlController\Event\NotFoundEvent;
+use Softspring\Component\CrudlController\Event\SuccessEvent;
 use Softspring\Component\CrudlController\Event\ViewEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -37,7 +43,7 @@ abstract class AbstractContentVersionListener implements EventSubscriberInterfac
         protected ContentManagerInterface $contentManager,
         protected ContentVersionManagerInterface $contentVersionManager,
         protected RouteManagerInterface $routeManager,
-        protected CmsConfig $cmsConfig,
+        protected CmsHelper $cmsHelper,
         protected RouterInterface $router,
         protected FlashNotifier $flashNotifier,
         protected AuthorizationCheckerInterface $authorizationChecker,
@@ -85,23 +91,37 @@ abstract class AbstractContentVersionListener implements EventSubscriberInterfac
         /** @var ContentInterface $content */
         $content = $event->getRequest()->attributes->get('content');
 
-        $version = $content->getVersions()->filter(fn (ContentVersionInterface $versionI) => $versionI->getId() === $versionId)->first();
+        $version = $this->contentVersionManager->getRepository()->findOneBy(['id' => $versionId, 'content' => $content]);
         $event->getRequest()->attributes->set('version', $version);
 
         $event->setEntity($version);
         $event->setNotFound(!$version);
     }
 
+    public function onNotFoundAddFlash(NotFoundEvent $event): void
+    {
+        $contentConfig = $event->getRequest()->attributes->get('_content_config');
+        $this->flashNotifier->addTrans('warning', "admin_{$contentConfig['_id']}.entity_not_found_flash", [], 'sfs_cms_contents');
+    }
+
     /**
      * @noinspection PhpRouteMissingInspection
      */
-    public function onNotFound(NotFoundEvent $event): void
+    public function onNotFoundRedirectToList(NotFoundEvent $event): void
     {
         $contentConfig = $event->getRequest()->attributes->get('_content_config');
-
-        $this->flashNotifier->addTrans('warning', "admin_{$contentConfig['_id']}.entity_not_found_flash", [], 'sfs_cms_contents');
         $url = $this->router->generate("sfs_cms_admin_content_{$contentConfig['_id']}_list");
         $event->setResponse(new RedirectResponse($url));
+    }
+
+    public function onEventSaveVersion(EntityEvent $event): void
+    {
+        $this->contentVersionManager->saveEntity($event->getEntity());
+    }
+
+    public function onEventSaveContent(EntityEvent $event): void
+    {
+        $this->contentManager->saveEntity($event->getEntity()->getContent());
     }
 
     public function onView(ViewEvent $event): void
@@ -115,5 +135,54 @@ abstract class AbstractContentVersionListener implements EventSubscriberInterfac
         $event->getData()['content_entity'] = $event->getRequest()->attributes->get('content');
 
         $event->setTemplate($this->getOption($event->getRequest(), 'view'));
+    }
+
+    public function onApplySetApplied(ApplyEvent $event): void
+    {
+        $event->setApplied(true);
+    }
+
+    public function onSuccessAddFlash(SuccessEvent $event): void
+    {
+        $contentConfig = $event->getRequest()->attributes->get('_content_config');
+        $this->flashNotifier->addTrans('success', "admin_{$contentConfig['_id']}.".static::ACTION_NAME.'.success_flash', [], 'sfs_cms_contents');
+    }
+
+    public function onFailureAddFlash(FailureEvent $event): void
+    {
+        $contentConfig = $event->getRequest()->attributes->get('_content_config');
+
+        $this->flashNotifier->addTrans('error', "admin_{$contentConfig['_id']}.".static::ACTION_NAME.'.failed_flash', [
+            '%exception%' => $event->getException()->getMessage(),
+            // '%exception_details%' => $event->getException() instanceof CompileExceptionDetailsInterface ? $event->getException()->getDetails() : '',
+        ], 'sfs_cms_contents');
+    }
+
+    public function onExceptionAddFlash(ExceptionEvent $event): void
+    {
+        $contentConfig = $event->getRequest()->attributes->get('_content_config');
+
+        $this->flashNotifier->addTrans('error', "admin_{$contentConfig['_id']}.".static::ACTION_NAME.'.failed_flash', [
+            '%exception%' => $event->getException()->getMessage(),
+            // '%exception_details%' => $event->getException() instanceof CompileExceptionDetailsInterface ? $event->getException()->getDetails() : '',
+        ], 'sfs_cms_contents');
+    }
+
+    public function onEventRedirectBack(EntityEvent|ExceptionEvent $event): void
+    {
+        if ($event instanceof EntityEvent) {
+            /** @var ContentVersionInterface $version */
+            $version = $event->getEntity();
+        } else {
+            $version = $event->getRequest()->attributes->get('version');
+        }
+
+        if (!$version instanceof ContentVersionInterface) {
+            $version = null;
+        }
+
+        $contentConfig = $event->getRequest()->attributes->get('_content_config');
+        $content = $event->getRequest()->attributes->get('content');
+        $event->setResponse($this->redirectBack($contentConfig['_id'], $content, $event->getRequest(), $version));
     }
 }

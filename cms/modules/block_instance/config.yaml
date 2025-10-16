@@ -6,7 +6,6 @@ module:
     render_template: '@module/block_instance/render.html.twig'
     module_options:
         label_format: 'modules.block_instance.%%name%%.label'
-        translation_domain: 'custom_domain'
         form_fields:
             id:
                 type: 'id'

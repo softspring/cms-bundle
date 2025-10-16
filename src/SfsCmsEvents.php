@@ -30,6 +30,12 @@ class SfsCmsEvents
     public const ADMIN_BLOCKS_UPDATE_FAILURE = 'sfs_cms.admin.blocks.update_failure';
     public const ADMIN_BLOCKS_UPDATE_FORM_INVALID = 'sfs_cms.admin.blocks.update_form_invalid';
     public const ADMIN_BLOCKS_UPDATE_VIEW = 'sfs_cms.admin.blocks.update_view';
+    // BLOCK DELETE EVENTS
+    public const ADMIN_BLOCKS_DELETE_INITIALIZE = 'sfs_cms.admin.blocks.delete_initialize';
+    public const ADMIN_BLOCKS_DELETE_FORM_VALID = 'sfs_cms.admin.blocks.delete_form_valid';
+    public const ADMIN_BLOCKS_DELETE_SUCCESS = 'sfs_cms.admin.blocks.delete_success';
+    public const ADMIN_BLOCKS_DELETE_FORM_INVALID = 'sfs_cms.admin.blocks.delete_form_invalid';
+    public const ADMIN_BLOCKS_DELETE_VIEW = 'sfs_cms.admin.blocks.delete_view';
 
     // MENU LIST EVENTS
     public const ADMIN_MENUS_LIST_INITIALIZE = 'sfs_cms.admin.menus.list_initialize';
@@ -188,6 +194,13 @@ class SfsCmsEvents
     public const ADMIN_CONTENTS_PREVIEW_FOUND = 'sfs_cms.admin.contents.preview_found';
     public const ADMIN_CONTENTS_PREVIEW_VIEW = 'sfs_cms.admin.contents.preview_view';
     public const ADMIN_CONTENTS_PREVIEW_EXCEPTION = 'sfs_cms.admin.contents.preview_exception';
+    // CONTENT DIFF EVENTS, ALL OF THEM ARE INTERNAL
+    public const ADMIN_CONTENTS_DIFF_INITIALIZE = 'sfs_cms.admin.contents.diff_initialize';
+    public const ADMIN_CONTENTS_DIFF_LOAD_ENTITY = 'sfs_cms.admin.contents.diff_load_entity';
+    public const ADMIN_CONTENTS_DIFF_NOT_FOUND = 'sfs_cms.admin.contents.diff_not_found';
+    public const ADMIN_CONTENTS_DIFF_FOUND = 'sfs_cms.admin.contents.diff_found';
+    public const ADMIN_CONTENTS_DIFF_VIEW = 'sfs_cms.admin.contents.diff_view';
+    public const ADMIN_CONTENTS_DIFF_EXCEPTION = 'sfs_cms.admin.contents.diff_exception';
 
     // CONTENT_VERSION CREATE EVENTS, ALL OF THEM ARE INTERNAL
     public const ADMIN_CONTENT_VERSIONS_CREATE_INITIALIZE = 'sfs_cms.admin.content_versions.create_initialize';

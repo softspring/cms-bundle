@@ -2,9 +2,9 @@
 
 namespace Softspring\CmsBundle\Admin\ActionListener;
 
-use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\InvalidContentException;
 use Softspring\CmsBundle\Config\Exception\MissingContentTypeException;
+use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Request\FlashNotifier;
 use Softspring\Component\CrudlController\Event\InitializeEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 trait ContentInitializeEventTrait
 {
     protected FlashNotifier $flashNotifier;
-    protected CmsConfig $cmsConfig;
+    protected CmsHelper $cmsHelper;
 
     public function onInitializeGetConfig(InitializeEvent $event): void
     {
@@ -45,10 +45,18 @@ trait ContentInitializeEventTrait
             throw new MissingContentTypeException('_content_type is required in route defaults');
         }
 
-        return $this->cmsConfig->getContent($request->attributes->get('_content_type')); // required = true
+        return $this->cmsHelper->config()->getContent($request->attributes->get('_content_type')); // required = true
     }
 
+    /**
+     * @deprecated this method is deprecated and will be removed in future versions
+     */
     public function onInitializeIsGranted(InitializeEvent $event): void
+    {
+        trigger_deprecation('softspring/cms-bundle', '5.4', 'The "%s" method is deprecated and will be removed in future versions. Use "onInitializeUpdateHelperConfig" instead.', __METHOD__);
+    }
+
+    public function onInitializeUpdateHelperConfig(InitializeEvent $event): void
     {
         $config = $event->getRequest()->attributes->get('_content_config');
 
@@ -56,7 +64,9 @@ trait ContentInitializeEventTrait
             return;
         }
 
-        $this->checkIsGranted($config['admin'][get_called_class()::ACTION_NAME]['is_granted']);
+        $helperConfig = $event->getConfig();
+        $helperConfig['is_granted'] = $config['admin'][get_called_class()::ACTION_NAME]['is_granted'];
+        $event->setConfig($helperConfig);
     }
 
     /**

@@ -1,0 +1,6 @@
+_sfs_cms_blocks_:
+    resource: "@SfsCmsBundle/config/routing/frontend_blocks.yaml"
+
+_sfs_cms_plugin_frontend_routes:
+    resource: '.'
+    type: sfs_cms_plugin_frontend

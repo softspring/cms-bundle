@@ -9,15 +9,32 @@ body {
     z-index: 1000;
 }
 
+.cms-content {
+    padding-top: 140px;
+
+    @include media-breakpoint-up(md) {
+        padding-top: 95px;
+    }
+    @include media-breakpoint-up(lg) {
+        padding-top: 75px;
+
+    }
+}
+
 .cms-content-header {
     display: flex;
     align-items: center;
-    min-height: 75px;
+    height: 140px;
+
+    @include media-breakpoint-up(md) {
+        height: 95px;
+    }
+    @include media-breakpoint-up(lg) {
+        height: 75px;
+    }
 }
 
-.cms-content-main{
-    margin-top: 27px;
-
+.cms-content-main {
     main {
         > .container-fluid {
             padding: 0;
@@ -41,8 +58,10 @@ body {
     background-color: $gray-500;
     z-index: 1000;
 
-    &:hover {
+    &:hover,
+    &.active {
         z-index: 1001;
+        text-decoration: none;
 
         &:before {
             opacity: 1;
@@ -67,18 +86,12 @@ body {
     }
 }
 
-[data-collection=collection]:hover > .row {
+[data-collection=collection]:hover > .row,
+[data-collection=collection].active > .row {
     & > .insert-module {
         display: block;
         margin-top: -4px;
         height: 4px;
-
-        //&:before {
-        //    margin-top: -8px;
-        //    margin-left: -10px;
-        //    position: relative;
-        //    left: 50%;
-        //}
 
         &.selected,
         &:hover {
@@ -94,6 +107,10 @@ body {
             margin-bottom: 20px;
         }
     }
+}
+.insert-module-at-the-end {
+    position: relative;
+    z-index: 1030;
 }
 
 .insert-module-at-the-end.col,
@@ -177,10 +194,25 @@ body {
         display: none;
     }
 
+    > .cms-module-body {
+        overflow: hidden;
+
+        &.disabled {
+            > .cms-module-edit {
+                > .module-preview,
+                > .cms-module-form > .cms-module-form-body {
+                    pointer-events: none;
+                    filter: grayscale(100%);
+                    opacity: 0.5;
+                }
+            }
+        }
+    }
+
     &.active>.cms-module-header,
     &:hover>.cms-module-header {
         display: block;
-        width: 140px;
+        width: 175px;
         height: 34px;
         position: absolute;
         right: 0px;
@@ -201,8 +233,12 @@ body {
 
                 &:hover {
                     color: black;
+                    .bi {
+                        opacity: var(--bs-btn-close-hover-opacity);
+                    }
                 }
                 .bi {
+                    opacity: var(--bs-btn-close-opacity);
                     font-size: 24px;
                 }
             }
@@ -331,7 +367,19 @@ body {
                 transition: all .3s ease-in-out;
             }
 
-            &:hover {
+            &.disabled {
+                cursor: default;
+                border-color: $gray-500;
+
+                .icon {
+                    color: $gray-500;
+                }
+                .name {
+                    color: $gray-500;
+                }
+            }
+
+            &:not(.disabled):hover {
                 border-color: $primary;
 
                 .icon {

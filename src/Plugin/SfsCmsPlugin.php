@@ -11,8 +11,10 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class SfsCmsPlugin extends Bundle
+abstract class SfsCmsPlugin extends Bundle
 {
+    abstract public static function getAlias(): string;
+
     /**
      * @throws Exception
      */
@@ -38,9 +40,24 @@ class SfsCmsPlugin extends Bundle
 
     public function build(ContainerBuilder $container): void
     {
-        $container->setParameter('sfs_cms.config_extensions', $this->getConfigExtensionClasses());
+        if (!$container->hasParameter('sfs_cms.config_extensions')) {
+            $container->setParameter('sfs_cms.config_extensions', []);
+        }
+        $extensions = $container->getParameter('sfs_cms.config_extensions');
+        $extensions = array_merge($extensions, $this->getConfigExtensionClasses());
+        $container->setParameter('sfs_cms.config_extensions', $extensions);
 
         parent::build($container);
+
+        $registeredPlugins = $container->hasParameter('sfs_cms.registered_plugins') ? $container->getParameter('sfs_cms.registered_plugins') : [];
+        if (!in_array($this->getName(), $registeredPlugins)) {
+            $registeredPlugins[] = [
+                'alias' => static::getAlias(),
+                'name' => $this->getName(),
+                'class' => static::class,
+            ];
+            $container->setParameter('sfs_cms.registered_plugins', $registeredPlugins);
+        }
 
         foreach ($this->getTargetEntitiesMappings() as $path => $namespace) {
             $this->addRegisterMappingsPass($container, [$path => $namespace]);

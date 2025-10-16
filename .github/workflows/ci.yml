@@ -2,9 +2,9 @@ name: CI
 
 on:
     push:
-        branches: [ 5.4 ]
+        branches: [ 5.5 ]
     pull_request:
-        branches: [ 5.4 ]
+        branches: [ 5.5 ]
 
 permissions:
     contents: read
@@ -23,7 +23,7 @@ jobs:
                 composer-prefer: [ '', '--prefer-lowest' ]
 
         steps:
-            -   uses: actions/checkout@v4
+            -   uses: actions/checkout@v5
 
             -   name: Install PHP
                 uses: shivammathur/setup-php@v2
@@ -76,10 +76,10 @@ jobs:
                 node-versions: [ '18' ]
                 npm-versions: [ '10' ]
         steps:
-            -   uses: actions/checkout@v4
+            -   uses: actions/checkout@v5
 
             -   name: Install Node.js
-                uses: actions/setup-node@v4
+                uses: actions/setup-node@v5
                 with:
                     node-version: ${{ matrix.node-versions }}
 

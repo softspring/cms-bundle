@@ -1,7 +1,8 @@
+// let collectionFormTypeDebug = true;
+
 import {filterCurrentFilterElements} from './filter-preview';
 import {getCollectionLastIndex} from '@softspring/collection-form-type/scripts/collection-form-type';
-import {Modal} from 'bootstrap';
-import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
+import {registerFeature, showAlert} from '@softspring/cms-bundle/scripts/tools';
 
 registerFeature('admin_content_edit_modules', _init);
 
@@ -10,6 +11,9 @@ registerFeature('admin_content_edit_modules', _init);
  * @private
  */
 function _init() {
+
+    checkEmptyModules();
+
     // close module edit form
     document.addEventListener('click', function (event) {
         if (!event.target || !event.target.hasAttribute('data-cms-module-form-close')) return;
@@ -24,6 +28,7 @@ function _init() {
         if (event.target && (event.target.hasAttribute('data-cms-module-form-close') || event.target.matches('[data-collection-action=delete]'))) {
             if (event.target.matches('[data-collection-action=delete]')) {
                 allLostFocus();
+                checkEmptyModules();
             }
             return;
         }
@@ -42,6 +47,7 @@ function _init() {
             moduleFocus(module);
         }
         filterCurrentFilterElements();
+        checkEmptyModules();
     });
 
     document.addEventListener("collection.node.add.after", function (event) { // (1)
@@ -50,6 +56,7 @@ function _init() {
             moduleFocus(module);
         }
         filterCurrentFilterElements();
+        checkEmptyModules();
     });
 
     document.addEventListener("collection.node.duplicate.after", function (event) { // (1)
@@ -58,6 +65,75 @@ function _init() {
             moduleFocus(module);
         }
         filterCurrentFilterElements();
+        checkEmptyModules();
+    });
+
+    document.addEventListener("collection.node.copy.after", function () { // (1)
+        showAlert('Copied to clipboard!', 'secondary', 800);
+    });
+
+    document.addEventListener("collection.node.copy.prepare", function (event) { // (1)
+        let data = event.toArray();
+        data.source = 'softspring/cms-bundle';
+        // add md5 hash of the data
+        event.data(data);
+    });
+
+    document.addEventListener("collection.node.paste.validate", function (event) { // (1)
+        let data = event.toArray();
+
+        if (!data || !data.source || data.source !== 'softspring/cms-bundle') {
+            event.data(null);
+            return;
+        }
+
+        let htmlContent = data.content;
+
+        // find any data-module-id attribute in the html content
+        const moduleIdRegex = /data-module-id="([^"]+)"/g;
+        // get differnt values of data-module-id
+        const moduleIds = new Set();
+        let match;
+        while ((match = moduleIdRegex.exec(htmlContent)) !== null) {
+            moduleIds.add(match[1]);
+        }
+
+        let collection = event.pasteDestination();
+        let collectionModulesAllowed = collection.dataset.modulesAllowed.split(',');
+        // check if all modules are allowed in the collection
+        for (let moduleId of moduleIds) {
+            if (!collectionModulesAllowed.includes(moduleId)) {
+                showAlert('The module "' + moduleId + '" is not allowed in this collection.', 'danger', 5000);
+                event.data(null);
+                return;
+            }
+        }
+
+        // check if the collection is inside another collection with data-modules-allowed attribute
+        while (collection.parentNode.closest('[data-modules-allowed]') !== null) {
+            collection = collection.parentNode.closest('[data-modules-allowed]');
+            collectionModulesAllowed = collection.dataset.modulesAllowed.split(',');
+            // check if all modules are allowed in the collection
+            for (let moduleId of moduleIds) {
+                if (!collectionModulesAllowed.includes(moduleId)) {
+                    showAlert('The module "' + moduleId + '" is not allowed in this collection.', 'danger', 5000);
+                    event.data(null);
+                    return;
+                }
+            }
+        }
+
+        // content is valid and can be pasted
+        event.data(data);
+    });
+
+    document.addEventListener("collection.node.paste.after", function (event) { // (1)
+        var module = event.target.querySelector('.cms-module');
+        if (module) {
+            moduleFocus(module);
+        }
+        filterCurrentFilterElements();
+        checkEmptyModules();
     });
 
     const prototypesModal = document.getElementById('module_prototypes_collection_modal');
@@ -110,7 +186,7 @@ function _init() {
     /**
      * @param {CollectionEvent} event
      */
-    document.addEventListener("collection.node.insert.before", function (event) {
+    document.addEventListener("collection.node.insert.before", async function (event) {
         if (modulesCollection) {
             event.collection(modulesCollection);
             event.position(modulesCollectionInsertIndex !== null ? modulesCollectionInsertIndex : getCollectionLastIndex(modulesCollection) + 1);
@@ -139,6 +215,7 @@ function _init() {
         modulesCollection = null;
         modulesCollectionInsertIndex = null;
 
+        const {Modal} = await import('bootstrap');
         const modal = Modal.getInstance(prototypesModal);
         modal && modal.hide();
     });
@@ -146,7 +223,44 @@ function _init() {
     /**
      * @param {CollectionEvent} event
      */
-    document.addEventListener("collection.node.insert.after", function (event) {
+    document.addEventListener("collection.node.paste.before", async function (event) {
+        if (modulesCollection) {
+            event.collection(modulesCollection);
+            event.position(modulesCollectionInsertIndex !== null ? modulesCollectionInsertIndex : getCollectionLastIndex(modulesCollection) + 1);
+        } else if (event.target && event.target.dataset.collectionTarget !== undefined) {
+            modulesCollection = document.getElementById(event.target.dataset.collectionTarget);
+        } else {
+            throw new Error('No collection target found for module');
+        }
+
+        // const moduleThumbnail = event._originEvent.target;
+        // let prototype = moduleThumbnail.dataset.prototype ?? moduleThumbnail.dataset.collectionPrototype;
+        // // COLLECTION
+        // // version_create_form_data_main_1_modules_0
+        // // version_create_form[data][main][1][modules][0]
+        // // PROTOTYPE
+        // // version_create_form_module_prototypes_collection____MODULE____class
+        // // version_create_form[module_prototypes_collection][___MODULE___]
+        // // RESULT
+        // // version_create_form_data_main_1_modules_0_modules_0_class
+        // // version_create_form[data][main][1][modules][0][modules][0][class]
+        // prototype = prototype.replace(new RegExp('version_create_form_module_prototypes_collection', 'g'), modulesCollection.id);
+        // prototype = prototype.replace(new RegExp('version_create_form\\[module_prototypes_collection\\]', 'g'), modulesCollection.dataset.fullName);
+        // event.prototype(prototype);
+
+        // reset variables
+        modulesCollection = null;
+        modulesCollectionInsertIndex = null;
+
+        const {Modal} = await import('bootstrap');
+        const modal = Modal.getInstance(prototypesModal);
+        modal && modal.hide();
+    });
+
+    /**
+     * @param {CollectionEvent} event
+     */
+    document.addEventListener("collection.node.insert.after", async function (event) {
         if (!event.collection() || !event.node() || event.collection().dataset.moduleRowClass === undefined) {
             return;
         }
@@ -154,7 +268,7 @@ function _init() {
         event.node().classList.remove(...event.node().classList);
         event.node().classList.add(event.collection().dataset.moduleRowClass);
 
-        if (event.collection().dataset.moduleRowClass == 'col') {
+        if (event.collection().dataset.moduleRowClass === 'col') {
             const down = event.node().querySelector(':scope > .cms-module > .cms-module-header > .cms-module-buttons > [data-collection-action=down] .bi-chevron-down');
             down.classList.remove('bi-chevron-down');
             down.classList.add('bi-chevron-right');
@@ -163,6 +277,7 @@ function _init() {
             up.classList.add('bi-chevron-left');
         }
 
+        const {Modal} = await import('bootstrap');
         const modal = Modal.getInstance(prototypesModal);
         modal && modal.hide();
 
@@ -179,6 +294,7 @@ function _init() {
     document.addEventListener("collection.node.insert.after", checkMaxInputVars);
     document.addEventListener("collection.node.add.after", checkMaxInputVars);
     document.addEventListener("collection.node.duplicate.after", checkMaxInputVars);
+    document.addEventListener("collection.node.paste.after", checkMaxInputVars);
 }
 
 function moduleFocus(module) {
@@ -215,5 +331,20 @@ function checkMaxInputVars() {
     } else {
         [...buttons].forEach((button) => button.classList.remove('disabled'));
         maxInputVarsMessage.classList.add('d-none');
+    }
+}
+
+function checkEmptyModules() {
+    // check if we have a module form
+    const modules = document.querySelectorAll('main [data-collection="collection"] .insert-module');
+
+    if (modules.length === 1) {
+        modules[0].classList.add('active');
+        modules[0].closest('[data-collection="collection"]').classList.add('active');
+    } else {
+        modules.forEach((module) => {
+            module.classList.remove('active');
+            module.closest('[data-collection="collection"]').classList.remove('active');
+        });
     }
 }

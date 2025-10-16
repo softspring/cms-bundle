@@ -80,6 +80,13 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
 
+                ->arrayNode('esi')
+                    ->canBeDisabled()
+                    ->children()
+                        ->enumNode('response_cache_strategy')->defaultValue('default')->values(['default', 'shortest_response'])->end()
+                    ->end()
+                ->end()
+
                 ->arrayNode('collections')
                     ->scalarPrototype()->end()
                 ->end()
@@ -167,6 +174,13 @@ class Configuration implements ConfigurationInterface
                                 ->enumNode('type')->defaultNull()->values(['ttl', 'none'])->end()
                             ->end()
                         ->end()
+                    ->end()
+                ->end()
+
+                ->arrayNode('compiled')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->integerNode('expiration_ttl')->defaultValue(3600 * 24 * 30)->end()
                     ->end()
                 ->end()
 

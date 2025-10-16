@@ -3,6 +3,7 @@
 namespace Softspring\CmsBundle\Model;
 
 use DateTime;
+use Softspring\CmsSectionsPlugin\Model\SectionVersionInterface;
 
 class CompiledData implements CompiledDataInterface
 {
@@ -15,6 +16,8 @@ class CompiledData implements CompiledDataInterface
     protected ?array $data = null;
 
     protected ?ContentVersionInterface $contentVersion;
+
+    protected ?SectionVersionInterface $sectionVersion;
 
     protected bool $errors = false;
 
@@ -30,7 +33,7 @@ class CompiledData implements CompiledDataInterface
 
     public function getCreatedAt(): ?DateTime
     {
-        return $this->createdAt ? DateTime::createFromFormat('U', "{$this->createdAt}") : null;
+        return $this->createdAt ? DateTime::createFromFormat('U', "$this->createdAt") : null;
     }
 
     public function setCreatedAt(?DateTime $createdAt): void
@@ -47,7 +50,7 @@ class CompiledData implements CompiledDataInterface
 
     public function getExpiresAt(): ?DateTime
     {
-        return $this->expiresAt ? DateTime::createFromFormat('U', "{$this->expiresAt}") : null;
+        return $this->expiresAt ? DateTime::createFromFormat('U', "$this->expiresAt") : null;
     }
 
     public function setExpiresAt(?DateTime $expiresAt): void
@@ -75,6 +78,33 @@ class CompiledData implements CompiledDataInterface
         $this->data[$part] = $value;
     }
 
+    public function getVersion(): ?VersionInterface
+    {
+        if ($this->contentVersion) {
+            return $this->getContentVersion();
+        }
+
+        if ($this->sectionVersion) {
+            return $this->getSectionVersion();
+        }
+
+        return null;
+    }
+
+    public function setVersion(?VersionInterface $version): void
+    {
+        if ($version instanceof ContentVersionInterface) {
+            $this->setContentVersion($version);
+            $this->sectionVersion = null;
+        } elseif ($version instanceof SectionVersionInterface) {
+            $this->contentVersion = null;
+            $this->setSectionVersion($version);
+        } else {
+            $this->contentVersion = null;
+            $this->sectionVersion = null;
+        }
+    }
+
     public function getContentVersion(): ?ContentVersionInterface
     {
         return $this->contentVersion;
@@ -83,6 +113,16 @@ class CompiledData implements CompiledDataInterface
     public function setContentVersion(?ContentVersionInterface $contentVersion): void
     {
         $this->contentVersion = $contentVersion;
+    }
+
+    public function getSectionVersion(): ?SectionVersionInterface
+    {
+        return $this->sectionVersion;
+    }
+
+    public function setSectionVersion(?SectionVersionInterface $sectionVersion): void
+    {
+        $this->sectionVersion = $sectionVersion;
     }
 
     public function hasErrors(): bool
@@ -94,8 +134,10 @@ class CompiledData implements CompiledDataInterface
     {
         $this->errors = $errors;
 
-        if ($this->getContentVersion()) {
-            $this->getContentVersion()->setCompileErrors($errors);
+        $version = $this->getVersion();
+
+        if ($version instanceof CompilableInterface) {
+            $version->setCompileErrors($errors);
         }
     }
 }
