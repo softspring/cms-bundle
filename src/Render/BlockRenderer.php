@@ -16,6 +16,7 @@ use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface;
 use Twig\Environment;
+use Twig\Extension\StringLoaderExtension;
 
 class BlockRenderer
 {
@@ -45,6 +46,8 @@ class BlockRenderer
     {
         $blockConfig = $this->cmsConfig->getBlock($type);
 
+        $renderFunctionAttrs = [];
+
         if ($blockConfig['esi']) {
             if (!$this->esiEnabled) {
                 throw new Exception('You must enable esi with framework.esi configuration to use it in CMS');
@@ -56,17 +59,21 @@ class BlockRenderer
             $urlFunction = 'path'; // TODO, review this: maybe if site or locale is at the domain that info can be lost
         } elseif ($blockConfig['ajax']) {
             $renderFunction = 'sfs_cms_render_ajax';
+            $renderFunctionAttrs['data-sfs-cms-ajax'] = 'block';
+            $renderFunctionAttrs['data-sfs-cms-block-type'] = $type;
             $urlFunction = 'url';
         } else {
             $renderFunction = 'render';
             $urlFunction = 'url';
         }
 
+        $render_function_attrs = !empty($renderFunctionAttrs) ? ', '.('{'.Parser::arrayToParamsString($renderFunctionAttrs).'}') : 'null';
+
         $params['_locale'] = $locale ?? $request?->getLocale() ?? $this->requestStack->getCurrentRequest()?->getLocale();
         $params['_site'] = $site ?? $request?->attributes->get('_site') ?? $this->requestStack->getCurrentRequest()?->attributes->get('_site');
         if (!empty($blockConfig['render_url'])) {
             $params_string = '{'.Parser::arrayToParamsString($params).'}';
-            $twigCode = "{{ $renderFunction($urlFunction('{$blockConfig['render_url']}', $params_string)) }}";
+            $twigCode = "{{ $renderFunction($urlFunction('{$blockConfig['render_url']}', $params_string) $render_function_attrs) }}";
         } else {
             // $twigCode = "{{ $renderFunction(url('sfs_cms_block_render_by_type', {'type':'$type'})) }}";
             $params['type'] = $type;
@@ -80,13 +87,18 @@ class BlockRenderer
                 $twigCode = "{{ $renderFunction(fragment_uri($controller, $fragmentEsiAbsolute, true, true)) }}";
             } elseif ('sfs_cms_render_ajax' == $renderFunction) {
                 // {{ fragment_uri(controller, absolute = false, strict = true, sign = true) }}
-                $twigCode = "{{ $renderFunction(url('sfs_cms_block_render_by_type', {'type':'$type'})) }}";
+                $twigCode = "{{ $renderFunction(url('sfs_cms_block_render_by_type', $params_string) $render_function_attrs) }}";
             } else {
                 $twigCode = "{{ $renderFunction($controller) }}";
             }
         }
 
-        $template = twig_template_from_string($this->twig, $twigCode);
+        if (class_exists(StringLoaderExtension::class)) {
+            /** @phpstan-ignore-next-line  */
+            $template = StringLoaderExtension::templateFromString($this->twig, $twigCode);
+        } else {
+            $template = twig_template_from_string($this->twig, $twigCode);
+        }
 
         if ($this->profilerEnabled) {
             $this->profilerDebugCollectorData[] = [
@@ -116,6 +128,7 @@ class BlockRenderer
         $params = [];
         $params['_locale'] = $locale;
         $params['isolate_request'] = !is_bool($blockConfig['isolate_request']) || $blockConfig['isolate_request'];
+        $renderFunctionAttrs = [];
 
         if ($blockConfig['esi']) {
             if (!$this->esiEnabled) {
@@ -126,23 +139,33 @@ class BlockRenderer
             $urlFunction = $forceEsiRender ? 'url' : 'path';
         } elseif ($blockConfig['ajax']) {
             $renderFunction = 'sfs_cms_render_ajax';
+            $renderFunctionAttrs['data-sfs-cms-ajax'] = 'block';
+            $renderFunctionAttrs['data-sfs-cms-block-id'] = $blockId;
+            $renderFunctionAttrs['data-sfs-cms-block-type'] = $type;
             $urlFunction = 'url';
         } else {
             $renderFunction = 'render';
             $urlFunction = 'url';
         }
 
+        $render_function_attrs = !empty($renderFunctionAttrs) ? ', '.('{'.Parser::arrayToParamsString($renderFunctionAttrs).'}') : 'null';
+
         if (!empty($blockConfig['render_url'])) {
             $params_string = '{'.Parser::arrayToParamsString($params).'}';
-            $twigCode = "{{ $renderFunction($urlFunction('{$blockConfig['render_url']}', $params_string)) }}";
+            $twigCode = "{{ $renderFunction($urlFunction('{$blockConfig['render_url']}', $params_string) $render_function_attrs) }}";
         } else {
             // $twigCode = "{{ $renderFunction(url('sfs_cms_block_render_by_type', {'type':'$type'})) }}";
             $params['id'] = $blockId;
             $params_string = '{'.Parser::arrayToParamsString($params).'}';
-            $twigCode = "{{ $renderFunction(controller('Softspring\\\\CmsBundle\\\\Controller\\\\BlockController::renderById', $params_string)) }}";
+            $twigCode = "{{ $renderFunction(controller('Softspring\\\\CmsBundle\\\\Controller\\\\BlockController::renderById', $params_string) $render_function_attrs) }}";
         }
 
-        $template = twig_template_from_string($this->twig, $twigCode);
+        if (class_exists(StringLoaderExtension::class)) {
+            /** @phpstan-ignore-next-line  */
+            $template = StringLoaderExtension::templateFromString($this->twig, $twigCode);
+        } else {
+            $template = twig_template_from_string($this->twig, $twigCode);
+        }
 
         if ($this->profilerEnabled) {
             $this->profilerDebugCollectorData[] = [

@@ -111,21 +111,21 @@ abstract class AbstractRouteForm extends AbstractType
                     return [
                         'data-show-fields' => match ($value) {
                             RouteInterface::TYPE_CONTENT => 'content',
-                            RouteInterface::TYPE_REDIRECT_TO_URL => 'redirectUrl',
+                            RouteInterface::TYPE_REDIRECT_TO_URL => 'redirectType,redirectUrl',
                             RouteInterface::TYPE_REDIRECT_TO_ROUTE => 'redirectType,symfonyRoute',
                             RouteInterface::TYPE_PARENT_ROUTE => '',
                             default => '',
                         },
                         'data-hide-fields' => match ($value) {
                             RouteInterface::TYPE_CONTENT => 'redirectUrl,redirectType,symfonyRoute',
-                            RouteInterface::TYPE_REDIRECT_TO_URL => 'content,redirectType,symfonyRoute',
+                            RouteInterface::TYPE_REDIRECT_TO_URL => 'content,symfonyRoute',
                             RouteInterface::TYPE_REDIRECT_TO_ROUTE => 'content,redirectUrl',
                             RouteInterface::TYPE_PARENT_ROUTE => 'content,redirectUrl,redirectType,symfonyRoute',
                             default => '',
                         },
                         'data-empty-fields' => match ($value) {
                             RouteInterface::TYPE_CONTENT => 'redirectUrl,redirectType,symfonyRoute',
-                            RouteInterface::TYPE_REDIRECT_TO_URL => 'content,redirectType,symfonyRoute',
+                            RouteInterface::TYPE_REDIRECT_TO_URL => 'content,symfonyRoute',
                             RouteInterface::TYPE_REDIRECT_TO_ROUTE => 'content,redirectUrl',
                             RouteInterface::TYPE_PARENT_ROUTE => 'content,redirectUrl,redirectType,symfonyRoute',
                             default => '',
