@@ -78,13 +78,13 @@ class PageTest extends TestCase
         $this->assertEquals(['test'], $page->getExtraData());
     }
 
-    public function testSeo(): void
+    public function testIndexing(): void
     {
         $page = new Page();
-        $this->assertNull($page->getSeo());
+        $this->assertNull($page->getIndexing());
 
-        $page->setSeo(['test']);
-        $this->assertEquals(['test'], $page->getSeo());
+        $page->setIndexing(['test']);
+        $this->assertEquals(['test'], $page->getIndexing());
     }
 
     public function testVersions(): void
