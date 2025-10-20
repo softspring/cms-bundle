@@ -68,7 +68,17 @@ class ReadListener extends AbstractContentListener
 
     public function onViewAddExtra(ViewEvent $event): void
     {
-        $event->getData()['entityLatestVersions'] = $this->contentVersionManager->getLatestVersions($event->getData()['content'], 3);
+        $latestVersions = $this->contentVersionManager->getLatestVersions($event->getData()['content'], 3);
+        $publishedVersion = $event->getData()['content']->getPublishedVersion();
+
+        if ($publishedVersion && !$latestVersions->contains($publishedVersion)) {
+            // remove last
+            $latestVersions->offsetUnset($latestVersions->count() - 1);
+            // add published at the end
+            $latestVersions->add($publishedVersion);
+        }
+
+        $event->getData()['entityLatestVersions'] = $latestVersions;
         $event->getData()['contentCacheLastModifiedEnabled'] = 'last_modified' === $this->contentCacheType;
     }
 
