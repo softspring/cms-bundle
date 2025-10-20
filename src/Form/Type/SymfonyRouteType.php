@@ -82,11 +82,13 @@ class SymfonyRouteType extends AbstractType
                 /* @phpstan-ignore-next-line */
                 foreach ($parameters[2] ?? [] as $parameter) {
                     if ('_locale' !== $parameter) {
-                        $attr['data-route-parameter'][] = $parameter;
+                        $attr['data-route-parameter'][$parameter] = $route->getRequirement($parameter);
                     }
                 }
 
-                isset($attr['data-route-parameter']) && $attr['data-route-parameter'] = implode(' ;; ', (array) $attr['data-route-parameter']);
+                if (!empty($attr['data-route-parameter'])) {
+                    $attr['data-route-parameter'] = json_encode($attr['data-route-parameter']);
+                }
 
                 return $attr;
             },
