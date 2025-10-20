@@ -64,41 +64,6 @@ function _init() {
     });
 }
 
-function selectOptionRouteRequirements(option) {
-    let routeParamsRequirements = {};
-
-    // extract from data-route-parameter attribute each param with optional requirements
-    // parameters are separated by " ;; " and it can be just a parameter name without requirement
-    // or parameter name "=" requirement
-    // e.g. data-route-parameter="id ;; slug=\\d+"
-
-    if (option.dataset.routeParameter) {
-        const routeParameters = option.dataset.routeParameter.split(' ;; ');
-
-        routeParameters.forEach((param) => {
-            const paramParts = param.split('=');
-            if (paramParts.length === 2) {
-                routeParamsRequirements[paramParts[0]] = paramParts[1];
-            } else {
-                routeParamsRequirements[paramParts[0]] = null;
-            }
-        });
-    }
-
-    return routeParamsRequirements;
-}
-
-// eslint-disable-next-line no-unused-vars
-function hasOptionalParams(routeParamsRequirements, routeParams) {
-    for (let paramName in routeParams) {
-        if (routeParamsRequirements[paramName] === undefined) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 function updateRouteParamsField(routeNameSelect, actionType = null) {
     const selectedOption = routeNameSelect.options[routeNameSelect.selectedIndex];
     const routeParamsField = document.getElementById(routeNameSelect.dataset.routeParams);
@@ -106,47 +71,37 @@ function updateRouteParamsField(routeNameSelect, actionType = null) {
     const routeShowParamsLink = document.querySelector('[data-route-show-params=' + routeParamsField.id + ']');
     const routeHideParamsLink = document.querySelector('[data-route-hide-params=' + routeParamsField.id + ']');
 
-    const isInit = selectedOption.dataset.init === undefined;
-    selectedOption.dataset.init = true;
+    let showField, showShowLink, showHideLink;
 
-    // get route requirements
-    const requiredRouteParams = selectOptionRouteRequirements(selectedOption);
-    const requiredRouteParamsCount = Object.keys(requiredRouteParams).length;
-
-    // init routeParams with requirements
-    let routeParams = requiredRouteParams;
-
-    // fill route params init values
-    if (isInit && routeParamsField.value && actionType !== 'change') {
-        const initialValues = JSON.parse(routeParamsField.value)
-
-        if (initialValues) {
-            [...Object.keys(initialValues)].forEach((paramName) => {
-                routeParams[paramName] = initialValues[paramName];
-            });
+    if (actionType !== 'init') {
+        if (selectedOption.dataset.routeParameter) {
+            routeParamsField.value = selectedOption.dataset.routeParameter;
+        } else {
+            routeParamsField.value = '{}';
         }
     }
 
-    if (Object.keys(routeParams).length) {
+    showField = !!(routeParamsField.value && routeParamsField.value !== '{}');
+    showShowLink = !showField && !selectedOption.dataset.routeParameter;
+    showHideLink = showField && !selectedOption.dataset.routeParameter;
+
+    if (showField) {
         routeParamsField.closest('div').showElement();
         routeParamsLabel && routeParamsLabel.closest('div').showElement();
-        routeParamsField.value = JSON.stringify(routeParams);
     } else {
         routeParamsField.closest('div').hideElement();
         routeParamsLabel && routeParamsLabel.closest('div').hideElement();
-        routeParamsField.value = '{}';
     }
 
-    if(routeShowParamsLink !== null && routeHideParamsLink !== null) {
-        if (requiredRouteParamsCount) {
-            routeShowParamsLink.hideElement();
-            routeHideParamsLink.hideElement();
-        } else if (Object.keys(routeParams).length) {
-            routeShowParamsLink.hideElement();
-            routeHideParamsLink.showElement();
-        } else {
-            routeShowParamsLink.showElement();
-            routeHideParamsLink.hideElement();
-        }
+    if (showShowLink) {
+        routeShowParamsLink && routeShowParamsLink.showElement();
+    } else {
+        routeShowParamsLink && routeShowParamsLink.hideElement();
+    }
+
+    if (showHideLink) {
+        routeHideParamsLink && routeHideParamsLink.showElement();
+    } else {
+        routeHideParamsLink && routeHideParamsLink.hideElement();
     }
 }
