@@ -9,17 +9,11 @@ use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\Component\CrudlController\Event\ApplyEvent;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Security\Core\Security as SecurityOld;
 
 class BlameListener implements EventSubscriberInterface
 {
-    /** @phpstan-ignore-next-line  */
-    protected SecurityOld|Security|null $security;
-
-    /** @phpstan-ignore-next-line  */
-    public function __construct(?SecurityOld $securityOld, ?Security $security)
+    public function __construct(protected ?Security $security)
     {
-        $this->security = $securityOld ?? $security;
     }
 
     public static function getSubscribedEvents(): array
@@ -119,13 +113,11 @@ class BlameListener implements EventSubscriberInterface
 
     protected function canBlame(): bool
     {
-        /* @phpstan-ignore-next-line */
         return $this->security && $this->security->getUser();
     }
 
     protected function getUser(): array
     {
-        /** @phpstan-ignore-next-line  */
         $user = $this->security->getUser();
 
         $userData = [
