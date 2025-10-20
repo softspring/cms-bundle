@@ -5,8 +5,8 @@
 ![License](https://img.shields.io/packagist/l/softspring/cms-bundle?style=flat-square)
 ![PHP Version](https://img.shields.io/packagist/dependency-v/softspring/cms-bundle/php?style=flat-square)
 ![Downloads](https://img.shields.io/packagist/dt/softspring/cms-bundle?style=flat-square)
-[![CI](https://img.shields.io/github/actions/workflow/status/softspring/cms-bundle/ci.yml?branch=5.5&style=flat-square&label=CI)](https://github.com/softspring/cms-bundle/actions/workflows/ci.yml)
-![Coverage](https://raw.githubusercontent.com/softspring/cms-bundle/5.5/.github/badges/coverage.svg)
+[![CI](https://img.shields.io/github/actions/workflow/status/softspring/cms-bundle/ci.yml?branch=6.0&style=flat-square&label=CI)](https://github.com/softspring/cms-bundle/actions/workflows/ci.yml)
+![Coverage](https://raw.githubusercontent.com/softspring/cms-bundle/6.0/.github/badges/coverage.svg)
 
 This is a CMS bundle for Symfony projects that allows manage multi-site and multi-language content with ease. It provides live preview and editing capabilities, ensuring a seamless content creation experience. Fully configurable, this bundle empowers developers to build dynamic and adaptable websites.
 
