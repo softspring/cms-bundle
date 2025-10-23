@@ -67,7 +67,7 @@ class BlockRenderer
             $urlFunction = 'url';
         }
 
-        $render_function_attrs = !empty($renderFunctionAttrs) ? ', '.('{'.Parser::arrayToParamsString($renderFunctionAttrs).'}') : 'null';
+        $render_function_attrs = !empty($renderFunctionAttrs) ? ', '.('{'.Parser::arrayToParamsString($renderFunctionAttrs).'}') : '';
 
         $params['_locale'] = $locale ?? $request?->getLocale() ?? $this->requestStack->getCurrentRequest()?->getLocale();
         $params['_site'] = $site ?? $request?->attributes->get('_site') ?? $this->requestStack->getCurrentRequest()?->attributes->get('_site');
