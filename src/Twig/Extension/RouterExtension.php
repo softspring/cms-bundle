@@ -34,7 +34,7 @@ class RouterExtension extends AbstractExtension
             new TwigFunction('sfs_cms_path', [$this, 'generatePath']),
             new TwigFunction('sfs_cms_route_path_url', [$this->urlGenerator, 'getUrlFixed']), // TODO REVIEW THIS, check if it works with symfony native routes
             new TwigFunction('sfs_cms_route_path_path', [$this->urlGenerator, 'getPathFixed']), // TODO REVIEW THIS, check if it works with symfony native routes
-            new TwigFunction('sfs_cms_route_attr', [$this->urlGenerator, 'getRouteAttributes']), // TODO REVIEW THIS, check if it works with symfony native routes
+            new TwigFunction('sfs_cms_route_attr', [$this->urlGenerator, 'getRouteAttributes'], ['is_safe' => ['html']]),
         ];
     }
 
