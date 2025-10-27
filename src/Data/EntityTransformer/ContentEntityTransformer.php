@@ -138,11 +138,6 @@ abstract class ContentEntityTransformer implements ContentEntityTransformerInter
 
         $content->setExtraData($contentData['extra']);
 
-        if (isset($contentData['seo'])) {
-            $content->setSeo($contentData['seo']);
-        } elseif (isset($contentData['indexing'])) {
-            $content->setSeo($contentData['indexing']);
-        }
         $content->setIndexing($contentData['indexing'] ?? []);
 
         foreach ($contentData['versions'] as $version) {

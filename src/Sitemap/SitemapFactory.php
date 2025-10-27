@@ -68,10 +68,10 @@ class SitemapFactory
 
     protected function getChangeFreq(ContentInterface $content, array $sitemapConfig): ?string
     {
-        $seo = $content->getSeo();
+        $indexing = $content->getIndexing();
 
-        if (!empty($seo['sitemapChangefreq'])) {
-            return $seo['sitemapChangefreq'];
+        if (!empty($indexing['sitemapChangefreq'])) {
+            return $indexing['sitemapChangefreq'];
         }
 
         if (!empty($sitemapConfig['default_changefreq'])) {
@@ -83,10 +83,10 @@ class SitemapFactory
 
     protected function getPriority(ContentInterface $content, array $sitemapConfig): ?string
     {
-        $seo = $content->getSeo();
+        $indexing = $content->getIndexing();
 
-        if (!empty($seo['sitemapPriority'])) {
-            return sprintf('%.1F', floatval($seo['sitemapPriority']));
+        if (!empty($indexing['sitemapPriority'])) {
+            return sprintf('%.1F', floatval($indexing['sitemapPriority']));
         }
 
         if (!empty($sitemapConfig['default_priority'])) {
@@ -128,14 +128,14 @@ class SitemapFactory
      */
     protected function skipContent(ContentInterface $content): bool
     {
-        $seo = $content->getSeo();
-        if (!($seo['sitemap'] ?? false)) {
+        $indexing = $content->getIndexing();
+        if (!($indexing['sitemap'] ?? false)) {
             return true;
         }
 
         // TODO check sitemap name
 
-        if ($seo['noIndex'] ?? false) {
+        if ($indexing['noIndex'] ?? false) {
             return true;
         }
 

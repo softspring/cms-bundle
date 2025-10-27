@@ -2,9 +2,9 @@ name: CI
 
 on:
     push:
-        branches: [ 5.5 ]
+        branches: [ 6.0 ]
     pull_request:
-        branches: [ 5.5 ]
+        branches: [ 6.0 ]
 
 permissions:
     contents: read
@@ -19,7 +19,7 @@ jobs:
             contents: write
         strategy:
             matrix:
-                php-versions: [ '8.3' ] # do not test 8.0 because of phpstan errors with doctrine/collections
+                php-versions: [ '8.4' ] # do not test 8.0 because of phpstan errors with doctrine/collections
                 composer-prefer: [ '', '--prefer-lowest' ]
 
         steps:

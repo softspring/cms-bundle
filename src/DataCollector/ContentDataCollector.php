@@ -95,7 +95,7 @@ class ContentDataCollector extends DataCollector
                     'name' => $this->translator->trans($site->getId().'.name', [], 'sfs_cms_sites'),
                 ];
             }, $content->getSites()->toArray()),
-            'seo' => $content->getSeo(),
+            'indexing' => $content->getIndexing(),
             'name' => $content->getName(),
             'lastVersionNumber' => $content->getLastVersionNumber(),
             'status' => $content->getStatus(),

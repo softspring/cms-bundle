@@ -34,12 +34,6 @@ class Block implements ConfigurationInterface
             ->end()
             ->validate()
                 ->ifTrue(function ($config) {
-                    return $config['static'] && !empty($config['form_options']);
-                })
-                ->thenInvalid('A block defined as static can not have form_options.')
-            ->end()
-            ->validate()
-                ->ifTrue(function ($config) {
                     return $config['static'] && !empty($config['form_template']);
                 })
                 ->thenInvalid('A block defined as static can not have form_template.')
@@ -83,18 +77,6 @@ class Block implements ConfigurationInterface
                 ->booleanNode('static')->defaultFalse()->end()
                 ->booleanNode('schedulable')->defaultFalse()->end()
                 ->scalarNode('render_url')->end()
-
-                // TODO review this ???
-                ->scalarNode('form_type')
-                    ->setDeprecated('softspring/cms-bundle', '5.1')
-                ->end()
-
-                // TODO review this ???
-                ->arrayNode('form_options')
-                    ->setDeprecated('softspring/cms-bundle', '5.1')
-                    ->useAttributeAsKey('key')
-                    ->prototype('variable')->end()
-                ->end()
 
                 ->arrayNode('form_fields')
                     ->useAttributeAsKey('key')

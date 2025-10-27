@@ -132,23 +132,6 @@ abstract class Content implements ContentInterface
         $this->extraData = $extraData;
     }
 
-    public function getSeo(): ?array
-    {
-        trigger_deprecation('sfs/cms-bundle', '5.2', 'Method %s is deprecated, use %s instead, and version.getSeo', __METHOD__, 'getIndexing');
-
-        if (null === $this->getIndexing()) {
-            return null;
-        }
-
-        return $this->getIndexing() + ($this->publishedVersion?->getSeo() ?: []);
-    }
-
-    public function setSeo(?array $seo): void
-    {
-        trigger_deprecation('sfs/cms-bundle', '5.2', 'Method %s is deprecated, use %s instead', __METHOD__, 'setIndexing');
-        $this->setIndexing($seo);
-    }
-
     public function getIndexing(): ?array
     {
         return $this->indexing;
