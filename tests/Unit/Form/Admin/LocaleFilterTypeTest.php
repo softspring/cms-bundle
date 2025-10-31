@@ -78,6 +78,20 @@ class LocaleFilterTypeTest extends TestCase
                 ],
                 ['en', 'fr', 'de']
             ],
+            [
+                'new format all with values',
+                [
+                    'en' => false,
+                    'fr' => false,
+                    'de' => false
+                ],
+                [
+                    'en' => false,
+                    'fr' => false,
+                    'de' => false
+                ],
+                ['en', 'fr', 'de']
+            ],
         ];
     }
 }
