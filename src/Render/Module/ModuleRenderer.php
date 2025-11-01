@@ -89,10 +89,10 @@ class ModuleRenderer
             if (is_string($key) && true === $value) {
                 $moduleEnabledSites[] = $this->cmsConfig->getSite($key);
             } elseif (is_string($value)) {
-                /** @deprecated, in 6.0 old format will be removed */
+                /* @deprecated, in 6.0 old format will be removed */
                 $moduleEnabledSites[] = $this->cmsConfig->getSite($value);
             } elseif ($value instanceof SiteInterface) {
-                /** @deprecated, in 6.0 old format will be removed */
+                /* @deprecated, in 6.0 old format will be removed */
                 $moduleEnabledSites[] = $value;
             }
         }
@@ -108,9 +108,15 @@ class ModuleRenderer
 
         $currentLocale = $this->requestStack->getCurrentRequest()->getLocale();
 
-        $moduleEnabledLocales = array_keys(array_filter($module['locale_filter'], function ($value) {
-            return true === $value;
-        }));
+        $moduleEnabledLocales = [];
+        foreach ($module['locale_filter'] as $key => $value) {
+            if (is_string($key) && true === $value) {
+                $moduleEnabledLocales[] = $key;
+            } elseif (is_string($value)) {
+                /* @deprecated, in 6.0 old format will be removed */
+                $moduleEnabledLocales[] = $value;
+            }
+        }
 
         return !in_array($currentLocale, $moduleEnabledLocales);
     }
