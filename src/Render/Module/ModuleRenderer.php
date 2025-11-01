@@ -10,6 +10,7 @@ use Softspring\CmsBundle\Config\Exception\DisabledModuleException;
 use Softspring\CmsBundle\Config\Exception\InvalidModuleException;
 use Softspring\CmsBundle\Config\Exception\InvalidSiteException;
 use Softspring\CmsBundle\Form\Module\ContainerModuleType;
+use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\Render\Error\RenderErrorList;
 use Softspring\CmsBundle\Render\Exception\ModuleRenderException;
 use Softspring\CmsBundle\Utils\DataMigrator;
@@ -77,33 +78,41 @@ class ModuleRenderer
      */
     protected function skipModuleRenderBySiteFilter(array $module): bool
     {
-        if (isset($module['site_filter'])) {
-            $currentSite = $this->requestStack->getCurrentRequest()->get('_sfs_cms_site');
+        if (!isset($module['site_filter'])) {
+            return false;
+        }
 
-            $siteFilters = [];
-            foreach ($module['site_filter'] as $site) {
-                $siteFilters[] = is_string($site) ? $this->cmsConfig->getSite($site) : $site;
-            }
+        $currentSite = $this->requestStack->getCurrentRequest()->get('_sfs_cms_site');
 
-            if (!in_array($currentSite, $siteFilters)) {
-                return true;
+        $moduleEnabledSites = [];
+        foreach ($module['site_filter'] as $key => $value) {
+            if (is_string($key) && true === $value) {
+                $moduleEnabledSites[] = $this->cmsConfig->getSite($key);
+            } elseif (is_string($value)) {
+                /** @deprecated, in 6.0 old format will be removed */
+                $moduleEnabledSites[] = $this->cmsConfig->getSite($value);
+            } elseif ($value instanceof SiteInterface) {
+                /** @deprecated, in 6.0 old format will be removed */
+                $moduleEnabledSites[] = $value;
             }
         }
 
-        return false;
+        return !in_array($currentSite, $moduleEnabledSites);
     }
 
     protected function skipModuleRenderByLocaleFilter(array $module): bool
     {
-        if (isset($module['locale_filter'])) {
-            $currentLocale = $this->requestStack->getCurrentRequest()->getLocale();
-
-            if (!in_array($currentLocale, $module['locale_filter'])) {
-                return true;
-            }
+        if (!isset($module['locale_filter'])) {
+            return false;
         }
 
-        return false;
+        $currentLocale = $this->requestStack->getCurrentRequest()->getLocale();
+
+        $moduleEnabledLocales = array_keys(array_filter($module['locale_filter'], function ($value) {
+            return true === $value;
+        }));
+
+        return !in_array($currentLocale, $moduleEnabledLocales);
     }
 
     /**
