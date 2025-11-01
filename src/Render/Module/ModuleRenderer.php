@@ -85,12 +85,14 @@ class ModuleRenderer
         $currentSite = $this->requestStack->getCurrentRequest()->get('_sfs_cms_site');
 
         $moduleEnabledSites = [];
-        foreach ($module['site_filter'] as $site => $value) {
-            if (is_string($site) && true === $value) {
-                $moduleEnabledSites[] = $this->cmsConfig->getSite($site);
+        foreach ($module['site_filter'] as $key => $value) {
+            if (is_string($key) && true === $value) {
+                $moduleEnabledSites[] = $this->cmsConfig->getSite($key);
             } elseif (is_string($value)) {
+                /** @deprecated, in 6.0 old format will be removed */
                 $moduleEnabledSites[] = $this->cmsConfig->getSite($value);
             } elseif ($value instanceof SiteInterface) {
+                /** @deprecated, in 6.0 old format will be removed */
                 $moduleEnabledSites[] = $value;
             }
         }
