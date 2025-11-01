@@ -89,7 +89,7 @@ class ModuleRenderer
             if (is_string($site) && true === $value) {
                 $moduleEnabledSites[] = $this->cmsConfig->getSite($site);
             } elseif (is_string($value)) {
-                $moduleEnabledSites[] = $this->cmsConfig->getSite($site);
+                $moduleEnabledSites[] = $this->cmsConfig->getSite($value);
             } elseif ($value instanceof SiteInterface) {
                 $moduleEnabledSites[] = $value;
             }
