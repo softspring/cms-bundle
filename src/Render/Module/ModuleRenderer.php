@@ -64,6 +64,13 @@ class ModuleRenderer
             return self::DISABLED_HIDDEN_MODULE."\n";
         }
 
+        $twigAdditionalContextFields = array_keys($twigAdditionalContext);
+        $moduleDataFields = array_keys($moduleData);
+
+        if (array_intersect($twigAdditionalContextFields, $moduleDataFields)) {
+            $this->cmsLogger && $this->cmsLogger->warning(sprintf('Module %s data fields (%s) are overlapping with reserved context fields (%s). Reserved context fields will override module data fields.', $moduleData['_module'], implode(', ', $moduleDataFields), implode(', ', $twigAdditionalContextFields)));
+        }
+
         $moduleData = DataMigrator::migrate($moduleConfig['revision_migration_scripts'], $moduleData, $moduleConfig['revision']);
 
         if ($this->isContainer($moduleConfig)) {
