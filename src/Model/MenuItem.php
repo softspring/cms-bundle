@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Softspring\TranslatableBundle\Model\Translation;
 
 abstract class MenuItem implements MenuItemInterface
 {
@@ -11,7 +12,7 @@ abstract class MenuItem implements MenuItemInterface
 
     protected ?int $type = MenuItemInterface::TYPE_ROUTE;
 
-    protected ?array $text = null;
+    protected array|Translation|null $text = null;
 
     protected ?array $options = null;
 
@@ -49,12 +50,12 @@ abstract class MenuItem implements MenuItemInterface
         $this->type = $type;
     }
 
-    public function getText(): ?array
+    public function getText(): array|Translation|null
     {
         return $this->text;
     }
 
-    public function setText(?array $text): void
+    public function setText(array|Translation|null $text): void
     {
         $this->text = $text;
     }
