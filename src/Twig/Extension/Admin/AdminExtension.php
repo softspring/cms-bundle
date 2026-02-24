@@ -135,16 +135,23 @@ class AdminExtension extends AbstractExtension implements GlobalsInterface
                 $attrs[$attrMatch[1]] = $attrMatch[2];
             }
 
+            $processed = [
+                'type' => $attrs['sfs-cms-ajax'] ?? 'unknown',
+                'block_id' => $attrs['sfs-cms-block-id'] ?? null,
+                'block_type' => $attrs['sfs-cms-block-type'] ?? null,
+                'url' => $attrs['href'] ?? null,
+                'section_id' => $attrs['sfs-cms-section-id'] ?? null,
+                'block_config' => isset($attrs['sfs-cms-block-type']) ? $this->cmsConfig->getBlock($attrs['sfs-cms-block-type'], false) : null,
+                'menu_config' => isset($attrs['sfs-cms-menu-type']) ? $this->cmsConfig->getMenu($attrs['sfs-cms-menu-type'], false) : null,
+            ];
+
+            if (isset($attrs['sfs-cms-section-id'])) {
+                $section = $this->sectionManager?->getRepository()->findOneById($attrs['sfs-cms-section-id']);
+                $processed['section_name'] = $section?->getName() ?? 'unknown';
+            }
+
             $ajaxCalls[] = [
-                'processed' => [
-                    'type' => $attrs['sfs-cms-ajax'] ?? 'unknown',
-                    'block_id' => $attrs['sfs-cms-block-id'] ?? null,
-                    'block_type' => $attrs['sfs-cms-block-type'] ?? null,
-                    'url' => $attrs['href'] ?? null,
-                    'section_id' => $attrs['sfs-cms-section-id'] ?? null,
-                    'block_config' => isset($attrs['sfs-cms-block-type']) ? $this->cmsConfig->getBlock($attrs['sfs-cms-block-type'], false) : null,
-                    'menu_config' => isset($attrs['sfs-cms-menu-type']) ? $this->cmsConfig->getMenu($attrs['sfs-cms-menu-type'], false) : null,
-                ],
+                'processed' => $processed,
             ];
         }
 
