@@ -1,7 +1,7 @@
 {
     "name": "@softspring/cms-bundle",
     "license": "MIT",
-    "version": "5.3.0-dev",
+    "version": "6.0.0-dev",
     "dependencies": {
         "bootstrap": "^5.1.1",
         "bootstrap-icons": "^1.11.2",
