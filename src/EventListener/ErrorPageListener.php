@@ -91,9 +91,9 @@ class ErrorPageListener implements EventSubscriberInterface
             try {
                 if (str_ends_with($template, '.twig')) {
                     return $this->twig->render($template, ['locale' => $locale]);
-                } else {
-                    return file_get_contents($template);
                 }
+
+                return file_get_contents($template);
             } catch (Exception $e) {
                 // do not throw any exception, try render next template
                 $this->logger && $this->logger->error(sprintf('ERROR RENDERING ERROR PAGE (%s): %s', $template, $e->getMessage()));

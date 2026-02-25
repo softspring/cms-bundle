@@ -75,9 +75,9 @@ class ModuleRenderer
 
         if ($this->isContainer($moduleConfig)) {
             return $this->renderContainerModule($moduleData, $moduleConfig, $profilerDebugCollectorData, $twigAdditionalContext, $renderErrorList);
-        } else {
-            return $this->renderNoContainerModule($moduleData, $moduleConfig, $profilerDebugCollectorData, $twigAdditionalContext, $renderErrorList);
         }
+
+        return $this->renderNoContainerModule($moduleData, $moduleConfig, $profilerDebugCollectorData, $twigAdditionalContext, $renderErrorList);
     }
 
     /**
