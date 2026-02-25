@@ -32,11 +32,12 @@
         "symfony/uid": "^6.4|^7.4|^8.0",
         "symfony/validator": "^6.4|^7.4|^8.0",
         "symfony/yaml": "^6.4|^7.4|^8.0",
-        "twig/twig": "^2.10|^3.0"
+        "twig/twig": "^3.4"
     },
     "require-dev": {
         "doctrine/data-fixtures": "^1.6 || ^2.0",
         "doctrine/doctrine-fixtures-bundle": "^4.2",
+        "ergebnis/composer-normalize": "^2.50",
         "friendsofphp/php-cs-fixer": "^3.89",
         "google/cloud-storage": "^1.30",
         "phpstan/phpstan": "^2.1",
@@ -65,7 +66,10 @@
         }
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true
+        }
     },
     "suggest": {
         "softspring/cms-blog-plugin": "Provides a blog for the CMS",
@@ -73,5 +77,30 @@
         "softspring/cms-translations-plugin": "Provides translations for the CMS",
         "softspring/cms-sylius-bundle": "Provides a Sylius integration for the CMS",
         "softspring/cms-module-coolection": "Provides a module collection for the CMS"
+    },
+    "scripts": {
+        "fix": [
+            "vendor/bin/rector process src tests",
+            "vendor/bin/php-cs-fixer fix --diff",
+            "composer normalize"
+        ],
+        "run-tests" : [
+            "composer validate --strict --no-check-lock --ansi",
+            "XDEBUG_MODE=coverage vendor/bin/phpunit",
+            "vendor/bin/rector process src tests --dry-run",
+            "vendor/bin/phpstan analyse src tests --level 5",
+            "vendor/bin/php-cs-fixer fix --dry-run --diff",
+            "vendor/bin/yaml-lint .github/ -vvv --parse-tags",
+            "vendor/bin/yaml-lint config/ -vvv --parse-tags",
+            "vendor/bin/yaml-lint translations/ -vvv --parse-tags"
+        ],
+        "test": [
+            "composer update --no-scripts --ansi",
+            "@run-tests"
+        ],
+        "test-bc": [
+            "composer update --no-scripts --ansi --prefer-lowest --prefer-stable",
+            "@run-tests"
+        ]
     }
 }
