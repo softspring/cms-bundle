@@ -67,7 +67,7 @@ class ContentVersionTransformer extends AbstractContentDataTransformer implement
         $contentVersion = $this->getContentVersion($entity);
 
         if ($contentVersion->getData()) {
-            $contentVersion->_setDataCallback(function ($data) use ($em) {
+            $contentVersion->_setDataCallback(function (array $data) use ($em): array {
                 foreach ($data as $layout => $modules) {
                     $this->untransformLayout($layout, $modules, $data, $em);
                 }

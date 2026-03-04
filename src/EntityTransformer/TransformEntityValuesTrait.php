@@ -19,7 +19,7 @@ trait TransformEntityValuesTrait
 
             if (($value['type'] ?? false) == 'route' && !empty($value['route_name'])) {
                 $route = $objectManager->getRepository(RouteInterface::class)->findOneBy(['id' => $value['route_name']]);
-                if ($route) {
+                if ($route instanceof RouteInterface) {
                     $entities[] = $route;
                 }
             }
@@ -55,10 +55,9 @@ trait TransformEntityValuesTrait
             } elseif (isset($value['_trans_id']) && isset($value['_default']) && (isset($value[$value['_default']]) && is_string($value[$value['_default']]) || is_null($value[$value['_default']] ?? null))) {
                 // if we are sure that this is a translation, we can create a new Translation object
                 return Translation::createFromArray($value);
-            } else {
-                foreach ($value as $key => $value2) {
-                    $value[$key] = $this->untransformEntityValues($value2, $objectManager);
-                }
+            }
+            foreach ($value as $key => $value2) {
+                $value[$key] = $this->untransformEntityValues($value2, $objectManager);
             }
         }
 

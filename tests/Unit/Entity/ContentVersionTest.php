@@ -105,7 +105,7 @@ class ContentVersionTest extends TestCase
         $version->setData(['test' => 'test']);
         $this->assertEquals(['test' => 'test'], $version->getData());
 
-        $version->_setDataCallback(function ($data) {
+        $version->_setDataCallback(function (array $data): array {
             $data['test'] = 'test2';
             return $data;
         });

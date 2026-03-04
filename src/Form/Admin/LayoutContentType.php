@@ -37,7 +37,7 @@ class LayoutContentType extends AbstractType
                 'label' => "{$options['layout']}.$containerId.container_title",
                 'translation_domain' => 'sfs_cms_layouts',
                 'content_type' => $options['content_type'],
-                'allowed_modules' => !empty($containerConfig['allowed_modules']) ? $containerConfig['allowed_modules'] : null,
+                'allowed_modules' => empty($containerConfig['allowed_modules']) ? null : $containerConfig['allowed_modules'],
                 // random prototype name to allow multiple levels
                 'prototype_name' => '__'.Hash::generate().'__',
                 'module_collection_class' => 'container-fluid',

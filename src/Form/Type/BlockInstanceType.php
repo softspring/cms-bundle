@@ -2,8 +2,10 @@
 
 namespace Softspring\CmsBundle\Form\Type;
 
+use Closure;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Model\BlockInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -41,19 +43,19 @@ class BlockInstanceType extends AbstractType
             'em' => $this->em,
             'required' => false,
             'block_types' => null,
-            'query_builder' => fn (EntityRepository $entityRepository) => $entityRepository->createQueryBuilder('b'),
-            'choice_label' => function (BlockInterface $block) {
+            'query_builder' => fn (EntityRepository $entityRepository): QueryBuilder => $entityRepository->createQueryBuilder('b'),
+            'choice_label' => function (BlockInterface $block): ?string {
                 return $block->getName();
             },
-            'choice_filter' => function (?BlockInterface $block = null) {
+            'choice_filter' => function (?BlockInterface $block = null): true {
                 return true;
             },
-            'choice_attr' => function (?BlockInterface $block) {
+            'choice_attr' => function (?BlockInterface $block): array {
                 $attr = [
                     'data-block-preview' => '',
                 ];
 
-                if ($block) {
+                if ($block instanceof BlockInterface) {
                     $blockConfig = $this->cmsHelper->config()->getBlock($block->getType());
                     $blockConfig['esi'] && $attr['data-block-esi'] = '';
                     $blockConfig['singleton'] && $attr['data-block-singleton'] = '';
@@ -78,20 +80,20 @@ class BlockInstanceType extends AbstractType
             return is_string($value) ? [$value] : $value;
         });
 
-        $resolver->setDefault('query_builder', function (Options $options) {
+        $resolver->setDefault('query_builder', function (Options $options): Closure {
             $blockTypes = $options['block_types'];
 
             if (null === $blockTypes) {
                 $blockTypes = array_keys($this->cmsHelper->config()->getBlocks());
             }
 
-            $blockTypes = array_filter($blockTypes, function ($blockType) {
+            $blockTypes = array_filter($blockTypes, function (string $blockType): bool {
                 $config = $this->cmsHelper->config()->getBlock($blockType);
 
                 return $config && !$config['static'];
             });
 
-            return function (EntityRepository $er) use ($blockTypes) {
+            return function (EntityRepository $er) use ($blockTypes): QueryBuilder {
                 return $er->createQueryBuilder('b')
                     ->orderBy('b.id', 'ASC')
                     ->andWhere('b.type IN (:types)')

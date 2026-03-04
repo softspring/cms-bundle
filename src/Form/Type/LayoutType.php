@@ -28,8 +28,8 @@ class LayoutType extends AbstractType
             'choice_translation_domain' => 'sfs_cms_layouts',
         ]);
 
-        $resolver->setNormalizer('choices', function (OptionsResolver $resolver, $choices) {
-            return array_combine(array_map(fn ($layout) => "$layout.title", $choices), $choices);
+        $resolver->setNormalizer('choices', function (OptionsResolver $resolver, $choices): array {
+            return array_combine(array_map(fn ($layout): string => "$layout.title", $choices), $choices);
         });
     }
 }

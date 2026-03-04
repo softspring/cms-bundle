@@ -40,11 +40,11 @@ class VersionListFilterForm extends PaginatorForm
 
         $resolver->setRequired('content_config');
 
-        $resolver->setNormalizer('label_format', function (Options $options, $value) {
+        $resolver->setNormalizer('label_format', function (Options $options, $value): string {
             return "admin_{$options['content_config']['_id']}.list.filter_form.%name%.label";
         });
 
-        $resolver->addNormalizer('query_builder', function (Options $options, QueryBuilder $qb) {
+        $resolver->addNormalizer('query_builder', function (Options $options, QueryBuilder $qb): QueryBuilder {
             $alias = $qb->getDQLPart('from')[0]->getAlias();
             $qb->andWhere("$alias.content = :content");
             $qb->setParameter('content', $options['content']);

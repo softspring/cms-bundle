@@ -37,7 +37,7 @@ class RoutingHelper
             return $alternates;
         }
 
-        foreach ($path->getRoute()->getSites()->filter(fn ($as) => $as !== $site) as $alternateSite) {
+        foreach ($path->getRoute()->getSites()->filter(fn ($as): bool => $as !== $site) as $alternateSite) {
             $alternates = array_merge($alternates, $this->generateRoutePathAlternatesForSite($alternateSite, $path, $addHrefLang));
         }
 

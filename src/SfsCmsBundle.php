@@ -36,7 +36,7 @@ class SfsCmsBundle extends Bundle
         $container->addCompilerPass(new EsiCacheStrategyPass());
     }
 
-    private function addRegisterMappingsPass(ContainerBuilder $container, array $mappings, $enablingParameter = false): void
+    private function addRegisterMappingsPass(ContainerBuilder $container, array $mappings, string|bool $enablingParameter = false): void
     {
         $container->addCompilerPass(DoctrineOrmMappingsPass::createXmlMappingDriver($mappings, ['sfs_cms.entity_manager_name'], $enablingParameter));
     }

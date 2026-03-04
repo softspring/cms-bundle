@@ -35,7 +35,7 @@ abstract class Route implements RouteInterface
         $this->children = new ArrayCollection();
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return ''.$this->getId();
     }
@@ -89,7 +89,7 @@ abstract class Route implements RouteInterface
 
     public function hasSite(string $site): bool
     {
-        return (bool) $this->getSites()->filter(fn (SiteInterface $routeSite) => "$routeSite" === "$site")->count();
+        return (bool) $this->getSites()->filter(fn (SiteInterface $routeSite): bool => "$routeSite" === "$site")->count();
     }
 
     /**
@@ -122,7 +122,7 @@ abstract class Route implements RouteInterface
 
     public function getPathForLocale(string $locale): ?RoutePathInterface
     {
-        return $this->getPaths()->filter(fn (RoutePathInterface $path) => $path->getLocale() === $locale)->first() ?: null;
+        return $this->getPaths()->filter(fn (RoutePathInterface $path): bool => $path->getLocale() === $locale)->first() ?: null;
     }
 
     public function getContent(): ?ContentInterface

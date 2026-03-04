@@ -21,13 +21,13 @@ class RouterExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('sfs_cms_link_attr', [$this, 'generateLinkAttributes'], ['is_safe' => ['html']]),
-            new TwigFunction('sfs_cms_resolve_request_from_url', [$this->routingHelper, 'resolveRequestFromUrl']),
-            new TwigFunction('sfs_cms_url', [$this->routingHelper, 'generateUrl']),
-            new TwigFunction('sfs_cms_path', [$this->routingHelper, 'generatePath']),
-            new TwigFunction('sfs_cms_route_path_url', [$this->urlGenerator, 'getUrlFixed']), // TODO REVIEW THIS, check if it works with symfony native routes
-            new TwigFunction('sfs_cms_route_path_path', [$this->urlGenerator, 'getPathFixed']), // TODO REVIEW THIS, check if it works with symfony native routes
-            new TwigFunction('sfs_cms_route_attr', [$this->urlGenerator, 'getRouteAttributes'], ['is_safe' => ['html']]),
+            new TwigFunction('sfs_cms_link_attr', $this->generateLinkAttributes(...), ['is_safe' => ['html']]),
+            new TwigFunction('sfs_cms_resolve_request_from_url', $this->routingHelper->resolveRequestFromUrl(...)),
+            new TwigFunction('sfs_cms_url', $this->routingHelper->generateUrl(...)),
+            new TwigFunction('sfs_cms_path', $this->routingHelper->generatePath(...)),
+            new TwigFunction('sfs_cms_route_path_url', $this->urlGenerator->getUrlFixed(...)), // TODO REVIEW THIS, check if it works with symfony native routes
+            new TwigFunction('sfs_cms_route_path_path', $this->urlGenerator->getPathFixed(...)), // TODO REVIEW THIS, check if it works with symfony native routes
+            new TwigFunction('sfs_cms_route_attr', $this->urlGenerator->getRouteAttributes(...), ['is_safe' => ['html']]),
         ];
     }
 
@@ -61,11 +61,7 @@ class RouterExtension extends AbstractExtension
         }
 
         if ('_self' != $linkData['target']) {
-            if ('custom' != $linkData['target']) {
-                $attributes['target'] = $linkData['target'];
-            } else {
-                $attributes['target'] = $linkData['custom_target'];
-            }
+            $attributes['target'] = 'custom' != $linkData['target'] ? $linkData['target'] : $linkData['custom_target'];
         }
 
         foreach ($attributes as $attr => $value) {

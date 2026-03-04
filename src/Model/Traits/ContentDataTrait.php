@@ -28,9 +28,6 @@ trait ContentDataTrait
 
     public function getData(): ?array
     {
-        // next line forces load proxy
-        $data = $this->data;
-
         if ($this->_getDataCallback) {
             $this->_rawData = $this->data;
             $this->data = call_user_func($this->_getDataCallback, $this->data);

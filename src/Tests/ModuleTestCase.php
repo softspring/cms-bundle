@@ -25,6 +25,7 @@ use Softspring\CmsBundle\Utils\DataMigrator;
 use Softspring\Component\DynamicFormType\Form\Extension\DynamicFormExtension;
 use Softspring\Component\DynamicFormType\Form\Resolver\ConstraintResolver;
 use Softspring\Component\DynamicFormType\Form\Resolver\DefaultTypeResolver;
+use Softspring\TranslatableBundle\Form\Extension\TranslationExtension;
 use Softspring\TranslatableBundle\Form\Type\TranslatableType as BaseTranslatableType;
 use Softspring\TranslatableBundle\Form\Type\TranslationType as BaseTranslationType;
 use Symfony\Component\Config\Definition\Processor;
@@ -68,12 +69,12 @@ abstract class ModuleTestCase extends TypeTestCase
 
         $cmsHelper = $this->createMock(CmsHelper::class);
 
-        $trabnslatableContext = new TranslatableContext($this->enabledLocales, $this->defaultLocale);
+        $translatableContext = new TranslatableContext($this->enabledLocales, $this->defaultLocale);
 
         $preloadedFormTypes = [];
         $preloadedFormTypes[] = new DynamicFormModuleType($cmsHelper);
-        $preloadedFormTypes[] = new TranslatableType($trabnslatableContext);
-        $preloadedFormTypes[] = new TranslationType($trabnslatableContext);
+        $preloadedFormTypes[] = new TranslatableType($translatableContext);
+        $preloadedFormTypes[] = new TranslationType($translatableContext);
         $preloadedFormTypes[] = new BaseTranslatableType(null, null);
         $preloadedFormTypes[] = new BaseTranslationType();
         $preloadedFormTypes[] = new SymfonyRouteType($router, $routeManager, []);
@@ -83,7 +84,9 @@ abstract class ModuleTestCase extends TypeTestCase
             $this->getValidatorExtension(),
             new DynamicFormExtension($cmsTypeResolver, new ConstraintResolver()),
             new PreloadedExtension($preloadedFormTypes, [DynamicFormModuleType::class => [new DynamicTypesExtension($cmsTypeResolver)]]),
-        ];
+        ] +
+            (class_exists(TranslationExtension::class) ? [new TranslationExtension($router, false)] : [])
+        ;
     }
 
     protected function getTypeExtensions(): array
@@ -108,7 +111,7 @@ abstract class ModuleTestCase extends TypeTestCase
     {
         $revisions = $this->provideDataForMigrations();
 
-        if (empty($revisions)) {
+        if ([] === $revisions) {
             $this->markTestSkipped('No migrations to test');
         }
 
@@ -236,7 +239,7 @@ abstract class ModuleTestCase extends TypeTestCase
 
     public static function assertRenderText(string $expected, string $render, ?string $cssSelector = null, ?string $xpathSelector = null): void
     {
-        ModuleTestCase::assertRenderCrawler(function (Crawler $crawler) use ($expected, $cssSelector, $xpathSelector) {
+        ModuleTestCase::assertRenderCrawler(function (Crawler $crawler) use ($expected, $cssSelector, $xpathSelector): void {
             if ($cssSelector) {
                 $crawler = $crawler->filter($cssSelector);
             } elseif ($xpathSelector) {

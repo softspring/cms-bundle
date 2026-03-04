@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Test\Unit\Config\Entity;
 
+use ReflectionClass;
 use PHPUnit\Framework\TestCase;
 use Softspring\CmsBundle\Entity\ContentVersion;
 use Softspring\CmsBundle\Entity\Page;
@@ -15,7 +16,7 @@ class PageTest extends TestCase
         $page = new Page();
         $this->assertNull($page->getId());
 
-        $reflection = new \ReflectionClass($page);
+        $reflection = new ReflectionClass($page);
         $property = $reflection->getProperty('id');
         $property->setValue($page, 'test');
         $this->assertEquals('test', $page->getId());

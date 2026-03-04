@@ -20,7 +20,7 @@ class IndexFactory
 
         $sitemaps = [];
 
-        foreach ($siteConfig['sitemaps'] as $sitemapName => $sitemapConfig) {
+        foreach ($siteConfig['sitemaps'] as $sitemapConfig) {
             $sitemaps[] = [
                 'loc' => "$hostAndProtocol/{$sitemapConfig['url']}",
             ];

@@ -45,7 +45,7 @@ class SiteResolverListener implements EventSubscriberInterface
         $request->attributes->set('_sfs_cms_site', $site);
         $request->attributes->set('_sfs_cms_site_host_config', $siteHostConfig);
 
-        if (!$this->originRequest) {
+        if (!$this->originRequest instanceof Request) {
             $this->originRequest = $this->requestStack->getMainRequest();
         }
 

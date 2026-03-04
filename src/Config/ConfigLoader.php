@@ -106,7 +106,7 @@ class ConfigLoader
             $layouts[$layoutName]['_id'] = $layoutName;
         }
 
-        if (empty($layouts)) {
+        if ([] === $layouts) {
             throw new MissingLayoutsException('No CMS layouts are configured. At least one layout is required');
         }
 

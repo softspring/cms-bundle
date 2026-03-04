@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Controller;
 
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -40,7 +41,7 @@ class BlockController extends AbstractController
             if (!$config['static']) {
                 $block = $this->getMoreRestrictiveBlock($this->blockManager->getRepository()->findByType($type));
 
-                if (!$block) {
+                if (!$block instanceof BlockInterface) {
                     $this->cmsLogger && $this->cmsLogger->error(sprintf('CMS missing block %s', $type));
 
                     return new Response();
@@ -56,8 +57,12 @@ class BlockController extends AbstractController
             }
 
             if ('ttl' !== $this->blockCacheType && false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
-                'public' === $config['cache_type'] && $response->setPublic();
-                'private' === $config['cache_type'] && $response->setPrivate();
+                if ('public' === $config['cache_type']) {
+                    $response->setPublic();
+                }
+                if ('private' === $config['cache_type']) {
+                    $response->setPrivate();
+                }
                 $response->setMaxAge($config['cache_ttl']);
             }
 
@@ -132,12 +137,12 @@ ERROR;
     {
         // find more restrictive block
         $getPublishedBlockSecondsFn = function (BlockInterface $block): int {
-            $start = $block->getPublishStartDate() ? $block->getPublishStartDate()->getTimestamp() : 0;
-            $end = $block->getPublishEndDate() ? $block->getPublishEndDate()->getTimestamp() : PHP_INT_MAX;
+            $start = $block->getPublishStartDate() instanceof DateTime ? $block->getPublishStartDate()->getTimestamp() : 0;
+            $end = $block->getPublishEndDate() instanceof DateTime ? $block->getPublishEndDate()->getTimestamp() : PHP_INT_MAX;
 
             return (int) ($end - $start);
         };
-        usort($blocks, function (BlockInterface $block1, BlockInterface $block2) use ($getPublishedBlockSecondsFn) {
+        usort($blocks, function (BlockInterface $block1, BlockInterface $block2) use ($getPublishedBlockSecondsFn): int {
             return $getPublishedBlockSecondsFn($block1) <=> $getPublishedBlockSecondsFn($block2);
         });
 

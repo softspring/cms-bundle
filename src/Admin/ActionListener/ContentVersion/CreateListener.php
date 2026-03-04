@@ -205,7 +205,7 @@ class CreateListener extends AbstractContentVersionListener
     {
         $request = $event->getRequest();
 
-        if (1 == $event->getForm()->getErrors()->count() && '_ok' == $event->getForm()->getErrors()[0]->getOrigin()->getName()) {
+        if (1 === $event->getForm()->getErrors()->count() && '_ok' === $event->getForm()->getErrors()[0]->getOrigin()->getName()) {
             return;
         }
 

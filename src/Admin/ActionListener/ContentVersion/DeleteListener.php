@@ -97,7 +97,7 @@ class DeleteListener extends AbstractContentVersionListener
         $content = $deleteVersion->getContent();
 
         if ($deleteVersion->isLastVersion()) {
-            $previousVersion = $content->getVersions()->filter(function (ContentVersionInterface $version) use ($deleteVersion) {
+            $previousVersion = $content->getVersions()->filter(function (ContentVersionInterface $version) use ($deleteVersion): bool {
                 return $version->getId() !== $deleteVersion->getId();
             })->first();
             $content->setLastVersion($previousVersion);

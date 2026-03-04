@@ -67,9 +67,9 @@ class ModuleRenderer
 
         if ($this->isContainer($moduleConfig)) {
             return $this->renderContainerModule($moduleData, $moduleConfig, $profilerDebugCollectorData, $twigAdditionalContext, $renderErrorList);
-        } else {
-            return $this->renderNoContainerModule($moduleData, $moduleConfig, $profilerDebugCollectorData, $twigAdditionalContext, $renderErrorList);
         }
+
+        return $this->renderNoContainerModule($moduleData, $moduleConfig, $profilerDebugCollectorData, $twigAdditionalContext, $renderErrorList);
     }
 
     /**
@@ -122,7 +122,7 @@ class ModuleRenderer
         $renderErrorList && $renderErrorList->pushLocation('modules');
         foreach ($module['modules'] as $i => $submodule) {
             $renderErrorList && $renderErrorList->pushLocation($i);
-            $module['contents'][] = $this->render($submodule, $profilerDebugCollectorData[sizeof($profilerDebugCollectorData) - 1]['modules'], $twigAdditionalContext, $renderErrorList);
+            $module['contents'][] = $this->render($submodule, $profilerDebugCollectorData[count($profilerDebugCollectorData) - 1]['modules'], $twigAdditionalContext, $renderErrorList);
             $renderErrorList && $renderErrorList->popLocation();
         }
         $renderErrorList && $renderErrorList->popLocation();
@@ -134,7 +134,7 @@ class ModuleRenderer
         } catch (Exception $exception) {
             $this->cmsLogger && $this->cmsLogger->error(sprintf('Error rendering %s template: %s', $moduleConfig['render_template'], $exception->getMessage()));
 
-            if (!$renderErrorList) {
+            if (!$renderErrorList instanceof RenderErrorList) {
                 throw new ModuleRenderException($module, $exception);
             }
 
@@ -172,9 +172,9 @@ class ModuleRenderer
         try {
             return $this->twig->render($moduleConfig['render_template'], $twigContext);
         } catch (Exception $exception) {
-            $this->cmsLogger && $this->cmsLogger->error(sprintf('Error rendering %s template: %s %s', $moduleConfig['render_template'], $exception->getMessage(), $renderErrorList ? $renderErrorList->currentLocation() : ''));
+            $this->cmsLogger && $this->cmsLogger->error(sprintf('Error rendering %s template: %s %s', $moduleConfig['render_template'], $exception->getMessage(), $renderErrorList instanceof RenderErrorList ? $renderErrorList->currentLocation() : ''));
 
-            if (!$renderErrorList) {
+            if (!$renderErrorList instanceof RenderErrorList) {
                 throw new ModuleRenderException($moduleData, $exception);
             }
 

@@ -15,7 +15,7 @@ class SiteTest extends TestCase
         $this->expectExceptionMessage('Invalid configuration for path "site": Invalid configuration, either hosts either paths must be set for a valid site');
         $processor = new Processor();
         $configuration = new Site('site_name');
-        $config = $processor->processConfiguration($configuration, ['site' => []]);
+        $processor->processConfiguration($configuration, ['site' => []]);
     }
 
     public function testBasic(): void

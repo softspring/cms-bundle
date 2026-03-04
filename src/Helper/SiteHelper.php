@@ -38,7 +38,7 @@ class SiteHelper
 
         $availableSites = array_values($availableSites);
 
-        usort($availableSites, function (SiteInterface $a, SiteInterface $b) {
+        usort($availableSites, function (SiteInterface $a, SiteInterface $b): int {
             return ($a->getConfig()['extra']['order'] ?? 500) <=> ($b->getConfig()['extra']['order'] ?? 500);
         });
 

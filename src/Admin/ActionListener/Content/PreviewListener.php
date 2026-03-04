@@ -50,7 +50,7 @@ class PreviewListener extends AbstractContentListener
         $event->getData()['enabledLocales'] = $content->getLocales();
 
         if ($event->getRequest()->query->get('version')) {
-            $version = $content->getVersions()->filter(fn (ContentVersionInterface $version) => $version->getId() == $event->getRequest()->query->get('version'))->first();
+            $version = $content->getVersions()->filter(fn (ContentVersionInterface $version): bool => $version->getId() == $event->getRequest()->query->get('version'))->first();
         }
 
         $event->getData()['version'] = $version ?? $content->getLastVersion();

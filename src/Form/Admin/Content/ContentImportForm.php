@@ -20,7 +20,7 @@ class ContentImportForm extends AbstractType implements ContentImportFormInterfa
             'content_config' => null,
         ]);
 
-        $resolver->setNormalizer('label_format', function (Options $options, $value) {
+        $resolver->setNormalizer('label_format', function (Options $options, $value): string {
             return "admin_{$options['content_config']['_id']}.import.form.%name%.label";
         });
     }

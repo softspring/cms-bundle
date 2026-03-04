@@ -31,7 +31,7 @@ class ContentDuplicateForm extends ContentCreateForm
 
         $builder->add('duplicateVersion', EntityType::class, [
             'class' => ContentVersionInterface::class,
-            'choice_label' => function (ContentVersionInterface $version) {
+            'choice_label' => function (ContentVersionInterface $version): string {
                 return 'v'.$version->getVersionNumber().($version->isPublished() ? ' (published)' : '');
             },
             'choices' => $options['origin_content']->getVersions(),

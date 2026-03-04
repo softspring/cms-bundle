@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Data\EntityTransformer;
 
+use DateTime;
 use Softspring\CmsBundle\Data\DataTransformer;
 use Softspring\CmsBundle\Data\Exception\InvalidElementException;
 use Softspring\CmsBundle\Data\Exception\ReferenceNotFoundException;
@@ -47,11 +48,7 @@ abstract class ContentEntityTransformer implements ContentEntityTransformerInter
             return true;
         }
 
-        if ('page' === $type) {
-            return true;
-        }
-
-        return false;
+        return 'page' === $type;
     }
 
     public function export(object $element, &$files = [], ?object $contentVersion = null, ?string $contentType = null): array
@@ -72,7 +69,7 @@ abstract class ContentEntityTransformer implements ContentEntityTransformerInter
 
         $versions = [];
 
-        if ($contentVersion) {
+        if ($contentVersion instanceof ContentVersionInterface) {
             $versions[] = [
                 'seo' => $this->dataTransformer->export($contentVersion->getSeo()),
                 'layout' => $contentVersion->getLayout(),
@@ -81,7 +78,7 @@ abstract class ContentEntityTransformer implements ContentEntityTransformerInter
                 'origin' => $contentVersion->getOrigin(),
                 'origin_description' => $contentVersion->getOriginDescription(),
                 'note' => $contentVersion->getNote(),
-                'created_at' => $contentVersion->getCreatedAt() ? $contentVersion->getCreatedAt()->format('Y-m-d H:i:s') : null,
+                'created_at' => $contentVersion->getCreatedAt() instanceof DateTime ? $contentVersion->getCreatedAt()->format('Y-m-d H:i:s') : null,
                 'meta' => $contentVersion->getMeta(),
             ];
         }
@@ -91,7 +88,7 @@ abstract class ContentEntityTransformer implements ContentEntityTransformerInter
                 'name' => $content->getName(),
                 'default_locale' => $content->getDefaultLocale(),
                 'locales' => $content->getLocales(),
-                'sites' => $content->getSites()->map(fn (SiteInterface $site) => $site->getId())->toArray(),
+                'sites' => $content->getSites()->map(fn (SiteInterface $site): ?string => $site->getId())->toArray(),
                 'extra' => $content->getExtraData(),
                 'indexing' => $content->getIndexing(),
                 'versions' => $versions,

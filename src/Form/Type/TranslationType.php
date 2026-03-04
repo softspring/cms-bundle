@@ -38,7 +38,7 @@ class TranslationType extends AbstractType
             'type' => TextType::class,
         ]);
 
-        $resolver->setNormalizer('type', function ($options, $value) {
+        $resolver->setNormalizer('type', function ($options, string $value): string {
             return $this->getFieldType($value);
         });
     }

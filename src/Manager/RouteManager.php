@@ -27,7 +27,9 @@ class RouteManager implements RouteManagerInterface
         /** @var RouteInterface $route */
         $route = new $class();
 
-        $addOnePath && $route->addPath(new RoutePath());
+        if ($addOnePath) {
+            $route->addPath(new RoutePath());
+        }
 
         return $route;
     }
@@ -35,7 +37,7 @@ class RouteManager implements RouteManagerInterface
     public function duplicateEntity(RouteInterface $route, ?ContentInterface $content = null, string $suffix = ''): RouteInterface
     {
         $newRoute = $this->createEntity(false);
-        $newRoute->setId($route->getId().($suffix ? '_'.$suffix : ''));
+        $newRoute->setId($route->getId().('' !== $suffix && '0' !== $suffix ? '_'.$suffix : ''));
         $newRoute->setSymfonyRoute($route->getSymfonyRoute());
         $newRoute->setParent($route->getParent());
         $newRoute->setType($route->getType());

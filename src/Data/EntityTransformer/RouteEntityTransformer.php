@@ -10,6 +10,7 @@ use Softspring\CmsBundle\Data\ReferencesRepository;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Manager\RoutePathManagerInterface;
 use Softspring\CmsBundle\Manager\SiteManagerInterface;
+use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\Utils\Slugger;
@@ -37,11 +38,7 @@ class RouteEntityTransformer implements EntityTransformerInterface
 
     public function supports(string $type, $data = null): bool
     {
-        if ('routes' === $type) {
-            return true;
-        }
-
-        return false;
+        return 'routes' === $type;
     }
 
     public function export(object $element, &$files = []): array
@@ -54,7 +51,7 @@ class RouteEntityTransformer implements EntityTransformerInterface
         $dump = [
             'route' => [
                 'id' => $route->getId(),
-                'sites' => $route->getSites()->map(fn (SiteInterface $site) => $site->getId())->toArray(),
+                'sites' => $route->getSites()->map(fn (SiteInterface $site): ?string => $site->getId())->toArray(),
                 'type' => $route->getType(),
                 'parent' => $route->getParent()?->getId(),
                 'symfony_route' => $route->getSymfonyRoute(),
@@ -65,7 +62,7 @@ class RouteEntityTransformer implements EntityTransformerInterface
             ],
         ];
 
-        if ($route->getContent()) {
+        if ($route->getContent() instanceof ContentInterface) {
             $dump['route']['content'] = Slugger::lowerSlug($route->getContent()->getName());
         }
 

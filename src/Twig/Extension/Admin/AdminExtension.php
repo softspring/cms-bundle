@@ -36,17 +36,17 @@ class AdminExtension extends AbstractExtension implements GlobalsInterface
     public function getFilters(): array
     {
         return [
-            new TwigFilter('sfs_cms_admin_content_url', [$this, 'getContentUrl']),
+            new TwigFilter('sfs_cms_admin_content_url', $this->getContentUrl(...)),
         ];
     }
 
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('sfs_cms_admin_content_url', [$this, 'getContentUrl']),
-            new TwigFunction('sfs_cms_admin_content_menu', [$this, 'getContentMenu']),
-            new TwigFunction('sfs_cms_admin_search_content_esi_calls', [$this, 'searchContentEsiCalls']),
-            new TwigFunction('sfs_cms_admin_search_content_ajax_calls', [$this, 'searchContentAjaxCalls']),
+            new TwigFunction('sfs_cms_admin_content_url', $this->getContentUrl(...)),
+            new TwigFunction('sfs_cms_admin_content_menu', $this->getContentMenu(...)),
+            new TwigFunction('sfs_cms_admin_search_content_esi_calls', $this->searchContentEsiCalls(...)),
+            new TwigFunction('sfs_cms_admin_search_content_ajax_calls', $this->searchContentAjaxCalls(...)),
         ];
     }
 

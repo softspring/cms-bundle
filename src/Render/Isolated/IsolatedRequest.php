@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Render\Isolated;
 
 use BadMethodCallException;
 use Softspring\CmsBundle\Model\ContentInterface;
+use Softspring\CmsBundle\Model\RoutePathInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\Render\Exception\IsolatedEnvironmentException;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,7 +56,7 @@ class IsolatedRequest extends Request
     {
         $isolatedRequest = IsolatedRequest::createIsolated($locale, $site, $preview);
 
-        if ($routePath = $content->getCanonicalRoutePath($locale)) {
+        if (($routePath = $content->getCanonicalRoutePath($locale)) instanceof RoutePathInterface) {
             $isolatedRequest->attributes->set('routePath', $routePath);
             $isolatedRequest->attributes->set('_route', $routePath->getRoute()->getId());
         }
@@ -68,7 +69,7 @@ class IsolatedRequest extends Request
         parent::__construct();
     }
 
-    public function __call($method, $params)
+    public function __call(string $method, array $params)
     {
         if (method_exists($this->inner, $method)) {
             return call_user_func_array([$this->inner, $method], $params);
@@ -77,7 +78,7 @@ class IsolatedRequest extends Request
         throw new BadMethodCallException(sprintf('Method "%s" does not exist in IsolatedRequest.', $method));
     }
 
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
         if (property_exists($this->inner, $name)) {
             return $this->inner->{$name};

@@ -39,7 +39,7 @@ class UrlGenerator
     {
         $route = $routeOrName instanceof RouteInterface ? $routeOrName : $this->getRoute($routeOrName);
 
-        if (!$route) {
+        if (!$route instanceof RouteInterface) {
             if ($onlyChecking) {
                 throw new RouteNotFoundException();
             }
@@ -51,7 +51,7 @@ class UrlGenerator
             return '#';
         }
 
-        $queryString = !empty($routeParams) ? '?'.http_build_query($routeParams) : '';
+        $queryString = [] === $routeParams ? '' : '?'.http_build_query($routeParams);
 
         return $this->getSiteSchemeAndHost($route, $locale, $site).$this->getSiteOrLocalePath($route, $locale, $site).'/'.$this->getRoutePath($route, $locale, $site).$queryString;
     }
@@ -65,7 +65,7 @@ class UrlGenerator
     {
         $route = $routeOrName instanceof RouteInterface ? $routeOrName : $this->getRoute($routeOrName);
 
-        if (!$route) {
+        if (!$route instanceof RouteInterface) {
             if ($onlyChecking) {
                 throw new RouteNotFoundException();
             }
@@ -77,7 +77,7 @@ class UrlGenerator
             return '#';
         }
 
-        $queryString = !empty($routeParams) ? '?'.http_build_query($routeParams) : '';
+        $queryString = [] === $routeParams ? '' : '?'.http_build_query($routeParams);
 
         return $this->getSiteOrLocalePath($route, $locale, $site).'/'.$this->getRoutePath($route, $locale, $site).$queryString;
     }
@@ -113,7 +113,7 @@ class UrlGenerator
     {
         $route = $routeOrName instanceof RouteInterface ? $routeOrName : (is_array($routeOrName) ? $this->getRoute($routeOrName['route_name']) : $this->getRoute($routeOrName, true));
 
-        if (!$route) {
+        if (!$route instanceof RouteInterface) {
             return '';
         }
 
@@ -125,8 +125,8 @@ class UrlGenerator
         $locale = $locale ?: $this->requestStack->getCurrentRequest()->getLocale();
 
         /* @var RoutePathInterface $path */
-        if ($locale) {
-            $path = $route->getPaths()->filter(fn (RoutePathInterface $routePath) => $routePath->getLocale() == $locale)->first();
+        if ('' !== $locale && '0' !== $locale) {
+            $path = $route->getPaths()->filter(fn (RoutePathInterface $routePath): bool => $routePath->getLocale() == $locale)->first();
         } else {
             $path = null;
         }
@@ -217,10 +217,8 @@ class UrlGenerator
             return $site;
         }
 
-        if (is_string($site)) {
-            if ($site = $this->cmsConfig->getSite($site)) {
-                return $site;
-            }
+        if (is_string($site) && $site = $this->cmsConfig->getSite($site)) {
+            return $site;
         }
 
         if ($request && $request->attributes->has('_sfs_cms_site')) {

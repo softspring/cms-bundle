@@ -6,6 +6,7 @@ use Rector\Config\RectorConfig;
 use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\Symfony\Symfony61\Rector\Class_\CommandConfigureToAttributeRector;
+use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromCreateMockAssignRector;
 use Rector\ValueObject\PhpVersion;
 
 return RectorConfig::configure()
@@ -19,8 +20,10 @@ return RectorConfig::configure()
         SetList::DEAD_CODE,
         SetList::TYPE_DECLARATION,
     ])
+    ->withImportNames()
     ->withPhpVersion(PhpVersion::PHP_84)
     ->withComposerBased(symfony: true)
     ->withSkip([
         CommandConfigureToAttributeRector::class,
+        TypedPropertyFromCreateMockAssignRector::class,
     ]);

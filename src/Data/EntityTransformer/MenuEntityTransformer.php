@@ -33,11 +33,7 @@ class MenuEntityTransformer implements EntityTransformerInterface
 
     public function supports(string $type, $data = null): bool
     {
-        if ('menus' === $type) {
-            return true;
-        }
-
-        return false;
+        return 'menus' === $type;
     }
 
     public function export(object $element, &$files = []): array

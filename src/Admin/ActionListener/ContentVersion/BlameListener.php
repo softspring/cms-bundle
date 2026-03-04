@@ -76,8 +76,12 @@ class BlameListener implements EventSubscriberInterface
         $version = $event->getEntity();
 
         // this runs before the version is updated, so we check the value inverted
-        !$version->isKeep() && $this->addHistory($version, 'lock');
-        $version->isKeep() && $this->addHistory($version, 'unlock');
+        if (!$version->isKeep()) {
+            $this->addHistory($version, 'lock');
+        }
+        if ($version->isKeep()) {
+            $this->addHistory($version, 'unlock');
+        }
     }
 
     public function onRecompileVersion(ApplyEvent $event): void

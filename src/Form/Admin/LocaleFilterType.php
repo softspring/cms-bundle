@@ -31,7 +31,7 @@ class LocaleFilterType extends AbstractType
         $resolver->setAllowedTypes('available_locales', ['array']);
 
         $resolver->setNormalizer('choices', function (OptionsResolver $options, $value) {
-            return !empty($value) ? $value : array_combine($options['available_locales'], $options['available_locales']);
+            return empty($value) ? array_combine($options['available_locales'], $options['available_locales']) : $value;
         });
     }
 
@@ -39,7 +39,7 @@ class LocaleFilterType extends AbstractType
     {
         $availableLocales = $options['available_locales'];
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (PreSetDataEvent $event) use ($availableLocales) {
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (PreSetDataEvent $event) use ($availableLocales): void {
             $data = $event->getData();
 
             $initialValue = array_combine($availableLocales, array_fill(0, count($availableLocales), true));

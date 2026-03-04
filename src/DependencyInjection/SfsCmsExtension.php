@@ -43,7 +43,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         // prepend default bundle collection
         array_unshift($config['collections'], 'vendor/softspring/cms-bundle/cms');
         // append (last to override anything) the project collection
-        array_push($config['collections'], 'cms');
+        $config['collections'][] = 'cms';
         $container->setParameter('sfs_cms.collections', $config['collections']);
 
         if ($container->hasParameter('sfs_cms.config_extensions')) {
