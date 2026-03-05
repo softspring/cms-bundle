@@ -7,6 +7,7 @@ use Softspring\CmsBundle\Routing\UrlGenerator;
 use Softspring\TranslatableBundle\Model\Translation;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Twig\DeprecatedCallableInfo;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -27,7 +28,7 @@ class TranslateExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('sfs_cms_trans', $this->translate(...), ['is_safe' => ['html'], 'deprecated' => true]),
+            new TwigFilter('sfs_cms_trans', $this->translate(...), ['is_safe' => ['html'],     'deprecation_info' => new DeprecatedCallableInfo('softspring/cms-bundle', '5.5')]),
         ];
     }
 
