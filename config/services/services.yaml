@@ -136,10 +136,6 @@ services:
         resource: '../../src/Security/Voter/*'
         tags: [ 'security.voter' ]
 
-    Softspring\CmsBundle\Security\Voter\DeprecatedPermissionVoter:
-        tags:
-            - { name: security.voter, priority: 1000 }
-
     Softspring\CmsBundle\Form\Resolver\AppTypeResolver:
         tags: [ { name: 'softspring.dynamic_form_type.type_resolver', priority: 100 } ]
 
