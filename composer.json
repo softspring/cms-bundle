@@ -11,6 +11,8 @@
         "doctrine/collections": "^1.8 || ^2.0",
         "doctrine/doctrine-bundle": "^2.10 || ^3.0 || ^4.0",
         "doctrine/migrations": "^3.2",
+        "doctrine/data-fixtures": "^1.6 || ^2.0",
+        "doctrine/doctrine-fixtures-bundle": "^4.2",
         "doctrine/orm": "^2.10 || ^3.0 || ^4.0",
         "softspring/components": "^6.0@dev",
         "softspring/crudl-controller": "^6.0@dev",
@@ -33,8 +35,6 @@
         "twig/twig": "^3.4"
     },
     "require-dev": {
-        "doctrine/data-fixtures": "^1.6 || ^2.0",
-        "doctrine/doctrine-fixtures-bundle": "^4.2",
         "ergebnis/composer-normalize": "^2.50",
         "friendsofphp/php-cs-fixer": "^3.94",
         "google/cloud-storage": "^1.20",
