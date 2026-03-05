@@ -2,7 +2,7 @@
 
 namespace Softspring\CmsBundle\Form\Type;
 
-use Softspring\Component\DynamicFormType\Form\DynamicFormType as BaseDynamicFormType;
+use Softspring\Component\DynamicFormType\Form\Type\DynamicFormType as BaseDynamicFormType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
