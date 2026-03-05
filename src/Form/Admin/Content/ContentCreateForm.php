@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Form\Admin\Content;
 
+use Doctrine\ORM\EntityRepository;
 use Softspring\CmsBundle\Form\Admin\Route\RouteCollectionType;
 use Softspring\CmsBundle\Form\Admin\SiteChoiceType;
 use Softspring\CmsBundle\Form\Type\DynamicFormType;
@@ -15,7 +16,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Locales;
-use Doctrine\ORM\EntityRepository;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
