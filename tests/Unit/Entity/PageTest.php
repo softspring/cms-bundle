@@ -69,6 +69,18 @@ class PageTest extends TestCase
         $this->assertCount(0, $page->getRoutes());
     }
 
+    public function testCanonicalPage(): void
+    {
+        $page = new Page();
+        $this->assertNull($page->getCanonicalPage());
+
+        $page->setCanonicalPage($canonicalPage = new Page());
+        $this->assertSame($canonicalPage, $page->getCanonicalPage());
+
+        $page->setCanonicalPage(null);
+        $this->assertNull($page->getCanonicalPage());
+    }
+
     public function testExtraData(): void
     {
         $page = new Page();

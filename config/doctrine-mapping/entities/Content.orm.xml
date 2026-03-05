@@ -50,6 +50,10 @@
             <join-column name="last_version_id" on-delete="SET NULL"/>
         </many-to-one>
 
+        <many-to-one field="canonicalPage" target-entity="Softspring\CmsBundle\Model\ContentInterface" fetch="LAZY">
+            <join-column name="canonical_page_id" on-delete="SET NULL"/>
+        </many-to-one>
+
         <one-to-many field="routes" target-entity="Softspring\CmsBundle\Model\RouteInterface" mapped-by="content">
             <cache usage="NONSTRICT_READ_WRITE" />
             <cascade>

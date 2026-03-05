@@ -7,6 +7,7 @@ use Softspring\CmsBundle\Form\Admin\SiteChoiceType;
 use Softspring\CmsBundle\Form\Type\DynamicFormType;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Translator\TranslatableContext;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -14,6 +15,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Locales;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -72,6 +74,15 @@ class ContentCreateForm extends AbstractType implements ContentCreateFormInterfa
         $builder->add('sites', SiteChoiceType::class, [
             'content' => $options['content_config'],
             'by_reference' => false,
+        ]);
+
+        $builder->add('canonicalPage', EntityType::class, [
+            'class' => $options['content_config']['entity_class'],
+            'required' => false,
+            'choice_label' => 'name',
+            'placeholder' => "admin_{$options['content_config']['_id']}.form.canonicalPage.placeholder",
+            'help' => "admin_{$options['content_config']['_id']}.form.canonicalPage.help",
+            'query_builder' => fn (EntityRepository $repository) => $repository->createQueryBuilder('c')->orderBy('c.name', 'ASC'),
         ]);
 
         if (!empty($options['content_config']['extra_fields'])) {

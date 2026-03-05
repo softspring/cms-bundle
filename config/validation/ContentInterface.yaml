@@ -5,3 +5,7 @@ Softspring\CmsBundle\Model\ContentInterface:
     getters:
         routes:
             - Valid: ~
+        canonicalPage:
+            -   Symfony\Component\Validator\Constraints\Expression:
+                    expression: "this.getCanonicalPage() == null or this.getCanonicalPage() != this"
+                    message: "Canonical page cannot reference itself"

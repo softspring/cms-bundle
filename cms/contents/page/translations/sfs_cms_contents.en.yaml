@@ -105,6 +105,9 @@ admin_page:
                 no: "no"
                 yes: "yes"
             edit.link: "Edit"
+        canonicalPage:
+            label: "Canonical URL source"
+            empty: "This page is canonical to itself"
         routes:
             title: "Routes"
             cache: "(cache %ttl% seconds)"
@@ -307,6 +310,10 @@ admin_page:
                     yearly: "yearly"
                     never: "never"
             sitemapPriority.label: "URL priority for sitemap"
+        canonicalPage:
+            label: "Canonical URL source"
+            placeholder: "Use this page as canonical (default)"
+            help: "If selected, this page will output a canonical URL pointing to the selected page."
         seo:
             metaTitle.label: "Title (browser title and meta tags)"
             metaDescription.label: "Description (meta tag)"

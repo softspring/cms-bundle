@@ -21,6 +21,10 @@
     <meta property="og:title" content="{{ version.seo.metaTitle|default|sfs_cms_trans }}">
     <meta property="og:description" content="{{ version.seo.metaDescription|default|sfs_cms_trans }}">
     <meta property="og:locale" content="{{ app.request.locale }}">
+    {% set canonicalUrl = sfs_cms_canonical_url() %}
+    {% if canonicalUrl %}
+        <link rel="canonical" href="{{ canonicalUrl }}" />
+    {% endif %}
     {% for locale, url in sfs_cms_alternate_urls() %}
         <link rel="alternate" hreflang="{{ locale }}" href="{{ url }}" />
     {% endfor %}

@@ -105,6 +105,9 @@ admin_page:
                 no: "no"
                 yes: "sí"
             edit.link: "Editar"
+        canonicalPage:
+            label: "Fuente de URL canónica"
+            empty: "Esta página es canónica de sí misma"
         routes:
             title: "Rutas"
             cache: "(cache %ttl% segundos)"
@@ -307,6 +310,10 @@ admin_page:
                     yearly: "anualmente"
                     never: "nunca"
             sitemapPriority.label: "Prioridad de URL en el sitemap"
+        canonicalPage:
+            label: "Fuente de URL canónica"
+            placeholder: "Usar esta página como canónica (por defecto)"
+            help: "Si se selecciona, esta página generará la URL canónica apuntando a la página seleccionada."
         seo:
             metaTitle.label: "Título (título del navegador y etiquetas meta)"
             metaDescription.label: "Descripción (etiqueta meta)"

@@ -83,6 +83,7 @@ class ContentManager implements ContentManagerInterface
         $newContent->setName($content->getName().' (copy)');
         $newContent->setExtraData($content->getExtraData());
         $newContent->setIndexing($content->getIndexing());
+        $newContent->setCanonicalPage($content->getCanonicalPage());
         $newContent->setDefaultLocale($content->getDefaultLocale());
         $newContent->setLocales($content->getLocales());
         foreach ($content->getSites() as $site) {

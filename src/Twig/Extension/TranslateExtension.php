@@ -40,6 +40,7 @@ class TranslateExtension extends AbstractExtension
             new TwigFunction('sfs_cms_available_locales', [$this, 'getAvailableLocales']),
             new TwigFunction('sfs_cms_alternate_urls', [$this, 'getAlternateUrls']),
             new TwigFunction('sfs_cms_locale_paths', [$this, 'getLocalePaths']),
+            new TwigFunction('sfs_cms_canonical_url', [$this, 'getCanonicalUrl']),
         ];
     }
 
@@ -159,5 +160,35 @@ class TranslateExtension extends AbstractExtension
         }
 
         return $localePaths;
+    }
+
+    public function getCanonicalUrl(): ?string
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        if (!$request) {
+            return null;
+        }
+
+        $site = $request->attributes->get('_sfs_cms_site');
+        $locale = $request->getLocale();
+
+        /** @var ?RoutePathInterface $routePath */
+        $routePath = $request->attributes->get('routePath');
+        if (!$routePath) {
+            return null;
+        }
+
+        $content = $routePath->getRoute()->getContent();
+        $canonicalPage = $content?->getCanonicalPage();
+
+        if ($canonicalPage) {
+            $canonicalRoutePath = $canonicalPage->getCanonicalRoutePath($locale) ?: $canonicalPage->getCanonicalRoutePath($canonicalPage->getDefaultLocale());
+
+            if ($canonicalRoutePath) {
+                return $this->cmsUrlGenerator->getUrlFixed($canonicalRoutePath, $site);
+            }
+        }
+
+        return $this->cmsUrlGenerator->getUrlFixed($routePath, $site);
     }
 }
