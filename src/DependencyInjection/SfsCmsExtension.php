@@ -137,6 +137,12 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         if (class_exists(MakerBundle::class)) {
             $loader->load('makers.yaml');
         }
+
+        if (!$container->hasParameter('sfs_cms.registered_plugins')) {
+            $container->setParameter('sfs_cms.registered_plugins', []);
+        }
+
+        $container->setParameter('sfs_cms.admin', true);
     }
 
     protected function processDataClasses(ContainerBuilder $container): void
