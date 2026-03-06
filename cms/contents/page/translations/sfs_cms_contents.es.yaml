@@ -47,7 +47,7 @@ admin_page:
         confirm_message_raw: "<p>¿Estás seguro de publicar esta versión?</p>"
         with_errors_confirm_message_raw: "<p>¿Estás seguro de publicar esta versión?</p><p>La versión tiene errores, puede que no se vea correctamente</p>"
 
-    unpublish:
+    version_unpublish:
         has_been_unpublished_flash: "La página se ha despublicado"
         confirm_message_title: "Despublicar página"
         confirm_message_raw: "<p>¿Estás seguro de despublicar esta página?</p><p>Mostrará un error 404 a los usuarios</p>"
@@ -80,7 +80,7 @@ admin_page:
         title: "%name%"
         breadcrumb: "%name%"
         actions:
-            unpublish:
+            version_unpublish:
                 confirm: "¿estás seguro de despublicar esta página?"
                 link: "Despublicar"
         name: "Nombre"
@@ -397,7 +397,7 @@ admin_page:
             delete.button: "Eliminar definitivamente"
             cancel.button: "Cancelar"
         success_flash: "La versión se ha eliminado"
-    
+
     diff:
         title: "Diferencias entre versiones"
         breadcrumb: "Diferencias entre versiones"

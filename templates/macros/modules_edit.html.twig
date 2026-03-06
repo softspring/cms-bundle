@@ -60,7 +60,7 @@
 {%- endmacro -%}
 
 {%- macro link_content (formField, locale = null, contentEditable = true, placeholderTransKey = null, hideIfEmpty = false, fill = false, wysiwyg = null) -%}
-    {% set module_name = _self._module_name(formField) %}
+    {% set module_name = _self._module_name(formField)|trim %}
     {{ _self._update_link_value(formField, 'data-edit-content-input') }}
 
     {% if locale == null and formField.vars.attr['data-input-lang']|default(false) %}
