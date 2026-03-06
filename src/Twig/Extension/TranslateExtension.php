@@ -28,7 +28,9 @@ class TranslateExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('sfs_cms_trans', $this->translate(...), ['is_safe' => ['html'],     'deprecation_info' => new DeprecatedCallableInfo('softspring/cms-bundle', '5.5')]),
+            new TwigFilter('sfs_cms_trans', $this->translate(...), array_merge(['is_safe' => ['html']],
+                class_exists(DeprecatedCallableInfo::class) ? ['deprecation_info' => new DeprecatedCallableInfo('softspring/cms-bundle', '5.5')] : ['deprecated' => true]
+            )),
         ];
     }
 

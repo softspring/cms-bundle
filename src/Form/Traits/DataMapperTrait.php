@@ -92,7 +92,7 @@ trait DataMapperTrait
         $toRevision = $form->getConfig()->getOption('module_revision');
         $migrationScripts = $form->getConfig()->getOption('module_migrations');
 
-        if ($migrationScripts === null) {
+        if (null === $migrationScripts) {
             return $data;
         }
 
