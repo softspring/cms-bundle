@@ -9,6 +9,7 @@ use Softspring\CmsBundle\DependencyInjection\Compiler\AliasDoctrineEntityManager
 use Softspring\CmsBundle\DependencyInjection\Compiler\EsiCacheStrategyPass;
 use Softspring\CmsBundle\DependencyInjection\Compiler\InjectWebDebugToolbarListenerPass;
 use Softspring\CmsBundle\DependencyInjection\Compiler\ResolveDoctrineTargetEntityPass;
+use Softspring\CmsBundle\DependencyInjection\Compiler\SortTwigNamespaceTemplatesPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -34,6 +35,7 @@ class SfsCmsBundle extends Bundle
         $container->addCompilerPass(new AddTwigNamespacesPass());
         $container->addCompilerPass(new AddCollectionTranslationsPass());
         $container->addCompilerPass(new EsiCacheStrategyPass());
+        $container->addCompilerPass(new SortTwigNamespaceTemplatesPass(), priority: -100);
     }
 
     private function addRegisterMappingsPass(ContainerBuilder $container, array $mappings, string|bool $enablingParameter = false): void
