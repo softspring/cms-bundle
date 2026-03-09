@@ -48,7 +48,7 @@ class UrlGenerator
         }
 
         if ($route->getContent() && !$route->getContent()->getPublishedVersion()) {
-            return '#';
+            return '#not-published';
         }
 
         $queryString = !empty($routeParams) ? '?'.http_build_query($routeParams) : '';

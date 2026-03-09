@@ -13,5 +13,14 @@ return static function (array $seo, int $originVersion, int $targetVersion): arr
         }
     }
 
+    // canonicalContent became translatable in revision 3.
+    // Migrate previous scalar/entity value to a translatable structure.
+    if ($originVersion < 3 && $targetVersion >= 3 && isset($seo['canonicalContent']) && !is_array($seo['canonicalContent'])) {
+        $seo['canonicalContent'] = \Softspring\TranslatableBundle\Model\Translation::createFromArray([
+            'en' => $seo['canonicalContent'],
+            '_default' => 'en',
+        ]);
+    }
+
     return $seo;
 };
