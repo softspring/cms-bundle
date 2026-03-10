@@ -94,7 +94,6 @@ abstract class ContentEntityTransformer implements ContentEntityTransformerInter
                 'sites' => $content->getSites()->map(fn (SiteInterface $site) => $site->getId())->toArray(),
                 'extra' => $content->getExtraData(),
                 'indexing' => $content->getIndexing(),
-                'canonical_page' => $content->getCanonicalPage()?->getName(),
                 'versions' => $versions,
             ],
         ];
@@ -138,16 +137,6 @@ abstract class ContentEntityTransformer implements ContentEntityTransformerInter
         $content->setLocales($contentData['locales'] ?? []);
 
         $content->setExtraData($contentData['extra']);
-
-        if (!empty($contentData['canonical_page'])) {
-            try {
-                /** @var ContentInterface $canonicalPage */
-                $canonicalPage = $referencesRepository->getReference('content___'.Slugger::lowerSlug($contentData['canonical_page']), true);
-                $content->setCanonicalPage($canonicalPage);
-            } catch (ReferenceNotFoundException) {
-                // ignore references outside the imported fixture set
-            }
-        }
 
         if (isset($contentData['seo'])) {
             $content->setSeo($contentData['seo']);

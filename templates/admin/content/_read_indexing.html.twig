@@ -38,14 +38,6 @@
                     <span class="badge bg-warning">{{ ('admin_'~content_type~'.read.indexing.sitemap.no')|trans }}</span>
                 {% endif %}
             </dd>
-            <dt class="fw-normal">{{ ('admin_'~content_type~'.read.indexing.canonicalPage.label')|trans }}</dt>
-            <dd class="fw-bold">
-                {% if entity.canonicalPage %}
-                    {{ entity.canonicalPage.name }}
-                {% else %}
-                    {{ ('admin_'~content_type~'.read.indexing.canonicalPage.empty')|trans }}
-                {% endif %}
-            </dd>
         </dl>
     {% endblock %}
 {% endembed %}

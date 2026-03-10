@@ -39,10 +39,6 @@ interface ContentInterface extends VersionableInterface, TranslatableConfigInter
 
     public function removeRoute(RouteInterface $route): void;
 
-    public function getCanonicalPage(): ?ContentInterface;
-
-    public function setCanonicalPage(?ContentInterface $canonicalPage): void;
-
     public function getCanonicalRoutePath(?string $locale = null): ?RoutePathInterface;
 
     public function getExtraData(): ?array;

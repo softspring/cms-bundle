@@ -25,8 +25,6 @@ abstract class Content implements ContentInterface
      */
     protected Collection $routes;
 
-    protected ?ContentInterface $canonicalPage = null;
-
     protected ?RouteInterface $canonical;
 
     protected ?array $extraData = null;
@@ -104,16 +102,6 @@ abstract class Content implements ContentInterface
         if ($this->routes->contains($route)) {
             $this->routes->removeElement($route);
         }
-    }
-
-    public function getCanonicalPage(): ?ContentInterface
-    {
-        return $this->canonicalPage;
-    }
-
-    public function setCanonicalPage(?ContentInterface $canonicalPage): void
-    {
-        $this->canonicalPage = $canonicalPage;
     }
 
     public function getCanonicalRoutePath(?string $locale = null): ?RoutePathInterface
