@@ -38,7 +38,7 @@ class SiteFilterType extends AbstractType
             return empty($value) ? array_combine($options['available_sites'], $options['available_sites']) : $value;
         });
 
-        $resolver->setNormalizer('default_value', function (OptionsResolver $options, $value) {
+        $resolver->setNormalizer('default_value', function (OptionsResolver $options, $value): null {
             // prevents filling with default value from SiteChoiceType when empty value is selected
             return null;
         });

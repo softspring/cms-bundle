@@ -39,7 +39,7 @@ class LocaleFilterType extends AbstractType
     {
         $availableLocales = $options['available_locales'];
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (PreSetDataEvent $event) use ($availableLocales) {
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (PreSetDataEvent $event) use ($availableLocales): void {
             self::onPreSetData($event, $availableLocales);
         });
 
@@ -79,7 +79,7 @@ class LocaleFilterType extends AbstractType
         }
 
         // migrate legacy format to new one
-        $isLegacy = 0 === sizeof($data);
+        $isLegacy = 0 === count($data);
         foreach ($data as $key => $value) {
             if (is_int($key) && is_string($value)) {
                 unset($data[$key]);

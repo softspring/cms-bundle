@@ -27,10 +27,10 @@ class ContentType extends AbstractType
             'class' => ContentInterface::class,
             'em' => $this->sfsContentEm,
             'required' => false,
-            'choice_label' => function (ContentInterface $content) {
+            'choice_label' => function (ContentInterface $content): ?string {
                 return $content->getName();
             },
-            'group_by' => function (ContentInterface $content) {
+            'group_by' => function (ContentInterface $content): string {
                 return $this->translator->trans("{$this->contentManager->getType($content)}.name", [], 'sfs_cms_contents');
             },
         ]);
