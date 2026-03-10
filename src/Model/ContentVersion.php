@@ -19,6 +19,10 @@ abstract class ContentVersion implements ContentVersionInterface
 
     protected ?array $seo = null;
 
+    protected mixed $_getSeoCallback = null;
+
+    protected mixed $_rawSeo = null;
+
     public function getContent(): ?ContentInterface
     {
         return $this->content;
@@ -52,13 +56,29 @@ abstract class ContentVersion implements ContentVersionInterface
         $this->layout = $layout;
     }
 
+    public function _setSeoCallback(callable $getSeoCallback): void
+    {
+        $this->_getSeoCallback = $getSeoCallback;
+    }
+
     public function getSeo(): ?array
     {
+        if ($this->_getSeoCallback) {
+            $this->_rawSeo = $this->seo;
+            $this->seo = call_user_func($this->_getSeoCallback, $this->seo);
+            $this->_getSeoCallback = null;
+        }
+
         return $this->seo;
     }
 
     public function setSeo(?array $seo): void
     {
         $this->seo = $seo;
+    }
+
+    public function getRawSeo(): ?array
+    {
+        return $this->_rawSeo ?? $this->seo;
     }
 }

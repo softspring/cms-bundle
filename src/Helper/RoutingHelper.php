@@ -91,34 +91,43 @@ class RoutingHelper
         return $this->generateUrl($route, $locale, $site, UrlGeneratorInterface::ABSOLUTE_PATH);
     }
 
+    public function generateUrlForContent($content, string $locale, $site = null): string
+    {
+        foreach ($content->getRoutes() as $route) {
+            if ($route->getPathForLocale($locale)) {
+                return $this->generateUrl($route, $locale, $site);
+            }
+        }
+
+        return '#';
+    }
+
     public function generateUrl($route, ?string $locale = null, $site = null, int $referenceType = UrlGeneratorInterface::ABSOLUTE_URL): string
     {
         if (is_null($route)) {
             return '#';
         }
 
+        $params = [];
+        $params['_locale'] = $locale ?: ($this->requestStack->getCurrentRequest()?->getLocale() ?: 'en');
+
+        if ($site) {
+            $params['_site'] = $site;
+        }
+
+        $routeName = $route;
+
         if (is_array($route)) {
             if (is_null($route['route_name'])) {
                 return '#';
             }
 
-            $params = $route['route_params'] ?? [];
-
-            $params['_locale'] = $locale ?: ($this->requestStack->getCurrentRequest()?->getLocale() ?: 'en');
-
-            if ($site) {
-                $params['_site'] = $site;
-            }
-
-            return $this->router->generate($route['route_name'], $params, $referenceType);
+            $params = array_merge($params, $route['route_params'] ?? []);
+            $routeName = $route['route_name'];
         } elseif ($route instanceof RouteInterface) {
-            return $this->router->generate($route->getId(), [], $referenceType);
+            $routeName = $route->getId();
         }
 
-        $params = [
-            '_locale' => $locale ?: ($this->requestStack->getCurrentRequest()?->getLocale() ?: 'en'),
-        ];
-
-        return $this->router->generate($route, $params, $referenceType);
+        return $this->router->generate($routeName, $params, $referenceType);
     }
 }
