@@ -160,4 +160,5 @@ class TranslateExtension extends AbstractExtension
 
         return $localePaths;
     }
+
 }

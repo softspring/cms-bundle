@@ -311,6 +311,9 @@ admin_page:
             metaTitle.label: "Title (browser title and meta tags)"
             metaDescription.label: "Description (meta tag)"
             metaKeywords.label: "Keywords (meta tag)"
+            canonicalContent.label: "Canonical URL source"
+            canonicalContent.placeholder: "Use this page as canonical (default)"
+            canonicalContent.help: "If selected, this page will output a canonical URL pointing to the selected page."
 
     version_form:
         note.label: "Note"

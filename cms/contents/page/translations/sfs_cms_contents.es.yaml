@@ -311,6 +311,9 @@ admin_page:
             metaTitle.label: "Título (título del navegador y etiquetas meta)"
             metaDescription.label: "Descripción (etiqueta meta)"
             metaKeywords.label: "Palabras clave (etiqueta meta)"
+            canonicalContent.label: "Fuente de URL canónica"
+            canonicalContent.placeholder: "Usar esta página como canónica (por defecto)"
+            canonicalContent.help: "Si se selecciona, esta página generará la URL canónica apuntando a la página seleccionada."
 
     version_form:
         note.label: "Nota"
