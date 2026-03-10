@@ -1,19 +1,19 @@
 {
     "name": "softspring/cms-bundle",
     "description": "A cms bundle",
-    "type": "symfony-bundle",
     "license": "AGPL-3.0-or-later",
-    "minimum-stability": "dev",
-    "prefer-stable": true,
+    "type": "symfony-bundle",
     "require": {
-        "php": ">=8.1",
+        "php": ">=8.4",
         "ext-json": "*",
-        "ext-zip": "*",
         "ext-libxml": "*",
-        "doctrine/collections": "^1.8 | ^2.0",
-        "doctrine/doctrine-bundle": "^2.6",
+        "ext-zip": "*",
+        "doctrine/collections": "^1.8 || ^2.0",
+        "doctrine/data-fixtures": "^1.6 || ^2.0",
+        "doctrine/doctrine-bundle": "^2.10 || ^3.0 || ^4.0",
+        "doctrine/doctrine-fixtures-bundle": "^4.2",
         "doctrine/migrations": "^3.2",
-        "doctrine/orm": "^2.14 | ^3.0",
+        "doctrine/orm": "^2.10 || ^3.0 || ^4.0",
         "softspring/components": "^6.0@dev",
         "softspring/crudl-controller": "^6.0@dev",
         "softspring/doctrine-migrations-version-comparator": "^6.0@dev",
@@ -25,32 +25,42 @@
         "softspring/polymorphic-form-type": "^6.0@dev",
         "softspring/translatable-bundle": "^6.0@dev",
         "softspring/twig-extra-bundle": "^6.0@dev",
-        "symfony/config": "^6.4|^7.3",
-        "symfony/intl": "^6.4|^7.3",
-        "symfony/routing": "^6.4|^7.3",
-        "symfony/serializer": "^6.4|^7.3",
-        "symfony/uid": "^6.4|^7.3",
-        "symfony/validator": "^6.4|^7.3",
-        "symfony/yaml": "^6.4|^7.3",
-        "twig/twig": "^2.10|^3.0"
+        "symfony/config": "^6.4 || ^7.4 || ^8.0",
+        "symfony/intl": "^6.4 || ^7.4 || ^8.0",
+        "symfony/routing": "^6.4 || ^7.4 || ^8.0",
+        "symfony/serializer": "^6.4 || ^7.4 || ^8.0",
+        "symfony/uid": "^6.4 || ^7.4 || ^8.0",
+        "symfony/validator": "^6.4 || ^7.4 || ^8.0",
+        "symfony/yaml": "^6.4 || ^7.4 || ^8.0",
+        "twig/twig": "^3.4"
     },
     "require-dev": {
-        "doctrine/data-fixtures": "^1.6 || ^2.0",
-        "doctrine/doctrine-fixtures-bundle": "^4.2",
-        "friendsofphp/php-cs-fixer": "^3.89",
-        "google/cloud-storage": "^1.30",
-        "phpstan/phpstan": "^1.12.3",
-        "phpunit/phpunit": "^12.0",
-        "rector/rector": "^2.2",
-        "sensio/framework-extra-bundle": "^5.4|^6.2",
+        "ergebnis/composer-normalize": "^2.50",
+        "friendsofphp/php-cs-fixer": "^3.94",
+        "google/cloud-storage": "^1.20",
+        "guzzlehttp/guzzle": "^7.8.2",
+        "guzzlehttp/promises": "^2.0",
+        "phpstan/phpstan": "^2.1",
+        "phpunit/phpunit": "^12.5",
+        "rector/rector": "^2.3",
+        "sensio/framework-extra-bundle": "^5.4 || ^6.2",
         "softspring/user-bundle": "^6.0@dev",
-        "symfony/css-selector": "^6.4|^7.3",
-        "symfony/dom-crawler": "^6.4|^7.3",
-        "symfony/form": "^6.4|^7.0",
+        "symfony/css-selector": "^6.4 || ^7.4 || ^8.0",
+        "symfony/dom-crawler": "^6.4 || ^7.4 || ^8.0",
+        "symfony/form": "^6.4 || ^7.4 || ^8.0",
         "symfony/maker-bundle": "^1.38",
-        "symfony/web-profiler-bundle": "^6.4|^7.3",
+        "symfony/web-profiler-bundle": "^6.4 || ^7.4 || ^8.0",
         "symfony/webpack-encore-bundle": "^2.0"
     },
+    "suggest": {
+        "softspring/cms-blog-plugin": "Provides a blog for the CMS",
+        "softspring/cms-module-coolection": "Provides a module collection for the CMS",
+        "softspring/cms-sections-plugin": "Provides editable sections for the CMS",
+        "softspring/cms-sylius-bundle": "Provides a Sylius integration for the CMS",
+        "softspring/cms-translations-plugin": "Provides translations for the CMS"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "Softspring\\CmsBundle\\": "src"
@@ -65,13 +75,39 @@
         }
     },
     "config": {
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true
+        },
         "sort-packages": true
     },
-    "suggest": {
-        "softspring/cms-blog-plugin": "Provides a blog for the CMS",
-        "softspring/cms-sections-plugin": "Provides editable sections for the CMS",
-        "softspring/cms-translations-plugin": "Provides translations for the CMS",
-        "softspring/cms-sylius-bundle": "Provides a Sylius integration for the CMS",
-        "softspring/cms-module-coolection": "Provides a module collection for the CMS"
+    "extra": {
+        "branch-alias": {
+            "dev-6.0": "6.0.x-dev"
+        }
+    },
+    "scripts": {
+        "fix": [
+            "vendor/bin/rector process src tests",
+            "vendor/bin/php-cs-fixer fix",
+            "composer normalize"
+        ],
+        "run-tests": [
+            "composer validate --strict --no-check-lock --ansi",
+            "XDEBUG_MODE=coverage vendor/bin/phpunit",
+            "vendor/bin/rector process src tests --dry-run",
+            "vendor/bin/phpstan analyse src tests --level 5",
+            "vendor/bin/php-cs-fixer fix --dry-run --diff",
+            "vendor/bin/yaml-lint .github/ -vvv --parse-tags",
+            "vendor/bin/yaml-lint config/ -vvv --parse-tags",
+            "vendor/bin/yaml-lint translations/ -vvv --parse-tags"
+        ],
+        "test": [
+            "composer update --no-scripts --ansi",
+            "@run-tests"
+        ],
+        "test-bc": [
+            "composer update --no-scripts --ansi --prefer-lowest --prefer-stable",
+            "@run-tests"
+        ]
     }
 }

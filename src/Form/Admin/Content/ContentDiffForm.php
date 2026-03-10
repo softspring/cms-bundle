@@ -25,7 +25,7 @@ class ContentDiffForm extends AbstractType implements ContentDiffFormInterface
         $resolver->setRequired('content');
         $resolver->setAllowedTypes('content', [ContentInterface::class]);
 
-        $resolver->setNormalizer('label_format', function (Options $options, $value) {
+        $resolver->setNormalizer('label_format', function (Options $options, $value): string {
             return "admin_{$options['content_config']['_id']}.diff.form.%name%.label";
         });
     }
@@ -37,7 +37,7 @@ class ContentDiffForm extends AbstractType implements ContentDiffFormInterface
 
         $versionFieldsOptions = [
             'choices' => $content->getVersions(),
-            'choice_label' => function (VersionInterface $version) {
+            'choice_label' => function (VersionInterface $version): string {
                 return 'v'.$version->getVersionNumber();
             },
             'choice_value' => function (?VersionInterface $version) {

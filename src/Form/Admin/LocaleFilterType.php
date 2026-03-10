@@ -31,7 +31,7 @@ class LocaleFilterType extends AbstractType
         $resolver->setAllowedTypes('available_locales', ['array']);
 
         $resolver->setNormalizer('choices', function (OptionsResolver $options, $value) {
-            return !empty($value) ? $value : array_combine($options['available_locales'], $options['available_locales']);
+            return empty($value) ? array_combine($options['available_locales'], $options['available_locales']) : $value;
         });
     }
 
@@ -39,29 +39,8 @@ class LocaleFilterType extends AbstractType
     {
         $availableLocales = $options['available_locales'];
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (PreSetDataEvent $event) use ($availableLocales) {
-            $data = $event->getData();
-
-            $initialValue = array_combine($availableLocales, array_fill(0, count($availableLocales), true));
-
-            if (null === $data) {
-                $data = $initialValue;
-            }
-
-            foreach ($data as $key => $value) {
-                if (is_int($key) && is_string($value)) {
-                    unset($data[$key]);
-                    $data[$value] = true;
-                }
-            }
-
-            foreach ($availableLocales as $locale) {
-                if (!array_key_exists($locale, $data)) {
-                    $data[$locale] = true;
-                }
-            }
-
-            $event->setData($data);
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (PreSetDataEvent $event) use ($availableLocales): void {
+            self::onPreSetData($event, $availableLocales);
         });
 
         $builder->addModelTransformer(new CallbackTransformer(function ($data) {
@@ -87,5 +66,34 @@ class LocaleFilterType extends AbstractType
 
             return $data;
         }));
+    }
+
+    public static function onPreSetData(PreSetDataEvent $event, array $availableLocales): void
+    {
+        $data = $event->getData();
+
+        $initialValue = array_combine($availableLocales, array_fill(0, count($availableLocales), true));
+
+        if (null === $data) {
+            $data = $initialValue;
+        }
+
+        // migrate legacy format to new one
+        $isLegacy = 0 === count($data);
+        foreach ($data as $key => $value) {
+            if (is_int($key) && is_string($value)) {
+                unset($data[$key]);
+                $data[$value] = true;
+                $isLegacy = true;
+            }
+        }
+
+        foreach ($availableLocales as $locale) {
+            if (!array_key_exists($locale, $data)) {
+                $data[$locale] = !$isLegacy;
+            }
+        }
+
+        $event->setData($data);
     }
 }

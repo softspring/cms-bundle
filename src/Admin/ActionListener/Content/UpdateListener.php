@@ -122,7 +122,7 @@ class UpdateListener extends AbstractContentListener
         $content = $event->getEntity();
 
         $addedLocales = array_diff($content->getLocales(), $this->initialLocales);
-        if (!empty($addedLocales)) {
+        if ([] !== $addedLocales) {
             foreach ($addedLocales as $locale) {
                 $content->addLocale($locale);
             }
@@ -137,14 +137,14 @@ class UpdateListener extends AbstractContentListener
         }
 
         $addedSites = array_diff($content->getSites()->toArray(), $this->initialSites);
-        if (!empty($addedSites)) {
+        if ([] !== $addedSites) {
             foreach ($addedSites as $site) {
                 $content->addSite($site);
             }
 
             $lastVersion = $content->getLastVersion();
             $newVersion = $this->contentManager->createVersion($content, $lastVersion, ContentVersionInterface::ORIGIN_ADD_SITE);
-            $addedSitesNames = array_map(fn (SiteInterface $site) => $site->getId(), $addedSites);
+            $addedSitesNames = array_map(fn (SiteInterface $site): ?string => $site->getId(), $addedSites);
             $newVersion->setOriginDescription('v'.$lastVersion->getVersionNumber().' + '.implode(',', $addedSitesNames));
 
             foreach ($addedSites as $site) {

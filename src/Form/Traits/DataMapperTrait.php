@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\PropertyAccess\Exception\AccessException;
 use Symfony\Component\PropertyAccess\Exception\UninitializedPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyPathInterface;
 
 trait DataMapperTrait
 {
@@ -68,7 +69,7 @@ trait DataMapperTrait
         }
     }
 
-    private function getPropertyValue($data, $propertyPath, FormInterface $form)
+    private function getPropertyValue(object|array $data, string|PropertyPathInterface $propertyPath, FormInterface $form)
     {
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
@@ -90,6 +91,10 @@ trait DataMapperTrait
     {
         $toRevision = $form->getConfig()->getOption('module_revision');
         $migrationScripts = $form->getConfig()->getOption('module_migrations');
+
+        if (null === $migrationScripts) {
+            return $data;
+        }
 
         return DataMigrator::migrate($migrationScripts, $data, $toRevision);
     }

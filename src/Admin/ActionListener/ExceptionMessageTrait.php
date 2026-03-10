@@ -16,13 +16,13 @@ trait ExceptionMessageTrait
     {
         $messages[] = sprintf('<li><strong>%s</strong>: %s</li>', get_class($exception), $exception->getMessage());
 
-        if ($exception->getPrevious()) {
+        if ($exception->getPrevious() instanceof Throwable) {
             $messages = array_merge($messages, $this->extractExceptionMessageEntries($exception->getPrevious()));
         }
 
         if ($exception instanceof RenderErrorException) {
             $messages = array_merge($messages, [
-                '<ul>'.implode('', array_map(function ($error) {
+                '<ul>'.implode('', array_map(function (string $error): string {
                     return sprintf('<li>%s</li>', $error);
                 }, $exception->getRenderErrorList()->getErrorsAsString())).'</ul>',
             ]);

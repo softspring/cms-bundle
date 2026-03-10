@@ -22,11 +22,7 @@ class LayoutHelper
 
         $layouts = $this->cmsConfig->getLayouts();
 
-        if (!empty($contentType['allowed_layouts'])) {
-            $availableLayouts = $contentType['allowed_layouts'];
-        } else {
-            $availableLayouts = array_keys($layouts);
-        }
+        $availableLayouts = empty($contentType['allowed_layouts']) ? array_keys($layouts) : $contentType['allowed_layouts'];
 
         foreach ($layouts as $layoutId => $layoutConfig) {
             if (!empty($layoutConfig['compatible_contents']) && !in_array($contentType['_id'], $layoutConfig['compatible_contents'])) {

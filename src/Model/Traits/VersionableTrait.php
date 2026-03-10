@@ -84,7 +84,7 @@ trait VersionableTrait
 
     public function setLastModified(?DateTime $lastModified): void
     {
-        $this->lastModified = $lastModified ? (int) $lastModified->format('U') : null;
+        $this->lastModified = $lastModified instanceof DateTime ? (int) $lastModified->format('U') : null;
     }
 
     public function getStatus(): string

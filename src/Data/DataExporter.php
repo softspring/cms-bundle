@@ -36,7 +36,9 @@ class DataExporter extends AbstractDataImportExport
 
     public function exportRoute(RouteInterface $route, string $path, array $options = []): string
     {
-        !is_dir("$path/routes") && mkdir("$path/routes", 0755, true);
+        if (!is_dir("$path/routes")) {
+            mkdir("$path/routes", 0755, true);
+        }
 
         $exportFile = YamlContent::save($this->getDataTransformer('routes', $route)->export($route), "$path/routes/{$route->getId()}.yaml");
 
@@ -47,7 +49,9 @@ class DataExporter extends AbstractDataImportExport
 
     public function exportMenu(MenuInterface $menu, string $path, array $options = []): string
     {
-        !is_dir("$path/menus") && mkdir("$path/menus", 0755, true);
+        if (!is_dir("$path/menus")) {
+            mkdir("$path/menus", 0755, true);
+        }
 
         $exportFile = YamlContent::save($this->getDataTransformer('menus', $menu)->export($menu), "$path/menus/".Slugger::lowerSlug($menu->getName()).'.yaml');
 
@@ -58,7 +62,9 @@ class DataExporter extends AbstractDataImportExport
 
     public function exportBlock(BlockInterface $block, string $path, array $options = []): string
     {
-        !is_dir("$path/blocks") && mkdir("$path/blocks", 0755, true);
+        if (!is_dir("$path/blocks")) {
+            mkdir("$path/blocks", 0755, true);
+        }
 
         $exportFile = YamlContent::save($this->getDataTransformer('blocks', $block)->export($block), "$path/blocks/".Slugger::lowerSlug($block->getName()).'.yaml');
 
@@ -71,7 +77,9 @@ class DataExporter extends AbstractDataImportExport
     {
         $contentType = $contentTypeConfig['_id'];
 
-        !is_dir("$path/contents") && mkdir("$path/contents", 0755, true);
+        if (!is_dir("$path/contents")) {
+            mkdir("$path/contents", 0755, true);
+        }
         $file = "$path/contents/".Slugger::lowerSlug($content->getName()).'.yaml';
         $files = [];
         /** @var ContentEntityTransformerInterface $transformer */
@@ -97,12 +105,16 @@ class DataExporter extends AbstractDataImportExport
                     switch ($fileData['@location']) {
                         case 'gcs':
                             $storageClient = new StorageClient();
-                            !is_dir(dirname("$path/$fileName")) && mkdir(dirname("$path/$fileName"), 0755, true);
+                            if (!is_dir(dirname("$path/$fileName"))) {
+                                mkdir(dirname("$path/$fileName"), 0755, true);
+                            }
                             $storageClient->bucket($fileData['bucket'])->object($fileData['object'])->downloadToFile("$path/$fileName");
                             break;
 
                         case 'sfs-media-filesystem':
-                            !is_dir(dirname("$path/$fileName")) && mkdir(dirname("$path/$fileName"), 0755, true);
+                            if (!is_dir(dirname("$path/$fileName"))) {
+                                mkdir(dirname("$path/$fileName"), 0755, true);
+                            }
                             copy($fileData['path'].'/'.$fileData['object'], "$path/$fileName");
                             break;
 

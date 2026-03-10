@@ -67,7 +67,7 @@ class ContentVersionTransformer extends AbstractContentDataTransformer implement
         $contentVersion = $this->getContentVersion($entity);
 
         if ($contentVersion->getData()) {
-            $contentVersion->_setDataCallback(function ($data) use ($em) {
+            $contentVersion->_setDataCallback(function (array $data) use ($em): array {
                 foreach ($data as $layout => $modules) {
                     $this->untransformLayout($layout, $modules, $data, $em);
                 }
@@ -77,14 +77,16 @@ class ContentVersionTransformer extends AbstractContentDataTransformer implement
         }
 
         if ($contentVersion->getSeo()) {
-            $seo = $contentVersion->getSeo();
-
             $config = $this->cmsConfig->getContent($contentVersion->getContent());
-            $seo = DataMigrator::migrate($config['seo_revision_migration_scripts'], $seo, $config['revision'], $this->cmsConfig);
-            foreach ($seo as $field => $value) {
-                $seo[$field] = $this->untransformEntityValues($value, $em);
-            }
-            $contentVersion->setSeo($seo);
+
+            $contentVersion->_setSeoCallback(function (array $seo) use ($em, $config): array {
+                $seo = DataMigrator::migrate($config['seo_revision_migration_scripts'], $seo, $config['revision'], $this->cmsConfig);
+                foreach ($seo as $field => $value) {
+                    $seo[$field] = $this->untransformEntityValues($value, $em);
+                }
+
+                return $seo;
+            });
         }
     }
 

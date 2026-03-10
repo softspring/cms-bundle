@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Form\Admin\Content;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Softspring\CmsBundle\Form\Type\SymfonyRouteType;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
@@ -36,7 +37,7 @@ class ContentDeleteForm extends AbstractType
         $resolver->setRequired('entity');
         $resolver->setAllowedTypes('entity', ContentInterface::class);
 
-        $resolver->setNormalizer('label_format', function (Options $options, $value) {
+        $resolver->setNormalizer('label_format', function (Options $options, $value): string {
             return "admin_{$options['content_config']['_id']}.delete.form.%name%.label";
         });
     }
@@ -52,7 +53,7 @@ class ContentDeleteForm extends AbstractType
                 "admin_{$options['content_config']['_id']}.delete.form.action.options.change" => 'change',
                 "admin_{$options['content_config']['_id']}.delete.form.action.options.redirect" => 'redirect',
             ],
-            'choice_attr' => function ($value) {
+            'choice_attr' => function ($value): array {
                 return [
                     'data-show-fields' => match ($value) {
                         'delete' => '',
@@ -82,15 +83,15 @@ class ContentDeleteForm extends AbstractType
             'class' => ContentInterface::class,
             'required' => false,
             'em' => $this->em,
-            'choice_label' => function (ContentInterface $content) {
+            'choice_label' => function (ContentInterface $content): ?string {
                 return $content->getName();
             },
-            'choice_attr' => function (ContentInterface $content) {
+            'choice_attr' => function (ContentInterface $content): array {
                 return [
-                    'data-site' => implode(',', $content->getSites()->map(fn (SiteInterface $site) => $site->getId())->toArray()),
+                    'data-site' => implode(',', $content->getSites()->map(fn (SiteInterface $site): ?string => $site->getId())->toArray()),
                 ];
             },
-            'query_builder' => function (EntityRepository $entityRepository) use ($options) {
+            'query_builder' => function (EntityRepository $entityRepository) use ($options): QueryBuilder {
                 $qb = $entityRepository->createQueryBuilder('c');
                 $qb->select('c, s');
                 $qb->leftJoin('c.sites', 's');

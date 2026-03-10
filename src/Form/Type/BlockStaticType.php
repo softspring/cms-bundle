@@ -39,13 +39,13 @@ class BlockStaticType extends AbstractType
             'block_types' => null,
             'choice_value' => '_id',
             'choice_translation_domain' => 'sfs_cms_blocks',
-            'choice_label' => function (?object $blockConfig) {
+            'choice_label' => function (?object $blockConfig): string {
                 return $blockConfig->_id ? "admin_{$blockConfig->_id}.name" : '';
             },
-            'choice_filter' => function (?object $blockConfig) {
+            'choice_filter' => function (?object $blockConfig): bool {
                 return $blockConfig && $blockConfig->static;
             },
-            'choice_attr' => function (?object $blockConfig) {
+            'choice_attr' => function (?object $blockConfig): array {
                 $attr = [
                     'data-block-preview' => '',
                 ];
@@ -62,7 +62,7 @@ class BlockStaticType extends AbstractType
                 foreach ($this->cmsHelper->config()->getSites() as $site) {
                     foreach ($this->cmsHelper->locale()->getEnabledLocales() as $locale) {
                         $attr['data-block-preview'] .= '<div data-lang="'.$locale.'" data-site="'.$site.'" class="section-preview"'
-                            .' data-preview-url="'.$this->router->generate('sfs_cms_admin_blocks_render_preview_by_type', ['type' => $blockConfig->_id, '_locale' => $locale, '_sfs_cms_site' => $site]).'"'
+                            .' data-preview-url="'.$this->router->generate('sfs_cms_admin_blocks_render_preview_by_type', ['type' => $blockConfig->_id, '_locale' => $locale, '_sfs_cms_site' => $site->getId()]).'"'
                             .'>BLOCK PREVIEW</div>';
                     }
                 }
@@ -76,7 +76,7 @@ class BlockStaticType extends AbstractType
             return is_string($value) ? [$value] : $value;
         });
 
-        $resolver->setDefault('choices', function (Options $options) {
+        $resolver->setDefault('choices', function (Options $options): array {
             $blockTypes = $this->cmsHelper->config()->getBlocks();
 
             if (null !== $options['block_types']) {
@@ -96,7 +96,7 @@ class BlockStaticType extends AbstractType
         $builder->addModelTransformer(new CallbackTransformer(
             function ($blockAsKey) use ($options): ?object {
                 if ($blockAsKey) {
-                    $filtered = array_filter($options['choices'], fn ($choice) => $choice->_id == $blockAsKey);
+                    $filtered = array_filter($options['choices'], fn ($choice): bool => $choice->_id == $blockAsKey);
                     /** @var false|object $choice */
                     $choice = current($filtered);
 

@@ -20,7 +20,7 @@ class VersionImportForm extends AbstractType implements VersionImportFormInterfa
             'content_config' => null,
         ]);
 
-        $resolver->setNormalizer('label_format', function (Options $options, $value) {
+        $resolver->setNormalizer('label_format', function (Options $options, $value): string {
             return "admin_{$options['content_config']['_id']}.import_version.form.%name%.label";
         });
     }

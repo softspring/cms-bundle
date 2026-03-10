@@ -21,9 +21,18 @@
     <meta property="og:title" content="{{ version.seo.metaTitle|default|sfs_cms_trans }}">
     <meta property="og:description" content="{{ version.seo.metaDescription|default|sfs_cms_trans }}">
     <meta property="og:locale" content="{{ app.request.locale }}">
-    {% for locale, url in sfs_cms_alternate_urls() %}
-        <link rel="alternate" hreflang="{{ locale }}" href="{{ url }}" />
-    {% endfor %}
+    {% set canonical_content = version.seo.canonicalContent|default(null) %}
+    {% if canonical_content is iterable %}
+        {% set canonical_content = canonical_content[app.request.locale]|default(null) %}
+    {% endif %}
+    {% if canonical_content and canonical_content != version.content %}
+        <link rel="canonical" href="{{ sfs_cms_url_for_content(canonical_content, app.request.locale) }}" />
+    {% else %}
+        <link rel="canonical" href="{{ sfs_cms_url_for_content(version.content, app.request.locale) }}" />
+        {% for locale, url in sfs_cms_alternate_urls() %}
+            <link rel="alternate" hreflang="{{ locale }}" href="{{ url }}" />
+        {% endfor %}
+    {% endif %}
 {% endblock seo %}
 
 {% block body %}

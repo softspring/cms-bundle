@@ -7,6 +7,7 @@ use Softspring\CmsBundle\Config\Exception\InvalidContentException;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 class ContentVersionDeleteVoter implements VoterInterface
@@ -18,7 +19,7 @@ class ContentVersionDeleteVoter implements VoterInterface
     /**
      * @throws InvalidContentException
      */
-    public function vote(TokenInterface $token, $subject, array $attributes): int
+    public function vote(TokenInterface $token, $subject, array $attributes, ?Vote $vote = null): int
     {
         // check version
         if (!is_object($subject) || !$subject instanceof ContentVersionInterface) {

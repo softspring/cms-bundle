@@ -58,7 +58,7 @@ class SiteResolver
     {
         $canonicalHost = $site->getCanonicalHost() ?? '';
 
-        if (!$canonicalHost) {
+        if ('' === $canonicalHost || '0' === $canonicalHost) {
             throw new SiteHasNotACanonicalHostException();
         }
 

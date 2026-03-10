@@ -24,7 +24,7 @@ class RouteCollectionType extends AbstractType
         $resolver->setDefaults([
             'entry_type' => RouteCreateForm::class,
             'required' => false,
-            'constraints' => new Count(['min' => 1]),
+            'constraints' => new Count(min: 1),
             'allow_add' => true,
             'allow_delete' => true,
             'by_reference' => false,

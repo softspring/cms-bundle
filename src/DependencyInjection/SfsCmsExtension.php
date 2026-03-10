@@ -18,7 +18,6 @@ use Softspring\CmsBundle\Entity\RoutePath;
 use Softspring\CmsBundle\Entity\Site;
 use Softspring\CmsBundle\Model\BlockInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
-use Softspring\Component\DynamicFormType\SfsDynamicFormTypeBundle;
 use Symfony\Bundle\MakerBundle\MakerBundle;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
@@ -43,7 +42,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         // prepend default bundle collection
         array_unshift($config['collections'], 'vendor/softspring/cms-bundle/cms');
         // append (last to override anything) the project collection
-        array_push($config['collections'], 'cms');
+        $config['collections'][] = 'cms';
         $container->setParameter('sfs_cms.collections', $config['collections']);
 
         if ($container->hasParameter('sfs_cms.config_extensions')) {
@@ -108,10 +107,6 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $adminEnabled && $loader->load('admin_services.yaml');
         $loader->load('entity_transformer.yaml');
 
-        if (!class_exists(SfsDynamicFormTypeBundle::class)) {
-            /* @deprecated This will be removed soon, use SfsDynamicFormTypeBundle instead */
-            $loader->load('dynamic_form_type.yaml');
-        }
         $adminEnabled && $loader->load('controller/admin_blocks.yaml');
         $adminEnabled && $loader->load('controller/admin_content.yaml');
         $adminEnabled && $loader->load('controller/admin_content_version.yaml');
@@ -137,6 +132,12 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         if (class_exists(MakerBundle::class)) {
             $loader->load('makers.yaml');
         }
+
+        if (!$container->hasParameter('sfs_cms.registered_plugins')) {
+            $container->setParameter('sfs_cms.registered_plugins', []);
+        }
+
+        $container->setParameter('sfs_cms.admin', true);
     }
 
     protected function processDataClasses(ContainerBuilder $container): void

@@ -66,7 +66,7 @@ abstract class SfsCmsPlugin extends Bundle
         $container->addCompilerPass(new ResolvePluginDoctrineTargetEntityPass($this->getTargetEntities()));
     }
 
-    protected function addRegisterMappingsPass(ContainerBuilder $container, array $mappings, $enablingParameter = false): void
+    protected function addRegisterMappingsPass(ContainerBuilder $container, array $mappings, string|bool $enablingParameter = false): void
     {
         $container->addCompilerPass(DoctrineOrmMappingsPass::createXmlMappingDriver($mappings, ['sfs_cms.entity_manager_name'], $enablingParameter));
     }
@@ -81,11 +81,7 @@ abstract class SfsCmsPlugin extends Bundle
         if (null === $this->extension) {
             $extension = $this->createContainerExtension();
 
-            if (null !== $extension) {
-                if (!$extension instanceof ExtensionInterface) {
-                    throw new LogicException(sprintf('Extension "%s" must implement Symfony\Component\DependencyInjection\Extension\ExtensionInterface.', get_debug_type($extension)));
-                }
-
+            if ($extension instanceof ExtensionInterface) {
                 // check naming convention
                 $basename = preg_replace('/Plugin$/', '', $this->getName());
                 $expectedAlias = Container::underscore($basename);

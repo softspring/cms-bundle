@@ -13,7 +13,7 @@ class ContentZipFileValidator extends FileValidator
     /**
      * @param UploadedFile|string|null $value
      */
-    public function validate($value, Constraint $constraint): void
+    public function validate(mixed $value, Constraint $constraint): void
     {
         if (!$constraint instanceof ContentZipFile) {
             throw new UnexpectedTypeException($constraint, ContentZipFile::class);
@@ -31,7 +31,7 @@ class ContentZipFileValidator extends FileValidator
 
         $originalName = $value->getClientOriginalName();
         $fields = [];
-        if (!preg_match('/(.*)-(v[0-9]+)-([0-9]{4}-[0-9]{2}-[0-9]{2})-([0-9]{2}-[0-9]{2}-[0-9]{2}).zip$/', $originalName, $fields)) {
+        if (!preg_match('/(.*)-(v\d+)-(\d{4}-\d{2}-\d{2})-(\d{2}-\d{2}-\d{2}).zip$/', $originalName, $fields)) {
             $this->context->buildViolation($constraint->invalidNameFormat)
                 ->setParameter('{{ string }}', $value)
                 ->addViolation();

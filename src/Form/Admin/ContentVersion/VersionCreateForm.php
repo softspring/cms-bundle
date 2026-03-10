@@ -45,7 +45,7 @@ class VersionCreateForm extends AbstractType implements VersionCreateFormInterfa
         $resolver->setRequired('content');
         $resolver->setAllowedTypes('content', [ContentInterface::class]);
 
-        $resolver->setNormalizer('label_format', function (Options $options, $value) {
+        $resolver->setNormalizer('label_format', function (Options $options, $value): string {
             return "admin_{$options['content_type']}.form.%name%.label";
         });
     }

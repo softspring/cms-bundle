@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Form\Admin\Route;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Softspring\CmsBundle\Form\Admin\SiteChoiceType;
 use Softspring\CmsBundle\Form\Type\SymfonyRouteType;
 use Softspring\CmsBundle\Model\ContentInterface;
@@ -40,8 +41,8 @@ abstract class AbstractRouteForm extends AbstractType
             'content_relative' => false,
             'label_format' => 'admin_routes.form.%name%.label',
             'translation_domain' => 'sfs_cms_admin',
-            'constraints' => new Callback(function (RouteInterface $value, ExecutionContextInterface $context, $payload) {
-                if ($value->getContent()) {
+            'constraints' => new Callback(function (RouteInterface $value, ExecutionContextInterface $context, $payload): void {
+                if ($value->getContent() instanceof ContentInterface) {
                     foreach ($value->getSites() as $site) {
                         if (!$value->getContent()->getSites()->contains($site)) {
                             $context->buildViolation('The content must have the same sites as route selected ones')
@@ -71,18 +72,18 @@ abstract class AbstractRouteForm extends AbstractType
             'class' => RouteInterface::class,
             'required' => false,
             'em' => $this->em,
-            'choice_filter' => function (?RouteInterface $parent) {
+            'choice_filter' => function (?RouteInterface $parent): bool {
                 return !$parent || RouteInterface::TYPE_PARENT_ROUTE == $parent->getType();
             },
             'choice_label' => function (RouteInterface $parent) {
                 return $parent->getId();
             },
-            'choice_attr' => function (RouteInterface $parent) {
+            'choice_attr' => function (RouteInterface $parent): array {
                 return [
-                    'data-site' => implode(',', $parent->getSites()->map(fn (SiteInterface $site) => "$site")->toArray()),
+                    'data-site' => implode(',', $parent->getSites()->map(fn (SiteInterface $site): string => "$site")->toArray()),
                 ];
             },
-            'query_builder' => function (EntityRepository $er) {
+            'query_builder' => function (EntityRepository $er): QueryBuilder {
                 return $er->createQueryBuilder('r')
                     ->select('r, s, c')
                     ->leftJoin('r.content', 'c')
@@ -95,7 +96,7 @@ abstract class AbstractRouteForm extends AbstractType
             $builder->add('sites', SiteChoiceType::class, [
                 'by_reference' => false,
                 'expanded' => true,
-                'constraints' => new Length(['min' => 1]),
+                'constraints' => new Length(min: 1),
             ]);
 
             $builder->add('type', ChoiceType::class, [
@@ -107,7 +108,7 @@ abstract class AbstractRouteForm extends AbstractType
                     'admin_routes.form.type.values.redirect_to_url' => RouteInterface::TYPE_REDIRECT_TO_URL,
                     'admin_routes.form.type.values.parent_route' => RouteInterface::TYPE_PARENT_ROUTE,
                 ],
-                'choice_attr' => function ($value) {
+                'choice_attr' => function ($value): array {
                     return [
                         'data-show-fields' => match ($value) {
                             RouteInterface::TYPE_CONTENT => 'content',
@@ -138,18 +139,18 @@ abstract class AbstractRouteForm extends AbstractType
                 'class' => ContentInterface::class,
                 'required' => false,
                 'em' => $this->em,
-                'query_builder' => function (EntityRepository $er) {
+                'query_builder' => function (EntityRepository $er): QueryBuilder {
                     return $er->createQueryBuilder('c')
                         ->select('c, s')
                         ->leftJoin('c.sites', 's')
                         ->orderBy('c.name', 'ASC');
                 },
-                'choice_label' => function (ContentInterface $content) {
+                'choice_label' => function (ContentInterface $content): ?string {
                     return $content->getName();
                 },
-                'choice_attr' => function (ContentInterface $content) {
+                'choice_attr' => function (ContentInterface $content): array {
                     return [
-                        'data-site' => implode(',', $content->getSites()->map(fn (SiteInterface $site) => $site->getId())->toArray()),
+                        'data-site' => implode(',', $content->getSites()->map(fn (SiteInterface $site): ?string => $site->getId())->toArray()),
                     ];
                 },
                 // 'constraints' => new NotBlank(),

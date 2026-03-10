@@ -143,7 +143,7 @@ class Content implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->beforeNormalization()
                         ->always()
-                        ->then(function ($data): array {
+                        ->then(function (array $data): array {
                             $deprecatedOptions = [
                                 'list_is_granted' => 'list.is_granted',
                                 'list_view' => 'list.view',

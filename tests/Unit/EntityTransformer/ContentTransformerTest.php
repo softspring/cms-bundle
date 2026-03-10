@@ -16,20 +16,20 @@ use stdClass;
 
 class ContentTransformerTest extends TestCase
 {
-    protected EntityManager|MockObject $em;
+    protected EntityManager&MockObject $em;
 
-    /** @var ClassMetadata<Route>|MockObject */
-    protected ClassMetadata|MockObject $routeClassMetadata;
+    /** @var ClassMetadata<Route>&MockObject */
+    protected ClassMetadata&MockObject $routeClassMetadata;
 
-    /** @var EntityRepository<Route>|MockObject */
-    protected EntityRepository|MockObject $routeRepository;
+    /** @var EntityRepository<Route>&MockObject */
+    protected EntityRepository&MockObject $routeRepository;
 
     protected function setUp(): void
     {
         $this->em = $this->createMock(EntityManager::class);
 
         $this->routeClassMetadata = $this->createMock(ClassMetadata::class);
-        $this->routeClassMetadata->method('getIdentifierValues')->willReturnCallback(function (Route $route) {
+        $this->routeClassMetadata->method('getIdentifierValues')->willReturnCallback(function (Route $route): array {
             return ['id' => $route->getId()];
         });
         $this->em->method('getClassMetadata')->with(Route::class)->willReturn($this->routeClassMetadata);

@@ -41,7 +41,7 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
     {
         $discriminatorMap = [];
 
-        foreach ($this->cmsConfig->getModules(false) as $moduleId => $config) {
+        foreach (array_keys($this->cmsConfig->getModules(false)) as $moduleId) {
             $discriminatorMap[$moduleId] = 'array';
         }
 
@@ -218,7 +218,7 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
         }
 
         if (!is_null($options['allowed_container_modules'])) {
-            $containerModules = array_keys(array_filter($options['types_map'], fn ($type) => ContainerModuleType::class === $type));
+            $containerModules = array_keys(array_filter($options['types_map'], fn ($type): bool => ContainerModuleType::class === $type));
             $disallowedModules = array_diff($containerModules, $options['allowed_container_modules']);
 
             foreach ($disallowedModules as $disallowedModule) {

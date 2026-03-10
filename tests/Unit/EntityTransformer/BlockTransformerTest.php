@@ -2,6 +2,8 @@
 
 namespace Softspring\CmsBundle\Test\Unit\Config\EntityTransformer;
 
+use stdClass;
+use ReflectionClass;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
@@ -15,21 +17,21 @@ use Softspring\CmsBundle\EntityTransformer\UnsupportedException;
 
 class BlockTransformerTest extends TestCase
 {
-    protected EntityManager|MockObject $em;
+    protected EntityManager&MockObject $em;
 
-    /** @var ClassMetadata<Route>|MockObject */
-    protected ClassMetadata|MockObject $routeClassMetadata;
+    /** @var ClassMetadata<Route>&MockObject */
+    protected ClassMetadata&MockObject $routeClassMetadata;
 
-    /** @var EntityRepository<Route>|MockObject */
-    protected EntityRepository|MockObject $routeRepository;
-    protected CmsConfig|MockObject $cmsConfig;
+    /** @var EntityRepository<Route>&MockObject */
+    protected EntityRepository&MockObject $routeRepository;
+    protected CmsConfig&MockObject $cmsConfig;
 
     protected function setUp(): void
     {
         $this->em = $this->createMock(EntityManager::class);
 
         $this->routeClassMetadata = $this->createMock(ClassMetadata::class);
-        $this->routeClassMetadata->method('getIdentifierValues')->willReturnCallback(function (Route $route) {
+        $this->routeClassMetadata->method('getIdentifierValues')->willReturnCallback(function (Route $route): array {
             return ['id' => $route->getId()];
         });
         $this->em->method('getClassMetadata')->with(Route::class)->willReturn($this->routeClassMetadata);
@@ -45,7 +47,7 @@ class BlockTransformerTest extends TestCase
         $this->expectException(UnsupportedException::class);
 
         $blockTransformer = new BlockTransformer($this->cmsConfig);
-        $blockTransformer->transform(new \stdClass(), $this->em);
+        $blockTransformer->transform(new stdClass(), $this->em);
     }
 
     public function testEmptyData(): void
@@ -64,7 +66,7 @@ class BlockTransformerTest extends TestCase
     public function testTransform(): void
     {
         $route = new Route();
-        (new \ReflectionClass($route))->getProperty('id')->setValue($route, 'route_id');
+        (new ReflectionClass($route))->getProperty('id')->setValue($route, 'route_id');
 
         $block = new Block();
         $block->setType('test');
@@ -110,7 +112,7 @@ class BlockTransformerTest extends TestCase
     public function testUntransform(): void
     {
         $route = new Route();
-        (new \ReflectionClass($route))->getProperty('id')->setValue($route, 'route_id');
+        (new ReflectionClass($route))->getProperty('id')->setValue($route, 'route_id');
 
         $this->routeRepository->method('findOneBy')->willReturn($route);
 

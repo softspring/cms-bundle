@@ -58,12 +58,12 @@ class CmsRouter implements RouterInterface, RequestMatcherInterface, WarmableInt
         }, $parameters);
 
         try {
-            $cleanParams = array_filter($parameters, fn ($key) => !in_array($key, ['_sfs_cms_locale', '_sfs_cms_locale_path']), ARRAY_FILTER_USE_KEY);
+            $cleanParams = array_filter($parameters, fn ($key): bool => !in_array($key, ['_sfs_cms_locale', '_sfs_cms_locale_path']), ARRAY_FILTER_USE_KEY);
 
             // first try to generate with Symfony's route generator
             return $this->staticRouter->generate($name, $cleanParams, $referenceType);
         } catch (RouteNotFoundException $e) {
-            $cleanParams = array_filter($parameters, fn ($key) => !in_array($key, ['_locale', '_site', '_sfs_cms_locale', '_sfs_cms_site', '_sfs_cms_locale_path', 'routePath', '_route_params']), ARRAY_FILTER_USE_KEY);
+            $cleanParams = array_filter($parameters, fn ($key): bool => !in_array($key, ['_locale', '_site', '_sfs_cms_locale', '_sfs_cms_site', '_sfs_cms_locale_path', 'routePath', '_route_params']), ARRAY_FILTER_USE_KEY);
             $locale = $parameters['_locale'] ?? $parameters['_sfs_cms_locale'] ?? null;
             $site = $parameters['_site'] ?? $parameters['_sfs_cms_site'] ?? null;
             $onlyChecking = isset($parameters['__twig_extra_route_defined_check']);
@@ -86,7 +86,7 @@ class CmsRouter implements RouterInterface, RequestMatcherInterface, WarmableInt
                         break;
 
                     default:
-                        throw new Exception('Invalid $referenceType');
+                        throw new Exception('Invalid $referenceType', $e->getCode(), $e);
                 }
 
                 return $url;
@@ -124,7 +124,6 @@ class CmsRouter implements RouterInterface, RequestMatcherInterface, WarmableInt
 
     public function warmUp(string $cacheDir, ?string $buildDir = null): array
     {
-        /* @phpstan-ignore-next-line */
-        return $this->staticRouter->warmUp($cacheDir, $buildDir);
+        return $this->staticRouter->warmUp($cacheDir);
     }
 }

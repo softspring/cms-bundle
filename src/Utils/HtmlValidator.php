@@ -9,7 +9,7 @@ class HtmlValidator
 {
     public static function validateModule(string $html): array
     {
-        if (empty(trim($html))) {
+        if (in_array(trim($html), ['', '0'], true)) {
             return [
                 'status' => 'success',
                 'messages' => [],
@@ -22,7 +22,7 @@ class HtmlValidator
         $errors = libxml_get_errors();
         libxml_clear_errors();
 
-        $errors = array_filter($errors, function (LibXMLError $error) {
+        $errors = array_filter($errors, function (LibXMLError $error): bool {
             // error codes here: https://gnome.pages.gitlab.gnome.org/libxml2/devhelp/libxml2-xmlerror.html
 
             if (801 === $error->code) { // XML_HTML_UNKNOWN_TAG
@@ -41,7 +41,7 @@ class HtmlValidator
             return true;
         });
 
-        $messages = array_map(function (LibXMLError $error) use ($html) {
+        $messages = array_map(function (LibXMLError $error) use ($html): array {
             $lines = explode(PHP_EOL, $html);
             $line = $lines[$error->line - 1] ?? '';
             $line = trim($line);
@@ -52,7 +52,7 @@ class HtmlValidator
             ];
         }, $errors);
 
-        $status = empty($errors) ? 'success' : (count(array_filter($messages, function ($error) {
+        $status = [] === $errors ? 'success' : (count(array_filter($messages, function (array $error): bool {
             return 'error' === $error['type'];
         })) ? 'error' : 'warning');
 

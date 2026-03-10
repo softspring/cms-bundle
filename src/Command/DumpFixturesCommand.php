@@ -39,7 +39,9 @@ class DumpFixturesCommand extends Command
         $output->writeln('Removed fixtures/media files');
         $mediaPath = '/srv/cms/fixtures/media';
         array_map('unlink', glob("$mediaPath/*.*"));
-        is_dir($mediaPath) && rmdir($mediaPath);
+        if (is_dir($mediaPath)) {
+            rmdir($mediaPath);
+        }
 
         $elements = $input->getArgument('elements');
 
@@ -50,17 +52,25 @@ class DumpFixturesCommand extends Command
             return Command::INVALID;
         }
 
-        (!$elements || 'contents' == $elements) && $this->dumpContents($output);
-        (!$elements || 'routes' == $elements) && $this->dumpRoutes($output);
-        (!$elements || 'menus' == $elements) && $this->dumpMenus($output);
-        (!$elements || 'blocks' == $elements) && $this->dumpBlocks($output);
+        if (!$elements || 'contents' == $elements) {
+            $this->dumpContents($output);
+        }
+        if (!$elements || 'routes' == $elements) {
+            $this->dumpRoutes($output);
+        }
+        if (!$elements || 'menus' == $elements) {
+            $this->dumpMenus($output);
+        }
+        if (!$elements || 'blocks' == $elements) {
+            $this->dumpBlocks($output);
+        }
 
         return Command::SUCCESS;
     }
 
     protected function dumpContents(OutputInterface $output)
     {
-        foreach ($this->cmsConfig->getContents() as $contentId => $contentConfig) {
+        foreach ($this->cmsConfig->getContents() as $contentConfig) {
             /** @var ContentInterface $content */
             foreach ($this->em->getRepository($contentConfig['entity_class'])->findAll() as $content) {
                 $this->dataExporter->exportContent($content, $content->getVersions()->first() ?: null, $contentConfig, '/srv/cms/fixtures', ['output' => $output]);

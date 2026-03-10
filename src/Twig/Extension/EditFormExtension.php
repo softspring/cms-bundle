@@ -12,14 +12,14 @@ class EditFormExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('sfs_cms_form_view_set_attr', [$this, 'formViewSetAttr']),
+            new TwigFunction('sfs_cms_form_view_set_attr', $this->formViewSetAttr(...)),
         ];
     }
 
     public function getFilters(): array
     {
         return [
-            new TwigFilter('sfs_cms_sha1', [$this, 'sha1']),
+            new TwigFilter('sfs_cms_sha1', $this->sha1(...)),
         ];
     }
 

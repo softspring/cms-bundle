@@ -16,9 +16,9 @@ use Twig\Environment;
 
 class ModuleRendererTest extends TestCase
 {
-    protected CmsConfig|MockObject $cmsConfig;
-    protected RequestStack|MockObject $requestStack;
-    protected Environment|MockObject $twig;
+    protected CmsConfig&MockObject $cmsConfig;
+    protected RequestStack&MockObject $requestStack;
+    protected Environment&MockObject $twig;
 
     protected function setUp(): void
     {
@@ -47,7 +47,7 @@ class ModuleRendererTest extends TestCase
 
         $this->cmsConfig->expects($this->any())
             ->method('getSite')
-            ->willReturnCallback(function ($site) use ($site1, $site2) {
+            ->willReturnCallback(function ($site) use ($site1, $site2): ?Site {
                 return match ($site) {
                     'site_1' => $site1,
                     'site_2' => $site2,
@@ -68,7 +68,7 @@ class ModuleRendererTest extends TestCase
             'site_filter' => [
                 'site_2',
             ],
-        ], $profilerDebugCollectorData, [], null);
+        ], $profilerDebugCollectorData, []);
 
         $this->assertEquals(ModuleRenderer::SITE_HIDDEN_MODULE."\n", $return);
     }
@@ -109,7 +109,7 @@ class ModuleRendererTest extends TestCase
             'locale_filter' => [
                 'en',
             ],
-        ], $profilerDebugCollectorData, [], null);
+        ], $profilerDebugCollectorData, []);
 
         $this->assertEquals(ModuleRenderer::LOCALE_HIDDEN_MODULE."\n", $return);
     }
@@ -149,7 +149,7 @@ class ModuleRendererTest extends TestCase
         $return = $moduleRenderer->render([
             '_module' => 'test_module',
             'content' => 'Test content',
-        ], $profilerDebugCollectorData, [], null);
+        ], $profilerDebugCollectorData, []);
 
         // Assuming the module is rendered as a string
         $this->assertStringContainsString('Test content', $return);
@@ -171,7 +171,7 @@ class ModuleRendererTest extends TestCase
 
         $this->cmsConfig->expects($this->any())
             ->method('getModule')
-            ->willReturnCallback(function ($module) {
+            ->willReturnCallback(function ($module): ?array {
                 return match ($module) {
                     'test_container_module' => [
                         'revision' => 1,
@@ -226,7 +226,7 @@ class ModuleRendererTest extends TestCase
                         'content' => 'Test content 2',
                     ],
                 ],
-            ], $profilerDebugCollectorData, [], null);
+            ], $profilerDebugCollectorData, []);
 
             // Assuming the module is rendered as a string
             $this->assertStringContainsString('Test content', $return);

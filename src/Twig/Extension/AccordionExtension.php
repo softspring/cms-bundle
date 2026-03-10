@@ -17,8 +17,8 @@ class AccordionExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('sfs_cms_admin_module_accordion_block_start', [$this, 'accordionStart'], ['is_safe' => ['html']]),
-            new TwigFunction('sfs_cms_admin_module_accordion_block_end', [$this, 'accordionEnd'], ['is_safe' => ['html']]),
+            new TwigFunction('sfs_cms_admin_module_accordion_block_start', $this->accordionStart(...), ['is_safe' => ['html']]),
+            new TwigFunction('sfs_cms_admin_module_accordion_block_end', $this->accordionEnd(...), ['is_safe' => ['html']]),
         ];
     }
 

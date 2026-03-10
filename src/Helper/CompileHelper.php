@@ -6,6 +6,7 @@ use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\InvalidContentException;
 use Softspring\CmsBundle\Config\Exception\InvalidLayoutException;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class CompileHelper
@@ -28,7 +29,7 @@ class CompileHelper
             return false;
         }
 
-        if (!$this->requestStack->getCurrentRequest()) {
+        if (!$this->requestStack->getCurrentRequest() instanceof Request) {
             return false; // not yet ready for render in fixtures, TODO improve this to allow render in fixtures
         }
 
@@ -47,11 +48,7 @@ class CompileHelper
 
         $layoutConfig = $this->cmsConfig->getLayout($version->getLayout());
 
-        if (false === $layoutConfig['save_compiled']) {
-            return false;
-        }
-
-        return true;
+        return false !== $layoutConfig['save_compiled'];
     }
 
     /**
@@ -65,10 +62,6 @@ class CompileHelper
 
         $contentConfig = $this->cmsConfig->getContent($version->getContent());
 
-        if (false === $contentConfig['save_compiled']) {
-            return false;
-        }
-
-        return true;
+        return false !== $contentConfig['save_compiled'];
     }
 }

@@ -26,7 +26,7 @@ class SitemapFactory
         $sitemapConfig = $this->getSitemapConfig($site, $sitemapId);
 
         $urls = [];
-        foreach ($this->getSiteContents($site)->filter(fn ($c) => !$this->skipContent($c)) as $content) {
+        foreach ($this->getSiteContents($site)->filter(fn (ContentInterface $c): bool => !$this->skipContent($c)) as $content) {
             $urls = array_merge($urls, $this->generateSitemapContentUrls($site, $content, $sitemapConfig));
         }
 
@@ -59,7 +59,7 @@ class SitemapFactory
                     'changefreq' => $this->getChangeFreq($content, $sitemapConfig),
                     'priority' => $this->getPriority($content, $sitemapConfig),
                     'xhtml:link' => $this->routingHelper->generateRoutePathAlternates($path, $site, $localeAlternates, $siteAlternates, $alternatesIncludeHreflang),
-                ], fn ($v) => !empty($v));
+                ], fn (string|array|null $v): bool => !in_array($v, ['', '0', []], true));
             }
         }
 
@@ -134,11 +134,6 @@ class SitemapFactory
         }
 
         // TODO check sitemap name
-
-        if ($indexing['noIndex'] ?? false) {
-            return true;
-        }
-
-        return false;
+        return $indexing['noIndex'] ?? false;
     }
 }

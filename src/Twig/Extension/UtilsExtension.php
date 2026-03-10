@@ -27,10 +27,10 @@ class UtilsExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('sfs_cms_check_content_locales_and_routes', [$this, 'checkContentLocalesAndRoutes']),
-            new TwigFunction('sfs_cms_validate_module_html', [HtmlValidator::class, 'validateModule']),
-            new TwigFunction('sfs_cms_content_type', [$this->contentManager, 'getType']),
-            new TwigFunction('sfs_cms_render_ajax', [$this, 'renderAjax'], ['is_safe' => ['html']]),
+            new TwigFunction('sfs_cms_check_content_locales_and_routes', $this->checkContentLocalesAndRoutes(...)),
+            new TwigFunction('sfs_cms_validate_module_html', HtmlValidator::validateModule(...)),
+            new TwigFunction('sfs_cms_content_type', $this->contentManager->getType(...)),
+            new TwigFunction('sfs_cms_render_ajax', $this->renderAjax(...), ['is_safe' => ['html']]),
         ];
     }
 
@@ -40,7 +40,7 @@ class UtilsExtension extends AbstractExtension
         $containerAttrs['id'] = $divId;
         $containerAttrs['data-href'] = $url;
 
-        $attrs = implode(' ', array_map(fn ($k, $v) => sprintf('%s="%s"', htmlspecialchars($k, ENT_QUOTES), htmlspecialchars($v, ENT_QUOTES)), array_keys($containerAttrs), $containerAttrs));
+        $attrs = implode(' ', array_map(fn ($k, $v): string => sprintf('%s="%s"', htmlspecialchars($k, ENT_QUOTES), htmlspecialchars($v, ENT_QUOTES)), array_keys($containerAttrs), $containerAttrs));
 
         return <<<AJAX
 <div $attrs>

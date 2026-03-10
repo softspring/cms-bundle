@@ -82,7 +82,7 @@ class CmsPurger implements PurgerInterface, ORMPurgerInterface
         $classes = [];
 
         foreach ($this->em->getMetadataFactory()->getAllMetadata() as $metadata) {
-            if ($metadata->isMappedSuperclass || (isset($metadata->isEmbeddedClass) && $metadata->isEmbeddedClass)) {
+            if ($metadata->isMappedSuperclass || (null !== $metadata->isEmbeddedClass && $metadata->isEmbeddedClass)) {
                 continue;
             }
 
@@ -102,7 +102,7 @@ class CmsPurger implements PurgerInterface, ORMPurgerInterface
             $class = $commitOrder[$i];
 
             if (
-                (isset($class->isEmbeddedClass) && $class->isEmbeddedClass)
+                (null !== $class->isEmbeddedClass && $class->isEmbeddedClass)
                 || $class->isMappedSuperclass
                 || ($class->isInheritanceTypeSingleTable() && $class->name !== $class->rootEntityName)
             ) {
@@ -133,7 +133,7 @@ class CmsPurger implements PurgerInterface, ORMPurgerInterface
             }
 
             // If the table is excluded, skip it as well
-            if (false !== \array_search($tbl, $this->excluded)) {
+            if (in_array($tbl, $this->excluded)) {
                 continue;
             }
 

@@ -1,6 +1,6 @@
 # this is the page base configuration
 content:
-    revision: 2
+    revision: 3
     entity_class: 'Softspring\CmsBundle\Entity\Page'
     default_layout: 'default'
     version_seo:
@@ -10,6 +10,10 @@ content:
             type: translation
         metaKeywords:
             type: translation
+        canonicalContent:
+            type: translatable
+            type_options:
+                type: content
     indexing:
         noIndex:
             type: checkbox
@@ -41,7 +45,7 @@ content:
                     admin_page.form.indexing.sitemapChangefreq.values.weekly: weekly
                     admin_page.form.indexing.sitemapChangefreq.values.monthly: monthly
                     admin_page.form.indexing.sitemapChangefreq.values.yearly: yearly
-                    admin_page.form.indexing.sitemapChangefreq.values.never: never
+                    admin_page.form.indexing.sitemapChangefreq.values.never: never                
         sitemapPriority:
             type: number
             type_options:

@@ -23,7 +23,7 @@ class CompileException extends Exception implements CompileExceptionDetailsInter
     private function stringifyException(Exception $exception): string
     {
         $message = $exception->getMessage();
-        if (empty($message)) {
+        if ('' === $message || '0' === $message) {
             if ($exception instanceof RenderErrorException) {
                 $message = 'Render error';
             } elseif ($exception instanceof CompileAllException) {

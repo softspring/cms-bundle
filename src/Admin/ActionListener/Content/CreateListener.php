@@ -91,7 +91,7 @@ class CreateListener extends AbstractContentListener
         /** @var ContentInterface $entity */
         $entity = $event->getForm()->getData();
 
-        $entity->getRoutes()->map(function (RouteInterface $route) use ($entity) {
+        $entity->getRoutes()->map(function (RouteInterface $route) use ($entity): void {
             foreach ($entity->getSites() as $site) {
                 $route->addSite($site);
             }

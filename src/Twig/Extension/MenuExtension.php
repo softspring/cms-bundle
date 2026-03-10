@@ -18,7 +18,7 @@ class MenuExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('sfs_cms_menu', [$this->menuRenderer, 'renderMenuByType'], ['is_safe' => ['html']]),
+            new TwigFunction('sfs_cms_menu', $this->menuRenderer->renderMenuByType(...), ['is_safe' => ['html']]),
         ];
     }
 }

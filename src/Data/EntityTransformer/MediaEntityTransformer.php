@@ -31,11 +31,7 @@ class MediaEntityTransformer implements EntityTransformerInterface
 
     public function supports(string $type, $data = null): bool
     {
-        if ('media' === $type) {
-            return true;
-        }
-
-        return false;
+        return 'media' === $type;
     }
 
     public function export(object $element, &$files = []): array

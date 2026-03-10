@@ -131,7 +131,7 @@ class ImportListener extends AbstractContentVersionListener
 
         $data = ZipContent::read($zipFile->getPath(), $zipFile->getBasename());
 
-        foreach ($data['contents'] as $id => $content) {
+        foreach ($data['contents'] as $content) {
             $contentType = key($content);
             $contentData = current($content);
             $versionData = $contentData['versions'][0];

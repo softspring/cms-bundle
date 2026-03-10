@@ -74,7 +74,7 @@ class ContentDataCollector extends DataCollector
                 'cacheTtl' => $routePath->getCacheTtl(),
                 'compiledPath' => $routePath->getCompiledPath(),
             ],
-            'paths' => array_map(function (RoutePathInterface $routePath) {
+            'paths' => array_map(function (RoutePathInterface $routePath): array {
                 return [
                     'path' => $routePath->getPath(),
                     'locale' => $routePath->getLocale(),
@@ -89,7 +89,7 @@ class ContentDataCollector extends DataCollector
             'id' => $content->getId(),
             'locales' => $content->getLocales(),
             'defaultLocale' => $content->getDefaultLocale(),
-            'sites' => array_map(function (SiteInterface $site) {
+            'sites' => array_map(function (SiteInterface $site): array {
                 return [
                     'id' => $site->getId(),
                     'name' => $this->translator->trans($site->getId().'.name', [], 'sfs_cms_sites'),
@@ -180,7 +180,7 @@ class ContentDataCollector extends DataCollector
     {
         $route = $this->getRoute();
 
-        if (!$route) {
+        if ([] === $route) {
             return null;
         }
 

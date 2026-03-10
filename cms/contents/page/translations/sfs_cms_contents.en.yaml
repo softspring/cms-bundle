@@ -47,7 +47,7 @@ admin_page:
         confirm_message_raw: "<p>Are you sure to publish this version?</p>"
         with_errors_confirm_message_raw: "<p>Are you sure to publish this version?</p><p>This version has some errors, maybe it will not be published correctly</p>"
 
-    unpublish:
+    version_unpublish:
         has_been_unpublished_flash: "The page has been unpublished"
         confirm_message_title: "Unpublish page"
         confirm_message_raw: "<p>Are you sure to unpublish this page?</p><p>It will show a 404 error to the users</p>"
@@ -80,7 +80,7 @@ admin_page:
         title: "%name%"
         breadcrumb: "%name%"
         actions:
-            unpublish:
+            version_unpublish:
                 confirm: "are you sure to unpublish this page?"
                 link: "Unpublish"
         name: "Name"
@@ -311,6 +311,9 @@ admin_page:
             metaTitle.label: "Title (browser title and meta tags)"
             metaDescription.label: "Description (meta tag)"
             metaKeywords.label: "Keywords (meta tag)"
+            canonicalContent.label: "Canonical URL source"
+            canonicalContent.placeholder: "Use this page as canonical (default)"
+            canonicalContent.help: "If selected, this page will output a canonical URL pointing to the selected page."
 
     version_form:
         note.label: "Note"
@@ -397,7 +400,7 @@ admin_page:
             delete.button: "Delete definitely"
             cancel.button: "Cancel"
         success_flash: "Version has been deleted"
-    
+
     diff:
         title: "Compare versions"
         breadcrumb: "Compare versions"

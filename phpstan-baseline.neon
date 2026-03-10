@@ -16,9 +16,6 @@ parameters:
             count: 1
             path: src/DataCollector/TwigDataCollector.php
         -
-            message: "#Call to an undefined method .*::method\\(\\)#"
-            path: tests
-        -
             message: "##"
             path: src/DataFixtures/Purger/CmsPurger.php
         -
@@ -29,4 +26,20 @@ parameters:
             reportUnmatched: false
         -
             message: "#Call to an undefined static method Twig\\\\Extension\\\\StringLoaderExtension::templateFromString\\(\\)#"
+            reportUnmatched: false
+        -
+            identifier: method.alreadyNarrowedType
+            reportUnmatched: false
+            path: tests/
+        -
+            identifier: method.alreadyNarrowedType
+            reportUnmatched: false
+            path: src/Tests/
+        -
+            identifier: class.notFound
+            path: src/Security/Voter/ContentVersionDeleteVoter.php
+            reportUnmatched: false
+        -
+            identifier: class.notFound
+            path: src/Security/Voter/ContentVersionVoter.php
             reportUnmatched: false
