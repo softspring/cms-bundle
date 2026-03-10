@@ -2,6 +2,8 @@
 
 namespace Softspring\CmsBundle\Test\Unit\Config\Router;
 
+use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -20,16 +22,16 @@ use Symfony\Component\HttpFoundation\Request;
 
 class UrlMatcherTest extends TestCase
 {
-    protected AbstractQuery $query;
-    protected QueryBuilder $qb;
-    protected EntityManagerInterface $em;
-    protected UrlGenerator $urlGenerator;
-    protected SiteResolver $siteResolver;
+    protected AbstractQuery&MockObject $query;
+    protected QueryBuilder&MockObject $qb;
+    protected EntityManagerInterface&MockObject $em;
+    protected UrlGenerator&MockObject $urlGenerator;
+    protected SiteResolver&MockObject $siteResolver;
 
     protected function setUp(): void
     {
         // compatible with ORM 2 and 3
-        if ((new \ReflectionClass(Query::class))->isFinal()) {
+        if (new ReflectionClass(Query::class)->isFinal()) {
             $this->query = $this->createMock(AbstractQuery::class);
         } else {
             $this->query = $this->createMock(Query::class);
@@ -38,8 +40,11 @@ class UrlMatcherTest extends TestCase
         $this->qb = $this->createMock(QueryBuilder::class);
         $this->qb->method('getQuery')->willReturn($this->query);
 
+        $repoMock = $this->createMock(EntityRepository::class);
+        $repoMock->method('createQueryBuilder')->willReturn($this->qb);
+
         $this->em = $this->createMock(EntityManagerInterface::class);
-        $this->em->method('getRepository')->willReturn($this->createMock(EntityRepository::class));
+        $this->em->method('getRepository')->willReturn($repoMock);
         $this->urlGenerator = $this->createMock(UrlGenerator::class);
         $this->siteResolver = $this->createMock(SiteResolver::class);
     }

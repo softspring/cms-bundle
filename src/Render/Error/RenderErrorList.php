@@ -24,7 +24,7 @@ class RenderErrorList
 
     public function hasErrors(): bool
     {
-        return !empty($this->errors);
+        return [] !== $this->errors;
     }
 
     public function getErrors(): array
@@ -34,14 +34,14 @@ class RenderErrorList
 
     public function getErrorsAsString(): array
     {
-        return array_map(function ($error) {
+        return array_map(function (array $error): string {
             return sprintf('%s (%s): %s', $error['location'], $error['template'], $error['exception']->getMessage());
         }, $this->getErrors());
     }
 
     public function getErrorsAsArray(): array
     {
-        return array_map(function ($error) {
+        return array_map(function (array $error): array {
             return [
                 'location' => $error['location'],
                 'template' => $error['template'],
@@ -68,7 +68,7 @@ class RenderErrorList
 
     public function currentLocation(): string
     {
-        return implode('', array_map(fn ($loc) => "[$loc]", $this->location));
+        return implode('', array_map(fn ($loc): string => "[$loc]", $this->location));
     }
 
     /**
@@ -86,7 +86,7 @@ class RenderErrorList
     public function formMapErrors(FormInterface $form): void
     {
         foreach ($this->getErrors() as $error) {
-            $paths = array_map(fn ($v) => trim($v, '[]'), explode('][', $error['location']));
+            $paths = array_map(fn ($v): string => trim($v, '[]'), explode('][', $error['location']));
             $field = $this->getMappedForm($form, $paths);
             $field && $field->addError(new FormError('An error has been produced during module render. Please review module configuration and try again. If the problem persists contact with developers.', null, [], null, $error));
         }
@@ -94,7 +94,7 @@ class RenderErrorList
 
     protected function getMappedForm(?FormInterface $form, array $paths): ?FormInterface
     {
-        if (empty($paths)) {
+        if ([] === $paths) {
             return $form;
         }
 

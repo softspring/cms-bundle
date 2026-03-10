@@ -37,7 +37,7 @@ abstract class AbstractBlockForm extends AbstractType
 
         $resolver->setRequired('block_config');
 
-        $resolver->setNormalizer('label_format', function (Options $options, $value) {
+        $resolver->setNormalizer('label_format', function (Options $options, $value): string {
             return "admin_{$options['block_config']['_id']}.form.%name%.label";
         });
     }

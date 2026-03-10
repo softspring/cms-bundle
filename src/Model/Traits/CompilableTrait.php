@@ -61,7 +61,7 @@ trait CompilableTrait
 
     public function cleanCompiled(): void
     {
-        $this->getCompiled()->map(function (CompiledDataInterface $compiled) {
+        $this->getCompiled()->map(function (CompiledDataInterface $compiled): void {
             $this->removeCompiled($compiled);
         });
         $this->setCompileErrors(false);

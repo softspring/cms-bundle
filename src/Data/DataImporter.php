@@ -64,7 +64,7 @@ class DataImporter extends AbstractDataImportExport
 
         // import medias before to prevent errors
         foreach ($contents['media'] ?? [] as $data) {
-            $this->cmsLogger && $this->cmsLogger->info(sprintf('Import media %s (%u/%u)', $data['media']['name'], isset($i) ? ++$i : $i = 1, sizeof($contents['media'])));
+            $this->cmsLogger && $this->cmsLogger->info(sprintf('Import media %s (%u/%u)', $data['media']['name'], isset($i) ? ++$i : $i = 1, count($contents['media'])));
             $entity = $this->getDataTransformer('media', $data)->import($data, $this->referenceRepository, $options);
             $this->em->persist($entity);
             $this->em->flush();
@@ -104,7 +104,6 @@ class DataImporter extends AbstractDataImportExport
             $this->referenceRepository->addReference("site___{$site}", $site);
         }
 
-        /** @var ContentEntityTransformerInterface $transformer */
         $transformer = $this->getDataTransformer($type);
 
         if (!$transformer instanceof ContentEntityTransformerInterface) {

@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Test\Unit\Compiler;
 
+use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Softspring\CmsBundle\Compiler\CompileException;
@@ -22,10 +23,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ContentVersionCompilerTest extends TestCase
 {
-    protected ContentVersionRenderer|MockObject $contentVersionRenderMock;
-    protected CompileHelper|MockObject $compileHelperMock;
-    protected CmsHelper|MockObject $cmsHelperMock;
-    protected CompiledDataManagerInterface|MockObject $compiledDataManagerMock;
+    protected MockObject $contentVersionRenderMock;
+    protected MockObject $compileHelperMock;
+    protected MockObject $cmsHelperMock;
+    protected MockObject $compiledDataManagerMock;
     protected ContentVersionCompiler $compiler;
 
     protected function setUp(): void
@@ -46,11 +47,11 @@ class ContentVersionCompilerTest extends TestCase
             ->willReturn($this->compileHelperMock);
 
         $this->compiledDataManagerMock->method('createEntity')
-            ->willReturnCallback(function() {
+            ->willReturnCallback(function(): CompiledData {
                 return new CompiledData();
             });
 
-        $this->compiledDataManagerMock->method('getCompileKeyFromRequest')->willReturnCallback(function(VersionInterface $version, Request $request) {
+        $this->compiledDataManagerMock->method('getCompileKeyFromRequest')->willReturnCallback(function(VersionInterface $version, Request $request): string {
             return sprintf('test_key/%s/%s', $request->getLocale(), $request->attributes->get('_sfs_cms_site'));
         });
     }
@@ -78,8 +79,8 @@ class ContentVersionCompilerTest extends TestCase
 
     public function testCompileRequestRenderErrors(): void
     {
-        $this->contentVersionRenderMock->method('render')->willReturnCallback(function (ContentVersionInterface $version, Request $request, ?RenderErrorList $renderErrorList = null, ?array $compiledContainers = null) {
-            $renderErrorList->add('test_template', new \Exception('Test error'), ['context' => 'data']);
+        $this->contentVersionRenderMock->method('render')->willReturnCallback(function (ContentVersionInterface $version, Request $request, ?RenderErrorList $renderErrorList = null, ?array $compiledContainers = null): string {
+            $renderErrorList->add('test_template', new Exception('Test error'), ['context' => 'data']);
             return 'rendered content';
         });
 
@@ -116,15 +117,15 @@ class ContentVersionCompilerTest extends TestCase
     public function testCompileRequestWithInvalidException(): void
     {
         $this->expectException(CompileException::class);
-        $this->contentVersionRenderMock->method('render')->willThrowException(new \Exception('Test error'));
+        $this->contentVersionRenderMock->method('render')->willThrowException(new Exception('Test error'));
 
         $this->compiler->compileRequest(new ContentVersion(), new Request());
     }
 
     public function testCompileRequestContainersRenderError(): void
     {
-        $this->contentVersionRenderMock->method('renderContainers')->willReturnCallback(function (ContentVersionInterface $version, Request $request, ?RenderErrorList $renderErrorList = null) {
-            $renderErrorList->add('test_template', new \Exception('Test error'), ['context' => 'data']);
+        $this->contentVersionRenderMock->method('renderContainers')->willReturnCallback(function (ContentVersionInterface $version, Request $request, ?RenderErrorList $renderErrorList = null): array {
+            $renderErrorList->add('test_template', new Exception('Test error'), ['context' => 'data']);
             return [];
         });
 
@@ -159,7 +160,7 @@ class ContentVersionCompilerTest extends TestCase
     public function testCompileRequestContainersInvalidException(): void
     {
         $this->expectException(CompileException::class);
-        $this->contentVersionRenderMock->method('renderContainers')->willThrowException(new \Exception('Test error'));
+        $this->contentVersionRenderMock->method('renderContainers')->willThrowException(new Exception('Test error'));
 
         $this->compiler->compileRequest(new ContentVersion(), new Request());
     }

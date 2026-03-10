@@ -13,7 +13,7 @@ readonly class DeprecatedVariable
     ) {
     }
 
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
         trigger_deprecation('softspring/cms-bundle', $this->removeVersion, sprintf($this->message, $this->oldName, $this->newName));
 
@@ -39,7 +39,7 @@ readonly class DeprecatedVariable
         return isset($this->inner->{$name});
     }
 
-    public function __set(string $name, $value): void
+    public function __set(string $name, mixed $value): void
     {
         trigger_deprecation('softspring/cms-bundle', $this->removeVersion, sprintf($this->message, $this->oldName, $this->newName));
         $this->inner->{$name} = $value;

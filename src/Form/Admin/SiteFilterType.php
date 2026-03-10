@@ -35,7 +35,12 @@ class SiteFilterType extends AbstractType
         $resolver->setAllowedTypes('available_sites', ['array']);
 
         $resolver->setNormalizer('choices', function (OptionsResolver $options, $value) {
-            return !empty($value) ? $value : array_combine($options['available_sites'], $options['available_sites']);
+            return empty($value) ? array_combine($options['available_sites'], $options['available_sites']) : $value;
+        });
+
+        $resolver->setNormalizer('default_value', function (OptionsResolver $options, $value): null {
+            // prevents filling with default value from SiteChoiceType when empty value is selected
+            return null;
         });
     }
 
@@ -43,7 +48,7 @@ class SiteFilterType extends AbstractType
     {
         $availableSites = $options['available_sites'];
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (PreSetDataEvent $event) use ($availableSites) {
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (PreSetDataEvent $event) use ($availableSites): void {
             $data = $event->getData();
 
             if (null === $data) {
@@ -63,7 +68,7 @@ class SiteFilterType extends AbstractType
             $event->setData($data);
         });
 
-        $builder->addModelTransformer(new CallbackTransformer(function ($data) use ($availableSites) {
+        $builder->addModelTransformer(new CallbackTransformer(function ($data) use ($availableSites): array {
             // from database to form
             if (is_array($data)) {
                 foreach ($data as $k => $v) {

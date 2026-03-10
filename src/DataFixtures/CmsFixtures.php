@@ -54,7 +54,7 @@ class CmsFixtures extends Fixture implements FixtureGroupInterface
                     'files' => [],
                 ];
 
-                $contents['media'][$id]['media']['versionFiles'] = array_map(fn ($name) => str_ireplace($this->fixturesPath.'/', '', $name), $contents['media'][$id]['media']['versionFiles']);
+                $contents['media'][$id]['media']['versionFiles'] = array_map(fn ($name): string|array => str_ireplace($this->fixturesPath.'/', '', $name), $contents['media'][$id]['media']['versionFiles']);
 
                 foreach ((new Finder())->in("$this->fixturesPath/media")->files()->name("{$data['id']}.*")->notName('*.json') as $mediaFile) {
                     $contents['media'][$id]['files']["media/{$mediaFile->getFilename()}"] = [

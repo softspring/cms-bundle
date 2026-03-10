@@ -133,7 +133,7 @@ class DuplicateListener extends AbstractContentListener
         $newContent->setLastVersionNumber(0);
         $newContent->setLastVersion($newVersion);
 
-        $newContent->getRoutes()->map(function (RouteInterface $route) use ($newContent) {
+        $newContent->getRoutes()->map(function (RouteInterface $route) use ($newContent): void {
             foreach ($newContent->getSites() as $site) {
                 $route->addSite($site);
             }

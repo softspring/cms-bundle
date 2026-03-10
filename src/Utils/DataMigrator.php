@@ -34,10 +34,10 @@ class DataMigrator
     public static function symfonyRouteToLink(?array $symfonyRoute): array
     {
         return [
-            'type' => !empty($symfonyRoute) ? 'route' : 'url',
-            'route_name' => !empty($symfonyRoute) ? $symfonyRoute['route_name'] : null,
-            'route_params' => !empty($symfonyRoute) ? $symfonyRoute['route_params'] : null,
-            'url' => !empty($symfonyRoute) ? null : '',
+            'type' => null === $symfonyRoute || [] === $symfonyRoute ? 'url' : 'route',
+            'route_name' => null === $symfonyRoute || [] === $symfonyRoute ? null : $symfonyRoute['route_name'],
+            'route_params' => null === $symfonyRoute || [] === $symfonyRoute ? null : $symfonyRoute['route_params'],
+            'url' => null === $symfonyRoute || [] === $symfonyRoute ? '' : null,
             'anchor' => null,
             'target' => '_self',
             'custom_target' => null,

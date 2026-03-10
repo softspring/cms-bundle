@@ -21,37 +21,37 @@ class Block implements ConfigurationInterface
 
         $rootNode
             ->validate()
-                ->ifTrue(function ($config) {
+                ->ifTrue(function (array $config): bool {
                     return $config['static'] && !$config['singleton'];
                 })
                 ->thenInvalid('A block defined as static must be singleton.')
             ->end()
             ->validate()
-                ->ifTrue(function ($config) {
+                ->ifTrue(function (array $config): bool {
                     return $config['static'] && !empty($config['form_fields']);
                 })
                 ->thenInvalid('A block defined as static can not have form_fields.')
             ->end()
             ->validate()
-                ->ifTrue(function ($config) {
+                ->ifTrue(function (array $config): bool {
                     return $config['static'] && !empty($config['form_template']);
                 })
                 ->thenInvalid('A block defined as static can not have form_template.')
             ->end()
             ->validate()
-                ->ifTrue(function ($config) {
+                ->ifTrue(function (array $config): bool {
                     return $config['static'] && $config['schedulable'];
                 })
                 ->thenInvalid('A block defined as static can not be schedulable.')
             ->end()
             ->validate()
-                ->ifTrue(function ($config) {
+                ->ifTrue(function (array $config): bool {
                     return is_bool($config['isolate_request']) && !$config['esi'] && !$config['ajax'];
                 })
                 ->thenInvalid('You can not set isolate_request if esi and ajax are false.')
             ->end()
             ->validate()
-                ->ifTrue(function ($config) {
+                ->ifTrue(function (array $config): bool {
                     return $config['esi'] && $config['ajax'];
                 })
                 ->thenInvalid('You can not set ajax if esi is true.')

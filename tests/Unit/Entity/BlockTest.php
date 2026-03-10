@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Test\Unit\Config\Entity;
 
+use ReflectionClass;
 use PHPUnit\Framework\TestCase;
 use Softspring\CmsBundle\Entity\Block;
 
@@ -12,7 +13,7 @@ class BlockTest extends TestCase
         $block = new Block();
         $this->assertNull($block->getId());
 
-        $reflection = new \ReflectionClass($block);
+        $reflection = new ReflectionClass($block);
         $property = $reflection->getProperty('id');
         $property->setValue($block, 'test');
         $this->assertEquals('test', $block->getId());

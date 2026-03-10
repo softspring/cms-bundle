@@ -101,7 +101,9 @@ class ZipContent
         $response->headers->set('Content-Disposition', 'attachment;filename="'.pathinfo($zipName, PATHINFO_BASENAME).'"');
         $response->headers->set('Content-length', (string) filesize($zipName));
 
-        $deleteAfterResponse && @unlink($zipName);
+        if ($deleteAfterResponse) {
+            @unlink($zipName);
+        }
 
         return $response;
     }

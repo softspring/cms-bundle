@@ -33,11 +33,7 @@ class BlockEntityTransformer implements EntityTransformerInterface
 
     public function supports(string $type, $data = null): bool
     {
-        if ('blocks' === $type) {
-            return true;
-        }
-
-        return false;
+        return 'blocks' === $type;
     }
 
     public function export(object $element, &$files = []): array
@@ -52,8 +48,8 @@ class BlockEntityTransformer implements EntityTransformerInterface
             'block' => [
                 'type' => $block->getType(),
                 'name' => $block->getName(),
-                'publish_start_date' => $block->getPublishStartDate() ? $block->getPublishStartDate()->format('Y-m-d H:i:s') : null,
-                'publish_end_date' => $block->getPublishEndDate() ? $block->getPublishEndDate()->format('Y-m-d H:i:s') : null,
+                'publish_start_date' => $block->getPublishStartDate() instanceof DateTime ? $block->getPublishStartDate()->format('Y-m-d H:i:s') : null,
+                'publish_end_date' => $block->getPublishEndDate() instanceof DateTime ? $block->getPublishEndDate()->format('Y-m-d H:i:s') : null,
                 'data' => $this->dataTransformer->export($block->getData(), $files),
             ],
         ];

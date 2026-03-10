@@ -56,7 +56,9 @@ class MenuRenderer
             'type' => $type,
         ];
 
-        $this->isPreview() && $params['_cms_preview'] = true;
+        if ($this->isPreview()) {
+            $params['_cms_preview'] = true;
+        }
         $params['isolate_request'] = !is_bool($menuConfig['isolate_request']) || $menuConfig['isolate_request'];
         $locale && $params['_locale'] = $locale;
         $site && $params['_site'] = "$site";
@@ -73,7 +75,7 @@ class MenuRenderer
             ];
         }
 
-        return $this->isolatedRunner->isolateEsiCapableRequestRender(function () use ($template) { return $template->render(); });
+        return $this->isolatedRunner->isolateEsiCapableRequestRender(function () use ($template): string { return $template->render(); });
     }
 
     public function getDebugCollectorData(): array

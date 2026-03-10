@@ -15,7 +15,7 @@ class Exceptions
             'file' => $e->getFile(),
             'line' => $e->getLine(),
             'trace' => explode("\n", $e->getTraceAsString()),
-            'previous' => $e->getPrevious() ? self::toArray($e->getPrevious()) : null,
+            'previous' => $e->getPrevious() instanceof Throwable ? self::toArray($e->getPrevious()) : null,
         ];
     }
 }

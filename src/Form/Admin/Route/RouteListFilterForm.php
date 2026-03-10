@@ -38,7 +38,7 @@ class RouteListFilterForm extends PaginatorForm implements RouteListFilterFormIn
             'order_default_value' => 'id',
         ]);
 
-        $resolver->addNormalizer('query_builder', function (Options $options, QueryBuilder $qb) {
+        $resolver->addNormalizer('query_builder', function (Options $options, QueryBuilder $qb): QueryBuilder {
             $alias = $qb->getDQLPart('from')[0]->getAlias();
             $qb->select("$alias, content");
             $qb->leftJoin("{$alias}.content", 'content');
@@ -55,7 +55,7 @@ class RouteListFilterForm extends PaginatorForm implements RouteListFilterFormIn
             'property_path' => '[id__like]',
         ]);
 
-        if (sizeof($this->cmsConfig->getSites()) > 1) {
+        if (count($this->cmsConfig->getSites()) > 1) {
             $builder->add('sites', SiteChoiceType::class, [
                 'required' => false,
                 'property_path' => '[sites.id]',

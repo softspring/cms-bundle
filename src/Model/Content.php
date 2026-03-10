@@ -4,6 +4,8 @@ namespace Softspring\CmsBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Softspring\CmsBundle\Model\Traits\TranslatableConfigTrait;
+use Softspring\CmsBundle\Model\Traits\VersionableTrait;
 use Softspring\CmsBundle\Utils\SitesSorter;
 
 /**
@@ -13,8 +15,8 @@ use Softspring\CmsBundle\Utils\SitesSorter;
  */
 abstract class Content implements ContentInterface
 {
-    use Traits\VersionableTrait;
-    use Traits\TranslatableConfigTrait;
+    use VersionableTrait;
+    use TranslatableConfigTrait;
 
     protected ?string $name = null;
 

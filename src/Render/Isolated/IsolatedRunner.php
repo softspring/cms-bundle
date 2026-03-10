@@ -101,7 +101,9 @@ class IsolatedRunner
             throw new RenderException('Error rendering request', 0, $e);
         } finally {
             // restore the previous request context if it was set
-            isset($prevRequestContext) && $this->router->setContext($prevRequestContext);
+            if (isset($prevRequestContext)) {
+                $this->router->setContext($prevRequestContext);
+            }
 
             // remove the current request from the request stack
             $this->requestStack->pop();

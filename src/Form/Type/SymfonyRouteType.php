@@ -67,12 +67,12 @@ class SymfonyRouteType extends AbstractType
             'choice_translation_domain' => false,
             'choices' => $this->getRoutes($options),
             'choice_label' => function (?Route $route) {
-                return $route ? $route->getDefault('_form___route_name') : '';
+                return $route instanceof Route ? $route->getDefault('_form___route_name') : '';
             },
             'choice_value' => function (?Route $route) {
-                return $route ? $route->getDefault('_form___route_name') : '';
+                return $route instanceof Route ? $route->getDefault('_form___route_name') : '';
             },
-            'choice_attr' => function (?Route $route) {
+            'choice_attr' => function (?Route $route): array {
                 $attr = [];
 
                 $parameters = [];
@@ -86,7 +86,7 @@ class SymfonyRouteType extends AbstractType
                     }
                 }
 
-                if (!empty($attr['data-route-parameter'])) {
+                if (isset($attr['data-route-parameter'])) {
                     $attr['data-route-parameter'] = json_encode($attr['data-route-parameter']);
                 }
 
@@ -139,7 +139,7 @@ class SymfonyRouteType extends AbstractType
             $allRoutes[$routeId] = new Route('', ['_sfs_cms_reference' => true]);
         }
 
-        $this->routes = array_filter($allRoutes, function (Route $route, string $routeName) use ($options) {
+        $this->routes = array_filter($allRoutes, function (Route $route, string $routeName) use ($options): bool {
             if (!empty($options['restrict_default_attribute'])) {
                 $matches = false;
 

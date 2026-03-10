@@ -10,6 +10,7 @@ use Softspring\CmsBundle\Config\Exception\DisabledModuleException;
 use Softspring\CmsBundle\Config\Exception\InvalidModuleException;
 use Softspring\CmsBundle\Config\Exception\InvalidSiteException;
 use Softspring\CmsBundle\Form\Module\ContainerModuleType;
+use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\Render\Error\RenderErrorList;
 use Softspring\CmsBundle\Render\Exception\ModuleRenderException;
 use Softspring\CmsBundle\Utils\DataMigrator;
@@ -63,13 +64,20 @@ class ModuleRenderer
             return self::DISABLED_HIDDEN_MODULE."\n";
         }
 
+        $twigAdditionalContextFields = array_keys($twigAdditionalContext);
+        $moduleDataFields = array_keys($moduleData);
+
+        if (array_intersect($twigAdditionalContextFields, $moduleDataFields)) {
+            $this->cmsLogger && $this->cmsLogger->warning(sprintf('Module %s data fields (%s) are overlapping with reserved context fields (%s). Reserved context fields will override module data fields.', $moduleData['_module'], implode(', ', $moduleDataFields), implode(', ', $twigAdditionalContextFields)));
+        }
+
         $moduleData = DataMigrator::migrate($moduleConfig['revision_migration_scripts'], $moduleData, $moduleConfig['revision']);
 
         if ($this->isContainer($moduleConfig)) {
             return $this->renderContainerModule($moduleData, $moduleConfig, $profilerDebugCollectorData, $twigAdditionalContext, $renderErrorList);
-        } else {
-            return $this->renderNoContainerModule($moduleData, $moduleConfig, $profilerDebugCollectorData, $twigAdditionalContext, $renderErrorList);
         }
+
+        return $this->renderNoContainerModule($moduleData, $moduleConfig, $profilerDebugCollectorData, $twigAdditionalContext, $renderErrorList);
     }
 
     /**
@@ -77,33 +85,47 @@ class ModuleRenderer
      */
     protected function skipModuleRenderBySiteFilter(array $module): bool
     {
-        if (isset($module['site_filter'])) {
-            $currentSite = $this->requestStack->getCurrentRequest()->get('_sfs_cms_site');
+        if (!isset($module['site_filter'])) {
+            return false;
+        }
 
-            $siteFilters = [];
-            foreach ($module['site_filter'] as $site) {
-                $siteFilters[] = is_string($site) ? $this->cmsConfig->getSite($site) : $site;
-            }
+        $currentSite = $this->requestStack->getCurrentRequest()->get('_sfs_cms_site');
 
-            if (!in_array($currentSite, $siteFilters)) {
-                return true;
+        $moduleEnabledSites = [];
+        foreach ($module['site_filter'] as $key => $value) {
+            if (is_string($key) && true === $value) {
+                $moduleEnabledSites[] = $this->cmsConfig->getSite($key);
+            } elseif (is_string($value)) {
+                /* @deprecated, in 6.0 old format will be removed */
+                $moduleEnabledSites[] = $this->cmsConfig->getSite($value);
+            } elseif ($value instanceof SiteInterface) {
+                /* @deprecated, in 6.0 old format will be removed */
+                $moduleEnabledSites[] = $value;
             }
         }
 
-        return false;
+        return !in_array($currentSite, $moduleEnabledSites);
     }
 
     protected function skipModuleRenderByLocaleFilter(array $module): bool
     {
-        if (isset($module['locale_filter'])) {
-            $currentLocale = $this->requestStack->getCurrentRequest()->getLocale();
+        if (!isset($module['locale_filter'])) {
+            return false;
+        }
 
-            if (!in_array($currentLocale, $module['locale_filter'])) {
-                return true;
+        $currentLocale = $this->requestStack->getCurrentRequest()->getLocale();
+
+        $moduleEnabledLocales = [];
+        foreach ($module['locale_filter'] as $key => $value) {
+            if (is_string($key) && true === $value) {
+                $moduleEnabledLocales[] = $key;
+            } elseif (is_string($value)) {
+                /* @deprecated, in 6.0 old format will be removed */
+                $moduleEnabledLocales[] = $value;
             }
         }
 
-        return false;
+        return !in_array($currentLocale, $moduleEnabledLocales);
     }
 
     /**
@@ -122,7 +144,7 @@ class ModuleRenderer
         $renderErrorList && $renderErrorList->pushLocation('modules');
         foreach ($module['modules'] as $i => $submodule) {
             $renderErrorList && $renderErrorList->pushLocation($i);
-            $module['contents'][] = $this->render($submodule, $profilerDebugCollectorData[sizeof($profilerDebugCollectorData) - 1]['modules'], $twigAdditionalContext, $renderErrorList);
+            $module['contents'][] = $this->render($submodule, $profilerDebugCollectorData[count($profilerDebugCollectorData) - 1]['modules'], $twigAdditionalContext, $renderErrorList);
             $renderErrorList && $renderErrorList->popLocation();
         }
         $renderErrorList && $renderErrorList->popLocation();
@@ -134,7 +156,7 @@ class ModuleRenderer
         } catch (Exception $exception) {
             $this->cmsLogger && $this->cmsLogger->error(sprintf('Error rendering %s template: %s', $moduleConfig['render_template'], $exception->getMessage()));
 
-            if (!$renderErrorList) {
+            if (!$renderErrorList instanceof RenderErrorList) {
                 throw new ModuleRenderException($module, $exception);
             }
 
@@ -172,9 +194,9 @@ class ModuleRenderer
         try {
             return $this->twig->render($moduleConfig['render_template'], $twigContext);
         } catch (Exception $exception) {
-            $this->cmsLogger && $this->cmsLogger->error(sprintf('Error rendering %s template: %s %s', $moduleConfig['render_template'], $exception->getMessage(), $renderErrorList ? $renderErrorList->currentLocation() : ''));
+            $this->cmsLogger && $this->cmsLogger->error(sprintf('Error rendering %s template: %s %s', $moduleConfig['render_template'], $exception->getMessage(), $renderErrorList instanceof RenderErrorList ? $renderErrorList->currentLocation() : ''));
 
-            if (!$renderErrorList) {
+            if (!$renderErrorList instanceof RenderErrorList) {
                 throw new ModuleRenderException($moduleData, $exception);
             }
 

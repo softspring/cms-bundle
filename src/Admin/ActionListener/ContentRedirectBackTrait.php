@@ -24,14 +24,14 @@ trait ContentRedirectBackTrait
                 return new RedirectResponse($this->router->generate(name: "sfs_cms_admin_content_{$configId}_versions", parameters: ['content' => $entity, 'page' => $page]));
 
             case 'version_info':
-                if ($version) {
+                if ($version instanceof ContentVersionInterface) {
                     return new RedirectResponse($this->router->generate("sfs_cms_admin_content_{$configId}_version_info", ['content' => $entity, 'version' => $version]));
                 }
 
                 return new RedirectResponse($this->router->generate(name: "sfs_cms_admin_content_{$configId}_versions", parameters: ['content' => $entity]));
 
             case 'preview':
-                if ($version) {
+                if ($version instanceof ContentVersionInterface) {
                     return new RedirectResponse($this->router->generate("sfs_cms_admin_content_{$configId}_preview", ['content' => $entity, 'version' => $version]));
                 }
 

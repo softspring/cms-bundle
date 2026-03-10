@@ -108,38 +108,32 @@ class UrlMatcher
 
         $pathInfo = explode('/', ltrim($pathInfo, '/'));
         foreach ($siteConfig['paths'] as $path) {
-            if (isset($pathInfo[0]) && "/$pathInfo[0]" === $path['path']) {
-                if ($path['locale']) {
-                    if (!empty($attributes['_sfs_cms_locale'])) {
-                        // TODO resolve conflict
-                    }
-                    $attributes['_sfs_cms_locale'] = $path['locale'];
-                    $attributes['_sfs_cms_locale_path'] = $path['path'];
+            if (isset($pathInfo[0]) && "/$pathInfo[0]" === $path['path'] && $path['locale']) {
+                if (!empty($attributes['_sfs_cms_locale'])) {
+                    // TODO resolve conflict
+                }
+                $attributes['_sfs_cms_locale'] = $path['locale'];
+                $attributes['_sfs_cms_locale_path'] = $path['path'];
+                // $pathInfo = substr($pathInfo, strlen($path['path']));
+                array_shift($pathInfo);
+                if ($path['trailing_slash_on_root'] && [] === $pathInfo && !$pathInfoHasTrailingSlash) {
+                    $url = parse_url($request->getUri());
+                    $url = sprintf('%s://%s%s', $url['scheme'], $url['host'], $url['path'].'/');
 
-                    // $pathInfo = substr($pathInfo, strlen($path['path']));
-                    array_shift($pathInfo);
-
-                    if ($path['trailing_slash_on_root'] && empty($pathInfo) && !$pathInfoHasTrailingSlash) {
-                        $url = parse_url($request->getUri());
-                        $url = sprintf('%s://%s%s', $url['scheme'], $url['host'], $url['path'].'/');
-
-                        return $this->generateRedirect($url, Response::HTTP_PERMANENTLY_REDIRECT);
-                    }
+                    return $this->generateRedirect($url, Response::HTTP_PERMANENTLY_REDIRECT);
                 }
             }
         }
         $pathInfo = '/'.implode('/', $pathInfo);
 
         // search in database or redis-cache (TODO) ;)
-        if ($routePath = $this->searchRoutePath($site, $pathInfo, $attributes['_sfs_cms_locale'] ?? null)) {
+        if (($routePath = $this->searchRoutePath($site, $pathInfo, $attributes['_sfs_cms_locale'] ?? null)) instanceof RoutePathInterface) {
             $route = $routePath->getRoute();
 
             if ($routePath->getLocale()) {
-                if (!empty($attributes['_sfs_cms_locale']) && $attributes['_sfs_cms_locale'] !== $routePath->getLocale()) {
-                    // check if locale is already set by site config
-                    if ($request->getLocale() && $request->getLocale() !== $routePath->getLocale()) {
-                        // TODO RESOLVE LOCALE CONFLICT
-                    }
+                // check if locale is already set by site config
+                if (!empty($attributes['_sfs_cms_locale']) && $attributes['_sfs_cms_locale'] !== $routePath->getLocale() && ($request->getLocale() && $request->getLocale() !== $routePath->getLocale())) {
+                    // TODO RESOLVE LOCALE CONFLICT
                 }
 
                 $attributes['_sfs_cms_locale'] = $routePath->getLocale();

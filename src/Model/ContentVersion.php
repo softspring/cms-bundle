@@ -3,18 +3,25 @@
 namespace Softspring\CmsBundle\Model;
 
 use InvalidArgumentException;
+use Softspring\CmsBundle\Model\Traits\CompilableTrait;
+use Softspring\CmsBundle\Model\Traits\ContentDataTrait;
+use Softspring\CmsBundle\Model\Traits\VersionTrait;
 
 abstract class ContentVersion implements ContentVersionInterface
 {
-    use Traits\ContentDataTrait;
-    use Traits\CompilableTrait;
-    use Traits\VersionTrait;
+    use ContentDataTrait;
+    use CompilableTrait;
+    use VersionTrait;
 
     protected ?ContentInterface $content = null;
 
     protected ?string $layout = null;
 
     protected ?array $seo = null;
+
+    protected mixed $_getSeoCallback = null;
+
+    protected mixed $_rawSeo = null;
 
     public function getContent(): ?ContentInterface
     {
@@ -49,13 +56,29 @@ abstract class ContentVersion implements ContentVersionInterface
         $this->layout = $layout;
     }
 
+    public function _setSeoCallback(callable $getSeoCallback): void
+    {
+        $this->_getSeoCallback = $getSeoCallback;
+    }
+
     public function getSeo(): ?array
     {
+        if ($this->_getSeoCallback) {
+            $this->_rawSeo = $this->seo;
+            $this->seo = call_user_func($this->_getSeoCallback, $this->seo);
+            $this->_getSeoCallback = null;
+        }
+
         return $this->seo;
     }
 
     public function setSeo(?array $seo): void
     {
         $this->seo = $seo;
+    }
+
+    public function getRawSeo(): ?array
+    {
+        return $this->_rawSeo ?? $this->seo;
     }
 }

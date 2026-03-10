@@ -2,7 +2,6 @@
 
 namespace Softspring\CmsBundle\Form\Type;
 
-use Softspring\CmsBundle\Form\DynamicFormTrait;
 use Softspring\CmsBundle\Translator\TranslatableContext;
 use Softspring\Component\DynamicFormType\Form\Resolver\TypeResolverInterface;
 use Softspring\TranslatableBundle\Form\Type\TranslatableType as BaseTranslatableType;
@@ -12,8 +11,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TranslatableType extends AbstractType
 {
-    use DynamicFormTrait;
-
     public function __construct(protected TranslatableContext $translatableContext, protected ?TypeResolverInterface $typeResolver = null)
     {
     }
@@ -36,8 +33,8 @@ class TranslatableType extends AbstractType
             'type' => TextType::class,
         ]);
 
-        $resolver->setNormalizer('type', function ($options, $value) {
-            return $this->getFieldType($value);
+        $resolver->setNormalizer('type', function ($options, string $value): string {
+            return $this->typeResolver->resolveTypeClass($value);
         });
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Softspring\CmsBundle\Test\Unit\Config\Router;
 
+use PHPUnit\Framework\MockObject\MockObject;
+use Exception;
 use Doctrine\ORM\EntityRepository;
 use PHPUnit\Framework\TestCase;
 use Softspring\CmsBundle\Config\CmsConfig;
@@ -15,8 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class SiteResolverTest extends TestCase
 {
-    protected CmsConfig $cmsConfig;
-    protected SiteManagerInterface $siteManager;
+    protected CmsConfig&MockObject $cmsConfig;
+    protected SiteManagerInterface&MockObject $siteManager;
 
     protected function setUp(): void
     {
@@ -49,7 +51,7 @@ class SiteResolverTest extends TestCase
             ],
         ];
 
-        $sites = array_map(function (array $siteConfig) {
+        $sites = array_map(function (array $siteConfig): Site {
             $site = new Site();
             $site->setId($siteConfig['_id']);
             $site->setConfig($siteConfig);
@@ -61,20 +63,20 @@ class SiteResolverTest extends TestCase
 
         $this->siteManager = $this->createMock(SiteManager::class);
         $this->siteManager->method('getRepository')->willReturn($repository);
-        $this->siteManager->method('createEntity')->willReturnCallback(function () {
+        $this->siteManager->method('createEntity')->willReturnCallback(function (): Site {
             return new Site();
         });
 
         $this->cmsConfig = $this->createMock(CmsConfig::class);
-        $this->cmsConfig->method('getSites')->willReturnCallback(function () use ($sitesConfig) {
-            return array_map(function ($config) {
+        $this->cmsConfig->method('getSites')->willReturnCallback(function () use ($sitesConfig): array {
+            return array_map(function (array $config): Site {
                 $site = new Site();
                 $site->setId($config['_id']);
                 $site->setConfig($config);
                 return $site;
             }, $sitesConfig);
         });
-        $this->cmsConfig->method('getSite')->willReturnCallback(function ($siteName) use ($sitesConfig) {
+        $this->cmsConfig->method('getSite')->willReturnCallback(function ($siteName) use ($sitesConfig): Site {
             $site = new Site();
             $site->setId($sitesConfig[$siteName]['_id']);
             $site->setConfig($sitesConfig[$siteName]);
@@ -120,7 +122,7 @@ class SiteResolverTest extends TestCase
 
     public function testResolveWithPath(): void
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
 
         $sitesConfig = ['identification' => 'path'];
         $siteResolver = new SiteResolver($this->cmsConfig, $sitesConfig);

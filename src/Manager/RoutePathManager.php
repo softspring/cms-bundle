@@ -26,7 +26,7 @@ class RoutePathManager implements RoutePathManagerInterface
     {
         /** @var RoutePathInterface $newPath */
         $newPath = $this->createEntity();
-        $newPath->setPath($path->getPath().($suffix ? '-'.$suffix : ''));
+        $newPath->setPath($path->getPath().('' !== $suffix && '0' !== $suffix ? '-'.$suffix : ''));
         $newPath->setLocale($path->getLocale());
         $newPath->setCacheTtl($path->getCacheTtl());
 

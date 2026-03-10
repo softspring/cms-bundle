@@ -28,7 +28,7 @@ class UserType extends AbstractType
             'required' => false,
             'class' => UserInterface::class,
             'em' => $this->sfsUserEm,
-            'choice_label' => function (UserInterface $user) {
+            'choice_label' => function (UserInterface $user): string {
                 return $user->getDisplayName();
             },
         ]);
