@@ -30,8 +30,8 @@
                 <button class="btn btn-link px-0" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter"><i class="bi bi-filter h4 text-muted align-middle"></i> Filters</button>
                 <div class="row align-items-end border shadow-sm rounded p-3 collapse show" id="collapseFilter">
                     {% if filterForm.name is defined %}<div class="col-12 col-md-6 col-lg-2">{{ form_row(filterForm.name) }}</div>{% endif %}
-                    {% if filterForm.path is defined %}<div class="col-12 col-md-6 col-lg-3">{{ form_row(filterForm.path) }}</div>{% endif %}
                     {% if filterForm.sites is defined %}<div class="col-12 col-md-6 col-lg-2">{{ form_row(filterForm.sites, {'attr':{'onchange':'submit()'}}) }}</div>{% endif %}
+                    {% if filterForm.path is defined %}<div class="col-12 col-md-6 col-lg-3">{{ form_row(filterForm.path) }}</div>{% endif %}
                     {% if filterForm.status is defined %}<div class="col-12 col-md-6 col-lg-2">{{ form_row(filterForm.status, {'attr':{'onchange':'submit()'}}) }}</div>{% endif %}
                     {% if filterForm.publishedVersionContent is defined %}<div class="col-12 col-md-6 col-lg-4">{{ form_row(filterForm.publishedVersionContent, {'attr':{'onchange':'submit()'}}) }}</div>{% endif %}
                     <div class="col pb-3">
