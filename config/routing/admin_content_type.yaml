@@ -8,7 +8,7 @@ create:
 
 details:
     controller: sfs_cms.admin.content.controller::read
-    path: /{content}
+    path: /{content}/details
 
 update:
     controller: sfs_cms.admin.content.controller::update
