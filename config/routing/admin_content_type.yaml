@@ -6,12 +6,6 @@ create:
     controller: sfs_cms.admin.content.controller::create
     path: /create
 
-import:
-    controller: sfs_cms.admin.content.controller::create
-    path: /import
-    defaults:
-        configKey: 'import'
-
 details:
     controller: sfs_cms.admin.content.controller::read
     path: /{content}
@@ -110,23 +104,11 @@ publish_version:
     defaults:
         configKey: 'version_publish'
 
-export_version:
-    controller: sfs_cms.admin.content_version.controller::apply
-    path: /{content}/{version}/export
-    defaults:
-        configKey: 'version_export'
-
 version_info:
     controller: sfs_cms.admin.content_version.controller::update
     path: /{content}/{version}/info
     defaults:
         configKey: 'version_info'
-
-import_version:
-    controller: sfs_cms.admin.content_version.controller::create
-    path: /{content}/import
-    defaults:
-        configKey: 'version_import'
 
 cleanup_versions:
     controller: sfs_cms.admin.content_version.controller::apply

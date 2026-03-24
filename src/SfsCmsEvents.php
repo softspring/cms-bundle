@@ -103,18 +103,6 @@ class SfsCmsEvents
     public const ADMIN_CONTENTS_CREATE_FORM_INVALID = 'sfs_cms.admin.contents.create_form_invalid';
     public const ADMIN_CONTENTS_CREATE_VIEW = 'sfs_cms.admin.contents.create_view';
     public const ADMIN_CONTENTS_CREATE_EXCEPTION = 'sfs_cms.admin.contents.create_exception';
-    // CONTENT IMPORT EVENTS, ALL OF THEM ARE INTERNAL
-    public const ADMIN_CONTENTS_IMPORT_INITIALIZE = 'sfs_cms.admin.contents.import_initialize';
-    public const ADMIN_CONTENTS_IMPORT_ENTITY = 'sfs_cms.admin.contents.import_import_entity';
-    public const ADMIN_CONTENTS_IMPORT_FORM_PREPARE = 'sfs_cms.admin.contents.import_form_prepare';
-    public const ADMIN_CONTENTS_IMPORT_FORM_INIT = 'sfs_cms.admin.contents.import_form_init';
-    public const ADMIN_CONTENTS_IMPORT_FORM_VALID = 'sfs_cms.admin.contents.import_form_valid';
-    public const ADMIN_CONTENTS_IMPORT_APPLY = 'sfs_cms.admin.contents.import_apply';
-    public const ADMIN_CONTENTS_IMPORT_SUCCESS = 'sfs_cms.admin.contents.import_success';
-    public const ADMIN_CONTENTS_IMPORT_FAILURE = 'sfs_cms.admin.contents.import_failure';
-    public const ADMIN_CONTENTS_IMPORT_FORM_INVALID = 'sfs_cms.admin.contents.import_form_invalid';
-    public const ADMIN_CONTENTS_IMPORT_VIEW = 'sfs_cms.admin.contents.import_view';
-    public const ADMIN_CONTENTS_IMPORT_EXCEPTION = 'sfs_cms.admin.contents.import_exception';
     // CONTENT READ EVENTS, ALL OF THEM ARE INTERNAL
     public const ADMIN_CONTENTS_READ_INITIALIZE = 'sfs_cms.admin.contents.read_initialize';
     public const ADMIN_CONTENTS_READ_LOAD_ENTITY = 'sfs_cms.admin.contents.read_load_entity';
@@ -214,18 +202,6 @@ class SfsCmsEvents
     public const ADMIN_CONTENT_VERSIONS_CREATE_FORM_INVALID = 'sfs_cms.admin.content_versions.create_form_invalid';
     public const ADMIN_CONTENT_VERSIONS_CREATE_VIEW = 'sfs_cms.admin.content_versions.create_view';
     public const ADMIN_CONTENT_VERSIONS_CREATE_EXCEPTION = 'sfs_cms.admin.content_versions.create_exception';
-    // CONTENT_VERSION IMPORT EVENTS, ALL OF THEM ARE INTERNAL
-    public const ADMIN_CONTENT_VERSIONS_IMPORT_INITIALIZE = 'sfs_cms.admin.content_versions.import_initialize';
-    public const ADMIN_CONTENT_VERSIONS_IMPORT_ENTITY = 'sfs_cms.admin.content_versions.import_import_entity';
-    public const ADMIN_CONTENT_VERSIONS_IMPORT_FORM_PREPARE = 'sfs_cms.admin.content_versions.import_form_prepare';
-    public const ADMIN_CONTENT_VERSIONS_IMPORT_FORM_INIT = 'sfs_cms.admin.content_versions.import_form_init';
-    public const ADMIN_CONTENT_VERSIONS_IMPORT_FORM_VALID = 'sfs_cms.admin.content_versions.import_form_valid';
-    public const ADMIN_CONTENT_VERSIONS_IMPORT_APPLY = 'sfs_cms.admin.content_versions.import_apply';
-    public const ADMIN_CONTENT_VERSIONS_IMPORT_SUCCESS = 'sfs_cms.admin.content_versions.import_success';
-    public const ADMIN_CONTENT_VERSIONS_IMPORT_FAILURE = 'sfs_cms.admin.content_versions.import_failure';
-    public const ADMIN_CONTENT_VERSIONS_IMPORT_FORM_INVALID = 'sfs_cms.admin.content_versions.import_form_invalid';
-    public const ADMIN_CONTENT_VERSIONS_IMPORT_VIEW = 'sfs_cms.admin.content_versions.import_view';
-    public const ADMIN_CONTENT_VERSIONS_IMPORT_EXCEPTION = 'sfs_cms.admin.content_versions.import_exception';
     // CONTENT_VERSION LIST EVENTS, ALL OF THEM ARE INTERNAL
     public const ADMIN_CONTENT_VERSIONS_LIST_INITIALIZE = 'sfs_cms.admin.content_versions.list_initialize';
     public const ADMIN_CONTENT_VERSIONS_LIST_FILTER_FORM_PREPARE = 'sfs_cms.admin.content_versions.list_filter_form_prepare';
@@ -275,15 +251,6 @@ class SfsCmsEvents
     public const ADMIN_CONTENT_VERSIONS_PUBLISH_SUCCESS = 'sfs_cms.admin.content_versions.publish_success';
     public const ADMIN_CONTENT_VERSIONS_PUBLISH_FAILURE = 'sfs_cms.admin.content_versions.publish_failure';
     public const ADMIN_CONTENT_VERSIONS_PUBLISH_EXCEPTION = 'sfs_cms.admin.content_versions.publish_exception';
-    // CONTENT_VERSION EXPORT EVENTS, ALL OF THEM ARE INTERNAL
-    public const ADMIN_CONTENT_VERSIONS_EXPORT_INITIALIZE = 'sfs_cms.admin.content_versions.export_initialize';
-    public const ADMIN_CONTENT_VERSIONS_EXPORT_LOAD_ENTITY = 'sfs_cms.admin.content_versions.export_load_entity';
-    public const ADMIN_CONTENT_VERSIONS_EXPORT_NOT_FOUND = 'sfs_cms.admin.content_versions.export_not_found';
-    public const ADMIN_CONTENT_VERSIONS_EXPORT_FOUND = 'sfs_cms.admin.content_versions.export_found';
-    public const ADMIN_CONTENT_VERSIONS_EXPORT_APPLY = 'sfs_cms.admin.content_versions.export_apply';
-    public const ADMIN_CONTENT_VERSIONS_EXPORT_SUCCESS = 'sfs_cms.admin.content_versions.export_success';
-    public const ADMIN_CONTENT_VERSIONS_EXPORT_FAILURE = 'sfs_cms.admin.content_versions.export_failure';
-    public const ADMIN_CONTENT_VERSIONS_EXPORT_EXCEPTION = 'sfs_cms.admin.content_versions.export_exception';
     // CONTENT VERSION CLEANUP EVENTS, ALL OF THEM ARE INTERNAL
     public const ADMIN_CONTENT_VERSIONS_CLEANUP_INITIALIZE = 'sfs_cms.admin.content_versions.cleanup_initialize';
     public const ADMIN_CONTENT_VERSIONS_CLEANUP_LOAD_ENTITY = 'sfs_cms.admin.content_versions.cleanup_load_entity';

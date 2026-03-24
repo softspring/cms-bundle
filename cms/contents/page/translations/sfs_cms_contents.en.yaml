@@ -52,29 +52,6 @@ admin_page:
         confirm_message_title: "Unpublish page"
         confirm_message_raw: "<p>Are you sure to unpublish this page?</p><p>It will show a 404 error to the users</p>"
 
-    import:
-        meta.title: "Import page"
-        title: "Import page"
-        breadcrumb: "Import page"
-        actions:
-            import.button: "Import page"
-            cancel.button: "Cancel"
-        form:
-            file.label: "Import content file"
-        failed_flash: "An error has been produced during the page import<br/><small>%exception%</small>"
-        duplicated_flash: "An error has been produced during the page import, the page already exists in the database, try to import it as a version<br/><small>%exception%</small>"
-        success_flash: "Page has been imported"
-
-    import_version:
-        meta.title: "Import version"
-        title: "Import version"
-        breadcrumb: "Import version"
-        actions:
-            import.button: "Import version"
-            cancel.button: "Cancel"
-        form:
-            file.label: "Import content file"
-
     read:
         meta.title: "General"
         title: "%name%"
@@ -135,8 +112,6 @@ admin_page:
         origin:
             "null": ""
             1: "edited"
-            2: "fixture"
-            3: "imported"
             4: "translated"
             5: "seo"
             6: "duplicated"
@@ -145,12 +120,10 @@ admin_page:
         actions:
             edit.link: "Edit"
             preview.link: "Preview"
-            export.link: "Export"
             publish.link: "Publish"
             unpublish:
                 link: "Unpublish"
                 confirm: "Are you sure you want to unpublish this page? It will show a 404 error to the users."
-            import_version.link: "Import version"
             cleanup_versions:
                 link: "Cleanup versions"
                 confirm: "Are you sure to cleanup versions? This action will delete all versions except the published one, the last one and the ones marked to keep."
@@ -200,7 +173,6 @@ admin_page:
         offer_backup: 'If you want, you can backup this content published version before deleting'
         index_warnings_raw: '<p><strong>Do not lose links and index!</strong></p>'
         actions:
-            export.button: Export
             delete.button: "Delete definitely"
             cancel.button: "Cancel"
         form:
@@ -251,7 +223,6 @@ admin_page:
         breadcrumb: "Pages"
         actions:
             create.link: "New page"
-            import.link: "Import page"
             details.link: "View"
             content.link: "Content"
             preview.link: "Preview"
@@ -267,7 +238,7 @@ admin_page:
             status.label: "Status"
             publishedVersionContent.label: "Published version content (case sensitive)"
         empty:
-            create_first_content_raw: '<a href="%create_link%">Create</a> or <a href="%import_link%">import</a> your first page!'
+            create_first_content_raw: '<a href="%create_link%">Create</a> your first page!'
             can_not_create_content: "You can not create a new page"
             go_to_doc_raw: 'If you need help go to <a href="https://github.com/softspring/cms-bundle" target="_blank">documentation</a>'
             clean_filters: 'Your query has no results, try to <a href="%url%">clean filters</a>'
@@ -322,13 +293,6 @@ admin_page:
         success_locked_flash: "Version has been locked"
         success_unlocked_flash: "Version has been unlocked"
         failed_flash: "An error has been produced during the version lock/unlock<br/><small>%exception%</small>"
-
-    version_export:
-        failed_flash: "An error has been produced during the version export<br/><small>%exception%</small>"
-
-    version_import:
-        success_flash: "Version has been imported"
-        failed_flash: "An error has been produced during the version import<br/><small>%exception%</small>"
 
     version_cleanup:
         success_flash: "Versions cleanup has been done correctly"

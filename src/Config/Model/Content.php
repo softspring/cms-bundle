@@ -151,14 +151,6 @@ class Content implements ConfigurationInterface
                                 'create_view' => 'create.view',
                                 'create_type' => 'create.type',
                                 'create_success_redirect_to' => 'create.success_redirect_to',
-                                'import_is_granted' => 'import.is_granted',
-                                'import_view' => 'import.view',
-                                'import_type' => 'import.type',
-                                'import_success_redirect_to' => 'import.success_redirect_to',
-                                'version_import_is_granted' => 'import.version_is_granted',
-                                'version_import_view' => 'import.version_view',
-                                'version_import_type' => 'import.version_type',
-                                'version_import_success_redirect_to' => 'import.version_success_redirect_to',
                                 'read_is_granted' => 'read.is_granted',
                                 'read_view' => 'read.view',
                                 'preview_is_granted' => 'preview.is_granted',
@@ -167,7 +159,6 @@ class Content implements ConfigurationInterface
                                 'versions_view' => 'version_list.view',
                                 'cleanup_versions_is_granted' => 'version_cleanup.is_granted',
                                 'keep_version_is_granted' => 'version_lock.is_granted',
-                                'export_version_is_granted' => 'export_version.is_granted',
                                 'update_is_granted' => 'update.is_granted',
                                 'update_view' => 'update.view',
                                 'update_type' => 'update.type',
@@ -210,14 +201,6 @@ class Content implements ConfigurationInterface
                         ->scalarNode('create_view')->setDeprecated('softspring/cms-bundle', '5.2')->end()
                         ->scalarNode('create_type')->setDeprecated('softspring/cms-bundle', '5.2')->end()
                         ->scalarNode('create_success_redirect_to')->setDeprecated('softspring/cms-bundle', '5.2')->end()
-                        ->scalarNode('import_is_granted')->setDeprecated('softspring/cms-bundle', '5.2')->end()
-                        ->scalarNode('import_view')->setDeprecated('softspring/cms-bundle', '5.2')->end()
-                        ->scalarNode('import_type')->setDeprecated('softspring/cms-bundle', '5.2')->end()
-                        ->scalarNode('import_success_redirect_to')->setDeprecated('softspring/cms-bundle', '5.2')->end()
-                        ->scalarNode('version_import_is_granted')->setDeprecated('softspring/cms-bundle', '5.2')->end()
-                        ->scalarNode('version_import_view')->setDeprecated('softspring/cms-bundle', '5.2')->end()
-                        ->scalarNode('version_import_type')->setDeprecated('softspring/cms-bundle', '5.2')->end()
-                        ->scalarNode('version_import_success_redirect_to')->setDeprecated('softspring/cms-bundle', '5.2')->end()
                         ->scalarNode('read_is_granted')->setDeprecated('softspring/cms-bundle', '5.2')->end()
                         ->scalarNode('read_view')->setDeprecated('softspring/cms-bundle', '5.2')->end()
                         ->scalarNode('preview_is_granted')->setDeprecated('softspring/cms-bundle', '5.2')->end()
@@ -226,7 +209,6 @@ class Content implements ConfigurationInterface
                         ->scalarNode('versions_view')->setDeprecated('softspring/cms-bundle', '5.2')->end()
                         ->scalarNode('cleanup_versions_is_granted')->setDeprecated('softspring/cms-bundle', '5.2')->end()
                         ->scalarNode('keep_version_is_granted')->setDeprecated('softspring/cms-bundle', '5.2')->end()
-                        ->scalarNode('export_version_is_granted')->setDeprecated('softspring/cms-bundle', '5.2')->end()
                         ->scalarNode('update_is_granted')->setDeprecated('softspring/cms-bundle', '5.2')->end()
                         ->scalarNode('update_view')->setDeprecated('softspring/cms-bundle', '5.2')->end()
                         ->scalarNode('update_type')->setDeprecated('softspring/cms-bundle', '5.2')->end()
@@ -265,27 +247,6 @@ class Content implements ConfigurationInterface
                                 ->scalarNode('success_redirect_to')->defaultValue('')->end()
                             ->end()
                         ->end()
-
-                        ->arrayNode('import')
-                            ->addDefaultsIfNotSet()
-                            ->children()
-                                ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_IMPORT')->end()
-                                ->scalarNode('view')->defaultValue('@SfsCmsDataPlugin/admin/content/import.html.twig')->end()
-                                ->scalarNode('type')->defaultValue('Softspring\\CmsDataPlugin\\Form\\Admin\\Content\\ContentImportForm')->end()
-                                ->scalarNode('success_redirect_to')->defaultValue('')->end()
-                            ->end()
-                        ->end()
-
-                        ->arrayNode('version_import')
-                            ->addDefaultsIfNotSet()
-                            ->children()
-                                ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSION_IMPORT')->end()
-                                ->scalarNode('view')->defaultValue('@SfsCmsDataPlugin/admin/content/version_import.html.twig')->end()
-                                ->scalarNode('type')->defaultValue('Softspring\\CmsDataPlugin\\Form\\Admin\\ContentVersion\\VersionImportForm')->end()
-                                ->scalarNode('success_redirect_to')->defaultValue('')->end()
-                            ->end()
-                        ->end()
-
                         ->arrayNode('read')
                             ->addDefaultsIfNotSet()
                             ->children()
@@ -342,13 +303,6 @@ class Content implements ConfigurationInterface
                                 ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSION_CLEAR_COMPILED')->end()
                             ->end()
                         ->end()
-                        ->arrayNode('export_version')
-                            ->addDefaultsIfNotSet()
-                            ->children()
-                                ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSION_EXPORT')->end()
-                            ->end()
-                        ->end()
-
                         ->arrayNode('update')
                             ->addDefaultsIfNotSet()
                             ->children()

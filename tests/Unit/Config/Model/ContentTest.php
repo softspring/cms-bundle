@@ -9,13 +9,11 @@ use Softspring\CmsBundle\Form\Admin\Content\ContentCreateForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentDeleteForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentDiffForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentDuplicateForm;
-use Softspring\CmsBundle\Form\Admin\Content\ContentImportForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentListFilterForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentRoutesForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentUpdateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionCreateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionDeleteForm;
-use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionImportForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionListFilterForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionSeoForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionUpdateForm;
@@ -114,18 +112,6 @@ class ContentTest extends TestCase
                     'type' => ContentCreateForm::class,
                     'success_redirect_to' => '',
                 ],
-                'import' => [
-                    'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_IMPORT',
-                    'view' => '@SfsCms/admin/content/import.html.twig',
-                    'type' => ContentImportForm::class,
-                    'success_redirect_to' => '',
-                ],
-                'version_import' => [
-                    'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSION_IMPORT',
-                    'view' => '@SfsCms/admin/content/version_import.html.twig',
-                    'type' => VersionImportForm::class,
-                    'success_redirect_to' => '',
-                ],
                 'read' => [
                     'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_READ',
                     'view' => '@SfsCms/admin/content/read.html.twig',
@@ -152,9 +138,6 @@ class ContentTest extends TestCase
                 ],
                 'version_lock' => [
                     'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSION_KEEP',
-                ],
-                'export_version' => [
-                    'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSION_EXPORT',
                 ],
                 'update' => [
                     'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_UPDATE',
