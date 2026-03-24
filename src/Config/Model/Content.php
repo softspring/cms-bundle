@@ -6,13 +6,11 @@ use Softspring\CmsBundle\Form\Admin\Content\ContentCreateForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentDeleteForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentDiffForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentDuplicateForm;
-use Softspring\CmsBundle\Form\Admin\Content\ContentImportForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentListFilterForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentRoutesForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentUpdateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionCreateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionDeleteForm;
-use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionImportForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionListFilterForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionSeoForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionUpdateForm;
@@ -272,8 +270,8 @@ class Content implements ConfigurationInterface
                             ->addDefaultsIfNotSet()
                             ->children()
                                 ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_IMPORT')->end()
-                                ->scalarNode('view')->defaultValue('@SfsCms/admin/content/import.html.twig')->end()
-                                ->scalarNode('type')->defaultValue(ContentImportForm::class)->end()
+                                ->scalarNode('view')->defaultValue('@SfsCmsDataPlugin/admin/content/import.html.twig')->end()
+                                ->scalarNode('type')->defaultValue('Softspring\\CmsDataPlugin\\Form\\Admin\\Content\\ContentImportForm')->end()
                                 ->scalarNode('success_redirect_to')->defaultValue('')->end()
                             ->end()
                         ->end()
@@ -282,8 +280,8 @@ class Content implements ConfigurationInterface
                             ->addDefaultsIfNotSet()
                             ->children()
                                 ->scalarNode('is_granted')->defaultValue('PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSION_IMPORT')->end()
-                                ->scalarNode('view')->defaultValue('@SfsCms/admin/content/version_import.html.twig')->end()
-                                ->scalarNode('type')->defaultValue(VersionImportForm::class)->end()
+                                ->scalarNode('view')->defaultValue('@SfsCmsDataPlugin/admin/content/version_import.html.twig')->end()
+                                ->scalarNode('type')->defaultValue('Softspring\\CmsDataPlugin\\Form\\Admin\\ContentVersion\\VersionImportForm')->end()
                                 ->scalarNode('success_redirect_to')->defaultValue('')->end()
                             ->end()
                         ->end()

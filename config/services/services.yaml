@@ -15,8 +15,6 @@ services:
             $esi: '@?esi'
             $siteConfig: '%sfs_cms.site_config%'
             $profiler: '@?profiler'
-            $entityTransformers: !tagged_iterator { tag: sfs_cms.data.entity_transformer, default_priority_method: getPriority }
-            $fieldTransformers: !tagged_iterator { tag: sfs_cms.data.field_transformer, default_priority_method: getPriority }
             $cmsLogger: '@?monolog.logger.cms'
             $debug: '%kernel.debug%'
             $defaultRestrictPatterns: '%sfs_cms.form_type.symfony_route.default_restrict_patterns%'
@@ -27,7 +25,6 @@ services:
             $contentCacheType: '%sfs_cms.content.cache.type%'
             $menuCacheType: '%sfs_cms.menu.cache.type%'
             $blockCacheType: '%sfs_cms.block.cache.type%'
-            $mediaStoragePath: '%sfs_media.storage.filesystem.path%'
             $compiledDataExpirationTtl: '%sfs_cms.compiled.expiration_ttl%'
             $contentRecompileEnabled: '%sfs_cms.content.recompile_enabled%'
             $registeredPlugins: '%sfs_cms.registered_plugins%'
@@ -49,14 +46,6 @@ services:
         resource: '../../src/Controller/*'
         tags: [ 'controller.service_arguments' ]
 
-    Softspring\CmsBundle\DataFixtures\:
-        resource: '../../src/DataFixtures/*'
-        tags: [ 'doctrine.fixtures.loader' ]
-
-    Softspring\CmsBundle\DataFixtures\Purger\CmsPurgerFactory:
-        tags:
-            - { name: 'doctrine.fixtures.purger_factory', alias: 'cms_purge' }
-
     Softspring\CmsBundle\Form\Admin\:
         resource: '../../src/Form/Admin/*'
         tags: [ 'form.type' ]
@@ -76,9 +65,6 @@ services:
     Softspring\CmsBundle\EventListener\SiteResolverListener: ~
 
     Softspring\CmsBundle\EventListener\ErrorPageListener: ~
-
-    Softspring\CmsBundle\Data\:
-        resource: '../../src/Data/*'
 
     Softspring\CmsBundle\Helper\:
         resource: '../../src/Helper/*'
