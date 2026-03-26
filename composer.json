@@ -54,6 +54,7 @@
     },
     "suggest": {
         "softspring/cms-blog-plugin": "Provides a blog for the CMS",
+        "softspring/cms-data-plugin": "Import/export and fixtures features are now in this plugin. Provides features for the CMS",
         "softspring/cms-module-coolection": "Provides a module collection for the CMS",
         "softspring/cms-sections-plugin": "Provides editable sections for the CMS",
         "softspring/cms-sylius-bundle": "Provides a Sylius integration for the CMS",

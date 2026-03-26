@@ -29,10 +29,13 @@
 
                 <p>{{ ('admin_'~content_type~'.version_delete.offer_backup')|trans }}</p>
 
+                {% if route_defined('sfs_cms_admin_content_'~content_type~'_export_version') %}
+                {# TODO make this configurable and extensible for plugins #}
                 <div class="mb-4">
                     <a href="{{ url('sfs_cms_admin_content_'~content_type~'_export_version', {'content':content_entity.id, 'version':version_entity.id}) }}" class="btn btn-primary">
                         {{ ('admin_'~content_type~'.version_delete.actions.export.button')|trans }}</a>
                 </div>
+                {% endif %}
 
                 {{ form_rest(form) }}
 

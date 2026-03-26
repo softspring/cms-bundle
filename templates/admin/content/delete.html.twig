@@ -31,10 +31,13 @@
                 {% if entity.publishedVersion|default(entity.lastVersion) %}
                     <p>{{ ('admin_'~content_type~'.delete.offer_backup')|trans }}</p>
 
-                    <div class="mb-4">
-                    <a href="{{ url('sfs_cms_admin_content_'~content_type~'_export_version', {'content':entity.id, 'version':entity.publishedVersion.id|default(entity.lastVersion.id)}) }}" class="btn btn-primary">
-                        {{ ('admin_'~content_type~'.delete.actions.export.button')|trans }}</a>
-                    </div>
+                    {% if route_defined('sfs_cms_admin_content_'~content_type~'_export_version') %}
+                        {# TODO make this configurable and extensible for plugins #}
+                        <div class="mb-4">
+                        <a href="{{ url('sfs_cms_admin_content_'~content_type~'_export_version', {'content':entity.id, 'version':entity.publishedVersion.id|default(entity.lastVersion.id)}) }}" class="btn btn-primary">
+                            {{ ('admin_'~content_type~'.delete.actions.export.button')|trans }}</a>
+                        </div>
+                    {% endif %}
                 {% endif %}
 
                 {{ ('admin_'~content_type~'.delete.index_warnings_raw')|trans|raw }}

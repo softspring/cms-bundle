@@ -32,18 +32,6 @@ services:
                     form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_CREATE_FORM_INVALID
                     view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_CREATE_VIEW
                     exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_CREATE_EXCEPTION
-                import:
-                    initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_IMPORT_INITIALIZE
-                    create_entity_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_IMPORT_ENTITY
-                    form_prepare_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_IMPORT_FORM_PREPARE
-                    form_init_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_IMPORT_FORM_INIT
-                    form_valid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_IMPORT_FORM_VALID
-                    apply_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_IMPORT_APPLY
-                    success_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_IMPORT_SUCCESS
-                    failure_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_IMPORT_FAILURE
-                    form_invalid_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_IMPORT_FORM_INVALID
-                    view_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_IMPORT_VIEW
-                    exception_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_IMPORT_EXCEPTION
                 read:
                     param_converter_key: 'id'
                     initialize_event_name: !php/const Softspring\CmsBundle\SfsCmsEvents::ADMIN_CONTENTS_READ_INITIALIZE

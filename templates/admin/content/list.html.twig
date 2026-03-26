@@ -17,8 +17,11 @@
                 <a class="btn btn-primary ms-3 mb-2" href="{{ url('sfs_cms_admin_content_'~content_type~'_create') }}">{{ ('admin_'~content_type~'.list.actions.create.link')|trans }} <i class="bi bi-plus-circle"></i></a>
             {% endif %}
 
-            {% if not content_config.admin.import.is_granted or is_granted(content_config.admin.import.is_granted) %}
-                <a class="btn btn-outline-primary ms-3 mb-2" href="{{ url('sfs_cms_admin_content_'~content_type~'_import') }}">{{ ('admin_'~content_type~'.list.actions.import.link')|trans }} <i class="bi bi-cloud-upload"></i></a>
+            {% if route_defined('sfs_cms_admin_content_'~content_type~'_import') %}
+                {# TODO make this configurable and extensible for plugins #}
+                {% if not content_config.admin.import.is_granted or is_granted(content_config.admin.import.is_granted) %}
+                    <a class="btn btn-outline-primary ms-3 mb-2" href="{{ url('sfs_cms_admin_content_'~content_type~'_import') }}">{{ ('admin_'~content_type~'.list.actions.import.link')|trans }} <i class="bi bi-cloud-upload"></i></a>
+                {% endif %}
             {% endif %}
         </div>
     </div>
@@ -75,6 +78,7 @@
                                     '%create_link%': url('sfs_cms_admin_content_'~content_type~'_create'),
                                     '%import_link%': url('sfs_cms_admin_content_'~content_type~'_import'),
                                 })|raw }}
+                                {# TODO IMPORT LINK DOES NOT ALWAYS EXIST #}
                             {% else %}
                                 {{ ('admin_'~content_type~'.list.empty.can_not_create_content')|trans }}
                             {% endif %}

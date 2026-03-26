@@ -81,10 +81,13 @@
                         <span class="bi bi-eye"></span></a>
                 {% endif %}
 
+                {% if route_defined('sfs_cms_admin_content_'~content_type~'_export_version') %}
+                {# TODO make this configurable and extensible for plugins #}
                 {% if not content_config.admin.export_version.is_granted or is_granted(content_config.admin.export_version.is_granted, version) %}
                     <a href="{{ url('sfs_cms_admin_content_'~content_type~'_export_version', {'content':entity.id, 'version':version.id}) }}"
                        class="ms-2 text-nowrap">{{ ('admin_'~content_type~'.versions.actions.export.link')|trans }}
                         <span class="bi bi-box-arrow-down"></span></a>
+                {% endif %}
                 {% endif %}
 
                 {% if not content_config.admin.publish_version.is_granted or is_granted(content_config.admin.publish_version.is_granted, version) %}

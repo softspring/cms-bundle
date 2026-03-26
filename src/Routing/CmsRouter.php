@@ -91,6 +91,10 @@ class CmsRouter implements RouterInterface, RequestMatcherInterface, WarmableInt
 
                 return $url;
             } catch (RouteNotFoundException $e) {
+                if ($onlyChecking) {
+                    throw $e; // prevent returning #
+                }
+
                 return '#';
             }
         }

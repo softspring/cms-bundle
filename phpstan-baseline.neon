@@ -16,9 +16,6 @@ parameters:
             count: 1
             path: src/DataCollector/TwigDataCollector.php
         -
-            message: "##"
-            path: src/DataFixtures/Purger/CmsPurger.php
-        -
             message: "#Function twig_template_from_string not found.#"
             reportUnmatched: false
         -
