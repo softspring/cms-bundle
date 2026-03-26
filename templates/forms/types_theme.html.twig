@@ -37,14 +37,18 @@
 {% endblock html_class_widget %}
 
 {% block cms_color_widget %}
-    <div class="input-group mb-3">
-        <div class="input-group-prepend">
-            <div class="input-group-text">
-                <input type="checkbox" data-color-type="toggler" {{ form.vars.data ? 'checked="checked"' : '' }} />
+    {% if form.vars.show_toggler %}
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                    <input type="checkbox" data-color-type="toggler" {{ form.vars.data ? 'checked="checked"' : '' }} />
+                </div>
             </div>
+            {{ form_widget(form, {'attr': {'data-color-type': 'widget'}, 'disabled': not form.vars.data}) }}
         </div>
-        {{ form_widget(form, {'attr': {'data-color-type': 'widget'}, 'disabled': not form.vars.data}) }}
-    </div>
+    {% else %}
+        {{ form_widget(form) }}
+    {% endif %}
 {% endblock cms_color_widget %}
 
 {% block html_id_widget %}

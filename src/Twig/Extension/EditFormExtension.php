@@ -23,9 +23,21 @@ class EditFormExtension extends AbstractExtension
         ];
     }
 
-    public function formViewSetAttr(FormView $formView, string $name, string $value): void
+    public function formViewSetAttr(FormView $formView, string $name, string $value, bool $allowMultiple = false): void
     {
-        $formView->vars['attr'][$name] = $value;
+        $current = (string)($formView->vars['attr'][$name] ?? '');
+
+        if (!$allowMultiple || $current === '') {
+            $formView->vars['attr'][$name] = $value;
+            return;
+        }
+
+        $values = array_filter(array_map('trim', explode(',', $current)));
+        if (!in_array($value, $values, true)) {
+            $values[] = $value;
+        }
+
+        $formView->vars['attr'][$name] = implode(',', $values);
     }
 
     public function sha1($value): string
