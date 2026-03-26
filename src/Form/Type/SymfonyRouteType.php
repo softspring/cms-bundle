@@ -100,7 +100,7 @@ class SymfonyRouteType extends AbstractType
         ]);
 
         $builder->addModelTransformer(new CallbackTransformer(function ($value): ?array {
-            if (is_array($value) && is_string($value['route_name']) && $this->routes) {
+            if (is_array($value) && isset($value['route_name']) && is_string($value['route_name']) && $this->routes) {
                 $value['route_name'] = $this->routes[$value['route_name']] ?? null;
                 $value['route_params'] = json_encode($value['route_params']);
             }

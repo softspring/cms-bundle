@@ -35,8 +35,8 @@ class DataMigrator
     {
         return [
             'type' => null === $symfonyRoute || [] === $symfonyRoute ? 'url' : 'route',
-            'route_name' => null === $symfonyRoute || [] === $symfonyRoute ? null : $symfonyRoute['route_name'],
-            'route_params' => null === $symfonyRoute || [] === $symfonyRoute ? null : $symfonyRoute['route_params'],
+            'route_name' => null === $symfonyRoute || [] === $symfonyRoute ? null : $symfonyRoute['route_name'] ?? null,
+            'route_params' => null === $symfonyRoute || [] === $symfonyRoute ? null : $symfonyRoute['route_params'] ?? null,
             'url' => null === $symfonyRoute || [] === $symfonyRoute ? '' : null,
             'anchor' => null,
             'target' => '_self',
