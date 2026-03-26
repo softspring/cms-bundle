@@ -126,6 +126,12 @@
         data-edit-content-toggle-target="{{ formField.vars.attr['data-edit-content-toggle-input'] }}"
 {%- endmacro -%}
 
+{%- macro link_choice_toggle(formField, choiceValues) -%}
+    {{ _self._update_link_value(formField, 'data-edit-content-toggle-choice') }}
+    data-edit-content-toggle-choice-target="{{ formField.vars.attr['data-edit-content-toggle-choice'] }}"
+    data-edit-content-toggle-choice-target-values="{{ choiceValues|join(',') }}"
+{%- endmacro -%}
+
 {%- macro link_media_preview (formField, locale = null, placeholder = null) -%}
     {{ _self._update_link_value(formField, 'data-media-preview-input') }}
 
