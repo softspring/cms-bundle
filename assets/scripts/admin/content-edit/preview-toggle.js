@@ -1,4 +1,5 @@
 import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
+import {filterCurrentFilterElements} from "./filter-preview";
 
 registerFeature('admin_content_edit_preview_toggle', _init);
 
@@ -47,10 +48,22 @@ function _init() {
         updateChoice(event.target);
     });
 
-    // Initialize all choice elements on load
-    document.querySelectorAll('[data-edit-content-toggle-choice]').forEach(function(choiceField) {
-        updateChoice(choiceField);
+    function initializeChoices() {
+        // Initialize all choice elements on load
+        document.querySelectorAll('[data-edit-content-toggle-choice]').forEach(function(choiceField) {
+            updateChoice(choiceField);
+        });
+    }
+
+    document.addEventListener("collection.node.add.after", function (event) { // (1)
+        initializeChoices();
     });
+
+    document.addEventListener("collection.node.insert.after", function (event) { // (1)
+        initializeChoices();
+    });
+
+    initializeChoices();
 
     function updateChoice(choiceField) {
         // Verificar que sea un select o input radio
