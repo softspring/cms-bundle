@@ -25,10 +25,11 @@ class EditFormExtension extends AbstractExtension
 
     public function formViewSetAttr(FormView $formView, string $name, string $value, bool $allowMultiple = false): void
     {
-        $current = (string)($formView->vars['attr'][$name] ?? '');
+        $current = (string) ($formView->vars['attr'][$name] ?? '');
 
-        if (!$allowMultiple || $current === '') {
+        if (!$allowMultiple || '' === $current) {
             $formView->vars['attr'][$name] = $value;
+
             return;
         }
 
