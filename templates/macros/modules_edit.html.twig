@@ -117,6 +117,13 @@
     {% endif %}
 {%- endmacro -%}
 
+{%- macro link_color_attribute (formField, attributeName, defaultValue = null) -%}
+    {% set value_hash = (formField.vars.name~'_'~random())|sfs_cms_sha1|slice(0,8) %}
+    {{ _self._update_link_value(formField, 'data-edit-color-attribute-'~attributeName~'-input', value_hash, true) }}
+    data-edit-color-attribute-{{ attributeName }}-target="{{ value_hash }}"
+    {{ attributeName }}="{{ formField.vars.data|default(defaultValue)|default('#000000') }}"
+{%- endmacro -%}
+
 {%- macro bg_color_style(formField) -%}
     {{ formField.vars.data ? 'background-color:'~formField.vars.data~';' : '' }}
 {%- endmacro -%}
@@ -184,8 +191,8 @@
     {% endif %}
 {%- endmacro _module_name -%}
 
-{%- macro _update_link_value (formField, dataField, value = false) -%}
-    {% if not formField.vars.attr[dataField]|default(false) %}
-        {{ sfs_cms_form_view_set_attr(formField, dataField, value == false ? (formField.vars.name~'_'~random())|sfs_cms_sha1|slice(0,8) : value) }}
+{%- macro _update_link_value (formField, dataField, value = false, allowMultiple = false) -%}
+    {% if not formField.vars.attr[dataField]|default(false) or allowMultiple %}
+        {{ sfs_cms_form_view_set_attr(formField, dataField, value == false ? (formField.vars.name~'_'~random())|sfs_cms_sha1|slice(0,8) : value, allowMultiple) }}
     {% endif %}
 {%- endmacro _update_link_value -%}
