@@ -16,7 +16,7 @@ function _init() {
  *
  * The preview target element must have the "data-edit-color-attribute-{attributeName}-target" attribute
  * The input field must have the "data-edit-color-attribute-{attributeName}-input"
- * Both data attributes must have the same value (as identificator)
+ * Both data attributes must have the same value (as identifier)
  */
 function onEditColorAttribute(event) {
     if (!event.target) {
