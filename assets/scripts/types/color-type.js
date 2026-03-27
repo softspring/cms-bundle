@@ -25,7 +25,12 @@ function _init() {
         }
 
         let widget = event.target;
-        let toggler = widget.closest('.input-group').querySelector('[data-color-type=toggler]');
+        let inputGroup = widget.closest('.input-group');
+        if (!inputGroup) {
+            return;
+        }
+
+        let toggler = inputGroup.querySelector('[data-color-type=toggler]');
 
         if (!toggler) {
             return;
@@ -40,7 +45,16 @@ function _init() {
 }
 
 function colorDatePicker(toggler) {
-    let widget = toggler.closest('.input-group').querySelector('[data-color-type=widget]');
+    if (!toggler) {
+        return;
+    }
+
+    let inputGroup = toggler.closest('.input-group');
+    if (!inputGroup) {
+        return;
+    }
+
+    let widget = inputGroup.querySelector('[data-color-type=widget]');
 
     if (!widget) {
         return;
@@ -56,7 +70,16 @@ function colorDatePicker(toggler) {
 
     if (!widget.hasAttribute('data-edit-bgcolor-input')) return;
 
-    let modulePreview = widget.closest('.cms-module-edit').querySelector('.module-preview');
+    let moduleEdit = widget.closest('.cms-module-edit');
+    if (!moduleEdit) {
+        return;
+    }
+
+    let modulePreview = moduleEdit.querySelector('.module-preview');
+    if (!modulePreview) {
+        return;
+    }
+
     let htmlTargetElements = modulePreview.querySelectorAll("[data-edit-bgcolor-target='" + widget.dataset.editBgcolorInput + "']");
     if (htmlTargetElements.length) {
 
