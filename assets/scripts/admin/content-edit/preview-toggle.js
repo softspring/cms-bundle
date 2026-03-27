@@ -1,5 +1,4 @@
 import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
-import {filterCurrentFilterElements} from "./filter-preview";
 
 registerFeature('admin_content_edit_preview_toggle', _init);
 
@@ -66,7 +65,7 @@ function _init() {
     initializeChoices();
 
     function updateChoice(choiceField) {
-        // Verificar que sea un select o input radio
+        // Check that it is a select or radio input
         let isSelect = choiceField.tagName === 'SELECT';
 
         // TODO add support for radio buttons
@@ -85,7 +84,7 @@ function _init() {
             htmlTargetElements.forEach(function (htmlTargetElement) {
                 let targetValues = htmlTargetElement.dataset.editContentToggleChoiceTargetValues;
 
-                // Si tiene valores específicos, verificar si el valor seleccionado está en la lista
+                // If it has specific values, check whether the selected value is in the list
                 if (targetValues) {
                     let valuesArray = targetValues.split(',').map(v => v.trim());
                     let shouldShow = valuesArray.includes(String(selectedValue));
@@ -96,7 +95,7 @@ function _init() {
                         htmlTargetElement.classList.add('d-none');
                     }
                 } else {
-                    // Si no tiene valores específicos, usar comportamiento booleano
+                    // If it has no specific values, use boolean behavior
                     if (selectedValue) {
                         htmlTargetElement.classList.remove('d-none');
                     } else {
