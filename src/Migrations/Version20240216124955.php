@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Softspring\CmsBundle\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Doctrine\Migrations\AbstractMigration;
 
 final class Version20240216124955 extends AbstractMigration
@@ -16,6 +17,15 @@ final class Version20240216124955 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
+        if ($this->connection->getDatabasePlatform() instanceof PostgreSQLPlatform) {
+            $this->addSql('ALTER TABLE cms_content_version ADD seo JSON DEFAULT NULL');
+            $this->addSql('ALTER TABLE cms_content RENAME COLUMN seo TO indexing');
+            $this->addSql("UPDATE cms_content_version v SET seo = (SELECT (((((indexing::jsonb #- '{noIndex}') #- '{sitemap}') #- '{noFollow}') #- '{sitemapPriority}') #- '{sitemapChangefreq}')::json FROM cms_content c WHERE v.content_id = c.id)");
+            $this->addSql("UPDATE cms_content SET indexing = ((((indexing::jsonb #- '{metaTitle}') #- '{metaKeywords}') #- '{metaDescription}'))::json");
+
+            return;
+        }
+
         $this->addSql('ALTER TABLE cms_content_version ADD seo JSON DEFAULT NULL');
         $this->addSql('ALTER TABLE cms_content CHANGE seo indexing JSON DEFAULT NULL');
 
@@ -29,6 +39,12 @@ final class Version20240216124955 extends AbstractMigration
     public function down(Schema $schema): void
     {
         $this->addSql('ALTER TABLE cms_content_version DROP seo');
+        if ($this->connection->getDatabasePlatform() instanceof PostgreSQLPlatform) {
+            $this->addSql('ALTER TABLE cms_content RENAME COLUMN indexing TO seo');
+
+            return;
+        }
+
         $this->addSql('ALTER TABLE cms_content CHANGE indexing seo JSON DEFAULT NULL');
     }
 }

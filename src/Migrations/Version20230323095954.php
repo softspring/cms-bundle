@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Softspring\CmsBundle\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Doctrine\Migrations\AbstractMigration;
 
 final class Version20230323095954 extends AbstractMigration
@@ -16,6 +17,16 @@ final class Version20230323095954 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
+        if ($this->connection->getDatabasePlatform() instanceof PostgreSQLPlatform) {
+            $this->addSql('CREATE TABLE cms_content_version_routes (content_version_id CHAR(36) NOT NULL, route_id VARCHAR(255) NOT NULL, PRIMARY KEY(content_version_id, route_id))');
+            $this->addSql('CREATE INDEX IDX_62372FCDD28591F7 ON cms_content_version_routes (content_version_id)');
+            $this->addSql('CREATE INDEX IDX_62372FCD34ECB4E6 ON cms_content_version_routes (route_id)');
+            $this->addSql('ALTER TABLE cms_content_version_routes ADD CONSTRAINT FK_62372FCDD28591F7 FOREIGN KEY (content_version_id) REFERENCES cms_content_version (id) ON DELETE CASCADE');
+            $this->addSql('ALTER TABLE cms_content_version_routes ADD CONSTRAINT FK_62372FCD34ECB4E6 FOREIGN KEY (route_id) REFERENCES cms_route (id) ON DELETE RESTRICT');
+
+            return;
+        }
+
         $this->addSql('CREATE TABLE cms_content_version_routes (content_version_id CHAR(36) NOT NULL, route_id VARCHAR(255) NOT NULL, INDEX IDX_62372FCDD28591F7 (content_version_id), INDEX IDX_62372FCD34ECB4E6 (route_id), PRIMARY KEY(content_version_id, route_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE cms_content_version_routes ADD CONSTRAINT FK_62372FCDD28591F7 FOREIGN KEY (content_version_id) REFERENCES cms_content_version (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE cms_content_version_routes ADD CONSTRAINT FK_62372FCD34ECB4E6 FOREIGN KEY (route_id) REFERENCES cms_route (id) ON DELETE RESTRICT');
