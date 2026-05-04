@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Twig\Extension;
 
+use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\RoutePathInterface;
 use Softspring\CmsBundle\Routing\UrlGenerator;
 use Softspring\TranslatableBundle\Model\Translation;
@@ -82,9 +83,32 @@ class TranslateExtension extends AbstractExtension
         return $this->enabledLocales;
     }
 
-    public function getAlternateUrls(): array
+    public function getAlternateUrls(?ContentInterface $content = null): array
     {
         $request = $this->requestStack->getCurrentRequest();
+
+        if ($content) {
+            $alternates = [];
+
+            foreach ($this->enabledLocales as $locale) {
+                $url = '#';
+
+                foreach ($content->getRoutes() as $route) {
+                    if ($route->getPathForLocale($locale)) {
+                        $url = $this->cmsUrlGenerator->getUrl($route, $locale);
+                        break;
+                    }
+                }
+
+                if ('#' === $url) {
+                    continue;
+                }
+
+                $alternates[$locale] = $url;
+            }
+
+            return $alternates;
+        }
 
         /** @var ?RoutePathInterface $routePath */
         $routePath = $request->attributes->get('routePath');
