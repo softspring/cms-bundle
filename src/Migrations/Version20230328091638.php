@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Softspring\CmsBundle\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Doctrine\Migrations\AbstractMigration;
 
 final class Version20230328091638 extends AbstractMigration
@@ -25,6 +26,15 @@ final class Version20230328091638 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
+        if ($this->connection->getDatabasePlatform() instanceof PostgreSQLPlatform) {
+            $this->addSql('ALTER TABLE cms_route DROP CONSTRAINT FK_2CB7BB55727ACA70');
+            $this->addSql('DROP INDEX IDX_2CB7BB55727ACA70');
+            $this->addSql('ALTER TABLE cms_route DROP COLUMN parent_id');
+            $this->addSql('ALTER TABLE cms_route_path DROP COLUMN compiled_path');
+
+            return;
+        }
+
         $this->addSql('ALTER TABLE cms_route DROP FOREIGN KEY FK_2CB7BB55727ACA70');
         $this->addSql('DROP INDEX IDX_2CB7BB55727ACA70 ON cms_route');
         $this->addSql('ALTER TABLE cms_route DROP parent_id');

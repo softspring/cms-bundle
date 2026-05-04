@@ -18,8 +18,8 @@ final class Version20240926071945 extends AbstractMigration
     public function up(Schema $schema): void
     {
         if ($this->connection->getDatabasePlatform() instanceof PostgreSQLPlatform) {
-            $this->addSql('ALTER TABLE cms_compiled_data ADD errors SMALLINT DEFAULT 0 NOT NULL');
-            $this->addSql('ALTER TABLE cms_content_version ADD compile_errors SMALLINT DEFAULT 0 NOT NULL');
+            $this->addSql('ALTER TABLE cms_compiled_data ADD errors BOOLEAN DEFAULT FALSE NOT NULL');
+            $this->addSql('ALTER TABLE cms_content_version ADD compile_errors BOOLEAN DEFAULT FALSE NOT NULL');
 
             return;
         }

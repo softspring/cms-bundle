@@ -24,7 +24,7 @@ final class Version20230301000000 extends AbstractMigration
             $this->addSql('CREATE UNIQUE INDEX UNIQ_A0293FB85E237E06 ON cms_content (name)');
             $this->addSql('CREATE INDEX IDX_A0293FB8B5D68A8D ON cms_content (published_version_id)');
             $this->addSql('CREATE TABLE cms_content_page (id CHAR(36) NOT NULL, PRIMARY KEY(id))');
-            $this->addSql('CREATE TABLE cms_content_version (id CHAR(36) NOT NULL, content_id CHAR(36) DEFAULT NULL, layout VARCHAR(255) DEFAULT NULL, data JSON DEFAULT NULL, compiled_modules JSON DEFAULT NULL, compiled JSON DEFAULT NULL, created_at INTEGER DEFAULT NULL, keep SMALLINT DEFAULT 0 NOT NULL, PRIMARY KEY(id))');
+            $this->addSql('CREATE TABLE cms_content_version (id CHAR(36) NOT NULL, content_id CHAR(36) DEFAULT NULL, layout VARCHAR(255) DEFAULT NULL, data JSON DEFAULT NULL, compiled_modules JSON DEFAULT NULL, compiled JSON DEFAULT NULL, created_at INTEGER DEFAULT NULL, keep BOOLEAN DEFAULT FALSE NOT NULL, PRIMARY KEY(id))');
             $this->addSql('CREATE INDEX IDX_C0E8E17F84A0A3ED ON cms_content_version (content_id)');
             $this->addSql('CREATE TABLE cms_menu (id CHAR(36) NOT NULL, name VARCHAR(255) NOT NULL, menu_type CHAR(30) NOT NULL, PRIMARY KEY(id))');
             $this->addSql('CREATE UNIQUE INDEX UNIQ_BA9397EE5E237E06 ON cms_menu (name)');
