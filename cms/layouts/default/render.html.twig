@@ -27,12 +27,12 @@
     {% endif %}
     {% if canonical_content and canonical_content != version.content %}
         <link rel="canonical" href="{{ sfs_cms_url_for_content(canonical_content, app.request.locale) }}" />
-        {% for locale, url in sfs_cms_alternate_urls(canonical_content) %}
+        {% for locale, url in sfs_cms_alternate_urls() %}
             <link rel="alternate" hreflang="{{ locale }}" href="{{ url }}" />
         {% endfor %}
     {% else %}
         <link rel="canonical" href="{{ sfs_cms_url_for_content(version.content, app.request.locale) }}" />
-        {% for locale, url in sfs_cms_alternate_urls(version.content) %}
+        {% for locale, url in sfs_cms_alternate_urls() %}
             <link rel="alternate" hreflang="{{ locale }}" href="{{ url }}" />
         {% endfor %}
     {% endif %}
