@@ -18,58 +18,58 @@ final class Version20230522124841 extends AbstractMigration
     public function up(Schema $schema): void
     {
         if ($this->connection->getDatabasePlatform() instanceof PostgreSQLPlatform) {
-            $this->addSql('CREATE TABLE cms_site (id CHAR(36) NOT NULL, PRIMARY KEY(id))');
-            $this->addSql('INSERT INTO cms_site (id) SELECT DISTINCT site FROM cms_content WHERE site IS NOT NULL ON CONFLICT DO NOTHING');
-            $this->addSql('INSERT INTO cms_site (id) SELECT DISTINCT site FROM cms_route WHERE site IS NOT NULL ON CONFLICT DO NOTHING');
+            $this->addSql('CREATE TABLE cms_site (id VARCHAR(36) NOT NULL, PRIMARY KEY(id))');
+            $this->addSql('INSERT INTO cms_site (id) SELECT DISTINCT btrim(site) FROM cms_content WHERE site IS NOT NULL ON CONFLICT DO NOTHING');
+            $this->addSql('INSERT INTO cms_site (id) SELECT DISTINCT btrim(site) FROM cms_route WHERE site IS NOT NULL ON CONFLICT DO NOTHING');
 
-            $this->addSql('CREATE TABLE cms_content_sites (content_id CHAR(36) NOT NULL, site_id CHAR(36) NOT NULL, PRIMARY KEY(content_id, site_id))');
+            $this->addSql('CREATE TABLE cms_content_sites (content_id CHAR(36) NOT NULL, site_id VARCHAR(36) NOT NULL, PRIMARY KEY(content_id, site_id))');
             $this->addSql('CREATE INDEX IDX_E792456484A0A3ED ON cms_content_sites (content_id)');
             $this->addSql('CREATE INDEX IDX_E7924564F6BD1646 ON cms_content_sites (site_id)');
             $this->addSql('ALTER TABLE cms_content_sites ADD CONSTRAINT FK_E792456484A0A3ED FOREIGN KEY (content_id) REFERENCES cms_content (id) ON DELETE CASCADE');
             $this->addSql('ALTER TABLE cms_content_sites ADD CONSTRAINT FK_E7924564F6BD1646 FOREIGN KEY (site_id) REFERENCES cms_site (id) ON DELETE CASCADE');
-            $this->addSql('INSERT INTO cms_content_sites (content_id, site_id) SELECT id, site FROM cms_content WHERE site IS NOT NULL ON CONFLICT DO NOTHING');
+            $this->addSql('INSERT INTO cms_content_sites (content_id, site_id) SELECT id, btrim(site) FROM cms_content WHERE site IS NOT NULL ON CONFLICT DO NOTHING');
             $this->addSql('ALTER TABLE cms_content DROP COLUMN site');
 
-            $this->addSql('CREATE TABLE cms_route_sites (route_id VARCHAR(255) NOT NULL, site_id CHAR(36) NOT NULL, PRIMARY KEY(route_id, site_id))');
+            $this->addSql('CREATE TABLE cms_route_sites (route_id VARCHAR(255) NOT NULL, site_id VARCHAR(36) NOT NULL, PRIMARY KEY(route_id, site_id))');
             $this->addSql('CREATE INDEX IDX_BC9E2F1934ECB4E6 ON cms_route_sites (route_id)');
             $this->addSql('CREATE INDEX IDX_BC9E2F19F6BD1646 ON cms_route_sites (site_id)');
-            $this->addSql('CREATE TABLE cms_route_path_sites (route_path_id CHAR(36) NOT NULL, site_id CHAR(36) NOT NULL, PRIMARY KEY(route_path_id, site_id))');
+            $this->addSql('CREATE TABLE cms_route_path_sites (route_path_id CHAR(36) NOT NULL, site_id VARCHAR(36) NOT NULL, PRIMARY KEY(route_path_id, site_id))');
             $this->addSql('CREATE INDEX IDX_D70A2920213F0BF3 ON cms_route_path_sites (route_path_id)');
             $this->addSql('CREATE INDEX IDX_D70A2920F6BD1646 ON cms_route_path_sites (site_id)');
             $this->addSql('ALTER TABLE cms_route_sites ADD CONSTRAINT FK_BC9E2F1934ECB4E6 FOREIGN KEY (route_id) REFERENCES cms_route (id) ON DELETE CASCADE');
             $this->addSql('ALTER TABLE cms_route_sites ADD CONSTRAINT FK_BC9E2F19F6BD1646 FOREIGN KEY (site_id) REFERENCES cms_site (id) ON DELETE CASCADE');
             $this->addSql('ALTER TABLE cms_route_path_sites ADD CONSTRAINT FK_D70A2920213F0BF3 FOREIGN KEY (route_path_id) REFERENCES cms_route_path (id) ON DELETE CASCADE');
             $this->addSql('ALTER TABLE cms_route_path_sites ADD CONSTRAINT FK_D70A2920F6BD1646 FOREIGN KEY (site_id) REFERENCES cms_site (id) ON DELETE CASCADE');
-            $this->addSql('INSERT INTO cms_route_sites (route_id, site_id) SELECT id, site FROM cms_route WHERE site IS NOT NULL ON CONFLICT DO NOTHING');
+            $this->addSql('INSERT INTO cms_route_sites (route_id, site_id) SELECT id, btrim(site) FROM cms_route WHERE site IS NOT NULL ON CONFLICT DO NOTHING');
             $this->addSql('ALTER TABLE cms_route DROP COLUMN site');
-            $this->addSql('INSERT INTO cms_route_path_sites (route_path_id, site_id) SELECT id, site FROM cms_route_path WHERE site IS NOT NULL ON CONFLICT DO NOTHING');
+            $this->addSql('INSERT INTO cms_route_path_sites (route_path_id, site_id) SELECT id, btrim(site) FROM cms_route_path WHERE site IS NOT NULL ON CONFLICT DO NOTHING');
             $this->addSql('ALTER TABLE cms_route_path DROP COLUMN site');
 
             return;
         }
 
         // create site table
-        $this->addSql('CREATE TABLE cms_site (id CHAR(36) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('INSERT IGNORE INTO cms_site SELECT DISTINCT site FROM cms_content');
-        $this->addSql('INSERT IGNORE INTO cms_site SELECT DISTINCT site FROM cms_route');
+        $this->addSql('CREATE TABLE cms_site (id VARCHAR(36) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('INSERT IGNORE INTO cms_site SELECT DISTINCT TRIM(site) FROM cms_content');
+        $this->addSql('INSERT IGNORE INTO cms_site SELECT DISTINCT TRIM(site) FROM cms_route');
 
         // UPDATE CONTENT MODEL
-        $this->addSql('CREATE TABLE cms_content_sites (content_id CHAR(36) NOT NULL, site_id CHAR(36) NOT NULL, INDEX IDX_E792456484A0A3ED (content_id), INDEX IDX_E7924564F6BD1646 (site_id), PRIMARY KEY(content_id, site_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;');
+        $this->addSql('CREATE TABLE cms_content_sites (content_id CHAR(36) NOT NULL, site_id VARCHAR(36) NOT NULL, INDEX IDX_E792456484A0A3ED (content_id), INDEX IDX_E7924564F6BD1646 (site_id), PRIMARY KEY(content_id, site_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;');
         $this->addSql('ALTER TABLE cms_content_sites ADD CONSTRAINT FK_E792456484A0A3ED FOREIGN KEY (content_id) REFERENCES cms_content (id) ON DELETE CASCADE;');
         $this->addSql('ALTER TABLE cms_content_sites ADD CONSTRAINT FK_E7924564F6BD1646 FOREIGN KEY (site_id) REFERENCES cms_site (id) ON DELETE CASCADE;');
-        $this->addSql('INSERT IGNORE INTO cms_content_sites SELECT id,site FROM cms_content;');
+        $this->addSql('INSERT IGNORE INTO cms_content_sites SELECT id,TRIM(site) FROM cms_content;');
         $this->addSql('ALTER TABLE cms_content DROP site;');
 
         // UPDATE ROUTES MODEL
-        $this->addSql('CREATE TABLE cms_route_sites (route_id VARCHAR(255) NOT NULL, site_id CHAR(36) NOT NULL, INDEX IDX_BC9E2F1934ECB4E6 (route_id), INDEX IDX_BC9E2F19F6BD1646 (site_id), PRIMARY KEY(route_id, site_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;');
-        $this->addSql('CREATE TABLE cms_route_path_sites (route_path_id CHAR(36) NOT NULL, site_id CHAR(36) NOT NULL, INDEX IDX_D70A2920213F0BF3 (route_path_id), INDEX IDX_D70A2920F6BD1646 (site_id), PRIMARY KEY(route_path_id, site_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;');
+        $this->addSql('CREATE TABLE cms_route_sites (route_id VARCHAR(255) NOT NULL, site_id VARCHAR(36) NOT NULL, INDEX IDX_BC9E2F1934ECB4E6 (route_id), INDEX IDX_BC9E2F19F6BD1646 (site_id), PRIMARY KEY(route_id, site_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;');
+        $this->addSql('CREATE TABLE cms_route_path_sites (route_path_id CHAR(36) NOT NULL, site_id VARCHAR(36) NOT NULL, INDEX IDX_D70A2920213F0BF3 (route_path_id), INDEX IDX_D70A2920F6BD1646 (site_id), PRIMARY KEY(route_path_id, site_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;');
         $this->addSql('ALTER TABLE cms_route_sites ADD CONSTRAINT FK_BC9E2F1934ECB4E6 FOREIGN KEY (route_id) REFERENCES cms_route (id) ON DELETE CASCADE;');
         $this->addSql('ALTER TABLE cms_route_sites ADD CONSTRAINT FK_BC9E2F19F6BD1646 FOREIGN KEY (site_id) REFERENCES cms_site (id) ON DELETE CASCADE;');
         $this->addSql('ALTER TABLE cms_route_path_sites ADD CONSTRAINT FK_D70A2920213F0BF3 FOREIGN KEY (route_path_id) REFERENCES cms_route_path (id) ON DELETE CASCADE;');
         $this->addSql('ALTER TABLE cms_route_path_sites ADD CONSTRAINT FK_D70A2920F6BD1646 FOREIGN KEY (site_id) REFERENCES cms_site (id) ON DELETE CASCADE;');
-        $this->addSql('INSERT IGNORE INTO cms_route_sites SELECT id,site FROM cms_route;');
+        $this->addSql('INSERT IGNORE INTO cms_route_sites SELECT id,TRIM(site) FROM cms_route;');
         $this->addSql('ALTER TABLE cms_route DROP site;');
-        $this->addSql('INSERT IGNORE INTO cms_route_path_sites SELECT id,site FROM cms_route_path;');
+        $this->addSql('INSERT IGNORE INTO cms_route_path_sites SELECT id,TRIM(site) FROM cms_route_path;');
         $this->addSql('ALTER TABLE cms_route_path DROP site;');
     }
 

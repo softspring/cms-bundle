@@ -7,9 +7,7 @@
     <entity name="Softspring\CmsBundle\Entity\Site" table="cms_site">
         <cache usage="NONSTRICT_READ_WRITE" />
 
-        <id name="id" type="string" length="36" column="id">
-            <options><option name="fixed">true</option></options>
-        </id>
+        <id name="id" type="string" length="36" column="id" />
     </entity>
 
 </doctrine-mapping>
