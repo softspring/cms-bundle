@@ -7,15 +7,9 @@
     <mapped-superclass name="Softspring\CmsBundle\Model\RoutePath" table="cms_route_path">
 
         <field name="path" column="path" nullable="false" length="100">
-            <options>
-                <option name="fixed">true</option>
-            </options>
         </field>
 
         <field name="compiledPath" column="compiled_path" nullable="true" length="255">
-            <options>
-                <option name="fixed">true</option>
-            </options>
         </field>
 
         <field name="cacheTtl" column="cache_ttl" type="integer" nullable="true">
@@ -25,9 +19,6 @@
         </field>
 
         <field name="locale" column="locale" nullable="true" length="5">
-            <options>
-                <option name="fixed">true</option>
-            </options>
         </field>
 
         <many-to-one field="route" target-entity="Softspring\CmsBundle\Model\RouteInterface" inversed-by="paths" fetch="EAGER">
