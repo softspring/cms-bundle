@@ -27,6 +27,7 @@ class ContentType extends AbstractType
             'class' => ContentInterface::class,
             'em' => $this->sfsContentEm,
             'required' => false,
+            'placeholder' => '',
             'choice_label' => function (ContentInterface $content) {
                 return $content->getName();
             },
