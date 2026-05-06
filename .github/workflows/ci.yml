@@ -67,6 +67,7 @@ jobs:
                     repo_token: ${{ secrets.GITHUB_TOKEN }}
 
     build-dist:
+        needs: frontend
         runs-on: ubuntu-latest
         permissions:
             contents: write
