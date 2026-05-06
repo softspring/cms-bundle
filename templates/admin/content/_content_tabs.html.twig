@@ -4,7 +4,7 @@
 {% set content_entity = content_entity|default(entity) %}
 {% trans_default_domain 'sfs_cms_contents' %}
 
-<ul class="nav nav-tabs mt-3" id="myTab" role="tablist">
+<ul class="nav nav-tabs my-3" id="myTab" role="tablist">
     {% block tabs %}
         {% for item in sfs_cms_admin_content_menu(current, content_entity) %}
             <li class="nav-item">
@@ -15,7 +15,7 @@
                 {% endif %}
             </li>
         {% endfor %}
-{#        <li class="nav-item">#}
+{#        <a class="sfs-content-tab">#}
 {#            {% if not content_config.admin.duplicate.is_granted or is_granted(content_config.admin.duplicate.is_granted, entity) %}#}
 {#                <a class="btn btn-sm btn-primary button" href="{{ url('sfs_cms_admin_content_'~content_type~'_duplicate', {'content':content_entity}) }}">#}
 {#                   <span class="bi bi-copy"></span>{{ ('admin_page.tabs_menu.duplicate')|trans }}</a>#}

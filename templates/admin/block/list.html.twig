@@ -35,11 +35,10 @@
         {% if entities|length %}
             <div class="mb-4">
                 {{ form_start(filterForm) }}
-                <button class="btn btn-link px-0" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter"><i class="bi bi-filter h4 text-muted align-middle"></i> Filters</button>
-                <div class="row align-items-end border shadow-sm rounded p-3 collapse show" id="collapseFilter">
-                    {% if filterForm.name is defined %}<div class="col-12 col-md-6 col-lg-2">{{ form_row(filterForm.name) }}</div>{% endif %}
-                    {% if filterForm.type is defined %}<div class="col-12 col-md-6 col-lg-2">{{ form_row(filterForm.type) }}</div>{% endif %}
-                    <div class="col pb-3">
+                <div class="d-flex flex-wrap align-items-center gap-3">
+                    {% if filterForm.name is defined %}{{ form_row(filterForm.name, {'row_class':'form-floating mb-3'}) }}{% endif %}
+                    {% if filterForm.type is defined %}{{ form_row(filterForm.type, {'row_class':'form-floating mb-3'}) }}{% endif %}
+                    <div class="align-self-end pb-3">
                         <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
                     </div>
                 </div>
@@ -76,22 +75,20 @@
                 {% include '@SfsCms/admin/block/list-page.html.twig' %}
             {% endblock tbody %}
 
-            {% block empty %}
+        {% block empty_message %}
+            <div class="p-5 text-center">
                 {% if blocks_config|filter((blockConfig) => not blockConfig.static) is empty %}
-                <div class="container-fluid bg-white p-4">
-                    <div class="p-5 m-5">
-                        <p class="text-center text-muted">
+                        <p class="mb-3 text-body-secondary">
                             {{ 'admin_blocks.list.no_blocks_configured.message'|trans }}
                         </p>
-                        <p class="text-center text-muted">
+                        <p class="mb-0 text-body-secondary">
                             {{ 'admin_blocks.list.no_blocks_configured.link'|trans|raw }}
                         </p>
-                    </div>
-                </div>
                 {% else %}
                     {{ parent() }}
                 {% endif %}
-            {% endblock empty %}
+            </div>
+            {% endblock empty_message %}
         {% endembed %}
     </div>
 {% endblock content %}

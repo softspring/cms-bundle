@@ -37,9 +37,7 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col">
-                {% include ['@content/'~content_type~'/admin/_read_general.html.twig', '@SfsCms/admin/content/_read_general.html.twig'] %}
-            </div>
+            {% include ['@content/'~content_type~'/admin/_read_general.html.twig', '@SfsCms/admin/content/_read_general.html.twig'] with {'container_classes': 'col card'} %}
             <div class="col">
                 {% include ['@content/'~content_type~'/admin/_read_indexing.html.twig', '@SfsCms/admin/content/_read_indexing.html.twig'] %}
             </div>

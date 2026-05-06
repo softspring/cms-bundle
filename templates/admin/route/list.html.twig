@@ -1,5 +1,6 @@
 {% trans_default_domain 'sfs_cms_admin' %}
 {% extends '@SfsCms/admin_layout.html.twig' %}
+{% form_theme filterForm '@SfsComponents/forms/admin-horizontal.html.twig' %}
 
 {% block title %}{{ 'admin_routes.list.meta.title'|trans }}{% endblock %}
 
@@ -22,13 +23,12 @@
         {% if filterForm.vars.submitted or entities|length %}
             <div class="mb-4">
                 {{ form_start(filterForm) }}
-                <button class="btn btn-link px-0" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter"><i class="bi bi-filter h4 text-muted align-middle"></i> Filters</button>
-                <div class="row align-items-end border shadow-sm rounded p-3 collapse show" id="collapseFilter">
-                    {% if filterForm.id is defined %}<div class="col-12 col-md-6 col-lg-3">{{ form_row(filterForm.id) }}</div>{% endif %}
-                    {% if filterForm.path is defined %}<div class="col-12 col-md-6 col-lg-3">{{ form_row(filterForm.path) }}</div>{% endif %}
-                    {% if filterForm.sites is defined %}<div class="col-12 col-md-6 col-lg-2">{{ form_row(filterForm.sites, {'attr':{'onchange':'submit()'}}) }}</div>{% endif %}
-                    {% if filterForm.type is defined %}<div class="col-12 col-md-6 col-lg-2">{{ form_row(filterForm.type, {'attr':{'onchange':'submit()'}}) }}</div>{% endif %}
-                    <div class="col pb-3">
+                <div class="d-flex flex-wrap align-items-center gap-3">
+                    {% if filterForm.id is defined %}{{ form_row(filterForm.id, {'row_class':'form-floating mb-3'}) }}{% endif %}
+                    {% if filterForm.path is defined %}{{ form_row(filterForm.path, {'row_class':'form-floating mb-3'}) }}{% endif %}
+                    {% if filterForm.sites is defined %}{{ form_row(filterForm.sites, {'row_class':'form-floating mb-3', 'attr':{'onchange':'submit()'}}) }}{% endif %}
+                    {% if filterForm.type is defined %}{{ form_row(filterForm.type, {'row_class':'form-floating mb-3', 'attr':{'onchange':'submit()'}}) }}{% endif %}
+                    <div class="align-self-end pb-3">
                         <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
                     </div>
                 </div>
@@ -57,26 +57,26 @@
                 {% include '@SfsCms/admin/route/list-page.html.twig' %}
             {% endblock tbody %}
 
-            {% block empty_message %}
-                {% if filterForm|default(false) and filterForm.vars.data|default([])|filter(v=>v) is not empty %}
-                    <p class="text-center text-muted">
-                        {{ ('admin_routes.list.empty.clean_filters')|trans({'%url%': url('sfs_cms_admin_routes_list')})|raw }}
-                    </p>
-                {% else %}
-                    <p class="text-center text-muted">
-{#                        {% if is_granted() %}#}
+                {% block empty_message %}
+                    {% if filterForm|default(false) and filterForm.vars.data|default([])|filter(v=>v) is not empty %}
+                    <div class="p-5 text-center">
+                        <p class="mb-3 text-body-secondary">
+                            {{ ('admin_routes.list.empty.clean_filters')|trans({'%url%': url('sfs_cms_admin_routes_list')})|raw }}
+                        </p>
+                    </div>
+                    {% else %}
+                    <div class="p-5 text-center">
+                        <p class="mb-3 text-body-secondary">
                             {{ ('admin_routes.list.empty.create_first_route_raw')|trans({
                                 '%create_link%': url('sfs_cms_admin_routes_create'),
                             })|raw }}
-{#                        {% else %}#}
-{#                            {{ ('admin_routes.list.empty.can_not_create_routes')|trans }}#}
-{#                        {% endif %}#}
-                    </p>
-                    <p class="text-center text-muted">
-                        {{ ('admin_routes.list.empty.go_to_doc_raw')|trans|raw }}
-                    </p>
-                {% endif %}
-            {% endblock empty_message %}
+                        </p>
+                        <p class="mb-0 text-body-secondary">
+                            {{ ('admin_routes.list.empty.go_to_doc_raw')|trans|raw }}
+                        </p>
+                    </div>
+                    {% endif %}
+                {% endblock empty_message %}
         {% endembed %}
     </div>
 {% endblock content %}
