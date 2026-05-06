@@ -162,5 +162,5 @@ jobs:
                 run: npm install --no-package-lock --no-audit --no-fund
 
             -   name: Run eslint
-                run: ../node_modules/.bin/eslint scripts/*
+                run: ESLINT_USE_FLAT_CONFIG=true ../node_modules/.bin/eslint scripts
                 working-directory: assets
