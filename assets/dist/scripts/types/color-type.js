@@ -1,0 +1,92 @@
+import {registerFeature} from '../tools.js';
+
+registerFeature('types_color_type', _init);
+
+/**
+ * Init behaviour
+ * @private
+ */
+function _init() {
+    document.querySelectorAll('[data-color-type=toggler]').forEach(function(togglerHtmlElement) {
+        colorDatePicker(togglerHtmlElement);
+    });
+
+    document.addEventListener('change', function (event) {
+        if (!event.target || !event.target.matches('[data-color-type=toggler]')) {
+            return;
+        }
+
+        colorDatePicker(event.target);
+    });
+
+    document.addEventListener('change', function (event) {
+        if (!event.target || !event.target.matches('[data-color-type=widget]')) {
+            return;
+        }
+
+        let widget = event.target;
+        let inputGroup = widget.closest('.input-group');
+        if (!inputGroup) {
+            return;
+        }
+
+        let toggler = inputGroup.querySelector('[data-color-type=toggler]');
+
+        if (!toggler) {
+            return;
+        }
+
+        if (widget.value && !toggler.checked) {
+            toggler.checked = true;
+        }
+
+        colorDatePicker(toggler);
+    });
+}
+
+function colorDatePicker(toggler) {
+    if (!toggler) {
+        return;
+    }
+
+    let inputGroup = toggler.closest('.input-group');
+    if (!inputGroup) {
+        return;
+    }
+
+    let widget = inputGroup.querySelector('[data-color-type=widget]');
+
+    if (!widget) {
+        return;
+    }
+
+    widget.disabled = !toggler.checked;
+
+    if (widget.disabled) {
+        widget.classList.add('disabled')
+    } else {
+        widget.classList.remove('disabled')
+    }
+
+    if (!widget.hasAttribute('data-edit-bgcolor-input')) return;
+
+    let moduleEdit = widget.closest('.cms-module-edit');
+    if (!moduleEdit) {
+        return;
+    }
+
+    let modulePreview = moduleEdit.querySelector('.module-preview');
+    if (!modulePreview) {
+        return;
+    }
+
+    let htmlTargetElements = modulePreview.querySelectorAll("[data-edit-bgcolor-target='" + widget.dataset.editBgcolorInput + "']");
+    if (htmlTargetElements.length) {
+
+        if (widget.disabled) {
+            htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.style.backgroundColor = null);
+        } else {
+            htmlTargetElements.forEach((htmlTargetElement) => htmlTargetElement.style.backgroundColor = widget.value);
+        }
+    }
+}

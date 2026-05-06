@@ -1,0 +1,410 @@
+body {
+  --sfs-cms-module-form-width: 450px;
+}
+
+.tox-notifications-container {
+  display: none;
+}
+
+.tox.tox-tinymce-inline {
+  z-index: 1000;
+}
+
+.cms-content {
+  padding-top: 140px;
+}
+@media (min-width: 768px) {
+  .cms-content {
+    padding-top: 95px;
+  }
+}
+@media (min-width: 992px) {
+  .cms-content {
+    padding-top: 75px;
+  }
+}
+
+.cms-content-header {
+  display: flex;
+  align-items: center;
+  height: 140px;
+}
+@media (min-width: 768px) {
+  .cms-content-header {
+    height: 95px;
+  }
+}
+@media (min-width: 992px) {
+  .cms-content-header {
+    height: 75px;
+  }
+}
+
+.cms-content-main main > .container-fluid {
+  padding: 0;
+}
+
+.row > .insert-module {
+  display: none;
+}
+
+.insert-module {
+  display: none;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  background-color: var(--bs-secondary-color);
+  z-index: 1000;
+}
+.insert-module:hover, .insert-module.active {
+  z-index: 1001;
+  text-decoration: none;
+}
+.insert-module:hover:before, .insert-module.active:before {
+  opacity: 1;
+}
+.insert-module:before {
+  content: "+";
+  display: block;
+  width: 25px;
+  height: 25px;
+  margin: -12px auto 0;
+  font-size: 30px;
+  line-height: 25px;
+  text-align: center;
+  color: white;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  background-color: var(--bs-primary);
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+[data-collection=collection]:hover > .row > .insert-module,
+[data-collection=collection].active > .row > .insert-module {
+  display: block;
+  margin-top: -4px;
+  height: 4px;
+}
+[data-collection=collection]:hover > .row > .insert-module.selected, [data-collection=collection]:hover > .row > .insert-module:hover,
+[data-collection=collection].active > .row > .insert-module.selected,
+[data-collection=collection].active > .row > .insert-module:hover {
+  background-color: var(--bs-primary);
+  color: white;
+}
+[data-collection=collection]:hover > .row > .insert-module.selected:before, [data-collection=collection]:hover > .row > .insert-module:hover:before,
+[data-collection=collection].active > .row > .insert-module.selected:before,
+[data-collection=collection].active > .row > .insert-module:hover:before {
+  background-color: var(--bs-primary);
+}
+[data-collection=collection]:hover > .row > .insert-module:last-child,
+[data-collection=collection].active > .row > .insert-module:last-child {
+  margin-bottom: 20px;
+}
+
+.insert-module-at-the-end {
+  position: relative;
+  z-index: 1030;
+}
+
+.insert-module-at-the-end.col,
+.insert-module-at-the-end[class^=col-],
+.insert-module-at-the-end[class*=col-] {
+  padding: 0;
+  margin-left: 12px;
+  flex: 0 0 16px;
+  height: 100%;
+  min-height: 200px;
+}
+.insert-module-at-the-end.col:first-child,
+.insert-module-at-the-end[class^=col-]:first-child,
+.insert-module-at-the-end[class*=col-]:first-child {
+  margin-left: 40px;
+}
+
+[data-collection=collection] {
+  min-height: 50px;
+}
+
+[data-collection=collection]:hover > .col,
+[data-collection=collection]:hover > [class*=" col-"],
+[data-collection=collection]:hover > [class^=col-],
+[data-collection=collection]:hover + .insert-module-at-the-end.col [data-collection=collection]:hover + [class*="insert-module-at-the-end col-"],
+[data-collection=collection]:hover + .insert-module-at-the-end[class^=col-] {
+  position: relative;
+}
+[data-collection=collection]:hover > .col > .insert-module,
+[data-collection=collection]:hover > [class*=" col-"] > .insert-module,
+[data-collection=collection]:hover > [class^=col-] > .insert-module,
+[data-collection=collection]:hover + .insert-module-at-the-end.col [data-collection=collection]:hover + [class*="insert-module-at-the-end col-"] > .insert-module,
+[data-collection=collection]:hover + .insert-module-at-the-end[class^=col-] > .insert-module {
+  position: absolute;
+  display: block;
+  margin-top: 10px;
+  margin-left: calc(var(--bs-gutter-x) * -0.5);
+  width: 4px;
+  height: calc(100% - 20px);
+  min-height: 50px;
+}
+[data-collection=collection]:hover > .col > .insert-module:before,
+[data-collection=collection]:hover > [class*=" col-"] > .insert-module:before,
+[data-collection=collection]:hover > [class^=col-] > .insert-module:before,
+[data-collection=collection]:hover + .insert-module-at-the-end.col [data-collection=collection]:hover + [class*="insert-module-at-the-end col-"] > .insert-module:before,
+[data-collection=collection]:hover + .insert-module-at-the-end[class^=col-] > .insert-module:before {
+  margin-top: -12px;
+  margin-left: -12px;
+  position: relative;
+  top: 50%;
+}
+[data-collection=collection]:hover > .col > .insert-module.selected, [data-collection=collection]:hover > .col > .insert-module:hover,
+[data-collection=collection]:hover > [class*=" col-"] > .insert-module.selected,
+[data-collection=collection]:hover > [class*=" col-"] > .insert-module:hover,
+[data-collection=collection]:hover > [class^=col-] > .insert-module.selected,
+[data-collection=collection]:hover > [class^=col-] > .insert-module:hover,
+[data-collection=collection]:hover + .insert-module-at-the-end.col [data-collection=collection]:hover + [class*="insert-module-at-the-end col-"] > .insert-module.selected,
+[data-collection=collection]:hover + .insert-module-at-the-end.col [data-collection=collection]:hover + [class*="insert-module-at-the-end col-"] > .insert-module:hover,
+[data-collection=collection]:hover + .insert-module-at-the-end[class^=col-] > .insert-module.selected,
+[data-collection=collection]:hover + .insert-module-at-the-end[class^=col-] > .insert-module:hover {
+  background-color: #0d6efd;
+  color: white;
+}
+[data-collection=collection]:hover > .col > .insert-module.selected:before, [data-collection=collection]:hover > .col > .insert-module:hover:before,
+[data-collection=collection]:hover > [class*=" col-"] > .insert-module.selected:before,
+[data-collection=collection]:hover > [class*=" col-"] > .insert-module:hover:before,
+[data-collection=collection]:hover > [class^=col-] > .insert-module.selected:before,
+[data-collection=collection]:hover > [class^=col-] > .insert-module:hover:before,
+[data-collection=collection]:hover + .insert-module-at-the-end.col [data-collection=collection]:hover + [class*="insert-module-at-the-end col-"] > .insert-module.selected:before,
+[data-collection=collection]:hover + .insert-module-at-the-end.col [data-collection=collection]:hover + [class*="insert-module-at-the-end col-"] > .insert-module:hover:before,
+[data-collection=collection]:hover + .insert-module-at-the-end[class^=col-] > .insert-module.selected:before,
+[data-collection=collection]:hover + .insert-module-at-the-end[class^=col-] > .insert-module:hover:before {
+  background-color: #0d6efd;
+}
+
+.cms-module {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+  border: 2px dashed transparent;
+  margin-top: -2px !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  min-height: 50px;
+}
+.cms-module .cms-module-form {
+  display: none;
+}
+.cms-module .cms-module-form .input-group-prepend .input-group-text {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  height: 100%;
+}
+.cms-module .cms-module-header {
+  display: none;
+}
+.cms-module > .cms-module-body {
+  overflow: hidden;
+}
+.cms-module > .cms-module-body.disabled > .cms-module-edit > .module-preview,
+.cms-module > .cms-module-body.disabled > .cms-module-edit > .cms-module-form > .cms-module-form-body {
+  pointer-events: none;
+  filter: grayscale(100%);
+  opacity: 0.5;
+}
+.cms-module.active > .cms-module-header, .cms-module:hover > .cms-module-header {
+  display: block;
+  width: 175px;
+  height: 34px;
+  position: absolute;
+  right: 0px;
+  border-radius: 4px;
+  z-index: 999;
+}
+.cms-module.active > .cms-module-header .cms-module-buttons, .cms-module:hover > .cms-module-header .cms-module-buttons {
+  position: absolute;
+  right: 15px;
+  top: 0;
+  display: flex;
+  align-items: center;
+}
+.cms-module.active > .cms-module-header .cms-module-buttons button, .cms-module:hover > .cms-module-header .cms-module-buttons button {
+  padding: 0.25em 0.25em 0;
+  border: none;
+  background-color: transparent;
+}
+.cms-module.active > .cms-module-header .cms-module-buttons button:hover, .cms-module:hover > .cms-module-header .cms-module-buttons button:hover {
+  color: black;
+}
+.cms-module.active > .cms-module-header .cms-module-buttons button:hover .bi, .cms-module:hover > .cms-module-header .cms-module-buttons button:hover .bi {
+  opacity: var(--bs-btn-close-hover-opacity);
+}
+.cms-module.active > .cms-module-header .cms-module-buttons button .bi, .cms-module:hover > .cms-module-header .cms-module-buttons button .bi {
+  opacity: var(--bs-btn-close-opacity);
+  font-size: 24px;
+}
+.cms-module:hover {
+  border: 2px dashed #d2d2d2;
+}
+.cms-module:hover .cms-module-header {
+  background-color: rgba(210, 210, 210, 0.4392156863);
+}
+.cms-module.active {
+  border: 2px dashed #5d5d5d;
+}
+.cms-module.active .cms-module-header {
+  background-color: rgba(93, 93, 93, 0.4392156863);
+}
+.cms-module.active > .cms-module-body > .cms-module-edit > .cms-module-form {
+  display: block;
+  position: fixed;
+  right: 0;
+  top: 75px;
+  width: var(--sfs-cms-module-form-width);
+  height: calc(100vh - 76px);
+  overflow-y: auto;
+  background-color: white;
+  box-shadow: -5px 0px 10px 1px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+.cms-module.has-errors {
+  border: 2px dashed #dc3545;
+}
+.cms-module.cms-module-deprecated {
+  border-color: rgba(var(--bs-warning-rgb), 0.5) !important;
+}
+.cms-module.cms-module-deprecated:hover {
+  border-color: rgba(var(--bs-warning-rgb), 0.8) !important;
+}
+.cms-module.cms-module-deprecated:hover .cms-module-header {
+  background-color: rgba(var(--bs-warning-rgb), 0.5) !important;
+}
+.cms-module.cms-module-deprecated.active {
+  border-color: rgba(var(--bs-warning-rgb), 1) !important;
+}
+.cms-module.cms-module-deprecated.active .cms-module-header {
+  background-color: rgba(var(--bs-warning-rgb), 0.7) !important;
+}
+.cms-module .cms-module-site-hidden,
+.cms-module .cms-module-locale-hidden {
+  position: relative;
+  pointer-events: none;
+  filter: grayscale(100%);
+  opacity: 0.5;
+}
+.cms-module .cms-module-site-hidden:before,
+.cms-module .cms-module-locale-hidden:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.cms-module .content-escape {
+  word-break: break-word;
+}
+.cms-module .textarea-lg {
+  height: 200px;
+}
+.cms-module .module-container {
+  border-width: 1px !important;
+  border-style: dashed !important;
+  min-height: 50px;
+}
+
+.add-module-modal {
+  /* Important part */
+}
+.add-module-modal .modal-dialog {
+  overflow-y: initial !important;
+}
+.add-module-modal .modal-body {
+  height: 80vh;
+  overflow-y: auto;
+}
+.add-module-modal .modal-body .module-thumbnail {
+  width: 100%;
+  height: 120px;
+  cursor: pointer;
+  border-radius: 5px;
+  border: 2px solid var(--bs-secondary);
+  transition: all 0.3s ease-in-out;
+}
+.add-module-modal .modal-body .module-thumbnail .icon {
+  height: 50px;
+  width: 50px;
+  margin: 15px auto;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+}
+.add-module-modal .modal-body .module-thumbnail .icon .bi {
+  font-size: 50px;
+  line-height: 50px;
+}
+.add-module-modal .modal-body .module-thumbnail .name {
+  color: var(--bs-secondary);
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+}
+.add-module-modal .modal-body .module-thumbnail.disabled {
+  cursor: default;
+  border-color: var(--bs-secondary-color);
+}
+.add-module-modal .modal-body .module-thumbnail.disabled .icon {
+  color: var(--bs-secondary-color);
+}
+.add-module-modal .modal-body .module-thumbnail.disabled .name {
+  color: var(--bs-secondary-color);
+}
+.add-module-modal .modal-body .module-thumbnail:not(.disabled):hover {
+  border-color: var(--bs-primary);
+}
+.add-module-modal .modal-body .module-thumbnail:not(.disabled):hover .icon {
+  color: var(--bs-primary);
+}
+.add-module-modal .modal-body .module-thumbnail:not(.disabled):hover .name {
+  color: var(--bs-primary);
+}
+
+#content-form {
+  width: var(--sfs-cms-module-form-width);
+  flex-shrink: 0;
+}
+
+[data-edit-content-placeholder]:empty:not(:focus)::after {
+  content: attr(data-edit-content-placeholder);
+  opacity: 0.5;
+  font-style: italic;
+}
+
+[data-edit-content-target] {
+  margin-right: 5px;
+  margin-left: 5px;
+  transition: box-shadow 0.3s ease-in-out;
+}
+[data-edit-content-target]:hover {
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+[data-edit-content-target]:hover:not(.btn) {
+  border-radius: 5px;
+}
+
+.modal-body [data-edit-content-target]:hover, .content-escape [data-edit-content-target]:hover {
+  box-shadow: none;
+}
+
+.collection-node-index {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  font-weight: bold;
+  border-radius: 50%;
+  background-color: #f1f1f1;
+}
+
+.edit-content-linked-focus {
+  box-shadow: 0 0 15px rgba(var(--bs-primary-rgb), 0.5);
+}
