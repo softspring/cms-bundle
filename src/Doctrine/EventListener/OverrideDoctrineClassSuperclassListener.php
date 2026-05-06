@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Softspring\CmsBundle\Doctrine\EventListener;
 
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;

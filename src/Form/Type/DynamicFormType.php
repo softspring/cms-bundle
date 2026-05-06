@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Softspring\CmsBundle\Form\Type;
 
 use Softspring\Component\DynamicFormType\Form\Type\DynamicFormType as BaseDynamicFormType;

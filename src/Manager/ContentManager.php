@@ -126,10 +126,7 @@ class ContentManager implements ContentManagerInterface
      */
     public function getRepository(?string $type = null): EntityRepository
     {
-        /** @var EntityRepository $repo */
-        $repo = $this->em->getRepository($this->getTypeClass($type));
-
-        return $repo;
+        return $this->em->getRepository($this->getTypeClass($type));
     }
 
     /**

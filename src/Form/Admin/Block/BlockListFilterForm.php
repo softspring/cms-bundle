@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Softspring\CmsBundle\Form\Admin\Block;
 
 use Softspring\CmsBundle\Form\Type\BlockTypeType;
