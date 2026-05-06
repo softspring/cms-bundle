@@ -1,5 +1,5 @@
-import {filterCurrentFilterElements} from "./filter-preview";
-import {cmsEditListener} from './event-listeners';
+import {filterCurrentFilterElements} from "./filter-preview.js";
+import {cmsEditListener} from './event-listeners.js';
 import {callForeachSelector, registerFeature} from '@softspring/cms-bundle/scripts/tools';
 
 registerFeature('admin_content_edit_locale_filter_modules', _init);

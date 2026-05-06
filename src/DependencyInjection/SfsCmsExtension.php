@@ -19,6 +19,7 @@ use Softspring\CmsBundle\Model\ContentInterface;
 use Symfony\Bundle\MakerBundle\MakerBundle;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\AssetMapper\AssetMapperInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
@@ -198,5 +199,15 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
                 'Softspring\CmsBundle\Migrations' => '@SfsCmsBundle/src/Migrations',
             ]),
         ]);
+
+        if (interface_exists(AssetMapperInterface::class)) {
+            $container->prependExtensionConfig('framework', [
+                'asset_mapper' => [
+                    'paths' => [
+                        \dirname(__DIR__, 2).'/assets/dist' => '@softspring/cms-bundle',
+                    ],
+                ],
+            ]);
+        }
     }
 }

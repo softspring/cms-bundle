@@ -1,3 +1,7 @@
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+
 body {
     --sfs-cms-module-form-width: 450px;
 }
@@ -55,7 +59,7 @@ body {
     border-radius: 4px;
     cursor: pointer;
     border: 1px solid rgba(255,255,255,.8);
-    background-color: $gray-500;
+    background-color: var(--bs-secondary-color);
     z-index: 1000;
 
     &:hover,
@@ -80,7 +84,7 @@ body {
         color: white;
         border-radius: 4px;
         border: 1px solid rgba(255,255,255,.8);
-        background-color: $primary;
+        background-color: var(--bs-primary);
         opacity: 0;
         transition: opacity .5s ease-in-out;
     }
@@ -95,11 +99,11 @@ body {
 
         &.selected,
         &:hover {
-            background-color: $primary;
+            background-color: var(--bs-primary);
             color: white;
 
             &:before {
-                background-color: $primary;
+                background-color: var(--bs-primary);
             }
         }
 
@@ -345,7 +349,7 @@ body {
             height: 120px;
             cursor: pointer;
             border-radius: 5px;
-            border: 2px solid $secondary;
+            border: 2px solid var(--bs-secondary);
             transition: all .3s ease-in-out;
 
             .icon {
@@ -362,31 +366,31 @@ body {
             }
 
             .name {
-                color: $secondary;
+                color: var(--bs-secondary);
                 text-align: center;
                 transition: all .3s ease-in-out;
             }
 
             &.disabled {
                 cursor: default;
-                border-color: $gray-500;
+                border-color: var(--bs-secondary-color);
 
                 .icon {
-                    color: $gray-500;
+                    color: var(--bs-secondary-color);
                 }
                 .name {
-                    color: $gray-500;
+                    color: var(--bs-secondary-color);
                 }
             }
 
             &:not(.disabled):hover {
-                border-color: $primary;
+                border-color: var(--bs-primary);
 
                 .icon {
-                    color: $primary;
+                    color: var(--bs-primary);
                 }
                 .name {
-                    color: $primary;
+                    color: var(--bs-primary);
                 }
             }
         }
@@ -437,5 +441,5 @@ body {
 }
 
 .edit-content-linked-focus {
-    box-shadow: 0 0 15px rgba($primary, .5);
+    box-shadow: 0 0 15px rgba(var(--bs-primary-rgb), .5);
 }

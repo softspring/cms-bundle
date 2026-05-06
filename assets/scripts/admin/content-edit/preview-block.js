@@ -1,6 +1,6 @@
-import {cmsEditListener} from './event-listeners';
-import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
-import {filterCurrentFilterElements} from "./filter-preview";
+import {cmsEditListener} from './event-listeners.js';
+import {registerFeature} from '@softspring/cms-bundle/scripts/tools.js';
+import {filterCurrentFilterElements} from "./filter-preview.js";
 
 registerFeature('admin_content_edit_preview_block', _init);
 

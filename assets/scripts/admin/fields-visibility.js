@@ -1,4 +1,4 @@
-import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
+import {registerFeature} from '@softspring/cms-bundle/scripts/tools.js';
 
 registerFeature('admin_fields_visibility', _init);
 

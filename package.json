@@ -2,8 +2,18 @@
     "name": "@softspring/cms-bundle",
     "license": "MIT",
     "version": "6.0.0-dev",
+    "symfony": {
+        "importmap": {
+            "@softspring/cms-bundle/scripts/admin-cms.js": {
+                "path": "assets/dist/scripts/admin-cms.js"
+            },
+            "@softspring/cms-bundle/scripts/tools.js": {
+                "path": "assets/dist/scripts/tools.js"
+            }
+        }
+    },
     "dependencies": {
-        "bootstrap": "^5.1.1",
+        "bootstrap": "^5.3.3",
         "bootstrap-icons": "^1.11.2",
         "tinymce": "^6.8.1",
         "jsondiffpatch": "^0.7.3"
@@ -17,8 +27,12 @@
         "@eslint/js": "^9.11.1",
         "eslint": "^8.57.1",
         "globals": "^15.9.0",
+        "sass": "^1.77.8",
         "@softspring/collection-form-type": "file:./../vendor/softspring/collection-form-type/assets",
         "@softspring/media-bundle": "file:./../vendor/softspring/media-bundle/assets",
         "@softspring/polymorphic-form-type": "file:./../vendor/softspring/polymorphic-form-type/assets"
+    },
+    "scripts": {
+        "build": "node assets/build-dist.mjs"
     }
 }

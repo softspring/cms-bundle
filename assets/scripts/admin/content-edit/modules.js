@@ -1,8 +1,8 @@
 // let collectionFormTypeDebug = true;
 
-import {filterCurrentFilterElements} from './filter-preview';
-import {getCollectionLastIndex} from '@softspring/collection-form-type/scripts/collection-form-type';
-import {registerFeature, showAlert} from '@softspring/cms-bundle/scripts/tools';
+import {filterCurrentFilterElements} from './filter-preview.js';
+import {getCollectionLastIndex} from '@softspring/collection-form-type/scripts/collection-form-type.js';
+import {registerFeature, showAlert} from '@softspring/cms-bundle/scripts/tools.js';
 
 registerFeature('admin_content_edit_modules', _init);
 

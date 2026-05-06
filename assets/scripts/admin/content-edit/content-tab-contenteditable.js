@@ -1,5 +1,5 @@
-import {cmsEditListener} from './event-listeners';
-import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
+import {cmsEditListener} from './event-listeners.js';
+import {registerFeature} from '@softspring/cms-bundle/scripts/tools.js';
 
 registerFeature('admin_content_edit_content_tab_contenteditable', _init);
 

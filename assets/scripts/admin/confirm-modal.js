@@ -1,5 +1,5 @@
 import {Modal} from 'bootstrap';
-import {registerFeature,addTargetEventListener} from '@softspring/cms-bundle/scripts/tools';
+import {registerFeature,addTargetEventListener} from '@softspring/cms-bundle/scripts/tools.js';
 
 registerFeature('admin_confirm_modal', _init);
 
@@ -83,4 +83,3 @@ function createModal(title, message, confirmButton, confirmButtonType, cancelBut
 
     return modalRandomId;
 }
-

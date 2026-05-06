@@ -29,8 +29,8 @@
  */
 
 import * as tinymce from 'tinymce/tinymce';
-import {contentEditableUpdateInputsFromElement} from './contenteditable';
-import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
+import {contentEditableUpdateInputsFromElement} from './contenteditable.js';
+import {registerFeature} from '@softspring/cms-bundle/scripts/tools.js';
 
 registerFeature('admin_content_edit_wysiwyg', _init);
 
@@ -143,4 +143,3 @@ function destroyWysiwyg(element) {
             break;
     }
 }
-
