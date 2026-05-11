@@ -1,7 +1,11 @@
 {% trans_default_domain 'sfs_cms_contents' %}
 
 {% for entity in collection %}
-    <tr>
+    <tr
+        {% if not content_config.admin.read.is_granted or is_granted(content_config.admin.read.is_granted, entity) %}
+            data-row-href="{{ url('sfs_cms_admin_content_'~content_type~'_details', {'content':entity.id}) }}"
+        {% endif %}
+    >
         <td class="p-3">{{ entity.name }}</td>
         <td class="p-3">{{ entity.sitesSorted|map((site) => site|sfs_cms_site_name)|join(', ') }}</td>
         <td class="p-3">{{ (content_type~'.status.'~entity.status)|trans }}</td>
