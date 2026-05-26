@@ -1,0 +1,37 @@
+{% trans_default_domain 'sfs_cms_modules' %}
+{% import '@SfsCms/macros/modules_edit.html.twig' as module %}
+{% set articles = sfs_cms_related_blog_articles(form.tag.vars.data|default(''), form.vars.content|default(null), form.limit.vars.data|default(3), form.order.vars.data|default('published_at_desc')) %}
+
+<div {{ module.link_id(form.id) }} {{ module.link_class(form.class) }}>
+    <strong>{{ form.title.vars.data|default('block_articles_related.render.title'|trans) }}</strong>
+    {% if form.tag.vars.data|default %}
+        <div class="small text-muted">{{ form.tag.vars.data }}</div>
+    {% endif %}
+    {% if form.order.vars.data|default %}
+        <div class="small text-muted">{{ ('block_articles_related.form.order.values.' ~ form.order.vars.data)|trans({}, 'sfs_cms_modules') }}</div>
+    {% endif %}
+
+    {% if articles is not empty %}
+        <ul class="article-list">
+            {% for article in articles %}
+                <li class="article-list-item">
+                    <a class="article-list-item__link" href="#">
+                        <div class="article-list-item__media-mask d-block">
+                            {% if article.extraData.image is defined %}
+                                {{ article.extraData.image|sfs_media_render_image('blog_list', {'class':'article-list-item__media img-fluid', 'height':'360'}) }}
+                            {% endif %}
+                        </div>
+                        <div class="article-list-item__wrap">
+                            <p class="article-list-item__date">{{ article.publishedAt ? article.publishedAt|time_ago|lower : '' }}</p>
+                            <h2 class="article-list-item__title">{{ article.extraData.title[app.request.locale]|default(article.name) }}</h2>
+                            <p class="article-list-item__description">{{ article.extraData.description[app.request.locale]|default }}</p>
+                            <p class="article-list-item__read-more">{{ 'article_list.list.read_more'|trans({}, 'sfs_cms_blocks') }}<i class="mdi mdi-chevron-right mdi-36px align-middle"></i></p>
+                        </div>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% elseif form.tag.vars.data|default %}
+        <div class="small text-muted mt-2">{{ 'block_articles_related.edit.no_results'|trans }}</div>
+    {% endif %}
+</div>

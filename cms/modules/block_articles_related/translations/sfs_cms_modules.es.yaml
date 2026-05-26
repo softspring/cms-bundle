@@ -1,0 +1,26 @@
+block_articles_related:
+    label: "Artículos relacionados"
+    prototype_button: "Artículos relacionados"
+    prototype_button_icon: '<i class="bi bi-tags"></i>'
+    render:
+        title: "Artículos relacionados"
+    edit:
+        no_results: "No se han encontrado artículos relacionados para la etiqueta seleccionada."
+    form:
+        _group:
+            attributes: "Atributos"
+            content: "Contenido"
+        id.label: "Id"
+        class.label: "Clases"
+        title.label: "Título"
+        tag:
+            label: "Etiqueta"
+            placeholder: "Selecciona una etiqueta"
+        limit.label: "Número de artículos"
+        order:
+            label: "Orden"
+            values:
+                published_at_desc: "Más recientes primero"
+                published_at_asc: "Más antiguos primero"
+                name_asc: "Título A-Z"
+                name_desc: "Título Z-A"

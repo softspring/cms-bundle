@@ -1,0 +1,23 @@
+{{ sfs_cms_admin_module_accordion_block_start(form, accordion, 'attributes') }}
+<div class="col-12">
+    {{ form_row(form.id) }}
+</div>
+<div class="col-12">
+    {{ form_row(form.class) }}
+</div>
+{{ sfs_cms_admin_module_accordion_block_end() }}
+
+{{ sfs_cms_admin_module_accordion_block_start(form, accordion, 'content', true) }}
+<div class="col-12">
+    {{ form_row(form.title) }}
+</div>
+<div class="col-12">
+    {{ form_row(form.tag) }}
+</div>
+<div class="col-12">
+    {{ form_row(form.limit) }}
+</div>
+<div class="col-12">
+    {{ form_row(form.order) }}
+</div>
+{{ sfs_cms_admin_module_accordion_block_end() }}

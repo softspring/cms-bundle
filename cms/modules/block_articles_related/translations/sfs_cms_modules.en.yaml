@@ -1,0 +1,26 @@
+block_articles_related:
+    label: "Related blog articles"
+    prototype_button: "Related blog articles"
+    prototype_button_icon: '<i class="bi bi-tags"></i>'
+    render:
+        title: "Related articles"
+    edit:
+        no_results: "No related articles found for the selected tag."
+    form:
+        _group:
+            attributes: "Attributes"
+            content: "Content"
+        id.label: "Id"
+        class.label: "Classes"
+        title.label: "Title"
+        tag:
+            label: "Tag"
+            placeholder: "Select a tag"
+        limit.label: "Number of articles"
+        order:
+            label: "Order"
+            values:
+                published_at_desc: "Newest first"
+                published_at_asc: "Oldest first"
+                name_asc: "Title A-Z"
+                name_desc: "Title Z-A"

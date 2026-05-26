@@ -23,6 +23,10 @@ class ModuleRenderer
     public const LOCALE_HIDDEN_MODULE = '<!-- LOCALE_HIDDEN_MODULE -->';
     public const DISABLED_HIDDEN_MODULE = '<!-- DISABLED_HIDDEN_MODULE -->';
 
+    private const LEGACY_MODULE_ALIASES = [
+        'blog_articles_related' => 'block_articles_related',
+    ];
+
     public function __construct(
         protected CmsConfig $cmsConfig,
         protected RequestStack $requestStack,
@@ -36,6 +40,8 @@ class ModuleRenderer
      */
     public function render(array $moduleData, array &$profilerDebugCollectorData, array $twigAdditionalContext = [], ?RenderErrorList $renderErrorList = null): string
     {
+        $moduleData = $this->normalizeLegacyModuleDiscriminator($moduleData);
+
         try {
             if ($this->skipModuleRenderBySiteFilter($moduleData)) {
                 $this->cmsLogger && $this->cmsLogger->debug(sprintf('Skipping %s module render by site', $moduleData['_module']));
@@ -222,5 +228,14 @@ class ModuleRenderer
     protected function isContainer(array $moduleConfig): bool
     {
         return ContainerModuleType::class === $moduleConfig['module_type'];
+    }
+
+    protected function normalizeLegacyModuleDiscriminator(array $moduleData): array
+    {
+        if (isset($moduleData['_module'], self::LEGACY_MODULE_ALIASES[$moduleData['_module']])) {
+            $moduleData['_module'] = self::LEGACY_MODULE_ALIASES[$moduleData['_module']];
+        }
+
+        return $moduleData;
     }
 }

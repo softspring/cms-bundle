@@ -1,0 +1,33 @@
+{% trans_default_domain "sfs_cms_modules" %}
+{% import "@SfsCms/macros/modules_render.html.twig" as module %}
+
+{% set articles = sfs_cms_related_blog_articles(tag|default(""), content, limit|default(3), order|default("published_at_desc")) %}
+
+{% if articles is not empty %}
+    <section {{ module.id(id) }} {{ module.class(class) }}>
+        <h2>{{ title|default("block_articles_related.render.title"|trans({}, "sfs_cms_modules")) }}</h2>
+
+        <ul class="article-list row g-4">
+            {% for article in articles %}
+                {% set routePath = article.getCanonicalRoutePath(app.request.locale) ?: article.getCanonicalRoutePath() %}
+                {% set articleUrl = routePath ? sfs_cms_route_path_path(routePath) : "#" %}
+
+                <li class="article-list-item col-12 col-md-6">
+                    <a class="article-list-item__link d-block w-100 h-100 p-0" href="{{ articleUrl }}">
+                        <div class="article-list-item__media-mask d-block">
+                            {% if article.extraData.image is defined %}
+                                {{ article.extraData.image|sfs_media_render_image("blog_list", {"class":"article-list-item__media img-fluid", "height":"360"}) }}
+                            {% endif %}
+                        </div>
+                        <div class="article-list-item__wrap">
+                            <p class="article-list-item__date">{{ article.publishedAt ? article.publishedAt|time_ago|lower : "" }}</p>
+                            <h2 class="article-list-item__title">{{ article.extraData.title[app.request.locale]|default(article.name) }}</h2>
+                            <p class="article-list-item__description">{{ article.extraData.description[app.request.locale]|default }}</p>
+                            <p class="article-list-item__read-more">{{ "article_list.list.read_more"|trans({}, "sfs_cms_blocks") }}<i class="mdi mdi-chevron-right mdi-36px align-middle"></i></p>
+                        </div>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
+{% endif %}

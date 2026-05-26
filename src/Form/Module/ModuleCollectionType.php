@@ -15,6 +15,8 @@ use Symfony\Component\Form\DataMapperInterface;
 use Symfony\Component\Form\Exception\InvalidConfigurationException;
 use Symfony\Component\Form\Exception\RuntimeException;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -23,6 +25,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class ModuleCollectionType extends PolymorphicCollectionType implements DataMapperInterface
 {
     use DataMapperTrait;
+
+    private const LEGACY_MODULE_ALIASES = [
+        'blog_articles_related' => 'block_articles_related',
+    ];
 
     protected CmsConfig $cmsConfig;
 
@@ -118,6 +124,7 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
     {
         $options = $this->removeInvalidModulesForContentType($options);
         parent::buildForm($builder, $options);
+        $this->normalizeLegacyModuleDiscriminatorsBeforeResize($builder);
         $builder->setDataMapper($this);
     }
 
@@ -229,5 +236,35 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
         }
 
         return $options;
+    }
+
+    protected function normalizeLegacyModuleDiscriminatorsBeforeResize(FormBuilderInterface $builder): void
+    {
+        $normalize = function (FormEvent $event): void {
+            $event->setData($this->normalizeLegacyModuleDiscriminators($event->getData()));
+        };
+
+        // Run before NodesResizeFormListener resolves the polymorphic discriminator.
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, $normalize, 1024);
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, $normalize, 1024);
+    }
+
+    protected function normalizeLegacyModuleDiscriminators(mixed $data): mixed
+    {
+        if (!is_array($data)) {
+            return $data;
+        }
+
+        if (isset($data['_module'], self::LEGACY_MODULE_ALIASES[$data['_module']])) {
+            $data['_module'] = self::LEGACY_MODULE_ALIASES[$data['_module']];
+        }
+
+        foreach ($data as $field => $value) {
+            if (is_array($value)) {
+                $data[$field] = $this->normalizeLegacyModuleDiscriminators($value);
+            }
+        }
+
+        return $data;
     }
 }

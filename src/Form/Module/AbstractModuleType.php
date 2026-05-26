@@ -81,6 +81,7 @@ abstract class AbstractModuleType extends AbstractNodeType
         $view->vars['module_disabled'] = $options['module_disabled'];
         $view->vars['form_template'] = $options['form_template'];
         $view->vars['edit_template'] = $options['edit_template'];
+        $view->vars['content'] = $options['content'];
         $view->vars['sites'] = $options['available_sites'];
         $view->vars['locales'] = $options['available_locales'];
         $view->vars['attr']['class'] = (isset($view->vars['attr']['class']) ? $view->vars['attr']['class'].' ' : '').$options['row_class'];

@@ -1,0 +1,45 @@
+module:
+    revision: 1
+    group: 'basic'
+    compatible_contents: ['page']
+    edit_template: '@module/block_articles_related/edit.html.twig'
+    form_template: '@module/block_articles_related/form.html.twig'
+    render_template: '@module/block_articles_related/render.html.twig'
+    module_options:
+        label_format: 'block_articles_related.%%name%%.label'
+        form_fields:
+            id:
+                type: 'id'
+
+            class:
+                type: 'class'
+
+            title:
+                type: 'text'
+                type_options:
+                    required: false
+
+            tag:
+                type: 'Softspring\CmsBundle\Form\Type\BlogArticleTagType'
+                type_options:
+                    required: true
+
+            limit:
+                type: 'integer'
+                type_options:
+                    required: false
+                    empty_data: 3
+                    default_value: 3
+                    attr:
+                        min: 1
+
+            order:
+                type: 'choice'
+                type_options:
+                    required: false
+                    default_value: 'published_at_desc'
+                    choices:
+                        'block_articles_related.form.order.values.published_at_desc': 'published_at_desc'
+                        'block_articles_related.form.order.values.published_at_asc': 'published_at_asc'
+                        'block_articles_related.form.order.values.name_asc': 'name_asc'
+                        'block_articles_related.form.order.values.name_desc': 'name_desc'
