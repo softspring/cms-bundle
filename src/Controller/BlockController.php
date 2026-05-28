@@ -154,15 +154,32 @@ ERROR;
 
     protected function preprocessPreviewRequest(Request $request): void
     {
-        if (!$request->attributes->has('_sfs_cms_site') && $request->get('_sfs_cms_site')) {
-            $request->attributes->set('_sfs_cms_site', $this->cmsConfig->getSite($request->get('_sfs_cms_site')));
+        $site = $this->getRequestValue($request, '_sfs_cms_site');
+        $siteId = $this->getRequestValue($request, '_site');
+        $locale = $this->getRequestValue($request, '_locale');
+
+        if (!$request->attributes->has('_sfs_cms_site') && $site) {
+            $request->attributes->set('_sfs_cms_site', $this->cmsConfig->getSite($site));
         }
-        if (!$request->attributes->has('_sfs_cms_site') && $request->get('_site')) {
-            $request->attributes->set('_sfs_cms_site', $this->cmsConfig->getSite($request->get('_site')));
+        if (!$request->attributes->has('_sfs_cms_site') && $siteId) {
+            $request->attributes->set('_sfs_cms_site', $this->cmsConfig->getSite($siteId));
         }
-        if (!$request->attributes->has('_locale') && $request->get('_locale')) {
-            $request->attributes->set('_locale', $request->get('_locale'));
-            $request->setLocale($request->get('_locale'));
+        if (!$request->attributes->has('_locale') && $locale) {
+            $request->attributes->set('_locale', $locale);
+            $request->setLocale($locale);
         }
+    }
+
+    protected function getRequestValue(Request $request, string $key): mixed
+    {
+        if ($request->attributes->has($key)) {
+            return $request->attributes->get($key);
+        }
+
+        if ($request->query->has($key)) {
+            return $request->query->get($key);
+        }
+
+        return $request->request->get($key);
     }
 }

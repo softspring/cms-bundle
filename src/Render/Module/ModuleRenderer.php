@@ -89,7 +89,7 @@ class ModuleRenderer
             return false;
         }
 
-        $currentSite = $this->requestStack->getCurrentRequest()->get('_sfs_cms_site');
+        $currentSite = $this->requestStack->getCurrentRequest()->attributes->get('_sfs_cms_site');
 
         $moduleEnabledSites = [];
         foreach ($module['site_filter'] as $key => $value) {
