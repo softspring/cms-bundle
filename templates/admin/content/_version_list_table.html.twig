@@ -18,6 +18,13 @@
             <th>&nbsp;</th>
         {% endblock ths %}
 
+        {% block tr_attributes %}
+            {% set version = element %}
+            {% if not content_config.admin.version_info.is_granted or is_granted(content_config.admin.version_info.is_granted, version) %}
+                data-row-href="{{ url('sfs_cms_admin_content_'~content_type~'_version_info', {'content':entity.id, 'version':version.id}) }}"
+            {% endif %}
+        {% endblock %}
+
         {% block tds %}
             {% set version = element %}
             <td>v{{ version.versionNumber }} {% if version.hasCompileErrors %}<i
@@ -65,7 +72,7 @@
             <td>
                 {% if not content_config.admin.version_info.is_granted or is_granted(content_config.admin.version_info.is_granted, version) %}
                     <a href="{{ url('sfs_cms_admin_content_'~content_type~'_version_info', {'content':entity.id, 'version':version.id}) }}"
-                       class="ms-2 text-nowrap">{{ ('admin_'~content_type~'.versions.actions.info.link')|trans }} <span
+                       class="ms-2 text-nowrap hidden-on-clickable-row">{{ ('admin_'~content_type~'.versions.actions.info.link')|trans }} <span
                                 class="bi bi-info"></span></a>
                 {% endif %}
 
