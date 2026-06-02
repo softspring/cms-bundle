@@ -35,6 +35,7 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
 }
+
 .cms-content-edit-alerts {
   z-index: 1050;
 }
