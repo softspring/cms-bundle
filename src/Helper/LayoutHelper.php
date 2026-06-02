@@ -16,7 +16,7 @@ class LayoutHelper
     /**
      * @throws InvalidContentException
      */
-    public function getAvailableLayouts(ContentInterface $content): array
+    public function getAvailableLayouts(ContentInterface $content, ?string $currentLayout = null): array
     {
         $contentType = $this->cmsConfig->getContent($content);
 
@@ -26,11 +26,23 @@ class LayoutHelper
 
         foreach ($layouts as $layoutId => $layoutConfig) {
             if (!empty($layoutConfig['compatible_contents']) && !in_array($contentType['_id'], $layoutConfig['compatible_contents'])) {
-                unset($availableLayouts[array_search($layoutId, $availableLayouts)]);
+                if (false !== $layoutIndex = array_search($layoutId, $availableLayouts)) {
+                    unset($availableLayouts[$layoutIndex]);
+                }
+            }
+
+            if (false === $layoutConfig['enabled'] && $layoutId !== $currentLayout) {
+                if (false !== $layoutIndex = array_search($layoutId, $availableLayouts)) {
+                    unset($availableLayouts[$layoutIndex]);
+                }
             }
         }
 
-        return $availableLayouts;
+        if ($currentLayout && isset($layouts[$currentLayout]) && !in_array($currentLayout, $availableLayouts)) {
+            $availableLayouts[] = $currentLayout;
+        }
+
+        return array_values($availableLayouts);
     }
 
     /**

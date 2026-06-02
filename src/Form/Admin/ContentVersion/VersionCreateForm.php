@@ -56,7 +56,7 @@ class VersionCreateForm extends AbstractType implements VersionCreateFormInterfa
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('layout', LayoutType::class, [
-            'choices' => $this->cmsHelper->layout()->getAvailableLayouts($options['content']),
+            'choices' => $this->cmsHelper->layout()->getAvailableLayouts($options['content'], $options['layout']),
         ]);
 
         $builder->add('data', LayoutContentType::class, [
