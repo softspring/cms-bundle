@@ -16,9 +16,17 @@ function disableChoiceOnLocaleSelect(select) {
     const choicesWidget = document.getElementById(select.dataset.localeDisablesChoice);
 
     callForeachSelector('input[type="checkbox"]', (checkbox) => checkbox.removeAttribute('disabled'));
+    choicesWidget.querySelectorAll('input[type="hidden"][data-default-locale-choice]').forEach((input) => input.remove());
 
     const localeCheckbox = choicesWidget.querySelector('input[type="checkbox"][value="' + selectedChoice.value + '"]');
     localeCheckbox.checked = true;
     localeCheckbox.setAttribute('checked', 'checked');
     localeCheckbox.setAttribute('disabled', 'disabled');
+
+    const localeHiddenInput = document.createElement('input');
+    localeHiddenInput.type = 'hidden';
+    localeHiddenInput.name = localeCheckbox.name;
+    localeHiddenInput.value = localeCheckbox.value;
+    localeHiddenInput.dataset.defaultLocaleChoice = 'true';
+    choicesWidget.append(localeHiddenInput);
 }

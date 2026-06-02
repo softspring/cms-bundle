@@ -1,0 +1,51 @@
+{% trans_default_domain 'sfs_cms_contents' %}
+
+<section class="mb-5" aria-labelledby="content-indexing-fields-title">
+    <h2 class="h5 border-bottom pb-2 mb-4" id="content-indexing-fields-title">{{ 'admin_content.form.sections.indexing.title'|trans }}</h2>
+
+    {{ form_errors(form.indexing) }}
+
+    <div class="d-flex flex-column gap-4">
+        <div>
+            <div class="d-flex gap-3 mb-3">
+                <span class="bi bi-diagram-3 text-body-secondary fs-4 flex-shrink-0" aria-hidden="true"></span>
+                <div>
+                    <p class="fw-semibold mb-1">{{ 'admin_content.form.indexing.sitemap.title'|trans }}</p>
+                    <p class="small text-body-secondary mb-0">{{ 'admin_content.form.indexing.sitemap.description'|trans }}</p>
+                </div>
+            </div>
+
+            {% if form.indexing.sitemap is defined %}
+                {{ form_row(form.indexing.sitemap, {'label_attr': {'class': 'checkbox-inline checkbox-switch'}}) }}
+            {% endif %}
+
+            <div class="row g-3">
+                {% if form.indexing.sitemapChangefreq is defined %}
+                    <div class="col-12 col-lg-7">{{ form_row(form.indexing.sitemapChangefreq) }}</div>
+                {% endif %}
+                {% if form.indexing.sitemapPriority is defined %}
+                    <div class="col-12 col-lg-5">{{ form_row(form.indexing.sitemapPriority, {'attr': {'placeholder': 'admin_content.form.indexing.default_values.placeholder'}}) }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div>
+            <div class="d-flex gap-3 mb-3">
+                <span class="bi bi-robot text-body-secondary fs-4 flex-shrink-0" aria-hidden="true"></span>
+                <div>
+                    <p class="fw-semibold mb-1">{{ 'admin_content.form.indexing.robots.title'|trans }}</p>
+                    <p class="small text-body-secondary mb-0">{{ 'admin_content.form.indexing.robots.description'|trans }}</p>
+                </div>
+            </div>
+
+            {% if form.indexing.noIndex is defined %}
+                {{ form_row(form.indexing.noIndex, {'label_attr': {'class': 'checkbox-inline checkbox-switch'}}) }}
+            {% endif %}
+            {% if form.indexing.noFollow is defined %}
+                {{ form_row(form.indexing.noFollow, {'label_attr': {'class': 'checkbox-inline checkbox-switch'}}) }}
+            {% endif %}
+        </div>
+    </div>
+
+    {{ form_rest(form.indexing) }}
+</section>

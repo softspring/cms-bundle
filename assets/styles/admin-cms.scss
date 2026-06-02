@@ -6,6 +6,49 @@ body {
     --sfs-cms-module-form-width: 450px;
 }
 
+.cms-content-edit-page {
+    height: 100vh;
+    min-height: 0 !important;
+    overflow: hidden !important;
+
+    .cms-content-edit-form {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        min-height: 0;
+    }
+
+    .cms-content {
+        display: flex;
+        flex: 1 1 auto;
+        flex-direction: column;
+        min-height: 0 !important;
+        padding-top: 0;
+        overflow: hidden;
+    }
+
+    .cms-content-header {
+        position: relative;
+        top: auto;
+        right: auto;
+        left: auto;
+        z-index: 1040;
+        flex: 0 0 auto;
+    }
+
+    .cms-content-main {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+}
+
+.cms-content-edit-alerts {
+    z-index: 1050;
+}
+
 .tox-notifications-container {
     display: none;
 }
@@ -133,6 +176,82 @@ body {
 
 [data-collection=collection] {
     min-height: 50px;
+}
+
+.cms-indexing-card {
+    border-top: 1px solid rgba($dark, .12);
+    border-bottom: 1px solid rgba($dark, .08);
+    padding: 1.75rem 0;
+}
+
+.cms-indexing-card__header {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.cms-indexing-card__grid {
+    display: grid;
+    grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+    gap: 2rem;
+}
+
+.cms-indexing-column--sitemap {
+    border-left: 1px solid rgba($dark, .1);
+    padding-left: 2rem;
+}
+
+.cms-indexing-column__header {
+    display: flex;
+    gap: .85rem;
+    margin-bottom: 1rem;
+}
+
+.cms-indexing-column__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 2.25rem;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: .75rem;
+    background: rgba($primary, .1);
+    color: $primary;
+    font-size: 1.1rem;
+}
+
+.cms-indexing-column__title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.cms-indexing-column__description {
+    margin: .15rem 0 0;
+    color: rgba($dark, .62);
+    font-size: .875rem;
+}
+
+.cms-indexing-column__fields .mb-3:last-child {
+    margin-bottom: 0 !important;
+}
+
+@media (max-width: 991.98px) {
+    .cms-indexing-card__header {
+        flex-direction: column;
+    }
+
+    .cms-indexing-card__grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .cms-indexing-column--sitemap {
+        border-left: 0;
+        border-top: 1px solid rgba($dark, .1);
+        padding-top: 1.5rem;
+        padding-left: 0;
+    }
 }
 [data-collection=collection]:hover > .col,
 [data-collection=collection]:hover > [class*=" col-"],

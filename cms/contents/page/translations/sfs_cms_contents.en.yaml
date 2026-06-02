@@ -269,7 +269,7 @@ admin_page:
             sitemapChangefreq:
                 label: "Change frequency for sitemap"
                 values:
-                    empty: ""
+                    empty: "Default value"
                     always: "always"
                     hourly: "hourly"
                     daily: "daily"
@@ -374,3 +374,26 @@ admin_page:
         actions:
             submit.button: "Compare"
             cancel.button: "Cancel"
+
+admin_content:
+    form:
+        sections:
+            main:
+                title: "Identifier"
+            content_configuration:
+                title: "Content configuration"
+            availability:
+                title: "Sites and languages"
+            routes:
+                title: "Main route"
+            indexing:
+                title: "SEO controls"
+        indexing:
+            title: "SEO controls"
+            default_values.placeholder: "Default value"
+            robots:
+                title: "Robots"
+                description: "Control whether search engines can index this content and follow its links."
+            sitemap:
+                title: "Sitemap"
+                description: "Decide whether this content appears in the sitemap and how it should be prioritized."

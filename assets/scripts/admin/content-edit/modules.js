@@ -179,8 +179,18 @@ function _init() {
     });
 
     prototypesModal && prototypesModal.addEventListener('hide.bs.modal', function () {
+        if (prototypesModal.contains(document.activeElement)) {
+            document.activeElement.blur();
+        }
+
         [...document.getElementsByClassName('insert-module')].forEach((element) => element.classList.remove('selected'));
         // insertElement.classList.remove('selected');
+    });
+
+    prototypesModal && prototypesModal.addEventListener('hidden.bs.modal', function () {
+        if (insertElement && document.contains(insertElement)) {
+            insertElement.focus({preventScroll: true});
+        }
     });
 
     /**

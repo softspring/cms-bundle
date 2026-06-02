@@ -1,0 +1,10 @@
+{% trans_default_domain 'sfs_cms_contents' %}
+
+<section class="mb-5" aria-labelledby="content-main-fields-title">
+    <h2 class="h5 border-bottom pb-2 mb-4" id="content-main-fields-title">{{ 'admin_content.form.sections.main.title'|trans }}</h2>
+
+    {{ form_row(form.name) }}
+    {% if form.duplicateVersion is defined %}
+        {{ form_row(form.duplicateVersion) }}
+    {% endif %}
+</section>

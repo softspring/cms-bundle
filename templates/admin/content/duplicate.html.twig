@@ -28,22 +28,14 @@
         <div class="tab-pane fade show active" id="edit" role="tabpanel" aria-labelledby="edit-tab">
             <div class="container-fluid bg-white p-3">
                 {% block form_fields %}
-                    {{ form_errors(form) }}
-
-                    <div class="row">
-                        <div class="col">{{ form_row(form.name) }}</div>
-                        <div class="col">{{ form_row(form.sites, {'label_attr': {'class': 'checkbox-inline checkbox-switch'}}) }}</div>
-                        <div class="col">{{ form_row(form.defaultLocale, {'attr': {'data-locale-disables-choice': form.locales.vars.id}}) }}</div>
-                        <div class="col">{{ form_row(form.locales, {'label_attr': {'class': 'checkbox-inline checkbox-switch'}}) }}</div>
-                    </div>
-
-                    {{ form_row(form.duplicateVersion) }}
-
-                    {% if form.extraData is defined %}{{ form_widget(form.extraData) }}{% endif %}
-                    {{ form_row(form.routes) }}
-                    {{ form_row(form.indexing) }}
-
-                    {{ form_rest(form) }}
+                    {% include [
+                        '@content/'~content_type~'/admin/_form_fields.html.twig',
+                        '@SfsCms/admin/content/_form_fields.html.twig'
+                    ] with {
+                        form: form,
+                        content_type: content_type,
+                        routes_enabled: true,
+                    } only %}
                 {% endblock form_fields %}
 
                 <div class="d-flex justify-content-end align-items-center">

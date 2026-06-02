@@ -4,18 +4,20 @@
     {% trans_default_domain 'sfs_cms_contents' %}
 
     {% block title %}
-        {% if entity.publishedVersion %}
-            {% if not content_config.admin.unpublish.is_granted or is_granted(content_config.admin.unpublish.is_granted, entity) %}
-                <a class="btn btn-sm btn-outline-secondary float-end"  href="{{ url('sfs_cms_admin_content_'~content_type~'_unpublish', {'content':entity.id}) }}"
-                   data-confirm-modal="{{ ('admin_'~content_type~'.version_unpublish.confirm_message_raw')|trans|base64_encode }}"
-                   data-confirm-modal-title="{{ ('admin_'~content_type~'.version_unpublish.confirm_message_title')|trans }}"
-                   data-confirm-modal-confirm-button-type="danger"
-                >{{ ('admin_'~content_type~'.read.actions.version_unpublish.link')|trans }} <i class="bi bi-toggle-off"></i></a>
-            {% else %}
-                <a class="btn btn-sm btn-outline-secondary float-end disabled">{{ ('admin_'~content_type~'.read.actions.version_unpublish.link')|trans }} <i class="bi bi-toggle-off"></i></a>
+        <h5 class="border-bottom border-1 border-light pb-2 mb-3 d-flex align-items-center justify-content-between gap-2">
+            <span>{{ title }}</span>
+            {% if entity.publishedVersion %}
+                {% if not content_config.admin.unpublish.is_granted or is_granted(content_config.admin.unpublish.is_granted, entity) %}
+                    <a class="btn btn-sm btn-outline-secondary flex-shrink-0" href="{{ url('sfs_cms_admin_content_'~content_type~'_unpublish', {'content':entity.id}) }}"
+                       data-confirm-modal="{{ ('admin_'~content_type~'.version_unpublish.confirm_message_raw')|trans|base64_encode }}"
+                       data-confirm-modal-title="{{ ('admin_'~content_type~'.version_unpublish.confirm_message_title')|trans }}"
+                       data-confirm-modal-confirm-button-type="danger"
+                    >{{ ('admin_'~content_type~'.read.actions.version_unpublish.link')|trans }} <i class="bi bi-toggle-off"></i></a>
+                {% else %}
+                    <a class="btn btn-sm btn-outline-secondary flex-shrink-0 disabled">{{ ('admin_'~content_type~'.read.actions.version_unpublish.link')|trans }} <i class="bi bi-toggle-off"></i></a>
+                {% endif %}
             {% endif %}
-        {% endif %}
-        {{ parent() }}
+        </h5>
     {% endblock %}
 
     {% block content %}

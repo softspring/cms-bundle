@@ -34,10 +34,6 @@ class DefaultValueExtension extends AbstractTypeExtension
                 return $options['default_value'];
             }
 
-            if (is_bool($options['default_value'])) {
-                return $options['default_value'];
-            }
-
             return $value ?? $options['default_value'];
         }, function ($value) {
             return $value;

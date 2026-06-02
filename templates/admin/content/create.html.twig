@@ -23,29 +23,14 @@
         {{ form_start(form) }}
 
             {% block form_fields %}
-                {{ form_errors(form) }}
-
-                <div class="row">
-                    <div class="col">{{ form_row(form.name) }}</div>
-                    <div class="col {{ form.sites.vars.choices|length < 2 ? 'd-none' : '' }}">{{ form_row(form.sites, {'label_attr': {'class': 'checkbox-inline checkbox-switch'}}) }}</div>
-                    <div class="col {{ form.defaultLocale.vars.choices|length < 2 ? 'd-none' : '' }}">{{ form_row(form.defaultLocale, {'attr': {'data-locale-disables-choice': form.locales.vars.id}}) }}</div>
-                    <div class="col {{ form.locales.vars.choices|length < 2 ? 'd-none' : '' }}">{{ form_row(form.locales, {'label_attr': {'class': 'checkbox-inline checkbox-switch'}}) }}</div>
-                </div>
-
-                {% if form.extraData is defined %}{{ form_widget(form.extraData) }}{% endif %}
-                {{ form_row(form.routes) }}
-
-                <div class="mt-5">
-                    <div class="d-flex justify-content-between mb-2">
-                        <div>
-                            <p class="h4">Content indexing</p></div>
-                    </div>
-
-                </div>
-
-                {{ form_widget(form.indexing) }}
-
-                {{ form_rest(form) }}
+                {% include [
+                    '@content/'~content_type~'/admin/_form_fields.html.twig',
+                    '@SfsCms/admin/content/_form_fields.html.twig'
+                ] with {
+                    form: form,
+                    content_type: content_type,
+                    routes_enabled: true,
+                } only %}
             {% endblock form_fields %}
 
             <div class="d-flex justify-content-end align-items-center">

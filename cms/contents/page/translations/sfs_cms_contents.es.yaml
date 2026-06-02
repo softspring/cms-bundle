@@ -269,7 +269,7 @@ admin_page:
             sitemapChangefreq:
                 label: "Frecuencia de cambio en el sitemap"
                 values:
-                    empty: ""
+                    empty: "Valor por defecto"
                     always: "siempre"
                     hourly: "cada hora"
                     daily: "diariamente"
@@ -373,3 +373,26 @@ admin_page:
         actions:
             submit.button: "Comaprar"
             cancel.button: "Cancelar"
+
+admin_content:
+    form:
+        sections:
+            main:
+                title: "Identificador"
+            content_configuration:
+                title: "Configuración del contenido"
+            availability:
+                title: "Sitios e idiomas"
+            routes:
+                title: "Ruta principal"
+            indexing:
+                title: "Controles SEO"
+        indexing:
+            title: "Controles SEO"
+            default_values.placeholder: "Valor por defecto"
+            robots:
+                title: "Robots"
+                description: "Controla si los buscadores pueden indexar este contenido y seguir sus enlaces."
+            sitemap:
+                title: "Sitemap"
+                description: "Decide si este contenido aparece en el sitemap y cómo debe priorizarse."

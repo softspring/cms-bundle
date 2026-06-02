@@ -2,6 +2,7 @@
 
 {% set sfs_components_theme = 'bootstrap5' %}
 {% set sfs_admin_lock_body_scroll = false %}
+{% set body_classes = (body_classes|default('') ~ ' cms-content-edit-page overflow-hidden')|trim %}
 
 {% extends '@SfsCms/admin_layout.html.twig' %}
 
@@ -21,9 +22,9 @@
     </div>
 
     {# disable turbo for content edit #}
-    {{ form_start(form, {'attr': {'novalidate':'', 'data-turbo': 'false'}}) }}
-    <div class="cms-content min-vh-100">
-        <header class="cms-content-header flex-fill p-3 bg-dark fixed-top border-bottom">
+    {{ form_start(form, {'attr': {'novalidate':'', 'data-turbo': 'false', 'class': 'cms-content-edit-form'}}) }}
+    <div class="cms-content">
+        <header class="cms-content-header p-3 bg-dark border-bottom">
             <div class="container-fluid">
                 <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                     <span class="d-flex align-items-center mb-2 mb-lg-0 text-white">
@@ -32,25 +33,23 @@
 
                     <div class="col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"></div>
 
-                    <div class="text-end me-3">
+                    <div class="text-end me-3 {{ form.layout.vars.choices|length <= 1 ? 'd-none' : '' }}">
                         {{ form_widget(form.layout, {'attr':{'onchange':"confirm('Si continuas se pueden eliminar datos ¿quieres continuar?') && (document.getElementById('version_create_form__ok').value = 1) && submit()"}}) }}
                     </div>
 
                     <div class="text-end me-3">
-                        <select class="form-select {#{{ content_entity.locales|length <= 1 ? 'd-none' : '' }}#}" id="contentEditionLanguageSelection">
+                        <select class="form-select {{ content_entity.locales|length <= 1 ? 'd-none' : '' }}" id="contentEditionLanguageSelection">
                             {% for locale in content_entity.locales %}
                                 <option value="{{ locale|lower }}">{{ locale|upper }}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <div class="text-end me-3">
-                        {% if entity.sites|length > 1 %}
-                            <select class="form-select" id="contentEditionSiteSelection">
-                                {% for site in entity.sitesSorted %}
-                                    <option value="{{ site }}">{{ site|sfs_cms_site_name }}</option>
-                                {% endfor %}
-                            </select>
-                        {% endif %}
+                        <select class="form-select {{ entity.sites|length <= 1 ? 'd-none' : '' }}" id="contentEditionSiteSelection">
+                            {% for site in entity.sitesSorted %}
+                                <option value="{{ site }}">{{ site|sfs_cms_site_name }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
 
                     <div class="text-end d-flex align-center">
@@ -88,13 +87,13 @@
                 </div>
             </div>
         </header>
-        <div class="cms-content-main flex-fill d-flex flex-row align-items-stretch bg-light h-100">
-            <div class="row h-100 w-100 mx-0">
+        <div class="cms-content-main flex-fill d-flex flex-row align-items-stretch bg-light">
+            <div class="row w-100 mx-0">
                 <div class="col px-0">
                     {{ form_errors(form) }}
                     {% include layout_config.edit_template %}
                 </div>
-                <div class="col-2 h-100 bg-white d-none" id="content-form"></div>
+                <div class="col-2 min-vh-100 bg-white d-none" id="content-form"></div>
             </div>
         </div>
     </div>
@@ -111,7 +110,7 @@
     </script>
 
     {% if alert|default(false) and alert[0] is defined and alert[1] is defined %}
-        <div class="fixed-top w-50 float-right m-5">
+        <div class="cms-content-edit-alerts fixed-top w-50 float-right m-5">
             <div class="alert alert-{{ alert[0]|replace({'error':'danger'}) }} alert-dismissible fade show" role="alert">
                 {{ alert[1]|trans(alert[2]|default([]), alert[3]|default('sfs_cms_contents'))|raw }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>

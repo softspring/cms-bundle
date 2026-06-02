@@ -49,6 +49,8 @@ class ContentUpdateForm extends AbstractType implements ContentUpdateFormInterfa
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $indexingFields = $this->indexingFields($options);
+
         $builder->add('name', TextType::class);
 
         $builder->add('defaultLocale', ChoiceType::class, [
@@ -80,10 +82,30 @@ class ContentUpdateForm extends AbstractType implements ContentUpdateFormInterfa
         }
 
         $builder->add('indexing', DynamicFormType::class, [
-            'form_fields' => $options['content_config']['indexing'] ?? [],
+            'form_fields' => $indexingFields,
             'translation_domain' => 'sfs_cms_contents',
             'label' => "admin_{$options['content_config']['_id']}.form.indexing.label",
             'label_format' => "admin_{$options['content_config']['_id']}.form.indexing.%name%.label",
         ]);
+    }
+
+    protected function indexingFields(array $options): array
+    {
+        $indexingFields = $options['content_config']['indexing'] ?? [];
+        $contentType = $options['content_config']['_id'];
+
+        if (isset($indexingFields['sitemapChangefreq']['type_options']['choices'])) {
+            $indexingFields['sitemapChangefreq']['type_options']['choices'] = array_combine(
+                array_map(
+                    fn (string $label): string => str_starts_with($label, 'admin_page.form.indexing.')
+                        ? "admin_{$contentType}.".substr($label, strlen('admin_page.'))
+                        : $label,
+                    array_keys($indexingFields['sitemapChangefreq']['type_options']['choices'])
+                ),
+                array_values($indexingFields['sitemapChangefreq']['type_options']['choices'])
+            );
+        }
+
+        return $indexingFields;
     }
 }

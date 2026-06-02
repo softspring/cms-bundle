@@ -1,0 +1,45 @@
+{% trans_default_domain 'sfs_cms_contents' %}
+
+{{ form_errors(form) }}
+
+<div class="row g-5 align-items-start">
+    <div class="col-12 col-xl-8">
+        {% include [
+            '@content/'~content_type~'/admin/_form_fields_main.html.twig',
+            '@SfsCms/admin/content/_form_fields_main.html.twig'
+        ] with {form: form, content_type: content_type} only %}
+
+        {% if routes_enabled and form.routes is defined %}
+            {% include [
+                '@content/'~content_type~'/admin/_form_fields_routes.html.twig',
+                '@SfsCms/admin/content/_form_fields_routes.html.twig'
+            ] with {form: form, content_type: content_type} only %}
+        {% endif %}
+
+        {% include [
+            '@content/'~content_type~'/admin/_form_fields_extra.html.twig',
+            '@SfsCms/admin/content/_form_fields_extra.html.twig'
+        ] with {form: form, content_type: content_type} only %}
+
+        {% if form.indexing is defined %}
+            {% include [
+                '@content/'~content_type~'/admin/_form_fields_indexing.html.twig',
+                '@SfsCms/admin/content/_form_fields_indexing.html.twig'
+            ] with {form: form, content_type: content_type} only %}
+        {% endif %}
+    </div>
+
+    <div class="col-12 col-xl-4">
+        {% include [
+            '@content/'~content_type~'/admin/_form_fields_sites_and_locales.html.twig',
+            '@SfsCms/admin/content/_form_fields_sites_and_locales.html.twig'
+        ] with {form: form, content_type: content_type} only %}
+
+        {% include [
+            '@content/'~content_type~'/admin/_form_fields_sidebar.html.twig',
+            '@SfsCms/admin/content/_form_fields_sidebar.html.twig'
+        ] ignore missing with {form: form, content_type: content_type} only %}
+    </div>
+</div>
+
+{{ form_rest(form) }}
