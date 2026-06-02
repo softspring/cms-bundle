@@ -41,13 +41,13 @@ class IsolatedRequest extends Request
         }
 
         $isolatedRequest = new self($request);
-        $isolatedRequest->attributes = &$isolatedRequest->inner->attributes;
-        $isolatedRequest->request = &$isolatedRequest->inner->request;
-        $isolatedRequest->query = &$isolatedRequest->inner->query;
-        $isolatedRequest->server = &$isolatedRequest->inner->server;
-        $isolatedRequest->files = &$isolatedRequest->inner->files;
-        $isolatedRequest->cookies = &$isolatedRequest->inner->cookies;
-        $isolatedRequest->headers = &$isolatedRequest->inner->headers;
+        $isolatedRequest->attributes = $isolatedRequest->inner->attributes;
+        $isolatedRequest->request = $isolatedRequest->inner->request;
+        $isolatedRequest->query = $isolatedRequest->inner->query;
+        $isolatedRequest->server = $isolatedRequest->inner->server;
+        $isolatedRequest->files = $isolatedRequest->inner->files;
+        $isolatedRequest->cookies = $isolatedRequest->inner->cookies;
+        $isolatedRequest->headers = $isolatedRequest->inner->headers;
 
         return $isolatedRequest;
     }

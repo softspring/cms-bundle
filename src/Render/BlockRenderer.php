@@ -72,6 +72,10 @@ class BlockRenderer
         $params['_locale'] = $locale ?? $request?->getLocale() ?? $this->requestStack->getCurrentRequest()?->getLocale();
         $params['_site'] = $site ?? $request?->attributes->get('_site') ?? $this->requestStack->getCurrentRequest()?->attributes->get('_site');
         if (!empty($blockConfig['render_url'])) {
+            if ($blockConfig['esi']) {
+                $params = $this->mergeCurrentRequestQueryParams($params);
+            }
+
             $params_string = '{'.Parser::arrayToParamsString($params).'}';
             $twigCode = "{{ $renderFunction($urlFunction('{$blockConfig['render_url']}', $params_string) $render_function_attrs) }}";
         } else {
@@ -150,6 +154,10 @@ class BlockRenderer
         $render_function_attrs = [] === $renderFunctionAttrs ? 'null' : ', '.('{'.Parser::arrayToParamsString($renderFunctionAttrs).'}');
 
         if (!empty($blockConfig['render_url'])) {
+            if ($blockConfig['esi'] && !$forceEsiRender) {
+                $params = $this->mergeCurrentRequestQueryParams($params);
+            }
+
             $params_string = '{'.Parser::arrayToParamsString($params).'}';
             $twigCode = "{{ $renderFunction($urlFunction('{$blockConfig['render_url']}', $params_string) $render_function_attrs) }}";
         } else {
@@ -183,5 +191,21 @@ class BlockRenderer
     public function getDebugCollectorData(): array
     {
         return $this->profilerDebugCollectorData;
+    }
+
+    protected function mergeCurrentRequestQueryParams(array $params): array
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        if (!$request) {
+            return $params;
+        }
+
+        foreach ($request->query->all() as $key => $value) {
+            if (!array_key_exists($key, $params)) {
+                $params[$key] = $value;
+            }
+        }
+
+        return $params;
     }
 }
