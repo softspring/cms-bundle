@@ -1,6 +1,6 @@
 {% trans_default_domain 'sfs_cms_modules' %}
 {% import '@SfsCms/macros/modules_edit.html.twig' as module %}
 
-<div {{ module.link_id(form.id) }} {{ module.link_class(form.class) }} {{ module.link_block(form.block) }}>
+<div {{ module.link_id(form.id) }} {{ module.link_class(form.class, 'pe-none') }} {{ module.link_block(form.block) }}>
     {{ form.block.vars.block_preview|raw }}
 </div>
