@@ -58,6 +58,7 @@ class Block implements ConfigurationInterface
             ->end()
             ->children()
                 ->integerNode('revision')->isRequired()->end()
+                ->booleanNode('enabled')->defaultTrue()->end()
 
                 ->scalarNode('render_template')->defaultValue("@block/{$this->blockName}/render.html.twig")->end()
                 ->scalarNode('form_template')->end()

@@ -43,7 +43,7 @@ class BlockStaticType extends AbstractType
                 return $blockConfig->_id ? "admin_{$blockConfig->_id}.name" : '';
             },
             'choice_filter' => function (?object $blockConfig): bool {
-                return $blockConfig && $blockConfig->static;
+                return $blockConfig && $blockConfig->static && $blockConfig->enabled;
             },
             'choice_attr' => function (?object $blockConfig): array {
                 $attr = [
@@ -63,7 +63,7 @@ class BlockStaticType extends AbstractType
                     foreach ($this->cmsHelper->locale()->getEnabledLocales() as $locale) {
                         $attr['data-block-preview'] .= '<div data-lang="'.$locale.'" data-site="'.$site.'" class="section-preview"'
                             .' data-preview-url="'.$this->router->generate('sfs_cms_admin_blocks_render_preview_by_type', ['type' => $blockConfig->_id, '_locale' => $locale, '_sfs_cms_site' => $site->getId()]).'"'
-                            .'>BLOCK PREVIEW</div>';
+                            .'></div>';
                     }
                 }
 

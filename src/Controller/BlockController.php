@@ -9,6 +9,7 @@ use Psr\Log\LoggerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Manager\BlockManagerInterface;
 use Softspring\CmsBundle\Model\BlockInterface;
+use Softspring\CmsBundle\Render\BlockRenderer;
 use Softspring\CmsBundle\Utils\DataMigrator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,6 +24,7 @@ class BlockController extends AbstractController
         protected EntityManagerInterface $em,
         protected CmsConfig $cmsConfig,
         protected BlockManagerInterface $blockManager,
+        protected BlockRenderer $blockRenderer,
         protected bool $debug,
         protected Environment $twig,
         protected string $blockCacheType,
@@ -37,6 +39,10 @@ class BlockController extends AbstractController
             $this->enableSchedulableFilter();
 
             $config = $this->cmsConfig->getBlock($type);
+
+            if (isset($config['render_url']) && $config['render_url']) {
+                return new Response($this->blockRenderer->renderBlockByType($type, $request->query->all()));
+            }
 
             if (!$config['static']) {
                 $block = $this->getMoreRestrictiveBlock($this->blockManager->getRepository()->findByType($type));

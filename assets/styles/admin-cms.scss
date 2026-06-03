@@ -49,6 +49,49 @@ body {
     z-index: 1050;
 }
 
+[data-preview-url] {
+    position: relative;
+}
+
+[data-preview-url][data-preview-url-loading],
+[data-preview-url]:not([data-preview-url-loaded]):not([data-preview-url-error]) {
+    min-height: 5rem;
+
+    &:before,
+    &:after {
+        content: '';
+        position: absolute;
+        pointer-events: none;
+    }
+
+    &:before {
+        inset: 0;
+        z-index: 20;
+        background: rgba($white, .7);
+        backdrop-filter: blur(1px);
+    }
+
+    &:after {
+        top: 50%;
+        left: 50%;
+        z-index: 21;
+        width: 1.75rem;
+        height: 1.75rem;
+        margin-top: -.875rem;
+        margin-left: -.875rem;
+        border: .2rem solid rgba($primary, .2);
+        border-top-color: $primary;
+        border-radius: 50%;
+        animation: cms-preview-spinner .7s linear infinite;
+    }
+}
+
+@keyframes cms-preview-spinner {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 .tox-notifications-container {
     display: none;
 }

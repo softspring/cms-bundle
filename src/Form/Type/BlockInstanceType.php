@@ -47,8 +47,8 @@ class BlockInstanceType extends AbstractType
             'choice_label' => function (BlockInterface $block): ?string {
                 return $block->getName();
             },
-            'choice_filter' => function (?BlockInterface $block = null): true {
-                return true;
+            'choice_filter' => function (?BlockInterface $block = null): bool {
+                return $block ? $this->cmsHelper->config()->getBlock($block->getType())['enabled'] : false;
             },
             'choice_attr' => function (?BlockInterface $block): array {
                 $attr = [
@@ -66,7 +66,7 @@ class BlockInstanceType extends AbstractType
                         foreach ($this->cmsHelper->locale()->getEnabledLocales() as $locale) {
                             $attr['data-block-preview'] .= '<div data-lang="'.$locale.'" data-site="'.$site.'" class="section-preview"'
                                 .' data-preview-url="'.$this->router->generate('sfs_cms_admin_blocks_render_preview_by_type', ['type' => $block->getType(), '_locale' => $locale, '_sfs_cms_site' => $site]).'"'
-                                .'>BLOCK PREVIEW</div>';
+                                .'></div>';
                         }
                     }
                 }
