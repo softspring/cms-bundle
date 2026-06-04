@@ -196,7 +196,7 @@ class BlockRenderer
     protected function mergeCurrentRequestQueryParams(array $params): array
     {
         $request = $this->requestStack->getCurrentRequest();
-        if (!$request) {
+        if (!$request instanceof Request) {
             return $params;
         }
 

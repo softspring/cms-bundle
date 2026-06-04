@@ -34,6 +34,7 @@ class BlockTest extends TestCase
         $this->assertEquals([
             'revision' => 1,
             'render_template' => '@block/block_name/render.html.twig',
+            'enabled' => true,
             'esi' => true,
             'cache_type' => 'public',
             'cache_ttl' => false,
@@ -60,6 +61,7 @@ class BlockTest extends TestCase
         $this->assertEquals([
             'revision' => 2,
             'render_template' => 'other_render_file.html.twig',
+            'enabled' => true,
             'esi' => true,
             'cache_type' => 'public',
             'cache_ttl' => false,
@@ -123,6 +125,7 @@ class BlockTest extends TestCase
         $this->assertEquals([
             'revision' => 2,
             'render_template' => '@block/block_name/render.html.twig',
+            'enabled' => true,
             'esi' => true,
             'cache_type' => 'public',
             'cache_ttl' => false,

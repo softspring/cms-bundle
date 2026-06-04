@@ -25,16 +25,12 @@ class LayoutHelper
         $availableLayouts = empty($contentType['allowed_layouts']) ? array_keys($layouts) : $contentType['allowed_layouts'];
 
         foreach ($layouts as $layoutId => $layoutConfig) {
-            if (!empty($layoutConfig['compatible_contents']) && !in_array($contentType['_id'], $layoutConfig['compatible_contents'])) {
-                if (false !== $layoutIndex = array_search($layoutId, $availableLayouts)) {
-                    unset($availableLayouts[$layoutIndex]);
-                }
+            if (!empty($layoutConfig['compatible_contents']) && !in_array($contentType['_id'], $layoutConfig['compatible_contents']) && false !== $layoutIndex = array_search($layoutId, $availableLayouts)) {
+                unset($availableLayouts[$layoutIndex]);
             }
 
-            if (false === $layoutConfig['enabled'] && $layoutId !== $currentLayout) {
-                if (false !== $layoutIndex = array_search($layoutId, $availableLayouts)) {
-                    unset($availableLayouts[$layoutIndex]);
-                }
+            if (false === $layoutConfig['enabled'] && $layoutId !== $currentLayout && false !== $layoutIndex = array_search($layoutId, $availableLayouts)) {
+                unset($availableLayouts[$layoutIndex]);
             }
         }
 

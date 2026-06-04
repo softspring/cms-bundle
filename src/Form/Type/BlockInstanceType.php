@@ -48,7 +48,7 @@ class BlockInstanceType extends AbstractType
                 return $block->getName();
             },
             'choice_filter' => function (?BlockInterface $block = null): bool {
-                return $block ? $this->cmsHelper->config()->getBlock($block->getType())['enabled'] : false;
+                return $block instanceof BlockInterface ? $this->cmsHelper->config()->getBlock($block->getType())['enabled'] : false;
             },
             'choice_attr' => function (?BlockInterface $block): array {
                 $attr = [
