@@ -32,7 +32,7 @@ import './admin/routes-forms.js';
 import './admin/fields-visibility.js';
 import './admin/locales-widgets.js';
 import './admin/versions-diff.js';
-import './admin/content-locale-paths';
+import './admin/content-locale-paths.js';
 
 import './types/block-type.js';
 import './types/color-type.js';
