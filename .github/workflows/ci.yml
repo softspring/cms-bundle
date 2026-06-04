@@ -132,14 +132,6 @@ jobs:
                     ref: ${{ env.BRANCH_NAME }}
                     token: ${{ secrets.CI_PUSH_TOKEN || github.token }}
 
-            -   name: Check CI push token
-                if: github.event_name == 'push'
-                run: |
-                    if [ -z "${{ secrets.CI_PUSH_TOKEN }}" ]; then
-                        echo "::error::CI_PUSH_TOKEN is required to push generated dist files to protected branches."
-                        exit 1
-                    fi
-
             -   name: Install Node.js
                 uses: actions/setup-node@v6
                 with:
@@ -173,6 +165,11 @@ jobs:
                 run: |
                     if [ -z "$(git status --porcelain -- assets/dist)" ]; then
                         exit 0
+                    fi
+
+                    if [ -z "${{ secrets.CI_PUSH_TOKEN }}" ]; then
+                        echo "::error::CI_PUSH_TOKEN is required to push generated dist files to protected branches."
+                        exit 1
                     fi
 
                     git config user.name "${{ env.CI_COMMIT_AUTHOR }}"
