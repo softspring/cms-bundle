@@ -76,8 +76,6 @@
     <script>
         const iframe = document.getElementById('preview');
         function previewSubmit(external = false) {
-            console.log('loading');
-
             if (external) {
                 document.getElementById('previewForm').target = '_blank';
             }
@@ -94,7 +92,6 @@
             }
         }
         function previewLoaded() {
-            console.log('loaded');
             iframe.classList.remove('opacity-50');
             document.getElementById('spinner').classList.add('d-none');
         }
@@ -105,4 +102,3 @@
 
     {% include '@SfsComponents/flash-messages/alerts.html.twig' %}
 {% endblock body %}
-

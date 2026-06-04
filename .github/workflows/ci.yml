@@ -15,8 +15,6 @@ env:
 jobs:
     backend:
         runs-on: ubuntu-latest
-        permissions:
-            contents: write
         strategy:
             matrix:
                 php-versions: [ '8.4' ]
@@ -35,8 +33,8 @@ jobs:
             -   name: Check PHP Version
                 run: php -v
 
-            -   name: Validate composer.json and composer.lock
-                run: composer validate --strict
+            -   name: Validate composer.json
+                run: composer validate --strict --no-check-lock
 
             -   name: Cache Composer packages
                 id: composer-cache
@@ -51,29 +49,39 @@ jobs:
                 run: composer update --prefer-dist --no-interaction --no-progress ${{ matrix.composer-prefer }}
 
             -   name: Run phpstan
-                run: ./vendor/bin/phpstan analyse
+                run: ./vendor/bin/phpstan analyse src tests --level 5
 
             -   name: Run tests
-                run: ./vendor/bin/phpunit --coverage-text --coverage-html=.phpunit.cache/html-report
+                run: ./vendor/bin/phpunit
 
             -   name: Code Style check
-                run: ./vendor/bin/php-cs-fixer fix -v --diff --dry-run
+                run: ./vendor/bin/php-cs-fixer fix -v --diff --dry-run --sequential
 
-            -   name: phpunit-coverage-badge
-                uses: timkrase/phpunit-coverage-badge@v1.2.1
+            -   name: Run Rector
+                run: ./vendor/bin/rector process src tests --dry-run
+
+            -   name: Lint YAML in .github
+                run: ./vendor/bin/yaml-lint .github/ -vvv --parse-tags
+
+            -   name: Lint YAML in config
+                run: ./vendor/bin/yaml-lint config/ -vvv --parse-tags
+
+            -   name: Lint YAML in translations
+                run: ./vendor/bin/yaml-lint translations/ -vvv --parse-tags
+
+            -   name: Upload coverage to Codecov
+                if: matrix.composer-prefer == ''
+                uses: codecov/codecov-action@v6
                 with:
-                    push_badge: true
-                    coverage_badge_path: .github/badges/coverage.svg
-                    repo_token: ${{ secrets.GITHUB_TOKEN }}
+                    token: ${{ secrets.CODECOV_TOKEN }}
+                    files: clover.xml
 
     frontend:
         needs: backend
         runs-on: ubuntu-latest
-        permissions:
-            contents: write
         strategy:
             matrix:
-                node-versions: [ '18' ]
+                node-versions: [ '20' ]
                 npm-versions: [ '10' ]
         steps:
             -   uses: actions/checkout@v6
@@ -82,15 +90,6 @@ jobs:
                 uses: actions/setup-node@v6
                 with:
                     node-version: ${{ matrix.node-versions }}
-
-            -   name: Restore composer cache
-                id: composer-cache
-                uses: actions/cache@v5
-                with:
-                    path: vendor
-                    key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-                    restore-keys: |
-                        ${{ runner.os }}-php-
 
             -   name: Check Node.js Version
                 run: node -v
@@ -111,5 +110,64 @@ jobs:
                 run: npm install --no-package-lock --no-audit --no-fund
 
             -   name: Run eslint
-                run: ESLINT_USE_FLAT_CONFIG=true ../node_modules/.bin/eslint scripts
-                working-directory: assets
+                run: npm run lint
+
+            -   name: Build assets
+                run: npm run build
+
+    build-dist:
+        needs: frontend
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+
+        env:
+            CI_COMMIT_MESSAGE: Continuous Integration Assets Build Artifacts
+            CI_COMMIT_AUTHOR: Continuous Integration
+            BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+
+        steps:
+            -   uses: actions/checkout@v6
+                with:
+                    ref: ${{ env.BRANCH_NAME }}
+
+            -   name: Install Node.js
+                uses: actions/setup-node@v6
+                with:
+                    node-version: '20'
+
+            -   name: Cache npm packages
+                id: npm-cache
+                uses: actions/cache@v5
+                with:
+                    path: node_modules
+                    key: ${{ runner.os }}-node-${{ hashFiles('package.json') }}
+                    restore-keys: |
+                        ${{ runner.os }}-node-
+
+            -   name: Install npm dependencies
+                run: npm install --no-package-lock --no-audit --no-fund
+
+            -   name: Build dist
+                run: npm run build
+
+            -   name: Check dist is clean on pull requests
+                if: github.event_name == 'pull_request'
+                run: |
+                    if [ -n "$(git status --porcelain -- assets/dist)" ]; then
+                        git status --short -- assets/dist
+                        exit 1
+                    fi
+
+            -   name: Commit dist changes
+                if: github.event_name == 'push'
+                run: |
+                    if [ -z "$(git status --porcelain -- assets/dist)" ]; then
+                        exit 0
+                    fi
+
+                    git config user.name "${{ env.CI_COMMIT_AUTHOR }}"
+                    git config user.email "username@users.noreply.github.com"
+                    git add assets/dist
+                    git commit -m "${{ env.CI_COMMIT_MESSAGE }}"
+                    git push origin HEAD:${{ env.BRANCH_NAME }}
