@@ -13,6 +13,7 @@ content:
         canonicalContent:
             type: translatable
             type_options:
+                extractable: false
                 type: content
                 type_options:
                     required: false
