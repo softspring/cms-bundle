@@ -24,7 +24,7 @@ class DefaultValueExtension extends AbstractTypeExtension
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        if (empty($options['default_value'])) {
+        if (null === $options['default_value']) {
             return;
         }
 
