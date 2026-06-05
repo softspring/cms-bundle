@@ -9,6 +9,7 @@ use Softspring\CmsBundle\Manager\ContentManager;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -29,6 +30,7 @@ class ContentType extends AbstractType
             'class' => ContentInterface::class,
             'em' => $this->sfsContentEm,
             'required' => false,
+            'placeholder' => static fn (Options $options): ?string => $options['required'] ? null : '',
             'choice_label' => function (ContentInterface $content): ?string {
                 return $content->getName();
             },

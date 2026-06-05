@@ -14,6 +14,9 @@ content:
             type: translatable
             type_options:
                 type: content
+                type_options:
+                    required: false
+
     indexing:
         noIndex:
             type: checkbox
