@@ -32,6 +32,7 @@ class ListListener extends AbstractContentVersionListener
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_LIST_VIEW => [
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onView', 0],
+                ['onViewAddEntities', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_LIST_EXCEPTION => [
                 ['onEventDispatchContentTypeEvent', 10],

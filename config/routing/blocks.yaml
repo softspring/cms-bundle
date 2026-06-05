@@ -1,4 +1,0 @@
-# This file is deprecated and will be removed in the next major version.
-
-_sfs_cms_blocks_:
-    resource: "@SfsCmsBlogPlugin/config/routing/blocks.yaml"

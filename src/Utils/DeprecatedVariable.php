@@ -9,7 +9,7 @@ readonly class DeprecatedVariable
         private string $oldName,
         private string $newName,
         private string $message = 'The %s variable is deprecated and will be removed in a future version. Please use the new variable %s instead.',
-        private string $removeVersion = '6.0',
+        private string $removeVersion = '7.0',
     ) {
     }
 

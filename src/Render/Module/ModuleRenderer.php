@@ -95,12 +95,8 @@ class ModuleRenderer
         foreach ($module['site_filter'] as $key => $value) {
             if (is_string($key) && true === $value) {
                 $moduleEnabledSites[] = $this->cmsConfig->getSite($key);
-            } elseif (is_string($value)) {
-                /* @deprecated, in 6.0 old format will be removed */
-                $moduleEnabledSites[] = $this->cmsConfig->getSite($value);
-            } elseif ($value instanceof SiteInterface) {
-                /* @deprecated, in 6.0 old format will be removed */
-                $moduleEnabledSites[] = $value;
+            } else {
+                throw new RuntimeException('Invalid module site filter key');
             }
         }
 
@@ -119,9 +115,8 @@ class ModuleRenderer
         foreach ($module['locale_filter'] as $key => $value) {
             if (is_string($key) && true === $value) {
                 $moduleEnabledLocales[] = $key;
-            } elseif (is_string($value)) {
-                /* @deprecated, in 6.0 old format will be removed */
-                $moduleEnabledLocales[] = $value;
+            } else {
+                throw new RuntimeException('Invalid module locale filter key');
             }
         }
 

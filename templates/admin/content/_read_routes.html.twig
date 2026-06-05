@@ -6,8 +6,8 @@
     {% block title %}
         <h5 class="border-bottom border-1 border-light pb-2 mb-3 d-flex align-items-center justify-content-between gap-2">
             <span>{{ title }}</span>
-            {% if not content_config.admin.routes.is_granted or is_granted(content_config.admin.routes.is_granted, entity) %}
-                <a class="btn btn-sm btn-outline-secondary flex-shrink-0" href="{{ url('sfs_cms_admin_content_'~content_type~'_routes', {'content':entity.id}) }}">{{ ('admin_'~content_type~'.read.routes.edit.link')|trans }} <i class="bi bi-signpost-split"></i></a>
+            {% if not content_config.admin.routes.is_granted or is_granted(content_config.admin.routes.is_granted, content_entity) %}
+                <a class="btn btn-sm btn-outline-secondary flex-shrink-0" href="{{ url('sfs_cms_admin_content_'~content_type~'_routes', {'content':content_entity.id}) }}">{{ ('admin_'~content_type~'.read.routes.edit.link')|trans }} <i class="bi bi-signpost-split"></i></a>
             {% else %}
                 <a class="btn btn-sm btn-outline-secondary flex-shrink-0 disabled">{{ ('admin_'~content_type~'.read.routes.edit.link')|trans }} <i class="bi bi-signpost-split"></i></a>
             {% endif %}
@@ -15,12 +15,12 @@
     {% endblock %}
 
     {% block content %}
-        {% if not entity.publishedVersion %}
+        {% if not content_entity.publishedVersion %}
             <div class="alert alert-warning" role="alert">
                 {{ ('admin_'~content_type~'.read.routes.not_published_warning')|trans }}
             </div>
         {% else %}
-            {% set routeLocales = sfs_cms_check_content_locales_and_routes(entity) %}
+            {% set routeLocales = sfs_cms_check_content_locales_and_routes(content_entity) %}
             {% for missingLocale in routeLocales.missing_route_locales %}
                 <div class="alert alert-warning" role="alert">
                     {{ ('admin_'~content_type~'.read.routes.missing_locale')|trans({'%missingLocale%': missingLocale}) }}
@@ -29,7 +29,7 @@
         {% endif %}
 
         <ul class="list-unstyled">
-            {% for route in entity.routes %}
+            {% for route in content_entity.routes %}
                 {% for site in route.sites %}
                     {% for path in route.paths %}
                         <li>

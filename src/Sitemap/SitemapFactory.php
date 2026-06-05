@@ -40,10 +40,8 @@ class SitemapFactory
     {
         $urls = [];
 
-        /** @deprecated will only use alternates_locales */
-        $localeAlternates = $sitemapConfig['alternates'] || $sitemapConfig['alternates_locales'];
-        /* @deprecated will only use alternates_sites */
-        $siteAlternates = $sitemapConfig['alternates'] || $sitemapConfig['alternates_sites'];
+        $localeAlternates = $sitemapConfig['alternates_locales'];
+        $siteAlternates = $sitemapConfig['alternates_sites'];
 
         $alternatesIncludeHreflang = $sitemapConfig['alternates_include_hreflang'] ?? true;
 

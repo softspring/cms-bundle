@@ -87,6 +87,7 @@ class CreateListener extends AbstractContentVersionListener
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CREATE_VIEW => [
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onView', 0],
+                ['onViewAddEntities', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_CREATE_EXCEPTION => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -229,13 +230,6 @@ class CreateListener extends AbstractContentVersionListener
 
         // show alert if exists
         $event->getData()['alert'] = $request->attributes->get('_content_version_alert');
-
-        //        // add enabled locales
-        //        $sitesLocales = $content->getSites()->map(fn (SiteInterface $site) => $site->getConfig()['locales'])->toArray();
-        //        $enabledLocales = call_user_func_array('array_merge', $sitesLocales);
-        //        $enabledLocales = array_unique($enabledLocales);
-        /* @deprecated */
-        $event->getData()['enabledLocales'] = $content->getLocales();
 
         // add max_input_vars to prevent errors
         // @see https://www.php.net/manual/en/info.configuration.php#ini.max-input-vars

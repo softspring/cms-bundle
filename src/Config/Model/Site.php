@@ -126,7 +126,6 @@ class Site implements ConfigurationInterface
                             ->scalarNode('default_priority')->defaultFalse()->end()
                             ->enumNode('default_changefreq')->defaultFalse()->values([false, 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never'])->end()
                             ->integerNode('cache_ttl')->defaultFalse()->end()
-                            ->booleanNode('alternates')->setDeprecated('softspring/cms-bundle', '5.1', 'Use alternates_locales and alternates_sites')->defaultTrue()->end()
                             ->booleanNode('alternates_locales')->defaultTrue()->end()
                             ->booleanNode('alternates_sites')->defaultTrue()->end()
                             ->booleanNode('alternates_include_hreflang')->defaultTrue()->end()
