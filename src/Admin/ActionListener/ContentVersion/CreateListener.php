@@ -220,8 +220,6 @@ class CreateListener extends AbstractContentVersionListener
         parent::onView($event);
 
         $request = $event->getRequest();
-        /** @var ContentInterface $content */
-        $content = $request->attributes->get('content');
         /** @var ContentVersionInterface $version */
         $version = $request->attributes->get('version');
 

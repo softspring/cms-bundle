@@ -98,6 +98,11 @@ class ContentTest extends TestCase
                 'metaTitle' => ['type' => 'translation'],
                 'metaDescription' => ['type' => 'translation'],
                 'metaKeywords' => ['type' => 'translation'],
+                'canonicalContent' => ['type' => 'translatable', 'type_options' => [
+                    'extractable' => false,
+                    'type' => 'content',
+                    'type_options' => ['required' => false],
+                ]],
             ],
             'admin' => [
                 'list' => [

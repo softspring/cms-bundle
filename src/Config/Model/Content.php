@@ -146,25 +146,6 @@ class Content implements ConfigurationInterface
 
                 ->arrayNode('admin')
                     ->addDefaultsIfNotSet()
-                    ->beforeNormalization()
-                        ->always()
-                        ->then(function (array $data): array {
-                            $deprecatedOptions = [
-                                // 'unpublish_is_granted' => 'unpublish.is_granted',
-                            ];
-
-                            foreach ($deprecatedOptions as $deprecatedOption => $newOption) {
-                                if (isset($data[$deprecatedOption])) {
-                                    trigger_deprecation('softspring/cms-bundle', '5.2', 'The "%s" option is deprecated, use "%s" instead.', $deprecatedOption, $newOption);
-                                    [$group, $attribute] = explode('.', $newOption);
-                                    $data[$group][$attribute] = $data[$group][$attribute] ?? $data[$deprecatedOption];
-                                    unset($data[$deprecatedOption]);
-                                }
-                            }
-
-                            return $data;
-                        })
-                    ->end()
                     ->children()
 
                         ->arrayNode('list')

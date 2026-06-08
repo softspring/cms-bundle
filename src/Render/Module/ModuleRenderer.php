@@ -10,7 +10,6 @@ use Softspring\CmsBundle\Config\Exception\DisabledModuleException;
 use Softspring\CmsBundle\Config\Exception\InvalidModuleException;
 use Softspring\CmsBundle\Config\Exception\InvalidSiteException;
 use Softspring\CmsBundle\Form\Module\ContainerModuleType;
-use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\Render\Error\RenderErrorList;
 use Softspring\CmsBundle\Render\Exception\ModuleRenderException;
 use Softspring\CmsBundle\Utils\DataMigrator;
@@ -95,6 +94,8 @@ class ModuleRenderer
         foreach ($module['site_filter'] as $key => $value) {
             if (is_string($key) && true === $value) {
                 $moduleEnabledSites[] = $this->cmsConfig->getSite($key);
+            } elseif (is_int($key) && is_string($value)) {
+                $moduleEnabledSites[] = $this->cmsConfig->getSite($value);
             } else {
                 throw new RuntimeException('Invalid module site filter key');
             }
@@ -115,6 +116,8 @@ class ModuleRenderer
         foreach ($module['locale_filter'] as $key => $value) {
             if (is_string($key) && true === $value) {
                 $moduleEnabledLocales[] = $key;
+            } elseif (is_int($key) && is_string($value)) {
+                $moduleEnabledLocales[] = $value;
             } else {
                 throw new RuntimeException('Invalid module locale filter key');
             }
