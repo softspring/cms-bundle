@@ -3,6 +3,7 @@
 namespace Softspring\CmsBundle\Test\Unit\Render;
 
 use Exception;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Softspring\CmsBundle\Config\CmsConfig;
@@ -27,7 +28,8 @@ class ModuleRendererTest extends TestCase
         $this->twig = $this->createMock(Environment::class);
     }
 
-    public function testSkipBySiteFilter(): void
+    #[DataProvider('siteFilterProvider')]
+    public function testSkipBySiteFilter(array $siteFilter): void
     {
         $site1 = new Site();
         $site1->setId('site_1');
@@ -65,15 +67,22 @@ class ModuleRendererTest extends TestCase
         $profilerDebugCollectorData = [];
         $return = $moduleRenderer->render([
             '_module' => 'test_module',
-            'site_filter' => [
-                'site_2',
-            ],
+            'site_filter' => $siteFilter,
         ], $profilerDebugCollectorData, []);
 
         $this->assertEquals(ModuleRenderer::SITE_HIDDEN_MODULE."\n", $return);
     }
 
-    public function testSkipByLocaleFilter(): void
+    public static function siteFilterProvider(): array
+    {
+        return [
+            'legacy list format' => [['site_2']],
+            'map format' => [['site_2' => true]],
+        ];
+    }
+
+    #[DataProvider('localeFilterProvider')]
+    public function testSkipByLocaleFilter(array $localeFilter): void
     {
         $site = new Site();
         $site->setId('site_1');
@@ -106,12 +115,18 @@ class ModuleRendererTest extends TestCase
         $profilerDebugCollectorData = [];
         $return = $moduleRenderer->render([
             '_module' => 'test_module',
-            'locale_filter' => [
-                'en',
-            ],
+            'locale_filter' => $localeFilter,
         ], $profilerDebugCollectorData, []);
 
         $this->assertEquals(ModuleRenderer::LOCALE_HIDDEN_MODULE."\n", $return);
+    }
+
+    public static function localeFilterProvider(): array
+    {
+        return [
+            'legacy list format' => [['en']],
+            'map format' => [['en' => true]],
+        ];
     }
 
     public function testRenderNoContainerModule(): void
