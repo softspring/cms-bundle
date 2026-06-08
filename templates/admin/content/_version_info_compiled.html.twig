@@ -7,7 +7,7 @@
         {% if sfs_cms_admin_content_recompile_enabled %}
             {% if not content_config.admin.version_recompile.is_granted or is_granted(content_config.admin.version_recompile.is_granted, version_entity) %}
                 <a class="mx-1 btn btn-sm btn-outline-secondary float-end"
-                   href="{{ url('sfs_cms_admin_content_'~content_type~'_recompile_version', {'content':entity.id, 'version': version_entity.id, 'back': 'version_info'}) }}">{{ ('admin_'~content_type~'.version_info.actions.recompile.link')|trans }}</a>
+                   href="{{ url('sfs_cms_admin_content_'~content_type~'_recompile_version', {'content':content_entity.id, 'version': version_entity.id, 'back': 'version_info'}) }}">{{ ('admin_'~content_type~'.version_info.actions.recompile.link')|trans }}</a>
             {% else %}
                 <a class="mx-1 btn btn-sm btn-outline-secondary float-end disabled">{{ ('admin_'~content_type~'.version_info.actions.recompile.link')|trans }}</a>
             {% endif %}
@@ -15,7 +15,7 @@
 
         {% if not content_config.admin.version_clear_compiled.is_granted or is_granted(content_config.admin.version_clear_compiled.is_granted, version_entity) %}
             <a class="mx-1 btn btn-sm btn-outline-secondary float-end"
-               href="{{ url('sfs_cms_admin_content_'~content_type~'_clear_compiled_version', {'content':entity.id, 'version': version_entity.id, 'back': 'version_info'}) }}">{{ ('admin_'~content_type~'.version_info.actions.clear_compiled.link')|trans }}</a>
+               href="{{ url('sfs_cms_admin_content_'~content_type~'_clear_compiled_version', {'content':content_entity.id, 'version': version_entity.id, 'back': 'version_info'}) }}">{{ ('admin_'~content_type~'.version_info.actions.clear_compiled.link')|trans }}</a>
         {% else %}
             <a class="mx-1 btn btn-sm btn-outline-secondary float-end disabled">{{ ('admin_'~content_type~'.version_info.actions.clear_compiled.link')|trans }}</a>
         {% endif %}

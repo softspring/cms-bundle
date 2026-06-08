@@ -6,9 +6,9 @@
     {% block title %}
         <h5 class="border-bottom border-1 border-light pb-2 mb-3 d-flex align-items-center justify-content-between gap-2">
             <span>{{ title }}</span>
-            {% if entity.publishedVersion %}
-                {% if not content_config.admin.unpublish.is_granted or is_granted(content_config.admin.unpublish.is_granted, entity) %}
-                    <a class="btn btn-sm btn-outline-secondary flex-shrink-0" href="{{ url('sfs_cms_admin_content_'~content_type~'_unpublish', {'content':entity.id}) }}"
+            {% if content_entity.publishedVersion %}
+                {% if not content_config.admin.unpublish.is_granted or is_granted(content_config.admin.unpublish.is_granted, content_entity) %}
+                    <a class="btn btn-sm btn-outline-secondary flex-shrink-0" href="{{ url('sfs_cms_admin_content_'~content_type~'_unpublish', {'content':content_entity.id}) }}"
                        data-confirm-modal="{{ ('admin_'~content_type~'.version_unpublish.confirm_message_raw')|trans|base64_encode }}"
                        data-confirm-modal-title="{{ ('admin_'~content_type~'.version_unpublish.confirm_message_title')|trans }}"
                        data-confirm-modal-confirm-button-type="danger"
@@ -23,21 +23,21 @@
     {% block content %}
         <dl class="mb-0">
             {#<dt class=fw-normal>{{ ('admin_'~content_type~'.read.name')|trans }}</dt>#}
-            {#<dd class=fw-bold>{{ entity.name }}</dd>#}
+            {#<dd class=fw-bold>{{ content_entity.name }}</dd>#}
             <dt class="fw-normal">{{ ('admin_'~content_type~'.read.sites')|trans }}</dt>
-            <dd class="fw-bold">{{ entity.sites|map((site) => site|sfs_cms_site_name)|join(', ') }}</dd>
+            <dd class="fw-bold">{{ content_entity.sites|map((site) => site|sfs_cms_site_name)|join(', ') }}</dd>
             <dt class="fw-normal">{{ ('admin_'~content_type~'.read.general.status')|trans }}</dt>
             <dd class="fw-bold">
-                {{ (content_type~'.status.'~entity.status)|trans }}
-                {% if entity.publishedVersion %}
-                    (<a href="{{ url('sfs_cms_admin_content_'~content_type~'_version_info', {'content':entity.id, 'version':entity.publishedVersion.id}) }}">v{{ entity.publishedVersion.versionNumber }}</a>)
+                {{ (content_type~'.status.'~content_entity.status)|trans }}
+                {% if content_entity.publishedVersion %}
+                    (<a href="{{ url('sfs_cms_admin_content_'~content_type~'_version_info', {'content':content_entity.id, 'version':content_entity.publishedVersion.id}) }}">v{{ content_entity.publishedVersion.versionNumber }}</a>)
                 {% endif %}
             </dd>
-            {% if entity.publishedVersion %}
+            {% if content_entity.publishedVersion %}
             <dt class="fw-normal">{{ ('admin_'~content_type~'.read.general.publishDate')|trans }}</dt>
             <dd class="fw-bold">
-                {% if entity.lastModified %}
-                    {{ entity.lastModified|date('H:i d-m-Y') }}
+                {% if content_entity.lastModified %}
+                    {{ content_entity.lastModified|date('H:i d-m-Y') }}
                 {% endif %}
             </dd>
             {% endif %}

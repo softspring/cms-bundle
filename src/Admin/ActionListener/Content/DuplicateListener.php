@@ -160,6 +160,6 @@ class DuplicateListener extends AbstractContentListener
     public function onViewAddOriginEntity(ViewEvent $event): void
     {
         $event->getData()['origin_entity'] = $event->getRequest()->attributes->get('content');
-        $event->getData()['entity'] = $event->getData()['content'];
+        $event->getData()['content_entity'] = $event->getData()['content'];
     }
 }

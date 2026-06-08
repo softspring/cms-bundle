@@ -14,7 +14,7 @@
     '@SfsMedia/forms/media_type_theme.html.twig'
 %}
 
-{% block title %}{{ ('admin_'~content_type~'.content.meta.title')|trans({'%name%':entity.name}) }}{% endblock %}
+{% block title %}{{ ('admin_'~content_type~'.content.meta.title')|trans({'%name%':content_entity.name}) }}{% endblock %}
 
 {% block body %}
     <div id="maxInputVarsMessage" data-max-input-vars="{{ maxInputVars }}" class="container-fluid bg-warning fixed-top px-5 py-3 text-center text-dark d-none" style="z-index: 10000">
@@ -28,7 +28,7 @@
             <div class="container-fluid">
                 <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                     <span class="d-flex align-items-center mb-2 mb-lg-0 text-white">
-                        {{ ('admin_'~content_type~'.content.title')|trans({'%name%':entity.name, '%versionNumber%': prev_version.versionNumber|default('0')}) }}
+                        {{ ('admin_'~content_type~'.content.title')|trans({'%name%':content_entity.name, '%versionNumber%': prev_version.versionNumber|default('0')}) }}
                     </span>
 
                     <div class="col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"></div>
@@ -45,8 +45,8 @@
                         </select>
                     </div>
                     <div class="text-end me-3">
-                        <select class="form-select {{ entity.sites|length <= 1 ? 'd-none' : '' }}" id="contentEditionSiteSelection">
-                            {% for site in entity.sitesSorted %}
+                        <select class="form-select {{ content_entity.sites|length <= 1 ? 'd-none' : '' }}" id="contentEditionSiteSelection">
+                            {% for site in content_entity.sitesSorted %}
                                 <option value="{{ site }}">{{ site|sfs_cms_site_name }}</option>
                             {% endfor %}
                         </select>
@@ -54,10 +54,10 @@
 
                     <div class="text-end d-flex align-center">
                         {% if app.request.query.get('back') == 'versions' %}
-                            <a href="{{ url('sfs_cms_admin_content_'~content_type~'_versions', {'content':entity.id}) }}"
+                            <a href="{{ url('sfs_cms_admin_content_'~content_type~'_versions', {'content':content_entity.id}) }}"
                                class="btn btn-light">{{ ('admin_'~content_type~'.content.actions.cancel.button')|trans }}</a>
                         {% else %}
-                            <a href="{{ url('sfs_cms_admin_content_'~content_type~'_details', {'content':entity.id}) }}"
+                            <a href="{{ url('sfs_cms_admin_content_'~content_type~'_details', {'content':content_entity.id}) }}"
                                class="btn btn-light">{{ ('admin_'~content_type~'.content.actions.cancel.button')|trans }}</a>
                         {% endif %}
 

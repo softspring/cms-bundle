@@ -6,8 +6,8 @@
     {% block title %}
         <h5 class="border-bottom border-1 border-light pb-2 mb-3 d-flex align-items-center justify-content-between gap-2">
             <span>{{ title }}</span>
-            {% if not content_config.admin.update.is_granted or is_granted(content_config.admin.update.is_granted, entity) %}
-                <a class="btn btn-sm btn-outline-secondary flex-shrink-0" href="{{ url('sfs_cms_admin_content_'~content_type~'_update', {'content':entity.id}) }}">{{ ('admin_'~content_type~'.read.indexing.edit.link')|trans }} <i class="bi bi-link-45deg"></i></a>
+            {% if not content_config.admin.update.is_granted or is_granted(content_config.admin.update.is_granted, content_entity) %}
+                <a class="btn btn-sm btn-outline-secondary flex-shrink-0" href="{{ url('sfs_cms_admin_content_'~content_type~'_update', {'content':content_entity.id}) }}">{{ ('admin_'~content_type~'.read.indexing.edit.link')|trans }} <i class="bi bi-link-45deg"></i></a>
             {% else %}
                 <a class="btn btn-sm btn-outline-secondary flex-shrink-0 disabled">{{ ('admin_'~content_type~'.read.indexing.edit.link')|trans }} <i class="bi bi-link-45deg"></i></a>
             {% endif %}
@@ -18,7 +18,7 @@
         <dl class="mb-0">
             <dt class="fw-normal">{{ ('admin_'~content_type~'.read.indexing.noIndex.label')|trans }}</dt>
             <dd class="fw-bold">
-                {% if entity.indexing.noIndex|default(false) %}
+                {% if content_entity.indexing.noIndex|default(false) %}
                     <span class="badge bg-warning">{{ ('admin_'~content_type~'.read.indexing.noIndex.yes')|trans }}</span>
                 {% else %}
                     <span class="badge bg-success">{{ ('admin_'~content_type~'.read.indexing.noIndex.no')|trans }}</span>
@@ -26,7 +26,7 @@
             </dd>
             <dt class="fw-normal">{{ ('admin_'~content_type~'.read.indexing.noFollow.label')|trans }}</dt>
             <dd class="fw-bold">
-                {% if entity.indexing.noFollow|default(false) %}
+                {% if content_entity.indexing.noFollow|default(false) %}
                     <span class="badge bg-warning">{{ ('admin_'~content_type~'.read.indexing.noFollow.yes')|trans }}</span>
                 {% else %}
                     <span class="badge bg-success">{{ ('admin_'~content_type~'.read.indexing.noFollow.no')|trans }}</span>
@@ -34,7 +34,7 @@
             </dd>
             <dt class="fw-normal">{{ ('admin_'~content_type~'.read.indexing.sitemap.label')|trans }}</dt>
             <dd class="fw-bold">
-                {% if entity.indexing.sitemap|default(false) %}
+                {% if content_entity.indexing.sitemap|default(false) %}
                     <span class="badge bg-success">{{ ('admin_'~content_type~'.read.indexing.sitemap.yes')|trans }}</span>
                 {% else %}
                     <span class="badge bg-warning">{{ ('admin_'~content_type~'.read.indexing.sitemap.no')|trans }}</span>

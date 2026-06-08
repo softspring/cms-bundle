@@ -14,13 +14,13 @@
     {{ parent() }}
     <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content_type~'_list') }}">{{ ('admin_'~content_type~'.list.breadcrumb')|trans }}</a></li>
     <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content_type~'_details', {'content':origin_entity.id}) }}">{{ ('admin_'~content_type~'.read.breadcrumb')|trans({'%name%': origin_entity.name}) }}</a></li>
-    <li class="breadcrumb-item active" aria-current="content">{{ ('admin_'~content_type~'.duplicate.breadcrumb')|trans({'%name%':entity.name}) }}</li>
+    <li class="breadcrumb-item active" aria-current="content">{{ ('admin_'~content_type~'.duplicate.breadcrumb')|trans({'%name%':content_entity.name}) }}</li>
 {% endblock breadcrums_content %}
 
 {% block content %}
     <h1 class="h3">{{ ('admin_'~content_type~'.duplicate.title')|trans({'%name%':origin_entity.name}) }}</h1>
 
-{#    {% include ['@content/'~content_type~'/admin/_content_tabs.html.twig', '@SfsCms/admin/content/_content_tabs.html.twig']  with {'current':'duplicate', 'content':content, 'entity':entity.id} %}#}
+{#    {% include ['@content/'~content_type~'/admin/_content_tabs.html.twig', '@SfsCms/admin/content/_content_tabs.html.twig']  with {'current':'duplicate', 'content':content, 'content_entity':content_entity.id} %}#}
 
     {{ form_start(form) }}
 

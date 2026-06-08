@@ -92,9 +92,6 @@ abstract class AbstractContentListener implements EventSubscriberInterface
     public function onViewAddEntities(ViewEvent $event): void
     {
         $event->getData()['content_entity'] = $event->getRequest()->attributes->get('content');
-
-        /* @deprecated use content_entity */
-        $event->getData()['entity'] = $event->getRequest()->attributes->get('content');
     }
 
     public function onFailureAddFormError(FailureEvent $event): void

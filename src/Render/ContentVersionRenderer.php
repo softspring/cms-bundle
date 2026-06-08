@@ -10,7 +10,6 @@ use Softspring\CmsBundle\Render\Error\RenderErrorList;
 use Softspring\CmsBundle\Render\Exception\RenderException;
 use Softspring\CmsBundle\Render\Isolated\IsolatedRunner;
 use Softspring\CmsBundle\Render\Module\ModuleRenderer;
-use Softspring\CmsBundle\Utils\DeprecatedVariable;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
@@ -97,7 +96,6 @@ class ContentVersionRenderer implements ContentVersionRendererInterface
                         $twigAdditionalContext = [
                             'version' => $version,
                             'content' => $version->getContent(),
-                            '_content' => new DeprecatedVariable($version->getContent(), '_content', 'content'),
                         ];
                         $containers[$layoutContainerId] .= $moduleRenderer->render($module, $this->profilerDebugCollectorData[$layoutContainerId], $twigAdditionalContext, $renderErrorList);
                         $renderErrorList && $renderErrorList->popLocation();
@@ -110,16 +108,6 @@ class ContentVersionRenderer implements ContentVersionRendererInterface
                 throw new RenderException(sprintf('Error rendering content version v%s containers', $version->getVersionNumber()), 0, $e);
             }
         });
-    }
-
-    /**
-     * @deprecated this is not used anymore, will be removed in next major version
-     */
-    public function renderModuleById(string $moduleId, array $data, ?RenderErrorList $renderErrorList = null): string
-    {
-        trigger_deprecation('softspring/cms-bundle', '5.1', 'The method "%s" is deprecated and will be removed in the next major version.', __METHOD__);
-
-        return '';
     }
 
     public function getDebugCollectorData(): array

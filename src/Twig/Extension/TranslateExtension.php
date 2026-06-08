@@ -40,15 +40,11 @@ class TranslateExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('sfs_cms_available_locales', $this->getAvailableLocales(...)),
             new TwigFunction('sfs_cms_alternate_urls', $this->getAlternateUrls(...)),
             new TwigFunction('sfs_cms_locale_paths', $this->getLocalePaths(...)),
         ];
     }
 
-    /**
-     * @deprecated
-     */
     public function translate(mixed $translatableText): string
     {
         $request = $this->requestStack->getCurrentRequest();
