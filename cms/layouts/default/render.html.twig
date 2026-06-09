@@ -27,6 +27,9 @@
     {% endif %}
     {% if canonical_content and canonical_content != version.content %}
         <link rel="canonical" href="{{ sfs_cms_url_for_content(canonical_content, app.request.locale) }}" />
+        {% for locale, url in sfs_cms_alternate_urls() %}
+            <link rel="alternate" hreflang="{{ locale }}" href="{{ url }}" />
+        {% endfor %}
     {% else %}
         <link rel="canonical" href="{{ sfs_cms_url_for_content(version.content, app.request.locale) }}" />
         {% for locale, url in sfs_cms_alternate_urls() %}
@@ -49,13 +52,13 @@
 
                 <ul class="nav col-12 col-lg-auto mb-2 justify-content-center mb-md-0">
                     {% if route_defined('home') %}
-                    {% for locale, path in sfs_cms_locale_paths('home') %}
-                        {% if locale == app.request.locale %}
-                            <li><a href="" class="nav-link px-3"><strong>{{ locale }}</strong></a></li>
-                        {% else %}
-                            <li><a href="{{ path }}" class="nav-link px-3">{{ locale }}</a></li>
-                        {% endif %}
-                    {% endfor %}
+                        {% for locale, path in sfs_cms_locale_paths('home') %}
+                            {% if locale == app.request.locale %}
+                                <li><a href="" class="nav-link px-3"><strong>{{ locale }}</strong></a></li>
+                            {% else %}
+                                <li><a href="{{ path }}" class="nav-link px-3">{{ locale }}</a></li>
+                            {% endif %}
+                        {% endfor %}
                     {% endif %}
                 </ul>
 

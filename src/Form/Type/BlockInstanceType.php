@@ -64,8 +64,8 @@ class BlockInstanceType extends AbstractType
 
                     foreach ($this->cmsHelper->config()->getSites() as $site) {
                         foreach ($this->cmsHelper->locale()->getEnabledLocales() as $locale) {
-                            $attr['data-block-preview'] .= '<div data-lang="'.$locale.'" data-site="'.$site.'" class="section-preview"'
-                                .' data-preview-url="'.$this->router->generate('sfs_cms_admin_blocks_render_preview_by_type', ['type' => $block->getType(), '_locale' => $locale, '_sfs_cms_site' => $site]).'"'
+                            $attr['data-block-preview'] .= '<div data-lang="'.$locale.'" data-site="'.$site->getId().'" class="section-preview"'
+                                .' data-preview-url="'.$this->router->generate('sfs_cms_admin_blocks_render_preview_by_type', ['type' => $block->getType(), '_locale' => $locale, '_sfs_cms_site' => $site->getId()]).'"'
                                 .'></div>';
                         }
                     }
