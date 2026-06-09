@@ -21,25 +21,25 @@ trait ContentRedirectBackTrait
             case 'versions':
                 $page = $request->query->get('page', 1);
 
-                return new RedirectResponse($this->router->generate(name: "sfs_cms_admin_content_{$configId}_versions", parameters: ['content' => $entity, 'page' => $page]));
+                return new RedirectResponse($this->router->generate(name: "sfs_cms_admin_content_{$configId}_versions", parameters: ['content' => $entity->getId(), 'page' => $page]));
 
             case 'version_info':
                 if ($version) {
-                    return new RedirectResponse($this->router->generate("sfs_cms_admin_content_{$configId}_version_info", ['content' => $entity, 'version' => $version]));
+                    return new RedirectResponse($this->router->generate("sfs_cms_admin_content_{$configId}_version_info", ['content' => $entity->getId(), 'version' => $version->getId()]));
                 }
 
-                return new RedirectResponse($this->router->generate(name: "sfs_cms_admin_content_{$configId}_versions", parameters: ['content' => $entity]));
+                return new RedirectResponse($this->router->generate(name: "sfs_cms_admin_content_{$configId}_versions", parameters: ['content' => $entity->getId()]));
 
             case 'preview':
                 if ($version) {
-                    return new RedirectResponse($this->router->generate("sfs_cms_admin_content_{$configId}_preview", ['content' => $entity, 'version' => $version]));
+                    return new RedirectResponse($this->router->generate("sfs_cms_admin_content_{$configId}_preview", ['content' => $entity->getId(), 'version' => $version->getId()]));
                 }
 
-                return new RedirectResponse($this->router->generate("sfs_cms_admin_content_{$configId}_preview", ['content' => $entity]));
+                return new RedirectResponse($this->router->generate("sfs_cms_admin_content_{$configId}_preview", ['content' => $entity->getId()]));
 
             case 'details':
             default:
-                return new RedirectResponse($this->router->generate("sfs_cms_admin_content_{$configId}_details", ['content' => $entity]));
+                return new RedirectResponse($this->router->generate("sfs_cms_admin_content_{$configId}_details", ['content' => $entity->getId()]));
         }
     }
 }
