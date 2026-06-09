@@ -28,7 +28,7 @@
                             {% if entity.sites|length > 1 %}
                                 <select class="form-select mx-1" name="_site" onchange="previewSubmit()">
                                     {% for site in entity.sitesSorted %}
-                                        <option value="{{ site }}">{{ site|sfs_cms_site_name }}</option>
+                                        <option value="{{ site.id }}">{{ site|sfs_cms_site_name }}</option>
                                     {% endfor %}
                                 </select>
                             {% endif %}
@@ -64,7 +64,7 @@
             </div>
         </header>
         <main class="position-relative flex-fill flex-grow-1 d-flex flex-column bg-light">
-            <iframe class="h-100 w-100 opacity-50" name="previewFrame" id="preview" src="{{ url('sfs_cms_admin_content_'~content_type~'_version_preview', {'content':entity.id, 'version':version.id, '_site': entity.sitesSorted.first, '_locale': entity.defaultLocale}) }}" width="100%" height="100%"></iframe>
+            <iframe class="h-100 w-100 opacity-50" name="previewFrame" id="preview" src="{{ url('sfs_cms_admin_content_'~content_type~'_version_preview', {'content':entity.id, 'version':version.id, '_site': entity.sitesSorted.first.id, '_locale': entity.defaultLocale}) }}" width="100%" height="100%"></iframe>
             <div class="position-absolute w-100 h-100 d-flex flex-column align-items-center justify-content-center" id="spinner" style="pointer-events: none;">
                 <div class="spinner-border" role="status">
                     <span class="sr-only">Loading...</span>
