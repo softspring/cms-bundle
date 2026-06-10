@@ -74,7 +74,7 @@ admin_page:
                 yes: "no index"
                 no: "index"
             noFollow:
-                label: "Follow links"
+                label: "Links"
                 yes: "no follow"
                 no: "follow"
             sitemap:
