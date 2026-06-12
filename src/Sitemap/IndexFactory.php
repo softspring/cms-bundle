@@ -26,6 +26,12 @@ class IndexFactory
             ];
         }
 
+        foreach ($siteConfig['sitemaps_index']['external_sitemaps'] ?? [] as $externalSitemapUrl) {
+            $sitemaps[] = [
+                'loc' => $externalSitemapUrl,
+            ];
+        }
+
         return $sitemaps;
     }
 }
