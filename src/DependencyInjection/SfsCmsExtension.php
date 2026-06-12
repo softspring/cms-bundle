@@ -64,6 +64,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $container->setParameter('sfs_cms.route.class', $config['route']['class']);
         $container->setParameter('sfs_cms.route.path_class', $config['route']['path_class']);
         $container->setParameter('sfs_cms.route.find_field_name', $config['route']['find_field_name'] ?? null);
+        $container->setParameter('sfs_cms.route.restricted_paths', $config['route']['restricted_paths'] ?? []);
 
         // configure content classes
         $container->setParameter('sfs_cms.content.content_class', $config['content']['content_class']);
@@ -200,7 +201,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
             $container->prependExtensionConfig('framework', [
                 'asset_mapper' => [
                     'paths' => [
-                        \dirname(__DIR__, 2).'/assets/dist' => '@softspring/cms-bundle',
+                        dirname(__DIR__, 2).'/assets/dist' => '@softspring/cms-bundle',
                     ],
                 ],
             ]);

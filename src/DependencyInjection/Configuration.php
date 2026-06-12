@@ -94,7 +94,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('site')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->enumNode('identification')->values(['domain', 'path'])->defaultValue('domain')->end()
+                        ->enumNode('identification')->setDeprecated('cms-bundle', '6.0', 'will be removed in 6.0')->values(['domain', 'path'])->defaultValue('domain')->end()
                         ->scalarNode('class')->defaultValue(Site::class)->end()
                         ->booleanNode('throw_not_found')->defaultTrue()->end()
                     ->end()
@@ -136,6 +136,9 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('class')->defaultValue(Route::class)->end()
                         ->scalarNode('path_class')->defaultValue(RoutePath::class)->end()
                         ->scalarNode('find_field_name')->defaultValue('id')->end()
+                        ->arrayNode('restricted_paths')
+                            ->scalarPrototype()->end()
+                        ->end()
                     ->end()
                 ->end()
 
