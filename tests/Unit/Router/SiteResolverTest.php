@@ -8,7 +8,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Entity\Site;
-use Softspring\CmsBundle\Exception\SiteHasNotACanonicalHostException;
 use Softspring\CmsBundle\Exception\SiteNotFoundException;
 use Softspring\CmsBundle\Manager\SiteManager;
 use Softspring\CmsBundle\Manager\SiteManagerInterface;
@@ -33,6 +32,12 @@ class SiteResolverTest extends TestCase
                 'paths' => [
                     ['path' => '/es', 'locale' => 'es', 'trailing_slash_on_root' => true],
                     ['path' => '/en', 'locale' => 'en', 'trailing_slash_on_root' => true],
+                ],
+                'slash_route' => [
+                    'enabled' => true,
+                    'behaviour' => 'redirect_to_route_with_user_language',
+                    'route' => 'home',
+                    'redirect_code' => 301,
                 ],
             ],
             'no_canonical' => [
@@ -77,6 +82,7 @@ class SiteResolverTest extends TestCase
             $site = new Site();
             $site->setId($siteConfig['_id']);
             $site->setConfig($siteConfig);
+
             return $site;
         }, $sitesConfig);
 
@@ -95,6 +101,7 @@ class SiteResolverTest extends TestCase
                 $site = new Site();
                 $site->setId($config['_id']);
                 $site->setConfig($config);
+
                 return $site;
             }, $sitesConfig);
         });
@@ -102,6 +109,7 @@ class SiteResolverTest extends TestCase
             $site = new Site();
             $site->setId($sitesConfig[$siteName]['_id']);
             $site->setConfig($sitesConfig[$siteName]);
+
             return $site;
         });
     }
@@ -215,6 +223,18 @@ class SiteResolverTest extends TestCase
 
         $this->assertEquals('docs', $siteId);
         $this->assertNull($hostConfig);
+        $this->assertNull($pathConfig);
+    }
+
+    public function testResolveSlashRouteForSiteWithPathConfiguration(): void
+    {
+        $siteResolver = new SiteResolver($this->cmsConfig, ['throw_not_found' => true]);
+
+        $request = new Request([], [], [], [], [], ['SERVER_NAME' => 'sfs-cms.org', 'REQUEST_URI' => '/']);
+        [$siteId, $siteConfig, $hostConfig, $pathConfig] = $siteResolver->resolveSiteAndHost($request);
+
+        $this->assertEquals('default', $siteId);
+        $this->assertEquals('sfs-cms.org', $hostConfig['domain']);
         $this->assertNull($pathConfig);
     }
 

@@ -92,6 +92,11 @@ class SiteResolver
                     $matchPathConfig = null;
                     ++$matchScore;
                 }
+                if (($siteConfig['slash_route']['enabled'] ?? false) && '/' === $path) {
+                    $requirePath = false;
+                    $matchPathConfig = null;
+                    ++$matchScore;
+                }
             }
 
             if ($matchScore > 0 && ($requireHost && $matchHostConfig || !$requireHost) && ($requirePath && $matchPathConfig || !$requirePath)) {
