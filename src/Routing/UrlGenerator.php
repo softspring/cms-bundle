@@ -196,10 +196,6 @@ class UrlGenerator
             $site = $route->getSites()->first();
         }
 
-        if ('path' == $this->siteConfig['identification']) {
-            throw new Exception('Not yet implemented');
-        }
-
         if ($site instanceof SiteInterface) {
             foreach ($site->getConfig()['paths'] as $pathConfig) {
                 if (!empty($pathConfig['locale']) && $pathConfig['locale'] === $locale) {

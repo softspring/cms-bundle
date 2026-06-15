@@ -57,7 +57,7 @@ class SiteTest extends TestCase
             ],
             'error_pages' => [],
             'sitemaps' => [],
-            'sitemaps_index' => ['enabled' => false, 'url' => false, 'cache_ttl' => false],
+            'sitemaps_index' => ['enabled' => false, 'url' => false, 'cache_ttl' => false, 'external_sitemaps' => []],
             'robots' => [
                 'mode' => false,
                 'static_file' => '@site/default/robots.txt.twig',

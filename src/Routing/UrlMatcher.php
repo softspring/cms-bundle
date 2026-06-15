@@ -37,21 +37,52 @@ class UrlMatcher
             return [];
         }
 
+        if ($redirect = $this->matchRequestSiteRedirects($request)) {
+            return $redirect;
+        }
+
+        if ($redirect = $this->matchPathInfoSlashRoute($request)) {
+            return $redirect;
+        }
+
+        if ($redirect = $this->matchSitemaps($request)) {
+            return $redirect;
+        }
+
+        if ($redirect = $this->matchRobots($request)) {
+            return $redirect;
+        }
+
+        return $this->matchRoutePath($request);
+    }
+
+    /**
+     * @throws SiteHasNotACanonicalHostException
+     */
+    protected function matchRequestSiteRedirects(Request $request): ?array
+    {
         /** @var SiteInterface $site */
         $site = $request->attributes->get('_sfs_cms_site');
         $siteConfig = $site->getConfig();
-        $siteHostConfig = $request->attributes->get('_sfs_cms_site_host_config');
+        $siteHostConfig = $request->attributes->get('_sfs_cms_site_host_config') ?? [];
 
         if ($siteConfig['https_redirect'] && 'http' === $request->getScheme()) {
             return $this->generateRedirect($this->siteResolver->getCanonicalRedirectUrl($site, $request), Response::HTTP_PERMANENTLY_REDIRECT);
         }
 
-        if ($siteHostConfig['redirect_to_canonical']) {
+        if (!empty($siteHostConfig['redirect_to_canonical'])) {
             return $this->generateRedirect($this->siteResolver->getCanonicalRedirectUrl($site, $request), Response::HTTP_PERMANENTLY_REDIRECT);
         }
 
+        return null;
+    }
+
+    protected function matchPathInfoSlashRoute(Request $request): ?array
+    {
         $pathInfo = $request->getPathInfo();
-        $pathInfoHasTrailingSlash = str_ends_with($pathInfo, '/');
+        /** @var SiteInterface $site */
+        $site = $request->attributes->get('_sfs_cms_site');
+        $siteConfig = $site->getConfig();
 
         if ($siteConfig['slash_route']['enabled'] && '/' === $pathInfo) {
             switch ($siteConfig['slash_route']['behaviour']) {
@@ -64,6 +95,16 @@ class UrlMatcher
                     throw new Exception('Not yet implemented');
             }
         }
+
+        return null;
+    }
+
+    protected function matchSitemaps(Request $request): ?array
+    {
+        $pathInfo = $request->getPathInfo();
+        /** @var SiteInterface $site */
+        $site = $request->attributes->get('_sfs_cms_site');
+        $siteConfig = $site->getConfig();
 
         foreach ($siteConfig['sitemaps'] as $sitemap => $sitemapConfig) {
             if ('/'.trim($sitemapConfig['url'], '/') === $pathInfo) {
@@ -81,6 +122,16 @@ class UrlMatcher
                 'site' => $site,
             ];
         }
+
+        return null;
+    }
+
+    protected function matchRobots(Request $request): ?array
+    {
+        $pathInfo = $request->getPathInfo();
+        /** @var SiteInterface $site */
+        $site = $request->attributes->get('_sfs_cms_site');
+        $siteConfig = $site->getConfig();
 
         if ('/robots.txt' === $pathInfo) {
             switch ($siteConfig['robots']['mode']) {
@@ -100,31 +151,40 @@ class UrlMatcher
             }
         }
 
+        return null;
+    }
+
+    protected function matchRoutePath(Request $request): array
+    {
+        /** @var SiteInterface $site */
+        $site = $request->attributes->get('_sfs_cms_site');
+        $siteConfig = $site->getConfig();
+        $siteHostConfig = $request->attributes->get('_sfs_cms_site_host_config') ?? [];
+        $sitePathConfig = $request->attributes->get('_sfs_cms_site_path_config') ?? [];
+
+        $pathInfo = $request->getPathInfo();
+        $pathInfoHasTrailingSlash = str_ends_with($pathInfo, '/');
         $attributes = [];
 
         if (!empty($siteHostConfig['locale'])) {
             $attributes['_sfs_cms_locale'] = $siteHostConfig['locale'];
+        } elseif (!empty($sitePathConfig['locale'])) {
+            $attributes['_sfs_cms_locale'] = $sitePathConfig['locale'];
+            $attributes['_sfs_cms_locale_path'] = $sitePathConfig['path'];
         }
 
-        $pathInfo = explode('/', ltrim($pathInfo, '/'));
-        foreach ($siteConfig['paths'] as $path) {
-            if (isset($pathInfo[0]) && "/$pathInfo[0]" === $path['path'] && $path['locale']) {
-                if (!empty($attributes['_sfs_cms_locale'])) {
-                    // TODO resolve conflict
-                }
-                $attributes['_sfs_cms_locale'] = $path['locale'];
-                $attributes['_sfs_cms_locale_path'] = $path['path'];
-                // $pathInfo = substr($pathInfo, strlen($path['path']));
-                array_shift($pathInfo);
-                if ($path['trailing_slash_on_root'] && [] === $pathInfo && !$pathInfoHasTrailingSlash) {
-                    $url = parse_url($request->getUri());
-                    $url = sprintf('%s://%s%s', $url['scheme'], $url['host'], $url['path'].'/');
-
-                    return $this->generateRedirect($url, Response::HTTP_PERMANENTLY_REDIRECT);
-                }
-            }
+        if (!empty($sitePathConfig['path'])) {
+            $pathInfo = substr($pathInfo, strlen($sitePathConfig['path']));
         }
-        $pathInfo = '/'.implode('/', $pathInfo);
+
+        $pathInfo = ltrim($pathInfo, '/');
+
+        if ('' === $pathInfo && !$pathInfoHasTrailingSlash && !empty($sitePathConfig['trailing_slash_on_root'])) {
+            $url = parse_url($request->getUri());
+            $url = sprintf('%s://%s%s', $url['scheme'], $url['host'], $url['path'].'/');
+
+            return $this->generateRedirect($url, Response::HTTP_PERMANENTLY_REDIRECT);
+        }
 
         // search in database or redis-cache (TODO) ;)
         if (($routePath = $this->searchRoutePath($site, $pathInfo, $attributes['_sfs_cms_locale'] ?? null)) instanceof RoutePathInterface) {
