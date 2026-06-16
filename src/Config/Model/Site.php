@@ -25,7 +25,7 @@ class Site implements ConfigurationInterface
                 ->thenInvalid('Invalid configuration, either hosts either paths must be set for a valid site')
             ->end()
             ->validate()
-                ->ifTrue(fn ($config): bool => self::hasReservedRoutePathCollisions($config))
+                ->ifTrue(fn (array $config): bool => self::hasReservedRoutePathCollisions($config))
                 ->thenInvalid('Invalid site configuration, sitemap and robots URLs must not collide')
             ->end()
             ->children()

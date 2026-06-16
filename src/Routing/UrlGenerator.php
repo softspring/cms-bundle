@@ -183,7 +183,7 @@ class UrlGenerator
             }
         }
 
-        if ($request = $this->getCurrentRequest()) {
+        if (($request = $this->getCurrentRequest()) instanceof Request) {
             return $request->getSchemeAndHttpHost();
         }
 
