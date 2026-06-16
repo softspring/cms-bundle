@@ -2,12 +2,13 @@
 
 namespace Softspring\CmsBundle\Test\Unit\Config;
 
+use PHPUnit\Framework\TestCase;
 use Softspring\CmsBundle\Config\ConfigLoader;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Filesystem\Filesystem;
 
-class ConfigLoaderTest extends \PHPUnit\Framework\TestCase
+class ConfigLoaderTest extends TestCase
 {
     protected string $projectDir;
     protected Filesystem $filesystem;
@@ -90,6 +91,117 @@ YAML);
 
         $this->expectException(InvalidConfigurationException::class);
         $this->expectExceptionMessage('reserved route "/robots.txt" for host "*"');
+
+        $this->createConfigLoader()->getSites($this->createContainer());
+    }
+
+    public function testSitesCanNotShareExactPathOnSameHost(): void
+    {
+        $this->writeSiteConfig('default', <<<YAML
+site:
+  hosts:
+    - domain: example.org
+  paths:
+    - path: /es
+YAML);
+        $this->writeSiteConfig('blog', <<<YAML
+site:
+  hosts:
+    - domain: example.org
+  paths:
+    - path: /es/
+YAML);
+
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessage('path "/es" for host "example.org"');
+
+        $this->createConfigLoader()->getSites($this->createContainer());
+    }
+
+    public function testSitesCanShareExactPathOnDifferentHosts(): void
+    {
+        $this->writeSiteConfig('default', <<<YAML
+site:
+  hosts:
+    - domain: example.org
+  paths:
+    - path: /es
+YAML);
+        $this->writeSiteConfig('blog', <<<YAML
+site:
+  hosts:
+    - domain: blog.example.org
+  paths:
+    - path: /es
+YAML);
+
+        $sites = $this->createConfigLoader()->getSites($this->createContainer());
+
+        $this->assertArrayHasKey('default', $sites);
+        $this->assertArrayHasKey('blog', $sites);
+    }
+
+    public function testSitesCanHaveParentChildPathsOnSameHost(): void
+    {
+        $this->writeSiteConfig('default', <<<YAML
+site:
+  hosts:
+    - domain: example.org
+  paths:
+    - path: /es
+YAML);
+        $this->writeSiteConfig('blog', <<<YAML
+site:
+  hosts:
+    - domain: example.org
+  paths:
+    - path: /es/blog
+YAML);
+
+        $sites = $this->createConfigLoader()->getSites($this->createContainer());
+
+        $this->assertArrayHasKey('default', $sites);
+        $this->assertArrayHasKey('blog', $sites);
+    }
+
+    public function testSitesCanHavePathsWithCommonPrefixOnSameHost(): void
+    {
+        $this->writeSiteConfig('docs', <<<YAML
+site:
+  hosts:
+    - domain: example.org
+  paths:
+    - path: /docs
+YAML);
+        $this->writeSiteConfig('guides', <<<YAML
+site:
+  hosts:
+    - domain: example.org
+  paths:
+    - path: /docs-and-guides
+YAML);
+
+        $sites = $this->createConfigLoader()->getSites($this->createContainer());
+
+        $this->assertArrayHasKey('docs', $sites);
+        $this->assertArrayHasKey('guides', $sites);
+    }
+
+    public function testPathOnlySitesCanNotShareExactPath(): void
+    {
+        $this->writeSiteConfig('docs', <<<YAML
+site:
+  paths:
+    - path: /docs
+YAML);
+        $this->writeSiteConfig('help', <<<YAML
+site:
+  paths:
+    - path: /docs
+YAML);
+
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessage('path "/docs" for host "*"');
 
         $this->createConfigLoader()->getSites($this->createContainer());
     }

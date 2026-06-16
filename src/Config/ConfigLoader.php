@@ -188,6 +188,7 @@ class ConfigLoader
         }
 
         $this->validateSiteReservedRoutePaths($sites);
+        $this->validateSitePathDuplicates($sites);
 
         return $sites;
     }
@@ -215,6 +216,34 @@ class ConfigLoader
                 }
             }
         }
+    }
+
+    protected function validateSitePathDuplicates(array $sites): void
+    {
+        $paths = [];
+
+        foreach ($sites as $siteName => $siteConfig) {
+            $hosts = array_map(fn (array $hostConfig): string => $hostConfig['domain'], $siteConfig['hosts'] ?? []);
+            $hosts = $hosts ?: ['*'];
+
+            foreach ($hosts as $host) {
+                foreach ($siteConfig['paths'] ?? [] as $pathConfig) {
+                    $path = $this->normalizeSitePath($pathConfig['path']);
+                    $key = "$host $path";
+
+                    if (isset($paths[$key])) {
+                        throw new InvalidConfigurationException(sprintf('Invalid CMS site configuration, path "%s" for host "%s" is configured by both site "%s" and site "%s". Site paths must be unique per host.', $path, $host, $paths[$key], $siteName));
+                    }
+
+                    $paths[$key] = $siteName;
+                }
+            }
+        }
+    }
+
+    protected function normalizeSitePath(string $path): string
+    {
+        return '/'.trim($path, '/');
     }
 
     protected function readConfigurations(ContainerBuilder $containerBuilder, string $elementPath, string $elementType): array
