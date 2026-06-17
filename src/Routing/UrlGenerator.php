@@ -52,8 +52,10 @@ class UrlGenerator
         }
 
         $queryString = [] === $routeParams ? '' : '?'.http_build_query($routeParams);
+        $site = $this->resolveSite($route, $site);
+        $locale = $this->resolveLocale($route, $locale, $site);
 
-        return $this->getSiteSchemeAndHost($route, $locale, $site).$this->getSiteOrLocalePath($route, $locale, $site).'/'.$this->getRoutePath($route, $locale, $site).$queryString;
+        return $this->getSiteSchemeAndHost($site, $locale).$this->getSiteOrLocalePath($site, $locale).'/'.$this->getRoutePath($route, $locale).$queryString;
     }
 
     /**
@@ -78,8 +80,10 @@ class UrlGenerator
         }
 
         $queryString = [] === $routeParams ? '' : '?'.http_build_query($routeParams);
+        $site = $this->resolveSite($route, $site);
+        $locale = $this->resolveLocale($route, $locale, $site);
 
-        return $this->getSiteOrLocalePath($route, $locale, $site).'/'.$this->getRoutePath($route, $locale, $site).$queryString;
+        return $this->getSiteOrLocalePath($site, $locale).'/'.$this->getRoutePath($route, $locale).$queryString;
     }
 
     /**
@@ -89,8 +93,10 @@ class UrlGenerator
     {
         $route = $routePath->getRoute();
         $locale = $routePath->getLocale();
+        $site = $this->resolveSite($route, $site);
+        $locale = $this->resolveLocale($route, $locale, $site);
 
-        return $this->getSiteSchemeAndHost($route, $locale, $site).$this->getSiteOrLocalePath($route, $locale, $site).'/'.$routePath->getCompiledPath();
+        return $this->getSiteSchemeAndHost($site, $locale).$this->getSiteOrLocalePath($site, $locale).'/'.$routePath->getCompiledPath();
     }
 
     /**
@@ -100,8 +106,10 @@ class UrlGenerator
     {
         $route = $routePath->getRoute();
         $locale = $routePath->getLocale();
+        $site = $this->resolveSite($route, $site);
+        $locale = $this->resolveLocale($route, $locale, $site);
 
-        return $this->getSiteOrLocalePath($route, $locale, $site).'/'.$routePath->getCompiledPath();
+        return $this->getSiteOrLocalePath($site, $locale).'/'.$routePath->getCompiledPath();
     }
 
     /**
@@ -120,10 +128,8 @@ class UrlGenerator
         return $route->getLinkAttrs();
     }
 
-    protected function getRoutePath(RouteInterface $route, ?string $locale = null, $site = null): string
+    protected function getRoutePath(RouteInterface $route, ?string $locale): string
     {
-        $locale = $locale ?: $this->requestStack->getCurrentRequest()->getLocale();
-
         /* @var RoutePathInterface $path */
         if ('' !== $locale && '0' !== $locale) {
             $path = $route->getPaths()->filter(fn (RoutePathInterface $routePath): bool => $routePath->getLocale() == $locale)->first();
@@ -162,20 +168,13 @@ class UrlGenerator
         return $request && $request->attributes->has('_cms_preview');
     }
 
-    protected function getSiteSchemeAndHost(RouteInterface $route, ?string $locale, $site = null): string
+    protected function getSiteSchemeAndHost(?SiteInterface $site, ?string $locale): string
     {
-        $locale = $locale ?: $this->requestStack->getCurrentRequest()->getLocale();
-        $site = $this->getSite($site, $this->requestStack->getCurrentRequest());
-
-        if (!$route->hasSite("$site")) {
-            $site = $route->getSites()->first();
-        }
-
         if ($site instanceof SiteInterface) {
             // todo, could we use SiteInterface::getCanonicalHost() and SiteInterface::getCanonicalScheme()?
             foreach ($site->getConfig()['hosts'] as $hostConfig) {
                 if ($hostConfig['canonical'] && (!$hostConfig['locale'] || $hostConfig['locale'] === $locale)) {
-                    $scheme = $hostConfig['scheme'] ?: $this->requestStack->getCurrentRequest()->getScheme();
+                    $scheme = $hostConfig['scheme'] ?: ($this->getCurrentRequest()?->getScheme() ?? 'https');
                     $host = $hostConfig['domain'];
                     $port = $hostConfig['port'] ?? null;
 
@@ -184,22 +183,15 @@ class UrlGenerator
             }
         }
 
-        return $this->requestStack->getCurrentRequest()->getSchemeAndHttpHost();
+        if (($request = $this->getCurrentRequest()) instanceof Request) {
+            return $request->getSchemeAndHttpHost();
+        }
+
+        throw new Exception('Can not generate an absolute URL without a site host or a current request');
     }
 
-    protected function getSiteOrLocalePath(RouteInterface $route, ?string $locale, $site = null): string
+    protected function getSiteOrLocalePath(?SiteInterface $site, ?string $locale): string
     {
-        $locale = $locale ?: $this->requestStack->getCurrentRequest()->getLocale();
-        $site = $this->getSite($site, $this->requestStack->getCurrentRequest());
-
-        if (!$route->hasSite("$site")) {
-            $site = $route->getSites()->first();
-        }
-
-        if ('path' == $this->siteConfig['identification']) {
-            throw new Exception('Not yet implemented');
-        }
-
         if ($site instanceof SiteInterface) {
             foreach ($site->getConfig()['paths'] as $pathConfig) {
                 if (!empty($pathConfig['locale']) && $pathConfig['locale'] === $locale) {
@@ -209,6 +201,43 @@ class UrlGenerator
         }
 
         return '';
+    }
+
+    protected function resolveSite(RouteInterface $route, $site = null): ?SiteInterface
+    {
+        $site = $this->getSite($site, $this->getCurrentRequest());
+
+        if ($site instanceof SiteInterface && (0 === $route->getSites()->count() || $route->hasSite("$site"))) {
+            return $site;
+        }
+
+        $routeSite = $route->getSites()->first();
+
+        return $routeSite instanceof SiteInterface ? $routeSite : $site;
+    }
+
+    protected function resolveLocale(RouteInterface $route, ?string $locale, ?SiteInterface $site): ?string
+    {
+        if (null !== $locale && '' !== $locale && '0' !== $locale) {
+            return $locale;
+        }
+
+        if ($requestLocale = $this->getCurrentRequest()?->getLocale()) {
+            return $requestLocale;
+        }
+
+        if ($site instanceof SiteInterface && !empty($site->getConfig()['default_locale'])) {
+            return $site->getConfig()['default_locale'];
+        }
+
+        $routePath = $route->getPaths()->first();
+
+        return $routePath instanceof RoutePathInterface ? $routePath->getLocale() : null;
+    }
+
+    protected function getCurrentRequest(): ?Request
+    {
+        return $this->requestStack->getCurrentRequest();
     }
 
     protected function getSite($site, ?Request $request): ?SiteInterface

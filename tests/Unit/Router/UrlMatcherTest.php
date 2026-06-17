@@ -2,14 +2,14 @@
 
 namespace Softspring\CmsBundle\Test\Unit\Config\Router;
 
-use PHPUnit\Framework\MockObject\MockObject;
-use ReflectionClass;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Softspring\CmsBundle\Entity\Page;
 use Softspring\CmsBundle\Entity\Route;
 use Softspring\CmsBundle\Entity\RoutePath;
@@ -190,7 +190,7 @@ class UrlMatcherTest extends TestCase
         $site = new Site();
         $site->setId('default');
         $site->setConfig($siteConfig);
-        $hostConfig = ['redirect_to_canonical' => false, 'locale' => 'es'];
+        $hostConfig = ['redirect_to_canonical' => false, 'locale' => false];
 
         $this->query->method('getOneOrNullResult')->willReturn(null);
         $this->query->method('setCacheable')->willReturn($this->query);
@@ -201,11 +201,232 @@ class UrlMatcherTest extends TestCase
         $request->attributes->set('_site', 'default');
         $request->attributes->set('_sfs_cms_site', $site);
         $request->attributes->set('_sfs_cms_site_host_config', $hostConfig);
+        $request->attributes->set('_sfs_cms_site_path_config', ['path' => '/en', 'locale' => 'en', 'trailing_slash_on_root' => false]);
         $attributes = $urlMatcher->matchRequest($request);
         $this->assertEquals([
             '_sfs_cms_locale' => 'en',
             '_locale' => 'en',
             '_sfs_cms_locale_path' => '/en',
+        ], $attributes);
+    }
+
+    public function testSiteWithNestedPathSearchesRouteWithoutSitePathPrefix(): void
+    {
+        $siteConfig = [
+            'locales' => ['es', 'en'],
+            'https_redirect' => true,
+            'slash_route' => [
+                'enabled' => false,
+            ],
+            'paths' => [
+                ['path' => '/es/blog', 'locale' => 'es', 'trailing_slash_on_root' => true],
+                ['path' => '/en/blog', 'locale' => 'en', 'trailing_slash_on_root' => true],
+            ],
+            'sitemaps' => [],
+            'sitemaps_index' => ['enabled' => false],
+        ];
+        $site = new Site();
+        $site->setId('blog');
+        $site->setConfig($siteConfig);
+        $hostConfig = ['redirect_to_canonical' => false];
+        $routeSearchParameters = [];
+
+        $this->qb->method('setParameter')->willReturnCallback(function (string $key, mixed $value) use (&$routeSearchParameters): QueryBuilder {
+            $routeSearchParameters[$key] = $value;
+
+            return $this->qb;
+        });
+        $this->query->method('getResult')->willReturn([]);
+        $this->query->method('setCacheable')->willReturn($this->query);
+        $this->query->method('setResultCacheLifetime')->willReturn($this->query);
+
+        $urlMatcher = new UrlMatcher($this->em, $this->urlGenerator, $this->siteResolver);
+        $request = new Request([], [], [], [], [], ['HTTPS' => true, 'SERVER_NAME' => 'sfs-cms.org', 'REQUEST_URI' => 'https://sfs-cms.org/es/blog/test-url']);
+        $request->attributes->set('_site', 'blog');
+        $request->attributes->set('_sfs_cms_site', $site);
+        $request->attributes->set('_sfs_cms_site_host_config', $hostConfig);
+        $request->attributes->set('_sfs_cms_site_path_config', ['path' => '/es/blog', 'locale' => 'es', 'trailing_slash_on_root' => true]);
+        $attributes = $urlMatcher->matchRequest($request);
+
+        $this->assertSame('test-url', $routeSearchParameters['path']);
+        $this->assertEquals([
+            '_sfs_cms_locale' => 'es',
+            '_locale' => 'es',
+            '_sfs_cms_locale_path' => '/es/blog',
+        ], $attributes);
+    }
+
+    public function testPathOnlySiteUsesPathLocaleWithoutHostConfig(): void
+    {
+        $siteConfig = [
+            'locales' => ['en'],
+            'https_redirect' => false,
+            'slash_route' => [
+                'enabled' => false,
+            ],
+            'paths' => [
+                ['path' => '/docs', 'locale' => 'en', 'trailing_slash_on_root' => true],
+            ],
+            'sitemaps' => [],
+            'sitemaps_index' => ['enabled' => false],
+        ];
+        $site = new Site();
+        $site->setId('docs');
+        $site->setConfig($siteConfig);
+        $routeSearchParameters = [];
+
+        $this->qb->method('setParameter')->willReturnCallback(function (string $key, mixed $value) use (&$routeSearchParameters): QueryBuilder {
+            $routeSearchParameters[$key] = $value;
+
+            return $this->qb;
+        });
+        $this->query->method('getResult')->willReturn([]);
+        $this->query->method('setCacheable')->willReturn($this->query);
+        $this->query->method('setResultCacheLifetime')->willReturn($this->query);
+
+        $urlMatcher = new UrlMatcher($this->em, $this->urlGenerator, $this->siteResolver);
+        $request = new Request([], [], [], [], [], ['HTTPS' => true, 'SERVER_NAME' => 'example.org', 'REQUEST_URI' => 'https://example.org/docs/install']);
+        $request->attributes->set('_site', 'docs');
+        $request->attributes->set('_sfs_cms_site', $site);
+        $request->attributes->set('_sfs_cms_site_host_config', null);
+        $request->attributes->set('_sfs_cms_site_path_config', ['path' => '/docs', 'locale' => 'en', 'trailing_slash_on_root' => true]);
+        $attributes = $urlMatcher->matchRequest($request);
+
+        $this->assertSame('install', $routeSearchParameters['path']);
+        $this->assertEquals([
+            '_sfs_cms_locale' => 'en',
+            '_locale' => 'en',
+            '_sfs_cms_locale_path' => '/docs',
+        ], $attributes);
+    }
+
+    public function testSitePathRootRedirectsToTrailingSlashWhenConfigured(): void
+    {
+        $siteConfig = [
+            'locales' => ['en'],
+            'https_redirect' => false,
+            'slash_route' => [
+                'enabled' => false,
+            ],
+            'paths' => [
+                ['path' => '/docs', 'locale' => 'en', 'trailing_slash_on_root' => true],
+            ],
+            'sitemaps' => [],
+            'sitemaps_index' => ['enabled' => false],
+        ];
+        $site = new Site();
+        $site->setId('docs');
+        $site->setConfig($siteConfig);
+
+        $urlMatcher = new UrlMatcher($this->em, $this->urlGenerator, $this->siteResolver);
+        $request = new Request([], [], [], [], [], ['HTTPS' => true, 'SERVER_NAME' => 'example.org', 'REQUEST_URI' => 'https://example.org/docs']);
+        $request->attributes->set('_site', 'docs');
+        $request->attributes->set('_sfs_cms_site', $site);
+        $request->attributes->set('_sfs_cms_site_host_config', null);
+        $request->attributes->set('_sfs_cms_site_path_config', ['path' => '/docs', 'locale' => 'en', 'trailing_slash_on_root' => true]);
+        $attributes = $urlMatcher->matchRequest($request);
+
+        $this->assertEquals([
+            '_controller' => 'Softspring\CmsBundle\Controller\RedirectController::redirectToUrl',
+            'url' => 'https://example.org/docs/',
+            'statusCode' => 308,
+        ], $attributes);
+    }
+
+    public function testSitePathRootDoesNotRedirectToTrailingSlashWhenDisabled(): void
+    {
+        $siteConfig = [
+            'locales' => ['en'],
+            'https_redirect' => false,
+            'slash_route' => [
+                'enabled' => false,
+            ],
+            'paths' => [
+                ['path' => '/docs', 'locale' => 'en', 'trailing_slash_on_root' => false],
+            ],
+            'sitemaps' => [],
+            'sitemaps_index' => ['enabled' => false],
+        ];
+        $site = new Site();
+        $site->setId('docs');
+        $site->setConfig($siteConfig);
+
+        $this->query->method('getResult')->willReturn([]);
+        $this->query->method('setCacheable')->willReturn($this->query);
+        $this->query->method('setResultCacheLifetime')->willReturn($this->query);
+
+        $urlMatcher = new UrlMatcher($this->em, $this->urlGenerator, $this->siteResolver);
+        $request = new Request([], [], [], [], [], ['HTTPS' => true, 'SERVER_NAME' => 'example.org', 'REQUEST_URI' => 'https://example.org/docs']);
+        $request->attributes->set('_site', 'docs');
+        $request->attributes->set('_sfs_cms_site', $site);
+        $request->attributes->set('_sfs_cms_site_host_config', null);
+        $request->attributes->set('_sfs_cms_site_path_config', ['path' => '/docs', 'locale' => 'en', 'trailing_slash_on_root' => false]);
+        $attributes = $urlMatcher->matchRequest($request);
+
+        $this->assertEquals([
+            '_sfs_cms_locale' => 'en',
+            '_locale' => 'en',
+            '_sfs_cms_locale_path' => '/docs',
+        ], $attributes);
+    }
+
+    public function testSitemapRouteCanMatchWithoutPathConfig(): void
+    {
+        $siteConfig = [
+            'https_redirect' => false,
+            'slash_route' => [
+                'enabled' => false,
+            ],
+            'sitemaps' => [
+                'pages' => ['url' => 'sitemap.xml'],
+            ],
+            'sitemaps_index' => ['enabled' => false],
+        ];
+        $site = new Site();
+        $site->setId('docs');
+        $site->setConfig($siteConfig);
+
+        $urlMatcher = new UrlMatcher($this->em, $this->urlGenerator, $this->siteResolver);
+        $request = new Request([], [], [], [], [], ['HTTPS' => true, 'SERVER_NAME' => 'example.org', 'REQUEST_URI' => 'https://example.org/sitemap.xml']);
+        $request->attributes->set('_site', 'docs');
+        $request->attributes->set('_sfs_cms_site', $site);
+        $request->attributes->set('_sfs_cms_site_host_config', null);
+        $request->attributes->set('_sfs_cms_site_path_config', null);
+        $attributes = $urlMatcher->matchRequest($request);
+
+        $this->assertEquals([
+            '_controller' => 'Softspring\CmsBundle\Controller\SitemapController::sitemap',
+            'sitemap' => 'pages',
+            'site' => $site,
+        ], $attributes);
+    }
+
+    public function testStaticRobotsRouteCanMatchWithoutPathConfig(): void
+    {
+        $siteConfig = [
+            'https_redirect' => false,
+            'slash_route' => [
+                'enabled' => false,
+            ],
+            'sitemaps' => [],
+            'sitemaps_index' => ['enabled' => false],
+            'robots' => ['mode' => 'static'],
+        ];
+        $site = new Site();
+        $site->setId('docs');
+        $site->setConfig($siteConfig);
+
+        $urlMatcher = new UrlMatcher($this->em, $this->urlGenerator, $this->siteResolver);
+        $request = new Request([], [], [], [], [], ['HTTPS' => true, 'SERVER_NAME' => 'example.org', 'REQUEST_URI' => 'https://example.org/robots.txt']);
+        $request->attributes->set('_site', 'docs');
+        $request->attributes->set('_sfs_cms_site', $site);
+        $request->attributes->set('_sfs_cms_site_host_config', null);
+        $request->attributes->set('_sfs_cms_site_path_config', null);
+        $attributes = $urlMatcher->matchRequest($request);
+
+        $this->assertEquals([
+            '_controller' => 'Softspring\CmsBundle\Controller\SiteController::staticRobotsTxt',
+            'site' => $site,
         ], $attributes);
     }
 
@@ -228,7 +449,7 @@ class UrlMatcherTest extends TestCase
         $site = new Site();
         $site->setId('default');
         $site->setConfig($siteConfig);
-        $hostConfig = ['redirect_to_canonical' => false, 'locale' => 'es'];
+        $hostConfig = ['redirect_to_canonical' => false, 'locale' => false];
 
         $route = new Route();
         $route->addSite($site);
@@ -247,12 +468,13 @@ class UrlMatcherTest extends TestCase
         $request->attributes->set('_site', 'default');
         $request->attributes->set('_sfs_cms_site', $site);
         $request->attributes->set('_sfs_cms_site_host_config', $hostConfig);
+        $request->attributes->set('_sfs_cms_site_path_config', ['path' => '/en', 'locale' => 'en', 'trailing_slash_on_root' => false]);
         $attributes = $urlMatcher->matchRequest($request);
         $this->assertEquals([
-//            '_route' => 'cms#example',
-//            '_route_params' => [],
-//            '_controller' => 'Softspring\CmsBundle\Controller\ContentController::renderRoutePath',
-//            'routePath' => $routePath,
+            //            '_route' => 'cms#example',
+            //            '_route_params' => [],
+            //            '_controller' => 'Softspring\CmsBundle\Controller\ContentController::renderRoutePath',
+            //            'routePath' => $routePath,
             '_sfs_cms_locale' => 'en',
             '_locale' => 'en',
             '_sfs_cms_locale_path' => '/en',

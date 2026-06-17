@@ -57,11 +57,52 @@ class SiteTest extends TestCase
             ],
             'error_pages' => [],
             'sitemaps' => [],
-            'sitemaps_index' => ['enabled' => false, 'url' => false, 'cache_ttl' => false],
+            'sitemaps_index' => ['enabled' => false, 'url' => false, 'cache_ttl' => false, 'external_sitemaps' => []],
             'robots' => [
                 'mode' => false,
                 'static_file' => '@site/default/robots.txt.twig',
             ],
         ], $config);
+    }
+
+    public function testSitemapUrlsCanNotCollideWithRobots(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessage('Invalid configuration for path "site": Invalid site configuration, sitemap and robots URLs must not collide');
+
+        $processor = new Processor();
+        $configuration = new Site('site_name');
+        $processor->processConfiguration($configuration, ['site' => [
+            'hosts' => [
+                ['domain' => 'example.org'],
+            ],
+            'robots' => [
+                'mode' => 'static',
+            ],
+            'sitemaps' => [
+                'pages' => ['url' => 'robots.txt'],
+            ],
+        ]]);
+    }
+
+    public function testSitemapIndexUrlCanNotCollideWithSitemapUrls(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessage('Invalid configuration for path "site": Invalid site configuration, sitemap and robots URLs must not collide');
+
+        $processor = new Processor();
+        $configuration = new Site('site_name');
+        $processor->processConfiguration($configuration, ['site' => [
+            'hosts' => [
+                ['domain' => 'example.org'],
+            ],
+            'sitemaps' => [
+                'pages' => ['url' => 'sitemap.xml'],
+            ],
+            'sitemaps_index' => [
+                'enabled' => true,
+                'url' => '/sitemap.xml',
+            ],
+        ]]);
     }
 }

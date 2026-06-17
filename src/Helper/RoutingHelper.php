@@ -69,7 +69,7 @@ class RoutingHelper
     {
         try {
             $request = Request::create($url);
-            [$siteId, $site, $siteHostConfig] = $this->siteResolver->resolveSiteAndHost($request);
+            [$siteId, $site, $siteHostConfig, $sitePathConfig] = $this->siteResolver->resolveSiteAndHost($request);
 
             if (!$siteId) {
                 return null;
@@ -78,6 +78,7 @@ class RoutingHelper
             $request->attributes->set('_site', $siteId);
             $request->attributes->set('_sfs_cms_site', $site);
             $request->attributes->set('_sfs_cms_site_host_config', $siteHostConfig);
+            $request->attributes->set('_sfs_cms_site_path_config', $sitePathConfig);
             $request->attributes->add($this->urlMatcher->matchRequest($request));
 
             return $request;

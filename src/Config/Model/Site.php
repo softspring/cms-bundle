@@ -24,6 +24,10 @@ class Site implements ConfigurationInterface
                 ->ifTrue(fn ($config): bool => empty($config['hosts']) && empty($config['paths']))
                 ->thenInvalid('Invalid configuration, either hosts either paths must be set for a valid site')
             ->end()
+            ->validate()
+                ->ifTrue(fn (array $config): bool => self::hasReservedRoutePathCollisions($config))
+                ->thenInvalid('Invalid site configuration, sitemap and robots URLs must not collide')
+            ->end()
             ->children()
                 ->arrayNode('allowed_content_types')
                     ->performNoDeepMerging()
@@ -151,5 +155,55 @@ class Site implements ConfigurationInterface
         }
 
         return $treeBuilder;
+    }
+
+    public static function getReservedRoutePaths(array $config): array
+    {
+        $reservedPaths = [];
+
+        foreach ($config['sitemaps'] ?? [] as $sitemap => $sitemapConfig) {
+            if (!empty($sitemapConfig['url'])) {
+                $reservedPaths[] = [
+                    'path' => self::normalizeReservedRoutePath($sitemapConfig['url']),
+                    'source' => sprintf('sitemap "%s"', $sitemap),
+                ];
+            }
+        }
+
+        if (!empty($config['sitemaps_index']['enabled']) && !empty($config['sitemaps_index']['url'])) {
+            $reservedPaths[] = [
+                'path' => self::normalizeReservedRoutePath($config['sitemaps_index']['url']),
+                'source' => 'sitemap index',
+            ];
+        }
+
+        if (!empty($config['robots']['mode'])) {
+            $reservedPaths[] = [
+                'path' => '/robots.txt',
+                'source' => 'robots.txt',
+            ];
+        }
+
+        return $reservedPaths;
+    }
+
+    protected static function hasReservedRoutePathCollisions(array $config): bool
+    {
+        $paths = [];
+
+        foreach (self::getReservedRoutePaths($config) as $reservedPath) {
+            if (isset($paths[$reservedPath['path']])) {
+                return true;
+            }
+
+            $paths[$reservedPath['path']] = true;
+        }
+
+        return false;
+    }
+
+    protected static function normalizeReservedRoutePath(string $path): string
+    {
+        return '/'.trim($path, '/');
     }
 }

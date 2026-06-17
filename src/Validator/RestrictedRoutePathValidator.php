@@ -5,6 +5,7 @@ namespace Softspring\CmsBundle\Validator;
 use Softspring\CmsBundle\Model\RoutePathInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 class RestrictedRoutePathValidator extends ConstraintValidator
 {
@@ -12,12 +13,12 @@ class RestrictedRoutePathValidator extends ConstraintValidator
     {
     }
 
-    /**
-     * @param RoutePathInterface  $value
-     * @param RestrictedRoutePath $constraint
-     */
     public function validate(mixed $value, Constraint $constraint): void
     {
+        if (!$constraint instanceof RestrictedRoutePath) {
+            throw new UnexpectedTypeException($constraint, RestrictedRoutePath::class);
+        }
+
         if (!$value instanceof RoutePathInterface) {
             return;
         }

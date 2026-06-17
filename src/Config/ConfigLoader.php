@@ -10,6 +10,7 @@ use Softspring\CmsBundle\Config\Model\Layout;
 use Softspring\CmsBundle\Config\Model\Menu;
 use Softspring\CmsBundle\Config\Model\Module;
 use Softspring\CmsBundle\Config\Model\Site;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -186,7 +187,63 @@ class ConfigLoader
             $sites[$siteName]['_id'] = $siteName;
         }
 
+        $this->validateSiteReservedRoutePaths($sites);
+        $this->validateSitePathDuplicates($sites);
+
         return $sites;
+    }
+
+    protected function validateSiteReservedRoutePaths(array $sites): void
+    {
+        $reservedPaths = [];
+
+        foreach ($sites as $siteName => $siteConfig) {
+            $hosts = array_map(fn (array $hostConfig): string => $hostConfig['domain'], $siteConfig['hosts'] ?? []);
+            $hosts = $hosts ?: ['*'];
+
+            foreach ($hosts as $host) {
+                foreach (Site::getReservedRoutePaths($siteConfig) as $reservedPath) {
+                    $key = "$host {$reservedPath['path']}";
+
+                    if (isset($reservedPaths[$key])) {
+                        throw new InvalidConfigurationException(sprintf('Invalid CMS site configuration, reserved route "%s" for host "%s" is configured by both site "%s" (%s) and site "%s" (%s). Sitemap and robots URLs must be unique per host.', $reservedPath['path'], $host, $reservedPaths[$key]['site'], $reservedPaths[$key]['source'], $siteName, $reservedPath['source']));
+                    }
+
+                    $reservedPaths[$key] = [
+                        'site' => $siteName,
+                        'source' => $reservedPath['source'],
+                    ];
+                }
+            }
+        }
+    }
+
+    protected function validateSitePathDuplicates(array $sites): void
+    {
+        $paths = [];
+
+        foreach ($sites as $siteName => $siteConfig) {
+            $hosts = array_map(fn (array $hostConfig): string => $hostConfig['domain'], $siteConfig['hosts'] ?? []);
+            $hosts = $hosts ?: ['*'];
+
+            foreach ($hosts as $host) {
+                foreach ($siteConfig['paths'] ?? [] as $pathConfig) {
+                    $path = $this->normalizeSitePath($pathConfig['path']);
+                    $key = "$host $path";
+
+                    if (isset($paths[$key])) {
+                        throw new InvalidConfigurationException(sprintf('Invalid CMS site configuration, path "%s" for host "%s" is configured by both site "%s" and site "%s". Site paths must be unique per host.', $path, $host, $paths[$key], $siteName));
+                    }
+
+                    $paths[$key] = $siteName;
+                }
+            }
+        }
+    }
+
+    protected function normalizeSitePath(string $path): string
+    {
+        return '/'.trim($path, '/');
     }
 
     protected function readConfigurations(ContainerBuilder $containerBuilder, string $elementPath, string $elementType): array
