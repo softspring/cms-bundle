@@ -3,7 +3,6 @@
 namespace Softspring\CmsBundle\Test\Unit\Config\Router;
 
 use Exception;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -16,7 +15,6 @@ use Softspring\CmsBundle\Routing\UrlGenerator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-#[AllowMockObjectsWithoutExpectations]
 class UrlGeneratorTest extends TestCase
 {
     protected RouteManagerInterface&MockObject $routeManager;

@@ -8,7 +8,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -24,7 +23,6 @@ use Softspring\CmsBundle\Sitemap\InvalidSitemapException;
 use Softspring\CmsBundle\Sitemap\SitemapFactory;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
-#[AllowMockObjectsWithoutExpectations]
 class SitemapFactoryTest extends TestCase
 {
     protected AbstractQuery&MockObject $query;

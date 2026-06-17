@@ -7,7 +7,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -21,7 +20,6 @@ use Softspring\CmsBundle\Routing\UrlGenerator;
 use Softspring\CmsBundle\Routing\UrlMatcher;
 use Symfony\Component\HttpFoundation\Request;
 
-#[AllowMockObjectsWithoutExpectations]
 class UrlMatcherTest extends TestCase
 {
     protected AbstractQuery&MockObject $query;
@@ -473,10 +471,10 @@ class UrlMatcherTest extends TestCase
         $request->attributes->set('_sfs_cms_site_path_config', ['path' => '/en', 'locale' => 'en', 'trailing_slash_on_root' => false]);
         $attributes = $urlMatcher->matchRequest($request);
         $this->assertEquals([
-//            '_route' => 'cms#example',
-//            '_route_params' => [],
-//            '_controller' => 'Softspring\CmsBundle\Controller\ContentController::renderRoutePath',
-//            'routePath' => $routePath,
+            //            '_route' => 'cms#example',
+            //            '_route_params' => [],
+            //            '_controller' => 'Softspring\CmsBundle\Controller\ContentController::renderRoutePath',
+            //            'routePath' => $routePath,
             '_sfs_cms_locale' => 'en',
             '_locale' => 'en',
             '_sfs_cms_locale_path' => '/en',

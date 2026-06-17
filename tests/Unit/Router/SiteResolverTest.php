@@ -3,7 +3,6 @@
 namespace Softspring\CmsBundle\Test\Unit\Config\Router;
 
 use Doctrine\ORM\EntityRepository;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Softspring\CmsBundle\Config\CmsConfig;
@@ -14,7 +13,6 @@ use Softspring\CmsBundle\Manager\SiteManagerInterface;
 use Softspring\CmsBundle\Routing\SiteResolver;
 use Symfony\Component\HttpFoundation\Request;
 
-#[AllowMockObjectsWithoutExpectations]
 class SiteResolverTest extends TestCase
 {
     protected CmsConfig&MockObject $cmsConfig;
