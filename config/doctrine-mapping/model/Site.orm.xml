@@ -6,6 +6,7 @@
 
     <mapped-superclass name="Softspring\CmsBundle\Model\Site" table="cms_site">
         <field name="config" column="config" type="json" nullable="true"/>
+        <field name="metadata" column="metadata" type="json" nullable="true"/>
     </mapped-superclass>
 
 </doctrine-mapping>

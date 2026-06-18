@@ -1,0 +1,6 @@
+{% trans_default_domain 'sfs_cms_admin' %}
+
+<div class="d-flex align-items-start justify-content-between gap-3 mb-3">
+    <h1 class="h3 mb-0">{{ 'admin_sites.read.title'|trans({'%name%': site|sfs_cms_site_name}) }}</h1>
+    {% block actions %}{% endblock %}
+</div>

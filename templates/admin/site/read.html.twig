@@ -1,136 +1,409 @@
 {% trans_default_domain 'sfs_cms_admin' %}
 {% extends '@SfsCms/admin_layout.html.twig' %}
+
 {% block title %}{{ 'admin_sites.read.meta.title'|trans({'%name%': site|sfs_cms_site_name }) }}{% endblock %}
 
 {% block breadcrums_content %}
     {{ parent() }}
-    <li class="breadcrumb-item"><a
-                href="{{ url('sfs_cms_admin_sites_list') }}">{{ 'admin_sites.list.breadcrumb'|trans }}</a></li>
-    <li class="breadcrumb-item active"
-        aria-current="content">{{ 'admin_sites.read.breadcrumb'|trans({'%name%': site|sfs_cms_site_name }) }}</li>
+    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_sites_list') }}">{{ 'admin_sites.list.breadcrumb'|trans }}</a></li>
+    <li class="breadcrumb-item active" aria-current="content">{{ 'admin_sites.read.breadcrumb'|trans({'%name%': site|sfs_cms_site_name }) }}</li>
 {% endblock breadcrums_content %}
 
 {% block content %}
-    {% set site_base_url = site.canonicalScheme ~ '://' ~ site.canonicalHost %}
+    {% set config = site.config|default({}) %}
+    {% set site_base_url = site.canonicalHost ? site.canonicalScheme ~ '://' ~ site.canonicalHost : null %}
+    {% set locales = config.locales|default([]) %}
+    {% set content_types = config.allowed_content_types|default([]) %}
+    {% set hosts = config.hosts|default([]) %}
+    {% set paths = config.paths|default([]) %}
+    {% set robots = config.robots|default({}) %}
+    {% set sitemaps = config.sitemaps|default([]) %}
+    {% set sitemap_index = config.sitemaps_index|default(null) %}
+    {% set slash_route = config.slash_route|default(false) %}
+    {% set error_pages = config.error_pages|default([]) %}
+    {% set extra = config.extra|default([]) %}
 
-    <h1 class="h3">{{ 'admin_sites.read.title'|trans({'%name%': site|sfs_cms_site_name }) }}</h1>
+    <div class="container-fluid py-4">
+        {% embed '@SfsCms/admin/site/_site_title.html.twig' with {'site': site} only %}
+        {% endembed %}
+        {% include '@SfsCms/admin/site/_site_tabs.html.twig' with {'current': 'details', 'site': site} %}
 
-    <div class="row">
-        <div class="col-3 p-2">
-            <div class="bg-white p-3 mb-3">
-                <h4 class="border-bottom border-1 border-light pb-2 mb-3">General</h4>
-                <dl>
-                    <dt>Id</dt>
-                    <dd>{{ site }}</dd>
-                    <dt>Name</dt>
-                    <dd>{{ site|sfs_cms_site_name }}</dd>
-                    <dt>Locales</dt>
-                    <dd>{{ site.config.locales|join(', ') }}</dd>
-                    <dt>Default locale</dt>
-                    <dd>{{ site.config.default_locale }}</dd>
-                    <dt>Allowed content types</dt>
-                    <dd>{{ site.config.allowed_content_types|map((content_type) => (content_type~'.name')|trans({}, 'sfs_cms_contents'))|join(', ') }}</dd>
-                    <dt>Robots TXT</dt>
-                    <dd>
-                        {% if site.config.robots.mode %}
-                            <a href="{{ site_base_url }}/robots.txt" target="_blank">robots.txt <span class="mdi mdi-18px mdi-open-in-new"></span></a>
-                        {% else %}
-                            <em>not configured</em>
-                        {% endif %}
-                    </dd>
-                </dl>
+        <div class="row g-3 mb-3">
+            <div class="col-12 col-md-6 col-xl-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="text-body-secondary small">Canonical URL</div>
+                        <div class="fw-semibold text-break">
+                            {% if site_base_url %}
+                                <a href="{{ site_base_url }}" target="_blank">{{ site_base_url }} <span class="mdi mdi-18px mdi-open-in-new"></span></a>
+                            {% else %}
+                                <span class="text-body-secondary">-</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 col-xl-2">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="text-body-secondary small">Locales</div>
+                        <div class="h4 mb-0">{{ locales|length }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 col-xl-2">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="text-body-secondary small">Domains</div>
+                        <div class="h4 mb-0">{{ hosts|length }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 col-xl-2">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="text-body-secondary small">Paths</div>
+                        <div class="h4 mb-0">{{ paths|length }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 col-xl-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="text-body-secondary small">Public files</div>
+                        <div class="d-flex flex-wrap gap-1">
+                            <span class="badge {{ robots.mode|default(null) ? 'text-bg-success' : 'text-bg-secondary' }}">robots.txt</span>
+                            <span class="badge {{ sitemaps is not empty ? 'text-bg-success' : 'text-bg-secondary' }}">sitemaps</span>
+                            <span class="badge {{ sitemap_index ? 'text-bg-success' : 'text-bg-secondary' }}">index</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        {# TODO include https_redirect info #}
-        {# TODO include locale_path_redirect_if_empty info #}
-        {# TODO include extra info #}
-        {# TODO include slash_route info #}
-        {# TODO include error_pages info #}
-
-        <div class="col-9 p-2">
-            {% if site.config.hosts is not empty %}
-            <div class="bg-white p-3 mb-3">
-                <h4 class="border-bottom border-1 border-light pb-2 mb-3">Domains</h4>
-
-                <table class="table">
-                    <tr>
-                        <th>Scheme</th>
-                        <th>Domain</th>
-                        <th>Locale</th>
-                        <th>Canonical</th>
-                    </tr>
-
-                    {% for host in site.config.hosts %}
-                        <tr>
-                            <td>{{ host.scheme }}</td>
-                            <td>
-                                <a href="{{ host.scheme ~ '://' ~ host.domain }}"
-                                   target="_blank">{{ host.domain }} <span class="mdi mdi-18px mdi-open-in-new"></span></a>
-                            </td>
-                            <td>{{ host.locale|default('--') }}</td>
-                            <td>{{ host.canonical ? 'Yes' : host.redirect_to_canonical ? 'Redirect' : 'No' }}</td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            </div>
-            {% endif %}
-
-            {% if site.config.paths is not empty %}
-            <div class="bg-white p-3 mb-3">
-                <h4 class="border-bottom border-1 border-light pb-2 mb-3">Paths</h4>
-
-                <table class="table">
-                    <tr>
-                        <th>Path</th>
-                        <th>Locale</th>
-                        <th>&nbsp;</th>
-                    </tr>
-
-                    {% for path in site.config.paths %}
-                        <tr>
-                            <td>
-                                <a href="{{ site_base_url }}/{{ path.path|trim('/') }}"
-                                   target="_blank">{{ path.path }} <span
-                                            class="mdi mdi-18px mdi-open-in-new"></span></a>
-                            </td>
-                            <td>{{ path.locale|default('--') }}</td>
-                            <td>{{ path.trailing_slash_on_root ? 'forces trailing slash' : '' }}</td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            </div>
-            {% endif %}
-
-            {% if site.config.sitemaps is not empty %}
-                <div class="bg-white p-3 mb-3">
-                    <h4 class="border-bottom border-1 border-light pb-2 mb-3">Sitemaps</h4>
-                    <table class="table">
-                        <tr>
-                            <th>Id</th>
-                            <th>Url</th>
-                            <th>Cache</th>
-                            <th>Defaults</th>
-                            <th>Include alternates</th>
-                        </tr>
-
-                        {# TODO include sitemaps_index #}
-                        {% for sitemap_id,sitemap in site.config.sitemaps %}
-                            <tr>
-                                <td>{{ sitemap_id }}</td>
-                                <td>
-                                    <a href="{{ site_base_url }}/{{ sitemap.url }}"
-                                       target="_blank">{{ sitemap.url }} <span
-                                                class="mdi mdi-18px mdi-open-in-new"></span></a>
-                                </td>
-                                <td>{{ sitemap.cache_ttl ? sitemap.cache_ttl : 'no' }}</td>
-                                <td>{{ sitemap.default_changefreq }} {{ sitemap.default_priority }}</td>
-                                <td>{{ sitemap.alternates_locales ? 'locales' : '' }} {{ sitemap.alternates_sites ? 'sites' : '' }}</td>
-                            </tr>
-                        {% endfor %}
-                    </table>
+        <div class="row g-3">
+            <div class="col-12 col-xl-3">
+                <div class="card h-100">
+                    <div class="card-header bg-transparent">
+                        <h2 class="h5 mb-0">CMS Options</h2>
+                    </div>
+                    <div class="card-body">
+                        <dl class="mb-0">
+                            <dt class="fw-normal text-body-secondary">Id</dt>
+                            <dd class="fw-semibold">{{ site }}</dd>
+                            <dt class="fw-normal text-body-secondary">Name</dt>
+                            <dd class="fw-semibold">{{ site|sfs_cms_site_name }}</dd>
+                            <dt class="fw-normal text-body-secondary">Default locale</dt>
+                            <dd class="fw-semibold">{{ config.default_locale|default('-') }}</dd>
+                            <dt class="fw-normal text-body-secondary">Locales</dt>
+                            <dd class="d-flex flex-wrap gap-1">
+                                {% for locale in locales %}
+                                    <span class="badge {{ locale == config.default_locale|default(null) ? 'text-bg-primary' : 'text-bg-secondary' }}">{{ locale }}</span>
+                                {% else %}
+                                    <span class="text-body-secondary">-</span>
+                                {% endfor %}
+                            </dd>
+                            <dt class="fw-normal text-body-secondary">Allowed content</dt>
+                            <dd class="d-flex flex-wrap gap-1">
+                                {% for content_type in content_types %}
+                                    <span class="badge text-bg-light border">{{ (content_type~'.name')|trans({}, 'sfs_cms_contents') }}</span>
+                                {% else %}
+                                    <span class="text-body-secondary">-</span>
+                                {% endfor %}
+                            </dd>
+                            <dt class="fw-normal text-body-secondary">HTTPS redirect</dt>
+                            <dd>
+                                <span class="badge {{ config.https_redirect|default(false) ? 'text-bg-success' : 'text-bg-secondary' }}">{{ config.https_redirect|default(false) ? 'Enabled' : 'Disabled' }}</span>
+                            </dd>
+                            <dt class="fw-normal text-body-secondary">Empty locale redirect</dt>
+                            <dd>
+                                {% if config.locale_path_redirect_if_empty is defined %}
+                                    <span class="badge {{ config.locale_path_redirect_if_empty ? 'text-bg-success' : 'text-bg-secondary' }}">{{ config.locale_path_redirect_if_empty ? 'Enabled' : 'Disabled' }}</span>
+                                {% else %}
+                                    <span class="text-body-secondary">Not configured</span>
+                                {% endif %}
+                            </dd>
+                            <dt class="fw-normal text-body-secondary">Slash route</dt>
+                            <dd>
+                                {% if slash_route %}
+                                    <div class="fw-semibold">{{ slash_route.route|default('-') }}</div>
+                                    <div class="small text-body-secondary">{{ slash_route.behaviour|default('-') }}{% if slash_route.redirect_code|default(null) %} · {{ slash_route.redirect_code }}{% endif %}</div>
+                                {% else %}
+                                    <span class="text-body-secondary">Not configured</span>
+                                {% endif %}
+                            </dd>
+                            <dt class="fw-normal text-body-secondary">Extra</dt>
+                            <dd class="mb-0">
+                                {% if extra is not empty %}
+                                    <dl class="mb-0 small">
+                                        {% for key, value in extra %}
+                                            <dt class="text-body-secondary">{{ key }}</dt>
+                                            <dd class="fw-semibold">
+                                                {% if value is same as(true) %}
+                                                    <span class="badge text-bg-success">Yes</span>
+                                                {% elseif value is same as(false) %}
+                                                    <span class="badge text-bg-secondary">No</span>
+                                                {% elseif value is iterable %}
+                                                    <code class="small">{{ value|json_encode(constant('JSON_PRETTY_PRINT')) }}</code>
+                                                {% elseif value is empty %}
+                                                    <span class="text-body-secondary">-</span>
+                                                {% else %}
+                                                    {{ value }}
+                                                {% endif %}
+                                            </dd>
+                                        {% endfor %}
+                                    </dl>
+                                {% else %}
+                                    <span class="text-body-secondary">No extra configuration.</span>
+                                {% endif %}
+                            </dd>
+                        </dl>
+                    </div>
                 </div>
-            {% endif %}
+            </div>
+
+            <div class="col-12 col-xl-9">
+                <div class="card h-100">
+                    <div class="card-header bg-transparent">
+                        <h2 class="h5 mb-0">Entrypoints</h2>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="h6 text-body-secondary">Domains</h3>
+                        {% if hosts is not empty %}
+                            <div class="table-responsive mb-4">
+                                <table class="table table-sm align-middle mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Scheme</th>
+                                            <th>Domain</th>
+                                            <th>Locale</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for host in hosts %}
+                                            {% set scheme = host.scheme|default(site.canonicalScheme|default('https')) %}
+                                            <tr>
+                                                <td>{{ scheme }}</td>
+                                                <td>
+                                                    <a href="{{ scheme ~ '://' ~ host.domain }}" target="_blank">{{ host.domain }}{% if host.port|default(null) %}:{{ host.port }}{% endif %} <span class="mdi mdi-18px mdi-open-in-new"></span></a>
+                                                </td>
+                                                <td>{{ host.locale|default('-') }}</td>
+                                                <td>
+                                                    {% if host.canonical|default(false) %}
+                                                        <span class="badge text-bg-success">Canonical</span>
+                                                    {% elseif host.redirect_to_canonical|default(false) %}
+                                                        <span class="badge text-bg-info">Redirect</span>
+                                                    {% else %}
+                                                        <span class="badge text-bg-secondary">Alias</span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <p class="text-body-secondary">No domains configured.</p>
+                        {% endif %}
+
+                        <h3 class="h6 text-body-secondary">Paths</h3>
+                        {% if paths is not empty %}
+                            <div class="table-responsive">
+                                <table class="table table-sm align-middle mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Path</th>
+                                            <th>Locale</th>
+                                            <th>Options</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for path in paths %}
+                                            <tr>
+                                                <td>
+                                                    {% if site_base_url %}
+                                                        <a href="{{ site_base_url }}/{{ path.path|trim('/') }}" target="_blank">{{ path.path }} <span class="mdi mdi-18px mdi-open-in-new"></span></a>
+                                                    {% else %}
+                                                        {{ path.path }}
+                                                    {% endif %}
+                                                </td>
+                                                <td>{{ path.locale|default('-') }}</td>
+                                                <td>
+                                                    {% if path.trailing_slash_on_root|default(false) %}
+                                                        <span class="badge text-bg-secondary">Trailing slash on root</span>
+                                                    {% else %}
+                                                        <span class="text-body-secondary">-</span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <p class="text-body-secondary mb-0">No paths configured.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-3 mt-0">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-transparent d-flex align-items-center justify-content-between gap-2">
+                        <h2 class="h5 mb-0">Sitemaps</h2>
+                        <span class="badge {{ sitemaps is not empty or sitemap_index ? 'text-bg-success' : 'text-bg-secondary' }}">{{ sitemaps|length }} sitemaps</span>
+                    </div>
+                    <div class="card-body">
+                        {% if sitemap_index or sitemaps is not empty %}
+                            <div class="table-responsive">
+                                <table class="table table-sm align-middle mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Type</th>
+                                            <th>Id</th>
+                                            <th>URL</th>
+                                            <th>Cache</th>
+                                            <th>Defaults</th>
+                                            <th>Alternates / External</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% if sitemap_index %}
+                                            <tr>
+                                                <td><span class="badge text-bg-primary">Index</span></td>
+                                                <td>index</td>
+                                                <td>
+                                                    {% if site_base_url and sitemap_index.url|default(null) %}
+                                                        <a href="{{ site_base_url }}/{{ sitemap_index.url }}" target="_blank">{{ sitemap_index.url }} <span class="mdi mdi-18px mdi-open-in-new"></span></a>
+                                                    {% else %}
+                                                        {{ sitemap_index.url|default('-') }}
+                                                    {% endif %}
+                                                </td>
+                                                <td>{{ sitemap_index.cache_ttl|default('no') }}</td>
+                                                <td>-</td>
+                                                <td>
+                                                    {% if sitemap_index.external_sitemaps|default([]) is not empty %}
+                                                        <ul class="mb-0 ps-3">
+                                                            {% for external_sitemap in sitemap_index.external_sitemaps %}
+                                                                <li>{{ external_sitemap }}</li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    {% else %}
+                                                        <span class="text-body-secondary">-</span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                        {% for sitemap_id, sitemap in sitemaps %}
+                                            <tr>
+                                                <td><span class="badge text-bg-secondary">Sitemap</span></td>
+                                                <td>{{ sitemap_id }}</td>
+                                                <td>
+                                                    {% if site_base_url and sitemap.url|default(null) %}
+                                                        <a href="{{ site_base_url }}/{{ sitemap.url }}" target="_blank">{{ sitemap.url }} <span class="mdi mdi-18px mdi-open-in-new"></span></a>
+                                                    {% else %}
+                                                        {{ sitemap.url|default('-') }}
+                                                    {% endif %}
+                                                </td>
+                                                <td>{{ sitemap.cache_ttl|default('no') }}</td>
+                                                <td>{{ sitemap.default_changefreq|default('-') }} {{ sitemap.default_priority|default('') }}</td>
+                                                <td>
+                                                    {% if sitemap.alternates_locales|default(false) %}<span class="badge text-bg-light border">Locales</span>{% endif %}
+                                                    {% if sitemap.alternates_sites|default(false) %}<span class="badge text-bg-light border">Sites</span>{% endif %}
+                                                    {% if not sitemap.alternates_locales|default(false) and not sitemap.alternates_sites|default(false) %}<span class="text-body-secondary">-</span>{% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <p class="text-body-secondary mb-0">No sitemaps configured.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-transparent d-flex align-items-center justify-content-between gap-2">
+                        <h2 class="h5 mb-0">Robots</h2>
+                        <span class="badge {{ robots.mode|default(null) ? 'text-bg-success' : 'text-bg-secondary' }}">{{ robots.mode|default('not configured') }}</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Mode</th>
+                                        <th>Static file</th>
+                                        <th>Public URL</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{ robots.mode|default('not configured') }}</td>
+                                        <td>{% if robots.static_file|default(null) %}<code>{{ robots.static_file }}</code>{% else %}<span class="text-body-secondary">-</span>{% endif %}</td>
+                                        <td>
+                                            {% if robots.mode|default(null) and site_base_url %}
+                                                <a href="{{ site_base_url }}/robots.txt" target="_blank">robots.txt <span class="mdi mdi-18px mdi-open-in-new"></span></a>
+                                            {% else %}
+                                                <span class="text-body-secondary">-</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-transparent d-flex align-items-center justify-content-between gap-2">
+                        <h2 class="h5 mb-0">Errors</h2>
+                        <span class="badge {{ error_pages is not empty ? 'text-bg-success' : 'text-bg-secondary' }}">{{ error_pages|length }} groups</span>
+                    </div>
+                    <div class="card-body">
+                        {% if error_pages is not empty %}
+                            <div class="table-responsive">
+                                <table class="table table-sm align-middle mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Status</th>
+                                            <th>Locale</th>
+                                            <th>Templates</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for status, locale_templates in error_pages %}
+                                            {% for locale, templates in locale_templates %}
+                                                <tr>
+                                                    <td>{{ status }}</td>
+                                                    <td>{{ locale }}</td>
+                                                    <td>
+                                                        <ul class="mb-0 ps-3">
+                                                            {% for template in templates %}
+                                                                <li><code>{{ template }}</code></li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <p class="text-body-secondary mb-0">No error pages configured.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock content %}

@@ -5,3 +5,7 @@ sfs_cms_admin_sites_list:
 sfs_cms_admin_sites_read:
     controller: sfs_cms.admin.site.controller::read
     path: /{site}
+
+_sfs_cms_plugin_admin_site_routes:
+    resource: '.'
+    type: sfs_cms_plugin_admin_site

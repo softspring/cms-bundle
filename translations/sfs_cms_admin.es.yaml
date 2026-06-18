@@ -240,6 +240,8 @@ admin_menus:
                 route_params.label: "Parámetros (JSON)"
 
 admin_sites:
+    tabs_menu:
+        details: "Detalles"
     list:
         meta.title: "Sitios"
         title: "Sitios"

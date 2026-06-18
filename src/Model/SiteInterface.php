@@ -16,6 +16,16 @@ interface SiteInterface
 
     public function getConfig(): ?array;
 
+    public function setMetadata(?array $metadata): void;
+
+    public function getMetadata(): ?array;
+
+    public function setMetadataField(string $field, mixed $value): void;
+
+    public function getMetadataField(string $field, mixed $default = null): mixed;
+
+    public function removeMetadataField(string $field): void;
+
     public function getCanonicalHost(): ?string;
 
     public function getCanonicalPort(): ?int;
