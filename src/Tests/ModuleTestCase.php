@@ -2,7 +2,6 @@
 
 namespace Softspring\CmsBundle\Tests;
 
-use Doctrine\ORM\EntityRepository;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use Softspring\CmsBundle\Config\CmsConfig;
@@ -20,26 +19,30 @@ use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Render\Error\RenderErrorList;
 use Softspring\CmsBundle\Render\Exception\ModuleRenderException;
 use Softspring\CmsBundle\Render\Module\ModuleRenderer;
+use Softspring\CmsBundle\Repository\RouteRepository;
 use Softspring\CmsBundle\Translator\TranslatableContext;
 use Softspring\CmsBundle\Utils\DataMigrator;
 use Softspring\Component\DynamicFormType\Form\Extension\DynamicFormExtension;
 use Softspring\Component\DynamicFormType\Form\Resolver\ConstraintResolver;
-use Softspring\Component\DynamicFormType\Form\Resolver\DefaultTypeResolver;
 use Softspring\TranslatableBundle\Form\Extension\TranslationExtension;
 use Softspring\TranslatableBundle\Form\Type\TranslatableType as BaseTranslatableType;
 use Softspring\TranslatableBundle\Form\Type\TranslationType as BaseTranslationType;
+use Softspring\TranslatableBundle\Model\Translation;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\Traits\ValidatorExtensionTrait;
 use Symfony\Component\Form\Test\TypeTestCase;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Yaml\Yaml;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 abstract class ModuleTestCase extends TypeTestCase
 {
@@ -56,13 +59,13 @@ abstract class ModuleTestCase extends TypeTestCase
      */
     protected function getExtensions(): array
     {
-        $cmsTypeResolver = new DefaultTypeResolver();
+        $cmsTypeResolver = new CmsModuleTypeResolver();
 
         $router = $this->createMock(RouterInterface::class);
         $router->method('getRouteCollection')->willReturn(new RouteCollection());
 
-        $routeRepository = $this->createMock(EntityRepository::class);
-        $routeRepository->method('findAll')->willReturn([]);
+        $routeRepository = $this->createMock(RouteRepository::class);
+        $routeRepository->method('getAllRouteIds')->willReturn([]);
 
         $routeManager = $this->createMock(RouteManagerInterface::class);
         $routeManager->method('getRepository')->willReturn($routeRepository);
@@ -73,9 +76,9 @@ abstract class ModuleTestCase extends TypeTestCase
 
         $preloadedFormTypes = [];
         $preloadedFormTypes[] = new DynamicFormModuleType($cmsHelper);
-        $preloadedFormTypes[] = new TranslatableType($translatableContext);
-        $preloadedFormTypes[] = new TranslationType($translatableContext);
-        $preloadedFormTypes[] = new BaseTranslatableType(null, null);
+        $preloadedFormTypes[] = new TranslatableType($translatableContext, $cmsTypeResolver);
+        $preloadedFormTypes[] = new TranslationType($translatableContext, $cmsTypeResolver);
+        $preloadedFormTypes[] = new BaseTranslatableType(null, null, $cmsTypeResolver);
         $preloadedFormTypes[] = new BaseTranslationType();
         $preloadedFormTypes[] = new SymfonyRouteType($router, $routeManager, []);
         $preloadedFormTypes[] = new LinkType($router, $routeManager, []);
@@ -191,7 +194,14 @@ abstract class ModuleTestCase extends TypeTestCase
     #[DataProvider('provideModuleRender')]
     public function testRender(array $data, string|callable $expected, array $templatesSource = []): void
     {
-        $requestStack = $this->createMock(RequestStack::class);
+        $request = new Request();
+        $request->setLocale($this->defaultLocale);
+        $request->setDefaultLocale($this->defaultLocale);
+
+        $requestStack = new RequestStack();
+        foreach ([$request] as $stackRequest) {
+            $requestStack->push($stackRequest);
+        }
 
         $moduleConfiguration = $this->readModuleConfiguration();
         $moduleConfiguration['revision_migration_scripts'] = [];
@@ -210,6 +220,8 @@ abstract class ModuleTestCase extends TypeTestCase
         $twig = new Environment($templateLoader, [
             'strict_variables' => true,
         ]);
+        $twig->addFilter(new TwigFilter('sfs_cms_trans', $this->translate(...), ['is_safe' => ['html']]));
+        $twig->addFunction(new TwigFunction('sfs_cms_link_attr', $this->generateLinkAttributes(...), ['is_safe' => ['html']]));
 
         $moduleRenderer = new ModuleRenderer($cmsConfig, $requestStack, $twig, null);
 
@@ -224,11 +236,71 @@ abstract class ModuleTestCase extends TypeTestCase
         }
 
         if (is_callable($expected)) {
-            $this->assertIsString($render);
             $expected($render);
         } else {
             $this->assertEquals($expected, $render);
         }
+    }
+
+    protected function translate(mixed $translatableText): string
+    {
+        if ($translatableText instanceof Translation) {
+            return $translatableText->translate($this->defaultLocale);
+        }
+
+        if (!is_array($translatableText)) {
+            return '';
+        }
+
+        if (isset($translatableText['_default'])) {
+            return Translation::createFromArray($translatableText)->translate($this->defaultLocale);
+        }
+
+        return $translatableText[$this->defaultLocale] ?? '';
+    }
+
+    protected function generateLinkAttributes(array $linkData): string
+    {
+        $attributes = [];
+
+        switch ($linkData['type'] ?? null) {
+            case 'anchor':
+                if (empty($linkData['anchor'])) {
+                    return '';
+                }
+
+                $attributes['href'] = '#'.ltrim($linkData['anchor'], '#');
+                break;
+
+            case 'route':
+                if (empty($linkData['route_name'])) {
+                    return '';
+                }
+
+                $attributes['href'] = '/'.$linkData['route_name'];
+                break;
+
+            case 'url':
+                if (empty($linkData['url'])) {
+                    return '';
+                }
+
+                $attributes['href'] = $linkData['url'];
+                break;
+
+            default:
+                return '';
+        }
+
+        if ('_self' !== ($linkData['target'] ?? '_self')) {
+            $attributes['target'] = 'custom' !== $linkData['target'] ? $linkData['target'] : ($linkData['custom_target'] ?? '');
+        }
+
+        return implode(' ', array_map(
+            static fn (string $name, string $value): string => sprintf('%s="%s"', $name, htmlentities($value)),
+            array_keys($attributes),
+            $attributes,
+        ));
     }
 
     public static function assertRenderCrawler(callable $expected, string $render): void
