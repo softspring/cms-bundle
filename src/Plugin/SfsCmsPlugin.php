@@ -5,6 +5,7 @@ namespace Softspring\CmsBundle\Plugin;
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
 use Exception;
 use LogicException;
+use Softspring\CmsBundle\DependencyInjection\Compiler\AddTwigBundlesNamespacesPass;
 use Softspring\CmsBundle\Plugin\Compiler\ResolvePluginDoctrineTargetEntityPass;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -64,6 +65,11 @@ abstract class SfsCmsPlugin extends Bundle
         }
 
         $container->addCompilerPass(new ResolvePluginDoctrineTargetEntityPass($this->getTargetEntities()));
+
+        if (is_dir($this->getPath().'/templates/bundles')) {
+            // allow overriding bundles templates
+            $container->addCompilerPass(new AddTwigBundlesNamespacesPass($this->getPath().'/templates'));
+        }
     }
 
     protected function addRegisterMappingsPass(ContainerBuilder $container, array $mappings, string|bool $enablingParameter = false): void
