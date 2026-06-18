@@ -6,7 +6,7 @@
 [![PHP Version](https://img.shields.io/packagist/dependency-v/softspring/cms-bundle/php?style=flat-square)](https://github.com/softspring/cms-bundle/blob/6.0/composer.json)
 [![Downloads](https://img.shields.io/packagist/dt/softspring/cms-bundle?style=flat-square)](https://packagist.org/packages/softspring/cms-bundle)
 [![CI](https://img.shields.io/github/actions/workflow/status/softspring/cms-bundle/ci.yml?branch=6.0&style=flat-square&label=CI)](https://github.com/softspring/cms-bundle/actions/workflows/ci.yml)
-[![Coverage](https://img.shields.io/codecov/c/github/softspring/cms-bundle?branch=6.0&style=flat-square)](https://codecov.io/gh/softspring/cms-bundle)
+[![Coverage](https://img.shields.io/codecov/c/github/softspring/cms-bundle?branch=6.0&style=flat-square)](https://app.codecov.io/gh/softspring/cms-bundle/tree/6.0)
 
 Softspring CMS Bundle provides the core CMS runtime and administration screens used by Armonic projects.
 
