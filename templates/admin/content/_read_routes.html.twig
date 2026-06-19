@@ -28,15 +28,26 @@
             {% endfor %}
         {% endif %}
 
-        <ul class="list-unstyled">
+        <ul class="list-unstyled d-grid gap-2 mb-0">
             {% for route in content_entity.routes %}
                 {% for site in route.sites %}
                     {% for path in route.paths %}
-                        <li>
-                            {{ site|sfs_cms_site_name }}: <a href="{{ sfs_cms_route_path_url(path, site) }}"
-                                                             target="_blank">{{ sfs_cms_route_path_path(path, site) }}
-                                <span class="mdi mdi-18px mdi-open-in-new"></span></a>
-                            {% if path.cacheTtl and not (contentCacheLastModifiedEnabled|default(false)) %}{{ ('admin_'~content_type~'.read.routes.cache')|trans({'%ttl%': path.cacheTtl}) }}{% endif %}
+                        <li class="row g-2 align-items-center">
+                            <div class="col text-truncate">
+                                <span class="fw-semibold">{{ site|sfs_cms_site_name }}:</span>
+                                <a href="{{ sfs_cms_route_path_url(path, site) }}" target="_blank" rel="noopener noreferrer">{{ sfs_cms_route_path_path(path, site) }}</a>
+                            </div>
+                            {% if path.cacheTtl and not (contentCacheLastModifiedEnabled|default(false)) %}
+                                <div class="col-auto">
+                                    <span class="badge text-bg-secondary">TTL {{ path.cacheTtl }}</span>
+                                </div>
+                            {% endif %}
+                            <div class="col-auto">
+                                <a class="btn btn-sm btn-outline-secondary" href="{{ sfs_cms_route_path_url(path, site) }}" target="_blank" rel="noopener noreferrer">
+                                    <i class="bi bi-box-arrow-up-right"></i>
+                                    <span class="visually-hidden">{{ sfs_cms_route_path_path(path, site) }}</span>
+                                </a>
+                            </div>
                         </li>
                     {% endfor %}
                 {% endfor %}
