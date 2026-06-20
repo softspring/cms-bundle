@@ -263,6 +263,7 @@ admin_page:
             publishedAt.header: "Published at"
         filter_form:
             name.label: "Name"
+            path.label: "Path"
             sites.label: "Sites"
             status.label: "Status"
             publishedVersionContent.label: "Published version content (case sensitive)"
