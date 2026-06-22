@@ -282,7 +282,7 @@
                                                         {{ sitemap_index.url|default('-') }}
                                                     {% endif %}
                                                 </td>
-                                                <td>{{ sitemap_index.cache_ttl|default('no') }}</td>
+                                                <td>{{ sitemap_index.cache_ttl|default(null)|sfs_cms_format_cache_ttl|default('no') }}</td>
                                                 <td>-</td>
                                                 <td>
                                                     {% if sitemap_index.external_sitemaps|default([]) is not empty %}
@@ -308,7 +308,7 @@
                                                         {{ sitemap.url|default('-') }}
                                                     {% endif %}
                                                 </td>
-                                                <td>{{ sitemap.cache_ttl|default('no') }}</td>
+                                                <td>{{ sitemap.cache_ttl|default(null)|sfs_cms_format_cache_ttl|default('no') }}</td>
                                                 <td>{{ sitemap.default_changefreq|default('-') }} {{ sitemap.default_priority|default('') }}</td>
                                                 <td>
                                                     {% if sitemap.alternates_locales|default(false) %}<span class="badge text-bg-light border">Locales</span>{% endif %}

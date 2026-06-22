@@ -49,7 +49,7 @@
                                     </a>
 
                                     {% if path.cacheTtl %}
-                                        cache {{ path.cacheTtl }} segundos
+                                        cache {{ path.cacheTtl|sfs_cms_format_cache_ttl }}
                                     {% endif %}
                                 </li>
                             {% endfor %}

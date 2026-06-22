@@ -49,7 +49,7 @@
                 {% if collector.route.currentPath.cacheTtl %}
                 <div class="sf-toolbar-info-piece">
                     <b>Route cache</b>
-                    <span>{{ collector.route.currentPath.cacheTtl|default('none') }}</span>
+                    <span>{{ collector.route.currentPath.cacheTtl|sfs_cms_format_cache_ttl|default('none') }}</span>
                 </div>
                 {% endif %}
                 <div class="sf-toolbar-info-piece">
@@ -199,8 +199,7 @@
         <div class="metric">
             <span class="value">
                 {% if collector.route.currentPath.cacheTtl %}
-                    {{ collector.route.currentPath.cacheTtl }}
-                    <span class="unit">sg</span>
+                    {{ collector.route.currentPath.cacheTtl|sfs_cms_format_cache_ttl }}
                 {% else %}
                     none
                 {% endif %}
@@ -324,7 +323,7 @@
                             <tr>
                                 <td class="font-normal">{{ key }}</td>
                                 <td class="font-normal"><a target="_blank" href="/{{ sitemap.url }}">{{ sitemap.url }}</a></td>
-                                <td class="font-normal">{{ sitemap.cache_ttl }}</td>
+                                <td class="font-normal">{{ sitemap.cache_ttl|sfs_cms_format_cache_ttl|default('none') }}</td>
                                 <td class="font-normal">{{ sitemap.default_priority }}</td>
                                 <td class="font-normal">{{ sitemap.default_changefreq }}</td>
                             </tr>
@@ -463,7 +462,7 @@
                                 <td>{{ block.type }}</td>
                                 <td>{{ block.config.esi?'yes':'no' }}</td>
                                 <td>{{ block.config.singleton?'yes':'no' }}</td>
-                                <td>{{ block.config.cache_ttl }}</td>
+                                <td>{{ block.config.cache_ttl|sfs_cms_format_cache_ttl|default('none') }}</td>
                                 <td>{{ dump(block.config) }}</td>
                             </tr>
                         {% endfor %}
@@ -499,7 +498,7 @@
                                 <td>{{ menu.type }}</td>
                                 <td>{{ menu.config.esi?'yes' : 'no' }}</td>
                                 <td>{{ menu.config.singleton?'yes' : 'no' }}</td>
-                                <td>{{ menu.config.cache_ttl }}</td>
+                                <td>{{ menu.config.cache_ttl|sfs_cms_format_cache_ttl|default('none') }}</td>
                                 <td>{{ dump(menu.config) }}</td>
                             </tr>
                         {% endfor %}

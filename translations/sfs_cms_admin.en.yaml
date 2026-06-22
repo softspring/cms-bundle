@@ -12,8 +12,8 @@ module_disabled_raw: "Module is disabled. Please enable it in the configuration 
 
 admin_content:
     read:
-        published_cache_alert_raw: "This content was last published at %publishedDateTime%. Some content URLs are cached for %maxRouteTtl% seconds. So you may have to wait %waitSeconds% seconds before the new content is available."
-        unpublished_cache_alert_raw: "This content was last unpublished at %publishedDateTime%. Some content URLs are cached for %maxRouteTtl% seconds. So you may have to wait %waitSeconds% seconds before the URLs show a 404 error."
+        published_cache_alert_raw: "This content was last published at %publishedDateTime%. Some content URLs are cached for %maxRouteTtl%. So you may have to wait %waitSeconds% before the new content is available."
+        unpublished_cache_alert_raw: "This content was last unpublished at %publishedDateTime%. Some content URLs are cached for %maxRouteTtl%. So you may have to wait %waitSeconds% before the URLs show a 404 error."
     content:
         max_input_vars_raw: "You have reached the max_input_vars (%maxInputVars%). Please remove some fields to continue. <br/>If you need to increase this limit, please contact your provider."
         modules_modal:
@@ -79,7 +79,7 @@ admin_blocks:
             delete.button: "Delete"
         invalid_block_type_flash: "No block configuration found"
         success_flash: "The block has been updated"
-        success_ttl_flash: "The block has been updated. For performance reasons, the block is cached for %cacheTtl% seconds, so you may take a while to see the changes"
+        success_ttl_flash: "The block has been updated. For performance reasons, the block is cached for %cacheTtl%, so you may take a while to see the changes"
 
     delete:
         meta.title: "Delete block"
@@ -146,6 +146,7 @@ admin_routes:
             page.header: "Page"
             path.header: "URL"
             type.header: "Type"
+            cacheTtl.header: "TTL"
         filter_form:
             id.label: "Route"
             sites.label: "Sites"
@@ -162,7 +163,7 @@ admin_routes:
             label: "Paths"
             path.label: "Path"
             locale.label: "Locale"
-            cacheTtl.label: "Cache time"
+            cacheTtl.label: "Cache TTL"
         id.label: "Identifier"
         sites.label: "Sites"
         parent.label: "Parent route"
@@ -225,7 +226,7 @@ admin_menus:
             cancel.button: "Cancel"
         invalid_block_type_flash: "No menu configuration found"
         success_flash: "The menu has been updated"
-        success_ttl_flash: "The menu has been updated. For performance reasons, the menu is cached for %cacheTtl% seconds, so you may take a while to see the changes"
+        success_ttl_flash: "The menu has been updated. For performance reasons, the menu is cached for %cacheTtl%, so you may take a while to see the changes"
 
     form:
         name.label: "Name"

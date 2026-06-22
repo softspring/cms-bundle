@@ -39,7 +39,7 @@
                             </div>
                             {% if path.cacheTtl and not (contentCacheLastModifiedEnabled|default(false)) %}
                                 <div class="col-auto">
-                                    <span class="badge text-bg-secondary">TTL {{ path.cacheTtl }}</span>
+                                    <span class="badge text-bg-secondary">TTL {{ path.cacheTtl|sfs_cms_format_cache_ttl }}</span>
                                 </div>
                             {% endif %}
                             <div class="col-auto">

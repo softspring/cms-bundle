@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Twig\Extension;
 
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
+use Softspring\CmsBundle\Utils\CacheTtlFormatter;
 use Softspring\CmsBundle\Utils\HtmlValidator;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -21,6 +22,7 @@ class UtilsExtension extends AbstractExtension
         return [
             new TwigFilter('base64_encode', 'base64_encode'),
             new TwigFilter('base64_decode', 'base64_decode'),
+            new TwigFilter('sfs_cms_format_cache_ttl', $this->formatCacheTtl(...)),
         ];
     }
 
@@ -63,6 +65,11 @@ class UtilsExtension extends AbstractExtension
     </script>
 </div>
 AJAX;
+    }
+
+    public function formatCacheTtl(mixed $cacheTtl): ?string
+    {
+        return CacheTtlFormatter::format($cacheTtl);
     }
 
     public function checkContentLocalesAndRoutes(ContentInterface $content): array

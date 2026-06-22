@@ -20,7 +20,7 @@ class UtilsExtensionTest extends TestCase
     {
         $extension = new UtilsExtension($this->createMock(ContentManagerInterface::class));
 
-        self::assertSame(['base64_encode', 'base64_decode'], array_map(static fn (TwigFilter $filter): string => $filter->getName(), $extension->getFilters()));
+        self::assertSame(['base64_encode', 'base64_decode', 'sfs_cms_format_cache_ttl'], array_map(static fn (TwigFilter $filter): string => $filter->getName(), $extension->getFilters()));
 
         self::assertSame([
             'sfs_cms_check_content_locales_and_routes',
@@ -40,6 +40,20 @@ class UtilsExtensionTest extends TestCase
         self::assertStringContainsString('data-name="&quot;quoted&quot;"', $html);
         self::assertStringContainsString('data-href="/fragment"', $html);
         self::assertStringContainsString('fetch(ajaxDiv.getAttribute', $html);
+    }
+
+    public function testItFormatsCacheTtl(): void
+    {
+        $extension = new UtilsExtension($this->createMock(ContentManagerInterface::class));
+
+        self::assertNull($extension->formatCacheTtl(null));
+        self::assertNull($extension->formatCacheTtl(false));
+        self::assertSame('0s', $extension->formatCacheTtl(0));
+        self::assertSame('60s', $extension->formatCacheTtl(60));
+        self::assertSame('30m', $extension->formatCacheTtl(1800));
+        self::assertSame('2h', $extension->formatCacheTtl(7200));
+        self::assertSame('4d', $extension->formatCacheTtl(345600));
+        self::assertSame('30d', $extension->formatCacheTtl(2592000));
     }
 
     public function testItFindsMissingRouteLocales(): void

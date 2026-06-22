@@ -12,8 +12,8 @@ module_disabled_raw: "El módulo está desactivado en configuración y no se pue
 
 admin_content:
     read:
-        published_cache_alert_raw: "Este contenido fue publicado por última vez el %publishedDateTime%. Algunas URLs de contenido están cacheadas durante %maxRouteTtl% segundos.<br/>Por lo que puede que tengas que esperar %waitSeconds% segundos antes de que el nuevo contenido esté disponible."
-        unpublished_cache_alert_raw: "Este contenido fue despublicado por última vez el %publishedDateTime%. Algunas URLs de contenido están cacheadas durante %maxRouteTtl% segundos.<br/>Por lo que puede que tengas que esperar %waitSeconds% segundos antes de que las URLs muestren un error 404."
+        published_cache_alert_raw: "Este contenido fue publicado por última vez el %publishedDateTime%. Algunas URLs de contenido están cacheadas durante %maxRouteTtl%.<br/>Por lo que puede que tengas que esperar %waitSeconds% antes de que el nuevo contenido esté disponible."
+        unpublished_cache_alert_raw: "Este contenido fue despublicado por última vez el %publishedDateTime%. Algunas URLs de contenido están cacheadas durante %maxRouteTtl%.<br/>Por lo que puede que tengas que esperar %waitSeconds% antes de que las URLs muestren un error 404."
     content:
         max_input_vars_raw: "Has alcanzado el número máximo de campos soportados (%maxInputVars%). Por favor, elimina algunos módulos para continuar. <br/>Si es necesario incrementar este límite habla con tu proveedor."
         modules_modal:
@@ -79,7 +79,7 @@ admin_blocks:
             delete.button: "Eliminar"
         invalid_block_type_flash: "No se ha encontrado la configuración del bloque"
         success_flash: "El bloque se ha actualizado correctamente"
-        success_ttl_flash: "El bloque se ha actualizado. Por cuestiones de rendimiento, el bloque está cacheado durante %cacheTtl% segundos, por lo que puede que tardes en visualizar los cambios"
+        success_ttl_flash: "El bloque se ha actualizado. Por cuestiones de rendimiento, el bloque está cacheado durante %cacheTtl%, por lo que puede que tardes en visualizar los cambios"
 
     delete:
         meta.title: "Eliminar bloque"
@@ -146,6 +146,7 @@ admin_routes:
             page.header: "Página"
             path.header: "URL"
             type.header: "Tipo"
+            cacheTtl.header: "TTL"
         filter_form:
             id.label: "Ruta"
             sites.label: "Sites"
@@ -162,7 +163,7 @@ admin_routes:
             label: "Segmentos"
             path.label: "Segmento"
             locale.label: "Idioma"
-            cacheTtl.label: "Tiempo de cache"
+            cacheTtl.label: "TTL de cache"
         id.label: "Identificador"
         sites.label: "Sites"
         parent.label: "Ruta padre"
@@ -225,7 +226,7 @@ admin_menus:
             cancel.button: "Cancelar"
         invalid_block_type_flash: "No menu configuration found"
         success_flash: "El menú se ha actualizado correctamente"
-        success_ttl_flash: "El menú se ha actualizado. Por cuestiones de rendimiento, el menú está cacheado durante %cacheTtl% segundos, por lo que puede que tardes en visualizar los cambios"
+        success_ttl_flash: "El menú se ha actualizado. Por cuestiones de rendimiento, el menú está cacheado durante %cacheTtl%, por lo que puede que tardes en visualizar los cambios"
 
     form:
         name.label: "Nombre"
