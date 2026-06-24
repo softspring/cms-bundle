@@ -3,7 +3,6 @@
 namespace Softspring\CmsBundle\Test\Unit\Config\Sitemap;
 
 use PHPUnit\Framework\TestCase;
-use Softspring\CmsBundle\Model\Site;
 use Softspring\CmsBundle\Sitemap\Index;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 

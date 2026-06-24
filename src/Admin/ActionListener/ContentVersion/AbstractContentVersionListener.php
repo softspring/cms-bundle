@@ -6,7 +6,6 @@ use Softspring\CmsBundle\Admin\ActionListener\ContentGetOptionTrait;
 use Softspring\CmsBundle\Admin\ActionListener\ContentInitializeEventTrait;
 use Softspring\CmsBundle\Admin\ActionListener\ContentRedirectBackTrait;
 use Softspring\CmsBundle\Admin\ActionListener\ExceptionMessageTrait;
-use Softspring\CmsBundle\Compiler\CompileExceptionDetailsInterface;
 use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;

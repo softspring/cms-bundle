@@ -2,7 +2,6 @@
 
 namespace Softspring\CmsBundle\Routing;
 
-use Doctrine\Persistence\Proxy;
 use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;

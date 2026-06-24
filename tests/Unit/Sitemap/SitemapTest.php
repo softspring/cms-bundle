@@ -2,17 +2,7 @@
 
 namespace Softspring\CmsBundle\Test\Unit\Config\Sitemap;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Softspring\CmsBundle\Entity\ContentVersion;
-use Softspring\CmsBundle\Entity\Page;
-use Softspring\CmsBundle\Entity\Route;
-use Softspring\CmsBundle\Entity\RoutePath;
-use Softspring\CmsBundle\Model\Site;
-use Softspring\CmsBundle\Routing\UrlGenerator;
-use Softspring\CmsBundle\Sitemap\InvalidSitemapException;
 use Softspring\CmsBundle\Sitemap\Sitemap;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 

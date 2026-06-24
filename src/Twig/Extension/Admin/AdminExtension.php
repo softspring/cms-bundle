@@ -8,7 +8,6 @@ use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsSectionsPlugin\Manager\SectionManagerInterface;
-use Softspring\CmsSectionsPlugin\Model\SectionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;

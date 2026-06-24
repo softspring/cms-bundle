@@ -3,6 +3,8 @@
 namespace Softspring\CmsBundle\Render;
 
 use Exception;
+use ReflectionException;
+use ReflectionMethod;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\InvalidBlockException;
 use Softspring\CmsBundle\Model\BlockInterface;
@@ -97,11 +99,7 @@ class BlockRenderer
             }
         }
 
-        if (class_exists(StringLoaderExtension::class)) {
-            $template = StringLoaderExtension::templateFromString($this->twig, $twigCode);
-        } else {
-            $template = twig_template_from_string($this->twig, $twigCode);
-        }
+        $template = $this->createTemplateFromString($twigCode);
 
         if ($this->profilerEnabled) {
             $this->profilerDebugCollectorData[] = [
@@ -151,7 +149,7 @@ class BlockRenderer
             $urlFunction = 'url';
         }
 
-        $render_function_attrs = [] === $renderFunctionAttrs ? 'null' : ', '.('{'.Parser::arrayToParamsString($renderFunctionAttrs).'}');
+        $render_function_attrs = [] === $renderFunctionAttrs ? '' : ', '.('{'.Parser::arrayToParamsString($renderFunctionAttrs).'}');
 
         if (!empty($blockConfig['render_url'])) {
             if ($blockConfig['esi'] && !$forceEsiRender) {
@@ -167,11 +165,7 @@ class BlockRenderer
             $twigCode = "{{ $renderFunction(controller('Softspring\\\\CmsBundle\\\\Controller\\\\BlockController::renderById', $params_string) $render_function_attrs) }}";
         }
 
-        if (class_exists(StringLoaderExtension::class)) {
-            $template = StringLoaderExtension::templateFromString($this->twig, $twigCode);
-        } else {
-            $template = twig_template_from_string($this->twig, $twigCode);
-        }
+        $template = $this->createTemplateFromString($twigCode);
 
         if ($this->profilerEnabled) {
             $this->profilerDebugCollectorData[] = [
@@ -191,6 +185,15 @@ class BlockRenderer
     public function getDebugCollectorData(): array
     {
         return $this->profilerDebugCollectorData;
+    }
+
+    protected function createTemplateFromString(string $twigCode): mixed
+    {
+        try {
+            return (new ReflectionMethod(StringLoaderExtension::class, 'templateFromString'))->invoke(null, $this->twig, $twigCode);
+        } catch (ReflectionException) {
+            return twig_template_from_string($this->twig, $twigCode);
+        }
     }
 
     protected function mergeCurrentRequestQueryParams(array $params): array
