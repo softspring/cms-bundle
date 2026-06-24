@@ -220,6 +220,7 @@ abstract class ModuleTestCase extends TypeTestCase
         $twig = new Environment($templateLoader, [
             'strict_variables' => true,
         ]);
+        $twig->addGlobal('app', ['request' => $request]);
         $twig->addFilter(new TwigFilter('sfs_cms_trans', $this->translate(...), ['is_safe' => ['html']]));
         $twig->addFilter(new TwigFilter('sfs_media_render', $this->renderMedia(...), ['is_safe' => ['html']]));
         $twig->addFilter(new TwigFilter('sfs_media_render_image', $this->renderMedia(...), ['is_safe' => ['html']]));
