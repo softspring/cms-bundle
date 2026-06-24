@@ -221,7 +221,17 @@ abstract class ModuleTestCase extends TypeTestCase
             'strict_variables' => true,
         ]);
         $twig->addFilter(new TwigFilter('sfs_cms_trans', $this->translate(...), ['is_safe' => ['html']]));
+        $twig->addFilter(new TwigFilter('sfs_media_render', $this->renderMedia(...), ['is_safe' => ['html']]));
+        $twig->addFilter(new TwigFilter('sfs_media_render_image', $this->renderMedia(...), ['is_safe' => ['html']]));
+        $twig->addFilter(new TwigFilter('sfs_media_render_picture', $this->renderMedia(...), ['is_safe' => ['html']]));
+        $twig->addFilter(new TwigFilter('sfs_media_render_video', $this->renderMedia(...), ['is_safe' => ['html']]));
+        $twig->addFilter(new TwigFilter('sfs_media_render_video_set', $this->renderMedia(...), ['is_safe' => ['html']]));
         $twig->addFunction(new TwigFunction('sfs_cms_link_attr', $this->generateLinkAttributes(...), ['is_safe' => ['html']]));
+        $twig->addFunction(new TwigFunction('sfs_media_render', $this->renderMedia(...), ['is_safe' => ['html']]));
+        $twig->addFunction(new TwigFunction('sfs_media_render_image', $this->renderMedia(...), ['is_safe' => ['html']]));
+        $twig->addFunction(new TwigFunction('sfs_media_render_picture', $this->renderMedia(...), ['is_safe' => ['html']]));
+        $twig->addFunction(new TwigFunction('sfs_media_render_video', $this->renderMedia(...), ['is_safe' => ['html']]));
+        $twig->addFunction(new TwigFunction('sfs_media_render_video_set', $this->renderMedia(...), ['is_safe' => ['html']]));
 
         $moduleRenderer = new ModuleRenderer($cmsConfig, $requestStack, $twig, null);
 
@@ -257,6 +267,33 @@ abstract class ModuleTestCase extends TypeTestCase
         }
 
         return $translatableText[$this->defaultLocale] ?? '';
+    }
+
+    protected function renderMedia(mixed $media, ?string $version = null, array $attributes = []): string
+    {
+        if (empty($media)) {
+            return '';
+        }
+
+        $mediaId = is_scalar($media) ? (string) $media : 'media';
+
+        $renderedAttributes = [
+            'data-media' => $mediaId,
+        ];
+
+        if ($version) {
+            $renderedAttributes['data-version'] = $version;
+        }
+
+        if (isset($attributes['class']) && is_string($attributes['class'])) {
+            $renderedAttributes['class'] = $attributes['class'];
+        }
+
+        return sprintf('<span %s></span>', implode(' ', array_map(
+            static fn (string $name, string $value): string => sprintf('%s="%s"', $name, htmlentities($value)),
+            array_keys($renderedAttributes),
+            $renderedAttributes,
+        )));
     }
 
     protected function generateLinkAttributes(array $linkData): string
