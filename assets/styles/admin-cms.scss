@@ -218,8 +218,13 @@ body {
 }
 
 [data-collection=collection] {
-    padding: 45px 0 0 0;
     min-height: 50px;
+}
+
+.cms-module-edit {
+    [data-collection=collection] {
+        padding: 45px 0 0 0;
+    }
 }
 
 .cms-indexing-card {
@@ -485,6 +490,7 @@ body {
 
     .content-escape {
         word-break: break-word;
+        text-wrap: auto;
     }
 
     .textarea-lg {
