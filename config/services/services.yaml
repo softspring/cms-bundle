@@ -72,6 +72,9 @@ services:
     Softspring\CmsBundle\Manager\:
         resource: '../../src/Manager/*'
 
+    Softspring\CmsBundle\Serialization\:
+        resource: '../../src/Serialization/*'
+
     Softspring\CmsBundle\Routing\:
         resource: '../../src/Routing/*'
 

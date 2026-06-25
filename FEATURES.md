@@ -23,6 +23,7 @@ This package provides the core CMS model, configuration loader, administration U
 - Block management for reusable static or dynamic content fragments.
 - Menu management and menu rendering helpers.
 - Admin controllers, templates, forms, and menu providers for CMS back-office screens.
+- Shared serializers for CMS configuration, sites, published content, menus and media images.
 - Twig namespaces and CMS collection loading for default, package, and project-level overrides.
 - Doctrine mappings, migrations, entity managers, entity transformers, and target entity resolution.
 - Request integration through value resolvers and legacy ParamConverter support when available.
@@ -48,6 +49,7 @@ Later collections override earlier definitions with the same element identifier.
 - Add custom content types backed by project entities.
 - Add custom module form types, edit templates, form templates, and render templates.
 - Register CMS plugins using the plugin infrastructure.
+- Reuse `Softspring\CmsBundle\Serialization` serializers from MCP tools, API integrations, CLI commands and assistant features.
 - Override Twig templates through Symfony template resolution and configured CMS namespaces.
 
 ## Current Limits
