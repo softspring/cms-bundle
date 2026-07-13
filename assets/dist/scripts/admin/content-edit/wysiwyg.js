@@ -100,6 +100,7 @@ function _createWysiwygTinyMCE(element) {
         toolbar: toolbar,
         valid_elements: validElements,
         valid_styles: validStyles,
+        license_key: 'gpl',
         setup: (editor) => {
             editor.on('change', () => {
                 contentEditableUpdateInputsFromElement(element);

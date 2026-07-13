@@ -62,7 +62,7 @@ class ContentVersionRenderer implements ContentVersionRendererInterface
             } catch (Exception $e) {
                 throw new RenderException(sprintf('Error rendering content version v%s', $version->getVersionNumber()), 0, $e);
             }
-        });
+        }, true);
     }
 
     /**
