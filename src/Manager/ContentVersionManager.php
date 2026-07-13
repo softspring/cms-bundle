@@ -66,6 +66,16 @@ class ContentVersionManager implements ContentVersionManagerInterface
      */
     public function getCompiledContent(ContentVersionInterface $contentVersion, Request $request, bool $throwExceptionOnCompileErrorAndNoContent = true): CompiledDataInterface
     {
+        if ($request->query->count() > 0) {
+            $compiledData = $this->contentCompiler->compileRequest($contentVersion, $request, null, false);
+
+            if ($throwExceptionOnCompileErrorAndNoContent && $compiledData->hasErrors() && !$compiledData->getDataPart('content')) {
+                throw new CompileException('Compilation error occurred');
+            }
+
+            return $compiledData;
+        }
+
         $compiledKey = $this->compiledDataManager->getCompileKeyFromRequest($contentVersion, $request);
 
         /** @var ?CompiledDataInterface $compiledData */

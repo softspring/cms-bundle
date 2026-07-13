@@ -51,7 +51,7 @@ class ContentVersionCompiler extends AbstractVersionCompiler
     /**
      * @throws CompileException
      */
-    public function compileRequest(VersionInterface $version, Request $request, ?CompiledDataInterface $preCompiledData = null): CompiledDataInterface
+    public function compileRequest(VersionInterface $version, Request $request, ?CompiledDataInterface $preCompiledData = null, bool $saveCompiled = true): CompiledDataInterface
     {
         if (!$version instanceof ContentVersionInterface) {
             throw new CompileException('Version must be an instance of ContentVersionInterface');
@@ -62,7 +62,7 @@ class ContentVersionCompiler extends AbstractVersionCompiler
         $compiledData->setVersion($version);
 
         try {
-            if ($this->cmsHelper->compile()->contentSaveCompiled($version)) {
+            if ($saveCompiled && $this->cmsHelper->compile()->contentSaveCompiled($version)) {
                 $version->addCompiled($compiledData);
             }
 

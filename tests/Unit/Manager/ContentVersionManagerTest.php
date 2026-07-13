@@ -7,11 +7,13 @@ namespace Softspring\CmsBundle\Test\Unit\Manager;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Softspring\CmsBundle\Compiler\ContentVersionCompiler;
+use Softspring\CmsBundle\Entity\CompiledData;
 use Softspring\CmsBundle\Entity\ContentVersion;
 use Softspring\CmsBundle\Entity\Site;
 use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Manager\CompiledDataManagerInterface;
 use Softspring\CmsBundle\Manager\ContentVersionManager;
+use Symfony\Component\HttpFoundation\Request;
 
 class ContentVersionManagerTest extends TestCase
 {
@@ -122,13 +124,34 @@ class ContentVersionManagerTest extends TestCase
         ], $version->getData());
     }
 
-    private function createManager(): ContentVersionManager
+    public function testGetCompiledContentDoesNotSaveQueryDependentCompiledData(): void
+    {
+        $version = new ContentVersion();
+        $compiledData = new CompiledData();
+        $compiledData->setDataPart('content', '<html>Page 3</html>');
+
+        $contentCompiler = $this->createMock(ContentVersionCompiler::class);
+        $contentCompiler->expects(self::once())
+            ->method('compileRequest')
+            ->with($version, self::isInstanceOf(Request::class), null, false)
+            ->willReturn($compiledData);
+
+        $compiledDataManager = $this->createMock(CompiledDataManagerInterface::class);
+        $compiledDataManager->expects(self::never())->method('getRepository');
+
+        $manager = $this->createManager($contentCompiler, $compiledDataManager);
+
+        self::assertSame($compiledData, $manager->getCompiledContent($version, Request::create('/blog?page=3')));
+        self::assertCount(0, $version->getCompiled());
+    }
+
+    private function createManager(?ContentVersionCompiler $contentCompiler = null, ?CompiledDataManagerInterface $compiledDataManager = null): ContentVersionManager
     {
         return new ContentVersionManager(
             $this->createStub(EntityManagerInterface::class),
             $this->createStub(CmsHelper::class),
-            $this->createStub(ContentVersionCompiler::class),
-            $this->createStub(CompiledDataManagerInterface::class),
+            $contentCompiler ?? $this->createStub(ContentVersionCompiler::class),
+            $compiledDataManager ?? $this->createStub(CompiledDataManagerInterface::class),
             true
         );
     }
