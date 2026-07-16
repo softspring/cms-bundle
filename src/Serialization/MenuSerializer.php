@@ -24,7 +24,7 @@ class MenuSerializer
             'data' => $menu->getData(),
             'items' => array_map(
                 fn (MenuItemInterface $item): array => $this->item($item),
-                $menu->getItems()?->filter(static fn (MenuItemInterface $item): bool => null === $item->getParent())->toArray() ?? [],
+                $menu->getItems()?->filter(static fn (MenuItemInterface $item): bool => !$item->getParent() instanceof MenuItemInterface)->toArray() ?? [],
             ),
         ];
     }

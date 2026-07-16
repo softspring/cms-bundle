@@ -7,7 +7,6 @@ namespace Softspring\CmsBundle\Serialization;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
-use Softspring\CmsBundle\Model\RoutePathInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
 
 use const DATE_ATOM;
@@ -72,10 +71,6 @@ class PublishedContentSerializer
         $paths = [];
 
         foreach ($route->getPaths() as $path) {
-            if (!$path instanceof RoutePathInterface) {
-                continue;
-            }
-
             if ($locale && $path->getLocale() !== $locale) {
                 continue;
             }

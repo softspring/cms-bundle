@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace Softspring\CmsBundle\Test\Unit\Serialization;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Softspring\CmsBundle\Model\MenuInterface;
 use Softspring\CmsBundle\Model\MenuItemInterface;
 use Softspring\CmsBundle\Serialization\MenuSerializer;
 
-#[AllowMockObjectsWithoutExpectations]
 class MenuSerializerTest extends TestCase
 {
     public function testItSerializesMenuSummaryAndNestedItems(): void

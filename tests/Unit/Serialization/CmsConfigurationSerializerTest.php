@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Softspring\CmsBundle\Test\Unit\Serialization;
 
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Model\SiteInterface;
@@ -12,7 +11,6 @@ use Softspring\CmsBundle\Serialization\CmsConfigurationSerializer;
 use Softspring\CmsBundle\Serialization\SensitiveValueSanitizer;
 use Softspring\CmsBundle\Serialization\SiteSerializer;
 
-#[AllowMockObjectsWithoutExpectations]
 class CmsConfigurationSerializerTest extends TestCase
 {
     public function testItSerializesCounts(): void

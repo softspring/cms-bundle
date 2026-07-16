@@ -32,9 +32,6 @@ interface ContentInterface extends VersionableInterface, TranslatableConfigInter
 
     public function removeSite(SiteInterface $site): void;
 
-    /**
-     * @return RouteInterface[]|Collection
-     */
     public function getRoutes(): Collection;
 
     public function addRoute(RouteInterface $route): void;
