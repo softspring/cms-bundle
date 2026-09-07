@@ -216,7 +216,11 @@ class UrlMatcher
                     return $this->generateRedirect($route->getRedirectUrl(), $route->getRedirectType() ?? Response::HTTP_FOUND);
 
                 case RouteInterface::TYPE_REDIRECT_TO_ROUTE:
-                    return $this->generateRedirectToRoute($route->getSymfonyRoute(), $route->getRedirectType() ?? Response::HTTP_FOUND);
+                    return $this->generateRedirectToRoute(
+                        $route->getSymfonyRoute(),
+                        $route->getRedirectType() ?? Response::HTTP_FOUND,
+                        $attributes['_sfs_cms_locale'] ?? null,
+                    );
 
                 default:
                     throw new Exception(sprintf('Route type %u not yet implemented', $route->getType()));
@@ -240,14 +244,20 @@ class UrlMatcher
         ];
     }
 
-    protected function generateRedirectToRoute(array $route, int $statusCode): array
+    protected function generateRedirectToRoute(array $route, int $statusCode, ?string $locale = null): array
     {
-        return [
+        $attributes = [
             '_controller' => 'Softspring\CmsBundle\Controller\RedirectController::redirection',
             'route' => $route['route_name'],
             'routeParams' => $route['route_params'],
             'statusCode' => $statusCode,
         ];
+
+        if ($locale) {
+            $attributes['_locale'] = $locale;
+        }
+
+        return $attributes;
     }
 
     protected function searchRoutePath(SiteInterface $site, string $path, ?string $locale = null): ?RoutePathInterface
