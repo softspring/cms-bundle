@@ -140,6 +140,32 @@ function _init() {
     let modulesCollection;
     let modulesCollectionInsertIndex;
     let insertElement;
+    let moduleSelectionLocked = false;
+    let modalPromise;
+
+    const closePrototypesModal = function () {
+        if (!prototypesModal) {
+            return;
+        }
+
+        modalPromise ??= import('bootstrap').then(({Modal}) => Modal.getOrCreateInstance(prototypesModal));
+        modalPromise.then((modal) => modal.hide()).catch(() => {
+            moduleSelectionLocked = false;
+        });
+    };
+
+    // A new module selection must wait until Bootstrap has completed hiding the
+    // previous modal. Otherwise its show/hide transitions can lose the target
+    // collection and the click never creates a collection node.
+    document.addEventListener('click', function (event) {
+        const thumbnail = event.target instanceof Element && event.target.closest('#module_prototypes_collection_modal [data-collection-action=insert]');
+        if (!thumbnail || !moduleSelectionLocked) {
+            return;
+        }
+
+        event.preventDefault();
+        event.stopImmediatePropagation();
+    }, true);
 
     prototypesModal && prototypesModal.addEventListener('show.bs.modal', function (event) {
         insertElement = event.relatedTarget;
@@ -183,10 +209,14 @@ function _init() {
         // insertElement.classList.remove('selected');
     });
 
+    prototypesModal && prototypesModal.addEventListener('hidden.bs.modal', function () {
+        moduleSelectionLocked = false;
+    });
+
     /**
      * @param {CollectionEvent} event
      */
-    document.addEventListener("collection.node.insert.before", async function (event) {
+    document.addEventListener("collection.node.insert.before", function (event) {
         if (modulesCollection) {
             event.collection(modulesCollection);
             event.position(modulesCollectionInsertIndex !== null ? modulesCollectionInsertIndex : getCollectionLastIndex(modulesCollection) + 1);
@@ -215,15 +245,14 @@ function _init() {
         modulesCollection = null;
         modulesCollectionInsertIndex = null;
 
-        const {Modal} = await import('bootstrap');
-        const modal = Modal.getInstance(prototypesModal);
-        modal && modal.hide();
+        moduleSelectionLocked = true;
+        closePrototypesModal();
     });
 
     /**
      * @param {CollectionEvent} event
      */
-    document.addEventListener("collection.node.paste.before", async function (event) {
+    document.addEventListener("collection.node.paste.before", function (event) {
         if (modulesCollection) {
             event.collection(modulesCollection);
             event.position(modulesCollectionInsertIndex !== null ? modulesCollectionInsertIndex : getCollectionLastIndex(modulesCollection) + 1);
@@ -252,15 +281,14 @@ function _init() {
         modulesCollection = null;
         modulesCollectionInsertIndex = null;
 
-        const {Modal} = await import('bootstrap');
-        const modal = Modal.getInstance(prototypesModal);
-        modal && modal.hide();
+        moduleSelectionLocked = true;
+        closePrototypesModal();
     });
 
     /**
      * @param {CollectionEvent} event
      */
-    document.addEventListener("collection.node.insert.after", async function (event) {
+    document.addEventListener("collection.node.insert.after", function (event) {
         if (!event.collection() || !event.node() || event.collection().dataset.moduleRowClass === undefined) {
             return;
         }
@@ -277,9 +305,7 @@ function _init() {
             up.classList.add('bi-chevron-left');
         }
 
-        const {Modal} = await import('bootstrap');
-        const modal = Modal.getInstance(prototypesModal);
-        modal && modal.hide();
+        closePrototypesModal();
 
         moduleFocus(event.node().querySelector('.cms-module'));
 
