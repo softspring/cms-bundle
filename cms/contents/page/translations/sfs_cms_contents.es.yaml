@@ -263,6 +263,7 @@ admin_page:
             publishedAt.header: "Publicada"
         filter_form:
             name.label: "Nombre"
+            path.label: "Ruta"
             sites.label: "Sitios"
             status.label: "Estado"
             publishedVersionContent.label: "Contenido publicado (distingue mayúsculas y minúsculas)"
