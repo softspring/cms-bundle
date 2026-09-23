@@ -3,7 +3,6 @@
 namespace Softspring\CmsBundle\Routing;
 
 use Doctrine\DBAL\Exception\TableNotFoundException;
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Softspring\CmsBundle\Exception\NotYetImplementedException;
@@ -278,7 +277,10 @@ class UrlMatcher
                 $qb->setParameter('locale', $locale);
             }
 
-            return $qb->getQuery()->setCacheable(true)->setResultCacheLifetime(60)->getResult(AbstractQuery::HYDRATE_OBJECT)[0] ?? null;
+            // Routes can be deleted through the CMS while their content is published.
+            // A cached hydrated RoutePath keeps a proxy to the deleted content and turns
+            // the expected 404 into an EntityNotFoundException (HTTP 500).
+            return $qb->getQuery()->getResult()[0] ?? null;
         } catch (TableNotFoundException $e) {
             // prevent error before creating database schema
             return null;
