@@ -21,7 +21,7 @@ trait ExceptionMessageTrait
         }
 
         if ($exception instanceof RenderErrorException) {
-            $messages = array_merge($messages, [
+            return array_merge($messages, [
                 '<ul>'.implode('', array_map(function (string $error): string {
                     return sprintf('<li>%s</li>', $error);
                 }, $exception->getRenderErrorList()->getErrorsAsString())).'</ul>',

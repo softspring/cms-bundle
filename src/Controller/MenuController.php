@@ -34,7 +34,9 @@ class MenuController extends AbstractController
             $menu = $this->menuManager->getRepository()->findOneByType($type);
 
             if (!$menu) {
-                $this->cmsLogger && $this->cmsLogger->error(sprintf('CMS missing menu %s', $type));
+                if ($this->cmsLogger instanceof LoggerInterface) {
+                    $this->cmsLogger->error(sprintf('CMS missing menu %s', $type));
+                }
 
                 return new Response();
             }
@@ -50,7 +52,9 @@ class MenuController extends AbstractController
 
             return $response;
         } catch (Exception $e) {
-            $this->cmsLogger && $this->cmsLogger->critical(sprintf('Error rendering menu %s: %s', $type, $e->getMessage()));
+            if ($this->cmsLogger instanceof LoggerInterface) {
+                $this->cmsLogger->critical(sprintf('Error rendering menu %s: %s', $type, $e->getMessage()));
+            }
 
             return new Response('<!-- error rendering menu, see logs -->');
         }

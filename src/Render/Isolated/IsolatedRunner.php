@@ -65,7 +65,9 @@ class IsolatedRunner
     public function isolateRequestRender(IsolatedRequest|Request $request, callable $renderFunction, bool $resetEntrypoints = false): mixed
     {
         if ($resetEntrypoints) {
-            $this->entrypointLookup && $this->entrypointLookup->reset();
+            if ($this->entrypointLookup instanceof EntrypointLookupInterface) {
+                $this->entrypointLookup->reset();
+            }
         }
 
         // inject the current request into the request stack

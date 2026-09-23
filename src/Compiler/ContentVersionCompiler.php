@@ -39,7 +39,9 @@ class ContentVersionCompiler extends AbstractVersionCompiler
 
         foreach ($version->getContent()->getSites() as $site) {
             foreach ($version->getContent()->getLocales() ?? [] as $locale) {
-                $this->cmsLogger && $this->cmsLogger->debug(sprintf('Compiling "%s" content version for "%s" in "%s"', $version->getContent()->getName(), "$site", $locale));
+                if ($this->cmsLogger instanceof LoggerInterface) {
+                    $this->cmsLogger->debug(sprintf('Compiling "%s" content version for "%s" in "%s"', $version->getContent()->getName(), "$site", $locale));
+                }
                 $request = IsolatedRequest::createIsolatedForContentRoute($version->getContent(), $locale, $site);
                 $compiledDatas[] = $this->compileRequest($version, $request);
             }

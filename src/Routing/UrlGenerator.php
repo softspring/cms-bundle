@@ -6,6 +6,7 @@ use Exception;
 use Psr\Log\LoggerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Manager\RouteManagerInterface;
+use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Model\RoutePathInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
@@ -47,7 +48,7 @@ class UrlGenerator
             return '#';
         }
 
-        if ($route->getContent() && !$route->getContent()->getPublishedVersion()) {
+        if ($route->getContent() instanceof ContentInterface && !$route->getContent()->getPublishedVersion()) {
             return '#not-published';
         }
 
@@ -75,7 +76,7 @@ class UrlGenerator
             return '#';
         }
 
-        if ($route->getContent() && !$route->getContent()->getPublishedVersion()) {
+        if ($route->getContent() instanceof ContentInterface && !$route->getContent()->getPublishedVersion()) {
             return '#';
         }
 
@@ -147,7 +148,9 @@ class UrlGenerator
     protected function getRoute($routeName, bool $silence = false): ?RouteInterface
     {
         if (!$routeName) {
-            $this->cmsLogger && $this->cmsLogger->warning('Empty route');
+            if ($this->cmsLogger instanceof LoggerInterface) {
+                $this->cmsLogger->warning('Empty route');
+            }
 
             return null;
         }
@@ -155,7 +158,9 @@ class UrlGenerator
         $route = $this->routeManager->getRepository()->findOneById($routeName);
 
         if (!$route && !$silence) {
-            $this->cmsLogger && $this->cmsLogger->warning(sprintf('Route %s not found', $routeName));
+            if ($this->cmsLogger instanceof LoggerInterface) {
+                $this->cmsLogger->warning(sprintf('Route %s not found', $routeName));
+            }
         }
 
         return $route;
@@ -165,7 +170,7 @@ class UrlGenerator
     {
         $request = $this->requestStack->getCurrentRequest();
 
-        return $request && $request->attributes->has('_cms_preview');
+        return $request instanceof Request && $request->attributes->has('_cms_preview');
     }
 
     protected function getSiteSchemeAndHost(?SiteInterface $site, ?string $locale): string
@@ -250,7 +255,7 @@ class UrlGenerator
             return $site;
         }
 
-        if ($request && $request->attributes->has('_sfs_cms_site')) {
+        if ($request instanceof Request && $request->attributes->has('_sfs_cms_site')) {
             return $request->attributes->get('_sfs_cms_site');
         }
 

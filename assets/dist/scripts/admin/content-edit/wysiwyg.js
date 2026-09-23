@@ -109,7 +109,6 @@ function _createWysiwygTinyMCE(element) {
         min_height: 30,
     });
 }
-
 /**
  * Create a wysiwyg editor
  * @param {HTMLElement} element
