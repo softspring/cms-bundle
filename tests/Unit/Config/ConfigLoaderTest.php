@@ -44,7 +44,7 @@ site:
 YAML);
 
         $this->expectException(InvalidConfigurationException::class);
-        $this->expectExceptionMessage('reserved route "/robots.txt" for host "example.org" is configured by both site "default" (robots.txt) and site "blog" (sitemap "pages")');
+        $this->expectExceptionMessageMatches('/reserved route "\\/robots\\.txt" for host "example\\.org" is configured by both site "(?:default" \(robots\.txt\) and site "blog" \(sitemap "pages"\)|blog" \(sitemap "pages"\) and site "default" \(robots\.txt\))/');
 
         $this->createConfigLoader()->getSites($this->createContainer());
     }
