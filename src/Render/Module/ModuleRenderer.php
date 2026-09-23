@@ -37,7 +37,9 @@ class ModuleRenderer
     {
         try {
             if ($this->skipModuleRenderBySiteFilter($moduleData)) {
-                $this->cmsLogger && $this->cmsLogger->debug(sprintf('Skipping %s module render by site', $moduleData['_module']));
+                if ($this->cmsLogger instanceof LoggerInterface) {
+                    $this->cmsLogger->debug(sprintf('Skipping %s module render by site', $moduleData['_module']));
+                }
 
                 return self::SITE_HIDDEN_MODULE."\n";
             }
@@ -46,19 +48,25 @@ class ModuleRenderer
         }
 
         if ($this->skipModuleRenderByLocaleFilter($moduleData)) {
-            $this->cmsLogger && $this->cmsLogger->debug(sprintf('Skipping %s module render by locale', $moduleData['_module']));
+            if ($this->cmsLogger instanceof LoggerInterface) {
+                $this->cmsLogger->debug(sprintf('Skipping %s module render by locale', $moduleData['_module']));
+            }
 
             return self::LOCALE_HIDDEN_MODULE."\n";
         }
 
-        $this->cmsLogger && $this->cmsLogger->debug(sprintf('Rendering %s module', $moduleData['_module']));
+        if ($this->cmsLogger instanceof LoggerInterface) {
+            $this->cmsLogger->debug(sprintf('Rendering %s module', $moduleData['_module']));
+        }
 
         try {
             $moduleConfig = $this->cmsConfig->getModule($moduleData['_module']);
         } catch (InvalidModuleException $e) {
             throw new ModuleRenderException($moduleData, $e);
         } catch (DisabledModuleException) {
-            $this->cmsLogger && $this->cmsLogger->warning(sprintf('Module %s is disabled, but it is rendered.', $moduleData['_module']));
+            if ($this->cmsLogger instanceof LoggerInterface) {
+                $this->cmsLogger->warning(sprintf('Module %s is disabled, but it is rendered.', $moduleData['_module']));
+            }
 
             return self::DISABLED_HIDDEN_MODULE."\n";
         }
@@ -67,7 +75,9 @@ class ModuleRenderer
         $moduleDataFields = array_keys($moduleData);
 
         if (array_intersect($twigAdditionalContextFields, $moduleDataFields)) {
-            $this->cmsLogger && $this->cmsLogger->warning(sprintf('Module %s data fields (%s) are overlapping with reserved context fields (%s). Reserved context fields will override module data fields.', $moduleData['_module'], implode(', ', $moduleDataFields), implode(', ', $twigAdditionalContextFields)));
+            if ($this->cmsLogger instanceof LoggerInterface) {
+                $this->cmsLogger->warning(sprintf('Module %s data fields (%s) are overlapping with reserved context fields (%s). Reserved context fields will override module data fields.', $moduleData['_module'], implode(', ', $moduleDataFields), implode(', ', $twigAdditionalContextFields)));
+            }
         }
 
         $moduleData = DataMigrator::migrate($moduleConfig['revision_migration_scripts'], $moduleData, $moduleConfig['revision']);
@@ -139,20 +149,30 @@ class ModuleRenderer
             'modules' => [],
         ];
 
-        $renderErrorList && $renderErrorList->pushLocation('modules');
-        foreach ($module['modules'] as $i => $submodule) {
-            $renderErrorList && $renderErrorList->pushLocation($i);
-            $module['contents'][] = $this->render($submodule, $profilerDebugCollectorData[count($profilerDebugCollectorData) - 1]['modules'], $twigAdditionalContext, $renderErrorList);
-            $renderErrorList && $renderErrorList->popLocation();
+        if ($renderErrorList instanceof RenderErrorList) {
+            $renderErrorList->pushLocation('modules');
         }
-        $renderErrorList && $renderErrorList->popLocation();
+        foreach ($module['modules'] as $i => $submodule) {
+            if ($renderErrorList instanceof RenderErrorList) {
+                $renderErrorList->pushLocation($i);
+            }
+            $module['contents'][] = $this->render($submodule, $profilerDebugCollectorData[count($profilerDebugCollectorData) - 1]['modules'], $twigAdditionalContext, $renderErrorList);
+            if ($renderErrorList instanceof RenderErrorList) {
+                $renderErrorList->popLocation();
+            }
+        }
+        if ($renderErrorList instanceof RenderErrorList) {
+            $renderErrorList->popLocation();
+        }
 
         try {
             // return $this->isolatedRunner->isolateRequestRender()
 
             return $this->twig->render($moduleConfig['render_template'], $module);
         } catch (Exception $exception) {
-            $this->cmsLogger && $this->cmsLogger->error(sprintf('Error rendering %s template: %s', $moduleConfig['render_template'], $exception->getMessage()));
+            if ($this->cmsLogger instanceof LoggerInterface) {
+                $this->cmsLogger->error(sprintf('Error rendering %s template: %s', $moduleConfig['render_template'], $exception->getMessage()));
+            }
 
             if (!$renderErrorList instanceof RenderErrorList) {
                 throw new ModuleRenderException($module, $exception);
@@ -192,7 +212,9 @@ class ModuleRenderer
         try {
             return $this->twig->render($moduleConfig['render_template'], $twigContext);
         } catch (Exception $exception) {
-            $this->cmsLogger && $this->cmsLogger->error(sprintf('Error rendering %s template: %s %s', $moduleConfig['render_template'], $exception->getMessage(), $renderErrorList instanceof RenderErrorList ? $renderErrorList->currentLocation() : ''));
+            if ($this->cmsLogger instanceof LoggerInterface) {
+                $this->cmsLogger->error(sprintf('Error rendering %s template: %s %s', $moduleConfig['render_template'], $exception->getMessage(), $renderErrorList instanceof RenderErrorList ? $renderErrorList->currentLocation() : ''));
+            }
 
             if (!$renderErrorList instanceof RenderErrorList) {
                 throw new ModuleRenderException($moduleData, $exception);

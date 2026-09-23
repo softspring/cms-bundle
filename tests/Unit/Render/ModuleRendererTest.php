@@ -215,14 +215,13 @@ class ModuleRendererTest extends TestCase
                     foreach ($data['contents'] as $submodule) {
                         $content .= $submodule ?? '';
                     }
-
                     return $content;
-                } elseif ('test_module.html.twig' === $template) {
+                }
+                if ('test_module.html.twig' === $template) {
                     // Simulate rendering of a simple module
                     return $data['content'] ?? '';
-                } else {
-                    throw new Exception("Unknown template: $template");
                 }
+                throw new Exception("Unknown template: $template");
             });
 
         $moduleRenderer = new ModuleRenderer($this->cmsConfig, $this->requestStack, $this->twig, null);

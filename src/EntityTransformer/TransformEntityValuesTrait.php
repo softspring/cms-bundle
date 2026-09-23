@@ -12,6 +12,10 @@ trait TransformEntityValuesTrait
 {
     protected function transformEntityValues($value, ObjectManager $objectManager, array &$entities = []): mixed
     {
+        if ($value instanceof Translation) {
+            return $value->__toArray();
+        }
+
         if (is_array($value) || is_iterable($value)) {
             foreach ($value as $key => $value2) {
                 $value[$key] = $this->transformEntityValues($value2, $objectManager, $entities);
@@ -23,8 +27,6 @@ trait TransformEntityValuesTrait
                     $entities[] = $route;
                 }
             }
-        } elseif ($value instanceof Translation) {
-            return $value->__toArray();
         } elseif (is_object($value)) {
             try {
                 $entities[] = $value;
@@ -52,7 +54,8 @@ trait TransformEntityValuesTrait
                 }
 
                 return $this->_references[$value['_entity_class']][$serializedId];
-            } elseif (isset($value['_trans_id']) && isset($value['_default']) && (isset($value[$value['_default']]) && is_string($value[$value['_default']]) || is_null($value[$value['_default']] ?? null))) {
+            }
+            if (isset($value['_trans_id']) && isset($value['_default']) && (isset($value[$value['_default']]) && is_string($value[$value['_default']]) || is_null($value[$value['_default']] ?? null))) {
                 // if we are sure that this is a translation, we can create a new Translation object
                 $value = Translation::createFromArray($value);
                 // iterate over translation values to untransform possible entities inside

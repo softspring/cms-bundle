@@ -38,7 +38,9 @@ class ContentVersionRenderer implements ContentVersionRendererInterface
     {
         return $this->isolatedRunner->isolateRequestRender($request, function (Request $request, Environment $twig, ModuleRenderer $moduleRenderer) use ($version, $renderErrorList, $compiledContainers): string {
             try {
-                $this->cmsLogger && $this->cmsLogger->debug(sprintf('Rendering %s content version', $version->getContent()->getName()));
+                if ($this->cmsLogger instanceof LoggerInterface) {
+                    $this->cmsLogger->debug(sprintf('Rendering %s content version', $version->getContent()->getName()));
+                }
 
                 // preload all medias
                 $version->getMedias();
@@ -83,24 +85,36 @@ class ContentVersionRenderer implements ContentVersionRendererInterface
                 $versionData = $version->getData();
 
                 $containers = [];
-                $renderErrorList && $renderErrorList->resetLocation();
-                $renderErrorList && $renderErrorList->pushLocation('data');
+                if ($renderErrorList instanceof RenderErrorList) {
+                    $renderErrorList->resetLocation();
+                }
+                if ($renderErrorList instanceof RenderErrorList) {
+                    $renderErrorList->pushLocation('data');
+                }
                 foreach ($layout['containers'] as $layoutContainerId => $layoutContainerConfig) {
                     $layoutContainer = $versionData ? $versionData[$layoutContainerId] ?? [] : [];
                     $containers[$layoutContainerId] = '';
 
-                    $renderErrorList && $renderErrorList->pushLocation($layoutContainerId);
+                    if ($renderErrorList instanceof RenderErrorList) {
+                        $renderErrorList->pushLocation($layoutContainerId);
+                    }
                     foreach ($layoutContainer as $i => $module) {
                         $this->profilerDebugCollectorData[$layoutContainerId] = [];
-                        $renderErrorList && $renderErrorList->pushLocation($i);
+                        if ($renderErrorList instanceof RenderErrorList) {
+                            $renderErrorList->pushLocation($i);
+                        }
                         $twigAdditionalContext = [
                             'version' => $version,
                             'content' => $version->getContent(),
                         ];
                         $containers[$layoutContainerId] .= $moduleRenderer->render($module, $this->profilerDebugCollectorData[$layoutContainerId], $twigAdditionalContext, $renderErrorList);
-                        $renderErrorList && $renderErrorList->popLocation();
+                        if ($renderErrorList instanceof RenderErrorList) {
+                            $renderErrorList->popLocation();
+                        }
                     }
-                    $renderErrorList && $renderErrorList->popLocation();
+                    if ($renderErrorList instanceof RenderErrorList) {
+                        $renderErrorList->popLocation();
+                    }
                 }
 
                 return $containers;

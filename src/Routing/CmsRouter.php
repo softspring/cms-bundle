@@ -110,7 +110,9 @@ class CmsRouter implements RouterInterface, RequestMatcherInterface, WarmableInt
             $attributes = $this->urlMatcher->matchRequest($request);
         } catch (Exception $e) {
             $attributes = [];
-            $this->logger && $this->logger->warning(sprintf('Caught exception in CmsRouter->matchRequest: %s', $e->getMessage()));
+            if ($this->logger instanceof LoggerInterface) {
+                $this->logger->warning(sprintf('Caught exception in CmsRouter->matchRequest: %s', $e->getMessage()));
+            }
         }
 
         if (isset($attributes['_controller'])) {

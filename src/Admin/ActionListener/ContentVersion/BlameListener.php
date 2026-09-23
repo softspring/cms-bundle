@@ -9,6 +9,7 @@ use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\Component\CrudlController\Event\ApplyEvent;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class BlameListener implements EventSubscriberInterface
 {
@@ -117,7 +118,7 @@ class BlameListener implements EventSubscriberInterface
 
     protected function canBlame(): bool
     {
-        return $this->security && $this->security->getUser();
+        return $this->security instanceof Security && $this->security->getUser() instanceof UserInterface;
     }
 
     protected function getUser(): array

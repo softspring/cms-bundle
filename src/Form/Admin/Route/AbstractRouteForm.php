@@ -73,7 +73,7 @@ abstract class AbstractRouteForm extends AbstractType
             'required' => false,
             'em' => $this->em,
             'choice_filter' => function (?RouteInterface $parent): bool {
-                return !$parent || RouteInterface::TYPE_PARENT_ROUTE == $parent->getType();
+                return !$parent instanceof RouteInterface || RouteInterface::TYPE_PARENT_ROUTE == $parent->getType();
             },
             'choice_label' => function (RouteInterface $parent) {
                 return $parent->getId();

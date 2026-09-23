@@ -54,7 +54,7 @@ class LayoutHelper
         $layout = $this->cmsConfig->getLayout($defaultLayout, false);
 
         if (!in_array($defaultLayout, $availableLayouts) || !$layout) {
-            $defaultLayout = $availableLayouts[0];
+            return $availableLayouts[0];
         }
 
         return $defaultLayout;
