@@ -10,6 +10,21 @@ use Doctrine\Migrations\AbstractMigration;
 
 final class Version20260506104327 extends AbstractMigration
 {
+    private const array MYSQL_FOREIGN_KEYS = [
+        'cms_compiled_data' => ['FK_30483E79D28591F7'],
+        'cms_content' => ['FK_A0293FB8A2C84DEF', 'FK_A0293FB8B5D68A8D'],
+        'cms_content_page' => ['FK_584BAC9FBF396750'],
+        'cms_content_sites' => ['FK_E792456484A0A3ED', 'FK_E7924564F6BD1646'],
+        'cms_content_version' => ['FK_C0E8E17F84A0A3ED'],
+        'cms_content_version_medias' => ['FK_423042FFD28591F7'],
+        'cms_content_version_routes' => ['FK_62372FCDD28591F7'],
+        'cms_content_version_sections' => ['FK_4491D9C7D28591F7'],
+        'cms_menu_item' => ['FK_1432B53D60272618', 'FK_1432B53DCCD7E912'],
+        'cms_route' => ['FK_2CB7BB5584A0A3ED'],
+        'cms_route_path_sites' => ['FK_D70A2920213F0BF3', 'FK_D70A2920F6BD1646'],
+        'cms_route_sites' => ['FK_BC9E2F19F6BD1646'],
+    ];
+
     public function getDescription(): string
     {
         return 'Normalize CMS column types for MySQL and PostgreSQL';
@@ -48,24 +63,11 @@ final class Version20260506104327 extends AbstractMigration
             return;
         }
 
-        $this->addSql('ALTER TABLE cms_compiled_data DROP FOREIGN KEY FK_30483E79D28591F7');
-        $this->addSql('ALTER TABLE cms_content DROP FOREIGN KEY FK_A0293FB8A2C84DEF');
-        $this->addSql('ALTER TABLE cms_content DROP FOREIGN KEY FK_A0293FB8B5D68A8D');
-        $this->addSql('ALTER TABLE cms_content_page DROP FOREIGN KEY FK_584BAC9FBF396750');
-        $this->addSql('ALTER TABLE cms_content_sites DROP FOREIGN KEY FK_E792456484A0A3ED');
-        $this->addSql('ALTER TABLE cms_content_version DROP FOREIGN KEY FK_C0E8E17F84A0A3ED');
-        $this->addSql('ALTER TABLE cms_content_version_medias DROP FOREIGN KEY FK_423042FFD28591F7');
-        $this->addSql('ALTER TABLE cms_content_version_routes DROP FOREIGN KEY FK_62372FCDD28591F7');
-        $this->addSql('ALTER TABLE cms_content_version_sections DROP FOREIGN KEY FK_4491D9C7D28591F7');
-        $this->addSql('ALTER TABLE cms_menu_item DROP FOREIGN KEY FK_1432B53D60272618');
-        $this->addSql('ALTER TABLE cms_menu_item DROP FOREIGN KEY FK_1432B53DCCD7E912');
-        $this->addSql('ALTER TABLE cms_route DROP FOREIGN KEY FK_2CB7BB5584A0A3ED');
-        $this->addSql('ALTER TABLE cms_route_path_sites DROP FOREIGN KEY FK_D70A2920213F0BF3');
+        $this->dropMysqlForeignKeys($schema);
         $this->addSql('ALTER TABLE cms_block CHANGE id id VARCHAR(36) NOT NULL');
         $this->addSql('ALTER TABLE cms_compiled_data CHANGE id id VARCHAR(36) NOT NULL');
         $this->addSql('ALTER TABLE cms_compiled_data CHANGE content_version_id content_version_id VARCHAR(36) DEFAULT NULL');
         $this->addSql('ALTER TABLE cms_content CHANGE id id VARCHAR(36) NOT NULL, CHANGE published_version_id published_version_id VARCHAR(36) DEFAULT NULL, CHANGE last_version_id last_version_id VARCHAR(36) DEFAULT NULL');
-        $this->addSql('ALTER TABLE cms_content_sites DROP FOREIGN KEY `FK_E7924564F6BD1646`');
         $this->addSql('ALTER TABLE cms_content_sites CHANGE content_id content_id VARCHAR(36) NOT NULL, CHANGE site_id site_id VARCHAR(36) NOT NULL');
         $this->addSql('ALTER TABLE cms_content_page CHANGE id id VARCHAR(36) NOT NULL');
         $this->addSql('ALTER TABLE cms_content_version CHANGE id id VARCHAR(36) NOT NULL, CHANGE content_id content_id VARCHAR(36) DEFAULT NULL');
@@ -75,10 +77,8 @@ final class Version20260506104327 extends AbstractMigration
         $this->addSql('ALTER TABLE cms_menu CHANGE id id VARCHAR(36) NOT NULL, CHANGE menu_type menu_type VARCHAR(30) NOT NULL');
         $this->addSql('ALTER TABLE cms_menu_item CHANGE id id VARCHAR(36) NOT NULL, CHANGE menu_id menu_id VARCHAR(36) DEFAULT NULL, CHANGE parent_item_id parent_item_id VARCHAR(36) DEFAULT NULL');
         $this->addSql('ALTER TABLE cms_route CHANGE content_id content_id VARCHAR(36) DEFAULT NULL');
-        $this->addSql('ALTER TABLE cms_route_sites DROP FOREIGN KEY `FK_BC9E2F19F6BD1646`');
         $this->addSql('ALTER TABLE cms_route_sites CHANGE site_id site_id VARCHAR(36) NOT NULL');
         $this->addSql('ALTER TABLE cms_route_path CHANGE id id VARCHAR(36) NOT NULL, CHANGE path path VARCHAR(100) NOT NULL, CHANGE locale locale VARCHAR(5) DEFAULT NULL, CHANGE compiled_path compiled_path VARCHAR(255) DEFAULT NULL');
-        $this->addSql('ALTER TABLE cms_route_path_sites DROP FOREIGN KEY `FK_D70A2920F6BD1646`');
         $this->addSql('ALTER TABLE cms_route_path_sites CHANGE route_path_id route_path_id VARCHAR(36) NOT NULL, CHANGE site_id site_id VARCHAR(36) NOT NULL');
         $this->addSql('ALTER TABLE cms_site CHANGE id id VARCHAR(36) NOT NULL');
         $this->addSql('ALTER TABLE cms_compiled_data ADD CONSTRAINT FK_30483E79D28591F7 FOREIGN KEY (content_version_id) REFERENCES cms_content_version (id) ON DELETE CASCADE');
@@ -132,25 +132,12 @@ final class Version20260506104327 extends AbstractMigration
             return;
         }
 
-        $this->addSql('ALTER TABLE cms_compiled_data DROP FOREIGN KEY FK_30483E79D28591F7');
-        $this->addSql('ALTER TABLE cms_content DROP FOREIGN KEY FK_A0293FB8A2C84DEF');
-        $this->addSql('ALTER TABLE cms_content DROP FOREIGN KEY FK_A0293FB8B5D68A8D');
-        $this->addSql('ALTER TABLE cms_content_page DROP FOREIGN KEY FK_584BAC9FBF396750');
-        $this->addSql('ALTER TABLE cms_content_sites DROP FOREIGN KEY FK_E792456484A0A3ED');
-        $this->addSql('ALTER TABLE cms_content_version DROP FOREIGN KEY FK_C0E8E17F84A0A3ED');
-        $this->addSql('ALTER TABLE cms_content_version_medias DROP FOREIGN KEY FK_423042FFD28591F7');
-        $this->addSql('ALTER TABLE cms_content_version_routes DROP FOREIGN KEY FK_62372FCDD28591F7');
-        $this->addSql('ALTER TABLE cms_content_version_sections DROP FOREIGN KEY FK_4491D9C7D28591F7');
-        $this->addSql('ALTER TABLE cms_menu_item DROP FOREIGN KEY FK_1432B53D60272618');
-        $this->addSql('ALTER TABLE cms_menu_item DROP FOREIGN KEY FK_1432B53DCCD7E912');
-        $this->addSql('ALTER TABLE cms_route DROP FOREIGN KEY FK_2CB7BB5584A0A3ED');
-        $this->addSql('ALTER TABLE cms_route_path_sites DROP FOREIGN KEY FK_D70A2920213F0BF3');
+        $this->dropMysqlForeignKeys($schema);
         $this->addSql('ALTER TABLE cms_block CHANGE id id CHAR(36) NOT NULL');
         $this->addSql('ALTER TABLE cms_compiled_data CHANGE id id CHAR(36) NOT NULL');
         $this->addSql('ALTER TABLE cms_compiled_data CHANGE content_version_id content_version_id CHAR(36) DEFAULT NULL');
         $this->addSql('ALTER TABLE cms_content CHANGE id id CHAR(36) NOT NULL, CHANGE published_version_id published_version_id CHAR(36) DEFAULT NULL, CHANGE last_version_id last_version_id CHAR(36) DEFAULT NULL');
         $this->addSql('ALTER TABLE cms_content_page CHANGE id id CHAR(36) NOT NULL');
-        $this->addSql('ALTER TABLE cms_content_sites DROP FOREIGN KEY FK_E7924564F6BD1646');
         $this->addSql('ALTER TABLE cms_content_sites CHANGE content_id content_id CHAR(36) NOT NULL, CHANGE site_id site_id CHAR(36) NOT NULL');
         $this->addSql('ALTER TABLE cms_content_version CHANGE id id CHAR(36) NOT NULL, CHANGE content_id content_id CHAR(36) DEFAULT NULL');
         $this->addSql('ALTER TABLE cms_content_version_medias CHANGE content_version_id content_version_id CHAR(36) NOT NULL');
@@ -160,9 +147,7 @@ final class Version20260506104327 extends AbstractMigration
         $this->addSql('ALTER TABLE cms_menu_item CHANGE id id CHAR(36) NOT NULL, CHANGE menu_id menu_id CHAR(36) DEFAULT NULL, CHANGE parent_item_id parent_item_id CHAR(36) DEFAULT NULL');
         $this->addSql('ALTER TABLE cms_route CHANGE content_id content_id CHAR(36) DEFAULT NULL');
         $this->addSql('ALTER TABLE cms_route_path CHANGE path path CHAR(100) NOT NULL, CHANGE compiled_path compiled_path CHAR(255) DEFAULT NULL, CHANGE locale locale CHAR(5) DEFAULT NULL, CHANGE id id CHAR(36) NOT NULL');
-        $this->addSql('ALTER TABLE cms_route_path_sites DROP FOREIGN KEY FK_D70A2920F6BD1646');
         $this->addSql('ALTER TABLE cms_route_path_sites CHANGE route_path_id route_path_id CHAR(36) NOT NULL, CHANGE site_id site_id CHAR(36) NOT NULL');
-        $this->addSql('ALTER TABLE cms_route_sites DROP FOREIGN KEY FK_BC9E2F19F6BD1646');
         $this->addSql('ALTER TABLE cms_route_sites CHANGE site_id site_id CHAR(36) NOT NULL');
         $this->addSql('ALTER TABLE cms_site CHANGE id id CHAR(36) NOT NULL');
         $this->addSql('ALTER TABLE cms_compiled_data ADD CONSTRAINT FK_30483E79D28591F7 FOREIGN KEY (content_version_id) REFERENCES cms_content_version (id) ON DELETE CASCADE');
@@ -181,5 +166,21 @@ final class Version20260506104327 extends AbstractMigration
         $this->addSql('ALTER TABLE cms_route_path_sites ADD CONSTRAINT FK_D70A2920213F0BF3 FOREIGN KEY (route_path_id) REFERENCES cms_route_path (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE cms_route_path_sites ADD CONSTRAINT FK_D70A2920F6BD1646 FOREIGN KEY (site_id) REFERENCES cms_site (id) ON UPDATE NO ACTION');
         $this->addSql('ALTER TABLE cms_route_sites ADD CONSTRAINT FK_BC9E2F19F6BD1646 FOREIGN KEY (site_id) REFERENCES cms_site (id) ON UPDATE NO ACTION');
+    }
+
+    private function dropMysqlForeignKeys(Schema $schema): void
+    {
+        foreach (self::MYSQL_FOREIGN_KEYS as $tableName => $foreignKeyNames) {
+            if (!$schema->hasTable($tableName)) {
+                continue;
+            }
+
+            $table = $schema->getTable($tableName);
+            foreach ($foreignKeyNames as $foreignKeyName) {
+                if ($table->hasForeignKey($foreignKeyName)) {
+                    $this->addSql(sprintf('ALTER TABLE %s DROP FOREIGN KEY %s', $tableName, $foreignKeyName));
+                }
+            }
+        }
     }
 }
