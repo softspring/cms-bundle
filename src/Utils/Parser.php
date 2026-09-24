@@ -12,7 +12,7 @@ class Parser
             return null !== $v;
         });
 
-        $data = array_map(function ($k, mixed $v): string {
+        $data = array_map(function (int|string $k, mixed $v): string {
             if (is_bool($v)) {
                 return "'$k':".($v ? 'true' : 'false');
             }

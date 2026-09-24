@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Softspring\CmsBundle\Test\Unit\Manager;
 
+use ReflectionClass;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
@@ -77,7 +78,7 @@ class RouteManagerTest extends TestCase
     private function createManager(?RoutePathManagerInterface $routePathManager = null): RouteManager
     {
         $metadata = $this->createStub(ClassMetadata::class);
-        $metadata->method('getReflectionClass')->willReturn(new \ReflectionClass(Route::class));
+        $metadata->method('getReflectionClass')->willReturn(new ReflectionClass(Route::class));
 
         $em = $this->createMock(EntityManagerInterface::class);
         $em->method('getClassMetadata')

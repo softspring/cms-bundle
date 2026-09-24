@@ -28,7 +28,7 @@ class SensitiveValueSanitizer
             $sanitized = [];
 
             foreach ($value as $childKey => $childValue) {
-                $sanitized[$childKey] = $this->sanitize($childValue, is_scalar($childKey) ? (string) $childKey : null);
+                $sanitized[$childKey] = $this->sanitize($childValue, (string) $childKey);
             }
 
             return $sanitized;

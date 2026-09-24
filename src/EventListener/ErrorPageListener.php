@@ -96,7 +96,9 @@ class ErrorPageListener implements EventSubscriberInterface
                 return file_get_contents($template);
             } catch (Exception $e) {
                 // do not throw any exception, try render next template
-                $this->logger && $this->logger->error(sprintf('ERROR RENDERING ERROR PAGE (%s): %s', $template, $e->getMessage()));
+                if ($this->logger instanceof LoggerInterface) {
+                    $this->logger->error(sprintf('ERROR RENDERING ERROR PAGE (%s): %s', $template, $e->getMessage()));
+                }
             }
         }
 

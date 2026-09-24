@@ -35,7 +35,7 @@ abstract class ContentVersion implements ContentVersionInterface
 
     public function setParent(?VersionableInterface $parent): void
     {
-        if ($parent && !$parent instanceof ContentInterface) {
+        if ($parent instanceof VersionableInterface && !$parent instanceof ContentInterface) {
             throw new InvalidArgumentException('Parent must implement ContentInterface');
         }
         $this->setContent($parent);

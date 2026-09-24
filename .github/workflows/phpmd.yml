@@ -1,18 +1,3 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-# PHPMD is a spin-off project of PHP Depend and
-# aims to be a PHP equivalent of the well known Java tool PMD.
-# What PHPMD does is: It takes a given PHP source code base
-# and look for several potential problems within that source.
-# These problems can be things like:
-#   Possible bugs
-#   Suboptimal code
-#   Overcomplicated expressions
-#   Unused parameters, methods, properties
-# More details at https://phpmd.org/
-
 name: Code Scanning
 
 on:
@@ -50,7 +35,8 @@ jobs:
                 continue-on-error: true
 
             -   name: Validate SARIF report
-                id: validate-sarif
+                id: validate_sarif
+                if: always()
                 run: |
                     if [ ! -s phpmd-results.sarif ]; then
                         echo "valid=false" >> "$GITHUB_OUTPUT"
@@ -64,7 +50,7 @@ jobs:
                     fi
 
             -   name: Upload analysis results to GitHub
-                if: steps.validate-sarif.outputs.valid == 'true'
+                if: steps.validate_sarif.outputs.valid == 'true'
                 uses: github/codeql-action/upload-sarif@v4
                 with:
                     sarif_file: phpmd-results.sarif

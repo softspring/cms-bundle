@@ -48,7 +48,9 @@ class BlockController extends AbstractController
                 $block = $this->getMoreRestrictiveBlock($this->blockManager->getRepository()->findByType($type));
 
                 if (!$block instanceof BlockInterface) {
-                    $this->cmsLogger && $this->cmsLogger->error(sprintf('CMS missing block %s', $type));
+                    if ($this->cmsLogger instanceof LoggerInterface) {
+                        $this->cmsLogger->error(sprintf('CMS missing block %s', $type));
+                    }
 
                     return new Response();
                 }
@@ -88,7 +90,9 @@ class BlockController extends AbstractController
             $block = $this->blockManager->getRepository()->findOneById($id);
 
             if (!$block) {
-                $this->cmsLogger && $this->cmsLogger->error(sprintf('CMS missing block %s', $id));
+                if ($this->cmsLogger instanceof LoggerInterface) {
+                    $this->cmsLogger->error(sprintf('CMS missing block %s', $id));
+                }
 
                 return new Response();
             }
@@ -118,7 +122,9 @@ class BlockController extends AbstractController
 
     protected function renderBlockException(string $message, Exception $exception): Response
     {
-        $this->cmsLogger && $this->cmsLogger->critical(sprintf('%s: %s', $message, $exception->getMessage()));
+        if ($this->cmsLogger instanceof LoggerInterface) {
+            $this->cmsLogger->critical(sprintf('%s: %s', $message, $exception->getMessage()));
+        }
 
         if (!$this->debug) {
             return new Response('<!-- error rendering block, see logs -->');

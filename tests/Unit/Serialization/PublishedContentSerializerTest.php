@@ -6,7 +6,6 @@ namespace Softspring\CmsBundle\Test\Unit\Serialization;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\ContentVersionInterface;
@@ -15,7 +14,6 @@ use Softspring\CmsBundle\Model\RoutePathInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsBundle\Serialization\PublishedContentSerializer;
 
-#[AllowMockObjectsWithoutExpectations]
 class PublishedContentSerializerTest extends TestCase
 {
     public function testItSerializesPublishedContentSummaryWithFilteredRoutes(): void

@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
 use Rector\Set\ValueObject\SetList;
-use Rector\Symfony\Set\SymfonySetList;
 use Rector\Symfony\Symfony61\Rector\Class_\CommandConfigureToAttributeRector;
+use Rector\Symfony\Symfony72\Rector\StmtsAwareInterface\PushRequestToRequestStackConstructorRector;
+use Rector\Transform\Rector\ClassMethod\WrapReturnRector;
 use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromCreateMockAssignRector;
 use Rector\ValueObject\PhpVersion;
 
@@ -15,7 +16,6 @@ return RectorConfig::configure()
         is_dir(__DIR__.'/tests') ? __DIR__.'/tests' : null,
     ])))
     ->withSets([
-        SymfonySetList::SYMFONY_80,
         SetList::CODE_QUALITY,
         SetList::DEAD_CODE,
         SetList::TYPE_DECLARATION,
@@ -25,5 +25,7 @@ return RectorConfig::configure()
     ->withComposerBased(symfony: true)
     ->withSkip([
         CommandConfigureToAttributeRector::class,
+        PushRequestToRequestStackConstructorRector::class,
+        WrapReturnRector::class,
         TypedPropertyFromCreateMockAssignRector::class,
     ]);

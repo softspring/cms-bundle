@@ -6,7 +6,6 @@ namespace Softspring\CmsBundle\Test\Unit\Serialization;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Softspring\CmsBundle\Serialization\MediaImageSerializer;
 use Softspring\CmsBundle\Serialization\MediaTypeRequirementsSerializer;
@@ -17,7 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-#[AllowMockObjectsWithoutExpectations]
 class MediaImageSerializerTest extends TestCase
 {
     public function testItSerializesImageContextWithoutAiMetadataAlias(): void

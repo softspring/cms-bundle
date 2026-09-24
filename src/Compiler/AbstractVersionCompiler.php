@@ -18,7 +18,7 @@ abstract class AbstractVersionCompiler implements CompilerInterface
         $exceptions = [];
 
         $currentException = $exception;
-        while ($currentException) {
+        while ($currentException instanceof Throwable) {
             $exceptionData = [
                 'class' => get_class($currentException),
                 'message' => $currentException->getMessage(),

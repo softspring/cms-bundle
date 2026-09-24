@@ -3,7 +3,6 @@
 namespace Softspring\CmsBundle\Routing;
 
 use Doctrine\DBAL\Exception\TableNotFoundException;
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Softspring\CmsBundle\Exception\NotYetImplementedException;
@@ -216,7 +215,11 @@ class UrlMatcher
                     return $this->generateRedirect($route->getRedirectUrl(), $route->getRedirectType() ?? Response::HTTP_FOUND);
 
                 case RouteInterface::TYPE_REDIRECT_TO_ROUTE:
-                    return $this->generateRedirectToRoute($route->getSymfonyRoute(), $route->getRedirectType() ?? Response::HTTP_FOUND);
+                    return $this->generateRedirectToRoute(
+                        $route->getSymfonyRoute(),
+                        $route->getRedirectType() ?? Response::HTTP_FOUND,
+                        $attributes['_sfs_cms_locale'] ?? null,
+                    );
 
                 default:
                     throw new Exception(sprintf('Route type %u not yet implemented', $route->getType()));
@@ -240,14 +243,20 @@ class UrlMatcher
         ];
     }
 
-    protected function generateRedirectToRoute(array $route, int $statusCode): array
+    protected function generateRedirectToRoute(array $route, int $statusCode, ?string $locale = null): array
     {
-        return [
+        $attributes = [
             '_controller' => 'Softspring\CmsBundle\Controller\RedirectController::redirection',
             'route' => $route['route_name'],
             'routeParams' => $route['route_params'],
             'statusCode' => $statusCode,
         ];
+
+        if ($locale) {
+            $attributes['_locale'] = $locale;
+        }
+
+        return $attributes;
     }
 
     protected function searchRoutePath(SiteInterface $site, string $path, ?string $locale = null): ?RoutePathInterface
@@ -268,7 +277,10 @@ class UrlMatcher
                 $qb->setParameter('locale', $locale);
             }
 
-            return $qb->getQuery()->setCacheable(true)->setResultCacheLifetime(60)->getResult(AbstractQuery::HYDRATE_OBJECT)[0] ?? null;
+            // Routes can be deleted through the CMS while their content is published.
+            // A cached hydrated RoutePath keeps a proxy to the deleted content and turns
+            // the expected 404 into an EntityNotFoundException (HTTP 500).
+            return $qb->getQuery()->getResult()[0] ?? null;
         } catch (TableNotFoundException $e) {
             // prevent error before creating database schema
             return null;

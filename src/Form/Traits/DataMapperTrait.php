@@ -120,7 +120,8 @@ trait DataMapperTrait
         foreach ($fields as $field => $isCompound) {
             if (!array_key_exists($field, $value)) {
                 continue;
-            } elseif ($isCompound && !is_array($value[$field]) && !$value[$field] instanceof ArrayAccess) {
+            }
+            if ($isCompound && !is_array($value[$field]) && !$value[$field] instanceof ArrayAccess) {
                 $value[$field] = [];
             } elseif (!$isCompound && is_array($value[$field])) {
                 $value[$field] = '';
