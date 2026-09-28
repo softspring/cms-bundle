@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Softspring\CmsBundle\Twig\Extension;
 
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -18,7 +20,7 @@ class SiteExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('sfs_cms_site_name', [$this, 'siteName']),
+            new TwigFilter('sfs_cms_site_name', $this->siteName(...)),
         ];
     }
 

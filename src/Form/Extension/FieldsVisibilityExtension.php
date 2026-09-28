@@ -58,15 +58,11 @@ class FieldsVisibilityExtension extends AbstractTypeExtension
 
         foreach (explode(',', $fields) as $field) {
             $field = trim($field);
-            if (!$field) {
+            if ('' === $field || '0' === $field) {
                 continue;
             }
 
-            if (isset($view->children[$field])) {
-                $transformed[] = $view->children[$field]->vars['id'];
-            } else {
-                $transformed[] = $view->vars['id'].'_'.$field;
-            }
+            $transformed[] = isset($view->children[$field]) ? $view->children[$field]->vars['id'] : $view->vars['id'].'_'.$field;
         }
 
         return implode(',', $transformed);

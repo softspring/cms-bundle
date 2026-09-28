@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Softspring\CmsBundle\Twig\Extension;
 
 use RuntimeException;
@@ -16,13 +18,13 @@ class WebpackExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('sfs_cms_encore_entry_reset', [$this, 'webpackResetEntrypoint']),
+            new TwigFunction('sfs_cms_encore_entry_reset', $this->webpackResetEntrypoint(...)),
         ];
     }
 
     public function webpackResetEntrypoint(string $entrypointName = '_default'): void
     {
-        if (!$this->entrypointLookupCollection) {
+        if (!$this->entrypointLookupCollection instanceof EntrypointLookupCollectionInterface) {
             throw new RuntimeException('Webpack encore entrypoint lookup collection is not available');
         }
 

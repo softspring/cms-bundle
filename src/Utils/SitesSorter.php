@@ -12,7 +12,7 @@ class SitesSorter
     {
         $sites = $sites instanceof Collection ? $sites->toArray() : $sites;
 
-        usort($sites, function (SiteInterface $a, SiteInterface $b) {
+        usort($sites, function (SiteInterface $a, SiteInterface $b): int {
             return ($a->getConfig()['extra']['order'] ?? 500) <=> ($b->getConfig()['extra']['order'] ?? 500);
         });
 

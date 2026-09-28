@@ -2,6 +2,8 @@
 
 namespace Softspring\CmsBundle\Test\Unit\Config\EntityTransformer;
 
+use stdClass;
+use ReflectionClass;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
@@ -16,16 +18,16 @@ use Softspring\MediaBundle\Entity\Media;
 
 class ContentVersionTransformerTest extends TestCase
 {
-    protected CmsConfig|MockObject $cmsConfig;
-    protected EntityManager|MockObject $em;
-    /** @var ClassMetadata<Route>|MockObject */
-    protected ClassMetadata|MockObject $routeClassMetadata;
-    /** @var ClassMetadata<Media>|MockObject */
-    protected ClassMetadata|MockObject $mediaClassMetadata;
-    /** @var EntityRepository<Route>|MockObject */
-    protected EntityRepository|MockObject $routeRepository;
-    /** @var EntityRepository<Media>|MockObject */
-    protected EntityRepository|MockObject $mediaRepository;
+    protected CmsConfig&MockObject $cmsConfig;
+    protected EntityManager&MockObject $em;
+    /** @var ClassMetadata<Route>&MockObject */
+    protected ClassMetadata&MockObject $routeClassMetadata;
+    /** @var ClassMetadata<Media>&MockObject */
+    protected ClassMetadata&MockObject $mediaClassMetadata;
+    /** @var EntityRepository<Route>&MockObject */
+    protected EntityRepository&MockObject $routeRepository;
+    /** @var EntityRepository<Media>&MockObject */
+    protected EntityRepository&MockObject $mediaRepository;
 
     protected function setUp(): void
     {
@@ -33,13 +35,13 @@ class ContentVersionTransformerTest extends TestCase
         $this->em = $this->createMock(EntityManager::class);
 
         $this->routeClassMetadata = $this->createMock(ClassMetadata::class);
-        $this->routeClassMetadata->method('getIdentifierValues')->willReturnCallback(function (Route $route) {
+        $this->routeClassMetadata->method('getIdentifierValues')->willReturnCallback(function (Route $route): array {
             return ['id' => $route->getId()];
         });
         $this->routeRepository = $this->createMock(EntityRepository::class);
 
         $this->mediaClassMetadata = $this->createMock(ClassMetadata::class);
-        $this->mediaClassMetadata->method('getIdentifierValues')->willReturnCallback(function (Media $media) {
+        $this->mediaClassMetadata->method('getIdentifierValues')->willReturnCallback(function (Media $media): array {
             return ['id' => $media->getId()];
         });
         $this->mediaRepository = $this->createMock(EntityRepository::class);
@@ -72,7 +74,7 @@ class ContentVersionTransformerTest extends TestCase
         $this->expectException(UnsupportedException::class);
 
         $versionTransformer = new ContentVersionTransformer($this->cmsConfig);
-        $versionTransformer->transform(new \stdClass(), $this->em);
+        $versionTransformer->transform(new stdClass(), $this->em);
     }
 
     public function testEmptyData(): void
@@ -91,10 +93,10 @@ class ContentVersionTransformerTest extends TestCase
     public function testTransform(): void
     {
         $route = new Route();
-        (new \ReflectionClass($route))->getProperty('id')->setValue($route, 'route_id');
+        (new ReflectionClass($route))->getProperty('id')->setValue($route, 'route_id');
 
         $media = new Media();
-        (new \ReflectionClass($media))->getProperty('id')->setValue($media, 'media_id');
+        (new ReflectionClass($media))->getProperty('id')->setValue($media, 'media_id');
 
         $data = [
             'header' => [
@@ -193,11 +195,11 @@ class ContentVersionTransformerTest extends TestCase
     public function testUntransform(): void
     {
         $route = new Route();
-        (new \ReflectionClass($route))->getProperty('id')->setValue($route, 'route_id');
+        (new ReflectionClass($route))->getProperty('id')->setValue($route, 'route_id');
         $this->routeRepository->method('findOneBy')->willReturn($route);
 
         $media = new Media();
-        (new \ReflectionClass($media))->getProperty('id')->setValue($media, 'media_id');
+        (new ReflectionClass($media))->getProperty('id')->setValue($media, 'media_id');
         $this->mediaRepository->method('findOneBy')->willReturn($media);
 
         $data = [

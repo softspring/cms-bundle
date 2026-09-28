@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Softspring\CmsBundle\Form\Type;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -7,6 +9,7 @@ use Softspring\CmsBundle\Manager\ContentManager;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -27,10 +30,11 @@ class ContentType extends AbstractType
             'class' => ContentInterface::class,
             'em' => $this->sfsContentEm,
             'required' => false,
-            'choice_label' => function (ContentInterface $content) {
+            'placeholder' => static fn (Options $options): ?string => $options['required'] ? null : '',
+            'choice_label' => function (ContentInterface $content): ?string {
                 return $content->getName();
             },
-            'group_by' => function (ContentInterface $content) {
+            'group_by' => function (ContentInterface $content): string {
                 return $this->translator->trans("{$this->contentManager->getType($content)}.name", [], 'sfs_cms_contents');
             },
         ]);

@@ -22,7 +22,7 @@ class CssModuleTest extends ModuleTestCase
                     '_revision' => 1,
                     'css' => 'body { background-color: red; }',
                 ],
-                'expected' => function ($result) {
+                'expected' => function (string $result): void {
                     ModuleTestCase::assertRenderText('body { background-color: red; }', $result, null, '//style');
                 },
             ],

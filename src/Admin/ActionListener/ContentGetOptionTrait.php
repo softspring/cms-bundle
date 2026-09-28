@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Softspring\CmsBundle\Admin\ActionListener;
 
 use Symfony\Component\HttpFoundation\Request;

@@ -70,7 +70,9 @@ class PreviewListener extends AbstractContentVersionListener
      */
     public function onFoundShowContent(EntityFoundEvent $event): void
     {
-        $this->webDebugToolbarListener && $this->webDebugToolbarListener->setMode(WebDebugToolbarListener::DISABLED);
+        if ($this->webDebugToolbarListener instanceof WebDebugToolbarListener) {
+            $this->webDebugToolbarListener->setMode(WebDebugToolbarListener::DISABLED);
+        }
 
         $request = $event->getRequest();
 

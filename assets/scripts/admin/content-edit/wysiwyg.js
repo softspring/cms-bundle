@@ -29,8 +29,8 @@
  */
 
 import * as tinymce from 'tinymce/tinymce';
-import {contentEditableUpdateInputsFromElement} from './contenteditable';
-import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
+import {contentEditableUpdateInputsFromElement} from './contenteditable.js';
+import {registerFeature} from '@softspring/cms-bundle/scripts/tools.js';
 
 registerFeature('admin_content_edit_wysiwyg', _init);
 
@@ -100,6 +100,7 @@ function _createWysiwygTinyMCE(element) {
         toolbar: toolbar,
         valid_elements: validElements,
         valid_styles: validStyles,
+        license_key: 'gpl',
         setup: (editor) => {
             editor.on('change', () => {
                 contentEditableUpdateInputsFromElement(element);
@@ -108,7 +109,6 @@ function _createWysiwygTinyMCE(element) {
         min_height: 30,
     });
 }
-
 /**
  * Create a wysiwyg editor
  * @param {HTMLElement} element
@@ -143,4 +143,3 @@ function destroyWysiwyg(element) {
             break;
     }
 }
-

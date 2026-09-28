@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Softspring\CmsBundle\EntityListener;
 
 use Doctrine\ORM\Event\PostLoadEventArgs;

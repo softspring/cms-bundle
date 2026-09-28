@@ -31,7 +31,7 @@ class ContentUpdateForm extends AbstractType implements ContentUpdateFormInterfa
 
         $resolver->setRequired('content_config');
 
-        $resolver->setNormalizer('label_format', function (Options $options, $value) {
+        $resolver->setNormalizer('label_format', function (Options $options, $value): string {
             return "admin_{$options['content_config']['_id']}.form.%name%.label";
         });
 
@@ -49,11 +49,13 @@ class ContentUpdateForm extends AbstractType implements ContentUpdateFormInterfa
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $indexingFields = $this->indexingFields($options);
+
         $builder->add('name', TextType::class);
 
         $builder->add('defaultLocale', ChoiceType::class, [
             'choice_translation_domain' => false,
-            'choices' => array_combine(array_map(fn ($lang) => Locales::getName($lang), $options['locales']), $options['locales']),
+            'choices' => array_combine(array_map(fn (string $lang): string => Locales::getName($lang), $options['locales']), $options['locales']),
             'default_value' => $options['default_locale'],
         ]);
 
@@ -61,15 +63,15 @@ class ContentUpdateForm extends AbstractType implements ContentUpdateFormInterfa
             'multiple' => true,
             'expanded' => true,
             'choice_translation_domain' => false,
-            'choices' => array_combine(array_map(fn ($lang) => Locales::getName($lang), $options['locales']), $options['locales']),
-            'constraints' => new Count(['min' => 1]),
+            'choices' => array_combine(array_map(fn (string $lang): string => Locales::getName($lang), $options['locales']), $options['locales']),
+            'constraints' => new Count(min: 1),
             'default_value' => [$options['default_locale']],
         ]);
 
         $builder->add('sites', SiteChoiceType::class, [
             'content' => $options['content_config'],
             'by_reference' => false,
-            'constraints' => new Count(['min' => 1]),
+            'constraints' => new Count(min: 1),
         ]);
 
         if (!empty($options['content_config']['extra_fields'])) {
@@ -80,10 +82,30 @@ class ContentUpdateForm extends AbstractType implements ContentUpdateFormInterfa
         }
 
         $builder->add('indexing', DynamicFormType::class, [
-            'form_fields' => $options['content_config']['indexing'] ?? [],
+            'form_fields' => $indexingFields,
             'translation_domain' => 'sfs_cms_contents',
             'label' => "admin_{$options['content_config']['_id']}.form.indexing.label",
             'label_format' => "admin_{$options['content_config']['_id']}.form.indexing.%name%.label",
         ]);
+    }
+
+    protected function indexingFields(array $options): array
+    {
+        $indexingFields = $options['content_config']['indexing'] ?? [];
+        $contentType = $options['content_config']['_id'];
+
+        if (isset($indexingFields['sitemapChangefreq']['type_options']['choices'])) {
+            $indexingFields['sitemapChangefreq']['type_options']['choices'] = array_combine(
+                array_map(
+                    fn (string $label): string => str_starts_with($label, 'admin_page.form.indexing.')
+                        ? "admin_{$contentType}.".substr($label, strlen('admin_page.'))
+                        : $label,
+                    array_keys($indexingFields['sitemapChangefreq']['type_options']['choices'])
+                ),
+                array_values($indexingFields['sitemapChangefreq']['type_options']['choices'])
+            );
+        }
+
+        return $indexingFields;
     }
 }

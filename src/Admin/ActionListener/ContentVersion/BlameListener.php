@@ -9,17 +9,12 @@ use Softspring\CmsBundle\SfsCmsEvents;
 use Softspring\Component\CrudlController\Event\ApplyEvent;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Security\Core\Security as SecurityOld;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class BlameListener implements EventSubscriberInterface
 {
-    /** @phpstan-ignore-next-line  */
-    protected SecurityOld|Security|null $security;
-
-    /** @phpstan-ignore-next-line  */
-    public function __construct(?SecurityOld $securityOld, ?Security $security)
+    public function __construct(protected ?Security $security)
     {
-        $this->security = $securityOld ?? $security;
     }
 
     public static function getSubscribedEvents(): array
@@ -82,8 +77,12 @@ class BlameListener implements EventSubscriberInterface
         $version = $event->getEntity();
 
         // this runs before the version is updated, so we check the value inverted
-        !$version->isKeep() && $this->addHistory($version, 'lock');
-        $version->isKeep() && $this->addHistory($version, 'unlock');
+        if (!$version->isKeep()) {
+            $this->addHistory($version, 'lock');
+        }
+        if ($version->isKeep()) {
+            $this->addHistory($version, 'unlock');
+        }
     }
 
     public function onRecompileVersion(ApplyEvent $event): void
@@ -119,13 +118,11 @@ class BlameListener implements EventSubscriberInterface
 
     protected function canBlame(): bool
     {
-        /* @phpstan-ignore-next-line */
-        return $this->security && $this->security->getUser();
+        return $this->security instanceof Security && $this->security->getUser() instanceof UserInterface;
     }
 
     protected function getUser(): array
     {
-        /** @phpstan-ignore-next-line  */
         $user = $this->security->getUser();
 
         $userData = [

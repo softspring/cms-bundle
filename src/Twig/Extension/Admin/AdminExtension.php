@@ -6,8 +6,8 @@ use Softspring\CmsBundle\Admin\Menu\MenuManager;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
+use Softspring\CmsBundle\Model\SiteInterface;
 use Softspring\CmsSectionsPlugin\Manager\SectionManagerInterface;
-use Softspring\CmsSectionsPlugin\Model\SectionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
@@ -36,17 +36,18 @@ class AdminExtension extends AbstractExtension implements GlobalsInterface
     public function getFilters(): array
     {
         return [
-            new TwigFilter('sfs_cms_admin_content_url', [$this, 'getContentUrl']),
+            new TwigFilter('sfs_cms_admin_content_url', $this->getContentUrl(...)),
         ];
     }
 
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('sfs_cms_admin_content_url', [$this, 'getContentUrl']),
-            new TwigFunction('sfs_cms_admin_content_menu', [$this, 'getContentMenu']),
-            new TwigFunction('sfs_cms_admin_search_content_esi_calls', [$this, 'searchContentEsiCalls']),
-            new TwigFunction('sfs_cms_admin_search_content_ajax_calls', [$this, 'searchContentAjaxCalls']),
+            new TwigFunction('sfs_cms_admin_content_url', $this->getContentUrl(...)),
+            new TwigFunction('sfs_cms_admin_content_menu', $this->getContentMenu(...)),
+            new TwigFunction('sfs_cms_admin_site_menu', $this->getSiteMenu(...)),
+            new TwigFunction('sfs_cms_admin_search_content_esi_calls', $this->searchContentEsiCalls(...)),
+            new TwigFunction('sfs_cms_admin_search_content_ajax_calls', $this->searchContentAjaxCalls(...)),
         ];
     }
 
@@ -60,6 +61,11 @@ class AdminExtension extends AbstractExtension implements GlobalsInterface
     public function getContentMenu(string $current, ContentInterface $content): array
     {
         return $this->menuManager->getEntityMenu('content', $current, $content);
+    }
+
+    public function getSiteMenu(string $current, SiteInterface $site): array
+    {
+        return $this->menuManager->getEntityMenu('site', $current, $site);
     }
 
     public function searchContentEsiCalls(string $content): array

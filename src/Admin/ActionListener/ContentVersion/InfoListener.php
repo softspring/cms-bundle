@@ -78,6 +78,7 @@ class InfoListener extends AbstractContentVersionListener
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_INFO_VIEW => [
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onView', 0],
+                ['onViewAddEntities', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_INFO_EXCEPTION => [
                 ['onEventDispatchContentTypeEvent', 10],

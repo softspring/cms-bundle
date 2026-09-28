@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Softspring\CmsBundle\Request\ValueResolver;
 
 use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;

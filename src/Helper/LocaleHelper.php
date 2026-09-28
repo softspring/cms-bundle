@@ -30,7 +30,7 @@ class LocaleHelper
     {
         if (is_array($value)) {
             $availableLocales = $value;
-        } elseif (!empty($availableSites)) {
+        } elseif (null !== $availableSites && [] !== $availableSites) {
             $availableLocales = [];
             foreach ($availableSites as $site) {
                 $availableLocales = array_merge($availableLocales, $site->getConfig()['locales'] ?? []);
@@ -49,11 +49,8 @@ class LocaleHelper
 
     public function normalizeFormAvailableLocalesForContent(?array $value, ContentInterface $content): array
     {
-        if (is_array($value)) {
-            $availableLocales = $value;
-        } else {
-            $availableLocales = $content->getLocales();
-        }
+        /** @var string[] $availableLocales */
+        $availableLocales = is_array($value) ? $value : $content->getLocales();
 
         $availableLocales = array_values($availableLocales);
         $availableLocales = array_unique($availableLocales);

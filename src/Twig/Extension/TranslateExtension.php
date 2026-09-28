@@ -2,11 +2,15 @@
 
 namespace Softspring\CmsBundle\Twig\Extension;
 
+use Softspring\CmsBundle\Model\ContentInterface;
+use Softspring\CmsBundle\Model\RouteInterface;
 use Softspring\CmsBundle\Model\RoutePathInterface;
 use Softspring\CmsBundle\Routing\UrlGenerator;
 use Softspring\TranslatableBundle\Model\Translation;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Twig\DeprecatedCallableInfo;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -27,7 +31,9 @@ class TranslateExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('sfs_cms_trans', [$this, 'translate'], ['is_safe' => ['html'], 'deprecated' => true]),
+            new TwigFilter('sfs_cms_trans', $this->translate(...), array_merge(['is_safe' => ['html']],
+                class_exists(DeprecatedCallableInfo::class) ? ['deprecation_info' => new DeprecatedCallableInfo('softspring/cms-bundle', '5.5')] : ['deprecated' => true]
+            )),
         ];
     }
 
@@ -37,15 +43,11 @@ class TranslateExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('sfs_cms_available_locales', [$this, 'getAvailableLocales']),
-            new TwigFunction('sfs_cms_alternate_urls', [$this, 'getAlternateUrls']),
-            new TwigFunction('sfs_cms_locale_paths', [$this, 'getLocalePaths']),
+            new TwigFunction('sfs_cms_alternate_urls', $this->getAlternateUrls(...)),
+            new TwigFunction('sfs_cms_locale_paths', $this->getLocalePaths(...)),
         ];
     }
 
-    /**
-     * @deprecated
-     */
     public function translate(mixed $translatableText): string
     {
         $request = $this->requestStack->getCurrentRequest();
@@ -85,17 +87,41 @@ class TranslateExtension extends AbstractExtension
     public function getAlternateUrls(): array
     {
         $request = $this->requestStack->getCurrentRequest();
+        $content = $this->resolveContentFromRequest($request);
+
+        if ($content instanceof ContentInterface) {
+            $alternates = [];
+
+            foreach ($this->enabledLocales as $locale) {
+                $url = '#';
+
+                foreach ($content->getRoutes() as $route) {
+                    if ($route->getPathForLocale($locale)) {
+                        $url = $this->cmsUrlGenerator->getUrl($route, $locale);
+                        break;
+                    }
+                }
+
+                if ('#' === $url) {
+                    continue;
+                }
+
+                $alternates[$locale] = $url;
+            }
+
+            return $alternates;
+        }
 
         /** @var ?RoutePathInterface $routePath */
         $routePath = $request->attributes->get('routePath');
 
-        $site = $request->attributes->get('_sfs_cms_site');
+        $request->attributes->get('_sfs_cms_site');
 
         $alternates = [];
 
         foreach ($this->enabledLocales as $locale) {
             if ($routePath) {
-                $hasLocalizedRoutePath = (bool) $routePath->getRoute()->getPaths()->filter(fn (RoutePathInterface $routePath) => $routePath->getLocale() == $locale)->count();
+                $hasLocalizedRoutePath = (bool) $routePath->getRoute()->getPaths()->filter(fn (RoutePathInterface $routePath): bool => $routePath->getLocale() == $locale)->count();
 
                 if (!$hasLocalizedRoutePath) {
                     continue;
@@ -122,6 +148,30 @@ class TranslateExtension extends AbstractExtension
         return $alternates;
     }
 
+    protected function resolveContentFromRequest(?Request $request): ?ContentInterface
+    {
+        if (!$request instanceof Request) {
+            return null;
+        }
+
+        $requestContent = $request->attributes->get('_content', $request->attributes->get('content'));
+
+        if ($requestContent instanceof ContentInterface) {
+            return $requestContent;
+        }
+
+        /** @var ?RoutePathInterface $routePath */
+        $routePath = $request->attributes->get('routePath');
+        if ($routePath?->getRoute()?->getContent()) {
+            return $routePath->getRoute()->getContent();
+        }
+
+        /** @var ?RouteInterface $route */
+        $route = $request->attributes->get('route');
+
+        return $route?->getContent();
+    }
+
     public function getLocalePaths(?string $defaultRoute = null): array
     {
         $request = $this->requestStack->getCurrentRequest();
@@ -137,7 +187,7 @@ class TranslateExtension extends AbstractExtension
                     continue;
                 }
 
-                $hasLocalizedRoutePath = (bool) $routePath->getRoute()->getPaths()->filter(fn (RoutePathInterface $routePath) => $routePath->getLocale() == $locale)->count();
+                $hasLocalizedRoutePath = (bool) $routePath->getRoute()->getPaths()->filter(fn (RoutePathInterface $routePath): bool => $routePath->getLocale() == $locale)->count();
 
                 if ($hasLocalizedRoutePath) {
                     $localePaths[$locale] = $this->cmsUrlGenerator->getPath($routePath->getRoute(), $locale);

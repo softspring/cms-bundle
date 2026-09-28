@@ -39,7 +39,9 @@ class ContentVersionCompiler extends AbstractVersionCompiler
 
         foreach ($version->getContent()->getSites() as $site) {
             foreach ($version->getContent()->getLocales() ?? [] as $locale) {
-                $this->cmsLogger && $this->cmsLogger->debug(sprintf('Compiling "%s" content version for "%s" in "%s"', $version->getContent()->getName(), "$site", $locale));
+                if ($this->cmsLogger instanceof LoggerInterface) {
+                    $this->cmsLogger->debug(sprintf('Compiling "%s" content version for "%s" in "%s"', $version->getContent()->getName(), "$site", $locale));
+                }
                 $request = IsolatedRequest::createIsolatedForContentRoute($version->getContent(), $locale, $site);
                 $compiledDatas[] = $this->compileRequest($version, $request);
             }
@@ -51,7 +53,7 @@ class ContentVersionCompiler extends AbstractVersionCompiler
     /**
      * @throws CompileException
      */
-    public function compileRequest(VersionInterface $version, Request $request, ?CompiledDataInterface $preCompiledData = null): CompiledDataInterface
+    public function compileRequest(VersionInterface $version, Request $request, ?CompiledDataInterface $preCompiledData = null, bool $saveCompiled = true): CompiledDataInterface
     {
         if (!$version instanceof ContentVersionInterface) {
             throw new CompileException('Version must be an instance of ContentVersionInterface');
@@ -62,7 +64,7 @@ class ContentVersionCompiler extends AbstractVersionCompiler
         $compiledData->setVersion($version);
 
         try {
-            if ($this->cmsHelper->compile()->contentSaveCompiled($version)) {
+            if ($saveCompiled && $this->cmsHelper->compile()->contentSaveCompiled($version)) {
                 $version->addCompiled($compiledData);
             }
 

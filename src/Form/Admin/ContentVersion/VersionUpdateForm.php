@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Softspring\CmsBundle\Form\Admin\ContentVersion;
 
 use Softspring\CmsBundle\Model\ContentInterface;
@@ -29,7 +31,7 @@ class VersionUpdateForm extends AbstractType implements VersionUpdateFormInterfa
         $resolver->setRequired('content');
         $resolver->setAllowedTypes('content', [ContentInterface::class]);
 
-        $resolver->setNormalizer('label_format', function (Options $options, $value) {
+        $resolver->setNormalizer('label_format', function (Options $options, $value): string {
             return "admin_{$options['content_type']}.version_form.%name%.label";
         });
     }

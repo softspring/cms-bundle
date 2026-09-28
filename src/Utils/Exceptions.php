@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Softspring\CmsBundle\Utils;
 
 use Throwable;
@@ -15,7 +17,7 @@ class Exceptions
             'file' => $e->getFile(),
             'line' => $e->getLine(),
             'trace' => explode("\n", $e->getTraceAsString()),
-            'previous' => $e->getPrevious() ? self::toArray($e->getPrevious()) : null,
+            'previous' => $e->getPrevious() instanceof Throwable ? self::toArray($e->getPrevious()) : null,
         ];
     }
 }

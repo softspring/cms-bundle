@@ -26,7 +26,7 @@ class ShortestResponseCacheStrategy implements ResponseCacheStrategyInterface
 
     public function update(Response $response): void
     {
-        if (empty($this->ttls)) {
+        if ([] === $this->ttls) {
             return;
         }
 

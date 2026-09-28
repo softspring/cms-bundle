@@ -39,11 +39,11 @@ class ContentListFilterForm extends PaginatorForm implements QueryBuilderProcess
 
         $resolver->setRequired('content_config');
 
-        $resolver->setNormalizer('label_format', function (Options $options, $value) {
+        $resolver->setNormalizer('label_format', function (Options $options, $value): string {
             return "admin_{$options['content_config']['_id']}.list.filter_form.%name%.label";
         });
 
-        $resolver->addNormalizer('query_builder', function (Options $options, QueryBuilder $qb) {
+        $resolver->addNormalizer('query_builder', function (Options $options, QueryBuilder $qb): QueryBuilder {
             $alias = $qb->getDQLPart('from')[0]->getAlias();
             $qb->select("$alias, pv");
             $qb->leftJoin("{$alias}.publishedVersion", 'pv');
@@ -65,7 +65,7 @@ class ContentListFilterForm extends PaginatorForm implements QueryBuilderProcess
             'property_path' => '[path__like]',
         ]);
 
-        if (sizeof($this->cmsConfig->getSitesForContent($options['content_config']['_id'])) > 1) {
+        if (count($this->cmsConfig->getSitesForContent($options['content_config']['_id'])) > 1) {
             $builder->add('sites', SiteChoiceType::class, [
                 'required' => false,
                 'property_path' => '[sites.id]',

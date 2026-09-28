@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Softspring\CmsBundle\Form\Type;
 
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -22,7 +24,7 @@ class LinkType extends SymfonyRouteType
                 'link_type.type.values.anchor' => 'anchor',
                 'link_type.type.values.url' => 'url',
             ],
-            'choice_attr' => function ($value) {
+            'choice_attr' => function ($value): array {
                 return [
                     'data-show-fields' => match ($value) {
                         'route' => 'route',
@@ -60,7 +62,7 @@ class LinkType extends SymfonyRouteType
                 'link_type.target.values._top' => '_top',
                 'link_type.target.values.custom' => 'custom',
             ],
-            'choice_attr' => function ($value) {
+            'choice_attr' => function ($value): array {
                 return [
                     'data-show-fields' => match ($value) {
                         'custom' => 'custom_target',

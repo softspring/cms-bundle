@@ -1,7 +1,7 @@
 {% trans_default_domain 'sfs_cms_admin' %}
 
 {% for block in collection %}
-    <tr>
+    <tr{% if is_granted('PERMISSION_SFS_CMS_ADMIN_BLOCKS_UPDATE', block) %} data-row-href="{{ url('sfs_cms_admin_blocks_update', {'block':block.id}) }}"{% endif %}>
         <td>{{ block.name }}</td>
         <td>
             {{ ('admin_'~block.type~'.name')|trans({}, 'sfs_cms_blocks') }}

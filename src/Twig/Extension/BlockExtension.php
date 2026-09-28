@@ -23,10 +23,10 @@ class BlockExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('sfs_cms_block', [$this->blockRenderer, 'renderBlock'], ['is_safe' => ['html']]),
-            new TwigFunction('sfs_cms_block_by_type', [$this->blockRenderer, 'renderBlockByType'], ['is_safe' => ['html']]),
-            new TwigFunction('sfs_cms_block_by_id', [$this, 'renderBlockById'], ['is_safe' => ['html']]),
-            new TwigFunction('sfs_cms_block_find', [$this, 'findOneBy'], ['is_safe' => ['html']]),
+            new TwigFunction('sfs_cms_block', $this->blockRenderer->renderBlock(...), ['is_safe' => ['html']]),
+            new TwigFunction('sfs_cms_block_by_type', $this->blockRenderer->renderBlockByType(...), ['is_safe' => ['html']]),
+            new TwigFunction('sfs_cms_block_by_id', $this->renderBlockById(...), ['is_safe' => ['html']]),
+            new TwigFunction('sfs_cms_block_find', $this->findOneBy(...), ['is_safe' => ['html']]),
         ];
     }
 
@@ -34,7 +34,7 @@ class BlockExtension extends AbstractExtension
     {
         $block = $this->findOneBy($id);
 
-        return $block ? $this->blockRenderer->renderBlock($block, $locale) : "<!-- block $id not found -->";
+        return $block instanceof BlockInterface ? $this->blockRenderer->renderBlock($block, $locale) : "<!-- block $id not found -->";
     }
 
     public function findOneBy($criteria, array $orderBy = []): ?BlockInterface

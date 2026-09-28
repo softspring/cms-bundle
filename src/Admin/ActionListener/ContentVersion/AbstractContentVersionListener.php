@@ -6,7 +6,6 @@ use Softspring\CmsBundle\Admin\ActionListener\ContentGetOptionTrait;
 use Softspring\CmsBundle\Admin\ActionListener\ContentInitializeEventTrait;
 use Softspring\CmsBundle\Admin\ActionListener\ContentRedirectBackTrait;
 use Softspring\CmsBundle\Admin\ActionListener\ExceptionMessageTrait;
-use Softspring\CmsBundle\Compiler\CompileExceptionDetailsInterface;
 use Softspring\CmsBundle\Helper\CmsHelper;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Manager\ContentVersionManagerInterface;
@@ -124,15 +123,17 @@ abstract class AbstractContentVersionListener implements EventSubscriberInterfac
         $this->contentManager->saveEntity($event->getEntity()->getContent());
     }
 
+    public function onViewAddEntities(ViewEvent $event): void
+    {
+        $event->getData()['content_entity'] = $event->getRequest()->attributes->get('content');
+    }
+
     public function onView(ViewEvent $event): void
     {
         $contentConfig = $event->getRequest()->attributes->get('_content_config');
 
         $event->getData()['content_type'] = $contentConfig['_id'];
         $event->getData()['content_config'] = $contentConfig;
-        /* @deprecated */
-        $event->getData()['entity'] = $event->getRequest()->attributes->get('content');
-        $event->getData()['content_entity'] = $event->getRequest()->attributes->get('content');
 
         $event->setTemplate($this->getOption($event->getRequest(), 'view'));
     }

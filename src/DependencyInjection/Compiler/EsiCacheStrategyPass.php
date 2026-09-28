@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Softspring\CmsBundle\DependencyInjection\Compiler;
 
 use Softspring\CmsBundle\HttpCache\ShortestResponseCacheStrategy;

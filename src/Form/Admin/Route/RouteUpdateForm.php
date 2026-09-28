@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Softspring\CmsBundle\Form\Admin\Route;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;

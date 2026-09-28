@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Softspring\CmsBundle\EventListener;
 
 use Softspring\CmsBundle\Routing\SiteResolver;
@@ -35,7 +37,7 @@ class SiteResolverListener implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        [$siteId, $site, $siteHostConfig] = $this->siteResolver->resolveSiteAndHost($request);
+        [$siteId, $site, $siteHostConfig, $sitePathConfig] = $this->siteResolver->resolveSiteAndHost($request);
 
         if (!$siteId) {
             return;
@@ -44,8 +46,9 @@ class SiteResolverListener implements EventSubscriberInterface
         $request->attributes->set('_site', $siteId);
         $request->attributes->set('_sfs_cms_site', $site);
         $request->attributes->set('_sfs_cms_site_host_config', $siteHostConfig);
+        $request->attributes->set('_sfs_cms_site_path_config', $sitePathConfig);
 
-        if (!$this->originRequest) {
+        if (!$this->originRequest instanceof Request) {
             $this->originRequest = $this->requestStack->getMainRequest();
         }
 

@@ -26,7 +26,7 @@ class SitemapFactory
         $sitemapConfig = $this->getSitemapConfig($site, $sitemapId);
 
         $urls = [];
-        foreach ($this->getSiteContents($site)->filter(fn ($c) => !$this->skipContent($c)) as $content) {
+        foreach ($this->getSiteContents($site)->filter(fn (ContentInterface $c): bool => !$this->skipContent($c)) as $content) {
             $urls = array_merge($urls, $this->generateSitemapContentUrls($site, $content, $sitemapConfig));
         }
 
@@ -40,10 +40,8 @@ class SitemapFactory
     {
         $urls = [];
 
-        /** @deprecated will only use alternates_locales */
-        $localeAlternates = $sitemapConfig['alternates'] || $sitemapConfig['alternates_locales'];
-        /* @deprecated will only use alternates_sites */
-        $siteAlternates = $sitemapConfig['alternates'] || $sitemapConfig['alternates_sites'];
+        $localeAlternates = $sitemapConfig['alternates_locales'];
+        $siteAlternates = $sitemapConfig['alternates_sites'];
 
         $alternatesIncludeHreflang = $sitemapConfig['alternates_include_hreflang'] ?? true;
 
@@ -59,7 +57,7 @@ class SitemapFactory
                     'changefreq' => $this->getChangeFreq($content, $sitemapConfig),
                     'priority' => $this->getPriority($content, $sitemapConfig),
                     'xhtml:link' => $this->routingHelper->generateRoutePathAlternates($path, $site, $localeAlternates, $siteAlternates, $alternatesIncludeHreflang),
-                ], fn ($v) => !empty($v));
+                ], fn (string|array|null $v): bool => !in_array($v, ['', '0', []], true));
             }
         }
 
@@ -68,10 +66,10 @@ class SitemapFactory
 
     protected function getChangeFreq(ContentInterface $content, array $sitemapConfig): ?string
     {
-        $seo = $content->getSeo();
+        $indexing = $content->getIndexing();
 
-        if (!empty($seo['sitemapChangefreq'])) {
-            return $seo['sitemapChangefreq'];
+        if (!empty($indexing['sitemapChangefreq'])) {
+            return $indexing['sitemapChangefreq'];
         }
 
         if (!empty($sitemapConfig['default_changefreq'])) {
@@ -83,10 +81,10 @@ class SitemapFactory
 
     protected function getPriority(ContentInterface $content, array $sitemapConfig): ?string
     {
-        $seo = $content->getSeo();
+        $indexing = $content->getIndexing();
 
-        if (!empty($seo['sitemapPriority'])) {
-            return sprintf('%.1F', floatval($seo['sitemapPriority']));
+        if (!empty($indexing['sitemapPriority'])) {
+            return sprintf('%.1F', floatval($indexing['sitemapPriority']));
         }
 
         if (!empty($sitemapConfig['default_priority'])) {
@@ -128,17 +126,12 @@ class SitemapFactory
      */
     protected function skipContent(ContentInterface $content): bool
     {
-        $seo = $content->getSeo();
-        if (!($seo['sitemap'] ?? false)) {
+        $indexing = $content->getIndexing();
+        if (!($indexing['sitemap'] ?? false)) {
             return true;
         }
 
         // TODO check sitemap name
-
-        if ($seo['noIndex'] ?? false) {
-            return true;
-        }
-
-        return false;
+        return $indexing['noIndex'] ?? false;
     }
 }

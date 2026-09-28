@@ -105,15 +105,15 @@ class ReadListener extends AbstractContentListener
         $publishedTimestamp = $publishedAt->format('U');
 
         $routeTtls = call_user_func_array('array_merge', $content->getRoutes()->map(function (RouteInterface $route) {
-            return $route->getPaths()->map(function (RoutePathInterface $path) {
+            return $route->getPaths()->map(function (RoutePathInterface $path): ?int {
                 return $path->getCacheTtl();
-            })->filter(function ($ttl) {
+            })->filter(function ($ttl): bool {
                 return null !== $ttl;
             })->toArray();
         })->toArray());
 
-        $maxRouteTtl = count($routeTtls) ? max($routeTtls) : null;
-        $minRouteTtl = count($routeTtls) ? min($routeTtls) : null;
+        $maxRouteTtl = count($routeTtls) > 0 ? max($routeTtls) : null;
+        $minRouteTtl = count($routeTtls) > 0 ? min($routeTtls) : null;
 
         if ($currentTimestamp - $publishedTimestamp > $maxRouteTtl) {
             // published version is too old, no cache

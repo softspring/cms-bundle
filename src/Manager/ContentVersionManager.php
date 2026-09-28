@@ -66,6 +66,16 @@ class ContentVersionManager implements ContentVersionManagerInterface
      */
     public function getCompiledContent(ContentVersionInterface $contentVersion, Request $request, bool $throwExceptionOnCompileErrorAndNoContent = true): CompiledDataInterface
     {
+        if ($request->query->count() > 0) {
+            $compiledData = $this->contentCompiler->compileRequest($contentVersion, $request, null, false);
+
+            if ($throwExceptionOnCompileErrorAndNoContent && $compiledData->hasErrors() && !$compiledData->getDataPart('content')) {
+                throw new CompileException('Compilation error occurred');
+            }
+
+            return $compiledData;
+        }
+
         $compiledKey = $this->compiledDataManager->getCompileKeyFromRequest($contentVersion, $request);
 
         /** @var ?CompiledDataInterface $compiledData */
@@ -76,7 +86,9 @@ class ContentVersionManager implements ContentVersionManagerInterface
 
         if (!$compiledData?->getDataPart('content') || !$this->cmsHelper->compile()->contentSaveCompiled($contentVersion)) {
             $compiledData = $this->contentCompiler->compileRequest($contentVersion, $request, $compiledData);
-            $this->cmsHelper->compile()->contentSaveCompiled($contentVersion) && $this->saveEntity($contentVersion);
+            if ($this->cmsHelper->compile()->contentSaveCompiled($contentVersion)) {
+                $this->saveEntity($contentVersion);
+            }
         }
 
         if ($throwExceptionOnCompileErrorAndNoContent && $compiledData->hasErrors() && !$compiledData->getDataPart('content')) {
@@ -102,7 +114,8 @@ class ContentVersionManager implements ContentVersionManagerInterface
         foreach ($module as $fieldName => &$fieldValue) {
             if (in_array($fieldName, ['_module', '_revision'])) {
                 continue;
-            } elseif ('modules' === $fieldName && is_array($fieldValue)) {
+            }
+            if ('modules' === $fieldName && is_array($fieldValue)) {
                 foreach ($fieldValue as &$subModule) {
                     $this->addLocaleToModule($subModule, $locale);
                 }
@@ -133,7 +146,8 @@ class ContentVersionManager implements ContentVersionManagerInterface
         foreach ($module as $fieldName => &$fieldValue) {
             if (in_array($fieldName, ['_module', '_revision'])) {
                 continue;
-            } elseif ('modules' === $fieldName && is_array($fieldValue)) {
+            }
+            if ('modules' === $fieldName && is_array($fieldValue)) {
                 foreach ($fieldValue as &$subModule) {
                     $this->addSiteToModule($subModule, $site);
                 }

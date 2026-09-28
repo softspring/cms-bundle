@@ -24,7 +24,7 @@ class HtmlModuleTest extends ModuleTestCase
                     'class' => null,
                     'code' => '<h1>Test</h1>',
                 ],
-                'expected' => function (string $result) {
+                'expected' => function (string $result): void {
                     ModuleTestCase::assertRenderText('Test', $result, 'h1');
                 },
             ],
@@ -36,7 +36,7 @@ class HtmlModuleTest extends ModuleTestCase
                     'class' => null,
                     'code' => '<h1>Test</h1>',
                 ],
-                'expected' => function (string $result) {
+                'expected' => function (string $result): void {
                     ModuleTestCase::assertRenderText('Test', $result, 'div#test > h1');
                 },
             ],
@@ -48,7 +48,7 @@ class HtmlModuleTest extends ModuleTestCase
                     'class' => 'test-class',
                     'code' => '<h1>Test</h1>',
                 ],
-                'expected' => function (string $result) {
+                'expected' => function (string $result): void {
                     ModuleTestCase::assertRenderText('Test', $result, 'div.test-class > h1');
                 },
             ],
@@ -60,7 +60,7 @@ class HtmlModuleTest extends ModuleTestCase
                     'class' => 'test-class',
                     'code' => '<h1>Test</h1>',
                 ],
-                'expected' => function (string $result) {
+                'expected' => function (string $result): void {
                     ModuleTestCase::assertRenderText('Test', $result, 'div#test.test-class > h1');
                 },
             ],

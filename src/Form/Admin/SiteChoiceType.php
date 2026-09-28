@@ -37,17 +37,17 @@ class SiteChoiceType extends AbstractType
             'multiple' => true,
             'expanded' => true,
             'content' => null,
-            'choice_label' => function (?SiteInterface $site) {
-                return $site ? $this->translator->trans("$site.name", [], 'sfs_cms_sites') : '';
+            'choice_label' => function (?SiteInterface $site): string {
+                return $site instanceof SiteInterface ? $this->translator->trans("$site.name", [], 'sfs_cms_sites') : '';
             },
             'default_value' => null,
         ]);
 
-        $resolver->setNormalizer('choices', function (Options $options, $value) {
+        $resolver->setNormalizer('choices', function (Options $options, ?array $value): array {
             return $this->cmsHelper->site()->normalizeFormAvailableSites($value, $options['content']);
         });
 
-        $resolver->setNormalizer('default_value', function (Options $options, $value) {
+        $resolver->setNormalizer('default_value', function (Options $options, ?array $value): ?array {
             if ($options['multiple']) {
                 return $this->cmsHelper->site()->normalizeFormAvailableSites($value, $options['content']);
             }

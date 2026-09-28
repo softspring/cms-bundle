@@ -48,14 +48,6 @@ trait ContentInitializeEventTrait
         return $this->cmsHelper->config()->getContent($request->attributes->get('_content_type')); // required = true
     }
 
-    /**
-     * @deprecated this method is deprecated and will be removed in future versions
-     */
-    public function onInitializeIsGranted(InitializeEvent $event): void
-    {
-        trigger_deprecation('softspring/cms-bundle', '5.4', 'The "%s" method is deprecated and will be removed in future versions. Use "onInitializeUpdateHelperConfig" instead.', __METHOD__);
-    }
-
     public function onInitializeUpdateHelperConfig(InitializeEvent $event): void
     {
         $config = $event->getRequest()->attributes->get('_content_config');

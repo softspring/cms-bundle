@@ -38,7 +38,7 @@ class CompiledData implements CompiledDataInterface
 
     public function setCreatedAt(?DateTime $createdAt): void
     {
-        $this->createdAt = $createdAt ? (int) $createdAt->format('U') : null;
+        $this->createdAt = $createdAt instanceof DateTime ? (int) $createdAt->format('U') : null;
     }
 
     public function autoSetCreatedAt(): void
@@ -55,7 +55,7 @@ class CompiledData implements CompiledDataInterface
 
     public function setExpiresAt(?DateTime $expiresAt): void
     {
-        $this->expiresAt = $expiresAt ? (int) $expiresAt->format('U') : null;
+        $this->expiresAt = $expiresAt instanceof DateTime ? (int) $expiresAt->format('U') : null;
     }
 
     public function getData(): ?array
@@ -80,11 +80,11 @@ class CompiledData implements CompiledDataInterface
 
     public function getVersion(): ?VersionInterface
     {
-        if ($this->contentVersion) {
+        if ($this->contentVersion instanceof ContentVersionInterface) {
             return $this->getContentVersion();
         }
 
-        if ($this->sectionVersion) {
+        if ($this->sectionVersion instanceof SectionVersionInterface) {
             return $this->getSectionVersion();
         }
 

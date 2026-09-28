@@ -23,7 +23,7 @@ class MakeContent extends AbstractMaker
     protected string $entityClassName;
 
     private DoctrineHelper $doctrineHelper;
-    private ?Inflector $inflector;
+    private ?Inflector $inflector = null;
 
     public function __construct(DoctrineHelper $doctrineHelper)
     {
@@ -44,7 +44,7 @@ class MakeContent extends AbstractMaker
         return 'Creates a new Softspring CMS content type';
     }
 
-    public function configureCommand(Command $command, InputConfiguration $inputConfig)
+    public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
         $command
             ->addArgument('content-name', InputArgument::OPTIONAL, 'The name of the content type (e.g. <fg=yellow>article, product, ...</>)')
@@ -71,12 +71,12 @@ class MakeContent extends AbstractMaker
         $input->setArgument('entity-class', $this->entityClassName);
     }
 
-    public function configureDependencies(DependencyBuilder $dependencies)
+    public function configureDependencies(DependencyBuilder $dependencies): void
     {
         // TODO: Implement configureDependencies() method.
     }
 
-    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator)
+    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
         //        $entityClassDetails = $generator->createClassNameDetails(
         //            Validator::entityExists($input->getArgument('entity-class'), $this->doctrineHelper->getEntitiesForAutocomplete()),

@@ -26,7 +26,7 @@ class IsolatedRunner
     /**
      * @throws RenderException
      */
-    public function isolateEsiCapableRequestRender(callable $renderFunction): mixed
+    public function isolateEsiCapableRequestRender(callable $renderFunction, bool $resetEntrypoints = false): mixed
     {
         $currentRequest = $this->requestStack->getCurrentRequest();
 
@@ -49,7 +49,7 @@ class IsolatedRunner
         }
 
         // do the render
-        $result = $this->isolateRequestRender($currentRequest, $renderFunction);
+        $result = $this->isolateRequestRender($currentRequest, $renderFunction, $resetEntrypoints);
 
         // Restore the original Surrogate-Capability header if it was set
         isset($originalSurrogateCapability) ?
@@ -62,10 +62,13 @@ class IsolatedRunner
     /**
      * @throws RenderException
      */
-    public function isolateRequestRender(IsolatedRequest|Request $request, callable $renderFunction): mixed
+    public function isolateRequestRender(IsolatedRequest|Request $request, callable $renderFunction, bool $resetEntrypoints = false): mixed
     {
-        // reset webpack encore entrypoint lookup to avoid cache issues
-        $this->entrypointLookup && $this->entrypointLookup->reset();
+        if ($resetEntrypoints) {
+            if ($this->entrypointLookup instanceof EntrypointLookupInterface) {
+                $this->entrypointLookup->reset();
+            }
+        }
 
         // inject the current request into the request stack
         // this is necessary to ensure that the request is available
@@ -101,7 +104,9 @@ class IsolatedRunner
             throw new RenderException('Error rendering request', 0, $e);
         } finally {
             // restore the previous request context if it was set
-            isset($prevRequestContext) && $this->router->setContext($prevRequestContext);
+            if (isset($prevRequestContext)) {
+                $this->router->setContext($prevRequestContext);
+            }
 
             // remove the current request from the request stack
             $this->requestStack->pop();

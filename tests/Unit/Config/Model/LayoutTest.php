@@ -16,7 +16,7 @@ class LayoutTest extends TestCase
 
         $processor = new Processor();
         $configuration = new Layout('layout_name');
-        $config = $processor->processConfiguration($configuration, []);
+        $processor->processConfiguration($configuration, []);
     }
 
     public function testDefaultConfig(): void

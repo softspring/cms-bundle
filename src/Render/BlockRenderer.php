@@ -3,6 +3,8 @@
 namespace Softspring\CmsBundle\Render;
 
 use Exception;
+use ReflectionException;
+use ReflectionMethod;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\InvalidBlockException;
 use Softspring\CmsBundle\Model\BlockInterface;
@@ -67,11 +69,15 @@ class BlockRenderer
             $urlFunction = 'url';
         }
 
-        $render_function_attrs = !empty($renderFunctionAttrs) ? ', '.('{'.Parser::arrayToParamsString($renderFunctionAttrs).'}') : '';
+        $render_function_attrs = [] === $renderFunctionAttrs ? '' : ', '.('{'.Parser::arrayToParamsString($renderFunctionAttrs).'}');
 
         $params['_locale'] = $locale ?? $request?->getLocale() ?? $this->requestStack->getCurrentRequest()?->getLocale();
         $params['_site'] = $site ?? $request?->attributes->get('_site') ?? $this->requestStack->getCurrentRequest()?->attributes->get('_site');
         if (!empty($blockConfig['render_url'])) {
+            if ($blockConfig['esi']) {
+                $params = $this->mergeCurrentRequestQueryParams($params);
+            }
+
             $params_string = '{'.Parser::arrayToParamsString($params).'}';
             $twigCode = "{{ $renderFunction($urlFunction('{$blockConfig['render_url']}', $params_string) $render_function_attrs) }}";
         } else {
@@ -82,10 +88,10 @@ class BlockRenderer
 
             $fragmentEsiAbsolute = 'false'; // todo make it configurable per block?, for example Varnish does not support absolute urls
 
-            if ('render_esi' == $renderFunction) {
+            if ('render_esi' === $renderFunction) {
                 // {{ fragment_uri(controller, absolute = false, strict = true, sign = true) }}
                 $twigCode = "{{ $renderFunction(fragment_uri($controller, $fragmentEsiAbsolute, true, true)) }}";
-            } elseif ('sfs_cms_render_ajax' == $renderFunction) {
+            } elseif ('sfs_cms_render_ajax' === $renderFunction) {
                 // {{ fragment_uri(controller, absolute = false, strict = true, sign = true) }}
                 $twigCode = "{{ $renderFunction(url('sfs_cms_block_render_by_type', $params_string) $render_function_attrs) }}";
             } else {
@@ -93,11 +99,7 @@ class BlockRenderer
             }
         }
 
-        if (class_exists(StringLoaderExtension::class)) {
-            $template = StringLoaderExtension::templateFromString($this->twig, $twigCode);
-        } else {
-            $template = twig_template_from_string($this->twig, $twigCode);
-        }
+        $template = $this->createTemplateFromString($twigCode);
 
         if ($this->profilerEnabled) {
             $this->profilerDebugCollectorData[] = [
@@ -106,7 +108,7 @@ class BlockRenderer
             ];
         }
 
-        return $this->isolatedRunner->isolateEsiCapableRequestRender(function (Request $request) use ($template, $locale) {
+        return $this->isolatedRunner->isolateEsiCapableRequestRender(function (Request $request) use ($template, $locale): string {
             $locale && $request->setLocale($locale);
 
             return $template->render();
@@ -147,9 +149,13 @@ class BlockRenderer
             $urlFunction = 'url';
         }
 
-        $render_function_attrs = !empty($renderFunctionAttrs) ? ', '.('{'.Parser::arrayToParamsString($renderFunctionAttrs).'}') : 'null';
+        $render_function_attrs = [] === $renderFunctionAttrs ? '' : ', '.('{'.Parser::arrayToParamsString($renderFunctionAttrs).'}');
 
         if (!empty($blockConfig['render_url'])) {
+            if ($blockConfig['esi'] && !$forceEsiRender) {
+                $params = $this->mergeCurrentRequestQueryParams($params);
+            }
+
             $params_string = '{'.Parser::arrayToParamsString($params).'}';
             $twigCode = "{{ $renderFunction($urlFunction('{$blockConfig['render_url']}', $params_string) $render_function_attrs) }}";
         } else {
@@ -159,11 +165,7 @@ class BlockRenderer
             $twigCode = "{{ $renderFunction(controller('Softspring\\\\CmsBundle\\\\Controller\\\\BlockController::renderById', $params_string) $render_function_attrs) }}";
         }
 
-        if (class_exists(StringLoaderExtension::class)) {
-            $template = StringLoaderExtension::templateFromString($this->twig, $twigCode);
-        } else {
-            $template = twig_template_from_string($this->twig, $twigCode);
-        }
+        $template = $this->createTemplateFromString($twigCode);
 
         if ($this->profilerEnabled) {
             $this->profilerDebugCollectorData[] = [
@@ -173,7 +175,7 @@ class BlockRenderer
             ];
         }
 
-        return $this->isolatedRunner->isolateEsiCapableRequestRender(function (Request $request) use ($template, $locale) {
+        return $this->isolatedRunner->isolateEsiCapableRequestRender(function (Request $request) use ($template, $locale): string {
             $locale && $request->setLocale($locale);
 
             return $template->render();
@@ -183,5 +185,30 @@ class BlockRenderer
     public function getDebugCollectorData(): array
     {
         return $this->profilerDebugCollectorData;
+    }
+
+    protected function createTemplateFromString(string $twigCode): mixed
+    {
+        try {
+            return (new ReflectionMethod(StringLoaderExtension::class, 'templateFromString'))->invoke(null, $this->twig, $twigCode);
+        } catch (ReflectionException) {
+            return twig_template_from_string($this->twig, $twigCode);
+        }
+    }
+
+    protected function mergeCurrentRequestQueryParams(array $params): array
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        if (!$request instanceof Request) {
+            return $params;
+        }
+
+        foreach ($request->query->all() as $key => $value) {
+            if (!array_key_exists($key, $params)) {
+                $params[$key] = $value;
+            }
+        }
+
+        return $params;
     }
 }

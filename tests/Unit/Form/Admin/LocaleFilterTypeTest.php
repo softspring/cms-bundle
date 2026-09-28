@@ -2,15 +2,14 @@
 
 namespace Softspring\CmsBundle\Test\Unit\Form\Admin;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Softspring\CmsBundle\Form\Admin\LocaleFilterType;
 use Symfony\Component\Form\Event\PreSetDataEvent;
 
 class LocaleFilterTypeTest extends TestCase
 {
-    /**
-     * @dataProvider migratingFormatProvider
-     */
+    #[DataProvider('migratingFormatProvider')]
     public function testMigratingFormat(string $description, array $provided, array $expected, array $available_locales): void
     {
         $form = $this->createMock('Symfony\Component\Form\FormInterface');

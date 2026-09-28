@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Softspring\CmsBundle\Model;
 
 use Doctrine\Common\Collections\Collection;
@@ -30,9 +32,6 @@ interface ContentInterface extends VersionableInterface, TranslatableConfigInter
 
     public function removeSite(SiteInterface $site): void;
 
-    /**
-     * @return RouteInterface[]|Collection
-     */
     public function getRoutes(): Collection;
 
     public function addRoute(RouteInterface $route): void;
@@ -44,16 +43,6 @@ interface ContentInterface extends VersionableInterface, TranslatableConfigInter
     public function getExtraData(): ?array;
 
     public function setExtraData(?array $extraData): void;
-
-    /**
-     * @deprecated use getIndexing()
-     */
-    public function getSeo(): ?array;
-
-    /**
-     * @deprecated use setIndexing()
-     */
-    public function setSeo(?array $seo): void;
 
     public function getIndexing(): ?array;
 

@@ -16,25 +16,29 @@ class LayoutHelper
     /**
      * @throws InvalidContentException
      */
-    public function getAvailableLayouts(ContentInterface $content): array
+    public function getAvailableLayouts(ContentInterface $content, ?string $currentLayout = null): array
     {
         $contentType = $this->cmsConfig->getContent($content);
 
         $layouts = $this->cmsConfig->getLayouts();
 
-        if (!empty($contentType['allowed_layouts'])) {
-            $availableLayouts = $contentType['allowed_layouts'];
-        } else {
-            $availableLayouts = array_keys($layouts);
-        }
+        $availableLayouts = empty($contentType['allowed_layouts']) ? array_keys($layouts) : $contentType['allowed_layouts'];
 
         foreach ($layouts as $layoutId => $layoutConfig) {
-            if (!empty($layoutConfig['compatible_contents']) && !in_array($contentType['_id'], $layoutConfig['compatible_contents'])) {
-                unset($availableLayouts[array_search($layoutId, $availableLayouts)]);
+            if (!empty($layoutConfig['compatible_contents']) && !in_array($contentType['_id'], $layoutConfig['compatible_contents']) && false !== $layoutIndex = array_search($layoutId, $availableLayouts)) {
+                unset($availableLayouts[$layoutIndex]);
+            }
+
+            if (false === $layoutConfig['enabled'] && $layoutId !== $currentLayout && false !== $layoutIndex = array_search($layoutId, $availableLayouts)) {
+                unset($availableLayouts[$layoutIndex]);
             }
         }
 
-        return $availableLayouts;
+        if ($currentLayout && isset($layouts[$currentLayout]) && !in_array($currentLayout, $availableLayouts)) {
+            $availableLayouts[] = $currentLayout;
+        }
+
+        return array_values($availableLayouts);
     }
 
     /**
@@ -50,7 +54,7 @@ class LayoutHelper
         $layout = $this->cmsConfig->getLayout($defaultLayout, false);
 
         if (!in_array($defaultLayout, $availableLayouts) || !$layout) {
-            $defaultLayout = $availableLayouts[0];
+            return $availableLayouts[0];
         }
 
         return $defaultLayout;

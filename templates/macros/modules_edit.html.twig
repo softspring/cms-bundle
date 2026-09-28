@@ -60,7 +60,7 @@
 {%- endmacro -%}
 
 {%- macro link_content (formField, locale = null, contentEditable = true, placeholderTransKey = null, hideIfEmpty = false, fill = false, wysiwyg = null) -%}
-    {% set module_name = _self._module_name(formField) %}
+    {% set module_name = _self._module_name(formField)|trim %}
     {{ _self._update_link_value(formField, 'data-edit-content-input') }}
 
     {% if locale == null and formField.vars.attr['data-input-lang']|default(false) %}
@@ -117,6 +117,13 @@
     {% endif %}
 {%- endmacro -%}
 
+{%- macro link_color_attribute (formField, attributeName, defaultValue = null) -%}
+    {% set value_hash = (formField.vars.name~'_'~random())|sfs_cms_sha1|slice(0,8) %}
+    {{ _self._update_link_value(formField, 'data-edit-color-attribute-'~attributeName~'-input', value_hash, true) }}
+    data-edit-color-attribute-{{ attributeName }}-target="{{ value_hash }}"
+    {{ attributeName }}="{{ formField.vars.data|default(defaultValue)|default('#000000') }}"
+{%- endmacro -%}
+
 {%- macro bg_color_style(formField) -%}
     {{ formField.vars.data ? 'background-color:'~formField.vars.data~';' : '' }}
 {%- endmacro -%}
@@ -124,6 +131,12 @@
 {%- macro link_toggle(formField) -%}
         {{ _self._update_link_value(formField, 'data-edit-content-toggle-input') }}
         data-edit-content-toggle-target="{{ formField.vars.attr['data-edit-content-toggle-input'] }}"
+{%- endmacro -%}
+
+{%- macro link_choice_toggle(formField, choiceValues) -%}
+    {{ _self._update_link_value(formField, 'data-edit-content-toggle-choice') }}
+    data-edit-content-toggle-choice-target="{{ formField.vars.attr['data-edit-content-toggle-choice'] }}"
+    data-edit-content-toggle-choice-target-values="{{ choiceValues|join(',') }}"
 {%- endmacro -%}
 
 {%- macro link_media_preview (formField, locale = null, placeholder = null) -%}
@@ -184,8 +197,8 @@
     {% endif %}
 {%- endmacro _module_name -%}
 
-{%- macro _update_link_value (formField, dataField, value = false) -%}
-    {% if not formField.vars.attr[dataField]|default(false) %}
-        {{ sfs_cms_form_view_set_attr(formField, dataField, value == false ? (formField.vars.name~'_'~random())|sfs_cms_sha1|slice(0,8) : value) }}
+{%- macro _update_link_value (formField, dataField, value = false, allowMultiple = false) -%}
+    {% if not formField.vars.attr[dataField]|default(false) or allowMultiple %}
+        {{ sfs_cms_form_view_set_attr(formField, dataField, value == false ? (formField.vars.name~'_'~random())|sfs_cms_sha1|slice(0,8) : value, allowMultiple) }}
     {% endif %}
 {%- endmacro _update_link_value -%}

@@ -47,7 +47,7 @@ class ContentManager implements ContentManagerInterface
 
         foreach ($attrs as $attr => $value) {
             /* @phpstan-ignore-next-line */
-            if ('rel' === $attr && is_array($value)) {
+            if (is_array($value)) {
                 $value = implode(',', $value);
             }
 
@@ -126,10 +126,7 @@ class ContentManager implements ContentManagerInterface
      */
     public function getRepository(?string $type = null): EntityRepository
     {
-        /** @var EntityRepository $repo */
-        $repo = $this->em->getRepository($this->getTypeClass($type));
-
-        return $repo;
+        return $this->em->getRepository($this->getTypeClass($type));
     }
 
     /**

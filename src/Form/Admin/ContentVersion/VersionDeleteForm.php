@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Softspring\CmsBundle\Form\Admin\ContentVersion;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -30,7 +32,7 @@ class VersionDeleteForm extends AbstractType
         $resolver->setRequired('content');
         $resolver->setAllowedTypes('content', [ContentInterface::class]);
 
-        $resolver->setNormalizer('label_format', function (Options $options, $value) {
+        $resolver->setNormalizer('label_format', function (Options $options, $value): string {
             return "admin_{$options['content_config']['_id']}.form.%name%.label";
         });
     }

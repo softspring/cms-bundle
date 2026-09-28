@@ -4,6 +4,8 @@ namespace Softspring\CmsBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Softspring\CmsBundle\Model\Traits\TranslatableConfigTrait;
+use Softspring\CmsBundle\Model\Traits\VersionableTrait;
 use Softspring\CmsBundle\Utils\SitesSorter;
 
 /**
@@ -13,8 +15,8 @@ use Softspring\CmsBundle\Utils\SitesSorter;
  */
 abstract class Content implements ContentInterface
 {
-    use Traits\VersionableTrait;
-    use Traits\TranslatableConfigTrait;
+    use VersionableTrait;
+    use TranslatableConfigTrait;
 
     protected ?string $name = null;
 
@@ -130,23 +132,6 @@ abstract class Content implements ContentInterface
     public function setExtraData(?array $extraData): void
     {
         $this->extraData = $extraData;
-    }
-
-    public function getSeo(): ?array
-    {
-        trigger_deprecation('sfs/cms-bundle', '5.2', 'Method %s is deprecated, use %s instead, and version.getSeo', __METHOD__, 'getIndexing');
-
-        if (null === $this->getIndexing()) {
-            return null;
-        }
-
-        return $this->getIndexing() + ($this->publishedVersion?->getSeo() ?: []);
-    }
-
-    public function setSeo(?array $seo): void
-    {
-        trigger_deprecation('sfs/cms-bundle', '5.2', 'Method %s is deprecated, use %s instead', __METHOD__, 'setIndexing');
-        $this->setIndexing($seo);
     }
 
     public function getIndexing(): ?array

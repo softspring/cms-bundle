@@ -79,6 +79,7 @@ class SeoListener extends AbstractContentVersionListener
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_SEO_VIEW => [
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onView', 0],
+                ['onViewAddEntities', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_SEO_EXCEPTION => [
                 ['onEventDispatchContentTypeEvent', 10],

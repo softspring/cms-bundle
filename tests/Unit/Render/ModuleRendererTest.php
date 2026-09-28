@@ -3,6 +3,7 @@
 namespace Softspring\CmsBundle\Test\Unit\Render;
 
 use Exception;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Softspring\CmsBundle\Config\CmsConfig;
@@ -16,9 +17,9 @@ use Twig\Environment;
 
 class ModuleRendererTest extends TestCase
 {
-    protected CmsConfig|MockObject $cmsConfig;
-    protected RequestStack|MockObject $requestStack;
-    protected Environment|MockObject $twig;
+    protected CmsConfig&MockObject $cmsConfig;
+    protected RequestStack&MockObject $requestStack;
+    protected Environment&MockObject $twig;
 
     protected function setUp(): void
     {
@@ -27,7 +28,8 @@ class ModuleRendererTest extends TestCase
         $this->twig = $this->createMock(Environment::class);
     }
 
-    public function testSkipBySiteFilter(): void
+    #[DataProvider('siteFilterProvider')]
+    public function testSkipBySiteFilter(array $siteFilter): void
     {
         $site1 = new Site();
         $site1->setId('site_1');
@@ -47,7 +49,7 @@ class ModuleRendererTest extends TestCase
 
         $this->cmsConfig->expects($this->any())
             ->method('getSite')
-            ->willReturnCallback(function ($site) use ($site1, $site2) {
+            ->willReturnCallback(function ($site) use ($site1, $site2): ?Site {
                 return match ($site) {
                     'site_1' => $site1,
                     'site_2' => $site2,
@@ -65,15 +67,22 @@ class ModuleRendererTest extends TestCase
         $profilerDebugCollectorData = [];
         $return = $moduleRenderer->render([
             '_module' => 'test_module',
-            'site_filter' => [
-                'site_2',
-            ],
-        ], $profilerDebugCollectorData, [], null);
+            'site_filter' => $siteFilter,
+        ], $profilerDebugCollectorData, []);
 
         $this->assertEquals(ModuleRenderer::SITE_HIDDEN_MODULE."\n", $return);
     }
 
-    public function testSkipByLocaleFilter(): void
+    public static function siteFilterProvider(): array
+    {
+        return [
+            'legacy list format' => [['site_2']],
+            'map format' => [['site_2' => true]],
+        ];
+    }
+
+    #[DataProvider('localeFilterProvider')]
+    public function testSkipByLocaleFilter(array $localeFilter): void
     {
         $site = new Site();
         $site->setId('site_1');
@@ -106,12 +115,18 @@ class ModuleRendererTest extends TestCase
         $profilerDebugCollectorData = [];
         $return = $moduleRenderer->render([
             '_module' => 'test_module',
-            'locale_filter' => [
-                'en',
-            ],
-        ], $profilerDebugCollectorData, [], null);
+            'locale_filter' => $localeFilter,
+        ], $profilerDebugCollectorData, []);
 
         $this->assertEquals(ModuleRenderer::LOCALE_HIDDEN_MODULE."\n", $return);
+    }
+
+    public static function localeFilterProvider(): array
+    {
+        return [
+            'legacy list format' => [['en']],
+            'map format' => [['en' => true]],
+        ];
     }
 
     public function testRenderNoContainerModule(): void
@@ -149,7 +164,7 @@ class ModuleRendererTest extends TestCase
         $return = $moduleRenderer->render([
             '_module' => 'test_module',
             'content' => 'Test content',
-        ], $profilerDebugCollectorData, [], null);
+        ], $profilerDebugCollectorData, []);
 
         // Assuming the module is rendered as a string
         $this->assertStringContainsString('Test content', $return);
@@ -171,7 +186,7 @@ class ModuleRendererTest extends TestCase
 
         $this->cmsConfig->expects($this->any())
             ->method('getModule')
-            ->willReturnCallback(function ($module) {
+            ->willReturnCallback(function ($module): ?array {
                 return match ($module) {
                     'test_container_module' => [
                         'revision' => 1,
@@ -200,14 +215,13 @@ class ModuleRendererTest extends TestCase
                     foreach ($data['contents'] as $submodule) {
                         $content .= $submodule ?? '';
                     }
-
                     return $content;
-                } elseif ('test_module.html.twig' === $template) {
+                }
+                if ('test_module.html.twig' === $template) {
                     // Simulate rendering of a simple module
                     return $data['content'] ?? '';
-                } else {
-                    throw new Exception("Unknown template: $template");
                 }
+                throw new Exception("Unknown template: $template");
             });
 
         $moduleRenderer = new ModuleRenderer($this->cmsConfig, $this->requestStack, $this->twig, null);
@@ -226,7 +240,7 @@ class ModuleRendererTest extends TestCase
                         'content' => 'Test content 2',
                     ],
                 ],
-            ], $profilerDebugCollectorData, [], null);
+            ], $profilerDebugCollectorData, []);
 
             // Assuming the module is rendered as a string
             $this->assertStringContainsString('Test content', $return);

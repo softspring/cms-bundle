@@ -64,11 +64,11 @@ abstract class AbstractModuleType extends AbstractNodeType
         $resolver->setAllowedTypes('available_sites', ['null', 'array']);
         $resolver->setAllowedTypes('available_locales', ['null', 'array']);
 
-        $resolver->setNormalizer('available_sites', function (Options $options, $value) {
+        $resolver->setNormalizer('available_sites', function (Options $options, $value): array {
             return $options['content'] ? $this->cmsHelper->site()->normalizeFormAvailableSites($value, $options['content']) : $this->cmsHelper->config()->getSites();
         });
 
-        $resolver->setNormalizer('available_locales', function (Options $options, $value) {
+        $resolver->setNormalizer('available_locales', function (Options $options, $value): array {
             return $options['content'] ? $this->cmsHelper->locale()->normalizeFormAvailableLocalesForContent($value, $options['content']) :
                 $this->cmsHelper->locale()->getEnabledLocales();
         });
@@ -90,13 +90,13 @@ abstract class AbstractModuleType extends AbstractNodeType
 
     protected function buildChildForm(FormBuilderInterface $builder, array $options): void
     {
-        if ($options['locale_filter'] && sizeof($options['available_locales']) > 1) {
+        if ($options['locale_filter'] && count($options['available_locales']) > 1) {
             $builder->add('locale_filter', LocaleFilterType::class, [
                 'available_locales' => $options['available_locales'],
             ]);
         }
 
-        if ($options['site_filter'] && sizeof($options['available_sites']) > 1) {
+        if ($options['site_filter'] && count($options['available_sites']) > 1) {
             $builder->add('site_filter', SiteFilterType::class, [
                 'content' => $options['content'],
                 'available_sites' => $options['available_sites'],

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Softspring\CmsBundle\Compiler;
 
 use Softspring\CmsBundle\Model\CompiledDataInterface;
@@ -16,7 +18,7 @@ abstract class AbstractVersionCompiler implements CompilerInterface
         $exceptions = [];
 
         $currentException = $exception;
-        while ($currentException) {
+        while ($currentException instanceof Throwable) {
             $exceptionData = [
                 'class' => get_class($currentException),
                 'message' => $currentException->getMessage(),

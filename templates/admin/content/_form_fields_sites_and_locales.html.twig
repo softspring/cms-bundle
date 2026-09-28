@@ -1,0 +1,22 @@
+{% trans_default_domain 'sfs_cms_contents' %}
+
+<section class="mb-5" aria-labelledby="content-sites-and-locales-fields-title">
+    <h2 class="h5 border-bottom pb-2 mb-4" id="content-sites-and-locales-fields-title">{{ 'admin_content.form.sections.availability.title'|trans }}</h2>
+
+    {% if form.sites is defined %}
+        <div class="{{ form.sites.vars.choices|length < 2 ? 'd-none' : '' }}">
+            {{ form_row(form.sites, {'label_attr': {'class': 'checkbox-inline checkbox-switch'}}) }}
+        </div>
+    {% endif %}
+    {% if form.defaultLocale is defined and form.locales is defined %}
+        <div class="{{ form.defaultLocale.vars.choices|length < 2 ? 'd-none' : '' }}">
+            {{ form_row(form.defaultLocale, {'attr': {'data-locale-disables-choice': form.locales.vars.id}}) }}
+        </div>
+    {% endif %}
+    {% if form.locales is defined %}
+        <div class="{{ form.locales.vars.choices|length < 2 ? 'd-none' : '' }}">
+            {{ form_row(form.locales, {'label_attr': {'class': 'checkbox-inline checkbox-switch'}}) }}
+        </div>
+    {% endif %}
+    {% if form.addLocale is defined %}{{ form_row(form.addLocale) }}{% endif %}
+</section>

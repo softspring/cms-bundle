@@ -13,7 +13,7 @@ class RoutingLoader extends Loader
         parent::__construct($env);
     }
 
-    public function load($resource, ?string $type = null): RouteCollection
+    public function load(mixed $resource, ?string $type = null): RouteCollection
     {
         $collection = new RouteCollection();
 
@@ -28,7 +28,7 @@ class RoutingLoader extends Loader
         return $collection;
     }
 
-    public function supports($resource, ?string $type = null): bool
+    public function supports(mixed $resource, ?string $type = null): bool
     {
         $types = [];
         foreach ($this->routingProviders as $routingProvider) {

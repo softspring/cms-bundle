@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Softspring\CmsBundle\Migrations;
 
+use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
@@ -26,6 +27,14 @@ final class Version20231128163442 extends AbstractMigration
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
+        if ($this->connection->getDatabasePlatform() instanceof PostgreSQLPlatform) {
+            $this->addSql('ALTER TABLE cms_content DROP CONSTRAINT FK_A0293FB8A2C84DEF');
+            $this->addSql('DROP INDEX IDX_A0293FB8A2C84DEF');
+            $this->addSql('ALTER TABLE cms_content DROP COLUMN last_version_id');
+
+            return;
+        }
+
         $this->addSql('ALTER TABLE cms_content DROP FOREIGN KEY FK_A0293FB8A2C84DEF');
         $this->addSql('DROP INDEX IDX_A0293FB8A2C84DEF ON cms_content');
         $this->addSql('ALTER TABLE cms_content DROP last_version_id');

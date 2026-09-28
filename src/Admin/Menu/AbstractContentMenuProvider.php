@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Softspring\CmsBundle\Admin\Menu;
 
 use RuntimeException;
@@ -31,7 +33,7 @@ abstract class AbstractContentMenuProvider implements MenuProviderInterface
     {
         $text = $this->translator->trans("admin_{$contentType}.tabs_menu.$id", [], 'sfs_cms_contents');
         $url = $this->router->generate("sfs_cms_admin_content_{$contentType}_{$id}", ['content' => $content->getId()]);
-        $active = $current == $id;
+        $active = $current === $id;
         $isGranted = $contentConfig['admin'][$configKey ?? $id]['is_granted'] ?? null;
         $disabled = ('#' === $url) || ($isGranted && !$this->authorizationChecker->isGranted($isGranted, $content));
 

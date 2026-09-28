@@ -1,4 +1,4 @@
-import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
+import {registerFeature} from '@softspring/cms-bundle/scripts/tools.js';
 
 registerFeature('admin_content_edit_filter_preview', _init);
 
@@ -22,8 +22,8 @@ function hideElement(htmlElement) {
 function showElement(htmlElement) {
     htmlElement.style.setProperty('display', '');
 
-    if (htmlElement.dataset.previewUrl && !htmlElement.dataset.previewUrlLoaded) {
-        htmlElement.dataset.previewUrlLoaded = true;
+    if (htmlElement.dataset.previewUrl && !htmlElement.dataset.previewUrlLoaded && !htmlElement.dataset.previewUrlLoading) {
+        htmlElement.dataset.previewUrlLoading = true;
         const previewUrl = htmlElement.dataset.previewUrl;
         fetch(previewUrl)
             .then(response => response.text())
@@ -34,9 +34,16 @@ function showElement(htmlElement) {
                 } else {
                     htmlElement.innerHTML = html;
                 }
+                htmlElement.dataset.previewUrlLoaded = true;
                 filterCurrentFilterElements();
             })
-            .catch(error => console.error('Error loading preview:', error));
+            .catch(error => {
+                htmlElement.dataset.previewUrlError = true;
+                console.error('Error loading preview:', error);
+            })
+            .finally(() => {
+                delete htmlElement.dataset.previewUrlLoading;
+            });
     }
 }
 

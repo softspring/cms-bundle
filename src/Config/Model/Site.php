@@ -21,8 +21,12 @@ class Site implements ConfigurationInterface
 
         $rootNode
             ->validate()
-                ->ifTrue(fn ($config) => empty($config['hosts']) && empty($config['paths']))
+                ->ifTrue(fn ($config): bool => empty($config['hosts']) && empty($config['paths']))
                 ->thenInvalid('Invalid configuration, either hosts either paths must be set for a valid site')
+            ->end()
+            ->validate()
+                ->ifTrue(fn (array $config): bool => self::hasReservedRoutePathCollisions($config))
+                ->thenInvalid('Invalid site configuration, sitemap and robots URLs must not collide')
             ->end()
             ->children()
                 ->arrayNode('allowed_content_types')
@@ -66,7 +70,7 @@ class Site implements ConfigurationInterface
                     ->performNoDeepMerging()
                     ->arrayPrototype()
                         ->beforeNormalization()
-                            ->always(function ($config) {
+                            ->always(function (array $config): array {
                                 $config['path'] = rtrim($config['path'], '/');
 
                                 return $config;
@@ -83,15 +87,15 @@ class Site implements ConfigurationInterface
                 ->arrayNode('slash_route')
                     ->performNoDeepMerging()
                     ->validate()
-                        ->ifTrue(fn ($config) => $config['enabled'] && empty($config['behaviour']))
+                        ->ifTrue(fn ($config): bool => $config['enabled'] && empty($config['behaviour']))
                         ->thenInvalid('If slash_route option is enabled, it requires a behaviour')
                     ->end()
                     ->validate()
-                        ->ifTrue(fn ($config) => $config['enabled'] && ($config['behaviour'] ?? '') == 'redirect_to_route_with_user_language' && empty($config['route']))
+                        ->ifTrue(fn ($config): bool => $config['enabled'] && ($config['behaviour'] ?? '') == 'redirect_to_route_with_user_language' && empty($config['route']))
                         ->thenInvalid('redirect_to_route_with_user_language behaviour requires a route')
                     ->end()
                     ->validate()
-                        ->ifTrue(fn ($config) => $config['enabled'] && ($config['behaviour'] ?? '') == 'redirect_to_route_with_user_language' && empty($config['redirect_code']))
+                        ->ifTrue(fn ($config): bool => $config['enabled'] && ($config['behaviour'] ?? '') == 'redirect_to_route_with_user_language' && empty($config['redirect_code']))
                         ->thenInvalid('redirect_to_route_with_user_language behaviour requires a redirect_code')
                     ->end()
                     ->canBeEnabled()
@@ -126,7 +130,6 @@ class Site implements ConfigurationInterface
                             ->scalarNode('default_priority')->defaultFalse()->end()
                             ->enumNode('default_changefreq')->defaultFalse()->values([false, 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never'])->end()
                             ->integerNode('cache_ttl')->defaultFalse()->end()
-                            ->booleanNode('alternates')->setDeprecated('softspring/cms-bundle', '5.1', 'Use alternates_locales and alternates_sites')->defaultTrue()->end()
                             ->booleanNode('alternates_locales')->defaultTrue()->end()
                             ->booleanNode('alternates_sites')->defaultTrue()->end()
                             ->booleanNode('alternates_include_hreflang')->defaultTrue()->end()
@@ -139,6 +142,9 @@ class Site implements ConfigurationInterface
                     ->children()
                         ->scalarNode('url')->defaultFalse()->end()
                         ->integerNode('cache_ttl')->defaultFalse()->end()
+                        ->arrayNode('external_sitemaps')
+                            ->scalarPrototype()->end()
+                        ->end()
                     ->end()
                 ->end()
             ->end()
@@ -149,5 +155,55 @@ class Site implements ConfigurationInterface
         }
 
         return $treeBuilder;
+    }
+
+    public static function getReservedRoutePaths(array $config): array
+    {
+        $reservedPaths = [];
+
+        foreach ($config['sitemaps'] ?? [] as $sitemap => $sitemapConfig) {
+            if (!empty($sitemapConfig['url'])) {
+                $reservedPaths[] = [
+                    'path' => self::normalizeReservedRoutePath($sitemapConfig['url']),
+                    'source' => sprintf('sitemap "%s"', $sitemap),
+                ];
+            }
+        }
+
+        if (!empty($config['sitemaps_index']['enabled']) && !empty($config['sitemaps_index']['url'])) {
+            $reservedPaths[] = [
+                'path' => self::normalizeReservedRoutePath($config['sitemaps_index']['url']),
+                'source' => 'sitemap index',
+            ];
+        }
+
+        if (!empty($config['robots']['mode'])) {
+            $reservedPaths[] = [
+                'path' => '/robots.txt',
+                'source' => 'robots.txt',
+            ];
+        }
+
+        return $reservedPaths;
+    }
+
+    protected static function hasReservedRoutePathCollisions(array $config): bool
+    {
+        $paths = [];
+
+        foreach (self::getReservedRoutePaths($config) as $reservedPath) {
+            if (isset($paths[$reservedPath['path']])) {
+                return true;
+            }
+
+            $paths[$reservedPath['path']] = true;
+        }
+
+        return false;
+    }
+
+    protected static function normalizeReservedRoutePath(string $path): string
+    {
+        return '/'.trim($path, '/');
     }
 }

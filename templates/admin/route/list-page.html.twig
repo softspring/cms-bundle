@@ -1,7 +1,7 @@
 {% trans_default_domain 'sfs_cms_admin' %}
 
 {% for route in collection %}
-    <tr>
+    <tr data-row-href="{{ url('sfs_cms_admin_routes_read', {'route':route.id}) }}">
         <td class="p-3">{{ route.id }}</td>
         <td class="p-3">{{ route.sites|map((site) => site|sfs_cms_site_name)|join(', ') }}</td>
         <td class="p-3">
@@ -14,6 +14,15 @@
                 {{ route.redirectUrl|default('') }}
             {% elseif route.type == constant('Softspring\\CmsBundle\\Model\\RouteInterface::TYPE_REDIRECT_TO_ROUTE') %}
                 {{ route.symfonyRoute.route_name|default('') }}
+            {% endif %}
+        </td>
+        <td class="p-3">
+            {% set cacheTtls = route.paths|map((path) => path.cacheTtl)|filter((cacheTtl) => cacheTtl) %}
+
+            {% if cacheTtls is not empty %}
+                {{ cacheTtls|map((cacheTtl) => cacheTtl|sfs_cms_format_cache_ttl)|join(', ') }}
+            {% else %}
+                <span class="text-body-secondary">-</span>
             {% endif %}
         </td>
         <td class="p-3 text-end">

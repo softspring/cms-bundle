@@ -24,7 +24,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->beforeNormalization()
                 ->always()
-                ->then(function ($configuration) {
+                ->then(function (array $configuration): array {
                     /** @phpstan-ignore-next-line */
                     $defaultCacheEnabled = $configuration['cache']['enabled'] ?? !empty($configuration['cache']['type']) ?? null;
                     $defaultCacheType = $configuration['cache']['type'] ?? 'none';
@@ -94,7 +94,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('site')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->enumNode('identification')->values(['domain', 'path'])->defaultValue('domain')->end()
+                        ->enumNode('identification')->setDeprecated('cms-bundle', '6.0', 'will be removed in 6.0')->values(['domain', 'path'])->defaultValue('domain')->end()
                         ->scalarNode('class')->defaultValue(Site::class)->end()
                         ->booleanNode('throw_not_found')->defaultTrue()->end()
                     ->end()
@@ -136,6 +136,9 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('class')->defaultValue(Route::class)->end()
                         ->scalarNode('path_class')->defaultValue(RoutePath::class)->end()
                         ->scalarNode('find_field_name')->defaultValue('id')->end()
+                        ->arrayNode('restricted_paths')
+                            ->scalarPrototype()->end()
+                        ->end()
                     ->end()
                 ->end()
 
@@ -150,8 +153,6 @@ class Configuration implements ConfigurationInterface
                         ->booleanNode('autocompile_on_save')->defaultFalse()->end()
                         ->booleanNode('autocompile_on_publish')->defaultTrue()->end()
                         ->scalarNode('prefix_compiled')->defaultValue('')->end()
-                        /* @deprecated cache_last_modified since 5.3, will be removed in 6.0, use global sfs_cms.cache block */
-                        ->booleanNode('cache_last_modified')->defaultFalse()->end()
                         ->arrayNode('cache')
                             ->children()
                                 ->booleanNode('enabled')->end()

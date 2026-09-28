@@ -21,49 +21,44 @@ class Block implements ConfigurationInterface
 
         $rootNode
             ->validate()
-                ->ifTrue(function ($config) {
+                ->ifTrue(function (array $config): bool {
                     return $config['static'] && !$config['singleton'];
                 })
                 ->thenInvalid('A block defined as static must be singleton.')
             ->end()
             ->validate()
-                ->ifTrue(function ($config) {
+                ->ifTrue(function (array $config): bool {
                     return $config['static'] && !empty($config['form_fields']);
                 })
                 ->thenInvalid('A block defined as static can not have form_fields.')
             ->end()
             ->validate()
-                ->ifTrue(function ($config) {
-                    return $config['static'] && !empty($config['form_options']);
-                })
-                ->thenInvalid('A block defined as static can not have form_options.')
-            ->end()
-            ->validate()
-                ->ifTrue(function ($config) {
+                ->ifTrue(function (array $config): bool {
                     return $config['static'] && !empty($config['form_template']);
                 })
                 ->thenInvalid('A block defined as static can not have form_template.')
             ->end()
             ->validate()
-                ->ifTrue(function ($config) {
+                ->ifTrue(function (array $config): bool {
                     return $config['static'] && $config['schedulable'];
                 })
                 ->thenInvalid('A block defined as static can not be schedulable.')
             ->end()
             ->validate()
-                ->ifTrue(function ($config) {
+                ->ifTrue(function (array $config): bool {
                     return is_bool($config['isolate_request']) && !$config['esi'] && !$config['ajax'];
                 })
                 ->thenInvalid('You can not set isolate_request if esi and ajax are false.')
             ->end()
             ->validate()
-                ->ifTrue(function ($config) {
+                ->ifTrue(function (array $config): bool {
                     return $config['esi'] && $config['ajax'];
                 })
                 ->thenInvalid('You can not set ajax if esi is true.')
             ->end()
             ->children()
                 ->integerNode('revision')->isRequired()->end()
+                ->booleanNode('enabled')->defaultTrue()->end()
 
                 ->scalarNode('render_template')->defaultValue("@block/{$this->blockName}/render.html.twig")->end()
                 ->scalarNode('form_template')->end()
@@ -83,18 +78,6 @@ class Block implements ConfigurationInterface
                 ->booleanNode('static')->defaultFalse()->end()
                 ->booleanNode('schedulable')->defaultFalse()->end()
                 ->scalarNode('render_url')->end()
-
-                // TODO review this ???
-                ->scalarNode('form_type')
-                    ->setDeprecated('softspring/cms-bundle', '5.1')
-                ->end()
-
-                // TODO review this ???
-                ->arrayNode('form_options')
-                    ->setDeprecated('softspring/cms-bundle', '5.1')
-                    ->useAttributeAsKey('key')
-                    ->prototype('variable')->end()
-                ->end()
 
                 ->arrayNode('form_fields')
                     ->useAttributeAsKey('key')

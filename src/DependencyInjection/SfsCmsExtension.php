@@ -4,8 +4,6 @@ namespace Softspring\CmsBundle\DependencyInjection;
 
 use Composer\InstalledVersions;
 use Softspring\CmsBundle\Config\ConfigLoader;
-use Softspring\CmsBundle\Data\EntityTransformer\EntityTransformerInterface;
-use Softspring\CmsBundle\Data\FieldTransformer\FieldTransformerInterface;
 use Softspring\CmsBundle\Entity\Block;
 use Softspring\CmsBundle\Entity\CompiledData;
 use Softspring\CmsBundle\Entity\Content;
@@ -18,8 +16,8 @@ use Softspring\CmsBundle\Entity\RoutePath;
 use Softspring\CmsBundle\Entity\Site;
 use Softspring\CmsBundle\Model\BlockInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
-use Softspring\Component\DynamicFormType\SfsDynamicFormTypeBundle;
 use Symfony\Bundle\MakerBundle\MakerBundle;
+use Symfony\Component\AssetMapper\AssetMapperInterface;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -27,14 +25,12 @@ use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
+use function dirname;
+
 class SfsCmsExtension extends Extension implements PrependExtensionInterface
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
-        /* @deprecated will be removed on 6.0 version, when fixtures will be refactored to use serializer */
-        $container->registerForAutoconfiguration(EntityTransformerInterface::class)->addTag('sfs_cms.data.entity_transformer');
-        $container->registerForAutoconfiguration(FieldTransformerInterface::class)->addTag('sfs_cms.data.field_transformer');
-
         $processor = new Processor();
         $configuration = new Configuration();
         $config = $processor->processConfiguration($configuration, $configs);
@@ -43,7 +39,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         // prepend default bundle collection
         array_unshift($config['collections'], 'vendor/softspring/cms-bundle/cms');
         // append (last to override anything) the project collection
-        array_push($config['collections'], 'cms');
+        $config['collections'][] = 'cms';
         $container->setParameter('sfs_cms.collections', $config['collections']);
 
         if ($container->hasParameter('sfs_cms.config_extensions')) {
@@ -70,6 +66,7 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $container->setParameter('sfs_cms.route.class', $config['route']['class']);
         $container->setParameter('sfs_cms.route.path_class', $config['route']['path_class']);
         $container->setParameter('sfs_cms.route.find_field_name', $config['route']['find_field_name'] ?? null);
+        $container->setParameter('sfs_cms.route.restricted_paths', $config['route']['restricted_paths'] ?? []);
 
         // configure content classes
         $container->setParameter('sfs_cms.content.content_class', $config['content']['content_class']);
@@ -108,20 +105,12 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         $adminEnabled && $loader->load('admin_services.yaml');
         $loader->load('entity_transformer.yaml');
 
-        if (!class_exists(SfsDynamicFormTypeBundle::class)) {
-            /* @deprecated This will be removed soon, use SfsDynamicFormTypeBundle instead */
-            $loader->load('dynamic_form_type.yaml');
-        }
         $adminEnabled && $loader->load('controller/admin_blocks.yaml');
         $adminEnabled && $loader->load('controller/admin_content.yaml');
         $adminEnabled && $loader->load('controller/admin_content_version.yaml');
         $adminEnabled && $loader->load('controller/admin_menus.yaml');
         $adminEnabled && $loader->load('controller/admin_routes.yaml');
         $adminEnabled && $loader->load('controller/admin_sites.yaml');
-
-        if (class_exists('Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle')) {
-            $loader->load('deprecated_param_converters.yaml');
-        }
 
         if (interface_exists('Symfony\Component\HttpKernel\Controller\ValueResolverInterface')) {
             $loader->load('value_resolvers.yaml');
@@ -137,6 +126,12 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
         if (class_exists(MakerBundle::class)) {
             $loader->load('makers.yaml');
         }
+
+        if (!$container->hasParameter('sfs_cms.registered_plugins')) {
+            $container->setParameter('sfs_cms.registered_plugins', []);
+        }
+
+        $container->setParameter('sfs_cms.admin', true);
     }
 
     protected function processDataClasses(ContainerBuilder $container): void
@@ -203,5 +198,15 @@ class SfsCmsExtension extends Extension implements PrependExtensionInterface
                 'Softspring\CmsBundle\Migrations' => '@SfsCmsBundle/src/Migrations',
             ]),
         ]);
+
+        if (interface_exists(AssetMapperInterface::class)) {
+            $container->prependExtensionConfig('framework', [
+                'asset_mapper' => [
+                    'paths' => [
+                        dirname(__DIR__, 2).'/assets/dist' => '@softspring/cms-bundle',
+                    ],
+                ],
+            ]);
+        }
     }
 }

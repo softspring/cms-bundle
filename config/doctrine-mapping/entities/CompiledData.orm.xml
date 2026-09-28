@@ -8,7 +8,6 @@
         <cache usage="NONSTRICT_READ_WRITE" />
 
         <id name="id" type="string" length="36" column="id">
-            <options><option name="fixed">true</option></options>
             <generator strategy="CUSTOM" />
             <custom-id-generator class="doctrine.uuid_generator"/>
         </id>

@@ -2,7 +2,7 @@
 
 {% extends '@SfsCms/admin_layout.html.twig' %}
 
-{% block title %}{{ ('admin_'~content_type~'.read.meta.title')|trans({'%name%':entity.name}) }}{% endblock %}
+{% block title %}{{ ('admin_'~content_type~'.read.meta.title')|trans({'%name%':content_entity.name}) }}{% endblock %}
 
 {% block breadcrums_content %}
     {{ parent() }}
@@ -10,48 +10,48 @@
                 href="{{ url('sfs_cms_admin_content_'~content_type~'_list') }}">{{ ('admin_'~content_type~'.list.breadcrumb')|trans }}</a>
     </li>
     <li class="breadcrumb-item active"
-        aria-current="content">{{ ('admin_'~content_type~'.read.breadcrumb')|trans({'%name%':entity.name}) }}</li>
+        aria-current="content">{{ ('admin_'~content_type~'.read.breadcrumb')|trans({'%name%':content_entity.name}) }}</li>
 {% endblock breadcrums_content %}
 
 {% block content %}
-    {% include ['@content/'~content_type~'/admin/_content_title.html.twig', '@SfsCms/admin/content/_content_title.html.twig']  with {'current':'read', 'content_type':content_type, 'content_entity':entity} %}
-    {% include ['@content/'~content_type~'/admin/_content_tabs.html.twig', '@SfsCms/admin/content/_content_tabs.html.twig']  with {'current':'details', 'content':content, 'content_entity':entity} %}
+    {% include ['@content/'~content_type~'/admin/_content_title.html.twig', '@SfsCms/admin/content/_content_title.html.twig']  with {'current':'read', 'content_type':content_type, 'content_entity':content_entity} %}
+    {% include ['@content/'~content_type~'/admin/_content_tabs.html.twig', '@SfsCms/admin/content/_content_tabs.html.twig']  with {'current':'details', 'content':content, 'content_entity':content_entity} %}
 
     {% if cache_alert is defined %}
         <div class="alert alert-warning" role="alert">
             {% if content.publishedVersion %}
                 {{ 'admin_content.read.published_cache_alert_raw'|trans({
                     '%publishedDateTime%': cache_alert.publishedDatetime|date('H:i d-m-Y'),
-                    '%maxRouteTtl%': cache_alert.maxRouteTtl,
-                    '%waitSeconds%': cache_alert.waitTime,
+                    '%maxRouteTtl%': cache_alert.maxRouteTtl|sfs_cms_format_cache_ttl,
+                    '%waitSeconds%': cache_alert.waitTime|sfs_cms_format_cache_ttl,
                 }, 'sfs_cms_admin')|raw }}
             {% else %}
                 {{ 'admin_content.read.unpublished_cache_alert_raw'|trans({
                     '%publishedDateTime%': cache_alert.publishedDatetime|date('H:i d-m-Y'),
-                    '%maxRouteTtl%': cache_alert.maxRouteTtl,
-                    '%waitSeconds%': cache_alert.waitTime,
+                    '%maxRouteTtl%': cache_alert.maxRouteTtl|sfs_cms_format_cache_ttl,
+                    '%waitSeconds%': cache_alert.waitTime|sfs_cms_format_cache_ttl,
                 }, 'sfs_cms_admin')|raw }}
             {% endif %}
         </div>
     {% endif %}
 
     <div class="container-fluid">
-        <div class="row">
+        <div class="row g-3">
             <div class="col">
-                {% include ['@content/'~content_type~'/admin/_read_general.html.twig', '@SfsCms/admin/content/_read_general.html.twig'] %}
+                {% include ['@content/'~content_type~'/admin/_read_general.html.twig', '@SfsCms/admin/content/_read_general.html.twig'] with {'container_classes': 'card'} %}
             </div>
             <div class="col">
-                {% include ['@content/'~content_type~'/admin/_read_indexing.html.twig', '@SfsCms/admin/content/_read_indexing.html.twig'] %}
+                {% include ['@content/'~content_type~'/admin/_read_indexing.html.twig', '@SfsCms/admin/content/_read_indexing.html.twig'] with {'container_classes': 'card'} %}
             </div>
             <div class="col">
-                {% include ['@content/'~content_type~'/admin/_read_routes.html.twig', '@SfsCms/admin/content/_read_routes.html.twig'] %}
+                {% include ['@content/'~content_type~'/admin/_read_routes.html.twig', '@SfsCms/admin/content/_read_routes.html.twig'] with {'container_classes': 'card'} %}
             </div>
             <div class="col">
-                {% include ['@content/'~content_type~'/admin/_read_translations.html.twig', '@SfsCms/admin/content/_read_translations.html.twig'] %}
+                {% include ['@content/'~content_type~'/admin/_read_translations.html.twig', '@SfsCms/admin/content/_read_translations.html.twig'] with {'container_classes': 'card'} %}
             </div>
         </div>
 
-        <div class="row">
+        <div class="row g-3">
             <div class="col">
                 {% include ['@content/'~content_type~'/admin/_read_versions.html.twig', '@SfsCms/admin/content/_read_versions.html.twig'] with {'backSection': 'details'} %}
             </div>

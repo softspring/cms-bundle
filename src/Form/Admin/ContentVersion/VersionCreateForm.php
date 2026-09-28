@@ -45,7 +45,7 @@ class VersionCreateForm extends AbstractType implements VersionCreateFormInterfa
         $resolver->setRequired('content');
         $resolver->setAllowedTypes('content', [ContentInterface::class]);
 
-        $resolver->setNormalizer('label_format', function (Options $options, $value) {
+        $resolver->setNormalizer('label_format', function (Options $options, $value): string {
             return "admin_{$options['content_type']}.form.%name%.label";
         });
     }
@@ -56,7 +56,7 @@ class VersionCreateForm extends AbstractType implements VersionCreateFormInterfa
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('layout', LayoutType::class, [
-            'choices' => $this->cmsHelper->layout()->getAvailableLayouts($options['content']),
+            'choices' => $this->cmsHelper->layout()->getAvailableLayouts($options['content'], $options['layout']),
         ]);
 
         $builder->add('data', LayoutContentType::class, [

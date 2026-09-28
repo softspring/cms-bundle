@@ -1,0 +1,13 @@
+{% trans_default_domain 'sfs_cms_admin' %}
+
+<ul class="nav nav-tabs my-3" role="tablist">
+    {% for item in sfs_cms_admin_site_menu(current, site) %}
+        <li class="nav-item">
+            {% if not (item.disabled|default(false)) %}
+                <a class="nav-link {{ item.active|default(false) ? 'active' : '' }}" href="{{ item.url|default('#') }}">{{ item.text }}</a>
+            {% else %}
+                <a class="nav-link disabled">{{ item.text }}</a>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>

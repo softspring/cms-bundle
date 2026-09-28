@@ -3,7 +3,6 @@
 namespace Softspring\CmsBundle\Routing;
 
 use Doctrine\DBAL\Exception\TableNotFoundException;
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Softspring\CmsBundle\Exception\NotYetImplementedException;
@@ -37,21 +36,52 @@ class UrlMatcher
             return [];
         }
 
+        if ($redirect = $this->matchRequestSiteRedirects($request)) {
+            return $redirect;
+        }
+
+        if ($redirect = $this->matchPathInfoSlashRoute($request)) {
+            return $redirect;
+        }
+
+        if ($redirect = $this->matchSitemaps($request)) {
+            return $redirect;
+        }
+
+        if ($redirect = $this->matchRobots($request)) {
+            return $redirect;
+        }
+
+        return $this->matchRoutePath($request);
+    }
+
+    /**
+     * @throws SiteHasNotACanonicalHostException
+     */
+    protected function matchRequestSiteRedirects(Request $request): ?array
+    {
         /** @var SiteInterface $site */
         $site = $request->attributes->get('_sfs_cms_site');
         $siteConfig = $site->getConfig();
-        $siteHostConfig = $request->attributes->get('_sfs_cms_site_host_config');
+        $siteHostConfig = $request->attributes->get('_sfs_cms_site_host_config') ?? [];
 
         if ($siteConfig['https_redirect'] && 'http' === $request->getScheme()) {
             return $this->generateRedirect($this->siteResolver->getCanonicalRedirectUrl($site, $request), Response::HTTP_PERMANENTLY_REDIRECT);
         }
 
-        if ($siteHostConfig['redirect_to_canonical']) {
+        if (!empty($siteHostConfig['redirect_to_canonical'])) {
             return $this->generateRedirect($this->siteResolver->getCanonicalRedirectUrl($site, $request), Response::HTTP_PERMANENTLY_REDIRECT);
         }
 
+        return null;
+    }
+
+    protected function matchPathInfoSlashRoute(Request $request): ?array
+    {
         $pathInfo = $request->getPathInfo();
-        $pathInfoHasTrailingSlash = str_ends_with($pathInfo, '/');
+        /** @var SiteInterface $site */
+        $site = $request->attributes->get('_sfs_cms_site');
+        $siteConfig = $site->getConfig();
 
         if ($siteConfig['slash_route']['enabled'] && '/' === $pathInfo) {
             switch ($siteConfig['slash_route']['behaviour']) {
@@ -64,6 +94,16 @@ class UrlMatcher
                     throw new Exception('Not yet implemented');
             }
         }
+
+        return null;
+    }
+
+    protected function matchSitemaps(Request $request): ?array
+    {
+        $pathInfo = $request->getPathInfo();
+        /** @var SiteInterface $site */
+        $site = $request->attributes->get('_sfs_cms_site');
+        $siteConfig = $site->getConfig();
 
         foreach ($siteConfig['sitemaps'] as $sitemap => $sitemapConfig) {
             if ('/'.trim($sitemapConfig['url'], '/') === $pathInfo) {
@@ -81,6 +121,16 @@ class UrlMatcher
                 'site' => $site,
             ];
         }
+
+        return null;
+    }
+
+    protected function matchRobots(Request $request): ?array
+    {
+        $pathInfo = $request->getPathInfo();
+        /** @var SiteInterface $site */
+        $site = $request->attributes->get('_sfs_cms_site');
+        $siteConfig = $site->getConfig();
 
         if ('/robots.txt' === $pathInfo) {
             switch ($siteConfig['robots']['mode']) {
@@ -100,46 +150,49 @@ class UrlMatcher
             }
         }
 
+        return null;
+    }
+
+    protected function matchRoutePath(Request $request): array
+    {
+        /** @var SiteInterface $site */
+        $site = $request->attributes->get('_sfs_cms_site');
+        $siteConfig = $site->getConfig();
+        $siteHostConfig = $request->attributes->get('_sfs_cms_site_host_config') ?? [];
+        $sitePathConfig = $request->attributes->get('_sfs_cms_site_path_config') ?? [];
+
+        $pathInfo = $request->getPathInfo();
+        $pathInfoHasTrailingSlash = str_ends_with($pathInfo, '/');
         $attributes = [];
 
         if (!empty($siteHostConfig['locale'])) {
             $attributes['_sfs_cms_locale'] = $siteHostConfig['locale'];
+        } elseif (!empty($sitePathConfig['locale'])) {
+            $attributes['_sfs_cms_locale'] = $sitePathConfig['locale'];
+            $attributes['_sfs_cms_locale_path'] = $sitePathConfig['path'];
         }
 
-        $pathInfo = explode('/', ltrim($pathInfo, '/'));
-        foreach ($siteConfig['paths'] as $path) {
-            if (isset($pathInfo[0]) && "/$pathInfo[0]" === $path['path']) {
-                if ($path['locale']) {
-                    if (!empty($attributes['_sfs_cms_locale'])) {
-                        // TODO resolve conflict
-                    }
-                    $attributes['_sfs_cms_locale'] = $path['locale'];
-                    $attributes['_sfs_cms_locale_path'] = $path['path'];
-
-                    // $pathInfo = substr($pathInfo, strlen($path['path']));
-                    array_shift($pathInfo);
-
-                    if ($path['trailing_slash_on_root'] && empty($pathInfo) && !$pathInfoHasTrailingSlash) {
-                        $url = parse_url($request->getUri());
-                        $url = sprintf('%s://%s%s', $url['scheme'], $url['host'], $url['path'].'/');
-
-                        return $this->generateRedirect($url, Response::HTTP_PERMANENTLY_REDIRECT);
-                    }
-                }
-            }
+        if (!empty($sitePathConfig['path'])) {
+            $pathInfo = substr($pathInfo, strlen($sitePathConfig['path']));
         }
-        $pathInfo = '/'.implode('/', $pathInfo);
+
+        $pathInfo = ltrim($pathInfo, '/');
+
+        if ('' === $pathInfo && !$pathInfoHasTrailingSlash && !empty($sitePathConfig['trailing_slash_on_root'])) {
+            $url = parse_url($request->getUri());
+            $url = sprintf('%s://%s%s', $url['scheme'], $url['host'], $url['path'].'/');
+
+            return $this->generateRedirect($url, Response::HTTP_PERMANENTLY_REDIRECT);
+        }
 
         // search in database or redis-cache (TODO) ;)
-        if ($routePath = $this->searchRoutePath($site, $pathInfo, $attributes['_sfs_cms_locale'] ?? null)) {
+        if (($routePath = $this->searchRoutePath($site, $pathInfo, $attributes['_sfs_cms_locale'] ?? null)) instanceof RoutePathInterface) {
             $route = $routePath->getRoute();
 
             if ($routePath->getLocale()) {
-                if (!empty($attributes['_sfs_cms_locale']) && $attributes['_sfs_cms_locale'] !== $routePath->getLocale()) {
-                    // check if locale is already set by site config
-                    if ($request->getLocale() && $request->getLocale() !== $routePath->getLocale()) {
-                        // TODO RESOLVE LOCALE CONFLICT
-                    }
+                // check if locale is already set by site config
+                if (!empty($attributes['_sfs_cms_locale']) && $attributes['_sfs_cms_locale'] !== $routePath->getLocale() && ($request->getLocale() && $request->getLocale() !== $routePath->getLocale())) {
+                    // TODO RESOLVE LOCALE CONFLICT
                 }
 
                 $attributes['_sfs_cms_locale'] = $routePath->getLocale();
@@ -162,7 +215,11 @@ class UrlMatcher
                     return $this->generateRedirect($route->getRedirectUrl(), $route->getRedirectType() ?? Response::HTTP_FOUND);
 
                 case RouteInterface::TYPE_REDIRECT_TO_ROUTE:
-                    return $this->generateRedirectToRoute($route->getSymfonyRoute(), $route->getRedirectType() ?? Response::HTTP_FOUND);
+                    return $this->generateRedirectToRoute(
+                        $route->getSymfonyRoute(),
+                        $route->getRedirectType() ?? Response::HTTP_FOUND,
+                        $attributes['_sfs_cms_locale'] ?? null,
+                    );
 
                 default:
                     throw new Exception(sprintf('Route type %u not yet implemented', $route->getType()));
@@ -186,14 +243,20 @@ class UrlMatcher
         ];
     }
 
-    protected function generateRedirectToRoute(array $route, int $statusCode): array
+    protected function generateRedirectToRoute(array $route, int $statusCode, ?string $locale = null): array
     {
-        return [
+        $attributes = [
             '_controller' => 'Softspring\CmsBundle\Controller\RedirectController::redirection',
             'route' => $route['route_name'],
             'routeParams' => $route['route_params'],
             'statusCode' => $statusCode,
         ];
+
+        if ($locale) {
+            $attributes['_locale'] = $locale;
+        }
+
+        return $attributes;
     }
 
     protected function searchRoutePath(SiteInterface $site, string $path, ?string $locale = null): ?RoutePathInterface
@@ -214,7 +277,10 @@ class UrlMatcher
                 $qb->setParameter('locale', $locale);
             }
 
-            return $qb->getQuery()->setCacheable(true)->setResultCacheLifetime(60)->getResult(AbstractQuery::HYDRATE_OBJECT)[0] ?? null;
+            // Routes can be deleted through the CMS while their content is published.
+            // A cached hydrated RoutePath keeps a proxy to the deleted content and turns
+            // the expected 404 into an EntityNotFoundException (HTTP 500).
+            return $qb->getQuery()->getResult()[0] ?? null;
         } catch (TableNotFoundException $e) {
             // prevent error before creating database schema
             return null;

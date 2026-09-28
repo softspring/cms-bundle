@@ -57,7 +57,7 @@ class VersionTransformer extends AbstractContentDataTransformer implements Trans
         $version = $entity;
 
         if ($version->getData()) {
-            $version->_setDataCallback(function ($data) use ($em) {
+            $version->_setDataCallback(function (array $data) use ($em): array {
                 $this->untransformModule($data, $data, $em);
 
                 return $data;

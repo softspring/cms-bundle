@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Softspring\CmsBundle\Form\Extension;
 
 use Symfony\Component\Form\AbstractTypeExtension;
@@ -22,17 +24,13 @@ class DefaultValueExtension extends AbstractTypeExtension
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        if (empty($options['default_value'])) {
+        if (null === $options['default_value']) {
             return;
         }
 
         // TODO this only works on required fields, on other fields it wont allow them to be empty
         $builder->addModelTransformer(new CallbackTransformer(function ($value) use ($options) {
-            if (is_countable($value) && !sizeof($value)) {
-                return $options['default_value'];
-            }
-
-            if (is_bool($options['default_value'])) {
+            if (is_countable($value) && !count($value)) {
                 return $options['default_value'];
             }
 

@@ -83,6 +83,7 @@ class DeleteListener extends AbstractContentVersionListener
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_DELETE_VIEW => [
                 ['onEventDispatchContentTypeEvent', 10],
                 ['onView', 0],
+                ['onViewAddEntities', 0],
             ],
             SfsCmsEvents::ADMIN_CONTENT_VERSIONS_DELETE_EXCEPTION => [
                 ['onEventDispatchContentTypeEvent', 10],
@@ -97,7 +98,7 @@ class DeleteListener extends AbstractContentVersionListener
         $content = $deleteVersion->getContent();
 
         if ($deleteVersion->isLastVersion()) {
-            $previousVersion = $content->getVersions()->filter(function (ContentVersionInterface $version) use ($deleteVersion) {
+            $previousVersion = $content->getVersions()->filter(function (ContentVersionInterface $version) use ($deleteVersion): bool {
                 return $version->getId() !== $deleteVersion->getId();
             })->first();
             $content->setLastVersion($previousVersion);

@@ -27,7 +27,7 @@ class MediaAltModalType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('media', MediaModalType::class, $options['media_type_options']);
+        $builder->add('media', MediaType::class, $options['media_type_options']);
 
         if ($options['alt']) {
             $builder->add('alt', TextType::class, $options['alt_type_options']);

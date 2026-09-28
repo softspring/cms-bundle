@@ -13,7 +13,10 @@ content:
         canonicalContent:
             type: translatable
             type_options:
+                extractable: false
                 type: content
+                type_options:
+                    required: false
     indexing:
         noIndex:
             type: checkbox
@@ -45,7 +48,7 @@ content:
                     admin_page.form.indexing.sitemapChangefreq.values.weekly: weekly
                     admin_page.form.indexing.sitemapChangefreq.values.monthly: monthly
                     admin_page.form.indexing.sitemapChangefreq.values.yearly: yearly
-                    admin_page.form.indexing.sitemapChangefreq.values.never: never                
+                    admin_page.form.indexing.sitemapChangefreq.values.never: never
         sitemapPriority:
             type: number
             type_options:

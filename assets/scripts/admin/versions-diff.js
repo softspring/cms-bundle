@@ -1,6 +1,6 @@
 import { diff } from 'jsondiffpatch';
 import * as jsondiffpatchHtml from 'jsondiffpatch/formatters/html';
-import {registerFeature} from '@softspring/cms-bundle/scripts/tools';
+import {registerFeature} from '@softspring/cms-bundle/scripts/tools.js';
 
 registerFeature('admin_versions_diff', _init);
 

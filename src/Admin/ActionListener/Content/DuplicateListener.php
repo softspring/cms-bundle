@@ -133,7 +133,7 @@ class DuplicateListener extends AbstractContentListener
         $newContent->setLastVersionNumber(0);
         $newContent->setLastVersion($newVersion);
 
-        $newContent->getRoutes()->map(function (RouteInterface $route) use ($newContent) {
+        $newContent->getRoutes()->map(function (RouteInterface $route) use ($newContent): void {
             foreach ($newContent->getSites() as $site) {
                 $route->addSite($site);
             }
@@ -160,6 +160,6 @@ class DuplicateListener extends AbstractContentListener
     public function onViewAddOriginEntity(ViewEvent $event): void
     {
         $event->getData()['origin_entity'] = $event->getRequest()->attributes->get('content');
-        $event->getData()['entity'] = $event->getData()['content'];
+        $event->getData()['content_entity'] = $event->getData()['content'];
     }
 }

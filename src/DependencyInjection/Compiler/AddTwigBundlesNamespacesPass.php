@@ -18,7 +18,7 @@ class AddTwigBundlesNamespacesPass implements CompilerPassInterface
 
         // register project namespaces before collections to allow overriding
         foreach ((new Finder())->in(trim($this->templatesPath).'/bundles')->depth(0)->directories() as $directory) {
-            $twigFilesystemLoaderDefinition->addMethodCall('prependPath', [$directory->getRealPath(), str_replace('Bundle', '', $directory->getBasename())]);
+            $twigFilesystemLoaderDefinition->addMethodCall('addPath', [$directory->getRealPath(), str_replace('Bundle', '', $directory->getBasename())]);
         }
     }
 }

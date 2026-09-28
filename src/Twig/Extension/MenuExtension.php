@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Softspring\CmsBundle\Twig\Extension;
 
 use Softspring\CmsBundle\Render\MenuRenderer;
@@ -18,7 +20,7 @@ class MenuExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('sfs_cms_menu', [$this->menuRenderer, 'renderMenuByType'], ['is_safe' => ['html']]),
+            new TwigFunction('sfs_cms_menu', $this->menuRenderer->renderMenuByType(...), ['is_safe' => ['html']]),
         ];
     }
 }

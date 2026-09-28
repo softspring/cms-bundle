@@ -8,6 +8,8 @@ class Site implements SiteInterface
 
     protected ?array $config = null;
 
+    protected ?array $metadata = null;
+
     public function getId(): ?string
     {
         return $this->id;
@@ -31,6 +33,35 @@ class Site implements SiteInterface
     public function setConfig(?array $config): void
     {
         $this->config = $config;
+    }
+
+    public function getMetadata(): ?array
+    {
+        return $this->metadata;
+    }
+
+    public function setMetadata(?array $metadata): void
+    {
+        $this->metadata = $metadata;
+    }
+
+    public function setMetadataField(string $field, mixed $value): void
+    {
+        $metadata = $this->getMetadata() ?? [];
+        $metadata[$field] = $value;
+        $this->setMetadata($metadata);
+    }
+
+    public function getMetadataField(string $field, mixed $default = null): mixed
+    {
+        return $this->getMetadata()[$field] ?? $default;
+    }
+
+    public function removeMetadataField(string $field): void
+    {
+        $metadata = $this->getMetadata() ?? [];
+        unset($metadata[$field]);
+        $this->setMetadata([] !== $metadata ? $metadata : null);
     }
 
     public function getCanonicalHost(): ?string

@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Softspring\CmsBundle\Form\Module;
 
+use Softspring\Component\DynamicFormType\Form\Type\DynamicFormTypeInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 
-class DynamicFormModuleType extends AbstractModuleType
+class DynamicFormModuleType extends AbstractModuleType implements DynamicFormTypeInterface
 {
     public function getBlockPrefix(): string
     {

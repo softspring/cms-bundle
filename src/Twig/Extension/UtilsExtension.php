@@ -4,6 +4,7 @@ namespace Softspring\CmsBundle\Twig\Extension;
 
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
+use Softspring\CmsBundle\Utils\CacheTtlFormatter;
 use Softspring\CmsBundle\Utils\HtmlValidator;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -21,16 +22,17 @@ class UtilsExtension extends AbstractExtension
         return [
             new TwigFilter('base64_encode', 'base64_encode'),
             new TwigFilter('base64_decode', 'base64_decode'),
+            new TwigFilter('sfs_cms_format_cache_ttl', $this->formatCacheTtl(...)),
         ];
     }
 
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('sfs_cms_check_content_locales_and_routes', [$this, 'checkContentLocalesAndRoutes']),
-            new TwigFunction('sfs_cms_validate_module_html', [HtmlValidator::class, 'validateModule']),
-            new TwigFunction('sfs_cms_content_type', [$this->contentManager, 'getType']),
-            new TwigFunction('sfs_cms_render_ajax', [$this, 'renderAjax'], ['is_safe' => ['html']]),
+            new TwigFunction('sfs_cms_check_content_locales_and_routes', $this->checkContentLocalesAndRoutes(...)),
+            new TwigFunction('sfs_cms_validate_module_html', HtmlValidator::validateModule(...)),
+            new TwigFunction('sfs_cms_content_type', $this->contentManager->getType(...)),
+            new TwigFunction('sfs_cms_render_ajax', $this->renderAjax(...), ['is_safe' => ['html']]),
         ];
     }
 
@@ -40,7 +42,7 @@ class UtilsExtension extends AbstractExtension
         $containerAttrs['id'] = $divId;
         $containerAttrs['data-href'] = $url;
 
-        $attrs = implode(' ', array_map(fn ($k, $v) => sprintf('%s="%s"', htmlspecialchars($k, ENT_QUOTES), htmlspecialchars($v, ENT_QUOTES)), array_keys($containerAttrs), $containerAttrs));
+        $attrs = implode(' ', array_map(fn ($k, $v): string => sprintf('%s="%s"', htmlspecialchars($k, ENT_QUOTES), htmlspecialchars($v, ENT_QUOTES)), array_keys($containerAttrs), $containerAttrs));
 
         return <<<AJAX
 <div $attrs>
@@ -63,6 +65,11 @@ class UtilsExtension extends AbstractExtension
     </script>
 </div>
 AJAX;
+    }
+
+    public function formatCacheTtl(mixed $cacheTtl): ?string
+    {
+        return CacheTtlFormatter::format($cacheTtl);
     }
 
     public function checkContentLocalesAndRoutes(ContentInterface $content): array

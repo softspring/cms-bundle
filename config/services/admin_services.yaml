@@ -14,6 +14,8 @@ services:
 
     Softspring\CmsBundle\Admin\Menu\ContentMenuProvider: ~
 
+    Softspring\CmsBundle\Admin\Menu\SiteMenuProvider: ~
+
     Softspring\CmsBundle\Twig\Extension\Admin\:
         resource: '../../src/Twig/Extension/Admin/*'
         tags: [ 'twig.extension' ]

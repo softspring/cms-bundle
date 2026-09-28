@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Softspring\CmsBundle\Form\Type;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,7 +30,7 @@ class UserType extends AbstractType
             'required' => false,
             'class' => UserInterface::class,
             'em' => $this->sfsUserEm,
-            'choice_label' => function (UserInterface $user) {
+            'choice_label' => function (UserInterface $user): string {
                 return $user->getDisplayName();
             },
         ]);

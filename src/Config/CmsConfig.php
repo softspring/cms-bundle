@@ -54,7 +54,7 @@ class CmsConfig
 
     public function getModules(bool $onlyEnabled = true): array
     {
-        return array_filter($this->modules, fn ($module) => !$onlyEnabled || $module['enabled']);
+        return array_filter($this->modules, fn (array $module): bool => !$onlyEnabled || $module['enabled']);
     }
 
     /**
@@ -202,7 +202,7 @@ class CmsConfig
     {
         $sites = $this->getSites();
 
-        return array_filter($sites, fn (SiteInterface $site) => in_array($contentType, $site->getConfig()['allowed_content_types']));
+        return array_filter($sites, fn (SiteInterface $site): bool => in_array($contentType, $site->getConfig()['allowed_content_types']));
     }
 
     public function getRegisteredPlugins(): array

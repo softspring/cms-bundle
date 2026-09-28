@@ -77,7 +77,7 @@ trait VersionTrait
 
     public function setCreatedAt(?DateTime $createdAt): void
     {
-        $this->createdAt = $createdAt ? (int) $createdAt->format('U') : null;
+        $this->createdAt = $createdAt instanceof DateTime ? (int) $createdAt->format('U') : null;
     }
 
     public function autoSetCreatedAt(): void

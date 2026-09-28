@@ -2,12 +2,14 @@
 
 namespace Softspring\CmsBundle\Controller;
 
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Manager\BlockManagerInterface;
 use Softspring\CmsBundle\Model\BlockInterface;
+use Softspring\CmsBundle\Render\BlockRenderer;
 use Softspring\CmsBundle\Utils\DataMigrator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,6 +24,7 @@ class BlockController extends AbstractController
         protected EntityManagerInterface $em,
         protected CmsConfig $cmsConfig,
         protected BlockManagerInterface $blockManager,
+        protected BlockRenderer $blockRenderer,
         protected bool $debug,
         protected Environment $twig,
         protected string $blockCacheType,
@@ -37,11 +40,17 @@ class BlockController extends AbstractController
 
             $config = $this->cmsConfig->getBlock($type);
 
+            if (isset($config['render_url']) && $config['render_url']) {
+                return new Response($this->blockRenderer->renderBlockByType($type, $request->query->all()));
+            }
+
             if (!$config['static']) {
                 $block = $this->getMoreRestrictiveBlock($this->blockManager->getRepository()->findByType($type));
 
-                if (!$block) {
-                    $this->cmsLogger && $this->cmsLogger->error(sprintf('CMS missing block %s', $type));
+                if (!$block instanceof BlockInterface) {
+                    if ($this->cmsLogger instanceof LoggerInterface) {
+                        $this->cmsLogger->error(sprintf('CMS missing block %s', $type));
+                    }
 
                     return new Response();
                 }
@@ -56,8 +65,12 @@ class BlockController extends AbstractController
             }
 
             if ('ttl' !== $this->blockCacheType && false !== $config['cache_ttl'] && !$request->attributes->has('_cms_preview')) {
-                'public' === $config['cache_type'] && $response->setPublic();
-                'private' === $config['cache_type'] && $response->setPrivate();
+                if ('public' === $config['cache_type']) {
+                    $response->setPublic();
+                }
+                if ('private' === $config['cache_type']) {
+                    $response->setPrivate();
+                }
                 $response->setMaxAge($config['cache_ttl']);
             }
 
@@ -77,7 +90,9 @@ class BlockController extends AbstractController
             $block = $this->blockManager->getRepository()->findOneById($id);
 
             if (!$block) {
-                $this->cmsLogger && $this->cmsLogger->error(sprintf('CMS missing block %s', $id));
+                if ($this->cmsLogger instanceof LoggerInterface) {
+                    $this->cmsLogger->error(sprintf('CMS missing block %s', $id));
+                }
 
                 return new Response();
             }
@@ -107,7 +122,9 @@ class BlockController extends AbstractController
 
     protected function renderBlockException(string $message, Exception $exception): Response
     {
-        $this->cmsLogger && $this->cmsLogger->critical(sprintf('%s: %s', $message, $exception->getMessage()));
+        if ($this->cmsLogger instanceof LoggerInterface) {
+            $this->cmsLogger->critical(sprintf('%s: %s', $message, $exception->getMessage()));
+        }
 
         if (!$this->debug) {
             return new Response('<!-- error rendering block, see logs -->');
@@ -132,12 +149,12 @@ ERROR;
     {
         // find more restrictive block
         $getPublishedBlockSecondsFn = function (BlockInterface $block): int {
-            $start = $block->getPublishStartDate() ? $block->getPublishStartDate()->getTimestamp() : 0;
-            $end = $block->getPublishEndDate() ? $block->getPublishEndDate()->getTimestamp() : PHP_INT_MAX;
+            $start = $block->getPublishStartDate() instanceof DateTime ? $block->getPublishStartDate()->getTimestamp() : 0;
+            $end = $block->getPublishEndDate() instanceof DateTime ? $block->getPublishEndDate()->getTimestamp() : PHP_INT_MAX;
 
             return (int) ($end - $start);
         };
-        usort($blocks, function (BlockInterface $block1, BlockInterface $block2) use ($getPublishedBlockSecondsFn) {
+        usort($blocks, function (BlockInterface $block1, BlockInterface $block2) use ($getPublishedBlockSecondsFn): int {
             return $getPublishedBlockSecondsFn($block1) <=> $getPublishedBlockSecondsFn($block2);
         });
 
@@ -149,15 +166,32 @@ ERROR;
 
     protected function preprocessPreviewRequest(Request $request): void
     {
-        if (!$request->attributes->has('_sfs_cms_site') && $request->get('_sfs_cms_site')) {
-            $request->attributes->set('_sfs_cms_site', $this->cmsConfig->getSite($request->get('_sfs_cms_site')));
+        $site = $this->getRequestValue($request, '_sfs_cms_site');
+        $siteId = $this->getRequestValue($request, '_site');
+        $locale = $this->getRequestValue($request, '_locale');
+
+        if (!$request->attributes->has('_sfs_cms_site') && $site) {
+            $request->attributes->set('_sfs_cms_site', $this->cmsConfig->getSite($site));
         }
-        if (!$request->attributes->has('_sfs_cms_site') && $request->get('_site')) {
-            $request->attributes->set('_sfs_cms_site', $this->cmsConfig->getSite($request->get('_site')));
+        if (!$request->attributes->has('_sfs_cms_site') && $siteId) {
+            $request->attributes->set('_sfs_cms_site', $this->cmsConfig->getSite($siteId));
         }
-        if (!$request->attributes->has('_locale') && $request->get('_locale')) {
-            $request->attributes->set('_locale', $request->get('_locale'));
-            $request->setLocale($request->get('_locale'));
+        if (!$request->attributes->has('_locale') && $locale) {
+            $request->attributes->set('_locale', $locale);
+            $request->setLocale($locale);
         }
+    }
+
+    protected function getRequestValue(Request $request, string $key): mixed
+    {
+        if ($request->attributes->has($key)) {
+            return $request->attributes->get($key);
+        }
+
+        if ($request->query->has($key)) {
+            return $request->query->get($key);
+        }
+
+        return $request->request->get($key);
     }
 }

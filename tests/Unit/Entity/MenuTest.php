@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Test\Unit\Config\Entity;
 
+use ReflectionClass;
 use PHPUnit\Framework\TestCase;
 use Softspring\CmsBundle\Entity\Menu;
 use Softspring\CmsBundle\Entity\MenuItem;
@@ -13,7 +14,7 @@ class MenuTest extends TestCase
         $menu = new Menu();
         $this->assertNull($menu->getId());
 
-        $reflection = new \ReflectionClass($menu);
+        $reflection = new ReflectionClass($menu);
         $property = $reflection->getProperty('id');
         $property->setValue($menu, 'test');
         $this->assertEquals('test', $menu->getId());

@@ -34,12 +34,12 @@ class BlockTest extends TestCase
         $this->assertEquals([
             'revision' => 1,
             'render_template' => '@block/block_name/render.html.twig',
+            'enabled' => true,
             'esi' => true,
             'cache_type' => 'public',
             'cache_ttl' => false,
             'singleton' => true,
             'static' => false,
-            'form_options' => [],
             'form_fields' => [],
             'schedulable' => false,
             'isolate_request' => null,
@@ -61,12 +61,12 @@ class BlockTest extends TestCase
         $this->assertEquals([
             'revision' => 2,
             'render_template' => 'other_render_file.html.twig',
+            'enabled' => true,
             'esi' => true,
             'cache_type' => 'public',
             'cache_ttl' => false,
             'singleton' => true,
             'static' => false,
-            'form_options' => [],
             'form_fields' => [],
             'schedulable' => false,
             'isolate_request' => null,
@@ -111,25 +111,6 @@ class BlockTest extends TestCase
         ]);
     }
 
-    public function testInvalidStaticAndFormOptions(): void
-    {
-        $this->expectException(InvalidConfigurationException::class);
-        $this->expectExceptionMessage('Invalid configuration for path "block": A block defined as static can not have form_options.');
-
-        $processor = new Processor();
-        $configuration = new Block('block_name');
-        $processor->processConfiguration($configuration, [
-            'block' => [
-                'revision' => 1,
-                'static' => true,
-                'singleton' => true,
-                'form_options' => [
-                    'test' => [],
-                ],
-            ],
-        ]);
-    }
-
     public function testRenderUrl(): void
     {
         $processor = new Processor();
@@ -144,42 +125,14 @@ class BlockTest extends TestCase
         $this->assertEquals([
             'revision' => 2,
             'render_template' => '@block/block_name/render.html.twig',
+            'enabled' => true,
             'esi' => true,
             'cache_type' => 'public',
             'cache_ttl' => false,
             'singleton' => true,
             'static' => false,
-            'form_options' => [],
             'form_fields' => [],
             'render_url' => 'render_route',
-            'schedulable' => false,
-            'isolate_request' => null,
-            'ajax' => false,
-        ], $config);
-    }
-
-    public function testCustomFormType(): void
-    {
-        $processor = new Processor();
-        $configuration = new Block('block_name');
-        $config = $processor->processConfiguration($configuration, [
-            'block' => [
-                'revision' => 2,
-                'form_type' => 'App\\Form\\ExampleType',
-            ],
-        ]);
-
-        $this->assertEquals([
-            'revision' => 2,
-            'render_template' => '@block/block_name/render.html.twig',
-            'esi' => true,
-            'cache_type' => 'public',
-            'cache_ttl' => false,
-            'singleton' => true,
-            'static' => false,
-            'form_options' => [],
-            'form_fields' => [],
-            'form_type' => 'App\\Form\\ExampleType',
             'schedulable' => false,
             'isolate_request' => null,
             'ajax' => false,

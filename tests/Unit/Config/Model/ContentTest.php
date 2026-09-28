@@ -9,13 +9,11 @@ use Softspring\CmsBundle\Form\Admin\Content\ContentCreateForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentDeleteForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentDiffForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentDuplicateForm;
-use Softspring\CmsBundle\Form\Admin\Content\ContentImportForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentListFilterForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentRoutesForm;
 use Softspring\CmsBundle\Form\Admin\Content\ContentUpdateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionCreateForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionDeleteForm;
-use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionImportForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionListFilterForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionSeoForm;
 use Softspring\CmsBundle\Form\Admin\ContentVersion\VersionUpdateForm;
@@ -100,6 +98,11 @@ class ContentTest extends TestCase
                 'metaTitle' => ['type' => 'translation'],
                 'metaDescription' => ['type' => 'translation'],
                 'metaKeywords' => ['type' => 'translation'],
+                'canonicalContent' => ['type' => 'translatable', 'type_options' => [
+                    'extractable' => false,
+                    'type' => 'content',
+                    'type_options' => ['required' => false],
+                ]],
             ],
             'admin' => [
                 'list' => [
@@ -112,18 +115,6 @@ class ContentTest extends TestCase
                     'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_CREATE',
                     'view' => '@SfsCms/admin/content/create.html.twig',
                     'type' => ContentCreateForm::class,
-                    'success_redirect_to' => '',
-                ],
-                'import' => [
-                    'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_IMPORT',
-                    'view' => '@SfsCms/admin/content/import.html.twig',
-                    'type' => ContentImportForm::class,
-                    'success_redirect_to' => '',
-                ],
-                'version_import' => [
-                    'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSION_IMPORT',
-                    'view' => '@SfsCms/admin/content/version_import.html.twig',
-                    'type' => VersionImportForm::class,
                     'success_redirect_to' => '',
                 ],
                 'read' => [
@@ -152,9 +143,6 @@ class ContentTest extends TestCase
                 ],
                 'version_lock' => [
                     'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSION_KEEP',
-                ],
-                'export_version' => [
-                    'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_VERSION_EXPORT',
                 ],
                 'update' => [
                     'is_granted' => 'PERMISSION_SFS_CMS_ADMIN_CONTENT_UPDATE',

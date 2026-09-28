@@ -3,21 +3,16 @@
 namespace Softspring\CmsBundle\Form\Type;
 
 use Softspring\CmsBundle\Config\CmsConfig;
-use Softspring\CmsBundle\Form\DynamicFormTrait;
 use Softspring\CmsBundle\Model\SiteInterface;
+use Softspring\Component\DynamicFormType\Form\Resolver\TypeResolverInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SiteableType extends AbstractType
 {
-    use DynamicFormTrait;
-
-    protected CmsConfig $cmsConfig;
-
-    public function __construct(CmsConfig $cmsConfig)
+    public function __construct(protected CmsConfig $cmsConfig, protected ?TypeResolverInterface $typeResolver = null)
     {
-        $this->cmsConfig = $cmsConfig;
     }
 
     public function getBlockPrefix(): string
@@ -46,7 +41,7 @@ class SiteableType extends AbstractType
     {
         /** @var SiteInterface $site */
         foreach ($options['sites'] as $site) {
-            $builder->add($site->getId(), $this->getFieldType($options['type']), [
+            $builder->add($site->getId(), $this->typeResolver->resolveTypeClass($options['type']), [
                 'label' => $site->getId().'.name',
                 'translation_domain' => 'sfs_cms_sites',
                 'block_prefix' => 'siteable_element',

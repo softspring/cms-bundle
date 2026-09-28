@@ -1,4 +1,4 @@
-import {addTargetEventListener, registerFeature} from '@softspring/cms-bundle/scripts/tools';
+import {addTargetEventListener, registerFeature} from '@softspring/cms-bundle/scripts/tools.js';
 
 registerFeature('admin_routes_forms', _init);
 

@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Softspring\CmsBundle\Form\Type;
 
-use Softspring\Component\DynamicFormType\Form\DynamicFormCollectionType as BaseDynamicFormCollectionType;
+use Softspring\Component\DynamicFormType\Form\Type\DynamicFormCollectionType as BaseDynamicFormCollectionType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class DynamicFormCollectionType extends BaseDynamicFormCollectionType

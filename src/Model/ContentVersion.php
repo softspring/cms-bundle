@@ -3,12 +3,15 @@
 namespace Softspring\CmsBundle\Model;
 
 use InvalidArgumentException;
+use Softspring\CmsBundle\Model\Traits\CompilableTrait;
+use Softspring\CmsBundle\Model\Traits\ContentDataTrait;
+use Softspring\CmsBundle\Model\Traits\VersionTrait;
 
 abstract class ContentVersion implements ContentVersionInterface
 {
-    use Traits\ContentDataTrait;
-    use Traits\CompilableTrait;
-    use Traits\VersionTrait;
+    use ContentDataTrait;
+    use CompilableTrait;
+    use VersionTrait;
 
     protected ?ContentInterface $content = null;
 
@@ -32,7 +35,7 @@ abstract class ContentVersion implements ContentVersionInterface
 
     public function setParent(?VersionableInterface $parent): void
     {
-        if ($parent && !$parent instanceof ContentInterface) {
+        if ($parent instanceof VersionableInterface && !$parent instanceof ContentInterface) {
             throw new InvalidArgumentException('Parent must implement ContentInterface');
         }
         $this->setContent($parent);
