@@ -42,11 +42,6 @@ class SiteFilterType extends AbstractType
             // prevents filling with default value from SiteChoiceType when empty value is selected
             return null;
         });
-
-        $resolver->setNormalizer('default_value', function (OptionsResolver $options, $value) {
-            // prevents filling with default value from SiteChoiceType when empty value is selected
-            return null;
-        });
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
