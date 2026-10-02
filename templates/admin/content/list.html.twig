@@ -34,6 +34,7 @@
                 <div class="d-flex flex-wrap align-items-center gap-3">
                     {% if filterForm.name is defined %}{{ form_row(filterForm.name, {'row_class':'form-floating mb-3'}) }}{% endif %}
                     {% if filterForm.sites is defined %}{{ form_row(filterForm.sites, {'row_class':'form-floating mb-3', 'attr':{'onchange':'submit()'}}) }}{% endif %}
+                    {% if filterForm.path is defined %}{{ form_row(filterForm.path, {'row_class':'form-floating mb-3'}) }}{% endif %}
                     {% if filterForm.status is defined %}{{ form_row(filterForm.status, {'row_class':'form-floating mb-3', 'attr':{'onchange':'submit()'}}) }}{% endif %}
                     {% if filterForm.publishedVersionContent is defined %}{{ form_row(filterForm.publishedVersionContent, {'row_class':'form-floating mb-3', 'attr':{'onchange':'submit()'}}) }}{% endif %}
                     <div class="align-self-end pb-3">
