@@ -176,6 +176,7 @@ class ContentVersionCompilerTest extends TestCase
         $page = new Page();
         $page->addSite($site1 = new Site()); $site1->setId('site1'); $site1->setConfig(['hosts'=>[]]);
         $page->addSite($site2 = new Site()); $site2->setId('site2'); $site2->setConfig(['hosts'=>[]]);
+        $page->addSite($disabledSite = new Site()); $disabledSite->setId('disabled'); $disabledSite->setConfig(['enabled' => false, 'hosts' => []]);
         $page->setDefaultLocale('en');
         $page->addLocale('es');
         $contentVersion = new ContentVersion();

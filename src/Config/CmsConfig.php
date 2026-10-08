@@ -151,14 +151,19 @@ class CmsConfig
         $this->siteEntities = null;
     }
 
-    public function getSites(): array
+    public function getSites(bool $onlyEnabled = false): array
     {
         if (null === $this->siteEntities) {
             $this->siteEntities = [];
 
             foreach ($this->siteManager->getRepository()->findAll() as $siteEntity) {
                 if (!isset($this->siteConfigs["$siteEntity"])) {
-                    $this->siteManager->deleteEntity($siteEntity);
+                    $entityConfig = $siteEntity->getConfig() ?? [];
+                    if ($entityConfig['enabled'] ?? true) {
+                        $siteEntity->setConfig(['enabled' => false] + $entityConfig);
+                        $this->siteManager->saveEntity($siteEntity);
+                    }
+                    $this->siteEntities["$siteEntity"] = $siteEntity;
                 } else {
                     $entityConfig = $siteEntity->getConfig();
                     $cmsConfig = $this->siteConfigs["$siteEntity"];
@@ -181,15 +186,17 @@ class CmsConfig
             }
         }
 
-        return $this->siteEntities;
+        return $onlyEnabled
+            ? array_filter($this->siteEntities, fn (SiteInterface $site): bool => $site->isEnabled())
+            : $this->siteEntities;
     }
 
     /**
      * @throws InvalidSiteException
      */
-    public function getSite(string $id, bool $required = true): ?SiteInterface
+    public function getSite(string $id, bool $required = true, bool $onlyEnabled = false): ?SiteInterface
     {
-        $sites = $this->getSites();
+        $sites = $this->getSites($onlyEnabled);
 
         if ($required && !isset($sites[$id])) {
             throw new InvalidSiteException($id, $sites);
@@ -198,9 +205,9 @@ class CmsConfig
         return $sites[$id] ?? null;
     }
 
-    public function getSitesForContent(string $contentType): array
+    public function getSitesForContent(string $contentType, bool $onlyEnabled = false): array
     {
-        $sites = $this->getSites();
+        $sites = $this->getSites($onlyEnabled);
 
         return array_filter($sites, fn (SiteInterface $site) => in_array($contentType, $site->getConfig()['allowed_content_types']));
     }

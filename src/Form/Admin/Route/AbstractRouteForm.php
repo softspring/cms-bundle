@@ -92,10 +92,26 @@ abstract class AbstractRouteForm extends AbstractType
         ]);
 
         if (!$options['content_relative']) {
+            $route = $builder->getData();
+            $availableSites = null;
+
+            if ($route instanceof RouteInterface && $route->getContent()) {
+                $availableSites = [];
+                foreach ($route->getContent()->getSites() as $site) {
+                    if ($site->isEnabled()) {
+                        $availableSites[$site->getId()] = $site;
+                    }
+                }
+                foreach ($route->getSites() as $site) {
+                    $availableSites[$site->getId()] = $site;
+                }
+            }
+
             $builder->add('sites', SiteChoiceType::class, [
                 'by_reference' => false,
                 'expanded' => true,
                 'constraints' => new Length(['min' => 1]),
+                'choices' => $availableSites,
             ]);
 
             $builder->add('type', ChoiceType::class, [

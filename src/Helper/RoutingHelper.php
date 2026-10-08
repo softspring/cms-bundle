@@ -31,13 +31,13 @@ class RoutingHelper
      */
     public function generateRoutePathAlternates(RoutePathInterface $path, SiteInterface $site, bool $localeAlternates = true, bool $siteAlternates = true, bool $addHrefLang = true): array
     {
-        $alternates = $localeAlternates ? $this->generateRoutePathAlternatesForSite($site, $path, $addHrefLang) : [];
+        $alternates = $localeAlternates && $site->isEnabled() ? $this->generateRoutePathAlternatesForSite($site, $path, $addHrefLang) : [];
 
         if (!$siteAlternates) {
             return $alternates;
         }
 
-        foreach ($path->getRoute()->getSites()->filter(fn ($as) => $as !== $site) as $alternateSite) {
+        foreach ($path->getRoute()->getSites()->filter(fn (SiteInterface $alternateSite) => $alternateSite !== $site && $alternateSite->isEnabled()) as $alternateSite) {
             $alternates = array_merge($alternates, $this->generateRoutePathAlternatesForSite($alternateSite, $path, $addHrefLang));
         }
 
@@ -49,6 +49,10 @@ class RoutingHelper
      */
     public function generateRoutePathAlternatesForSite(SiteInterface $site, RoutePathInterface $path, bool $addHrefLang = true): array
     {
+        if (!$site->isEnabled()) {
+            return [];
+        }
+
         $alternates = [];
 
         foreach ($path->getRoute()->getPaths() as $alternatePath) {

@@ -29,7 +29,7 @@ class SiteResolver
         switch ($this->siteConfig['identification']) {
             case 'domain':
                 $host = $request->getHost();
-                foreach ($this->cmsConfig->getSites() as $siteId => $site) {
+                foreach ($this->cmsConfig->getSites(true) as $siteId => $site) {
                     foreach ($site->getConfig()['hosts'] as $hostConfig) {
                         if ($host === $hostConfig['domain']) {
                             return [$siteId, $site, $hostConfig];
