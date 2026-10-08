@@ -102,8 +102,10 @@ class ModuleRenderer
 
         $moduleEnabledSites = [];
         foreach ($module['site_filter'] as $key => $value) {
-            if (is_string($key) && true === $value) {
-                $moduleEnabledSites[] = $this->cmsConfig->getSite($key);
+            if (is_string($key) && is_bool($value)) {
+                if ($value) {
+                    $moduleEnabledSites[] = $this->cmsConfig->getSite($key);
+                }
             } elseif (is_int($key) && is_string($value)) {
                 $moduleEnabledSites[] = $this->cmsConfig->getSite($value);
             } else {
@@ -124,8 +126,10 @@ class ModuleRenderer
 
         $moduleEnabledLocales = [];
         foreach ($module['locale_filter'] as $key => $value) {
-            if (is_string($key) && true === $value) {
-                $moduleEnabledLocales[] = $key;
+            if (is_string($key) && is_bool($value)) {
+                if ($value) {
+                    $moduleEnabledLocales[] = $key;
+                }
             } elseif (is_int($key) && is_string($value)) {
                 $moduleEnabledLocales[] = $value;
             } else {

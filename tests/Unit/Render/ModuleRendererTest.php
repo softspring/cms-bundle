@@ -78,6 +78,7 @@ class ModuleRendererTest extends TestCase
         return [
             'legacy list format' => [['site_2']],
             'map format' => [['site_2' => true]],
+            'map format with all sites disabled' => [['site_1' => false, 'site_2' => false]],
         ];
     }
 
@@ -126,6 +127,7 @@ class ModuleRendererTest extends TestCase
         return [
             'legacy list format' => [['en']],
             'map format' => [['en' => true]],
+            'map format with all locales disabled' => [['en' => false, 'fr' => false]],
         ];
     }
 
