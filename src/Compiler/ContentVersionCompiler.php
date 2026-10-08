@@ -38,6 +38,10 @@ class ContentVersionCompiler extends AbstractVersionCompiler
         $compiledDatas = [];
 
         foreach ($version->getContent()->getSites() as $site) {
+            if (!$site->isEnabled()) {
+                continue;
+            }
+
             foreach ($version->getContent()->getLocales() ?? [] as $locale) {
                 $this->cmsLogger && $this->cmsLogger->debug(sprintf('Compiling "%s" content version for "%s" in "%s"', $version->getContent()->getName(), "$site", $locale));
                 $request = IsolatedRequest::createIsolatedForContentRoute($version->getContent(), $locale, $site);

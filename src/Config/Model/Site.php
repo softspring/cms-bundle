@@ -21,10 +21,12 @@ class Site implements ConfigurationInterface
 
         $rootNode
             ->validate()
-                ->ifTrue(fn ($config) => empty($config['hosts']) && empty($config['paths']))
+                ->ifTrue(fn ($config) => ($config['enabled'] ?? true) && empty($config['hosts']) && empty($config['paths']))
                 ->thenInvalid('Invalid configuration, either hosts either paths must be set for a valid site')
             ->end()
             ->children()
+                ->booleanNode('enabled')->defaultTrue()->end()
+
                 ->arrayNode('allowed_content_types')
                     ->performNoDeepMerging()
                     ->defaultValue(['page'])

@@ -14,6 +14,8 @@ interface SiteInterface
 
     public function getConfig(): ?array;
 
+    public function isEnabled(): bool;
+
     public function getCanonicalHost(): ?string;
 
     public function getCanonicalPort(): ?int;

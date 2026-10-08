@@ -47,6 +47,13 @@ class SiteResolverTest extends TestCase
                     ['domain' => 'store.sfs-cms.org', 'locale' => 'en', 'scheme' => 'https', 'canonical' => true, 'redirect_to_canonical' => false],
                 ],
             ],
+            'disabled' => [
+                '_id' => 'disabled',
+                'enabled' => false,
+                'hosts' => [
+                    ['domain' => 'disabled.sfs-cms.org', 'locale' => false, 'scheme' => 'https', 'canonical' => true, 'redirect_to_canonical' => false],
+                ],
+            ],
         ];
 
         $sites = array_map(function (array $siteConfig) {
@@ -66,13 +73,15 @@ class SiteResolverTest extends TestCase
         });
 
         $this->cmsConfig = $this->createMock(CmsConfig::class);
-        $this->cmsConfig->method('getSites')->willReturnCallback(function () use ($sitesConfig) {
-            return array_map(function ($config) {
+        $this->cmsConfig->method('getSites')->willReturnCallback(function (bool $onlyEnabled = false) use ($sitesConfig) {
+            $sites = array_map(function ($config) {
                 $site = new Site();
                 $site->setId($config['_id']);
                 $site->setConfig($config);
                 return $site;
             }, $sitesConfig);
+
+            return $onlyEnabled ? array_filter($sites, fn (Site $site) => $site->isEnabled()) : $sites;
         });
         $this->cmsConfig->method('getSite')->willReturnCallback(function ($siteName) use ($sitesConfig) {
             $site = new Site();
@@ -105,6 +114,15 @@ class SiteResolverTest extends TestCase
         $this->assertNull($siteId);
         $this->assertNull($siteConfig);
         $this->assertNull($hostConfig);
+    }
+
+    public function testDisabledSiteIsNotResolved(): void
+    {
+        $siteResolver = new SiteResolver($this->cmsConfig, ['identification' => 'domain', 'throw_not_found' => false]);
+
+        $request = new Request([], [], [], [], [], ['SERVER_NAME' => 'disabled.sfs-cms.org']);
+
+        $this->assertSame([null, null, null], $siteResolver->resolveSiteAndHost($request));
     }
 
     public function testResolveNotFoundWithException(): void

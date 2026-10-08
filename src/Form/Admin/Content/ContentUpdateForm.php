@@ -67,7 +67,7 @@ class ContentUpdateForm extends AbstractType implements ContentUpdateFormInterfa
         ]);
 
         $builder->add('sites', SiteChoiceType::class, [
-            'content' => $options['content_config'],
+            'content' => $options['content'],
             'by_reference' => false,
             'constraints' => new Count(['min' => 1]),
         ]);

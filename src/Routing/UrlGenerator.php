@@ -51,6 +51,15 @@ class UrlGenerator
             return '#not-published';
         }
 
+        $site = $this->getSiteForRoute($route, $site, $this->requestStack->getCurrentRequest());
+        if ($route->getSites()->count() && !$site) {
+            if ($onlyChecking) {
+                throw new RouteNotFoundException();
+            }
+
+            return '#';
+        }
+
         $queryString = !empty($routeParams) ? '?'.http_build_query($routeParams) : '';
 
         return $this->getSiteSchemeAndHost($route, $locale, $site).$this->getSiteOrLocalePath($route, $locale, $site).'/'.$this->getRoutePath($route, $locale, $site).$queryString;
@@ -77,6 +86,15 @@ class UrlGenerator
             return '#';
         }
 
+        $site = $this->getSiteForRoute($route, $site, $this->requestStack->getCurrentRequest());
+        if ($route->getSites()->count() && !$site) {
+            if ($onlyChecking) {
+                throw new RouteNotFoundException();
+            }
+
+            return '#';
+        }
+
         $queryString = !empty($routeParams) ? '?'.http_build_query($routeParams) : '';
 
         return $this->getSiteOrLocalePath($route, $locale, $site).'/'.$this->getRoutePath($route, $locale, $site).$queryString;
@@ -89,6 +107,11 @@ class UrlGenerator
     {
         $route = $routePath->getRoute();
         $locale = $routePath->getLocale();
+        $site = $this->getSiteForRoute($route, $site, $this->requestStack->getCurrentRequest());
+
+        if ($route->getSites()->count() && !$site) {
+            return '#';
+        }
 
         return $this->getSiteSchemeAndHost($route, $locale, $site).$this->getSiteOrLocalePath($route, $locale, $site).'/'.$routePath->getCompiledPath();
     }
@@ -100,6 +123,11 @@ class UrlGenerator
     {
         $route = $routePath->getRoute();
         $locale = $routePath->getLocale();
+        $site = $this->getSiteForRoute($route, $site, $this->requestStack->getCurrentRequest());
+
+        if ($route->getSites()->count() && !$site) {
+            return '#';
+        }
 
         return $this->getSiteOrLocalePath($route, $locale, $site).'/'.$routePath->getCompiledPath();
     }
@@ -167,8 +195,8 @@ class UrlGenerator
         $locale = $locale ?: $this->requestStack->getCurrentRequest()->getLocale();
         $site = $this->getSite($site, $this->requestStack->getCurrentRequest());
 
-        if (!$route->hasSite("$site")) {
-            $site = $route->getSites()->first();
+        if (!$site || !$route->hasSite("$site")) {
+            $site = $this->getEnabledRouteSite($route);
         }
 
         if ($site instanceof SiteInterface) {
@@ -192,8 +220,8 @@ class UrlGenerator
         $locale = $locale ?: $this->requestStack->getCurrentRequest()->getLocale();
         $site = $this->getSite($site, $this->requestStack->getCurrentRequest());
 
-        if (!$route->hasSite("$site")) {
-            $site = $route->getSites()->first();
+        if (!$site || !$route->hasSite("$site")) {
+            $site = $this->getEnabledRouteSite($route);
         }
 
         if ('path' == $this->siteConfig['identification']) {
@@ -214,19 +242,43 @@ class UrlGenerator
     protected function getSite($site, ?Request $request): ?SiteInterface
     {
         if ($site instanceof SiteInterface) {
-            return $site;
+            return $site->isEnabled() ? $site : null;
         }
 
         if (is_string($site)) {
-            if ($site = $this->cmsConfig->getSite($site)) {
+            if ($site = $this->cmsConfig->getSite($site, false, true)) {
                 return $site;
             }
         }
 
         if ($request && $request->attributes->has('_sfs_cms_site')) {
-            return $request->attributes->get('_sfs_cms_site');
+            $requestSite = $request->attributes->get('_sfs_cms_site');
+
+            return $requestSite instanceof SiteInterface && $requestSite->isEnabled() ? $requestSite : null;
         }
 
         return null;
+    }
+
+    protected function getEnabledRouteSite(RouteInterface $route): ?SiteInterface
+    {
+        foreach ($route->getSites() as $site) {
+            if ($site->isEnabled()) {
+                return $site;
+            }
+        }
+
+        return null;
+    }
+
+    protected function getSiteForRoute(RouteInterface $route, $site, ?Request $request): ?SiteInterface
+    {
+        $site = $this->getSite($site, $request);
+
+        if ($site && (!$route->getSites()->count() || $route->hasSite("$site"))) {
+            return $site;
+        }
+
+        return $this->getEnabledRouteSite($route);
     }
 }
