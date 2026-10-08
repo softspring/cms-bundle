@@ -54,11 +54,11 @@ function _init() {
         });
     }
 
-    document.addEventListener("collection.node.add.after", function (event) { // (1)
+    document.addEventListener("collection.node.add.after", function () { // (1)
         initializeChoices();
     });
 
-    document.addEventListener("collection.node.insert.after", function (event) { // (1)
+    document.addEventListener("collection.node.insert.after", function () { // (1)
         initializeChoices();
     });
 
