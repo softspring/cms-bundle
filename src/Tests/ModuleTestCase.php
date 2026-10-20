@@ -11,6 +11,7 @@ use Softspring\CmsBundle\Entity\Page;
 use Softspring\CmsBundle\Form\Extension\DefaultValueExtension;
 use Softspring\CmsBundle\Form\Extension\DynamicTypesExtension;
 use Softspring\CmsBundle\Form\Module\DynamicFormModuleType;
+use Softspring\CmsBundle\Form\Resolver\CmsTypeResolver;
 use Softspring\CmsBundle\Form\Type\LinkType;
 use Softspring\CmsBundle\Form\Type\SymfonyRouteType;
 use Softspring\CmsBundle\Form\Type\TranslatableType;
@@ -23,6 +24,7 @@ use Softspring\CmsBundle\Render\Module\ModuleRenderer;
 use Softspring\CmsBundle\Translator\TranslatableContext;
 use Softspring\CmsBundle\Utils\DataMigrator;
 use Softspring\Component\DynamicFormType\Form\Extension\DynamicFormExtension;
+use Softspring\Component\DynamicFormType\Form\Resolver\ChainTypeResolver;
 use Softspring\Component\DynamicFormType\Form\Resolver\ConstraintResolver;
 use Softspring\Component\DynamicFormType\Form\Resolver\DefaultTypeResolver;
 use Softspring\TranslatableBundle\Form\Type\TranslatableType as BaseTranslatableType;
@@ -55,7 +57,7 @@ abstract class ModuleTestCase extends TypeTestCase
      */
     protected function getExtensions(): array
     {
-        $cmsTypeResolver = new DefaultTypeResolver();
+        $cmsTypeResolver = new ChainTypeResolver([new CmsTypeResolver(), new DefaultTypeResolver()]);
 
         $router = $this->createMock(RouterInterface::class);
         $router->method('getRouteCollection')->willReturn(new RouteCollection());
@@ -72,9 +74,9 @@ abstract class ModuleTestCase extends TypeTestCase
 
         $preloadedFormTypes = [];
         $preloadedFormTypes[] = new DynamicFormModuleType($cmsHelper);
-        $preloadedFormTypes[] = new TranslatableType($trabnslatableContext);
-        $preloadedFormTypes[] = new TranslationType($trabnslatableContext);
-        $preloadedFormTypes[] = new BaseTranslatableType(null, null);
+        $preloadedFormTypes[] = new TranslatableType($trabnslatableContext, $cmsTypeResolver);
+        $preloadedFormTypes[] = new TranslationType($trabnslatableContext, $cmsTypeResolver);
+        $preloadedFormTypes[] = new BaseTranslatableType(null, null, $cmsTypeResolver);
         $preloadedFormTypes[] = new BaseTranslationType();
         $preloadedFormTypes[] = new SymfonyRouteType($router, $routeManager, []);
         $preloadedFormTypes[] = new LinkType($router, $routeManager, []);
