@@ -64,6 +64,11 @@ class Site implements SiteInterface
         $this->setMetadata([] !== $metadata ? $metadata : null);
     }
 
+    public function isEnabled(): bool
+    {
+        return $this->getConfig()['enabled'] ?? true;
+    }
+
     public function getCanonicalHost(): ?string
     {
         foreach ($this->getConfig()['hosts'] as $hostConfig) {

@@ -27,11 +27,15 @@ class SiteHelper
         if (is_array($value)) {
             $availableSites = $value;
         } elseif (empty($content)) {
-            $availableSites = $this->cmsConfig->getSites();
+            $availableSites = $this->cmsConfig->getSites(true);
         } elseif ($content instanceof ContentInterface) {
-            $availableSites = $content->getSites()->toArray();
+            $availableSites = $this->cmsConfig->getSitesForContent($this->cmsConfig->getContent($content)['_id'], true);
+
+            foreach ($content->getSites() as $site) {
+                $availableSites[$site->getId()] = $site;
+            }
         } elseif (isset($content['_id'])) {
-            $availableSites = $this->cmsConfig->getSitesForContent($content['_id']);
+            $availableSites = $this->cmsConfig->getSitesForContent($content['_id'], true);
         } else {
             throw new Exception('Can not get available sites');
         }

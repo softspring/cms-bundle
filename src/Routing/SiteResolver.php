@@ -44,7 +44,7 @@ class SiteResolver
         $host = $request->getHost();
         $path = $request->getPathInfo();
 
-        foreach ($this->cmsConfig->getSites() as $siteId => $site) {
+        foreach ($this->cmsConfig->getSites(true) as $siteId => $site) {
             $siteConfig = $site->getConfig();
             $matchScore = 0;
             $matchHostConfig = null;

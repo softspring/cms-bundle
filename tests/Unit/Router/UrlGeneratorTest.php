@@ -14,6 +14,7 @@ use Softspring\CmsBundle\Manager\RouteManagerInterface;
 use Softspring\CmsBundle\Routing\UrlGenerator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 class UrlGeneratorTest extends TestCase
 {
@@ -155,5 +156,70 @@ class UrlGeneratorTest extends TestCase
         }
 
         return $route;
+    }
+
+    public function testDisabledOnlyRouteDoesNotGeneratePublicUrl(): void
+    {
+        $site = new Site();
+        $site->setId('disabled');
+        $site->setConfig(['enabled' => false, 'hosts' => []]);
+
+        $route = new Route();
+        $route->setId('disabled_route');
+        $route->addSite($site);
+
+        $path = new RoutePath();
+        $path->setLocale('en');
+        $path->setCompiledPath('disabled-path');
+        $route->addPath($path);
+
+        $requestStack = new RequestStack();
+        $requestStack->push(Request::create('https://example.org/en/'));
+
+        $urlGenerator = new UrlGenerator(
+            $requestStack,
+            $this->createMock(RouteManagerInterface::class),
+            $this->createMock(CmsConfig::class),
+            ['identification' => 'domain'],
+            null,
+        );
+
+        $this->assertSame('#', $urlGenerator->getUrl($route, 'en', $site));
+        $this->assertSame('#', $urlGenerator->getUrlFixed($path, $site));
+    }
+
+    public function testDisabledSiteDoesNotGeneratePathsOrPassRouteExistenceChecks(): void
+    {
+        $site = $this->createSite(['enabled' => false, 'hosts' => [], 'paths' => []], 'disabled');
+        $route = $this->createRoute($site, 'hidden', []);
+        $path = new RoutePath();
+        $path->setLocale('es');
+        $path->setCompiledPath('hidden');
+        $route->addPath($path);
+        $generator = $this->createUrlGenerator();
+
+        self::assertSame('#', $generator->getPath($route, 'es', $site));
+        self::assertSame('#', $generator->getPathFixed($path, $site));
+
+        $this->expectException(RouteNotFoundException::class);
+        $generator->getPath($route, 'es', $site, [], true);
+    }
+
+    public function testRouteFallsBackToAnEnabledSite(): void
+    {
+        $disabled = $this->createSite(['enabled' => false, 'hosts' => [], 'paths' => []], 'disabled');
+        $enabled = $this->createSite([
+            'hosts' => [
+                ['domain' => 'enabled.example.org', 'locale' => false, 'scheme' => 'https', 'canonical' => true],
+            ],
+            'paths' => [['path' => '/es', 'locale' => 'es']],
+            'default_locale' => 'es',
+        ], 'enabled');
+        $route = $this->createRoute($disabled, 'entry', [['locale' => 'es', 'path' => 'entrada']]);
+        $route->addSite($enabled);
+        $generator = $this->createUrlGenerator();
+
+        self::assertSame('/es/entrada', $generator->getPath($route, 'es', $disabled));
+        self::assertSame('https://enabled.example.org/es/entrada', $generator->getUrl($route, 'es', $disabled));
     }
 }

@@ -65,7 +65,7 @@ class ContentListFilterForm extends PaginatorForm implements QueryBuilderProcess
             'property_path' => '[path__like]',
         ]);
 
-        if (count($this->cmsConfig->getSitesForContent($options['content_config']['_id'])) > 1) {
+        if (count($this->cmsConfig->getSitesForContent($options['content_config']['_id'], true)) > 1) {
             $builder->add('sites', SiteChoiceType::class, [
                 'required' => false,
                 'property_path' => '[sites.id]',

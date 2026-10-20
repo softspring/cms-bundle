@@ -26,6 +26,8 @@ interface SiteInterface
 
     public function removeMetadataField(string $field): void;
 
+    public function isEnabled(): bool;
+
     public function getCanonicalHost(): ?string;
 
     public function getCanonicalPort(): ?int;

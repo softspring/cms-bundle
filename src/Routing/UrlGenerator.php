@@ -54,6 +54,13 @@ class UrlGenerator
 
         $queryString = [] === $routeParams ? '' : '?'.http_build_query($routeParams);
         $site = $this->resolveSite($route, $site);
+        if ($route->getSites()->count() && !$site instanceof SiteInterface) {
+            if ($onlyChecking) {
+                throw new RouteNotFoundException();
+            }
+
+            return '#';
+        }
         $locale = $this->resolveLocale($route, $locale, $site);
 
         return $this->getSiteSchemeAndHost($site, $locale).$this->getSiteOrLocalePath($site, $locale).'/'.$this->getRoutePath($route, $locale).$queryString;
@@ -82,6 +89,13 @@ class UrlGenerator
 
         $queryString = [] === $routeParams ? '' : '?'.http_build_query($routeParams);
         $site = $this->resolveSite($route, $site);
+        if ($route->getSites()->count() && !$site instanceof SiteInterface) {
+            if ($onlyChecking) {
+                throw new RouteNotFoundException();
+            }
+
+            return '#';
+        }
         $locale = $this->resolveLocale($route, $locale, $site);
 
         return $this->getSiteOrLocalePath($site, $locale).'/'.$this->getRoutePath($route, $locale).$queryString;
@@ -95,6 +109,9 @@ class UrlGenerator
         $route = $routePath->getRoute();
         $locale = $routePath->getLocale();
         $site = $this->resolveSite($route, $site);
+        if ($route->getSites()->count() && !$site instanceof SiteInterface) {
+            return '#';
+        }
         $locale = $this->resolveLocale($route, $locale, $site);
 
         return $this->getSiteSchemeAndHost($site, $locale).$this->getSiteOrLocalePath($site, $locale).'/'.$routePath->getCompiledPath();
@@ -108,6 +125,9 @@ class UrlGenerator
         $route = $routePath->getRoute();
         $locale = $routePath->getLocale();
         $site = $this->resolveSite($route, $site);
+        if ($route->getSites()->count() && !$site instanceof SiteInterface) {
+            return '#';
+        }
         $locale = $this->resolveLocale($route, $locale, $site);
 
         return $this->getSiteOrLocalePath($site, $locale).'/'.$routePath->getCompiledPath();
@@ -216,9 +236,13 @@ class UrlGenerator
             return $site;
         }
 
-        $routeSite = $route->getSites()->first();
+        foreach ($route->getSites() as $routeSite) {
+            if ($routeSite->isEnabled()) {
+                return $routeSite;
+            }
+        }
 
-        return $routeSite instanceof SiteInterface ? $routeSite : $site;
+        return 0 === $route->getSites()->count() ? $site : null;
     }
 
     protected function resolveLocale(RouteInterface $route, ?string $locale, ?SiteInterface $site): ?string
@@ -248,15 +272,17 @@ class UrlGenerator
     protected function getSite($site, ?Request $request): ?SiteInterface
     {
         if ($site instanceof SiteInterface) {
-            return $site;
+            return $site->isEnabled() ? $site : null;
         }
 
-        if (is_string($site) && $site = $this->cmsConfig->getSite($site)) {
+        if (is_string($site) && $site = $this->cmsConfig->getSite($site, false, true)) {
             return $site;
         }
 
         if ($request instanceof Request && $request->attributes->has('_sfs_cms_site')) {
-            return $request->attributes->get('_sfs_cms_site');
+            $requestSite = $request->attributes->get('_sfs_cms_site');
+
+            return $requestSite instanceof SiteInterface && $requestSite->isEnabled() ? $requestSite : null;
         }
 
         return null;

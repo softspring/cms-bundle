@@ -34,6 +34,7 @@ class SiteTest extends TestCase
         ]);
 
         $this->assertEquals([
+            'enabled' => true,
             'allowed_content_types' => ['page', 'post'],
             'locales' => ['es', 'en'],
             'default_locale' => 'en',
@@ -104,5 +105,18 @@ class SiteTest extends TestCase
                 'url' => '/sitemap.xml',
             ],
         ]]);
+    }
+
+    public function testDisabledSiteDoesNotRequireHostsOrPaths(): void
+    {
+        $processor = new Processor();
+        $configuration = new Site('disabled_site');
+        $config = $processor->processConfiguration($configuration, ['site' => [
+            'enabled' => false,
+        ]]);
+
+        $this->assertFalse($config['enabled']);
+        $this->assertSame([], $config['hosts']);
+        $this->assertSame([], $config['paths']);
     }
 }

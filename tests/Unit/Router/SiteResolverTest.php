@@ -76,6 +76,14 @@ class SiteResolverTest extends TestCase
             ],
         ];
 
+        $sitesConfig['disabled'] = [
+            '_id' => 'disabled',
+            'enabled' => false,
+            'hosts' => [
+                ['domain' => 'disabled.sfs-cms.org', 'locale' => false, 'scheme' => 'https', 'canonical' => true, 'redirect_to_canonical' => false],
+            ],
+        ];
+
         $sites = array_map(function (array $siteConfig): Site {
             $site = new Site();
             $site->setId($siteConfig['_id']);
@@ -94,14 +102,16 @@ class SiteResolverTest extends TestCase
         });
 
         $this->cmsConfig = $this->createMock(CmsConfig::class);
-        $this->cmsConfig->method('getSites')->willReturnCallback(function () use ($sitesConfig): array {
-            return array_map(function (array $config): Site {
+        $this->cmsConfig->method('getSites')->willReturnCallback(function (bool $onlyEnabled = false) use ($sitesConfig): array {
+            $sites = array_map(function (array $config): Site {
                 $site = new Site();
                 $site->setId($config['_id']);
                 $site->setConfig($config);
 
                 return $site;
             }, $sitesConfig);
+
+            return $onlyEnabled ? array_filter($sites, static fn (Site $site): bool => $site->isEnabled()) : $sites;
         });
         $this->cmsConfig->method('getSite')->willReturnCallback(function ($siteName) use ($sitesConfig): Site {
             $site = new Site();
@@ -250,5 +260,14 @@ class SiteResolverTest extends TestCase
         $siteResolver = new SiteResolver($this->cmsConfig, $sitesConfig);
         $request = new Request([], [], [], [], [], ['SERVER_NAME' => 'www.sfs-cms.org', 'REQUEST_URI' => 'https://www.sfs-cms.org/test/url', 'QUERY_STRING' => 'with-params=1']);
         $this->assertEquals('https://sfs-cms.org/test/url?with-params=1', $siteResolver->getCanonicalRedirectUrl($this->cmsConfig->getSite('default'), $request));
+    }
+
+    public function testDisabledSiteIsNotResolved(): void
+    {
+        $siteResolver = new SiteResolver($this->cmsConfig, ['identification' => 'domain', 'throw_not_found' => false]);
+
+        $request = new Request([], [], [], [], [], ['SERVER_NAME' => 'disabled.sfs-cms.org']);
+
+        $this->assertSame([null, null, null, null], $siteResolver->resolveSiteAndHost($request));
     }
 }

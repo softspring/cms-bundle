@@ -21,7 +21,7 @@ class Site implements ConfigurationInterface
 
         $rootNode
             ->validate()
-                ->ifTrue(fn ($config): bool => empty($config['hosts']) && empty($config['paths']))
+                ->ifTrue(fn ($config): bool => ($config['enabled'] ?? true) && empty($config['hosts']) && empty($config['paths']))
                 ->thenInvalid('Invalid configuration, either hosts either paths must be set for a valid site')
             ->end()
             ->validate()
@@ -29,6 +29,8 @@ class Site implements ConfigurationInterface
                 ->thenInvalid('Invalid site configuration, sitemap and robots URLs must not collide')
             ->end()
             ->children()
+                ->booleanNode('enabled')->defaultTrue()->end()
+
                 ->arrayNode('allowed_content_types')
                     ->performNoDeepMerging()
                     ->defaultValue(['page'])

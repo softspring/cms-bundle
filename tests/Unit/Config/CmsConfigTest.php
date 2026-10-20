@@ -126,13 +126,12 @@ class CmsConfigTest extends TestCase
         $siteManager->expects(self::once())
             ->method('getRepository')
             ->willReturn($repository);
-        $siteManager->expects(self::once())
-            ->method('deleteEntity')
-            ->with($legacySite);
+        $siteManager->expects(self::never())
+            ->method('deleteEntity');
         $siteManager->expects(self::once())
             ->method('createEntity')
             ->willReturn($createdSite);
-        $siteManager->expects(self::exactly(2))
+        $siteManager->expects(self::exactly(3))
             ->method('saveEntity')
             ->willReturnCallback(function (object $site) use (&$savedSites): void {
                 $savedSites[] = $site;
@@ -142,13 +141,14 @@ class CmsConfigTest extends TestCase
 
         $sites = $cmsConfig->getSites();
 
-        self::assertSame(['default', 'blog'], array_keys($sites));
+        self::assertSame(['default', 'legacy', 'blog'], array_keys($sites));
+        self::assertFalse($legacySite->isEnabled());
         self::assertSame($this->sites()['default'], $defaultSite->getConfig());
         self::assertSame('blog', $createdSite->getId());
         self::assertSame($this->sites()['blog'], $createdSite->getConfig());
-        self::assertSame([$defaultSite, $createdSite], $savedSites);
+        self::assertSame([$defaultSite, $legacySite, $createdSite], $savedSites);
         self::assertSame($defaultSite, $cmsConfig->getSite('default'));
-        self::assertSame(['default' => $defaultSite], $cmsConfig->getSitesForContent('page'));
+        self::assertSame(['default' => $defaultSite], $cmsConfig->getSitesForContent('page', true));
         self::assertSame(['blog' => $createdSite], $cmsConfig->getSitesForContent('post'));
 
         $cmsConfig->getSites();
@@ -261,5 +261,53 @@ class CmsConfigTest extends TestCase
                 'alias' => 'sfs_cms_blog',
             ],
         ];
+    }
+
+    public function testMissingConfiguredSiteIsPreservedAsDisabled(): void
+    {
+        $site = new Site();
+        $site->setId('legacy');
+        $site->setConfig(['hosts' => [], 'allowed_content_types' => ['page']]);
+
+        $repository = $this->createMock(EntityRepository::class);
+        $repository->method('findAll')->willReturn([$site]);
+
+        $siteManager = $this->createMock(SiteManagerInterface::class);
+        $siteManager->method('getRepository')->willReturn($repository);
+        $siteManager->expects($this->never())->method('deleteEntity');
+        $siteManager->expects($this->once())->method('saveEntity')->with($site);
+
+        $cmsConfig = new CmsConfig([], [], [], [], [], [], $siteManager);
+
+        $this->assertSame(['legacy' => $site], $cmsConfig->getSites());
+        $this->assertSame([], $cmsConfig->getSites(true));
+        $this->assertFalse($site->isEnabled());
+        $this->assertSame(['enabled' => false, 'hosts' => [], 'allowed_content_types' => ['page']], $site->getConfig());
+    }
+
+    public function testOnlyEnabledSitesCanBeRequested(): void
+    {
+        $enabled = new Site();
+        $enabled->setId('enabled');
+        $enabled->setConfig(['enabled' => true]);
+
+        $disabled = new Site();
+        $disabled->setId('disabled');
+        $disabled->setConfig(['enabled' => false]);
+
+        $repository = $this->createMock(EntityRepository::class);
+        $repository->method('findAll')->willReturn([$enabled, $disabled]);
+
+        $siteManager = $this->createMock(SiteManagerInterface::class);
+        $siteManager->method('getRepository')->willReturn($repository);
+
+        $cmsConfig = new CmsConfig([], [], [], [], [], [
+            'enabled' => $enabled->getConfig(),
+            'disabled' => $disabled->getConfig(),
+        ], $siteManager);
+
+        $this->assertSame(['enabled' => $enabled], $cmsConfig->getSites(true));
+        $this->assertSame($disabled, $cmsConfig->getSite('disabled'));
+        $this->assertNull($cmsConfig->getSite('disabled', false, true));
     }
 }
