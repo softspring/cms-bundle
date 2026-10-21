@@ -3,13 +3,14 @@
 namespace Softspring\CmsBundle\Utils;
 
 use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\MediaBundle\Type\MediaTypesCollection;
 
 class DataMigrator
 {
-    public static function migrate(array $migrationScripts, $moduleData, $toRevision, ?CmsConfig $cmsConfig = null): array
+    public static function migrate(array $migrationScripts, $moduleData, $toRevision, ?CmsConfig $cmsConfig = null, ?MediaTypesCollection $mediaTypesCollection = null): array
     {
         foreach ($migrationScripts as $migrationScript) {
-            $moduleData = (include $migrationScript)($moduleData, (int) ($moduleData['_revision'] ?? 1), $toRevision, $cmsConfig);
+            $moduleData = (include $migrationScript)($moduleData, (int) ($moduleData['_revision'] ?? 1), $toRevision, $cmsConfig, $mediaTypesCollection);
         }
 
         $moduleData['_revision'] = $toRevision;

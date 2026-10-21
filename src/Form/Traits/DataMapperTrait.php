@@ -96,7 +96,7 @@ trait DataMapperTrait
             return $data;
         }
 
-        return DataMigrator::migrate($migrationScripts, $data, $toRevision);
+        return DataMigrator::migrate($migrationScripts, $data, $toRevision, $this->cmsConfig ?? null, $this->mediaTypesCollection ?? null);
     }
 
     /**
