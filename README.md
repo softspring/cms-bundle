@@ -10,6 +10,23 @@
 
 Softspring CMS Bundle provides the core CMS runtime and administration screens used by Armonic projects.
 
+## Configured media selection migrations
+
+Module migration scripts can receive optional fourth and fifth arguments:
+`CmsConfig $cmsConfig` and `MediaTypesCollection $mediaTypesCollection`. Older
+scripts remain valid. Both editor data mapping and module rendering supply this
+context.
+
+`MediaSelectionMigrator::migrate($data, $formFields, $mediaTypesCollection)`
+repairs restricted `mediaVersion` fields, including translations and dynamic
+collections, using the first available choice in configuration order. Valid
+selections and unrelated data remain untouched. A configured picture name is
+never replaced with a hard-coded `_default`; unresolved references or empty
+allow-lists are preserved for editorial resolution.
+
+Requires the media-bundle configured-selection helper; merge that companion PR
+before enabling these migrations.
+
 It lets Symfony applications manage sites, localized routes, pages, content versions, layouts, reusable blocks, menus, editable modules, preview rendering, and compiled content storage.
 
 ## Documentation

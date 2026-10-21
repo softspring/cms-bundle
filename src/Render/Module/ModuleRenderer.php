@@ -13,6 +13,7 @@ use Softspring\CmsBundle\Form\Module\ContainerModuleType;
 use Softspring\CmsBundle\Render\Error\RenderErrorList;
 use Softspring\CmsBundle\Render\Exception\ModuleRenderException;
 use Softspring\CmsBundle\Utils\DataMigrator;
+use Softspring\MediaBundle\Type\MediaTypesCollection;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
 
@@ -27,6 +28,7 @@ class ModuleRenderer
         protected RequestStack $requestStack,
         protected Environment $twig,
         protected ?LoggerInterface $cmsLogger,
+        protected ?MediaTypesCollection $mediaTypesCollection = null,
     ) {
     }
 
@@ -80,7 +82,7 @@ class ModuleRenderer
             }
         }
 
-        $moduleData = DataMigrator::migrate($moduleConfig['revision_migration_scripts'], $moduleData, $moduleConfig['revision']);
+        $moduleData = DataMigrator::migrate($moduleConfig['revision_migration_scripts'], $moduleData, $moduleConfig['revision'], $this->cmsConfig, $this->mediaTypesCollection);
 
         if ($this->isContainer($moduleConfig)) {
             return $this->renderContainerModule($moduleData, $moduleConfig, $profilerDebugCollectorData, $twigAdditionalContext, $renderErrorList);

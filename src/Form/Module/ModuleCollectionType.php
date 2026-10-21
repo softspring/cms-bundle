@@ -11,6 +11,7 @@ use Softspring\Component\PolymorphicFormType\Form\Discriminator\NodeDiscriminato
 use Softspring\Component\PolymorphicFormType\Form\EventListener\NodesResizeFormListener;
 use Softspring\Component\PolymorphicFormType\Form\Type\Node\AbstractNodeType;
 use Softspring\Component\PolymorphicFormType\Form\Type\PolymorphicCollectionType;
+use Softspring\MediaBundle\Type\MediaTypesCollection;
 use Symfony\Component\Form\DataMapperInterface;
 use Symfony\Component\Form\Exception\InvalidConfigurationException;
 use Symfony\Component\Form\Exception\RuntimeException;
@@ -26,7 +27,7 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
 
     protected CmsConfig $cmsConfig;
 
-    public function __construct(FormFactory $formFactory, CmsConfig $cmsConfig)
+    public function __construct(FormFactory $formFactory, CmsConfig $cmsConfig, protected ?MediaTypesCollection $mediaTypesCollection = null)
     {
         parent::__construct($formFactory);
         $this->cmsConfig = $cmsConfig;
