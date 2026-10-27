@@ -152,7 +152,7 @@ ERROR;
             $start = $block->getPublishStartDate() instanceof DateTime ? $block->getPublishStartDate()->getTimestamp() : 0;
             $end = $block->getPublishEndDate() instanceof DateTime ? $block->getPublishEndDate()->getTimestamp() : PHP_INT_MAX;
 
-            return (int) ($end - $start);
+            return $end - $start;
         };
         usort($blocks, function (BlockInterface $block1, BlockInterface $block2) use ($getPublishedBlockSecondsFn): int {
             return $getPublishedBlockSecondsFn($block1) <=> $getPublishedBlockSecondsFn($block2);
