@@ -19,9 +19,11 @@ This package provides the core CMS model, configuration loader, administration U
 - Content versioning, preview rendering, publishing support, and compiled content storage.
 - Layout configuration with named containers and allowed module restrictions.
 - Editable module system with built-in module form types and render templates.
+- Module site filters support site entities, identifier lists, and boolean maps.
 - Built-in modules for HTML, translatable HTML, CSS, containers, grids, and block rendering.
 - Block management for reusable static or dynamic content fragments.
 - Menu management and menu rendering helpers.
+- Site and locale context for internal and signed ESI fragments, including explicit menu site selection.
 - Admin controllers, templates, forms, and menu providers for CMS back-office screens.
 - Shared serializers for CMS configuration, sites, published content, menus and media images.
 - Twig namespaces and CMS collection loading for default, package, and project-level overrides.

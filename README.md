@@ -10,6 +10,19 @@
 
 Softspring CMS Bundle provides the core CMS runtime and administration screens used by Armonic projects.
 
+## Site context in fragments
+
+Internal and signed ESI fragments carry their site in the `_site` request
+attribute. Site resolution restores the enabled site object and the host/path
+configuration for the fragment's locale before rendering. Query parameters on
+normal pages do not override their site. An explicit unknown or disabled
+fragment site fails instead of selecting another site.
+
+Menu rendering respects an explicitly supplied site; otherwise it uses the
+current resolved site. Standalone ESI fragments have a site and locale, but no
+originating page request. Invalidate cached fragments and pages after deploying
+changes to site-context resolution.
+
 ## Configured media selection migrations
 
 Module migration scripts can receive optional fourth and fifth arguments:
@@ -28,6 +41,12 @@ Requires the media-bundle configured-selection helper; merge that companion PR
 before enabling these migrations.
 
 It lets Symfony applications manage sites, localized routes, pages, content versions, layouts, reusable blocks, menus, editable modules, preview rendering, and compiled content storage.
+
+## Module site filters
+
+Module site filters accept persisted site entities as well as site identifiers
+and boolean maps. Saving a module through a site selection field therefore
+keeps the same rendering behaviour when its data is hydrated again.
 
 ## Documentation
 

@@ -43,15 +43,19 @@ class SiteResolverListener implements EventSubscriberInterface
             return;
         }
 
+        if ($request->attributes->has('_controller') && $request->attributes->has('_locale')) {
+            $request->setLocale($request->attributes->get('_locale'));
+        }
+
         $request->attributes->set('_site', $siteId);
         $request->attributes->set('_sfs_cms_site', $site);
         $request->attributes->set('_sfs_cms_site_host_config', $siteHostConfig);
         $request->attributes->set('_sfs_cms_site_path_config', $sitePathConfig);
 
-        if (!$this->originRequest instanceof Request) {
-            $this->originRequest = $this->requestStack->getMainRequest();
+        $this->originRequest = $this->requestStack->getMainRequest();
+        // A standalone signed fragment has site context, but no originating page.
+        if ($this->originRequest instanceof Request && ($this->originRequest !== $request || !$request->attributes->has('_controller'))) {
+            $request->attributes->set('_sfs_cms_origin_request', $this->originRequest);
         }
-
-        $request->attributes->set('_sfs_cms_origin_request', $this->originRequest);
     }
 }

@@ -26,6 +26,12 @@ class SiteResolver
      */
     public function resolveSiteAndHost(Request $request): ?array
     {
+        // FragmentListener has already validated signed fragments and populated
+        // their attributes. Query parameters must not override the page's site.
+        if ($request->attributes->has('_controller') && $request->attributes->has('_site')) {
+            return $this->resolveFragmentSite($request);
+        }
+
         if ($matchingSite = $this->matchingSite($request)) {
             return $matchingSite;
         }
@@ -35,6 +41,35 @@ class SiteResolver
         }
 
         return [null, null, null, null];
+    }
+
+    protected function resolveFragmentSite(Request $request): array
+    {
+        $id = $request->attributes->get('_site');
+        $id = $id instanceof SiteInterface ? $id->getId() : $id;
+        $site = is_string($id) ? ($this->cmsConfig->getSites(true)[$id] ?? null) : null;
+        if (!$site instanceof SiteInterface) {
+            throw new SiteNotFoundException('The fragment site does not exist or is disabled.');
+        }
+
+        $locale = $request->attributes->get('_locale', $request->getLocale());
+        $config = $site->getConfig();
+        $hostConfig = null;
+        foreach ($config['hosts'] ?? [] as $host) {
+            if (($host['canonical'] ?? false) && (empty($host['locale']) || $host['locale'] === $locale)) {
+                $hostConfig = $host;
+                break;
+            }
+        }
+        $pathConfig = null;
+        foreach ($config['paths'] ?? [] as $path) {
+            if (($path['locale'] ?? null) === $locale) {
+                $pathConfig = $path;
+                break;
+            }
+        }
+
+        return [$id, $site, $hostConfig, $pathConfig];
     }
 
     protected function matchingSite(Request $request): ?array
