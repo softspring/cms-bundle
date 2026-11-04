@@ -41,7 +41,7 @@
         "guzzlehttp/guzzle": "^7.8.2",
         "guzzlehttp/promises": "^2.0",
         "phpstan/phpstan": "^2.1",
-        "phpunit/phpunit": "^12.5",
+        "phpunit/phpunit": "^13.4",
         "rector/rector": "^2.6.7",
         "sensio/framework-extra-bundle": "^5.4 || ^6.2",
         "softspring/user-bundle": "^6.0@dev",
