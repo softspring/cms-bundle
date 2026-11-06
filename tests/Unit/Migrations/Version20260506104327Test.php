@@ -46,6 +46,34 @@ class Version20260506104327Test extends TestCase
         $this->assertContains(self::ADD_COMPILED_DATA_FOREIGN_KEY, $statements);
     }
 
+    public function testPreservesPluginForeignKeysAroundColumnChanges(): void
+    {
+        foreach (['up', 'down'] as $direction) {
+            $schema = $this->createCompiledDataSchema(false);
+            $plugin = $schema->createTable('blog_post');
+            $plugin->addColumn('id', 'string', ['length' => 36]);
+            $plugin->addForeignKeyConstraint('cms_content_version', ['id'], ['id'], ['onDelete' => 'CASCADE'], 'FK_BLOG_VERSION');
+            $migration = $this->createMigration();
+            $migration->$direction($schema);
+            $statements = $this->statements($migration);
+
+            $this->assertStringContainsString('DROP FOREIGN KEY FK_BLOG_VERSION', $statements[0]);
+            $this->assertStringContainsString('ADD CONSTRAINT FK_BLOG_VERSION', $statements[array_key_last($statements)]);
+            $this->assertStringContainsString('ON DELETE CASCADE', $statements[array_key_last($statements)]);
+        }
+    }
+
+    public function testDoesNotRequireOptionalSectionsPluginTables(): void
+    {
+        foreach (['up', 'down'] as $direction) {
+            $migration = $this->createMigration();
+            $migration->$direction($this->createCompiledDataSchema(false));
+            foreach ($this->statements($migration) as $statement) {
+                $this->assertStringNotContainsString('ALTER TABLE cms_content_version_sections', $statement);
+            }
+        }
+    }
+
     private function createMigration(): Version20260506104327
     {
         $connection = $this->createMock(Connection::class);
