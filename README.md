@@ -2,11 +2,11 @@
 
 [![Latest Stable](https://img.shields.io/packagist/v/softspring/cms-bundle?label=stable&style=flat-square)](https://github.com/softspring/cms-bundle/releases)
 [![Latest Unstable](https://img.shields.io/packagist/v/softspring/cms-bundle?label=unstable&style=flat-square&include_prereleases)](https://github.com/softspring/cms-bundle/releases)
-[![License](https://img.shields.io/packagist/l/softspring/cms-bundle?style=flat-square)](https://github.com/softspring/cms-bundle/blob/6.0/LICENSE)
-[![PHP Version](https://img.shields.io/packagist/dependency-v/softspring/cms-bundle/php?style=flat-square)](https://github.com/softspring/cms-bundle/blob/6.0/composer.json)
+[![License](https://img.shields.io/packagist/l/softspring/cms-bundle?style=flat-square)](https://github.com/softspring/cms-bundle/blob/6.1/LICENSE)
+[![PHP Version](https://img.shields.io/packagist/dependency-v/softspring/cms-bundle/php?style=flat-square)](https://github.com/softspring/cms-bundle/blob/6.1/composer.json)
 [![Downloads](https://img.shields.io/packagist/dt/softspring/cms-bundle?style=flat-square)](https://packagist.org/packages/softspring/cms-bundle)
-[![CI](https://img.shields.io/github/actions/workflow/status/softspring/cms-bundle/ci.yml?branch=6.0&style=flat-square&label=CI)](https://github.com/softspring/cms-bundle/actions/workflows/ci.yml)
-[![Coverage](https://img.shields.io/codecov/c/github/softspring/cms-bundle?branch=6.0&style=flat-square)](https://app.codecov.io/gh/softspring/cms-bundle/tree/6.0)
+[![CI](https://img.shields.io/github/actions/workflow/status/softspring/cms-bundle/ci.yml?branch=6.1&style=flat-square&label=CI)](https://github.com/softspring/cms-bundle/actions/workflows/ci.yml)
+[![Coverage](https://img.shields.io/codecov/c/github/softspring/cms-bundle?branch=6.1&style=flat-square)](https://app.codecov.io/gh/softspring/cms-bundle/tree/6.1)
 
 Softspring CMS Bundle provides the core CMS runtime and administration screens used by Armonic projects.
 
@@ -14,7 +14,7 @@ It lets Symfony applications manage sites, localized routes, pages, content vers
 
 ## Documentation
 
-Read the usage documentation in [Armonic Documentation](https://armonic.softspring.es/6.0/bundles/cms-bundle/install).
+Read the usage documentation in [Armonic Documentation](https://armonic.softspring.es/6.1@dev/bundles/cms-bundle/install).
 
 ## Features
 

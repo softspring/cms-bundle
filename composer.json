@@ -14,17 +14,17 @@
         "doctrine/doctrine-fixtures-bundle": "^4.2",
         "doctrine/migrations": "^3.2",
         "doctrine/orm": "^2.10 || ^3.0 || ^4.0",
-        "softspring/components": "^6.0@dev",
-        "softspring/crudl-controller": "^6.0@dev",
-        "softspring/doctrine-migrations-version-comparator": "^6.0@dev",
-        "softspring/doctrine-target-entity-resolver": "^6.0@dev",
-        "softspring/dynamic-form-type": "^6.0@dev",
-        "softspring/events": "^6.0@dev",
-        "softspring/media-bundle": "^6.0@dev",
-        "softspring/permissions-bundle": "^6.0@dev",
-        "softspring/polymorphic-form-type": "^6.0@dev",
-        "softspring/translatable-bundle": "^6.0@dev",
-        "softspring/twig-extra-bundle": "^6.0@dev",
+        "softspring/components": "6.1.*@dev",
+        "softspring/crudl-controller": "6.1.*@dev",
+        "softspring/doctrine-migrations-version-comparator": "6.1.*@dev",
+        "softspring/doctrine-target-entity-resolver": "6.1.*@dev",
+        "softspring/dynamic-form-type": "6.1.*@dev",
+        "softspring/events": "6.1.*@dev",
+        "softspring/media-bundle": "6.1.*@dev",
+        "softspring/permissions-bundle": "6.1.*@dev",
+        "softspring/polymorphic-form-type": "6.1.*@dev",
+        "softspring/translatable-bundle": "6.1.*@dev",
+        "softspring/twig-extra-bundle": "6.1.*@dev",
         "symfony/config": "^6.4 || ^7.4 || ^8.0",
         "symfony/intl": "^6.4 || ^7.4 || ^8.0",
         "symfony/routing": "^6.4 || ^7.4 || ^8.0",
@@ -44,7 +44,7 @@
         "phpunit/phpunit": "^12.5",
         "rector/rector": "^2.6.7",
         "sensio/framework-extra-bundle": "^5.4 || ^6.2",
-        "softspring/user-bundle": "^6.0@dev",
+        "softspring/user-bundle": "6.1.*@dev",
         "symfony/css-selector": "^6.4 || ^7.4 || ^8.0",
         "symfony/dom-crawler": "^6.4 || ^7.4 || ^8.0",
         "symfony/form": "^6.4 || ^7.4 || ^8.0",
@@ -84,7 +84,8 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-6.0": "6.0.x-dev"
+            "dev-6.0": "6.0.x-dev",
+            "dev-6.1": "6.1.x-dev"
         }
     },
     "scripts": {
