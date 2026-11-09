@@ -18,7 +18,6 @@ final class Version20260506104327 extends AbstractMigration
         'cms_content_version' => ['FK_C0E8E17F84A0A3ED'],
         'cms_content_version_medias' => ['FK_423042FFD28591F7'],
         'cms_content_version_routes' => ['FK_62372FCDD28591F7'],
-        'cms_content_version_sections' => ['FK_4491D9C7D28591F7'],
         'cms_menu_item' => ['FK_1432B53D60272618', 'FK_1432B53DCCD7E912'],
         'cms_route' => ['FK_2CB7BB5584A0A3ED'],
         'cms_route_path_sites' => ['FK_D70A2920213F0BF3', 'FK_D70A2920F6BD1646'],
@@ -63,6 +62,7 @@ final class Version20260506104327 extends AbstractMigration
             return;
         }
 
+        $additionalForeignKeys = $this->dropAdditionalMysqlForeignKeys($schema);
         $this->dropMysqlForeignKeys($schema);
         $this->addSql('ALTER TABLE cms_block CHANGE id id VARCHAR(36) NOT NULL');
         $this->addSql('ALTER TABLE cms_compiled_data CHANGE id id VARCHAR(36) NOT NULL');
@@ -73,7 +73,6 @@ final class Version20260506104327 extends AbstractMigration
         $this->addSql('ALTER TABLE cms_content_version CHANGE id id VARCHAR(36) NOT NULL, CHANGE content_id content_id VARCHAR(36) DEFAULT NULL');
         $this->addSql('ALTER TABLE cms_content_version_medias CHANGE content_version_id content_version_id VARCHAR(36) NOT NULL');
         $this->addSql('ALTER TABLE cms_content_version_routes CHANGE content_version_id content_version_id VARCHAR(36) NOT NULL');
-        $this->addSql('ALTER TABLE cms_content_version_sections CHANGE content_version_id content_version_id VARCHAR(36) NOT NULL');
         $this->addSql('ALTER TABLE cms_menu CHANGE id id VARCHAR(36) NOT NULL, CHANGE menu_type menu_type VARCHAR(30) NOT NULL');
         $this->addSql('ALTER TABLE cms_menu_item CHANGE id id VARCHAR(36) NOT NULL, CHANGE menu_id menu_id VARCHAR(36) DEFAULT NULL, CHANGE parent_item_id parent_item_id VARCHAR(36) DEFAULT NULL');
         $this->addSql('ALTER TABLE cms_route CHANGE content_id content_id VARCHAR(36) DEFAULT NULL');
@@ -90,13 +89,15 @@ final class Version20260506104327 extends AbstractMigration
         $this->addSql('ALTER TABLE cms_content_version ADD CONSTRAINT FK_C0E8E17F84A0A3ED FOREIGN KEY (content_id) REFERENCES cms_content (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE cms_content_version_medias ADD CONSTRAINT FK_423042FFD28591F7 FOREIGN KEY (content_version_id) REFERENCES cms_content_version (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE cms_content_version_routes ADD CONSTRAINT FK_62372FCDD28591F7 FOREIGN KEY (content_version_id) REFERENCES cms_content_version (id) ON DELETE CASCADE');
-        $this->addSql('ALTER TABLE cms_content_version_sections ADD CONSTRAINT FK_4491D9C7D28591F7 FOREIGN KEY (content_version_id) REFERENCES cms_content_version (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE cms_menu_item ADD CONSTRAINT FK_1432B53D60272618 FOREIGN KEY (parent_item_id) REFERENCES cms_menu_item (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE cms_menu_item ADD CONSTRAINT FK_1432B53DCCD7E912 FOREIGN KEY (menu_id) REFERENCES cms_menu (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE cms_route ADD CONSTRAINT FK_2CB7BB5584A0A3ED FOREIGN KEY (content_id) REFERENCES cms_content (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE cms_route_path_sites ADD CONSTRAINT FK_D70A2920213F0BF3 FOREIGN KEY (route_path_id) REFERENCES cms_route_path (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE cms_route_path_sites ADD CONSTRAINT FK_D70A2920F6BD1646 FOREIGN KEY (site_id) REFERENCES cms_site (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE cms_route_sites ADD CONSTRAINT FK_BC9E2F19F6BD1646 FOREIGN KEY (site_id) REFERENCES cms_site (id) ON DELETE CASCADE');
+        foreach ($additionalForeignKeys as $statement) {
+            $this->addSql($statement);
+        }
     }
 
     public function down(Schema $schema): void
@@ -132,6 +133,7 @@ final class Version20260506104327 extends AbstractMigration
             return;
         }
 
+        $additionalForeignKeys = $this->dropAdditionalMysqlForeignKeys($schema);
         $this->dropMysqlForeignKeys($schema);
         $this->addSql('ALTER TABLE cms_block CHANGE id id CHAR(36) NOT NULL');
         $this->addSql('ALTER TABLE cms_compiled_data CHANGE id id CHAR(36) NOT NULL');
@@ -142,7 +144,6 @@ final class Version20260506104327 extends AbstractMigration
         $this->addSql('ALTER TABLE cms_content_version CHANGE id id CHAR(36) NOT NULL, CHANGE content_id content_id CHAR(36) DEFAULT NULL');
         $this->addSql('ALTER TABLE cms_content_version_medias CHANGE content_version_id content_version_id CHAR(36) NOT NULL');
         $this->addSql('ALTER TABLE cms_content_version_routes CHANGE content_version_id content_version_id CHAR(36) NOT NULL');
-        $this->addSql('ALTER TABLE cms_content_version_sections CHANGE content_version_id content_version_id CHAR(36) NOT NULL');
         $this->addSql('ALTER TABLE cms_menu CHANGE menu_type menu_type CHAR(30) NOT NULL, CHANGE id id CHAR(36) NOT NULL');
         $this->addSql('ALTER TABLE cms_menu_item CHANGE id id CHAR(36) NOT NULL, CHANGE menu_id menu_id CHAR(36) DEFAULT NULL, CHANGE parent_item_id parent_item_id CHAR(36) DEFAULT NULL');
         $this->addSql('ALTER TABLE cms_route CHANGE content_id content_id CHAR(36) DEFAULT NULL');
@@ -159,13 +160,35 @@ final class Version20260506104327 extends AbstractMigration
         $this->addSql('ALTER TABLE cms_content_version ADD CONSTRAINT FK_C0E8E17F84A0A3ED FOREIGN KEY (content_id) REFERENCES cms_content (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE cms_content_version_medias ADD CONSTRAINT FK_423042FFD28591F7 FOREIGN KEY (content_version_id) REFERENCES cms_content_version (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE cms_content_version_routes ADD CONSTRAINT FK_62372FCDD28591F7 FOREIGN KEY (content_version_id) REFERENCES cms_content_version (id) ON DELETE CASCADE');
-        $this->addSql('ALTER TABLE cms_content_version_sections ADD CONSTRAINT FK_4491D9C7D28591F7 FOREIGN KEY (content_version_id) REFERENCES cms_content_version (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE cms_menu_item ADD CONSTRAINT FK_1432B53D60272618 FOREIGN KEY (parent_item_id) REFERENCES cms_menu_item (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE cms_menu_item ADD CONSTRAINT FK_1432B53DCCD7E912 FOREIGN KEY (menu_id) REFERENCES cms_menu (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE cms_route ADD CONSTRAINT FK_2CB7BB5584A0A3ED FOREIGN KEY (content_id) REFERENCES cms_content (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE cms_route_path_sites ADD CONSTRAINT FK_D70A2920213F0BF3 FOREIGN KEY (route_path_id) REFERENCES cms_route_path (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE cms_route_path_sites ADD CONSTRAINT FK_D70A2920F6BD1646 FOREIGN KEY (site_id) REFERENCES cms_site (id) ON UPDATE NO ACTION');
         $this->addSql('ALTER TABLE cms_route_sites ADD CONSTRAINT FK_BC9E2F19F6BD1646 FOREIGN KEY (site_id) REFERENCES cms_site (id) ON UPDATE NO ACTION');
+        foreach ($additionalForeignKeys as $statement) {
+            $this->addSql($statement);
+        }
+    }
+
+    /** @return list<string> SQL to restore foreign keys from plugins and application tables. */
+    private function dropAdditionalMysqlForeignKeys(Schema $schema): array
+    {
+        $platform = $this->connection->getDatabasePlatform();
+        $referencedTables = ['cms_block', 'cms_compiled_data', 'cms_content', 'cms_content_page', 'cms_content_version', 'cms_menu', 'cms_menu_item', 'cms_route_path'];
+        $restore = [];
+        foreach ($schema->getTables() as $table) {
+            foreach ($table->getForeignKeys() as $foreignKey) {
+                if (!in_array(strtolower($foreignKey->getForeignTableName()), $referencedTables, true)
+                    || in_array(strtolower($foreignKey->getName()), array_map('strtolower', self::MYSQL_FOREIGN_KEYS[$table->getName()] ?? []), true)) {
+                    continue;
+                }
+                $this->addSql($platform->getDropForeignKeySQL($foreignKey->getName(), $table->getName()));
+                $restore[] = $platform->getCreateForeignKeySQL($foreignKey, $table->getName());
+            }
+        }
+
+        return $restore;
     }
 
     private function dropMysqlForeignKeys(Schema $schema): void

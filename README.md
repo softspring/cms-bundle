@@ -14,11 +14,16 @@ It lets Symfony applications manage sites, localized routes, pages, content vers
 
 ## Documentation
 
-Read the usage documentation in [Armonic Documentation](https://armonic.softspring.es/latest/bundles/cms-bundle/install).
+Read the usage documentation in [Armonic Documentation](https://armonic.softspring.es/6.0/bundles/cms-bundle/install).
 
 ## Features
 
 See [FEATURES.md](FEATURES.md) for the functional scope of this package.
+
+## Database migrations
+
+Core migrations manage the CMS tables. Optional plugins provide migrations for their own tables.
+The core identifier normalization preserves external foreign keys without requiring optional plugin tables.
 
 ## Contributing
 
