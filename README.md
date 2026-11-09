@@ -20,6 +20,11 @@ Read the usage documentation in [Armonic Documentation](https://armonic.softspri
 
 See [FEATURES.md](FEATURES.md) for the functional scope of this package.
 
+## Database migrations
+
+Core migrations manage the CMS tables. Optional plugins provide migrations for their own tables.
+The core identifier normalization preserves external foreign keys without requiring optional plugin tables.
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).

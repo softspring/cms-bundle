@@ -18,7 +18,6 @@ final class Version20260506104327 extends AbstractMigration
         'cms_content_version' => ['FK_C0E8E17F84A0A3ED'],
         'cms_content_version_medias' => ['FK_423042FFD28591F7'],
         'cms_content_version_routes' => ['FK_62372FCDD28591F7'],
-        'cms_content_version_sections' => ['FK_4491D9C7D28591F7'],
         'cms_menu_item' => ['FK_1432B53D60272618', 'FK_1432B53DCCD7E912'],
         'cms_route' => ['FK_2CB7BB5584A0A3ED'],
         'cms_route_path_sites' => ['FK_D70A2920213F0BF3', 'FK_D70A2920F6BD1646'],
@@ -74,9 +73,6 @@ final class Version20260506104327 extends AbstractMigration
         $this->addSql('ALTER TABLE cms_content_version CHANGE id id VARCHAR(36) NOT NULL, CHANGE content_id content_id VARCHAR(36) DEFAULT NULL');
         $this->addSql('ALTER TABLE cms_content_version_medias CHANGE content_version_id content_version_id VARCHAR(36) NOT NULL');
         $this->addSql('ALTER TABLE cms_content_version_routes CHANGE content_version_id content_version_id VARCHAR(36) NOT NULL');
-        if ($schema->hasTable('cms_content_version_sections')) {
-            $this->addSql('ALTER TABLE cms_content_version_sections CHANGE content_version_id content_version_id VARCHAR(36) NOT NULL');
-        }
         $this->addSql('ALTER TABLE cms_menu CHANGE id id VARCHAR(36) NOT NULL, CHANGE menu_type menu_type VARCHAR(30) NOT NULL');
         $this->addSql('ALTER TABLE cms_menu_item CHANGE id id VARCHAR(36) NOT NULL, CHANGE menu_id menu_id VARCHAR(36) DEFAULT NULL, CHANGE parent_item_id parent_item_id VARCHAR(36) DEFAULT NULL');
         $this->addSql('ALTER TABLE cms_route CHANGE content_id content_id VARCHAR(36) DEFAULT NULL');
@@ -93,9 +89,6 @@ final class Version20260506104327 extends AbstractMigration
         $this->addSql('ALTER TABLE cms_content_version ADD CONSTRAINT FK_C0E8E17F84A0A3ED FOREIGN KEY (content_id) REFERENCES cms_content (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE cms_content_version_medias ADD CONSTRAINT FK_423042FFD28591F7 FOREIGN KEY (content_version_id) REFERENCES cms_content_version (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE cms_content_version_routes ADD CONSTRAINT FK_62372FCDD28591F7 FOREIGN KEY (content_version_id) REFERENCES cms_content_version (id) ON DELETE CASCADE');
-        if ($schema->hasTable('cms_content_version_sections')) {
-            $this->addSql('ALTER TABLE cms_content_version_sections ADD CONSTRAINT FK_4491D9C7D28591F7 FOREIGN KEY (content_version_id) REFERENCES cms_content_version (id) ON DELETE CASCADE');
-        }
         $this->addSql('ALTER TABLE cms_menu_item ADD CONSTRAINT FK_1432B53D60272618 FOREIGN KEY (parent_item_id) REFERENCES cms_menu_item (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE cms_menu_item ADD CONSTRAINT FK_1432B53DCCD7E912 FOREIGN KEY (menu_id) REFERENCES cms_menu (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE cms_route ADD CONSTRAINT FK_2CB7BB5584A0A3ED FOREIGN KEY (content_id) REFERENCES cms_content (id) ON DELETE CASCADE');
@@ -151,9 +144,6 @@ final class Version20260506104327 extends AbstractMigration
         $this->addSql('ALTER TABLE cms_content_version CHANGE id id CHAR(36) NOT NULL, CHANGE content_id content_id CHAR(36) DEFAULT NULL');
         $this->addSql('ALTER TABLE cms_content_version_medias CHANGE content_version_id content_version_id CHAR(36) NOT NULL');
         $this->addSql('ALTER TABLE cms_content_version_routes CHANGE content_version_id content_version_id CHAR(36) NOT NULL');
-        if ($schema->hasTable('cms_content_version_sections')) {
-            $this->addSql('ALTER TABLE cms_content_version_sections CHANGE content_version_id content_version_id CHAR(36) NOT NULL');
-        }
         $this->addSql('ALTER TABLE cms_menu CHANGE menu_type menu_type CHAR(30) NOT NULL, CHANGE id id CHAR(36) NOT NULL');
         $this->addSql('ALTER TABLE cms_menu_item CHANGE id id CHAR(36) NOT NULL, CHANGE menu_id menu_id CHAR(36) DEFAULT NULL, CHANGE parent_item_id parent_item_id CHAR(36) DEFAULT NULL');
         $this->addSql('ALTER TABLE cms_route CHANGE content_id content_id CHAR(36) DEFAULT NULL');
@@ -170,9 +160,6 @@ final class Version20260506104327 extends AbstractMigration
         $this->addSql('ALTER TABLE cms_content_version ADD CONSTRAINT FK_C0E8E17F84A0A3ED FOREIGN KEY (content_id) REFERENCES cms_content (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE cms_content_version_medias ADD CONSTRAINT FK_423042FFD28591F7 FOREIGN KEY (content_version_id) REFERENCES cms_content_version (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE cms_content_version_routes ADD CONSTRAINT FK_62372FCDD28591F7 FOREIGN KEY (content_version_id) REFERENCES cms_content_version (id) ON DELETE CASCADE');
-        if ($schema->hasTable('cms_content_version_sections')) {
-            $this->addSql('ALTER TABLE cms_content_version_sections ADD CONSTRAINT FK_4491D9C7D28591F7 FOREIGN KEY (content_version_id) REFERENCES cms_content_version (id) ON DELETE CASCADE');
-        }
         $this->addSql('ALTER TABLE cms_menu_item ADD CONSTRAINT FK_1432B53D60272618 FOREIGN KEY (parent_item_id) REFERENCES cms_menu_item (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE cms_menu_item ADD CONSTRAINT FK_1432B53DCCD7E912 FOREIGN KEY (menu_id) REFERENCES cms_menu (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE cms_route ADD CONSTRAINT FK_2CB7BB5584A0A3ED FOREIGN KEY (content_id) REFERENCES cms_content (id) ON DELETE CASCADE');
