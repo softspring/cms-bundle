@@ -14,7 +14,7 @@ It lets Symfony applications manage sites, localized routes, pages, content vers
 
 ## Documentation
 
-Read the usage documentation in [Armonic Documentation](https://armonic.softspring.es/6.1@dev/bundles/cms-bundle/install).
+Read the usage documentation in [Armonic Documentation](https://armonic.softspring.es/6.1-dev/bundles/cms-bundle/install).
 
 ## Features
 
