@@ -8,6 +8,10 @@ use DateTime;
 
 interface CompiledDataInterface
 {
+    public function getGeneration(): string;
+
+    public function setGeneration(string $generation): void;
+
     public function getKey(): ?string;
 
     public function setKey(?string $key): void;

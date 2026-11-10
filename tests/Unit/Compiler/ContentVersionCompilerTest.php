@@ -2,6 +2,7 @@
 
 namespace Softspring\CmsBundle\Test\Unit\Compiler;
 
+use DateTime;
 use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -56,11 +57,38 @@ class ContentVersionCompilerTest extends TestCase
         });
     }
 
+    public function testRuntimeCompilationDoesNotAttachCacheOrModifyPublishedParent(): void
+    {
+        $version = new ContentVersion();
+        $parent = new Page();
+        $version->setParent($parent);
+        $parent->setPublishedVersion($version);
+        $parent->setLastModified(new DateTime('2000-01-01'));
+        $before = $parent->getLastModified();
+        $this->compileHelperMock->method('contentSaveCompiled')->willReturn(true);
+        $this->contentVersionRenderMock->method('render')->willReturn('Runtime HTML');
+        $compiled = $this->compiler->compileRequest($version, new Request(), null, false);
+        self::assertSame('Runtime HTML', $compiled->getDataPart('content'));
+        self::assertCount(0, $version->getCompiled());
+        self::assertEquals($before, $parent->getLastModified());
+    }
+
     public function testCompileRequestInvalidClassException(): void
     {
         $this->expectException(CompileException::class);
         $this->expectExceptionMessage('Version must be an instance of ContentVersionInterface');
         $this->compiler->compileRequest($this->createMock(VersionInterface::class), new Request());
+    }
+
+    public function testRuntimeErrorsAreReturnedWithoutChangingEditorialErrorState(): void
+    {
+        $version = new ContentVersion();
+        $this->compileHelperMock->method('contentSaveCompiled')->willReturn(true);
+        $this->contentVersionRenderMock->method('render')->willThrowException(new RenderException('Runtime template error'));
+        $compiled = $this->compiler->compileRequest($version, new Request(), null, false);
+        self::assertTrue($compiled->hasErrors());
+        self::assertFalse($version->hasCompileErrors());
+        self::assertCount(0, $version->getCompiled());
     }
 
     public function testCompileRequestPreviousContainers(): void

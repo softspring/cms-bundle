@@ -5,6 +5,8 @@
                       https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <entity name="Softspring\CmsBundle\Entity\CompiledData" table="cms_compiled_data">
+        <unique-constraints><unique-constraint name="uniq_cms_content_compiled_key" columns="content_version_id,compiled_key,generation"/></unique-constraints>
+
         <cache usage="NONSTRICT_READ_WRITE" />
 
         <id name="id" type="string" length="36" column="id">
