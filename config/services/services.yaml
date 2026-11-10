@@ -69,6 +69,14 @@ services:
     Softspring\CmsBundle\Helper\:
         resource: '../../src/Helper/*'
 
+    Softspring\CmsBundle\Cache\DoctrineCompiledDataStore: ~
+
+    Softspring\CmsBundle\Cache\CompiledDataStoreInterface: '@Softspring\CmsBundle\Cache\DoctrineCompiledDataStore'
+
+    Softspring\CmsBundle\Cache\CompiledContentCache:
+        arguments:
+            $lockFactory: '@?lock.sfs_cms_compile.factory'
+
     Softspring\CmsBundle\Manager\:
         resource: '../../src/Manager/*'
 

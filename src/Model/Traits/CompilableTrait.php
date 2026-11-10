@@ -5,12 +5,20 @@ namespace Softspring\CmsBundle\Model\Traits;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Softspring\CmsBundle\Model\CompiledDataInterface;
+use Symfony\Component\Uid\Uuid;
 
 trait CompilableTrait
 {
     protected ?Collection $compiled = null;
 
     protected bool $compileErrors = false;
+
+    protected string $compiledGeneration = '';
+
+    public function getCompiledGeneration(): string
+    {
+        return $this->compiledGeneration;
+    }
 
     /**
      * @return Collection<CompiledDataInterface>
@@ -61,6 +69,7 @@ trait CompilableTrait
 
     public function cleanCompiled(): void
     {
+        $this->compiledGeneration = (string) Uuid::v4();
         $this->getCompiled()->map(function (CompiledDataInterface $compiled): void {
             $this->removeCompiled($compiled);
         });

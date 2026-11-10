@@ -27,6 +27,7 @@
         "softspring/twig-extra-bundle": "^6.0@dev",
         "symfony/config": "^6.4 || ^7.4 || ^8.0",
         "symfony/intl": "^6.4 || ^7.4 || ^8.0",
+        "symfony/lock": "^6.4 || ^7.4 || ^8.0",
         "symfony/routing": "^6.4 || ^7.4 || ^8.0",
         "symfony/serializer": "^6.4 || ^7.4 || ^8.0",
         "symfony/uid": "^6.4 || ^7.4 || ^8.0",

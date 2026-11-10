@@ -15,11 +15,23 @@ class CompiledData implements CompiledDataInterface
 
     protected ?array $data = null;
 
-    protected ?ContentVersionInterface $contentVersion;
+    protected ?ContentVersionInterface $contentVersion = null;
 
-    protected ?SectionVersionInterface $sectionVersion;
+    protected ?SectionVersionInterface $sectionVersion = null;
 
     protected bool $errors = false;
+
+    protected string $generation = '';
+
+    public function getGeneration(): string
+    {
+        return $this->generation;
+    }
+
+    public function setGeneration(string $generation): void
+    {
+        $this->generation = $generation;
+    }
 
     public function getKey(): ?string
     {
@@ -133,11 +145,5 @@ class CompiledData implements CompiledDataInterface
     public function setErrors(bool $errors): void
     {
         $this->errors = $errors;
-
-        $version = $this->getVersion();
-
-        if ($version instanceof CompilableInterface) {
-            $version->setCompileErrors($errors);
-        }
     }
 }

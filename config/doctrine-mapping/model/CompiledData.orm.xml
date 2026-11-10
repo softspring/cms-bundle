@@ -10,6 +10,10 @@
             <index name="expires_at_idx" columns="expires_at"/>
         </indexes>
 
+        <field name="generation" column="generation" type="string" length="36">
+            <options><option name="default"></option></options>
+        </field>
+
         <field name="key" column="compiled_key" type="string" length="50" nullable="true"/>
 
         <field name="createdAt" column="created_at" type="integer" nullable="true">

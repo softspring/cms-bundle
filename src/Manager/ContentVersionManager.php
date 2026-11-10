@@ -6,6 +6,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Softspring\CmsBundle\Cache\CompiledContentCache;
+use Softspring\CmsBundle\Cache\DoctrineCompiledDataStore;
 use Softspring\CmsBundle\Compiler\CompileException;
 use Softspring\CmsBundle\Compiler\ContentVersionCompiler;
 use Softspring\CmsBundle\Helper\CmsHelper;
@@ -27,7 +29,9 @@ class ContentVersionManager implements ContentVersionManagerInterface
         protected ContentVersionCompiler $contentCompiler,
         protected CompiledDataManagerInterface $compiledDataManager,
         protected bool $contentSaveCompiled,
+        protected ?CompiledContentCache $compiledContentCache = null,
     ) {
+        $this->compiledContentCache ??= new CompiledContentCache(new DoctrineCompiledDataStore($em, $compiledDataManager));
     }
 
     public function getTargetClass(): string
@@ -78,18 +82,10 @@ class ContentVersionManager implements ContentVersionManagerInterface
 
         $compiledKey = $this->compiledDataManager->getCompileKeyFromRequest($contentVersion, $request);
 
-        /** @var ?CompiledDataInterface $compiledData */
-        $compiledData = $this->compiledDataManager->getRepository()->findOneBy([
-            'contentVersion' => $contentVersion,
-            'key' => $compiledKey,
-        ]);
-
-        if (!$compiledData?->getDataPart('content') || !$this->cmsHelper->compile()->contentSaveCompiled($contentVersion)) {
-            $compiledData = $this->contentCompiler->compileRequest($contentVersion, $request, $compiledData);
-            if ($this->cmsHelper->compile()->contentSaveCompiled($contentVersion)) {
-                $this->saveEntity($contentVersion);
-            }
-        }
+        $compile = fn (): CompiledDataInterface => $this->contentCompiler->compileRequest($contentVersion, $request, null, false);
+        $compiledData = $this->cmsHelper->compile()->contentSaveCompiled($contentVersion)
+            ? $this->compiledContentCache->get($contentVersion, $compiledKey, $compile)
+            : $compile();
 
         if ($throwExceptionOnCompileErrorAndNoContent && $compiledData->hasErrors() && !$compiledData->getDataPart('content')) {
             throw new CompileException('Compilation error occurred');

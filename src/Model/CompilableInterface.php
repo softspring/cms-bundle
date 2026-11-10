@@ -21,6 +21,8 @@ interface CompilableInterface
 
     public function cleanCompiled(): void;
 
+    public function getCompiledGeneration(): string;
+
     public function hasCompileErrors(): bool;
 
     public function setCompileErrors(bool $compileErrors): void;

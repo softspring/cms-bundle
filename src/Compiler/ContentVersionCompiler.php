@@ -66,6 +66,7 @@ class ContentVersionCompiler extends AbstractVersionCompiler
         $compiledData = $this->compiledDataManager->createEntity();
         $compiledData->setKey($this->compiledDataManager->getCompileKeyFromRequest($version, $request));
         $compiledData->setVersion($version);
+        $compiledData->setGeneration($version->getCompiledGeneration());
 
         try {
             if ($saveCompiled && $this->cmsHelper->compile()->contentSaveCompiled($version)) {
@@ -95,6 +96,10 @@ class ContentVersionCompiler extends AbstractVersionCompiler
             $this->saveExceptionInCompiledData($compiledData, $exception);
         } catch (Exception $exception) {
             throw new CompileException('Error compiling content version request', 0, $exception);
+        }
+
+        if ($saveCompiled && $compiledData->hasErrors()) {
+            $version->setCompileErrors(true);
         }
 
         return $compiledData;

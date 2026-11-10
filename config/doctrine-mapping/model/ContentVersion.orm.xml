@@ -38,6 +38,10 @@
             </options>
         </field>
 
+        <field name="compiledGeneration" column="compiled_generation" type="string" length="36">
+            <options><option name="default"></option></options>
+        </field>
+
         <field name="compileErrors" column="compile_errors" type="boolean">
             <options>
                 <option name="default">0</option>
