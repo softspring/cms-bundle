@@ -61,8 +61,8 @@ class CmsConfigurationSerializer
                 'renderTemplate' => $config['render_template'] ?? null,
                 'editTemplate' => $config['edit_template'] ?? null,
                 'compatibleContents' => $config['compatible_contents'] ?? [],
-                'containers' => $this->summarizeContainers($config['containers'] ?? []),
-            ];
+                'containers' => $this->summarizeContainers($config['containers'] ?? [], is_array($config['meta']['containers'] ?? null) ? $config['meta']['containers'] : []),
+            ] + AiInstructionsSerializer::summarize($config);
 
             if ($includeRawConfig) {
                 $layouts[$id]['config'] = $this->sanitizer->sanitize($config);
@@ -95,7 +95,7 @@ class CmsConfigurationSerializer
                 'compatibleContents' => $config['compatible_contents'] ?? [],
                 'optionKeys' => array_keys($config['module_options'] ?? []),
                 'revisionMigrationScripts' => $config['revision_migration_scripts'] ?? [],
-            ];
+            ] + AiInstructionsSerializer::summarize($config);
 
             if ($includeRawConfig) {
                 $modules[$id]['config'] = $this->sanitizer->sanitize($config);
@@ -117,14 +117,14 @@ class CmsConfigurationSerializer
                 'defaultLayout' => $config['default_layout'] ?? null,
                 'allowedLayouts' => $config['allowed_layouts'] ?? [],
                 'saveCompiled' => (bool) ($config['save_compiled'] ?? true),
-                'containers' => $this->summarizeContainers($config['containers'] ?? []),
+                'containers' => $this->summarizeContainers($config['containers'] ?? [], is_array($config['meta']['containers'] ?? null) ? $config['meta']['containers'] : []),
                 'extraFieldKeys' => array_keys($config['extra_fields'] ?? []),
                 'indexingFieldKeys' => array_keys($config['indexing'] ?? []),
                 'versionSeoFieldKeys' => array_keys($config['version_seo'] ?? []),
                 'adminSections' => array_keys($config['admin'] ?? []),
                 'metaKeys' => array_keys($config['meta'] ?? []),
                 'seoRevisionMigrationScripts' => $config['seo_revision_migration_scripts'] ?? [],
-            ];
+            ] + AiInstructionsSerializer::summarize($config);
 
             if ($includeRawConfig) {
                 $contents[$id]['config'] = $this->sanitizer->sanitize($config);
@@ -143,7 +143,7 @@ class CmsConfigurationSerializer
                 'id' => $id,
                 'revision' => $config['revision'] ?? null,
                 'renderTemplate' => $config['render_template'] ?? null,
-            ];
+            ] + AiInstructionsSerializer::summarize($config);
 
             if ($includeRawConfig) {
                 $menus[$id]['config'] = $this->sanitizer->sanitize($config);
@@ -173,7 +173,7 @@ class CmsConfigurationSerializer
                 'schedulable' => (bool) ($config['schedulable'] ?? false),
                 'formFieldKeys' => array_keys($config['form_fields'] ?? []),
                 'revisionMigrationScripts' => $config['revision_migration_scripts'] ?? [],
-            ];
+            ] + AiInstructionsSerializer::summarize($config);
 
             if ($includeRawConfig) {
                 $blocks[$id]['config'] = $this->sanitizer->sanitize($config);
@@ -188,7 +188,7 @@ class CmsConfigurationSerializer
         return $this->sanitizer->sanitize($this->cmsConfig->getRegisteredPlugins());
     }
 
-    private function summarizeContainers(array $containers): array
+    private function summarizeContainers(array $containers, array $metadata = []): array
     {
         $summary = [];
 
@@ -200,7 +200,7 @@ class CmsConfigurationSerializer
             $summary[$id] = [
                 'required' => (bool) ($config['required'] ?? false),
                 'allowedModules' => $config['allowed_modules'] ?? [],
-            ];
+            ] + AiInstructionsSerializer::summarize(['meta' => $metadata[$id] ?? []]);
         }
 
         return $summary;

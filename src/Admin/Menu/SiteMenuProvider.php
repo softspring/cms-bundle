@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Softspring\CmsBundle\Admin\Menu;
 
 use Softspring\CmsBundle\Model\SiteInterface;
+use Symfony\Component\DependencyInjection\Attribute\AsTaggedItem;
 
+#[AsTaggedItem(priority: 255)]
 class SiteMenuProvider extends AbstractSiteMenuProvider
 {
     public static function getPriority(): int

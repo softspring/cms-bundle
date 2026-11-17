@@ -1,4 +1,6 @@
 module:
+    meta:
+        ai_instructions: Group related modules in one container. Use the allowed child modules and retain the intended nesting and layout structure.
     revision: 2
     group: 'container'
     edit_template: '@module/container/edit.html.twig'

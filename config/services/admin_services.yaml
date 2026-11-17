@@ -10,7 +10,7 @@ services:
 
     Softspring\CmsBundle\Admin\Menu\MenuManager:
         arguments:
-            $menuProviders: !tagged_iterator { tag: sfs_cms.admin_menu.menu_provider, default_priority_method: getPriority }
+            $menuProviders: !tagged_iterator { tag: sfs_cms.admin_menu.menu_provider }
 
     Softspring\CmsBundle\Admin\Menu\ContentMenuProvider: ~
 

@@ -23,6 +23,7 @@ abstract class AbstractModuleType extends AbstractNodeType
     public function configureChildOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
+            'meta' => [],
             'module_id' => null,
             'module_revision' => null,
             'module_migrations' => [],
@@ -39,6 +40,7 @@ abstract class AbstractModuleType extends AbstractNodeType
             'module_disabled' => null,
         ]);
 
+        $resolver->setAllowedTypes('meta', ['array']);
         $resolver->setRequired('module_id');
         $resolver->setAllowedTypes('module_id', ['string']);
 
@@ -76,6 +78,7 @@ abstract class AbstractModuleType extends AbstractNodeType
 
     public function buildChildView(FormView $view, FormInterface $form, array $options): void
     {
+        $view->vars['meta'] = $options['meta'];
         $view->vars['module_id'] = $options['module_id'];
         $view->vars['module_enabled'] = $options['module_enabled'];
         $view->vars['module_disabled'] = $options['module_disabled'];

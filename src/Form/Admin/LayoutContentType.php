@@ -33,7 +33,9 @@ class LayoutContentType extends AbstractType
         $layoutConfig = $this->cmsConfig->getLayout($options['layout']);
 
         foreach ($layoutConfig['containers'] as $containerId => $containerConfig) {
+            $metadata = $layoutConfig['meta']['containers'][$containerId] ?? [];
             $builder->add($containerId, ModuleCollectionType::class, [
+                'meta' => is_array($metadata) ? $metadata : [],
                 'label' => "{$options['layout']}.$containerId.container_title",
                 'translation_domain' => 'sfs_cms_layouts',
                 'content_type' => $options['content_type'],

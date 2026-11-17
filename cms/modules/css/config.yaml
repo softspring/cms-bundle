@@ -1,4 +1,6 @@
 module:
+    meta:
+        ai_instructions: Use for necessary page-specific CSS in a compatible container. Prefer existing styles and module options; avoid introducing global overrides for a local content change.
     revision: 1
     group: 'helper'
     edit_template: '@module/css/edit.html.twig'

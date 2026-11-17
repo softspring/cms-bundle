@@ -1,4 +1,6 @@
 module:
+    meta:
+        ai_instructions: Use for markup intended for the document head or a headers container. Do not put visible page body content here.
     revision: 1
     group: 'helper'
     edit_template: '@module/html_headers/edit.html.twig'

@@ -26,7 +26,7 @@ class SiteSerializer
             'allowedContentTypes' => $config['allowed_content_types'] ?? [],
             'hosts' => $config['hosts'] ?? [],
             'metadataKeys' => array_keys($site->getMetadata() ?? []),
-        ];
+        ] + AiInstructionsSerializer::summarize($site->getConfig() ?? []);
 
         if ($includeRawConfig) {
             $data['config'] = $this->sanitizer->sanitize($config);
@@ -42,7 +42,7 @@ class SiteSerializer
             'id' => $site->getId(),
             'canonical' => $this->canonical($site),
             'metadata' => $site->getMetadata(),
-        ];
+        ] + AiInstructionsSerializer::summarize($site->getConfig() ?? []);
 
         if ($includeConfig) {
             $data['config'] = $site->getConfig();

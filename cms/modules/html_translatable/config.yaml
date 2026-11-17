@@ -1,4 +1,6 @@
 module:
+    meta:
+        ai_instructions: Use for custom HTML that differs by locale. Prefer semantic translatable modules when available and supply content for each requested locale.
     revision: 2
     group: 'html'
     edit_template: '@module/html_translatable/edit.html.twig'

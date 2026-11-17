@@ -14,6 +14,6 @@ class MediaTypeRequirementsSerializer
             'mediaType' => $typeConfig['type'] ?? null,
             'isImage' => 'image' === ($typeConfig['type'] ?? null),
             'uploadRequirements' => $typeConfig['upload_requirements'] ?? [],
-        ];
+        ] + AiInstructionsSerializer::summarize($typeConfig);
     }
 }

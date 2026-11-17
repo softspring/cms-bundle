@@ -1,4 +1,6 @@
 module:
+    meta:
+        ai_instructions: Arrange child modules in a responsive grid. Choose the configured column and spacing options and preserve the intended reading order.
     revision: 1
     group: 'container'
     edit_template: '@module/grid/edit.html.twig'
