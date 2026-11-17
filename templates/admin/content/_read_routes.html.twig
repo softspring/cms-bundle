@@ -28,7 +28,7 @@
             {% endfor %}
         {% endif %}
 
-        <ul class="list-unstyled d-grid gap-2 mb-0">
+        <ul class="list-unstyled d-flex flex-column gap-2 mb-0">
             {% for route in content_entity.routes %}
                 {% for site in route.sites %}
                     {% for path in route.paths %}
