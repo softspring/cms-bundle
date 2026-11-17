@@ -108,13 +108,15 @@
         </div>
 
         <div class="row mt-3">
-            <div class="col-3">
+            <div class="col-12 col-lg-3">
                 {% include ['@content/'~content_type~'/admin/_version_info_general.html.twig', '@SfsCms/admin/content/_version_info_general.html.twig'] %}
             </div>
-            <div class="col-9">
+            <div class="col-12 col-lg-9">
                 {% include ['@content/'~content_type~'/admin/_version_info_compiled.html.twig', '@SfsCms/admin/content/_version_info_compiled.html.twig'] %}
                 {% include ['@content/'~content_type~'/admin/_version_info_data.html.twig', '@SfsCms/admin/content/_version_info_data.html.twig'] %}
-                {% include ['@content/'~content_type~'/admin/_version_info_seo.html.twig', '@SfsCms/admin/content/_version_info_seo.html.twig'] %}
+                {% block version_info_seo %}
+                    {% include ['@content/'~content_type~'/admin/_version_info_seo.html.twig', '@SfsCms/admin/content/_version_info_seo.html.twig'] %}
+                {% endblock %}
 
                 <div class="row">
                     <div class="col">
