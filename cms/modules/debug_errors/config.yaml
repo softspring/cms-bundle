@@ -1,4 +1,6 @@
 module:
+    meta:
+        ai_instructions: Development error diagnostics only. Do not add this module to normal published editorial content.
     revision: 1
     group: 'basic'
     enabled: false

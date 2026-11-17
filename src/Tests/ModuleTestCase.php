@@ -5,6 +5,7 @@ namespace Softspring\CmsBundle\Tests;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use Softspring\CmsBundle\Config\CmsConfig;
+use Softspring\CmsBundle\Config\Model\MetadataExtension;
 use Softspring\CmsBundle\Config\Model\Module;
 use Softspring\CmsBundle\Entity\Page;
 use Softspring\CmsBundle\Form\Extension\DefaultValueExtension;
@@ -133,7 +134,7 @@ abstract class ModuleTestCase extends TypeTestCase
 
         $processor = new Processor();
 
-        return $processor->processConfiguration(new Module($this->moduleName), [$moduleConfig['module']]);
+        return $processor->processConfiguration(new Module($this->moduleName, [new MetadataExtension()]), [$moduleConfig['module']]);
     }
 
     public function testConfiguration(): void

@@ -1,4 +1,6 @@
 module:
+    meta:
+        ai_instructions: Embed an existing reusable CMS block instance. Inspect its type, purpose and fields rather than copying its markup into the page.
     revision: 1
     group: 'cms-blocks'
     edit_template: '@module/block_instance/edit.html.twig'

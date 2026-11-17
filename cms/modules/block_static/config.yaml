@@ -1,4 +1,6 @@
 module:
+    meta:
+        ai_instructions: Render an existing static CMS block. Reuse its configured template instead of duplicating static markup in content modules.
     revision: 1
     group: 'cms-blocks'
     edit_template: '@module/block_static/edit.html.twig'

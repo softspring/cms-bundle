@@ -13,6 +13,8 @@ This package provides the core CMS model, configuration loader, administration U
 
 ## Main Features
 
+- Order admin menu providers through standard Symfony `AsTaggedItem` attributes or explicit tag priorities; keep their static priority methods for interface compatibility.
+
 - Site configuration with locales, hosts, paths, HTTPS redirects, sitemaps, error pages, and allowed content types.
 - CMS route management with localized paths and route behaviours.
 - Page and custom content type support backed by Doctrine entities.
@@ -26,6 +28,7 @@ This package provides the core CMS model, configuration loader, administration U
 - Site and locale context for internal and signed ESI fragments, including explicit menu site selection.
 - Admin controllers, templates, forms, and menu providers for CMS back-office screens.
 - Shared serializers for CMS configuration, sites, published content, menus and media images.
+- Optional text in `meta.ai_instructions` on modules, content types, layouts, containers, menus, blocks and sites through generic metadata, exposed as `aiInstructions` in shared context and module prototypes.
 - Twig namespaces and CMS collection loading for default, package, and project-level overrides.
 - Doctrine mappings, migrations, entity managers, entity transformers, and target entity resolution.
 - Request integration through value resolvers and legacy ParamConverter support when available.
@@ -60,3 +63,5 @@ Later collections override earlier definitions with the same element identifier.
 - The admin UI depends on other Softspring bundles for shared components, media handling, permissions, forms, and user integration.
 - Some compatibility services still support older ParamConverter integration when SensioFrameworkExtraBundle is installed.
 - Asset builds require npm dependencies and the local Softspring asset packages declared in `package.json`.
+
+- Supply a common MetadataExtension for CMS definition loading without adding AI-specific configuration model fields.

@@ -1,4 +1,6 @@
 module:
+    meta:
+        ai_instructions: Embed a reusable block selected by its configured type. Inspect the block type instructions and reuse its supported fields.
     revision: 1
     group: 'cms-blocks'
     edit_template: '@module/block_instance_by_type/edit.html.twig'

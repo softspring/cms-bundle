@@ -8,6 +8,7 @@ use Softspring\CmsBundle\Config\Model\ConfigExtensionInterface;
 use Softspring\CmsBundle\Config\Model\Content;
 use Softspring\CmsBundle\Config\Model\Layout;
 use Softspring\CmsBundle\Config\Model\Menu;
+use Softspring\CmsBundle\Config\Model\MetadataExtension;
 use Softspring\CmsBundle\Config\Model\Module;
 use Softspring\CmsBundle\Config\Model\Site;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
@@ -267,7 +268,7 @@ class ConfigLoader
 
     protected function getConfigExtensions(string $configClass): array
     {
-        $extensions = [];
+        $extensions = [new MetadataExtension()];
         foreach ($this->configExtensionsClasses as $configExtensionClass) {
             $extension = new $configExtensionClass();
             if ($extension->supports($configClass)) {

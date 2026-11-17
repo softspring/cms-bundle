@@ -64,6 +64,7 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
             $typesOptions[$moduleId]['label'] = "$moduleId.label";
             $typesOptions[$moduleId]['label_format'] = "$moduleId.form.%name%.label";
             $typesOptions[$moduleId]['translation_domain'] = 'sfs_cms_modules';
+            $typesOptions[$moduleId]['meta'] = $config['meta'] ?? [];
             $typesOptions[$moduleId]['module_id'] = $moduleId;
             $typesOptions[$moduleId]['module_revision'] = $config['revision'];
             $typesOptions[$moduleId]['module_migrations'] = $config['revision_migration_scripts'];
@@ -94,6 +95,7 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
+            'meta' => [],
             'translation_domain' => 'sfs_cms_modules',
             'error_bubbling' => false,
             'entity_manager' => null,
@@ -112,6 +114,7 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
             'collection_row_attr' => [],
         ]);
 
+        $resolver->setAllowedTypes('meta', ['array']);
         $resolver->setAllowedTypes('content', [ContentInterface::class, 'null']);
     }
 
@@ -138,6 +141,7 @@ class ModuleCollectionType extends PolymorphicCollectionType implements DataMapp
             }
         }
 
+        $view->vars['meta'] = $options['meta'];
         $view->vars['module_collection_class'] = $options['module_collection_class'];
         $view->vars['module_row_class'] = $options['module_row_class'];
         $view->vars['collection_row_attr'] = $options['collection_row_attr'];

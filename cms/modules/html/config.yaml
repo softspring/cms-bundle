@@ -1,4 +1,6 @@
 module:
+    meta:
+        ai_instructions: Use for custom HTML fragments that cannot be represented with the available semantic modules. Prefer dedicated content modules for ordinary editorial text.
     revision: 1
     group: 'html'
     edit_template: '@module/html/edit.html.twig'

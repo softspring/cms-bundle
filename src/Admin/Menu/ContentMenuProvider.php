@@ -3,7 +3,9 @@
 namespace Softspring\CmsBundle\Admin\Menu;
 
 use Softspring\CmsBundle\Config\Exception\InvalidContentException;
+use Symfony\Component\DependencyInjection\Attribute\AsTaggedItem;
 
+#[AsTaggedItem(priority: 255)]
 class ContentMenuProvider extends AbstractContentMenuProvider
 {
     public static function getPriority(): int
