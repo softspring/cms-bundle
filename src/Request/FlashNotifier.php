@@ -15,7 +15,9 @@ class FlashNotifier
 
     public function add(string $type, string $message): void
     {
-        $this->requestStack->getSession()->getFlashBag()->add($type, $message);
+        if ($this->requestStack->getCurrentRequest()?->hasSession()) {
+            $this->requestStack->getSession()->getFlashBag()->add($type, $message);
+        }
     }
 
     public function addTrans(string $type, string $message, array $parameters = [], ?string $domain = null, ?string $locale = null): void

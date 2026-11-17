@@ -13,8 +13,9 @@ use Softspring\CmsBundle\Config\Exception\InvalidSiteException;
 use Softspring\CmsBundle\Manager\SiteManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Softspring\CmsBundle\Model\SiteInterface;
+use Symfony\Contracts\Service\ResetInterface;
 
-class CmsConfig
+class CmsConfig implements ResetInterface
 {
     protected array $siteConfigs;
     /**
@@ -33,6 +34,11 @@ class CmsConfig
         protected array $registeredPlugins = [],
     ) {
         $this->siteConfigs = $sites;
+    }
+
+    public function reset(): void
+    {
+        $this->siteEntities = null;
     }
 
     public function getLayouts(): array
