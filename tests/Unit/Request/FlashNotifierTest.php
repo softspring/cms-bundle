@@ -7,6 +7,7 @@ namespace Softspring\CmsBundle\Test\Unit\Request;
 use PHPUnit\Framework\TestCase;
 use Softspring\CmsBundle\Request\FlashNotifier;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -17,8 +18,10 @@ class FlashNotifierTest extends TestCase
     {
         $session = new Session(new MockArraySessionStorage());
 
-        $requestStack = $this->createMock(RequestStack::class);
-        $requestStack->method('getSession')->willReturn($session);
+        $request = new Request();
+        $request->setSession($session);
+        $requestStack = new RequestStack();
+        $requestStack->push($request);
 
         $translator = $this->createMock(TranslatorInterface::class);
         $translator->expects($this->once())
@@ -32,5 +35,16 @@ class FlashNotifierTest extends TestCase
 
         self::assertSame(['Saved'], $session->getFlashBag()->peek('success'));
         self::assertSame(['Translated message'], $session->getFlashBag()->peek('error'));
+    }
+    public function testSessionlessRequestsDoNotCreateFlashMessages(): void
+    {
+        $requests = new RequestStack();
+        $notifier = new FlashNotifier($requests, $this->createStub(TranslatorInterface::class));
+        $notifier->add('success', 'Without a request');
+        $request = new Request();
+        $requests->push($request);
+        $notifier->add('success', 'Without a session');
+
+        self::assertFalse($request->hasSession());
     }
 }
