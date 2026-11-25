@@ -13,10 +13,11 @@ class DynamicTypesExtension extends BaseDynamicTypesExtension
 {
     public static function getExtendedTypes(): iterable
     {
-        return array_merge((array) parent::getExtendedTypes(), [
+        return [
+            ...parent::getExtendedTypes(),
             DynamicFormModuleType::class,
             DynamicFormType::class,
             ContainerModuleType::class,
-        ]);
+        ];
     }
 }
