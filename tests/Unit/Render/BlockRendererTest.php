@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Softspring\CmsBundle\Test\Unit\Render;
 
 use Closure;
+use Stringable;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 use PHPUnit\Framework\TestCase;
 use Softspring\CmsBundle\Config\CmsConfig;
@@ -125,6 +126,67 @@ class BlockRendererTest extends TestCase
         self::assertSame(
             'render:url:app_block_hero:{"_locale":"es","isolate_request":false}',
             $renderer->renderBlock($block, 'es', true)
+        );
+    }
+
+    public function testPassesParamsWithSpecialCharactersUnchanged(): void
+    {
+        $cmsConfig = $this->createCmsConfig([
+            'achievements' => [
+                'esi' => false,
+                'ajax' => false,
+                'isolate_request' => true,
+                'render_url' => null,
+            ],
+        ]);
+
+        $renderer = $this->createRenderer($cmsConfig);
+        $params = [
+            'apostrophe' => "Kid's favourite",
+            'backslash' => 'C:\\path\\',
+            'twig' => "{{ 1 + 1 }} {% if true %}' ~ '",
+            'asterisk' => 'Award* winner _x_ #1 `y`',
+            'texts' => ['en' => "It's", 'de' => null],
+        ];
+
+        $expected = [
+            'apostrophe' => "Kid's favourite",
+            'backslash' => 'C:\\path\\',
+            'twig' => "{{ 1 + 1 }} {% if true %}' ~ '",
+            'asterisk' => 'Award* winner _x_ #1 `y`',
+            'texts' => ['en' => "It's"],
+            '_locale' => 'en',
+            '_site' => 'site-1',
+            'type' => 'achievements',
+        ];
+
+        self::assertSame(
+            'render:controller:Softspring\\CmsBundle\\Controller\\BlockController::renderByType:'.json_encode($expected, JSON_THROW_ON_ERROR),
+            $renderer->renderBlockByType('achievements', $params)
+        );
+    }
+
+    public function testConvertsStringableSiteToItsIdentifier(): void
+    {
+        $cmsConfig = $this->createCmsConfig([
+            'hero' => [
+                'esi' => false,
+                'ajax' => false,
+                'isolate_request' => true,
+                'render_url' => 'app_block_hero',
+            ],
+        ]);
+
+        $site = new class implements Stringable {
+            public function __toString(): string
+            {
+                return 'default';
+            }
+        };
+
+        self::assertSame(
+            'render:url:app_block_hero:{"_locale":"es","_site":"default"}',
+            $this->createRenderer($cmsConfig)->renderBlockByType('hero', [], 'es', $site)
         );
     }
 

@@ -22,4 +22,15 @@ class ParserTest extends TestCase
             ]),
         );
     }
+
+    public function testItEscapesQuotesAndBackslashesInStrings(): void
+    {
+        self::assertSame(
+            "'title':'Kid\\'s \\\\ favourite','it\\'s':true",
+            Parser::arrayToParamsString([
+                'title' => "Kid's \\ favourite",
+                "it's" => true,
+            ]),
+        );
+    }
 }

@@ -10,7 +10,7 @@ use Softspring\CmsBundle\Config\Exception\InvalidBlockException;
 use Softspring\CmsBundle\Model\BlockInterface;
 use Softspring\CmsBundle\Render\Exception\RenderException;
 use Softspring\CmsBundle\Render\Isolated\IsolatedRunner;
-use Softspring\CmsBundle\Utils\Parser;
+use Softspring\CmsBundle\Utils\RenderParams;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\HttpCache\Esi;
@@ -69,7 +69,7 @@ class BlockRenderer
             $urlFunction = 'url';
         }
 
-        $render_function_attrs = [] === $renderFunctionAttrs ? '' : ', '.('{'.Parser::arrayToParamsString($renderFunctionAttrs).'}');
+        $render_function_attrs = [] === $renderFunctionAttrs ? '' : ', _sfs_cms_render_attrs';
 
         $params['_locale'] = $locale ?? $request?->getLocale() ?? $this->requestStack->getCurrentRequest()?->getLocale();
         $params['_site'] = $site ?? $request?->attributes->get('_site') ?? $this->requestStack->getCurrentRequest()?->attributes->get('_site');
@@ -78,13 +78,11 @@ class BlockRenderer
                 $params = $this->mergeCurrentRequestQueryParams($params);
             }
 
-            $params_string = '{'.Parser::arrayToParamsString($params).'}';
-            $twigCode = "{{ $renderFunction($urlFunction('{$blockConfig['render_url']}', $params_string) $render_function_attrs) }}";
+            $twigCode = "{{ $renderFunction($urlFunction(_sfs_cms_render_url, _sfs_cms_params) $render_function_attrs) }}";
         } else {
             // $twigCode = "{{ $renderFunction(url('sfs_cms_block_render_by_type', {'type':'$type'})) }}";
             $params['type'] = $type;
-            $params_string = '{'.Parser::arrayToParamsString($params).'}';
-            $controller = "controller('Softspring\\\\CmsBundle\\\\Controller\\\\BlockController::renderByType', $params_string)";
+            $controller = "controller('Softspring\\\\CmsBundle\\\\Controller\\\\BlockController::renderByType', _sfs_cms_params)";
 
             $fragmentEsiAbsolute = 'false'; // todo make it configurable per block?, for example Varnish does not support absolute urls
 
@@ -93,7 +91,7 @@ class BlockRenderer
                 $twigCode = "{{ $renderFunction(fragment_uri($controller, $fragmentEsiAbsolute, true, true)) }}";
             } elseif ('sfs_cms_render_ajax' === $renderFunction) {
                 // {{ fragment_uri(controller, absolute = false, strict = true, sign = true) }}
-                $twigCode = "{{ $renderFunction(url('sfs_cms_block_render_by_type', $params_string) $render_function_attrs) }}";
+                $twigCode = "{{ $renderFunction(url('sfs_cms_block_render_by_type', _sfs_cms_params) $render_function_attrs) }}";
             } else {
                 $twigCode = "{{ $renderFunction($controller) }}";
             }
@@ -108,10 +106,12 @@ class BlockRenderer
             ];
         }
 
-        return $this->isolatedRunner->isolateEsiCapableRequestRender(function (Request $request) use ($template, $locale): string {
+        $context = $this->createRenderContext($params, $renderFunctionAttrs, $blockConfig['render_url'] ?? null);
+
+        return $this->isolatedRunner->isolateEsiCapableRequestRender(function (Request $request) use ($template, $locale, $context): string {
             $locale && $request->setLocale($locale);
 
-            return $template->render();
+            return $template->render($context);
         });
     }
 
@@ -149,20 +149,18 @@ class BlockRenderer
             $urlFunction = 'url';
         }
 
-        $render_function_attrs = [] === $renderFunctionAttrs ? '' : ', '.('{'.Parser::arrayToParamsString($renderFunctionAttrs).'}');
+        $render_function_attrs = [] === $renderFunctionAttrs ? '' : ', _sfs_cms_render_attrs';
 
         if (!empty($blockConfig['render_url'])) {
             if ($blockConfig['esi'] && !$forceEsiRender) {
                 $params = $this->mergeCurrentRequestQueryParams($params);
             }
 
-            $params_string = '{'.Parser::arrayToParamsString($params).'}';
-            $twigCode = "{{ $renderFunction($urlFunction('{$blockConfig['render_url']}', $params_string) $render_function_attrs) }}";
+            $twigCode = "{{ $renderFunction($urlFunction(_sfs_cms_render_url, _sfs_cms_params) $render_function_attrs) }}";
         } else {
             // $twigCode = "{{ $renderFunction(url('sfs_cms_block_render_by_type', {'type':'$type'})) }}";
             $params['id'] = $blockId;
-            $params_string = '{'.Parser::arrayToParamsString($params).'}';
-            $twigCode = "{{ $renderFunction(controller('Softspring\\\\CmsBundle\\\\Controller\\\\BlockController::renderById', $params_string) $render_function_attrs) }}";
+            $twigCode = "{{ $renderFunction(controller('Softspring\\\\CmsBundle\\\\Controller\\\\BlockController::renderById', _sfs_cms_params) $render_function_attrs) }}";
         }
 
         $template = $this->createTemplateFromString($twigCode);
@@ -175,16 +173,31 @@ class BlockRenderer
             ];
         }
 
-        return $this->isolatedRunner->isolateEsiCapableRequestRender(function (Request $request) use ($template, $locale): string {
+        $context = $this->createRenderContext($params, $renderFunctionAttrs, $blockConfig['render_url'] ?? null);
+
+        return $this->isolatedRunner->isolateEsiCapableRequestRender(function (Request $request) use ($template, $locale, $context): string {
             $locale && $request->setLocale($locale);
 
-            return $template->render();
+            return $template->render($context);
         });
     }
 
     public function getDebugCollectorData(): array
     {
         return $this->profilerDebugCollectorData;
+    }
+
+    /**
+     * The parameters are passed to the template as variables, not written into its code, so any value
+     * (quotes, backslashes, Twig syntax, arrays) reaches the URL or the controller unchanged.
+     */
+    protected function createRenderContext(array $params, array $renderFunctionAttrs, ?string $renderUrl): array
+    {
+        return [
+            '_sfs_cms_params' => RenderParams::normalize($params),
+            '_sfs_cms_render_attrs' => RenderParams::normalize($renderFunctionAttrs),
+            '_sfs_cms_render_url' => $renderUrl,
+        ];
     }
 
     protected function createTemplateFromString(string $twigCode): mixed

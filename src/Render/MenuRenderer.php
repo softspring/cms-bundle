@@ -7,7 +7,7 @@ use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Config\Exception\InvalidMenuException;
 use Softspring\CmsBundle\Render\Exception\RenderException;
 use Softspring\CmsBundle\Render\Isolated\IsolatedRunner;
-use Softspring\CmsBundle\Utils\Parser;
+use Softspring\CmsBundle\Utils\RenderParams;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\HttpCache\Esi;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
@@ -63,8 +63,7 @@ class MenuRenderer
         $locale && $params['_locale'] = $locale;
         $site && $params['_site'] = "$site";
 
-        $params_string = '{'.Parser::arrayToParamsString($params).'}';
-        $twigCode = "{{ $renderFunction(controller('Softspring\\\\CmsBundle\\\\Controller\\\\MenuController::renderByType', $params_string)) }}";
+        $twigCode = "{{ $renderFunction(controller('Softspring\\\\CmsBundle\\\\Controller\\\\MenuController::renderByType', _sfs_cms_params)) }}";
 
         $template = twig_template_from_string($this->twig, $twigCode);
 
@@ -75,7 +74,9 @@ class MenuRenderer
             ];
         }
 
-        return $this->isolatedRunner->isolateEsiCapableRequestRender(function () use ($template): string { return $template->render(); });
+        $context = ['_sfs_cms_params' => RenderParams::normalize($params)];
+
+        return $this->isolatedRunner->isolateEsiCapableRequestRender(function () use ($template, $context): string { return $template->render($context); });
     }
 
     public function getDebugCollectorData(): array
