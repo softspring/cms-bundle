@@ -21,7 +21,7 @@ This package provides the core CMS model, configuration loader, administration U
 - Editable module system with built-in module form types and render templates.
 - Module site filters support site entities, identifier lists, and boolean maps.
 - Built-in modules for HTML, translatable HTML, CSS, containers, grids, and block rendering.
-- Block management for reusable static or dynamic content fragments.
+- Block management for reusable static or dynamic content fragments. Block names are unique across all block types; the admin forms report a duplicate name as a validation error on the name field.
 - Menu management and menu rendering helpers.
 - Site and locale context for internal and signed ESI fragments, including explicit menu site selection.
 - Admin controllers, templates, forms, and menu providers for CMS back-office screens.
